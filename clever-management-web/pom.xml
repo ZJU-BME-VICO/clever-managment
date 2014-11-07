@@ -12,8 +12,13 @@
 	<name>clever-management-web</name>
 	<url>http://maven.apache.org</url>
 	<properties>
-		
+
 	</properties>
 	<dependencies>
+		<dependency>
+			<groupId>edu.zju.bme.clever</groupId>
+			<artifactId>clever-management-service</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 	</dependencies>
 </project>

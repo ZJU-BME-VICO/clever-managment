@@ -16,33 +16,87 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<!-- versions -->
+		<spring.data.version>1.7.1.RELEASE</spring.data.version>
+		<hibernate.version>4.3.7.Final</hibernate.version>
 	</properties>
-	
-	<profiles>
-		<profile>
-			<id>local-dev</id>
-			<properties>
-				<env>local-dev</env>
-				<database.url>jdbc:sqlserver://localhost;databaseName=clever-management</database.url>
-				<database.username>sa</database.username>
-				<database.password>sa</database.password>
-			</properties>
-		</profile>
-		<profile>
-			<id>remote-dev</id>
-			<properties>
-				<database.url>jdbc:sqlserver://172.16.100.33;instanceName=CDR;databaseName=clever-management</database.url>
-				<database.username>sa</database.username>
-				<database.password>@Sxdyy0808</database.password>
-			</properties>
-		</profile>
-	</profiles>
+
+	<build>
+		<resources>
+			<resource>
+				<directory>src/main/config</directory>
+				<includes>
+					<include>*.properties</include>
+				</includes>
+				<filtering>true</filtering>
+			</resource>
+			<resource>
+				<directory>src/main/resources</directory>
+				<includes>
+					<include>**</include>
+				</includes>
+				<filtering>true</filtering>
+			</resource>
+		</resources>
+		<testResources>
+			<testResource>
+				<directory>src/test/resources</directory>
+				<includes>
+					<include>*.properties</include>
+				</includes>
+				<filtering>true</filtering>
+			</testResource>
+			<testResource>
+				<directory>src/test/java</directory>
+				<includes>
+					<include>**</include>
+				</includes>
+				<filtering>true</filtering>
+			</testResource>
+		</testResources>
+	</build>
 
 	<dependencies>
 		<dependency>
 			<groupId>edu.zju.bme.clever</groupId>
 			<artifactId>clever-commons</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+		<!-- jpa -->
+		<dependency>
+			<groupId>org.springframework.data</groupId>
+			<artifactId>spring-data-jpa</artifactId>
+			<version>1.7.1.RELEASE</version>
+		</dependency>
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-entitymanager</artifactId>
+			<version>${hibernate.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.jboss.logging</groupId>
+					<artifactId>jboss-logging</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.jboss.logging</groupId>
+					<artifactId>jboss-logging-annotations</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-c3p0</artifactId>
+			<version>${hibernate.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.jboss.logging</groupId>
+					<artifactId>jboss-logging</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.jboss.logging</groupId>
+					<artifactId>jboss-logging-annotations</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 	</dependencies>
 </project>
