@@ -1,0 +1,60 @@
+<?xml version="1.0"?>
+<project
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>edu.zju.bme.clever</groupId>
+		<artifactId>clever-management</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+	</parent>
+	<artifactId>clever-management-env</artifactId>
+	<packaging>jar</packaging>
+
+	<name>clever-management-env</name>
+	<url>http://maven.apache.org</url>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties>
+
+	<profiles>
+		<profile>
+			<id>local-dev</id>
+			<properties>
+				<env>local-dev</env>
+				<database.url>jdbc:sqlserver://localhost;databaseName=clever-management</database.url>
+				<database.username>sa</database.username>
+				<database.password>sa</database.password>
+			</properties>
+		</profile>
+		<profile>
+			<id>remote-dev</id>
+			<properties>
+				<database.url>jdbc:sqlserver://172.16.100.33;instanceName=CDR;databaseName=clever-management</database.url>
+				<database.username>sa</database.username>
+				<database.password>@Sxdyy0808</database.password>
+			</properties>
+		</profile>
+	</profiles>
+	
+	<build>
+		<resources>
+			<resource>
+				<directory>src/main/config</directory>
+				<includes>
+					<include>**</include>
+				</includes>
+				<filtering>true</filtering>
+			</resource>
+			<resource>
+				<directory>src/main/resources</directory>
+				<includes>
+					<include>**</include>
+				</includes>
+				<filtering>true</filtering>
+			</resource>
+		</resources>
+	</build>
+	
+</project>

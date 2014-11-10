@@ -27,8 +27,5 @@
 		http://www.springframework.org/schema/security/spring-security-3.2.xsd
 		http://cxf.apache.org/transports/http/configuration
         http://cxf.apache.org/schemas/configuration/http-conf.xsd">	
-		
-	<bean id="mavenProfileInheritance" class="edu.zju.bme.clever.management.test.MavenProfileInheritance">
-		<constructor-arg value="${database.url}"/>
-	</bean>
+    <context:property-placeholder location="classpath:config.properties"/>
 </beans>

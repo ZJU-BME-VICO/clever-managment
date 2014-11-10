@@ -9,8 +9,11 @@
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
 	<artifactId>clever-management-web</artifactId>
+	<packaging>war</packaging>
+	
 	<name>clever-management-web</name>
 	<url>http://maven.apache.org</url>
+	
 	<properties>
 
 	</properties>

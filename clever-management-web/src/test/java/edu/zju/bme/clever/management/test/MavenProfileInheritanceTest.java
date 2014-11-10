@@ -8,7 +8,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = "classpath:applicationContext-test.xml")
+@ContextConfiguration(locations = "classpath:web-beans.xml")
 public class MavenProfileInheritanceTest {
 
 	@Resource(name = "mavenProfileInheritance")

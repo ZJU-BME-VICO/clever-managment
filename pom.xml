@@ -11,6 +11,7 @@
 	<modules>
 		<module>clever-management-web</module>
 		<module>clever-management-service</module>
+		<module>clever-management-env</module>
 	</modules>
 
 	<properties>
@@ -24,20 +25,9 @@
 	<profiles>
 		<profile>
 			<id>local-dev</id>
-			<properties>
-				<env>local-dev</env>
-				<database.url>jdbc:sqlserver://localhost;databaseName=clever-management</database.url>
-				<database.username>sa</database.username>
-				<database.password>sa</database.password>
-			</properties>
 		</profile>
 		<profile>
 			<id>remote-dev</id>
-			<properties>
-				<database.url>jdbc:sqlserver://172.16.100.33;instanceName=CDR;databaseName=clever-management</database.url>
-				<database.username>sa</database.username>
-				<database.password>@Sxdyy0808</database.password>
-			</properties>
 		</profile>
 	</profiles>
 
