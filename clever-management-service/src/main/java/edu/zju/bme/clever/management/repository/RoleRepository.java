@@ -1,4 +1,4 @@
-package edu.zju.bme.clever.management.repo;
+package edu.zju.bme.clever.management.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

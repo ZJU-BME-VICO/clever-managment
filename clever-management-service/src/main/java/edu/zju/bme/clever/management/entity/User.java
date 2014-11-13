@@ -1,15 +1,11 @@
 package edu.zju.bme.clever.management.entity;
 
-import java.io.Serializable;
 import java.util.Calendar;
-import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
@@ -20,31 +16,27 @@ import javax.persistence.TemporalType;
 import org.hibernate.annotations.DynamicUpdate;
 
 @Entity
-@Table(name = "Users")
+@Table
 @DynamicUpdate(true)
-public class User implements Serializable {
+public class User extends AbstractIndentifiedEntity {
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -4791462313378825505L;
-	@Id
-	@Column(name = "UserId")
-	@GeneratedValue
-	private Integer userId;
-	@Column(name = "UserName")
+	@Column
 	private String userName;
-	@Column(name = "Password")
+	@Column
 	private String password;
-	@Column(name = "Enabled")
+	@Column
 	private boolean isEnabled;
-	@ManyToMany(targetEntity = Role.class, fetch = FetchType.EAGER)
-	@JoinTable(name = "UserRoleMappling", joinColumns = { @JoinColumn(name = "UserId") }, inverseJoinColumns = { @JoinColumn(name = "RoleId") })
+	@ManyToMany(targetEntity = Role.class, fetch = FetchType.LAZY)
+	@JoinTable
 	private Set<Role> roles;
 	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name = "UpdateTime")
+	@Column
 	private Calendar updateTime;
 	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name = "LastLogoutTime")
+	@Column
 	private Calendar lastLogoutTime;
 
 	public User() {
@@ -75,14 +67,6 @@ public class User implements Serializable {
 		this.roles = roles;
 	}
 
-	public Integer getUserId() {
-		return userId;
-	}
-
-	public void setUserId(Integer userId) {
-		this.userId = userId;
-	}
-
 	public String getUserName() {
 		return userName;
 	}
@@ -105,14 +89,6 @@ public class User implements Serializable {
 
 	public void setUpdateTime(Calendar updateTime) {
 		this.updateTime = updateTime;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (obj instanceof User) {
-			return ((User) obj).getUserId() == this.userId;
-		}
-		return false;
 	}
 
 }

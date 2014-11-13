@@ -25,7 +25,7 @@
 				<env>local-dev</env>
 				<database.url>jdbc:sqlserver://localhost;databaseName=clever-management</database.url>
 				<database.username>sa</database.username>
-				<database.password>sa</database.password>
+				<database.password>@sa</database.password>
 			</properties>
 		</profile>
 		<profile>
