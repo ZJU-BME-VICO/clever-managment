@@ -7,6 +7,8 @@ import javax.persistence.CollectionTable;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
@@ -26,25 +28,6 @@ public class TemplateFile extends AbstractFile<TemplateMaster> {
 	 */
 	private static final long serialVersionUID = 16763153667340880L;
 
-	public enum TemplateType {
-		Storage("Storage"), Application("Application"), Integration(
-				"Integration");
-
-		private final String value;
-
-		public String getValue() {
-			return value;
-		}
-
-		public String toString() {
-			return value;
-		}
-
-		TemplateType(String value) {
-			this.value = value;
-		}
-	}
-
 	@OneToOne(fetch = FetchType.LAZY)
 	@PrimaryKeyJoinColumn
 	private TemplateFile lastVersionTemplate;
@@ -53,6 +36,9 @@ public class TemplateFile extends AbstractFile<TemplateMaster> {
 	@Column(name = "value")
 	@MapKeyColumn(name = "attribute")
 	private Map<String, String> properties = new HashMap<String, String>();
+	@Column
+	@Enumerated(EnumType.STRING)
+	private TemplateType templateType;
 
 	public TemplateFile getLastVersionTemplate() {
 		return lastVersionTemplate;
@@ -68,6 +54,14 @@ public class TemplateFile extends AbstractFile<TemplateMaster> {
 
 	public void setProperties(Map<String, String> properties) {
 		this.properties = properties;
+	}
+
+	public TemplateType getTemplateType() {
+		return templateType;
+	}
+
+	public void setTemplateType(TemplateType templateType) {
+		this.templateType = templateType;
 	}
 
 }
