@@ -1,0 +1,73 @@
+package edu.zju.bme.clever.management.entity;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.persistence.CollectionTable;
+import javax.persistence.Column;
+import javax.persistence.ElementCollection;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.MapKeyColumn;
+import javax.persistence.MapKeyJoinColumn;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+import javax.persistence.PrimaryKeyJoinColumn;
+import javax.persistence.Table;
+
+@Entity
+@Table
+public class TemplateFile extends AbstractFile<TemplateMaster> {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 16763153667340880L;
+
+	public enum TemplateType {
+		Storage("Storage"), Application("Application"), Integration(
+				"Integration");
+
+		private final String value;
+
+		public String getValue() {
+			return value;
+		}
+
+		public String toString() {
+			return value;
+		}
+
+		TemplateType(String value) {
+			this.value = value;
+		}
+	}
+
+	@OneToOne(fetch = FetchType.LAZY)
+	@PrimaryKeyJoinColumn
+	private TemplateFile lastVersionTemplate;
+	@ElementCollection(fetch = FetchType.LAZY)
+	@CollectionTable
+	@Column(name = "value")
+	@MapKeyColumn(name = "attribute")
+	private Map<String, String> properties = new HashMap<String, String>();
+
+	public TemplateFile getLastVersionTemplate() {
+		return lastVersionTemplate;
+	}
+
+	public void setLastVersionTemplate(TemplateFile lastVersionTemplate) {
+		this.lastVersionTemplate = lastVersionTemplate;
+	}
+
+	public Map<String, String> getProperties() {
+		return properties;
+	}
+
+	public void setProperties(Map<String, String> properties) {
+		this.properties = properties;
+	}
+
+}
