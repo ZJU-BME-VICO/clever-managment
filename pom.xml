@@ -102,11 +102,11 @@
 			<artifactId>logback-classic</artifactId>
 			<version>${logback.version}</version>
 		</dependency>
-<!-- 		<dependency> -->
-<!-- 			<groupId>ch.qos.logback</groupId> -->
-<!-- 			<artifactId>log4j-bridge</artifactId> -->
-<!-- 			<version>0.9.7</version> -->
-<!-- 		</dependency> -->
+		<!-- <dependency> -->
+		<!-- <groupId>ch.qos.logback</groupId> -->
+		<!-- <artifactId>log4j-bridge</artifactId> -->
+		<!-- <version>0.9.7</version> -->
+		<!-- </dependency> -->
 		<dependency>
 			<groupId>ch.qos.logback</groupId>
 			<artifactId>logback-access</artifactId>
@@ -123,4 +123,14 @@
 			<version>${slf4j.version}</version>
 		</dependency>
 	</dependencies>
+
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-web</artifactId>
+				<version>${spring.version}</version>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
 </project>

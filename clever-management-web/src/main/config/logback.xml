@@ -8,6 +8,12 @@
 			<charset>UTF-8</charset>
 		</encoder>
 	</appender>
+	<logger name="com.mchange">
+		<level value="WARN"/>
+	</logger>
+	<logger name="org.hibernate">
+		<level value="INFO"/>
+	</logger>
 	<logger name="ch.qos">
 		<level value="WARN"/>
 	</logger>

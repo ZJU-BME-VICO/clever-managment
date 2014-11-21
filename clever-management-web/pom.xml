@@ -10,18 +10,141 @@
 	</parent>
 	<artifactId>clever-management-web</artifactId>
 	<packaging>war</packaging>
-	
+
 	<name>clever-management-web</name>
 	<url>http://maven.apache.org</url>
-	
-	<properties>
 
+	<properties>
+		<spring.security.version>3.2.4.RELEASE</spring.security.version>
+		<servlet-api.version>3.1.0</servlet-api.version>
+		<jetty.version>9.2.2.v20140723</jetty.version>
 	</properties>
+
+	<build>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-compiler-plugin</artifactId>
+					<configuration>
+						<source>1.8</source>
+						<target>1.8</target>
+						<encoding>${project.build.sourceEncoding}</encoding>
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.tomcat.maven</groupId>
+				<artifactId>tomcat7-maven-plugin</artifactId>
+				<configuration>
+					<url>${tomcat.url}</url>
+					<username>admin</username>
+					<password>admin</password>
+					<path>/${project.artifactId}</path>
+					<charset>${project.build.sourceEncoding}</charset>
+					<uriEncoding>${project.build.sourceEncoding}</uriEncoding>
+					<port>${server.port}</port>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.eclipse.jetty</groupId>
+				<artifactId>jetty-maven-plugin</artifactId>
+				<version>${jetty.version}</version>
+				<configuration>
+					<webApp>
+						<contextPath>/${project.artifactId}</contextPath>
+					</webApp>
+					<httpConnector>
+						<port>${server.port}</port>
+					</httpConnector>
+				</configuration>
+			</plugin>
+		</plugins>
+		<resources>
+			<resource>
+				<directory>src/main/config</directory>
+				<includes>
+					<include>**</include>
+				</includes>
+				<filtering>true</filtering>
+			</resource>
+			<resource>
+				<directory>src/main/resources</directory>
+				<includes>
+					<include>**</include>
+				</includes>
+				<filtering>true</filtering>
+			</resource>
+		</resources>
+		<testResources>
+			<testResource>
+				<directory>src/test/resources</directory>
+				<includes>
+					<include>**</include>
+				</includes>
+				<filtering>true</filtering>
+			</testResource>
+			<testResource>
+				<directory>src/test/java</directory>
+				<includes>
+					<include>**</include>
+				</includes>
+				<filtering>true</filtering>
+			</testResource>
+			<testResource>
+				<directory>src/main/config</directory>
+				<includes>
+					<include>**</include>
+				</includes>
+				<filtering>true</filtering>
+			</testResource>
+			<testResource>
+				<directory>src/main/resources</directory>
+				<includes>
+					<include>**</include>
+				</includes>
+				<filtering>true</filtering>
+			</testResource>
+		</testResources>
+	</build>
+
 	<dependencies>
 		<dependency>
 			<groupId>edu.zju.bme.clever</groupId>
 			<artifactId>clever-management-service</artifactId>
 			<version>${project.version}</version>
+		</dependency>
+
+		<!-- spring security -->
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-web</artifactId>
+			<version>${spring.security.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-config</artifactId>
+			<version>${spring.security.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-taglibs</artifactId>
+			<version>${spring.security.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>javax.servlet-api</artifactId>
+			<version>${servlet-api.version}</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<!-- spring mvc -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-webmvc</artifactId>
+			<version>${spring.version}</version>
 		</dependency>
 	</dependencies>
 </project>

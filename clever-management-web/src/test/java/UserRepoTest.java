@@ -1,4 +1,4 @@
-package edu.zju.bme.clever.management.test;
+
 
 import java.util.Optional;
 
@@ -15,13 +15,13 @@ import edu.zju.bme.clever.management.service.entity.User;
 import edu.zju.bme.clever.management.service.repository.UserRepository;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = "classpath:service-context.xml")
+@ContextConfiguration(locations = "classpath:web-context.xml")
 public class UserRepoTest {
 
 	@Autowired
 	private UserRepository userRepo;
 
-	//@Test
+	@Test
 	public void test() {
 		Optional<User> user = Optional.ofNullable(this.userRepo.findOne(1));
 		user.ifPresent(usr -> {
@@ -40,7 +40,7 @@ public class UserRepoTest {
 		System.out.println(user1.equals(role));
 	}
 
-	@Test
+	//@Test
 	public void buildDatabase() {
 		System.out.println("Succeeded.");
 	}

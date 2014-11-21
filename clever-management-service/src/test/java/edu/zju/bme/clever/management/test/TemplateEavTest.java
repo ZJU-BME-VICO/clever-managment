@@ -9,13 +9,13 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 
-import edu.zju.bme.clever.management.entity.TemplateFile;
-import edu.zju.bme.clever.management.entity.TemplateMaster;
-import edu.zju.bme.clever.management.repository.TemplateFileRepository;
-import edu.zju.bme.clever.management.repository.TemplateMasterRepository;
+import edu.zju.bme.clever.management.service.entity.TemplateFile;
+import edu.zju.bme.clever.management.service.entity.TemplateMaster;
+import edu.zju.bme.clever.management.service.repository.TemplateFileRepository;
+import edu.zju.bme.clever.management.service.repository.TemplateMasterRepository;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = "classpath:service-beans.xml")
+@ContextConfiguration(locations = "classpath:service-context.xml")
 @Transactional
 @TransactionConfiguration(defaultRollback = false)
 public class TemplateEavTest {
