@@ -10,6 +10,7 @@
 	xmlns:p="http://www.springframework.org/schema/p"
 	xmlns:sec="http://www.springframework.org/schema/security"
 	xmlns:http-conf="http://cxf.apache.org/transports/http/configuration"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
 	xsi:schemaLocation="
 		http://www.springframework.org/schema/beans
 		http://www.springframework.org/schema/beans/spring-beans.xsd
@@ -26,8 +27,44 @@
 		http://www.springframework.org/schema/security
 		http://www.springframework.org/schema/security/spring-security-3.2.xsd
 		http://cxf.apache.org/transports/http/configuration
-        http://cxf.apache.org/schemas/configuration/http-conf.xsd">	
+        http://cxf.apache.org/schemas/configuration/http-conf.xsd
+        http://www.springframework.org/schema/mvc 
+		http://www.springframework.org/schema/mvc/spring-mvc.xsd">	
         
 	<import resource="classpath*:env-context.xml" />
+	
+	<mvc:annotation-driven
+		content-negotiation-manager="contentNegotiationManager">
+	</mvc:annotation-driven>
+	
+	<context:component-scan base-package="edu.zju.bme.clever.management.web" />
+
+	<mvc:resources location="/WEB-INF/"
+		mapping="/**" />
+		
+	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="prefix" value="/WEB-INF/jsp/"></property>
+		<property name="suffix" value=".jsp"></property>
+	</bean>
+	
+	<bean id="contentNegotiationManager"
+		class="org.springframework.web.accept.ContentNegotiationManagerFactoryBean">
+		<property name="favorPathExtension" value="true" />
+		<property name="favorParameter" value="true" />
+		<property name="parameterName" value="format" />
+		<property name="ignoreAcceptHeader" value="true" />
+		<property name="useJaf" value="false" />
+		<property name="defaultContentType" value="application/json" />
+
+		<property name="mediaTypes">
+			<map>
+				<entry key="html" value="text/html" />
+				<entry key="pdf" value="application/pdf" />
+				<entry key="xsl" value="application/vnd.ms-excel" />
+				<entry key="xml" value="application/xml" />
+				<entry key="json" value="application/json" />
+			</map>
+		</property>
+	</bean>
 	
 </beans>

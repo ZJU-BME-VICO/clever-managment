@@ -1,0 +1,18 @@
+<!-- js library -->
+<script src="js/lib/jquery-2.1.1.js"></script>
+<script src="js/lib/angular.js"></script>
+<script src="js/lib/angular-animate.js"></script>
+<script src="js/lib/angular-translate.js"></script>
+<script src="js/lib/ui-utils.js"></script>
+<script src="js/lib/angular-ui-router.js"></script>
+<script src="js/lib/ui-bootstrap-tpls-0.12.0.js"></script>
+<script src="js/lib/xml2json.js"></script>
+
+
+<!-- app init -->
+<script src="js/app-config.js"></script>
+<script src="js/app-controller.js"></script>
+<script src="js/app.js"></script>
+
+<!-- i18n -->
+<script src="js/i18n/i18n-zh.js"></script>
