@@ -7,7 +7,7 @@ uri="http://www.springframework.org/security/tags"%>
 <html ng-app="cleverManagementApp">
 	<head>
 		<meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
-		<title translate>TITLE</title>
+		<title translate>TITLE_WEBSITE</title>
 		<link rel="icon" href="img/logo.png" />
 		<!-- css init -->
 		<%@ include file="jspf/css-init.jspf"%>
@@ -15,6 +15,9 @@ uri="http://www.springframework.org/security/tags"%>
 	<body ng-controller="appCtrl" style="font-family: Microsoft YaHei;" ng-cloak>
 		<!-- header -->
 		<%@ include file="jspf/header.jspf"%>
+
+		<!-- content -->
+		<div ui-view class="container responsive-container"></div>
 
 		<!-- footer -->
 		<%@ include file="jspf/footer.jspf"%>

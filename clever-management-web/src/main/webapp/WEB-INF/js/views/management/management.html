@@ -1,0 +1,11 @@
+<ol class="breadcrumb" style="background-color: white;">
+	<li>
+		<a href="#/">首页</a>
+	</li>
+	<li ng-repeat="breadcrumb in breadcrumbs" ng-class="{ active : $last }">
+		<a ng-if="!$last" ng-href="{{breadcrumb.href}}">{{breadcrumb.title}}</a>
+		<span ng-if="$last">{{breadcrumb.title}}</span>
+	</li>
+</ol>
+<div ui-view></div>
+<div ui-view="menu"></div>

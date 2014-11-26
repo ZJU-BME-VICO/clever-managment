@@ -60,7 +60,7 @@
       <property name="jpaProperties">
          <props>
             <prop key="hibernate.hbm2ddl.auto">${hibernate.hbm2ddl.auto}</prop>
-            <prop key="hibernate.dialect">org.hibernate.dialect.SQLServer2012Dialect</prop>
+            <prop key="hibernate.dialect">${hibernate.dialect}</prop>
             <prop key="hibernate.ejb.naming_strategy">edu.zju.bme.clever.management.service.util.CleverDatabaseNamingStrategy</prop>
             <prop key="hibernate.show_sql">${hibernate.show_sql}</prop>
 			<prop key="hibernate.format_sql">${hibernate.format_sql}</prop>
