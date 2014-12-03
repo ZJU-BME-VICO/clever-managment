@@ -16,12 +16,4 @@ public class PageController {
 	public String getIndex() {
 		return "index";
 	}
-
-	@RequestMapping(value = "/login", method = RequestMethod.GET)
-	public ModelAndView getLogInView(
-			@RequestParam(value = "error", required = false) boolean error) {
-		Map<String, Object> model = new HashMap<String, Object>();
-		model.put("error", error);
-		return new ModelAndView("login", model);
-	}
 }

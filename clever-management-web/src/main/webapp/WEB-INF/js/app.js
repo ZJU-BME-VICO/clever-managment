@@ -1,5 +1,5 @@
-angular.module('clever.management.directives', []);
-angular.module('clever.management.services', []);
+angular.module('clever.management.directives', ['clever.management.directives.filesModel']);
+angular.module('clever.management.services', ['clever.management.services.resource']);
 angular.module('clever.management.filters', []);
 angular.module('clever.management.controllers', ['clever.management.controllers.app']);
 angular.module('clever.management.i18n', ['clever.management.i18n.zh']);
@@ -8,67 +8,74 @@ angular.module('cleverManagementApp', ['ngAnimate', 'ui.bootstrap', 'pascalprech
 	$urlRouterProvider.otherwise('/');
 
 	// UI router config
+	// Home
 	$stateProvider.state('home', {
 		url : '/',
 		templateUrl : 'js/views/home/home.html',
-	}).state('login', {
-		url : '/login',
+	})
+	// Login
+	.state('login', {
+		url : '/login?failure',
 		templateUrl : 'js/views/login/login.html',
-
+		controller : function($scope, $stateParams) {
+			$scope.failure = $stateParams.failure == 'true' ? true : false;
+		},
 	})
 	// Management
 	.state('management', {
 		abstract : true,
 		url : '/management',
 		templateUrl : 'js/views/management/management.html',
-		controller : function($scope) {
-			$scope.breadcrumbs = [];
-			$scope.setBreadcrumbs = function(breadcrumbs) {
-				$scope.breadcrumbs = breadcrumbs;
-			};
-		}
+		controller : ManagementCtrl,
 	}).state('management.list', {
 		url : '',
 		templateUrl : 'js/views/management/management.list.html',
-		controller : function($scope) {
-			var breadcrumbs = [];
-			breadcrumbs.push({
-				title : '管理',
-				href : '#/management'
-			});
-			$scope.setBreadcrumbs(breadcrumbs);
-		},
 	})
 	// Archetype
 	.state('management.archetype', {
 		abstract : true,
 		url : '/archetype',
-		views : {
-			'' : {
-				template : '<div class="row" ui-view></div>',
-			},
-			'menu' : {
-				templateUrl : 'js/views/management/archetype/management.archetype.menu.html',
-			}
-		},
-
+		templateUrl : 'js/views/universal-ui-view.html',
+		controller : ArchetypePageCtrl,
 	}).state('management.archetype.list', {
 		url : '',
 		templateUrl : 'js/views/management/archetype/management.archetype.list.html',
-		controller : function($scope) {
-			var breadcrumbs = [];
-			breadcrumbs.push({
-				title : '管理',
-				href : '#/management'
-			});
-			breadcrumbs.push({
-				title : '原型 ',
-				href : '#/management/archetype'
-			});
-			$scope.setBreadcrumbs(breadcrumbs);
-		},
+	}).state('management.archetype.view', {
+		url : '/view',
+		templateUrl : 'js/views/management/archetype/view/management.archetype.view.html',
+	}).state('management.archetype.upload', {
+		url : '/upload',
+		templateUrl : 'js/views/management/archetype/upload/management.archetype.upload.html',
+		controller : UploadCtrl,
+	})
+	// Storage
+	.state('management.storage', {
+		abstract : true,
+		url : '/storage',
+		templateUrl : 'js/views/universal-ui-view.html',
+	}).state('management.storage.list', {
+		url : '',
+		templateUrl : 'js/views/management/storage/management.storage.list.html',
+	})
+	// Application
+	.state('management.application', {
+		abstract : true,
+		url : '/application',
+		templateUrl : 'js/views/universal-ui-view.html',
+	}).state('management.application.list', {
+		url : '',
+		templateUrl : 'js/views/management/application/management.application.list.html',
+	})
+	// Integration
+	.state('management.integration', {
+		abstract : true,
+		url : '/integration',
+		templateUrl : 'js/views/universal-ui-view.html',
+	}).state('management.integration.list', {
+		url : '',
+		templateUrl : 'js/views/management/integration/management.integration.list.html',
 	});
-
+	
 	// Translate config
 	$translateProvider.preferredLanguage('zh');
 

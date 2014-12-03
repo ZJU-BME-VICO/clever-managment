@@ -12,12 +12,12 @@ uri="http://www.springframework.org/security/tags"%>
 		<!-- css init -->
 		<%@ include file="jspf/css-init.jspf"%>
 	</head>
-	<body ng-controller="appCtrl" style="font-family: Microsoft YaHei;" ng-cloak>
+	<body ng-controller="appCtrl" style="font-family: Microsoft YaHei;" ng-style="{height: windowHeight, width: windowWidth}" ng-cloak>
 		<!-- header -->
 		<%@ include file="jspf/header.jspf"%>
 
 		<!-- content -->
-		<div ui-view class="container responsive-container"></div>
+		<div ui-view class="container responsive-container" ng-style="{height: windowHeight - 100, width: windowWidth}"></div>
 
 		<!-- footer -->
 		<%@ include file="jspf/footer.jspf"%>

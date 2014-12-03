@@ -1,4 +1,4 @@
-angular.module('clever.management.controllers.app', []).controller('appCtrl', function($scope, $translate, $timeout) {
+angular.module('clever.management.controllers.app', []).controller('appCtrl', function($scope, $translate, $window, $timeout) {
 
 	$scope.selectLanguage = function(key) {
 		$translate.use(key);
@@ -12,4 +12,14 @@ angular.module('clever.management.controllers.app', []).controller('appCtrl', fu
 			return 'LANGUAGE_EN';
 		}
 	};
+
+	$scope.windowHeight = $window.innerHeight;
+	$scope.windowWidth = $window.innerWidth;
+
+	angular.element($window).bind('resize', function() {
+		$scope.windowWidth = $window.innerWidth > 1280 ? $window.innerWidth : 1280;
+		$scope.windowHeight = $window.innerHeight > 720 ? $window.innerHeight : 720;
+		$scope.$apply();
+	});
+
 });

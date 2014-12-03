@@ -1,10 +1,8 @@
-<nav class="navbar navbar-default" role="navigation">
+<nav class="navbar navbar-default" role="navigation" >
 	<div class="responsive-header">
 		<!-- Brand and toggle get grouped for better mobile display -->
 		<div class="navbar-header">
-			<a class="navbar-brand" ng-href="{{WEBSITE_DOMAIN}}/#/">
-				<span><img src="img/logo.png" style="height: 28px;margin-top: -5px;">&nbsp;{{'TITLE_WEBSITE' | translate}}</span>
-			</a>
+			<a class="navbar-brand" ng-href="{{WEBSITE_DOMAIN}}/#/"> <span><img src="img/logo.png" style="height: 28px;margin-top: -5px;">&nbsp;{{'TITLE_WEBSITE' | translate}}</span> </a>
 		</div>
 		<ul class="nav navbar-nav navbar-left">
 			<li>
@@ -14,11 +12,7 @@
 			</li>
 			<li class="dropdown" dropdown>
 				<a href class="dropdown-toggle"
-				dropdown-toggle> 
-					<img ng-show="getCurrentLanguage() == 'LANGUAGE_ZH'" src="img/zh.png" style="height: 18px;">
-					<img ng-show="getCurrentLanguage() == 'LANGUAGE_EN'" src="img/en.png" style="height: 20px;">
-					{{getCurrentLanguage() | translate}}<b class="caret"></b>
-				</a>
+				dropdown-toggle> <img ng-show="getCurrentLanguage() == 'LANGUAGE_ZH'" src="img/zh.png" style="height: 18px;"> <img ng-show="getCurrentLanguage() == 'LANGUAGE_EN'" src="img/en.png" style="height: 20px;"> {{getCurrentLanguage() | translate}}<b class="caret"></b> </a>
 				<ul class="dropdown-menu">
 					<li ng-click="selectLanguage('zh')" style="cursor: pointer;">
 						&nbsp;&nbsp;&nbsp;&nbsp;<img src="img/zh.png" style="height: 20px;">&nbsp;&nbsp;{{'LANGUAGE_ZH' | translate}}
@@ -36,6 +30,23 @@
 				<sec:authorize access="!isAuthenticated()">
 					<li>
 						<a ng-href="{{WEBSITE_DOMAIN}}/#/login"><span class="glyphicon glyphicon-log-in"></span> {{'HEADER_LOGIN' | translate}}</a>
+					</li>
+				</sec:authorize>
+				<sec:authorize access="isAuthenticated()">
+					<sec:authentication property="principal.username" var="userName" />
+					<li>
+						<p class="navbar-text" style="margin-right: 0px;">
+							{{'HEADER_WELCOME' | translate}}
+						</p>
+					</li>
+					<li class="dropdown" dropdown>
+						<a href class="dropdown-toggle"
+						dropdown-toggle>${userName} <b class="caret"></b></a>
+						<ul class="dropdown-menu">
+							<li>
+								<a ng-href="{{WEBSITE_DOMAIN}}/logout"><span class="glyphicon glyphicon-log-in"></span> {{'HEADER_LOGOUT' | translate}}</a>
+							</li>
+						</ul>
 					</li>
 				</sec:authorize>
 			</ul>
