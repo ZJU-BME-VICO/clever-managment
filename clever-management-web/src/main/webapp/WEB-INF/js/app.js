@@ -1,5 +1,5 @@
 angular.module('clever.management.directives', ['clever.management.directives.filesModel']);
-angular.module('clever.management.services', ['clever.management.services.resource']);
+angular.module('clever.management.services', ['clever.management.services.resource', 'clever.management.services.authentication']);
 angular.module('clever.management.filters', []);
 angular.module('clever.management.controllers', ['clever.management.controllers.app']);
 angular.module('clever.management.i18n', ['clever.management.i18n.zh']);
@@ -15,10 +15,13 @@ angular.module('cleverManagementApp', ['ngAnimate', 'ui.bootstrap', 'pascalprech
 	})
 	// Login
 	.state('login', {
-		url : '/login?failure',
+		url : '/login?errorType',
 		templateUrl : 'js/views/login/login.html',
 		controller : function($scope, $stateParams) {
-			$scope.failure = $stateParams.failure == 'true' ? true : false;
+			$scope.errorType = $stateParams.errorType;
+			$scope.isErrorType = function(errorType) {
+				return $scope.errorType == errorType;
+			};
 		},
 	})
 	// Management
@@ -75,13 +78,36 @@ angular.module('cleverManagementApp', ['ngAnimate', 'ui.bootstrap', 'pascalprech
 		url : '',
 		templateUrl : 'js/views/management/integration/management.integration.list.html',
 	});
-	
+
 	// Translate config
 	$translateProvider.preferredLanguage('zh');
 
-}).run(function($rootScope, $state, $stateParams, WEBSITE_DOMAIN) {
+}).run(function($rootScope, $state, $stateParams, authenticationService, WEBSITE_DOMAIN) {
+
 	$rootScope.WEBSITE_DOMAIN = WEBSITE_DOMAIN;
 	$rootScope.$state = $state;
 	$rootScope.$stateParams = $stateParams;
+
+	var authenticateWhiteList = ['home', 'login'];
+
+	$rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams) {
+		if (authenticateWhiteList.indexOf(toState.name) < 0) {
+			authenticationService.validateAuthentication().then(function(result) {
+				if (!result.isAuthenticated) {
+					event.preventDefault();
+					if (result.previousIsAuthenticated) {
+						$state.go('login', {
+							errorType : 'SessionExpired'
+						});
+					} else {
+						$state.go('login', {
+							errorType : 'Unauthorized'
+						});
+					}
+				}
+			});
+		}
+	});
+
 });
 

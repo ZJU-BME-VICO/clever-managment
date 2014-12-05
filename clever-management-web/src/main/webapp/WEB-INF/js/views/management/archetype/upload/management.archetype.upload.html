@@ -4,14 +4,12 @@
 			<div class="col-sm-12 col-md-12 col-lg-12">
 				<button class="btn btn-success fileinput-button" ng-show="isStatus('ToAddFile')">
 					<span class="glyphicon glyphicon-plus"></span> {{'ARCHETYPE_UPLOAD_ADD_FILE' | translate}}
-					<input id="inputFiles" type="file" files-model multiple file-list="fileList">
+					<input id="inputFiles" type="file" multiple accept=".adl" files-model file-list="fileList">
 				</button>
 				<h4 ng-show="status == 'Validating'"><img ng-src="{{WEBSITE_DOMAIN}}/img/loading.gif" style="max-height: 18px;"></img> {{'iUploadUploading' | translate}}</h4>
 				<h4 ng-show="status == 'ValidationFailed'" style="color: red">{{'iUploadValidationFailed' | translate}}</h4>
 				<h4 ng-show="status == 'ValidationPast'" style="color: green">{{'iUploadValidationPast' | translate}}</h4>
 				<h4 ng-show="status == 'Uploading'"><img ng-src="{{WEBSITE_DOMAIN}}/img/loading.gif" style="max-height: 18px;"></img> {{'iUploadUploading' | translate}}</h4>
-				<h4 ng-show="status == 'UploadFailed'" style="color: red">{{'iUploadUploadFailed' | translate}}</h4>
-				<h4 ng-show="status == 'UploadSucceeded'" style="color: green">{{'iUploadUploadSucceeded' | translate}}</h4>
 			</div>
 		</div>
 		<br/>
@@ -32,7 +30,7 @@
 							<td style="vertical-align: middle;"><span ng-show="file.status == 'INVALID'" style="cursor: pointer;" popover-placement="bottom" popover="{{file.message}}"><span class="glyphicon glyphicon-exclamation-sign"></span> {{'iUploadDetails' | translate}}</span></td>
 							<td style="vertical-align: middle;">
 							<button ng-show="file.status== 'TOUPLOAD' || file.status == 'INVALID'" type="button" class="btn btn-warning" ng-click="deleteFile(file.name)">
-								{{'iUploadDelete' | translate}}
+								{{'ARCHETYPE_UPLOAD_DELETE' | translate}}
 							</button>
 						</tr>
 					</tbody>
@@ -47,12 +45,12 @@
 		{{'ARCHETYPE_UPLOAD_VALIDATE' | translate}}
 	</button>
 	<button ng-show="status == 'ValidationFailed'" class="btn btn-primary btn-lg" ng-click="validateFiles()" ng-disabled="fileList.length == 0">
-		{{'iUploadRetry' | translate}}
+		{{'ARCHETYPE_UPLOAD_RETRY' | translate}}
 	</button>
 	<button ng-show="status == 'ValidationPast'" class="btn btn-success btn-lg" ng-click="uploadFiles()" ng-disabled="fileList.length == 0">
-		{{'iUploadUpload' | translate}}
+		{{'ARCHETYPE_UPLOAD_UPLOAD' | translate}}
 	</button>
 	<button class="btn btn-warning btn-lg" ng-click="reset()">
-		{{'iUploadReset' | translate}}
+		{{'ARCHETYPE_UPLOAD_RESET' | translate}}
 	</button>
 </div>

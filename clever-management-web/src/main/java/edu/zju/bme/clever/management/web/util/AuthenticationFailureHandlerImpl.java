@@ -24,7 +24,6 @@ public class AuthenticationFailureHandlerImpl implements
 	public void onAuthenticationFailure(HttpServletRequest request,
 			HttpServletResponse response, AuthenticationException exception)
 			throws IOException, ServletException {
-		response.sendRedirect("/clever-management-web/#/login?failure=true");
-		// response.getWriter().print("{\"succeeded\":\"false\"}");
+		response.sendRedirect("/clever-management-web/#/login?errorType=WrongUserNameOrPassword");
 	}
 }

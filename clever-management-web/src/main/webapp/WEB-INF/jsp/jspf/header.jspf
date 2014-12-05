@@ -27,28 +27,26 @@
 				<li>
 					<a ng-href="{{WEBSITE_DOMAIN}}/#/"><span class="glyphicon glyphicon-home"></span> {{'HEADER_HOME' | translate}}</a>
 				</li>
-				<sec:authorize access="!isAuthenticated()">
-					<li>
-						<a ng-href="{{WEBSITE_DOMAIN}}/#/login"><span class="glyphicon glyphicon-log-in"></span> {{'HEADER_LOGIN' | translate}}</a>
-					</li>
-				</sec:authorize>
+				<li ng-show="!isAuthenticated">
+					<a ng-href="{{WEBSITE_DOMAIN}}/#/login"><span class="glyphicon glyphicon-log-in"></span> {{'HEADER_LOGIN' | translate}}</a>
+				</li>
 				<sec:authorize access="isAuthenticated()">
 					<sec:authentication property="principal.username" var="userName" />
-					<li>
-						<p class="navbar-text" style="margin-right: 0px;">
-							{{'HEADER_WELCOME' | translate}}
-						</p>
-					</li>
-					<li class="dropdown" dropdown>
-						<a href class="dropdown-toggle"
-						dropdown-toggle>${userName} <b class="caret"></b></a>
-						<ul class="dropdown-menu">
-							<li>
-								<a ng-href="{{WEBSITE_DOMAIN}}/logout"><span class="glyphicon glyphicon-log-in"></span> {{'HEADER_LOGOUT' | translate}}</a>
-							</li>
-						</ul>
-					</li>
 				</sec:authorize>
+				<li ng-show="isAuthenticated">
+					<p class="navbar-text" style="margin-right: 0px;">
+						{{'HEADER_WELCOME' | translate}}
+					</p>
+				</li>
+				<li class="dropdown" dropdown ng-show="isAuthenticated">
+					<a href class="dropdown-toggle"
+					dropdown-toggle>${userName} <b class="caret"></b></a>
+					<ul class="dropdown-menu">
+						<li>
+							<a ng-href="{{WEBSITE_DOMAIN}}/logout"><span class="glyphicon glyphicon-log-in"></span> {{'HEADER_LOGOUT' | translate}}</a>
+						</li>
+					</ul>
+				</li>
 			</ul>
 		</div><!-- /.navbar-collapse -->
 	</div>

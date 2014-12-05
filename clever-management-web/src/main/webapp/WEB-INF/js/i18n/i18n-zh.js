@@ -23,10 +23,16 @@ angular.module('clever.management.i18n.zh', ['pascalprecht.translate']).config(f
 		LOGIN_PASSWORD : '密码',
 		LOGIN_REMEMBER_ME : '记住我',
 		LOGIN_BUTTON : '登录',
-		LOGIN_INVALID : '用户名或密码错误',
+		LOGIN_WRONG_USERNAME_PASSWORD : '用户名或密码错误',
+		LOGIN_UNAUTHORIZED : '请先登录再进行操作',
+		LOGIN_SESSION_EXPIRED : '会话已过期，请重新登录',
 		
 		// Archetype upload
 		ARCHETYPE_UPLOAD_ADD_FILE : '添加文件',
 		ARCHETYPE_UPLOAD_VALIDATE : '验证',
+		ARCHETYPE_UPLOAD_RESET : '重置',
+		ARCHETYPE_UPLOAD_RETRY : '重试',
+		ARCHETYPE_UPLOAD_UPLOAD : '上传',
+		ARCHETYPE_UPLOAD_DELETE : '删除',
 	});
 });

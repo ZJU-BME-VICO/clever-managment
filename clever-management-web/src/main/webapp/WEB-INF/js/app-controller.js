@@ -1,4 +1,11 @@
-angular.module('clever.management.controllers.app', []).controller('appCtrl', function($scope, $translate, $window, $timeout) {
+angular.module('clever.management.controllers.app', []).controller('appCtrl', function($scope, $translate, $window, $timeout, authenticationService) {
+
+	$scope.isAuthenticated = false;
+	$scope.$watch(function() {
+		return authenticationService.isAuthenticated();
+	}, function(newValue) {
+		$scope.isAuthenticated = newValue;
+	});
 
 	$scope.selectLanguage = function(key) {
 		$translate.use(key);

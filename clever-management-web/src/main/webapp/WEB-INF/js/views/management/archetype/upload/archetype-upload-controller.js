@@ -8,11 +8,24 @@ function UploadCtrl($scope) {
 		ToUpload : 5,
 		Uploading : 6,
 	};
-	
+
 	$scope.fileList = [];
 	$scope.status = pageStatus.ToAddFile;
 
 	$scope.isStatus = function(status) {
 		return $scope.status == pageStatus[status];
+	};
+
+	$scope.deleteFile = function(fileName) {
+		for ( i = 0; i < $scope.fileList.length; i++) {
+			if ($scope.fileList[i].name == fileName) {
+				$scope.fileList.splice(i, 1);
+			}
+		}
+	};
+	
+	$scope.reset = function() {
+		$scope.fileList = [];
+		$scope.status = pageStatus.ToAddFile;
 	};
 }
