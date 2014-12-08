@@ -2,7 +2,7 @@
 	<div ng-style="{height: windowHeight - 310}">
 		<div class="row">
 			<div class="col-sm-12 col-md-12 col-lg-12">
-				<button class="btn btn-success fileinput-button" ng-show="isStatus('ToAddFile')">
+				<button class="btn btn-success fileinput-button" ng-show="onStatus('ToAddFile')">
 					<span class="glyphicon glyphicon-plus"></span> {{'ARCHETYPE_UPLOAD_ADD_FILE' | translate}}
 					<input id="inputFiles" type="file" multiple accept=".adl" files-model file-list="fileList">
 				</button>
@@ -19,11 +19,11 @@
 					<tbody>
 						<tr ng-repeat="file in fileList | orderBy:file.name" ng-class="{TOUPLOAD: '', VALID: 'success', EXISTED: 'info', CHANGED: 'warning', INVALID: 'danger', FAILED: 'danger'}[file.status]">
 							<td style="vertical-align: middle;">
-								<span ng-show="file.status=='TOUPLOAD'"><span class="glyphicon glyphicon-plus-sign"></span> {{'iUploadToUpload' | translate}}</span>
-								<span ng-show="file.status=='VALID'"><span class="glyphicon glyphicon-ok-sign"></span> {{'iUploadValid' | translate}}</span>
-								<span ng-show="file.status=='INVALID'"><span class="glyphicon glyphicon-minus-sign"></span> {{'iUploadInvalid' | translate}}</span>
-								<span ng-show="file.status=='FAILED'"><span class="glyphicon glyphicon-remove-sign"></span> {{'iUploadFailed' | translate}}</span>
-								<span ng-show="file.status=='UPLOADING'"><img ng-src="{{WEBSITE_DOMAIN}}/img/loading.gif" style="max-height: 20px;"></img> {{'iUploadProcessing' | translate}}</span>
+								<span ng-show="file.status=='TOUPLOAD'"><span class="glyphicon glyphicon-plus-sign"></span> {{'ARCHETYPE_UPLOAD_FILE_TO_UPLOAD' | translate}}</span>
+								<span ng-show="file.status=='VALID'"><span class="glyphicon glyphicon-ok-sign"></span> {{'ARCHETYPE_UPLOAD_FILE_VALID' | translate}}</span>
+								<span ng-show="file.status=='INVALID'"><span class="glyphicon glyphicon-minus-sign"></span> {{'ARCHETYPE_UPLOAD_FILE_INVALID' | translate}}</span>
+								<span ng-show="file.status=='FAILED'"><span class="glyphicon glyphicon-remove-sign"></span> {{'ARCHETYPE_UPLOAD_FILE_FAILED' | translate}}</span>
+								<span ng-show="file.status=='UPLOADING'"><img ng-src="{{WEBSITE_DOMAIN}}/img/loading.gif" style="max-height: 20px;"></img> {{'ARCHETYPE_UPLOAD_FILE_UPLOADING' | translate}}</span>
 							</td>
 							<td style="vertical-align: middle;">{{file.name}}</td>
 							<td style="vertical-align: middle;">{{file.size/1024 | number:0}}KB</td>
@@ -41,13 +41,13 @@
 	</div>
 </div>
 <div class="modal-footer">
-	<button ng-show="isStatus('ToAddFile')" class="btn btn-primary btn-lg" ng-click="validateFiles()" ng-disabled="fileList.length == 0">
+	<button ng-show="onStatus('ToAddFile')" class="btn btn-primary btn-lg" ng-click="validateFiles()" ng-disabled="fileList.length == 0">
 		{{'ARCHETYPE_UPLOAD_VALIDATE' | translate}}
 	</button>
-	<button ng-show="status == 'ValidationFailed'" class="btn btn-primary btn-lg" ng-click="validateFiles()" ng-disabled="fileList.length == 0">
+	<button ng-show="onStatus('ValidationFailed')" class="btn btn-primary btn-lg" ng-click="validateFiles()" ng-disabled="fileList.length == 0">
 		{{'ARCHETYPE_UPLOAD_RETRY' | translate}}
 	</button>
-	<button ng-show="status == 'ValidationPast'" class="btn btn-success btn-lg" ng-click="uploadFiles()" ng-disabled="fileList.length == 0">
+	<button ng-show="onStatus('ValidationPast')" class="btn btn-success btn-lg" ng-click="uploadFiles()" ng-disabled="fileList.length == 0">
 		{{'ARCHETYPE_UPLOAD_UPLOAD' | translate}}
 	</button>
 	<button class="btn btn-warning btn-lg" ng-click="reset()">

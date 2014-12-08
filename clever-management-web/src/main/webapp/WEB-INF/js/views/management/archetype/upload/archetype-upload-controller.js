@@ -12,7 +12,7 @@ function UploadCtrl($scope) {
 	$scope.fileList = [];
 	$scope.status = pageStatus.ToAddFile;
 
-	$scope.isStatus = function(status) {
+	$scope.onStatus = function(status) {
 		return $scope.status == pageStatus[status];
 	};
 
@@ -23,7 +23,11 @@ function UploadCtrl($scope) {
 			}
 		}
 	};
-	
+
+	$scope.validateFiles = function() {
+
+	};
+
 	$scope.reset = function() {
 		$scope.fileList = [];
 		$scope.status = pageStatus.ToAddFile;
