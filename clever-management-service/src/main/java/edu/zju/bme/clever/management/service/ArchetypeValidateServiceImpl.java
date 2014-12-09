@@ -37,38 +37,55 @@ public class ArchetypeValidateServiceImpl {
 
 	public void validateConsistency(Map<String, Archetype> archetypes,
 			Map<String, FileProcessResult> results) {
-		archetypes.forEach((archetypeId, archetype) -> {
-			FileProcessResult result = results.get(archetypeId);
-			Optional<ArchetypeFile> archetypeFile = Optional
-					.ofNullable(this.archetypeFileRepo.findByName(archetype
-							.getArchetypeId().getValue()));
-			Optional<ArchetypeMaster> archetypeMaster = Optional
-					.ofNullable(this.archetypeMasterRepo.findByName(archetype
-							.getArchetypeId().base()));
-			// Validate existence
-				this.validateExistence(archetype, result, archetypeFile);
-				// Validate version
-				this.validateVersion(archetype, result, archetypeMaster);
-				// Validate specialise archetype
-				this.validateSpecialisation(archetype, result, archetypes);
-				// Validate version upgrade
-				archetypeMaster.map(ArchetypeMaster::getLatestFile)
-						.ifPresent(
-								file -> {
-									ADLParser parser = new ADLParser(file
-											.getContent());
-									try {
-										Archetype previousArchetype = parser
-												.parse();
-										this.validateVersionUpgrade(archetype,
-												previousArchetype, result);
-									} catch (Exception ex) {
-										this.logger.error(
-												"Cannot parse archetype "
-														+ file.getName(), ex);
-									}
-								});
-			});
+		Map<String, Archetype> validatedArchetypes = new HashMap<String, Archetype>();
+		int lastLoopValidatedArchetypeCount = -1;
+		while (validatedArchetypes.size() > lastLoopValidatedArchetypeCount) {
+			archetypes
+					.forEach((archetypeId, archetype) -> {
+						FileProcessResult result = results.get(archetypeId);
+						Optional<ArchetypeFile> archetypeFile = Optional
+								.ofNullable(this.archetypeFileRepo
+										.findByName(archetype.getArchetypeId()
+												.getValue()));
+						Optional<ArchetypeMaster> archetypeMaster = Optional
+								.ofNullable(this.archetypeMasterRepo
+										.findByName(archetype.getArchetypeId()
+												.base()));
+
+						// Validate specialize archetype
+					this.validateSpecialisation(archetype, result,
+							validatedArchetypes);
+					// Validate existence
+					this.validateExistence(archetype, result, archetypeFile);
+					// Validate version
+					this.validateVersion(archetype, result, archetypeMaster);
+					// Validate version upgrade
+					archetypeMaster
+							.map(ArchetypeMaster::getLatestFile)
+							.ifPresent(
+									file -> {
+										ADLParser parser = new ADLParser(file
+												.getContent());
+										try {
+											Archetype previousArchetype = parser
+													.parse();
+											this.validateVersionUpgrade(
+													archetype,
+													previousArchetype, result);
+										} catch (Exception ex) {
+											this.logger.error(
+													"Cannot parse archetype "
+															+ file.getName(),
+													ex);
+										}
+									});
+
+					// Validate past
+					validatedArchetypes.put(archetypeId, archetype);
+					archetypes.remove(archetypeId, archetype);
+				});
+			lastLoopValidatedArchetypeCount = validatedArchetypes.size();
+		}
 	}
 
 	private void validateExistence(Archetype archetype,
