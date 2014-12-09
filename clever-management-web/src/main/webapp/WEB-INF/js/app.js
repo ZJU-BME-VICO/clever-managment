@@ -68,6 +68,10 @@ angular.module('cleverManagementApp', ['ngAnimate', 'ui.bootstrap', 'pascalprech
 	}).state('management.application.list', {
 		url : '',
 		templateUrl : 'js/views/management/application/management.application.list.html',
+	}).state('management.application.designer', {
+		url : '/designer',
+		templateUrl : 'js/views/management/application/designer/management.application.designer.html',
+		controller : DesignerCtrl,
 	})
 	// Integration
 	.state('management.integration', {

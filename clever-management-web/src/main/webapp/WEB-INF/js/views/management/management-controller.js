@@ -28,7 +28,11 @@ function ManagementCtrl($scope) {
 	// Application management
 	var application = management.application = {
 		title : '应用管理',
-		href : '#/management/archetype'
+		href : '#/management/application'
+	};
+	application.designer = {
+		title : '设计器',
+		href : '#/management/application/designer'
 	};
 	// Integration management
 	var integration = management.integration = {
