@@ -34,6 +34,10 @@ function ManagementCtrl($scope) {
 		title : '设计器',
 		href : '#/management/application/designer'
 	};
+	application.view = {
+			title : '应用查看',
+			href : '#/management/application/view',
+	};
 	// Integration management
 	var integration = management.integration = {
 		title : '集成管理',
