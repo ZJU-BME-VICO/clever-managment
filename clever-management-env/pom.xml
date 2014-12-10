@@ -20,16 +20,16 @@
 
 	<profiles>
 		<profile>
-			<id>remote-dev</id>
+			<id>local-dev</id>
 			<properties>
-				<env>remote-dev</env>
+				<env>local-dev</env>
 				<database.url>jdbc:sqlserver://localhost:1433;databaseName=clever-management</database.url>
 				<database.username>sa</database.username>
 				<database.password>root</database.password>
 			</properties>
 		</profile>
 		<profile>
-			<id>local-dev</id>
+			<id>remote-dev</id>
 			<properties>
 				<database.url>jdbc:sqlserver://172.16.100.33;instanceName=CDR;databaseName=clever-management</database.url>
 				<database.username>sa</database.username>

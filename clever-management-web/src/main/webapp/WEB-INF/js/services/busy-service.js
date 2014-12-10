@@ -1,27 +1,31 @@
 angular.module('clever.management.services.busy', []).service('busyService', function() {
+
 	var threads = [];
 	var isBusy = false;
 	this.getBusy = function(){
 		return isBusy;
 	};
 	this.pushBusy = function(){
-		var randomId = random();
-		while(threads.indexOf(randomId)>0){
-			ranmowId = random();
+		var randomId = this.random();
+		while(threads.indexOf(""+randomId)>=0){   //indexof某字符串在一串字符中第一次出现的位置
+			ranmowId = this.random();
 		}
-		threads.push(randomId);
+		threads.push(""+randomId);
 		isBusy = true;
 		return randomId;
 	};
 	this.popBusy = function(id){
-		var index = threads.indexOf(id);
+		var index = threads.indexOf(""+id);
 		threads.splice(index,1);
 		if(threads.length==0){
 			isBusy = false;
+			while(threads.length!=0){
+				threads.pop();
+			}
 		}
 	};
-	function random(){
-		return 1;
+	this.random=function(){
+		return Math.ceil(Math.random()*100);
 	}
 //	var s={
 //
