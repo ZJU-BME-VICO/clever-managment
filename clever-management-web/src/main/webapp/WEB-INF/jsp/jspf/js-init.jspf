@@ -20,6 +20,7 @@
 <script src="js/services/resource-service.js"></script>
 <script src="js/services/authentication-service.js"></script>
 <script src="js/services/busy-service.js"></script>
+<script src="js/services/msgbox-service.js"></script>
 
 <!-- directives -->
 <script src="js/directives/files-model/files-model-directive.js"></script>
