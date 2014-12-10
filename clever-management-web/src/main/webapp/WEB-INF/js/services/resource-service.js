@@ -4,7 +4,9 @@ angular.module('clever.management.services.resource', []).service('resourceServi
 			return data;
 		}).error(function(data, status, headers, config) {
 			if (status == 401) {
-				$state.go('login');
+				$state.go('login', {
+					errorType : 'SessionExpired'
+				});
 			}
 		});
 	};

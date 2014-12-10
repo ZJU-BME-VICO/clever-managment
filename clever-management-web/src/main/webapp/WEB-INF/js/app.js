@@ -72,6 +72,10 @@ angular.module('cleverManagementApp', ['ngAnimate', 'ui.bootstrap', 'pascalprech
 		url : '/designer',
 		templateUrl : 'js/views/management/application/designer/management.application.designer.html',
 		controller : DesignerCtrl,
+	}).state('management.application.view', {
+		url : '/view',
+		templateUrl : 'js/views/management/application/view/management.application.view.html',
+		controller : ApplicationViewCtrl,
 	})
 	// Integration
 	.state('management.integration', {
@@ -95,7 +99,7 @@ angular.module('cleverManagementApp', ['ngAnimate', 'ui.bootstrap', 'pascalprech
 	var authenticateWhiteList = ['home', 'login'];
 
 	$rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams) {
-		busyService.pushBusy();
+//		busyService.pushBusy();
 		if (authenticateWhiteList.indexOf(toState.name) < 0) {
 			authenticationService.validateAuthentication().then(function(result) {
 				if (!result.isAuthenticated) {
