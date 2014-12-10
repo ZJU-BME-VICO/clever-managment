@@ -1,57 +1,62 @@
 angular.module('msgboxModule', []).service('msgboxService', ['$modal', function($modal) {
-var icons = {
-            question: 'glyphicon glyphicon-question-sign',
-            error: 'glyphicon glyphicon-remove-sign',
-            success: 'glyphicon glyphicon-ok-sign',
-            info: 'glyphicon glyphicon-info-sign',
-            warning: 'glyphicon glyphicon-exclamation-sign'
-        };
 
-        var colors = {
-            question: '#428bca',
-            error: '#cc4036',
-            success: '#5bb75b',
-            info: '#2f96b4',
-            warning: '#f0ad4e'
-        };
-    this.createMessageBox = function(title, content, icon, button) {
+        var icons = {
+            question: {
+                fort: 'glyphicon glyphicon-question-sign',
+                color: '#428bca'
+            },
+            error: {
+                fort: 'glyphicon glyphicon-remove-sign',
+                color: '#cc4036'
+            },
+            success: {
+                fort: 'glyphicon glyphicon-ok-sign',
+                color: '#5bb75b'
+            },
+            info: {
+                fort: 'glyphicon glyphicon-info-sign',
+                color: '#2f96b4'
+            },
+            warning: {
+                fort: 'glyphicon glyphicon-exclamation-sign',
+                color: '#f0ad4e'
+            }
 
-        
+        };
 
         var buttons ={
-            yesOrNo: ['Yes', 'No'],
-            okOrCancel: ['Ok', 'Cancel']
+            yesOrNo: {
+                bt1: 'Yes',
+                bt2: 'No'
+            },
+            okOrCancel: {
+                bt1: 'Ok', 
+                bt2: 'Cancel'
+            }
         };
+
+    this.createMessageBox = function(title, content, icon, button) {
 
         return msgInstance = $modal.open({
             template: '<div class="modal-header">' + 
                             '<button type="button" class="close" ng-click="cancel()">' +
                                 '&times;' +
                             '</button>' +
-                            '<h3 class="modal-title">{{title}}</h3>' +
-                         '</div>' +
-                         '<div class="modal-body">' +
-                            '<div class="content-container">' +
-                                '<div class="row">' +
-                                    '<div class="col-sm-2" ng-if="icon">' +
-                                        '<span ng-class="icon" ng-style="iconStyle">' +
-                                        '</span>' +
-                                    '</div>' +
-                                    '<div class="col-sm-10" ng-if="icon">' +
-                                        '<p style="word-wrap:break-word;">{{content}}</p>' +
-                                    '</div>' +
-                                    '<div class="col-sm-12" ng-if="icon == null">' +
-                                        '<p style="word-wrap:break-word;">{{content}}</p>' +
-                                    '</div>' +
-                                '</div>' +
-                            '</div>' +
+                            '<h3 class="modal-title">' +
+                                '<span ng-class="icon" ng-style="iconStyle" ng-if= "icon">' +
+                                '</span>' +
+                                '&nbsp;{{title}}' +
+                            '</h3>' +
                         '</div>' +
-                        '<div class="modal-footer" ng-if="button != null">' +
+                        '<div class="modal-body">' +
+                            '<p style="word-wrap:break-word;">{{content}}</p>' +
+                        '</div>' +
+                        '<div class="modal-footer" ng-if="button">' +
                             '<button class="btn btn-primary" ng-click="ok()">' +
-                                '{{button[0]}}' +
+                                '{{button.bt1}}' +
                             '</button>' +
                             '<button class="btn btn-warning" ng-click="cancel()">' +
-                                '{{button[1]}}' +
+                                '{{button.bt2}}' +
                             '</button>' +
                         '</div>' +
                         '<div class="modal-footer" ng-if="button == null">' +
@@ -68,11 +73,19 @@ var icons = {
                 };
                 $scope.title = title;
                 $scope.content = content;
-                $scope.icon = icons[icon];
-                $scope.iconStyle = {
-                    'font-size': '30px',
-                    'color': colors[icon]
-                };
+
+                if(icon == null){
+                    $scope.icon = null;
+                }
+                else{
+                    $scope.icon = icons[icon].fort;
+                    $scope.iconStyle = {
+                        'top': '5px',
+                        'font-size': '30px',
+                        'color': icons[icon].color
+                    }
+                }
+
                 $scope.button = buttons[button];
             },
             backdrop: 'static',
