@@ -9,12 +9,14 @@ import java.util.Map;
 import org.openehr.am.archetype.Archetype;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import edu.zju.bme.clever.management.service.ArchetypeValidateService;
 import edu.zju.bme.clever.management.service.entity.FileProcessResult;
 import se.acode.openehr.parser.ADLParser;
 
@@ -24,10 +26,8 @@ public class ArchetypeResourceController {
 
 	protected final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-	@RequestMapping("/test")
-	public String test() {
-		return "index";
-	}
+	@Autowired
+	private ArchetypeValidateService archetypeValidateService;
 
 	@RequestMapping(value = "/validation", method = RequestMethod.POST)
 	public List<FileProcessResult> validateFiles(
@@ -43,7 +43,7 @@ public class ArchetypeResourceController {
 							fileName, fileSize);
 					FileProcessResult result = new FileProcessResult();
 					result.setName(fileName);
-					result.setStatus(FileProcessResult.FileStatus.Valid);
+					result.setStatus(FileProcessResult.FileStatus.VALID);
 					allResults.add(result);
 					try {
 						ADLParser parser = new ADLParser(file.getInputStream(),
@@ -56,12 +56,13 @@ public class ArchetypeResourceController {
 					} catch (Throwable ex) {
 						this.logger.debug("Parse file {} failed.",
 								file.getOriginalFilename(), ex);
-						result.setStatus(FileProcessResult.FileStatus.Invalid);
+						result.setStatus(FileProcessResult.FileStatus.INVALID);
 						result.setMessage("Archetype parse failed, error: "
 								+ ex.getMessage());
 					}
 				});
-		
+		// Validate archetypes
+		this.archetypeValidateService.validateConsistency(archetypes, results);
 		return allResults;
 	}
 

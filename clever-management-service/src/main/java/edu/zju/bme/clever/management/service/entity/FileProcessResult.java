@@ -32,7 +32,7 @@ public class FileProcessResult {
 
 	public enum FileStatus {
 
-		Valid("Valid"), Invalid("Invalid");
+		VALID("VALID"), INVALID("INVALID");
 
 		private final String value;
 

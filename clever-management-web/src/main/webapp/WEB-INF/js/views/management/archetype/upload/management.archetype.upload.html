@@ -6,10 +6,11 @@
 					<span class="glyphicon glyphicon-plus"></span> {{'ARCHETYPE_UPLOAD_ADD_FILE' | translate}}
 					<input id="inputFiles" type="file" multiple accept=".adl" files-model file-list="fileList">
 				</button>
-				<h4 ng-show="status == 'Validating'"><img ng-src="{{WEBSITE_DOMAIN}}/img/loading.gif" style="max-height: 18px;"></img> {{'iUploadUploading' | translate}}</h4>
-				<h4 ng-show="status == 'ValidationFailed'" style="color: red">{{'iUploadValidationFailed' | translate}}</h4>
-				<h4 ng-show="status == 'ValidationPast'" style="color: green">{{'iUploadValidationPast' | translate}}</h4>
-				<h4 ng-show="status == 'Uploading'"><img ng-src="{{WEBSITE_DOMAIN}}/img/loading.gif" style="max-height: 18px;"></img> {{'iUploadUploading' | translate}}</h4>
+				<span ng-show="fileList.length>0" class="badge pull-right">{{fileList.length}}</span>
+				<h4 ng-show="onStatus('Validating')"><img ng-src="{{WEBSITE_DOMAIN}}/img/loading.gif" style="max-height: 18px;"></img> {{'ARCHETYPE_UPLOAD_VALIDATING_HINT' | translate}}</h4>
+				<h4 ng-show="onStatus('ValidationFailed')" style="color: red">{{'ARCHETYPE_UPLOAD_VALIDATION_FAILED_HINT' | translate}}</h4>
+				<h4 ng-show="onStatus('ValidationPast')" style="color: green">{{'ARCHETYPE_UPLOAD_VALIDATION_PAST_HINT' | translate}}</h4>
+				<h4 ng-show="onStatus('Uploading')"><img ng-src="{{WEBSITE_DOMAIN}}/img/loading.gif" style="max-height: 18px;"></img> {{'ARCHETYPE_UPLOAD_UPLOADING_HINT' | translate}}</h4>
 			</div>
 		</div>
 		<br/>
@@ -27,7 +28,12 @@
 							</td>
 							<td style="vertical-align: middle;">{{file.name}}</td>
 							<td style="vertical-align: middle;">{{file.size/1024 | number:0}}KB</td>
-							<td style="vertical-align: middle;"><span ng-show="file.status == 'INVALID'" style="cursor: pointer;" popover-placement="bottom" popover="{{file.message}}"><span class="glyphicon glyphicon-exclamation-sign"></span> {{'iUploadDetails' | translate}}</span></td>
+							<td style="vertical-align: middle;">
+								<a ng-show="file.status == 'INVALID'" style="cursor: pointer;" popover-placement="bottom" popover="{{file.message}}" popover-trigger="mouseenter">
+									<span class="glyphicon glyphicon-exclamation-sign"></span> 
+									{{'ARCHETYPE_UPLOAD_FILE_DETAILS' | translate}}
+								</a>
+							</td>
 							<td style="vertical-align: middle;">
 							<button ng-show="file.status== 'TOUPLOAD' || file.status == 'INVALID'" type="button" class="btn btn-warning" ng-click="deleteFile(file.name)">
 								{{'ARCHETYPE_UPLOAD_DELETE' | translate}}
