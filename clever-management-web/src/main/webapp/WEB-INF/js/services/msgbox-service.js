@@ -1,4 +1,4 @@
-angular.module('msgboxModule', []).service('msgboxService', ['$modal', function($modal) {
+angular.module('clever.management.services.msgbox', []).service('msgboxService', ['$modal', function($modal) {
 
         var icons = {
             question: {
@@ -35,7 +35,7 @@ angular.module('msgboxModule', []).service('msgboxService', ['$modal', function(
             }
         };
 
-    this.createMessageBox = function(title, content, icon, button) {
+    this.createMessageBox = function(title, content, values, icon, button) {
 
         return msgInstance = $modal.open({
             template: '<div class="modal-header">' + 
@@ -45,11 +45,11 @@ angular.module('msgboxModule', []).service('msgboxService', ['$modal', function(
                             '<h3 class="modal-title">' +
                                 '<span ng-class="icon" ng-style="iconStyle" ng-if= "icon">' +
                                 '</span>' +
-                                '&nbsp;{{title}}' +
+                                '&nbsp;{{title | translate:values}}' +
                             '</h3>' +
                         '</div>' +
                         '<div class="modal-body">' +
-                            '<p style="word-wrap:break-word;">{{content}}</p>' +
+                            '<p style="word-wrap:break-word;">{{content | translate:values}}</p>' +
                         '</div>' +
                         '<div class="modal-footer" ng-if="button">' +
                             '<button class="btn btn-primary" ng-click="ok()">' +
@@ -65,6 +65,8 @@ angular.module('msgboxModule', []).service('msgboxService', ['$modal', function(
                         '</div>',
 
             controller: function($scope, $modalInstance) {
+            	$scope.values = values;
+            	
                 $scope.ok = function() {
                     $modalInstance.close(true);
                 };
@@ -82,8 +84,8 @@ angular.module('msgboxModule', []).service('msgboxService', ['$modal', function(
                     $scope.iconStyle = {
                         'top': '5px',
                         'font-size': '30px',
-                        'color': icons[icon].color
-                    }
+                        'color': icons[icon].color,
+                    };
                 }
 
                 $scope.button = buttons[button];

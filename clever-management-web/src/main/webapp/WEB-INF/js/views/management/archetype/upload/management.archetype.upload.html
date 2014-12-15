@@ -25,6 +25,7 @@
 								<span ng-show="file.status=='INVALID'"><span class="glyphicon glyphicon-minus-sign"></span> {{'ARCHETYPE_UPLOAD_FILE_INVALID' | translate}}</span>
 								<span ng-show="file.status=='FAILED'"><span class="glyphicon glyphicon-remove-sign"></span> {{'ARCHETYPE_UPLOAD_FILE_FAILED' | translate}}</span>
 								<span ng-show="file.status=='UPLOADING'"><img ng-src="{{WEBSITE_DOMAIN}}/img/loading.gif" style="max-height: 20px;"></img> {{'ARCHETYPE_UPLOAD_FILE_UPLOADING' | translate}}</span>
+								<span ng-show="file.status=='VALIDATING'"><img ng-src="{{WEBSITE_DOMAIN}}/img/loading.gif" style="max-height: 20px;"></img> {{'ARCHETYPE_UPLOAD_FILE_VALIDATING' | translate}}</span>
 							</td>
 							<td style="vertical-align: middle;">{{file.name}}</td>
 							<td style="vertical-align: middle;">{{file.size/1024 | number:0}}KB</td>

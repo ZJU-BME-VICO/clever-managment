@@ -1,4 +1,4 @@
-function UploadCtrl($scope, resourceService, ARCHETYPE_VALIDATION_URL) {
+function UploadCtrl($scope, resourceService, msgboxService, ARCHETYPE_VALIDATE_URL, ARCHETYPE_UPLOAD_URL) {
 	var pageStatus = {
 		ToAddFile : 0,
 		ToValidate : 1,
@@ -29,9 +29,9 @@ function UploadCtrl($scope, resourceService, ARCHETYPE_VALIDATION_URL) {
 		var formData = new FormData();
 		angular.forEach($scope.fileList, function(file, index) {
 			formData.append('files', file.file);
-			file.status = 'UPLOADING';
+			file.status = 'VALIDATING';
 		});
-		resourceService.post(ARCHETYPE_VALIDATION_URL, formData, {
+		resourceService.post(ARCHETYPE_VALIDATE_URL, formData, {
 			transformRequest : angular.identity,
 			headers : {
 				'Content-Type' : undefined
@@ -54,6 +54,33 @@ function UploadCtrl($scope, resourceService, ARCHETYPE_VALIDATION_URL) {
 				$scope.status = pageStatus.ValidationPast;
 			} else {
 				$scope.status = pageStatus.ValidationFailed;
+			}
+		});
+	};
+
+	$scope.uploadFiles = function() {
+		$scope.status = pageStatus.Uploading;
+		var formData = new FormData();
+		angular.forEach($scope.fileList, function(file, index) {
+			formData.append('files', file.file);
+			file.status = 'UPLOADING';
+		});
+		resourceService.post(ARCHETYPE_UPLOAD_URL, formData, {
+			transformRequest : angular.identity,
+			headers : {
+				'Content-Type' : undefined
+			}
+		}).then(function(result) {
+			if (result.succeeded) {
+				msgboxService.createMessageBox("ARCHETYPE_UPLOAD_SUCCEEDED", "ARCHETYPE_UPLOAD_SUCCEEDED_HINT").then(function() {
+					$scope.reset();
+				});
+			} else {
+				msgboxService("ARCHETYPE_UPLOAD_FAILED", "ARCHETYPE_UPLOAD_FAILED_HINT", {
+					errorMsg : result.message
+				}).then(function() {
+					$scope.reset();
+				});
 			}
 		});
 	};

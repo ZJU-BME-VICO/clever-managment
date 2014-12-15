@@ -41,9 +41,14 @@ angular.module('clever.management.i18n.zh', ['pascalprecht.translate']).config(f
 		ARCHETYPE_UPLOAD_FILE_DETAILS : '详情',
 		ARCHETYPE_UPLOAD_FILE_TO_UPLOAD : '待上传',
 		ARCHETYPE_UPLOAD_FILE_UPLOADING : '上传中',
+		ARCHETYPE_UPLOAD_FILE_VALIDATING : '验证中',
 		ARCHETYPE_UPLOAD_FILE_VALID : '有效',
 		ARCHETYPE_UPLOAD_FILE_INVALID : '无效',
 		ARCHETYPE_UPLOAD_FILE_FAILED : '失败',
+		ARCHETYPE_UPLOAD_SUCCEEDED : '操作成功',
+		ARCHETYPE_UPLOAD_SUCCEEDED_HINT : '原型上传成功。',
+		ARCHETYPE_UPLOAD_FAILED : '操作失败',
+		ARCHETYPE_UPLOAD_FAILED_HINT : '原型上传失败，错误：{{errorMsg}}',
 
 	});
 });
