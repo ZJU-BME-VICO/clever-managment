@@ -34,6 +34,7 @@
 	<context:annotation-config />
 	<context:component-scan base-package="edu.zju.bme.clever.management.web" />
 	
+	<!-- spring security config -->	
 	<sec:http pattern="/js/**" security="none" />
 	<sec:http pattern="/css/**" security="none" />
 	<sec:http pattern="/font/**" security="none" />
@@ -69,5 +70,18 @@
 			user-service-ref="userDetailsService">
 		</sec:authentication-provider>
 	</sec:authentication-manager>
+	
+	<!-- Jmx config -->
+
+    <bean id="serverConnector"
+        class="org.springframework.jmx.support.ConnectorServerFactoryBean" depends-on="registry">
+	    <property name="objectName" value="connector:name=rmi"/>
+	    <property name="serviceUrl"
+	            value="service:jmx:rmi://localhost/jndi/rmi://localhost:${jmx.port}/connector"/>
+	</bean>
+	
+	<bean id="registry" class="org.springframework.remoting.rmi.RmiRegistryFactoryBean">
+    	<property name="port" value="${jmx.port}"/>
+	</bean>
 	
 </beans>

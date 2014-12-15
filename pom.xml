@@ -31,6 +31,38 @@
 		</profile>
 	</profiles>
 
+	<repositories>
+		<repository>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+			<id>nexus</id>
+			<url>http://172.16.100.55:8081/nexus/content/groups/public/</url>
+		</repository>
+	</repositories>
+	<pluginRepositories>
+		<pluginRepository>
+			<id>nexus</id>
+			<url>http://172.16.100.55:8081/nexus/content/groups/public/</url>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+		</pluginRepository>
+	</pluginRepositories>
+	<distributionManagement>
+		<repository>
+			<id>snapshots</id>
+			<name>Internal Releases</name>
+			<url>http://172.16.100.55:8081/nexus/content/repositories/snapshots/</url>
+		</repository>
+	</distributionManagement>
+
 	<name>clever-management</name>
 	<url>http://maven.apache.org</url>
 
@@ -49,14 +81,6 @@
 			</plugins>
 		</pluginManagement>
 	</build>
-	
-	<distributionManagement>
-		<repository>
-			<id>snapshots</id>
-			<name>Internal Releases</name>
-			<url>http://172.16.100.55:8081/nexus/content/repositories/snapshots/</url>
-		</repository>
-	</distributionManagement>
 
 	<dependencies>
 		<dependency>

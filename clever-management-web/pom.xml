@@ -15,6 +15,7 @@
 	<url>http://maven.apache.org</url>
 
 	<properties>
+		<jmx.port>1099</jmx.port>
 		<spring.security.version>3.2.4.RELEASE</spring.security.version>
 		<servlet-api.version>3.1.0</servlet-api.version>
 		<jetty.version>9.2.2.v20140723</jetty.version>
@@ -60,6 +61,12 @@
 					<httpConnector>
 						<port>${server.port}</port>
 					</httpConnector>
+					<systemProperties>
+						<com.sun.management.jmxremote>true</com.sun.management.jmxremote>
+						<com.sun.management.jmxremote.port>1099</com.sun.management.jmxremote.port>
+						<com.sun.management.jmxremote.ssl>false</com.sun.management.jmxremote.ssl>
+						<com.sun.management.jmxremote.authenticate>false</com.sun.management.jmxremote.authenticate>
+					</systemProperties>
 				</configuration>
 			</plugin>
 		</plugins>
@@ -152,19 +159,20 @@
 			<artifactId>spring-webmvc</artifactId>
 			<version>${spring.version}</version>
 		</dependency>
-		
+
 		<!-- file upload support -->
 		<dependency>
 			<groupId>commons-fileupload</groupId>
 			<artifactId>commons-fileupload</artifactId>
 			<version>1.3.1</version>
 		</dependency>
-		
+
 		<!-- jackson -->
 		<dependency>
 			<groupId>com.fasterxml.jackson.core</groupId>
 			<artifactId>jackson-databind</artifactId>
 			<version>${jackson.version}</version>
 		</dependency>
+
 	</dependencies>
 </project>
