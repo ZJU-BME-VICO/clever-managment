@@ -26,12 +26,12 @@ angular.module('clever.management.services.msgbox', []).service('msgboxService',
 
         var buttons ={
             yesOrNo: {
-                bt1: 'Yes',
-                bt2: 'No'
+                btn1: 'MESSAGE_BOX_BTN_YES',
+                btn2: 'MESSAGE_BOX_BTN_NO'
             },
             okOrCancel: {
-                bt1: 'Ok', 
-                bt2: 'Cancel'
+                btn1: 'MESSAGE_BOX_BTN_OK', 
+                btn2: 'MESSAGE_BOX_BTN_CANCEL'
             }
         };
 
@@ -39,7 +39,7 @@ angular.module('clever.management.services.msgbox', []).service('msgboxService',
 
         return msgInstance = $modal.open({
             template: '<div class="modal-header">' + 
-                            '<button type="button" class="close" ng-click="cancel()">' +
+                            '<button type="button" class="close" ng-click="cancel()" style="font-size: 35px;">' +
                                 '&times;' +
                             '</button>' +
                             '<h3 class="modal-title">' +
@@ -51,17 +51,14 @@ angular.module('clever.management.services.msgbox', []).service('msgboxService',
                         '<div class="modal-body">' +
                             '<p style="word-wrap:break-word;">{{content | translate:values}}</p>' +
                         '</div>' +
-                        '<div class="modal-footer" ng-if="button">' +
-                            '<button class="btn btn-primary" ng-click="ok()">' +
-                                '{{button.bt1}}' +
+                        '<div class="modal-footer">' +
+                            '<button ng-if="button" class="btn btn-primary" ng-click="ok()">' +
+                                '{{button.btn1 | translate}}' +
                             '</button>' +
-                            '<button class="btn btn-warning" ng-click="cancel()">' +
-                                '{{button.bt2}}' +
+                            '<button ng-if="button" class="btn btn-warning" ng-click="cancel()">' +
+                                '{{button.btn2 | translate}}' +
                             '</button>' +
-                        '</div>' +
-                        '<div class="modal-footer" ng-if="button == null">' +
-                            '<button class="btn btn-primary" ng-click="ok()">Ok' +
-                                '</button>' +
+                            '<button ng-if="!button" class="btn btn-primary" ng-click="ok()">{{"MESSAGE_BOX_BTN_OK" | translate}}</button>' +
                         '</div>',
 
             controller: function($scope, $modalInstance) {
@@ -83,7 +80,7 @@ angular.module('clever.management.services.msgbox', []).service('msgboxService',
                     $scope.icon = icons[icon].fort;
                     $scope.iconStyle = {
                         'top': '5px',
-                        'font-size': '30px',
+                        'font-size': '28px',
                         'color': icons[icon].color,
                     };
                 }
