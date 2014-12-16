@@ -44,27 +44,24 @@ public class ArchetypeResourceController {
 	@Autowired
 	private UserService userService;
 	
-	private boolean debug = false;
-	private boolean uploadResultManipulate;
+	private boolean manipulateUploadResult;
+	private boolean uploadResult;
 
 	@ManagedAttribute
-	public boolean isDebug() {
-		return debug;
+	public boolean isManipulateUploadResult() {
+		return manipulateUploadResult;
 	}
-
 	@ManagedAttribute
-	public void setDebug(boolean debug) {
-		this.debug = debug;
+	public void setManipulateUploadResult(boolean manipulateUploadResult) {
+		this.manipulateUploadResult = manipulateUploadResult;
 	}
-
 	@ManagedAttribute
-	public boolean isUploadResultManipulate() {
-		return uploadResultManipulate;
+	public boolean isUploadResult() {
+		return uploadResult;
 	}
-
 	@ManagedAttribute
-	public void setUploadResultManipulate(boolean uploadResultManipulate) {
-		this.uploadResultManipulate = uploadResultManipulate;
+	public void setUploadResult(boolean uploadResult) {
+		this.uploadResult = uploadResult;
 	}
 
 	@RequestMapping(value = "/action/validate", method = RequestMethod.POST)
@@ -113,7 +110,14 @@ public class ArchetypeResourceController {
 		FileUploadResult result = new FileUploadResult();
 		result.setSucceeded(true);
 		
-		
+		// Debug mode
+		if(this.manipulateUploadResult){
+			result.setMessage("Upload result manipulated.");
+			if(!this.uploadResult){
+				result.setSucceeded(false);
+			}
+			return result;
+		}
 		
 		User user = this.userService.getUserByName(userName);
 		Map<String, Archetype> archetypes = new HashMap<String, Archetype>();
