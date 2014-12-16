@@ -1,5 +1,5 @@
-angular.module('clever.management.directives', ['clever.management.directives.filesModel']);
-angular.module('clever.management.services', ['clever.management.services.resource', 'clever.management.services.authentication']);
+angular.module('clever.management.directives', ['clever.management.directives.filesModel', 'clever.management.directives.busyModel']);
+angular.module('clever.management.services', ['clever.management.services.resource', 'clever.management.services.authentication', 'clever.management.services.busy', 'clever.management.services.msgbox']);
 angular.module('clever.management.filters', []);
 angular.module('clever.management.controllers', ['clever.management.controllers.app']);
 angular.module('clever.management.i18n', ['clever.management.i18n.zh']);
@@ -72,6 +72,10 @@ angular.module('cleverManagementApp', ['ngAnimate', 'ui.bootstrap', 'pascalprech
 		url : '/designer',
 		templateUrl : 'js/views/management/application/designer/management.application.designer.html',
 		controller : DesignerCtrl,
+	}).state('management.application.view', {
+		url : '/view',
+		templateUrl : 'js/views/management/application/view/management.application.view.html',
+		controller : ApplicationViewCtrl,
 	})
 	// Integration
 	.state('management.integration', {
@@ -86,7 +90,7 @@ angular.module('cleverManagementApp', ['ngAnimate', 'ui.bootstrap', 'pascalprech
 	// Translate config
 	$translateProvider.preferredLanguage('zh');
 
-}).run(function($rootScope, $state, $stateParams, authenticationService, WEBSITE_DOMAIN) {
+}).run(function($rootScope, $state, $stateParams, authenticationService, busyService, WEBSITE_DOMAIN) {
 
 	$rootScope.WEBSITE_DOMAIN = WEBSITE_DOMAIN;
 	$rootScope.$state = $state;
@@ -95,6 +99,7 @@ angular.module('cleverManagementApp', ['ngAnimate', 'ui.bootstrap', 'pascalprech
 	var authenticateWhiteList = ['home', 'login'];
 
 	$rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams) {
+//		busyService.pushBusy();
 		if (authenticateWhiteList.indexOf(toState.name) < 0) {
 			authenticationService.validateAuthentication().then(function(result) {
 				if (!result.isAuthenticated) {

@@ -2,7 +2,8 @@ var prefix = '/clever-management-web';
 var config = {
 	'WEBSITE_DOMAIN' : prefix,
 	'AUTHENTICATION_URL' : prefix + '/authentication',
-	'ARCHETYPE_VALIDATION_URL' : prefix + '/archetypes/validation',
+	'ARCHETYPE_VALIDATE_URL' : prefix + '/archetypes/action/validate',
+	'ARCHETYPE_UPLOAD_URL' : prefix + '/archetypes/action/upload',
 };
 var configModel = angular.module('clever.management.config', []);
 angular.forEach(config, function(value, key) {

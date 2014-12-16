@@ -1,11 +1,30 @@
-angular.module('clever.management.services.resource', []).service('resourceService', function($http, $state) {
-	this.get = function(url) {
-		$http.get(url).success(function(data, status, headers, config) {
-			return data;
+angular.module('clever.management.services.resource', []).service('resourceService', function($http, $q, $state) {
+
+	this.get = function(url, config) {
+		var deferred = $q.defer();
+		$http.get(url, config).success(function(data, status, headers, config) {
+			deferred.resolve(data);
 		}).error(function(data, status, headers, config) {
 			if (status == 401) {
-				$state.go('login');
+				$state.go('login', {
+					errorType : 'SessionExpired'
+				});
 			}
 		});
+		return deferred.promise;
+	};
+
+	this.post = function(url, data, config) {
+		var deferred = $q.defer();
+		$http.post(url, data, config).success(function(data, status, headers, config) {
+			deferred.resolve(data);
+		}).error(function(data, status, headers, config) {
+			if (status == 401) {
+				$state.go('login', {
+					errorType : 'SessionExpired'
+				});
+			}
+		});
+		return deferred.promise;
 	};
 });

@@ -19,16 +19,20 @@
 <!-- services -->
 <script src="js/services/resource-service.js"></script>
 <script src="js/services/authentication-service.js"></script>
+<script src="js/services/busy-service.js"></script>
 <script src="js/services/template-parse-service.js"></script>
+<script src="js/services/msgbox-service.js"></script>
 <!--<script src="js/services/template-retrieve-service.js"></script>-->
 
 <!-- directives -->
 <script src="js/directives/files-model/files-model-directive.js"></script>
+<script src="js/directives/busy-model/busy-model-directive.js"></script>
 
 <!-- controllers -->
 <script src="js/views/management/management-controller.js"></script>
 <script src="js/views/management/archetype/archetype-page-controller.js"></script>
 <script src="js/views/management/archetype/upload/archetype-upload-controller.js"></script>
 <script src="js/views/management/application/designer/application-designer-controller.js"></script>
+<script src="js/views/management/application/view/application-view-controller.js"></script>
 
 

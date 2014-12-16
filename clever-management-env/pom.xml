@@ -23,9 +23,9 @@
 			<id>local-dev</id>
 			<properties>
 				<env>local-dev</env>
-				<database.url>jdbc:sqlserver://localhost;databaseName=clever-management</database.url>
+				<database.url>jdbc:sqlserver://localhost:1433;databaseName=clever-management</database.url>
 				<database.username>sa</database.username>
-				<database.password>@sa</database.password>
+				<database.password>root</database.password>
 			</properties>
 		</profile>
 		<profile>

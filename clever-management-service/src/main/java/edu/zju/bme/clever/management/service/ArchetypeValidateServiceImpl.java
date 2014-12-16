@@ -1,6 +1,8 @@
 package edu.zju.bme.clever.management.service;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -26,7 +28,7 @@ import edu.zju.bme.clever.management.service.repository.ArchetypeFileRepository;
 import edu.zju.bme.clever.management.service.repository.ArchetypeMasterRepository;
 
 @Service
-public class ArchetypeValidateServiceImpl {
+public class ArchetypeValidateServiceImpl implements ArchetypeValidateService {
 
 	protected final Logger logger = LoggerFactory.getLogger(this.getClass());
 
@@ -35,8 +37,11 @@ public class ArchetypeValidateServiceImpl {
 	@Autowired
 	private ArchetypeFileRepository archetypeFileRepo;
 
+	@Override
 	public void validateConsistency(Map<String, Archetype> archetypes,
 			Map<String, FileProcessResult> results) {
+		Map<String, Archetype> validatedArchetypes = new HashMap<String, Archetype>();
+		Map<String, Archetype> specialiseValidationFailedArchetypes = new HashMap<String, Archetype>();
 		archetypes.forEach((archetypeId, archetype) -> {
 			FileProcessResult result = results.get(archetypeId);
 			Optional<ArchetypeFile> archetypeFile = Optional
@@ -49,8 +54,6 @@ public class ArchetypeValidateServiceImpl {
 				this.validateExistence(archetype, result, archetypeFile);
 				// Validate version
 				this.validateVersion(archetype, result, archetypeMaster);
-				// Validate specialise archetype
-				this.validateSpecialisation(archetype, result, archetypes);
 				// Validate version upgrade
 				archetypeMaster.map(ArchetypeMaster::getLatestFile)
 						.ifPresent(
@@ -68,13 +71,44 @@ public class ArchetypeValidateServiceImpl {
 														+ file.getName(), ex);
 									}
 								});
+				// Validate specialize archetype
+				if (result.getStatus().equals(
+						FileProcessResult.FileStatus.VALID)) {
+					this.validateSpecialisation(archetype, result,
+							validatedArchetypes,
+							specialiseValidationFailedArchetypes);
+				}
+
+				// Validate past
+				if (result.getStatus().equals(
+						FileProcessResult.FileStatus.VALID)) {
+					validatedArchetypes.put(archetypeId, archetype);
+				}
 			});
+
+		// Validate specialize failed archetypes
+		int lastLoopSize = 0;
+		while (specialiseValidationFailedArchetypes.size() > lastLoopSize) {
+			specialiseValidationFailedArchetypes.forEach((archetypeId,
+					archetype) -> {
+				String specialiseArchetypeId = archetype.getParentArchetypeId()
+						.getValue();
+				if (validatedArchetypes.containsKey(specialiseArchetypeId)) {
+					FileProcessResult result = results
+							.get(specialiseArchetypeId);
+					result.setStatus(FileProcessResult.FileStatus.VALID);
+					result.setMessage("");
+					specialiseValidationFailedArchetypes.remove(archetypeId);
+				}
+			});
+			lastLoopSize = specialiseValidationFailedArchetypes.size();
+		}
 	}
 
 	private void validateExistence(Archetype archetype,
 			FileProcessResult result, Optional<ArchetypeFile> file) {
 		file.ifPresent(f -> {
-			result.setStatus(FileProcessResult.FileStatus.Invalid);
+			result.setStatus(FileProcessResult.FileStatus.INVALID);
 			result.setMessage(result.getMessage()
 					+ "Archetype already exists. ");
 		});
@@ -86,23 +120,29 @@ public class ArchetypeValidateServiceImpl {
 				+ master.map(ArchetypeMaster::getLatestFileInternalVersion)
 						.orElse(1);
 		if (archetype.getArchetypeId().versionID().compareTo(nextVersion) != 0) {
-			result.setStatus(FileProcessResult.FileStatus.Invalid);
+			result.setStatus(FileProcessResult.FileStatus.INVALID);
 			result.setMessage(result.getMessage()
 					+ "Archetype version should be " + nextVersion + ". ");
 		}
 	}
 
 	private void validateSpecialisation(Archetype archetype,
-			FileProcessResult result, Map<String, Archetype> archetypes) {
+			FileProcessResult result,
+			Map<String, Archetype> validatedArchetypes,
+			Map<String, Archetype> specialiseValidationFailedArchetypes) {
 		Optional.ofNullable(archetype.getParentArchetypeId())
 				.map(ArchetypeID::getValue)
 				.ifPresent(
 						id -> {
-							if (!archetypes.containsKey(id)) {
+							if (!validatedArchetypes.containsKey(id)) {
 								if (this.archetypeFileRepo.findByName(id) == null) {
-									result.setStatus(FileProcessResult.FileStatus.Invalid);
+									result.setStatus(FileProcessResult.FileStatus.INVALID);
 									result.setMessage("Specialise archetype "
-											+ id + "does not exist.");
+											+ id + " does not exist.");
+									specialiseValidationFailedArchetypes.put(
+											archetype.getArchetypeId()
+													.getValue(), archetype);
+
 								}
 							}
 						});

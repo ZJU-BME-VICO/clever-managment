@@ -15,7 +15,10 @@ uri="http://www.springframework.org/security/tags"%>
 	<body ng-controller="appCtrl" style="font-family: Microsoft YaHei;" ng-style="{height: windowHeight, width: windowWidth}" ng-cloak>
 		<!-- header -->
 		<%@ include file="jspf/header.jspf"%>
-
+		
+		<!-- busy hint -->
+		<busy-model size="100" window-width="windowWidth" window-height="windowHeight"></busy-model>
+		
 		<!-- content -->
 		<div ui-view class="container responsive-container" ng-style="{height: windowHeight - 100, width: windowWidth}"></div>
 

@@ -2,6 +2,7 @@ package edu.zju.bme.clever.management.web.util;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Calendar;
 import java.util.Optional;
 
 import javax.annotation.Resource;
@@ -12,10 +13,14 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.logout.SimpleUrlLogoutSuccessHandler;
 import org.springframework.stereotype.Component;
+
+import edu.zju.bme.clever.management.service.UserService;
+import edu.zju.bme.clever.management.service.exception.UserNotFoundException;
 
 public class LogoutSuccessHandlerImpl extends SimpleUrlLogoutSuccessHandler {
 
@@ -23,6 +28,8 @@ public class LogoutSuccessHandlerImpl extends SimpleUrlLogoutSuccessHandler {
 
 	@Resource
 	private ServletContext servletContext;
+	@Autowired
+	private UserService userService;
 
 	// Just for setting the default target URL
 	public LogoutSuccessHandlerImpl(String defaultTargetURL) {
@@ -52,7 +59,12 @@ public class LogoutSuccessHandlerImpl extends SimpleUrlLogoutSuccessHandler {
 				}
 				userFolder.delete();
 			}
-
+			try {
+				this.userService.updateUserLogoutTime(userName,
+						Calendar.getInstance());
+			} catch (UserNotFoundException ex) {
+				this.logger.error("Update logout time failed.", ex);
+			}
 		}
 		super.onLogoutSuccess(request, response, authentication);
 	}
