@@ -31,6 +31,8 @@ public abstract class AbstractMaster<T extends AbstractFile> extends
 	private String conceptName;
 	@ManyToOne(fetch = FetchType.LAZY)
 	private ArchetypeMaster specialiseArchetypeMaster;
+	@Column(name = "specialise_archetype_master_id", updatable = false, insertable = false)
+	private Integer specialiseArchetypeMasterId;
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "specialiseArchetypeMaster")
 	private List<ArchetypeMaster> specialisedArchetypeMasters;
 	@Column
@@ -98,6 +100,10 @@ public abstract class AbstractMaster<T extends AbstractFile> extends
 	public void setSpecialiseArchetypeMaster(
 			ArchetypeMaster specialiseArchetypeMaster) {
 		this.specialiseArchetypeMaster = specialiseArchetypeMaster;
+	}
+
+	public Integer getSpecialiseArchetypeMasterId() {
+		return specialiseArchetypeMasterId;
 	}
 
 	public Integer getLatestSpecialiseArchetypeInternalVersion() {

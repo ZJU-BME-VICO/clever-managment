@@ -46,10 +46,11 @@ angular.module('cleverManagementApp', ['ngAnimate', 'ui.bootstrap', 'pascalprech
 	}).state('management.archetype.view', {
 		url : '/view',
 		templateUrl : 'js/views/management/archetype/view/management.archetype.view.html',
+		controller : ArchetypeViewCtrl,
 	}).state('management.archetype.upload', {
 		url : '/upload',
 		templateUrl : 'js/views/management/archetype/upload/management.archetype.upload.html',
-		controller : UploadCtrl,
+		controller : ArchetypeUploadCtrl,
 	})
 	// Storage
 	.state('management.storage', {

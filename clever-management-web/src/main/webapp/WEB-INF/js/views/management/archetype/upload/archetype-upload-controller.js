@@ -1,4 +1,4 @@
-function UploadCtrl($scope, resourceService, msgboxService, ARCHETYPE_VALIDATE_URL, ARCHETYPE_UPLOAD_URL) {
+function ArchetypeUploadCtrl($scope, resourceService, msgboxService, ARCHETYPE_VALIDATE_URL, ARCHETYPE_UPLOAD_URL) {
 	var pageStatus = {
 		ToAddFile : 0,
 		ToValidate : 1,
@@ -20,6 +20,9 @@ function UploadCtrl($scope, resourceService, msgboxService, ARCHETYPE_VALIDATE_U
 		for ( i = 0; i < $scope.fileList.length; i++) {
 			if ($scope.fileList[i].name == fileName) {
 				$scope.fileList.splice(i, 1);
+			}
+			if ($scope.fileList.length == 0) {
+				$scope.reset();
 			}
 		}
 	};

@@ -32,6 +32,7 @@
 <script src="js/views/management/management-controller.js"></script>
 <script src="js/views/management/archetype/archetype-page-controller.js"></script>
 <script src="js/views/management/archetype/upload/archetype-upload-controller.js"></script>
+<script src="js/views/management/archetype/view/archetype-view-controller.js"></script>
 <script src="js/views/management/application/designer/application-designer-controller.js"></script>
 <script src="js/views/management/application/view/application-view-controller.js"></script>
 
