@@ -97,9 +97,14 @@ angular.module('cleverManagementApp', ['ngAnimate', 'ui.bootstrap', 'pascalprech
 	$rootScope.$stateParams = $stateParams;
 
 	var authenticateWhiteList = ['home', 'login'];
+	
+	var id;
 
 	$rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams) {
-//		busyService.pushBusy();
+		if(id){
+			busyService.popBusy(id);
+		}
+		id = busyService.pushBusy('BUSY_LOADING');
 		if (authenticateWhiteList.indexOf(toState.name) < 0) {
 			authenticationService.validateAuthentication().then(function(result) {
 				if (!result.isAuthenticated) {
@@ -115,6 +120,12 @@ angular.module('cleverManagementApp', ['ngAnimate', 'ui.bootstrap', 'pascalprech
 					}
 				}
 			});
+		}
+	});
+	
+	$rootScope.$on('$stateChangeSuccess', function(event, toState, toParams, fromState, fromParams) {
+		if(id){
+			busyService.popBusy(id);
 		}
 	});
 

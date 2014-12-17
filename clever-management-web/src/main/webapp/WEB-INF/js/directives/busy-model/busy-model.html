@@ -1,5 +1,7 @@
 <div ng-show="isBusy">
 	<div style="position: absolute;top: 0;left: 0;background-color: grey;opacity: 0.7;z-index: 1000" ng-style="{height: windowHeight, width: windowWidth}">
-		<img src="/clever-management-web/img/loading.gif" ng-style="{height: size, 'margin-top': (windowHeight-size)/2,'margin-left':(windowWidth-size)/2}"></img>
+		<span style="position: absolute;" ng-style="{'margin-top': (windowHeight-size)/2,'margin-left':(windowWidth-size)/2, 'font-size': size - 15 + 'px'}">
+			<img ng-src="/clever-management-web/img/loading.gif" ng-style="{height: size}"></img>
+			&nbsp;{{busyHint | translate}}
 	</div>
 </div> 
