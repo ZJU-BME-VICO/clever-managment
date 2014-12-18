@@ -1,5 +1,5 @@
-angular.module('clever.management.directives', ['clever.management.directives.filesModel', 'clever.management.directives.busyModel']);
-angular.module('clever.management.services', ['clever.management.services.resource', 'clever.management.services.authentication', 'clever.management.services.busy', 'clever.management.services.msgbox','clever.management.services.templateParse']);
+angular.module('clever.management.directives', ['clever.management.directives.filesModel', 'clever.management.directives.busyModel', 'clever.management.directives.archetypeListTree', 'clever.management.directives.archetypeListTreeNode']);
+angular.module('clever.management.services', ['clever.management.services.resource', 'clever.management.services.authentication', 'clever.management.services.busy', 'clever.management.services.msgbox']);
 angular.module('clever.management.filters', []);
 angular.module('clever.management.controllers', ['clever.management.controllers.app']);
 angular.module('clever.management.i18n', ['clever.management.i18n.zh']);
@@ -46,10 +46,11 @@ angular.module('cleverManagementApp', ['ngAnimate', 'ui.bootstrap', 'pascalprech
 	}).state('management.archetype.view', {
 		url : '/view',
 		templateUrl : 'js/views/management/archetype/view/management.archetype.view.html',
+		controller : ArchetypeViewCtrl,
 	}).state('management.archetype.upload', {
 		url : '/upload',
 		templateUrl : 'js/views/management/archetype/upload/management.archetype.upload.html',
-		controller : UploadCtrl,
+		controller : ArchetypeUploadCtrl,
 	})
 	// Storage
 	.state('management.storage', {
@@ -96,10 +97,15 @@ angular.module('cleverManagementApp', ['ngAnimate', 'ui.bootstrap', 'pascalprech
 	$rootScope.$state = $state;
 	$rootScope.$stateParams = $stateParams;
 
-	var authenticateWhiteList = ['home', 'login'];
+	var authenticateWhiteList = ['home', 'login', 'management.archetype.list', 'management.storage.list', 'management.application.list', 'managment.integration.list'];
+
+	var id;
 
 	$rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams) {
-//		busyService.pushBusy();
+		if (id) {
+			busyService.popBusy(id);
+		}
+		id = busyService.pushBusy('BUSY_LOADING');
 		if (authenticateWhiteList.indexOf(toState.name) < 0) {
 			authenticationService.validateAuthentication().then(function(result) {
 				if (!result.isAuthenticated) {
@@ -115,6 +121,12 @@ angular.module('cleverManagementApp', ['ngAnimate', 'ui.bootstrap', 'pascalprech
 					}
 				}
 			});
+		}
+	});
+
+	$rootScope.$on('$stateChangeSuccess', function(event, toState, toParams, fromState, fromParams) {
+		if (id) {
+			busyService.popBusy(id);
 		}
 	});
 

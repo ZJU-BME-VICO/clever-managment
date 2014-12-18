@@ -1,4 +1,4 @@
-function UploadCtrl($scope, resourceService, msgboxService, ARCHETYPE_VALIDATE_URL, ARCHETYPE_UPLOAD_URL) {
+function ArchetypeUploadCtrl($scope, resourceService, msgboxService, ARCHETYPE_VALIDATE_URL, ARCHETYPE_UPLOAD_URL) {
 	var pageStatus = {
 		ToAddFile : 0,
 		ToValidate : 1,
@@ -20,6 +20,9 @@ function UploadCtrl($scope, resourceService, msgboxService, ARCHETYPE_VALIDATE_U
 		for ( i = 0; i < $scope.fileList.length; i++) {
 			if ($scope.fileList[i].name == fileName) {
 				$scope.fileList.splice(i, 1);
+			}
+			if ($scope.fileList.length == 0) {
+				$scope.reset();
 			}
 		}
 	};
@@ -72,13 +75,13 @@ function UploadCtrl($scope, resourceService, msgboxService, ARCHETYPE_VALIDATE_U
 			}
 		}).then(function(result) {
 			if (result.succeeded) {
-				msgboxService.createMessageBox("ARCHETYPE_UPLOAD_SUCCEEDED", "ARCHETYPE_UPLOAD_SUCCEEDED_HINT").then(function() {
+				msgboxService.createMessageBox("ARCHETYPE_UPLOAD_SUCCEEDED", "ARCHETYPE_UPLOAD_SUCCEEDED_HINT", {}, 'success').result.then(function() {
 					$scope.reset();
 				});
 			} else {
-				msgboxService("ARCHETYPE_UPLOAD_FAILED", "ARCHETYPE_UPLOAD_FAILED_HINT", {
+				msgboxService.createMessageBox("ARCHETYPE_UPLOAD_FAILED", "ARCHETYPE_UPLOAD_FAILED_HINT", {
 					errorMsg : result.message
-				}).then(function() {
+				}, 'error').result.then(function() {
 					$scope.reset();
 				});
 			}

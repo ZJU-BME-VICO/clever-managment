@@ -65,7 +65,7 @@
 		<constructor-arg value="/" />
 	</bean>
 	
-	<sec:authentication-manager>
+	<sec:authentication-manager alias="authenticationManager">
 		<sec:authentication-provider
 			user-service-ref="userDetailsService">
 		</sec:authentication-provider>
@@ -78,6 +78,11 @@
 	    <property name="objectName" value="connector:name=rmi"/>
 	    <property name="serviceUrl"
 	            value="service:jmx:rmi://localhost/jndi/rmi://localhost:${jmx.port}/connector"/>
+	    <property name="environment">
+	    	<map>
+	    		<entry key="jmx.remote.authenticator" value-ref="jmxSecurityAuthenticator" />
+	    	</map>
+	    </property>
 	</bean>
 	
 	<bean id="registry" class="org.springframework.remoting.rmi.RmiRegistryFactoryBean">

@@ -4,6 +4,15 @@ angular.module('clever.management.i18n.zh', ['pascalprecht.translate']).config(f
 		LANGUAGE : '语言',
 		LANGUAGE_ZH : '中文',
 		LANGUAGE_EN : '英文',
+		
+		// Message box
+		MESSAGE_BOX_BTN_YES : '是',
+		MESSAGE_BOX_BTN_NO : '否',
+		MESSAGE_BOX_BTN_OK : '确定',
+		MESSAGE_BOX_BTN_CANCEL : '取消',
+		
+		// Busy service
+		BUSY_LOADING : '加载中',
 
 		// Home
 		ARCHETYPE_MANAGEMENT : '原型管理',

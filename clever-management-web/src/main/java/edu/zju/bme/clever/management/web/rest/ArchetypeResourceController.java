@@ -2,9 +2,11 @@ package edu.zju.bme.clever.management.web.rest;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.openehr.am.archetype.Archetype;
 import org.slf4j.Logger;
@@ -14,19 +16,21 @@ import org.springframework.jmx.export.annotation.ManagedAttribute;
 import org.springframework.jmx.export.annotation.ManagedResource;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import edu.zju.bme.clever.management.service.ArchetypeProviderService;
 import edu.zju.bme.clever.management.service.ArchetypeValidateService;
 import edu.zju.bme.clever.management.service.ArchetypeVersionControlService;
 import edu.zju.bme.clever.management.service.UserService;
 import edu.zju.bme.clever.management.service.entity.AbstractFile.SourceType;
+import edu.zju.bme.clever.management.service.entity.ArchetypeMaster;
 import edu.zju.bme.clever.management.service.entity.FileProcessResult;
 import edu.zju.bme.clever.management.service.entity.User;
+import edu.zju.bme.clever.management.web.entity.ArchetypeMasterInfo;
 import edu.zju.bme.clever.management.web.entity.FileUploadResult;
 import se.acode.openehr.parser.ADLParser;
 
@@ -43,28 +47,62 @@ public class ArchetypeResourceController {
 	private ArchetypeVersionControlService archetypeVersionControlService;
 	@Autowired
 	private UserService userService;
-	
-	private boolean debug = false;
-	private boolean uploadResultManipulate;
+	@Autowired
+	private ArchetypeProviderService archetypeProviderService;
+
+	private boolean manipulateUploadResult;
+	private boolean uploadResult;
 
 	@ManagedAttribute
-	public boolean isDebug() {
-		return debug;
+	public boolean isManipulateUploadResult() {
+		return manipulateUploadResult;
 	}
 
 	@ManagedAttribute
-	public void setDebug(boolean debug) {
-		this.debug = debug;
+	public void setManipulateUploadResult(boolean manipulateUploadResult) {
+		this.manipulateUploadResult = manipulateUploadResult;
 	}
 
 	@ManagedAttribute
-	public boolean isUploadResultManipulate() {
-		return uploadResultManipulate;
+	public boolean isUploadResult() {
+		return uploadResult;
 	}
 
 	@ManagedAttribute
-	public void setUploadResultManipulate(boolean uploadResultManipulate) {
-		this.uploadResultManipulate = uploadResultManipulate;
+	public void setUploadResult(boolean uploadResult) {
+		this.uploadResult = uploadResult;
+	}
+
+	@RequestMapping(value = "/list", method = RequestMethod.GET)
+	public List<ArchetypeMasterInfo> getArchtypeList() {
+		List<ArchetypeMaster> masters = this.archetypeProviderService
+				.getAllArchetypeMasters();
+		Map<Integer, ArchetypeMasterInfo> infos = masters
+				.stream()
+				.collect(
+						Collectors.toMap(
+								master -> master.getId(),
+								master -> {
+									ArchetypeMasterInfo info = new ArchetypeMasterInfo();
+									info.setId(master.getId());
+									info.setConceptName(master.getConceptName());
+									info.setName(master.getName());
+									info.setLatestArchetypeVersion(master
+											.getLatestFileVersion());
+									info.setLifecycleState(master.getLatestFileLifecycleState());
+									return info;
+								}));
+		masters.forEach(master -> {
+			if (master.getSpecialiseArchetypeMaster() != null) {
+				ArchetypeMasterInfo info = infos.get(master.getId());
+				info.setRoot(false);
+				infos.get(master.getSpecialiseArchetypeMasterId())
+						.getSpecialiseArchetypeMasters().add(info);
+
+			}
+		});
+		return infos.values().stream().filter(info -> info.isRoot())
+				.collect(Collectors.toList());
 	}
 
 	@RequestMapping(value = "/action/validate", method = RequestMethod.POST)
@@ -112,9 +150,16 @@ public class ArchetypeResourceController {
 				.getUsername();
 		FileUploadResult result = new FileUploadResult();
 		result.setSucceeded(true);
-		
-		
-		
+
+		// Debug mode
+		if (this.manipulateUploadResult) {
+			result.setMessage("Upload result manipulated.");
+			if (!this.uploadResult) {
+				result.setSucceeded(false);
+			}
+			return result;
+		}
+
 		User user = this.userService.getUserByName(userName);
 		Map<String, Archetype> archetypes = new HashMap<String, Archetype>();
 

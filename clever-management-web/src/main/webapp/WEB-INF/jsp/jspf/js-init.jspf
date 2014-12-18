@@ -27,11 +27,14 @@
 <!-- directives -->
 <script src="js/directives/files-model/files-model-directive.js"></script>
 <script src="js/directives/busy-model/busy-model-directive.js"></script>
+<script src="js/directives/archetype-list-tree/archetype-list-tree-directive.js"></script>
+<script src="js/directives/archetype-list-tree/archetype-list-tree-node-directive.js"></script>
 
 <!-- controllers -->
 <script src="js/views/management/management-controller.js"></script>
 <script src="js/views/management/archetype/archetype-page-controller.js"></script>
 <script src="js/views/management/archetype/upload/archetype-upload-controller.js"></script>
+<script src="js/views/management/archetype/view/archetype-view-controller.js"></script>
 <script src="js/views/management/application/designer/application-designer-controller.js"></script>
 <script src="js/views/management/application/view/application-view-controller.js"></script>
 
