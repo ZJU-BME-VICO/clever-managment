@@ -1,4 +1,4 @@
-angular.module('clever.management.directives', ['clever.management.directives.filesModel', 'clever.management.directives.busyModel']);
+angular.module('clever.management.directives', ['clever.management.directives.filesModel', 'clever.management.directives.busyModel', 'clever.management.directives.archetypeListTree', 'clever.management.directives.archetypeListTreeNode']);
 angular.module('clever.management.services', ['clever.management.services.resource', 'clever.management.services.authentication', 'clever.management.services.busy', 'clever.management.services.msgbox']);
 angular.module('clever.management.filters', []);
 angular.module('clever.management.controllers', ['clever.management.controllers.app']);
@@ -97,12 +97,12 @@ angular.module('cleverManagementApp', ['ngAnimate', 'ui.bootstrap', 'pascalprech
 	$rootScope.$state = $state;
 	$rootScope.$stateParams = $stateParams;
 
-	var authenticateWhiteList = ['home', 'login'];
-	
+	var authenticateWhiteList = ['home', 'login', 'management.archetype.list', 'management.storage.list', 'management.application.list', 'managment.integration.list'];
+
 	var id;
 
 	$rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams) {
-		if(id){
+		if (id) {
 			busyService.popBusy(id);
 		}
 		id = busyService.pushBusy('BUSY_LOADING');
@@ -123,9 +123,9 @@ angular.module('cleverManagementApp', ['ngAnimate', 'ui.bootstrap', 'pascalprech
 			});
 		}
 	});
-	
+
 	$rootScope.$on('$stateChangeSuccess', function(event, toState, toParams, fromState, fromParams) {
-		if(id){
+		if (id) {
 			busyService.popBusy(id);
 		}
 	});

@@ -3,12 +3,15 @@ package edu.zju.bme.clever.management.web.entity;
 import java.util.HashSet;
 import java.util.Set;
 
+import edu.zju.bme.clever.management.service.entity.LifecycleState;
+
 public class ArchetypeMasterInfo {
 
 	private Integer id;
 	private String conceptName;
 	private String latestArchetypeVersion;
 	private String name;
+	private LifecycleState lifecycleState;
 	private Set<ArchetypeMasterInfo> specialiseArchetypeMasters = new HashSet<ArchetypeMasterInfo>();
 	private boolean isRoot = true;
 
@@ -42,6 +45,14 @@ public class ArchetypeMasterInfo {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public LifecycleState getLifecycleState() {
+		return lifecycleState;
+	}
+
+	public void setLifecycleState(LifecycleState lifecycleState) {
+		this.lifecycleState = lifecycleState;
 	}
 
 	public Set<ArchetypeMasterInfo> getSpecialiseArchetypeMasters() {

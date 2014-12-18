@@ -89,6 +89,7 @@ public class ArchetypeResourceController {
 									info.setName(master.getName());
 									info.setLatestArchetypeVersion(master
 											.getLatestFileVersion());
+									info.setLifecycleState(master.getLatestFileLifecycleState());
 									return info;
 								}));
 		masters.forEach(master -> {
