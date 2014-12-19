@@ -15,7 +15,7 @@
 	<url>http://maven.apache.org</url>
 
 	<properties>
-		<jmx.port>1099</jmx.port>
+		<jmx.port>8081</jmx.port>
 		<spring.security.version>3.2.4.RELEASE</spring.security.version>
 		<servlet-api.version>3.1.0</servlet-api.version>
 		<jetty.version>9.2.2.v20140723</jetty.version>
