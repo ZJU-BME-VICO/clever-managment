@@ -37,5 +37,5 @@
 <script src="js/views/management/archetype/view/archetype-view-controller.js"></script>
 <script src="js/views/management/application/designer/application-designer-controller.js"></script>
 <script src="js/views/management/application/view/application-view-controller.js"></script>
-
+<script src="js/views/management/application/edit/application-edit-controller.js"></script>
 

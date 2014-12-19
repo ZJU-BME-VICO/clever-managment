@@ -1,5 +1,4 @@
-function ApplicationViewCtrl($scope){
-	
+function ApplicationEditCtrl($scope){
 	$scope.imgUrl = '/clever-management-web/img/logo.png';
 	$scope.applications = [
 		{
