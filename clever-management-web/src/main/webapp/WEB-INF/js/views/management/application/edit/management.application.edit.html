@@ -1,0 +1,39 @@
+<div class="row">
+	<a class="btn btn-success pull-right" href="#">add</a> <input type="text"
+		placeholder="app name" class="form-control" style="width: 15%;"
+		ng-model="search.name">
+</div>
+<div ng-style="{height: windowHeight - 285}" style="overflow: auto;">
+	<div class="row">
+		<div class="col-sm-4 col-md-3 col-lg-3" style="min-width: 250px;" ng-repeat="application in applications">
+			<div class="thumbnail" style="height: 420px;">
+				<div class="row">
+					<div class="col-lg-12 col-md-12 col-sm-12">
+						<div class="pull-right">
+							<span type="button" class="glyphicon glyphicon-wrench" style="padding: 5px; cursor: pointer;" ng-click="editApp(application)"></span>
+							<span type="button" class="glyphicon glyphicon-trash" style="padding: 5px; cursor: pointer;" ng-click="deleteApplication(application)"></span>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-lg-12 col-md-12 col-sm-12">
+						<div class="text-center">
+							<img ng-src="{{imgUrl}}" style="width: 200px; height: 200px;">
+						</div>
+					</div>
+				</div>
+				<div class="caption">
+					<div class="text-center">
+						<span style="font-size: 2em;">{{application.name}}</span>
+					</div>
+					<p style="height: 110px; overflow: auto; font-size: 13pt;">
+						<span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>{{application.desc}}
+					</p>
+					<a href="{{application.url}}" class="pull-right"
+						style="position: absolute; bottom: 0px; right: 0px; margin-bottom: 25px; margin-right: 25px;">{{getFixedText(application.url,215)}}</a>
+					<br />
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
