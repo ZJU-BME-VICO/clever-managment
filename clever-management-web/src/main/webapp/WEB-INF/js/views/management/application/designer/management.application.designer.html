@@ -6,17 +6,23 @@
 	    		<div class="panel panel-default">
 	    			<div class="panel-heading">
 	    				<div class="panel-title row">
-	    					<input ng-model="templateName"></input>
-	    					<button></button>
+	    					
 	    				</div>
 	    			</div>
 	    		</div>
 	    	</div>
-	    <div class="flexBox" ng-style="{height:windowHeight - 165}" style="overflow:auto  ">
+	    <div class="listBox" ng-style="{height:windowHeight - 200}"  >
 	        <div class="templateTree">
-	        	<archetype-list-tree tree-data="archetypeList" select-node-callback="selectNode(node)" tree-control="treeControl"></archetype-list-tree>
+                <button ng-click="expand()">expandAll</button>
+                <button ng-click="collapse()">collapseAll</button>
+	        	<template-list-tree tree-data="templateList" select-node-callback="selectNode(node)" tree-control="treeControl"></template-list-tree>
+	        	
 	        </div>	
 	  	    </div>
 	    </nav>
+	   <div class="flexBox" ng-style="{height:windowHeight - 200}"  >
+	   	<div class="editArea">
+	   		<DV_TEXT node-data="nodeList"></DV_TEXT>
+	   	</div>
 	</div>
 </div>

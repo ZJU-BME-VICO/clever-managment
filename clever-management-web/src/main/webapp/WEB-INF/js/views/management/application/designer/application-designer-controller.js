@@ -5,9 +5,10 @@ function DesignerCtrl($scope,resourceService,templateParseService){
 	//var url='js/views/management/application/designer/HeartFailure.xml';
 	resourceService.get(url).then(function(result){
 		var x2js = new X2JS();
-	    var tmp = x2js.xml_str2json(result).template;//对象里 有没有template属性？
+	    var tmp = x2js.xml_str2json(result).template;
 	    var parseResult=templateParseService.parseTemplate(tmp);
-	    $scope.archetypeList=parseResult;
+	    $scope.templateList=parseResult.definition.definitionTree;
+	    $scope.nodeList=parseResult.definition.contentTree[1];
 	});
 
 	$scope.treeControl = {};
@@ -22,15 +23,6 @@ function DesignerCtrl($scope,resourceService,templateParseService){
 
 	$scope.expand = function() {
 		$scope.treeControl.expandAll();
-	};
-
-	$scope.changeTree = function() {
-		if ($scope.archetypeList == list1) {
-			$scope.archetypeList = list2;
-		} else {
-			$scope.archetypeList = list1;
-		}
-
 	};
 }
 

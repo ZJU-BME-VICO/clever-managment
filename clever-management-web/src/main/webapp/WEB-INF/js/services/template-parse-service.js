@@ -28,43 +28,78 @@ angular.module('clever.management.services.templateParse',[]).service('templateP
     	processNode(template.definition,undefined,undefined,definition.definitionTree,definition.contentTree);
     	return definition;
     };
+    
     function processNode(node,parent,termDefinition,treeItems,contentTree){
     	if(angular.isArray(node)){
     		angular.forEach(node,function(value){
-    			value.parent=parent;
-    			var extractedNode=extractNode(value,termDefinition);
-    			treeItems.push(extractedNode);
-    			termDefinition=extractedNode.label.term_definitions;
-    			if(extractedNode.label.labelContent){
-    				contentTree.push(extractedNode);
-    			}   	 			
-    			if(value.attributes){
-    				extractedNode.children=[];
-    				processNode(value.attributes,value,termDefinition,extractedNode.children,contentTree);
-    			}else if(value.children){
-    				extractedNode.children = [];
-					processNode(value.children, value,termDefinition,extractedNode.children,contentTree);
-    			}
-    		}); 
-    	}else {
-    		node.parent = parent;
-    		var extractedNode = extractNode(node,termDefinition);
-    		treeItems.push(extractedNode);
-    		termDefinition=extractedNode.label.term_definitions;
-    		if(extractedNode.label.labelContent){//node with archetype term_definitions
-    				contentTree.push(extractedNode);
-    			}	
-			if (node.attributes) {
-				extractedNode.children = [];			
-				processNode(node.attributes, node,termDefinition, extractedNode.children,contentTree);
-			} else if (node.children) {				
-				extractedNode.children = [];
-				processNode(node.children, node,termDefinition,extractedNode.children,contentTree);
-			} 
+    			pushData(value,parent,termDefinition,treeItems,contentTree);
+    		}); }else{
+    			pushData(node,parent,termDefinition,treeItems,contentTree);
+    			
+    		}
+    		
+    		}
+    
+    function unNeedNode(node){
+    	if(node.children){
+    		node=node.children;
+    	}else if(node.attributes){
+    		node=node.attributes;
     	}
-    };
+    	return node;
+    }
+    function pushData(node,parent,termDefinition,treeItems,contentTree){
+    	    node.parent = parent;
+    		var extractedNode = extractNode(node,termDefinition);
+    		termDefinition=extractedNode.label.term_definitions;
+    		var typeT=extractedNode.label.text;
+    		if(typeT=="ELEMENT"){//node with archetype term_definitions
+    				var leafNode=getleafNode(extractedNode);
+    				contentTree.push(leafNode);
+    			}	
+    	   		if((typeList.indexOf(typeT)==-1)&&(attributeList.indexOf(typeT)==-1)){
+    			treeItems.push(extractedNode);
+    		    if(node.attributes){ 
+    			extractedNode.children=[];
+    			processNode(node.attributes,node,termDefinition,extractedNode.children,contentTree);
+    	    	}else if(node.children){    				
+    			extractedNode.children = [];
+				processNode(node.children, node,termDefinition,extractedNode.children,contentTree);
+    		   } 
+            }else{ 
+    			node=unNeedNode(node);
+    			if(angular.isArray(node)){
+    			angular.forEach(node,function(item){
+    				var extractedNode=extractNode(item,termDefinition);
+    			    var typeT=extractedNode.label.text;
+    			    if(typeT=="ELEMENT"){//node with archetype term_definitions
+    				var leafNode=getleafNode(extractedNode);
+    				contentTree.push(leafNode);
+    			}
+    			    termDefinition=extractedNode.label.term_definitions; 
+    		        if((typeList.indexOf(typeT)==-1)&&(attributeList.indexOf(typeT)==-1)){
+    				   treeItems.push(extractedNode); }
+    			       if(item.attributes){ 
+    			       extractedNode.children=[];
+    			       processNode(item.attributes,item,termDefinition,extractedNode.children,contentTree);
+    	    	       }else if(item.children){    				
+    			       extractedNode.children = [];
+				       processNode(item.children, item,termDefinition,extractedNode.children,contentTree);
+    			}    			
+               });
+              }else {
+              	if(node.children||node.attributes){pushData(node,parent,termDefinition,treeItems,contentTree);}
+              	}
+    
+            }
+    }
+    
+    var typeList = ['DV_COUNT', 'DV_TEXT', 'DV_DATE_TIME', 'DV_QUANTITY', 'DV_BOOLEAN','DV_QUANTITY','DV_ORDINAL','DV_DURATION','CODE_PHRASE','DV_CODED_TEXT'];
+	var attributeList = ['value', 'magnitude','items','data','name','state','defining_code','events'];
+	
+	
     function extractNode (node,termDefinition) {
-      var type,attribute,code,term_definitions ,name,archtype_id,dataType;
+      var type,attribute,code,term_definitions ,name,archtype_id,dataType,picType;
       var dataValue=[];
       type=node.rm_type_name;
       attribute=node.rm_attribute_name;
@@ -139,24 +174,33 @@ angular.module('clever.management.services.templateParse',[]).service('templateP
 				}
 				
 				}
-		}		
+		}
+		if(!name){
+		   name=label;
+		  }
+		if(type=="ELEMENT"){
+		   picType=dataType;
+		}else{
+		   picType=label;
+		}	
 		
 		return {
 			label : {
 				type : labelType,
 				text : label,
-				code : code,
+				code:code,
 				term_definitions : term_definitions,
 				labelContent:name,
 				dataType:dataType,
-				dataValue:dataValue
+				dataValue:dataValue,
+				picType:picType,
 			}
 		};
       
     }
-    var typeList = ['DV_COUNT', 'DV_TEXT', 'DV_DATE_TIME', 'DV_QUANTITY', 'DV_BOOLEAN','DV_QUANTITY','DV_ORDINAL','DV_CODED_TEXT'];
-	var attributeList = ['value', 'magnitude'];
+    
     function getDefinition(code,term_definitions){
+    	var name="";
     	if(code){
     		if(term_definitions[0]==undefined){
 					name=term_definitions.items[0].__text;
@@ -169,5 +213,17 @@ angular.module('clever.management.services.templateParse',[]).service('templateP
     	}
     	return name;
     }
-
+    function getleafNode(node){
+    	var type,dataType,labelContent,dataValue;
+        return {
+        	detailInfor:{
+        		type:node.label.type,
+        		dataType:node.label.dataType,
+        		labelContent:node.label.labelContent,
+        		dataValue:node.label.dataValue
+        	}
+        };
+    }
+    
+    
 });
