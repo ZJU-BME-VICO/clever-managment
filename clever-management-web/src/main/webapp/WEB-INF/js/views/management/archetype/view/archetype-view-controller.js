@@ -75,6 +75,9 @@ function ArchetypeViewCtrl($scope, resourceService, ARCHETYPE_LIST_URL) {
 		} else {
 			$scope.archetypeList = list1;
 		}
-
 	};
+	
+	$scope.$watch('filter',function(newValue){
+		$scope.treeControl.search(newValue);
+	});
 }

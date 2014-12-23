@@ -1,5 +1,24 @@
-<archetype-list-tree tree-data="archetypeList" select-node-callback="selectNode(node)" tree-control="treeControl"></archetype-list-tree>
-
-<button ng-click="collapse()">collapse</button>
-<button ng-click="expand()">expand</button>
-<button ng-click="changeTree()">changeTree</button>
+<div class='row'>
+	<div class="col-md-3">
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<input type="text" class="form-control" style="width: 100%;" ng-model="filter">
+			</div>
+			<div class="list-group" ng-style="{height: windowHeight - 277}" style="overflow: auto;">
+				<archetype-list-tree tree-data="archetypeList" select-node-callback="selectNode(node)" tree-control="treeControl"></archetype-list-tree>
+			</div>
+		</div>
+	</div>
+	<div class="col-md-9">
+		<button ng-click="collapse()">
+			collapse
+		</button>
+		<button ng-click="expand()">
+			expand
+		</button>
+		<button ng-click="changeTree()">
+			changeTree
+		</button>
+	</div>
+</div>
+</div>
