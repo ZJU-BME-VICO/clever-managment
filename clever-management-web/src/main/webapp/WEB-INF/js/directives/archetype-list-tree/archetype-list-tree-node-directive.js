@@ -23,7 +23,7 @@ function($compile) {
 										'<img ng-class="nodeData.lifecycleState | lowercase"></img>' +
 										'{{nodeData.name}}' +
 									'</span>' +
-									'<archetype-list-tree-node ng-hide="nodeData.collapsed" ng-repeat="node in nodeData.specialiseArchetypeMasters" ng-init="node.parent = nodeData" tree-scope="treeScope" node-data="node" select-node-callback="selectNodeCallback"></archetype-tree-list-node>' +
+									'<archetype-list-tree-node ng-hide="nodeData.collapsed || !node.show" ng-repeat="node in nodeData.specialiseArchetypeMasters" ng-init="node.parent = nodeData;node.show = true;" tree-scope="treeScope" node-data="node" select-node-callback="selectNodeCallback"></archetype-tree-list-node>' +
 								'</li>' +
 							'</ul>';
 
