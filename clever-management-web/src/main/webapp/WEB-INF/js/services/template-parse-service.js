@@ -216,7 +216,7 @@ angular.module('clever.management.services.templateParse',[]).service('templateP
     function getleafNode(node){
     	var type,dataType,labelContent,dataValue;
         return {
-        	detailInfor:{
+        	detailInfo:{
         		type:node.label.type,
         		dataType:node.label.dataType,
         		labelContent:node.label.labelContent,

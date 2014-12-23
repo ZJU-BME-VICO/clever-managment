@@ -12,7 +12,7 @@ function DesignerCtrl($scope,resourceService,templateParseService){
 	});
 
 	$scope.treeControl = {};
-
+    
 	$scope.selectNode = function(node) {
 		var a;
 	};
@@ -24,5 +24,7 @@ function DesignerCtrl($scope,resourceService,templateParseService){
 	$scope.expand = function() {
 		$scope.treeControl.expandAll();
 	};
+	
+	//$scope.dvtextControl={};
 }
 
