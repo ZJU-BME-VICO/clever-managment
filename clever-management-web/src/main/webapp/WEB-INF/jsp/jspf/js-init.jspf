@@ -32,6 +32,7 @@
 <script src="js/directives/application-template/template-list-tree/template-list-tree-directive.js"></script>
 <script src="js/directives/application-template/template-list-tree/template-list-tree-node-directive.js"></script>
 <script src="js/directives/application-template/DV-TEXT/DV-TEXT-directive.js"></script>
+<script src="js/directives/application-template/GUI/long-press-directive.js"></script>
 
 <!-- controllers -->
 <script src="js/views/management/management-controller.js"></script>

@@ -1,15 +1,18 @@
 angular.module('clever.management.directives.templateListTreeNode', []).directive('templateListTreeNode',
-function($compile) {
+function($compile,$document) {
 	return {
-		require: '^templateListTree',
+		require: ['^templateListTree','dvText'],
 		restrict : 'E',
 		scope : {
 			nodeData : '=',
 			treeScope : '=',
 			selectNodeCallback : '=',
 		},
-		link : function(scope, element, attrs) { 
+		link : function(scope, element, attrs,controllers) { 
+			var templateTreeCtrl=controllers[0];
+			var guiCtrl=controllers[1];
 		
+		    
 			scope.nodeData.collapsed = true;
 			scope.treeScope.nodes.push(scope.nodeData); 
 			
@@ -38,8 +41,7 @@ function($compile) {
 			
 			scope.doubleClickNodeLabel = function(selectedNode){
 				//Collapse or Expand
-				selectedNode.collapsed = !selectedNode.collapsed;
-				
+				selectedNode.collapsed = !selectedNode.collapsed;				
 				// call back
 				scope.selectNodeCallback(selectedNode); 
 			};
@@ -49,13 +51,27 @@ function($compile) {
 				if (scope.treeScope.currentNode && scope.treeScope.currentNode.selected) {
 					scope.treeScope.currentNode.selected = undefined;
 				}
-
 				//set highlight to selected node
 				selectedNode.selected = 'selected';
-
 				//set currentNode
 				scope.treeScope.currentNode = selectedNode;
 			};
+			
+			scope.drag=function(selectedNode){
+				var divarea=document.getElementById("editArea");
+				var temp=
+				divarea.append()
+				
+			};
+			
+		    
+		  /*  element.on=function(selectedNode){
+		    	alert('selectedNode.lable.contentLabel');
+		    	
+		    };
+		    scope.mouseup = function(selectedNode) {
+	           console.log('Touch end');
+           };*/
 		},
 	};
 });

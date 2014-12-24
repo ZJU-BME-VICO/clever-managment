@@ -1,5 +1,5 @@
 <div class="row">
-	<div class="col-xs-12 col-md-12 col-lg-12">
+    <div class="col-xs-4 col-md-3 col-lg-3">
 		<!-- left side navbar-->
 	    <nav id="navbar" class="vbox">
 	    	<div class="panel-group" id ="">
@@ -10,19 +10,22 @@
 	    				</div>
 	    			</div>
 	    		</div>
-	    	</div>
+	    	
 	    <div class="listBox" ng-style="{height:windowHeight - 200}"  >
 	        <div class="templateTree">
                 <button ng-click="expand()">expandAll</button>
                 <button ng-click="collapse()">collapseAll</button>
-	        	<template-list-tree tree-data="templateList" select-node-callback="selectNode(node)" tree-control="treeControl"></template-list-tree>
+	        	<template-list-tree tree-data="templateList" select-node-callback="selectNode(node)" tree-control="treeControl" on-long-press="nodeOnLongPress(node)" on-touch-end="nodeOnTouchEnd(node)"></template-list-tree>
 	        	
 	        </div>	
 	  	    </div>
 	    </nav>
-	   <div class="flexBox" ng-style="{height:windowHeight - 200}"  >
-	   	<div class="editArea">
+	    </div>  
+	 <div class="col-xs-8 col-md-9 col-lg-9">
+         <div class="flexBox" ng-style="{height:windowHeight - 200}"  >
+	   	    <div id="editArea">
 	   		<dv-text gui-data="nodeList" gui-control="dvtextControl"></DV-TEXT>
-	   	</div>
+	   	    </div>
 	</div>
+         </div>
 </div>
