@@ -1,2 +1,6 @@
 <link rel="stylesheet" href="css/bootstrap.css" />
 <link rel="stylesheet" href="css/app.css" />
+<link rel="stylesheet" href="css/archetype-list-tree.css" />
+<link rel="stylesheet" href="css/template-list-tree.css" />
+<link rel="stylesheet" href="css/file-input.css" />
+<link rel="stylesheet" href="css/home-page.css" />

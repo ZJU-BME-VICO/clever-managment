@@ -1,0 +1,74 @@
+/* Archetype list tree */
+archetype-list-tree li .expanded {
+	padding: 1px 5px;
+	height: 12px;
+	background-image: url("../img/arrow_expanded.png");
+	background-repeat: no-repeat;
+	cursor: pointer;
+}
+
+archetype-list-tree li .collapsed {
+	padding: 1px 5px;
+	height: 12px;
+	background-image: url("../img/arrow_collapsed_white.png");
+	background-repeat: no-repeat;
+	cursor: pointer;
+}
+
+archetype-list-tree li .draft {
+	padding: 0 10px;
+	height: 16px;
+	background-image: url("../img/draft.png");
+	background-repeat: no-repeat;
+}
+
+archetype-list-tree li .teamreview {
+	padding: 0 10px;
+	height: 16px;
+	background-image: url("../img/teamreview.png");
+	background-repeat: no-repeat;
+}
+
+archetype-list-tree li .published {
+	padding: 0 10px;
+	height: 16px;
+	background-image: url("../img/published.png");
+	background-repeat: no-repeat;
+}
+
+archetype-list-tree {
+	/* prevent user selection */
+	-moz-user-select: -moz-none;
+	-khtml-user-select: none;
+	-webkit-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+	/* default */
+	font-size: 13px;
+	color: #555;
+	text-decoration: none;
+}
+
+archetype-list-tree ul {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+	border: none;
+	overflow: hidden;
+}
+
+archetype-list-tree li {
+	position: relative;
+	padding: 5px 0 0 20px;
+	line-height: 20px;
+	font-size: 15px;
+}
+
+archetype-list-tree li i, archetype-list-tree li span {
+	cursor: pointer;
+}
+
+archetype-list-tree li .selected {
+	background-color: #aaddff;
+	font-weight: bold;
+}
