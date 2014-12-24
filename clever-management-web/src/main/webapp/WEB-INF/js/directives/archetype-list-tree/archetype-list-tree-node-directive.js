@@ -5,15 +5,17 @@ function($compile) {
 		restrict : 'E',
 		scope : {
 			nodeData : '=',
-			treeScope : '=',
-			selectNodeCallback : '=',
-			highlightText : '=',
 		},
-		link : function(scope, element, attrs) { 
+		link : function(scope, element, attrs, treeCtrl) { 
 		
 			scope.nodeData.collapsed = true;
-			scope.treeScope.nodes.push(scope.nodeData); 
-			
+			scope.$watch(function() {
+				return treeCtrl.getKeyword();
+			}, function(newValue) {
+				scope.highlightText = newValue;
+			});
+			treeCtrl.getNodes().push(scope.nodeData);
+
 			var template = '<ul>' +
 								'<li>' +
 									'<img class="collapsed" ng-show="nodeData.specialiseArchetypeMasters.length && nodeData.collapsed" ng-click="selectNodeHead(nodeData)"></img>' +
@@ -29,10 +31,7 @@ function($compile) {
 										'ng-hide="nodeData.collapsed || !node.show" ' +
 										'ng-repeat="node in nodeData.specialiseArchetypeMasters" ' +
 										'ng-init="node.parent = nodeData;node.show = true;" ' +
-										'tree-scope="treeScope" ' +
-										'node-data="node" ' +
-										'highlight-text="highlightText" ' +
-										'select-node-callback="selectNodeCallback">' +
+										'node-data="node">' +
 									'</archetype-tree-list-node>' +
 								'</li>' +
 							'</ul>';
@@ -51,20 +50,20 @@ function($compile) {
 				selectedNode.collapsed = !selectedNode.collapsed;
 				
 				// call back
-				scope.selectNodeCallback(selectedNode); 
+				treeCtrl.selectNode(selectedNode);
 			};
 					
 			scope.selectNodeLabel = function(selectedNode) {
 				//remove highlight from previous node
-				if (scope.treeScope.currentNode && scope.treeScope.currentNode.selected) {
-					scope.treeScope.currentNode.selected = undefined;
+				if (treeCtrl.getCurrentNode() && treeCtrl.getCurrentNode().selected) {
+					treeCtrl.getCurrentNode().selected = undefined;
 				}
 
 				//set highlight to selected node
 				selectedNode.selected = 'selected';
 
 				//set currentNode
-				scope.treeScope.currentNode = selectedNode;
+				treeCtrl.setCurrentNode(selectedNode);
 			};
 		},
 	};
