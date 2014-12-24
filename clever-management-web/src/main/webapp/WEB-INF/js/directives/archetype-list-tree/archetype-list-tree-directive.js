@@ -6,8 +6,10 @@ angular.module('clever.management.directives.archetypeListTree', []).directive('
 			treeControl : '=',
 			selectNodeCallback : '&',
 		},
-		template : '<archetype-list-tree-node ng-repeat="node in treeData" ng-show="node.show" ng-init="node.show = true" node-data="node" tree-scope="treeScope" select-node-callback="selectNode"></archetype-list-tree-node>',
+		template : '<archetype-list-tree-node ' + 'ng-repeat="node in treeData" ' + 'ng-show="node.show" ' + 'ng-init="node.show = true" ' + 'node-data="node" ' + 'tree-scope="treeScope" ' + 'highlight-text="highlightText" ' + 'select-node-callback="selectNode">' + '</archetype-list-tree-node>',
 		controller : function($scope) {
+
+			$scope.highlightText = '';
 
 			$scope.treeScope = {
 				currentNode : undefined,
@@ -32,9 +34,14 @@ angular.module('clever.management.directives.archetypeListTree', []).directive('
 					});
 				},
 				search : function(keyword) {
+					$scope.highlightText = keyword;
 					if (keyword != '') {
+						// Reset node state before search
 						angular.forEach($scope.treeScope.nodes, function(node) {
-							if (node.name.indexOf(keyword) < 0) {
+							node.containsTargetChild = undefined;
+						});
+						angular.forEach($scope.treeScope.nodes, function(node) {
+							if ((node.conceptName + '(' + node.latestArchetypeVersion + ')').toLowerCase().indexOf(keyword.toLowerCase()) < 0) {
 								if (!node.containsTargetChild) {
 									node.show = false;
 								}

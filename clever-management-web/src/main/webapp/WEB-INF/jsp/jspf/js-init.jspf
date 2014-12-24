@@ -29,6 +29,7 @@
 <script src="js/directives/busy-model/busy-model-directive.js"></script>
 <script src="js/directives/archetype-list-tree/archetype-list-tree-directive.js"></script>
 <script src="js/directives/archetype-list-tree/archetype-list-tree-node-directive.js"></script>
+<script src="js/directives/splitter/splitter-directive.js"></script>
 <script src="js/directives/application-template/template-list-tree/template-list-tree-directive.js"></script>
 <script src="js/directives/application-template/template-list-tree/template-list-tree-node-directive.js"></script>
 <script src="js/directives/application-template/DV-TEXT/DV-TEXT-directive.js"></script>
@@ -41,4 +42,7 @@
 <script src="js/views/management/application/designer/application-designer-controller.js"></script>
 <script src="js/views/management/application/view/application-view-controller.js"></script>
 <script src="js/views/management/application/edit/application-edit-controller.js"></script>
+
+<!-- filters -->
+<script src="js/filters/unsafe-filter.js"></script>
 

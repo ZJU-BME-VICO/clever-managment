@@ -7,6 +7,7 @@ function($compile) {
 			nodeData : '=',
 			treeScope : '=',
 			selectNodeCallback : '=',
+			highlightText : '=',
 		},
 		link : function(scope, element, attrs) { 
 		
@@ -21,9 +22,18 @@ function($compile) {
 									'<i class="normal" ng-hide="nodeData.specialiseArchetypeMasters.length"></i> ' +
 									'<span ng-class="nodeData.selected" ng-click="selectNodeLabel(nodeData)" ng-dblclick="doubleClickNodeLabel(nodeData)">' +
 										'<img ng-class="nodeData.lifecycleState | lowercase"></img>' +
-										'{{nodeData.name}}' +
+										'<span ng-bind-html="nodeData.conceptName | highlight:highlightText | unsafe"></span>' +
+										'&nbsp<span style="color: grey;font-size: 10pt;">({{nodeData.latestArchetypeVersion}})</span>' +
 									'</span>' +
-									'<archetype-list-tree-node ng-hide="nodeData.collapsed || !node.show" ng-repeat="node in nodeData.specialiseArchetypeMasters" ng-init="node.parent = nodeData;node.show = true;" tree-scope="treeScope" node-data="node" select-node-callback="selectNodeCallback"></archetype-tree-list-node>' +
+									'<archetype-list-tree-node ' +
+										'ng-hide="nodeData.collapsed || !node.show" ' +
+										'ng-repeat="node in nodeData.specialiseArchetypeMasters" ' +
+										'ng-init="node.parent = nodeData;node.show = true;" ' +
+										'tree-scope="treeScope" ' +
+										'node-data="node" ' +
+										'highlight-text="highlightText" ' +
+										'select-node-callback="selectNodeCallback">' +
+									'</archetype-tree-list-node>' +
 								'</li>' +
 							'</ul>';
 
