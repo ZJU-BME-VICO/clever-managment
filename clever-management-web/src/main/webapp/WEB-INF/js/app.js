@@ -5,11 +5,11 @@ angular.module('clever.management.services', ['clever.management.services.resour
 angular.module('clever.management.filters', ['clever.management.filters.unsafe']);
 angular.module('clever.management.controllers', ['clever.management.controllers.app']);
 angular.module('clever.management.i18n', ['clever.management.i18n.zh']);
-angular.module('cleverManagementApp', ['ngAnimate', 'ui.bootstrap', 'pascalprecht.translate', 'ui.router', 'ui.utils', 'clever.management.i18n', 'clever.management.directives', 'clever.management.controllers', 'clever.management.services', 'clever.management.filters', 'clever.management.config']).config(function($stateProvider, $urlRouterProvider, $translateProvider) {
-
-	$urlRouterProvider.otherwise('/');
+angular.module('cleverManagementApp', ['ngAnimate', 'ui.bootstrap', 'pascalprecht.translate', 'ui.router', 'ui.utils', 'clever.management.i18n', 'clever.management.directives', 'clever.management.controllers', 'clever.management.services', 'clever.management.filters', 'clever.management.config'])
+.config(function($stateProvider, $urlRouterProvider, $translateProvider) {
 
 	// UI router config
+	$urlRouterProvider.otherwise('/');
 	// Home
 	$stateProvider.state('home', {
 		url : '/',
@@ -71,8 +71,8 @@ angular.module('cleverManagementApp', ['ngAnimate', 'ui.bootstrap', 'pascalprech
 	}).state('management.application.list', {
 		url : '',
 		templateUrl : 'js/views/management/application/management.application.list.html',
-	}).state('management.application.designer', {
-		url : '/designer',
+	}).state('management.application.design', {
+		url : '/design',
 		templateUrl : 'js/views/management/application/designer/management.application.designer.html',
 		controller : DesignerCtrl,
 	}).state('management.application.view', {

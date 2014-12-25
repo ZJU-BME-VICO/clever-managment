@@ -58,6 +58,19 @@ angular.module('clever.management.i18n.zh', ['pascalprecht.translate']).config(f
 		ARCHETYPE_UPLOAD_SUCCEEDED_HINT : '原型上传成功。',
 		ARCHETYPE_UPLOAD_FAILED : '操作失败',
 		ARCHETYPE_UPLOAD_FAILED_HINT : '原型上传失败，错误：{{errorMsg}}',
+		
+		// Menu
+		MENU_RETURN : '返回上一级',
+		MENU_MANAGEMENT : '管理功能',
+		MENU_MANAGEMENT_ARCHETYPE : '原型管理',
+		MENU_MANAGEMENT_ARCHETYPE_VIEW : '原型查看',
+		MENU_MANAGEMENT_ARCHETYPE_UPLOAD : '原型上传',
+		MENU_MANAGEMENT_STORAGE : '存储管理',
+		MENU_MANAGEMENT_APPLICATION : '应用管理',
+		MENU_MANAGEMENT_APPLICATION_DESIGN : '设计器',
+		MENU_MANAGEMENT_APPLICATION_EDIT : '应用编辑',
+		MENU_MANAGEMENT_APPLICATION_VIEW : '应用查看',
+		MENU_MANAGEMENT_INTEGRATION : '集成管理',
 
 	});
 });

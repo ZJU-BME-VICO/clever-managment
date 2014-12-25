@@ -1,5 +1,3 @@
-<footer class="bottom">
-	<div class="pull-right">
-		2014 ZheJiang University, BME, ChunKin.Lau&nbsp;&nbsp;
-	</div>
+<footer style="position: absolute;bottom: 0px;right: 0px;">
+	2014 ZheJiang University, BME, ChunKin.Lau&nbsp;&nbsp;
 </footer>

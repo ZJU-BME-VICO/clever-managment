@@ -35,7 +35,7 @@ angular.module('clever.management.directives.archetypeListTree', []).directive('
 
 			this.selectNode = function(selectedNode) {
 				$scope.selectNodeCallback({
-					node : selectedNode
+					value : selectedNode
 				});
 			};
 
