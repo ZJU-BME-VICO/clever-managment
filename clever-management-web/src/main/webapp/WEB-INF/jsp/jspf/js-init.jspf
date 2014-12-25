@@ -32,6 +32,8 @@
 <script src="js/directives/splitter/splitter-directive.js"></script>
 <script src="js/directives/application-template/template-list-tree/template-list-tree-directive.js"></script>
 <script src="js/directives/application-template/template-list-tree/template-list-tree-node-directive.js"></script>
+<script src="js/directives/unfold-model/unfold-model-directive.js"></script>
+<script src="js/directives/fishItem-model/fishItem-model-directive.js"></script>
 <script src="js/directives/application-template/DV-TEXT/DV-TEXT-directive.js"></script>
 
 <!-- controllers -->
