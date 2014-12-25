@@ -1,4 +1,4 @@
-angular.module('clever.management.directives.fishItemModel', []).directive('fishItemModel',function($compile){
+angular.module('clever.management.directives.fisheyeMenu', []).directive('fisheyeMenu',function($compile){
 	return {
 		restrict:'E',
 		scope:{
@@ -20,38 +20,37 @@ angular.module('clever.management.directives.fishItemModel', []).directive('fish
 			};
 		},
 		link: function(scope, element, attr) {
-			var template='<div class="dock" id="dock2">'+
+			var template='<div class="dock">'+
 							'<div class="dock-container2">'+
 								'<a class="dock-item2" href="#" ng-repeat="funInfo in funInfos" item-click="addBody"'+
 									' ng-click="addBody(funInfo.alt)">'+
 									'<span>{{funInfo.title}}</span>'+
-									'<img ng-src="images/{{funInfo.imgUrl}}" alt="{{funInfo.alt}}">'+
+									'<img ng-src="img/{{funInfo.imgUrl}}" alt="{{funInfo.alt}}">'+
 								'</a>'+
 							'</div>'+
 						'</div>';
-			if(scope.funInfos){
+			if (scope.funInfos) {
 				element.html('').append($compile(template)(scope));
 			};
 
-			scope.$watch('funInfos',function(newValue,oldValue){
-				if(newValue.length > 0){
-					$timeout(function(){
- 						$("#dock2").Fisheye(
-							{
-								maxWidth: 60,
-								items: 'a',
-								itemsText: 'span',
-								container: '.dock-container2',
-								itemWidth: 40,
-								proximity: 80,
-								alignment : 'left',
-								valign: 'bottom',
-								halign : 'center'
-							}
-						);
-					},0);
+			scope.$watch('funInfos', function(newValue, oldValue) {
+				if (newValue.length > 0) {
+					$timeout(function() {
+						$(element).Fisheye({
+							maxWidth : 60,
+							items : 'a',
+							itemsText : 'span',
+							container : '.dock-container2',
+							itemWidth : 40,
+							proximity : 80,
+							alignment : 'left',
+							valign : 'bottom',
+							halign : 'center'
+						});
+					}, 0);
 				}
 			});
+
 		}
 	};
 });
