@@ -1,6 +1,6 @@
-angular.module('clever.management.directives', ['clever.management.directives.commons', 'clever.management.directives.commons', 'clever.management.directives.archetypeListTree', 'clever.management.directives.archetypeListTreeNode']);
+angular.module('clever.management.directives', ['clever.management.directives.commons', 'clever.management.directives.templateDesign', 'clever.management.directives.archetypeListTree', 'clever.management.directives.archetypeListTreeNode']);
 angular.module('clever.management.directives.commons', ['clever.management.directives.filesModel', 'clever.management.directives.busyModel', 'clever.management.directives.splitter', 'clever.management.directives.fisheyeMenu']);
-angular.module('clever.management.directives.commons'['clever.management.directives.templateListTree', 'clever.management.directives.templateListTreeNode', 'clever.management.directives.DVTEXT', 'clever.management.directive.longPress']);
+angular.module('clever.management.directives.templateDesign', ['clever.management.directives.templateListTree', 'clever.management.directives.templateListTreeNode', 'clever.management.directives.DVTEXT', 'clever.management.directive.longPress']);
 angular.module('clever.management.services', ['clever.management.services.resource', 'clever.management.services.authentication', 'clever.management.services.busy', 'clever.management.services.msgbox', 'clever.management.services.templateParse']);
 angular.module('clever.management.filters', ['clever.management.filters.unsafe']);
 angular.module('clever.management.controllers', ['clever.management.controllers.app']);
