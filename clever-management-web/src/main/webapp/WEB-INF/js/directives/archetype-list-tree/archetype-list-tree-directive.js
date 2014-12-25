@@ -6,15 +6,34 @@ angular.module('clever.management.directives.archetypeListTree', []).directive('
 			treeControl : '=',
 			selectNodeCallback : '&',
 		},
-		template : '<archetype-list-tree-node ng-repeat="node in treeData" ng-show="node.show" ng-init="node.show = true" node-data="node" tree-scope="treeScope" select-node-callback="selectNode"></archetype-list-tree-node>',
+		template : '<archetype-list-tree-node ' +
+						'ng-repeat="node in treeData" ' +
+						'ng-show="node.show" ' +
+						'ng-init="node.show = true" ' +
+						'node-data="node">' +
+					'</archetype-list-tree-node>',
+		
 		controller : function($scope) {
 
-			$scope.treeScope = {
-				currentNode : undefined,
-				nodes : [],
+			$scope.highlightText = '';
+
+			var nodes = [];
+			this.getNodes = function(){
+				return nodes;
+			};
+			this.getCurrentNode = function(){
+				return currentNode;
+			};
+			var currentNode = undefined;
+			this.setCurrentNode = function(node){
+				currentNode = node;
+			};
+			var keyword = '';
+			this.getKeyword = function(){
+				return keyword;
 			};
 
-			$scope.selectNode = function(selectedNode) {
+			this.selectNode = function(selectedNode) {
 				$scope.selectNodeCallback({
 					node : selectedNode
 				});
@@ -22,19 +41,24 @@ angular.module('clever.management.directives.archetypeListTree', []).directive('
 
 			$scope.treeControl = {
 				expandAll : function() {
-					angular.forEach($scope.treeScope.nodes, function(node) {
+					angular.forEach(getNodes(), function(node) {
 						node.collapsed = false;
 					});
 				},
 				collapseAll : function() {
-					angular.forEach($scope.treeScope.nodes, function(node) {
+					angular.forEach(nodes, function(node) {
 						node.collapsed = true;
 					});
 				},
-				search : function(keyword) {
+				search : function(filter) {
+					keyword = filter;
 					if (keyword != '') {
-						angular.forEach($scope.treeScope.nodes, function(node) {
-							if (node.name.indexOf(keyword) < 0) {
+						// Reset node state before search
+						angular.forEach(nodes, function(node) {
+							node.containsTargetChild = undefined;
+						});
+						angular.forEach(nodes, function(node) {
+							if ((node.conceptName + '(' + node.latestArchetypeVersion + ')').toLowerCase().indexOf(keyword.toLowerCase()) < 0) {
 								if (!node.containsTargetChild) {
 									node.show = false;
 								}
@@ -53,7 +77,7 @@ angular.module('clever.management.directives.archetypeListTree', []).directive('
 							}
 						});
 					} else {
-						angular.forEach($scope.treeScope.nodes, function(node) {
+						angular.forEach(nodes, function(node) {
 							node.show = true;
 							if (node.orginalCollapased != undefined) {
 								node.collapsed = node.orginalCollapased;
@@ -66,14 +90,11 @@ angular.module('clever.management.directives.archetypeListTree', []).directive('
 
 			$scope.$watch('treeData', function(newValue, oldValue) {
 				if (newValue != oldValue) {
-					$scope.treeScope = {
-						currentNode : undefined,
-						nodes : [],
-					};
+					nodes = [];
+					currentNode = undefined;
 				}
 			});
-		},
-		link : function(scope, element, attrs) {
+		}, link : function(scope, element, attrs) {
 
 		},
 	};

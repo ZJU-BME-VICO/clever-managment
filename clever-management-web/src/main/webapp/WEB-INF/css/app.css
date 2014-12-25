@@ -22,278 +22,36 @@
 	margin-left: auto;
 }
 
-.item-icon {
-	font-size: 9em;
-}
-.item-title {
-	font-size: 2.4em;
-}
-.item-content {
-	font-size: 1.6em;
-	padding-top: 10px;
-}
-
-
-.fileinput-button input {
-	position: absolute;
-	top: 0;
-	right: 0;
-	margin: 0;
-	opacity: 0;
-	-ms-filter: 'alpha(opacity=0)';
-	font-size: 200px;
-	direction: ltr;
-	cursor: pointer;
+.hbox {
+	height: 100%;
+	width: 100%;
+	display: -webkit-box;
+	display: -moz-box;
+	display: -ms-flexbox;
+	-webkit-box-orient: horizontal;
+	-moz-box-orient: horizontal;
+	-ms-flex-direction: row;
 }
 
-/* Archetype list tree */
-archetype-list-tree li .expanded {
-  padding: 1px 5px;
-  height: 12px;
-  background-image: url("../img/arrow_expanded.png");
-  background-repeat: no-repeat;
-  cursor: pointer;
-}
-
-archetype-list-tree li .collapsed {
-  padding: 1px 5px;
-  height: 12px;
-  background-image: url("../img/arrow_collapsed_white.png");
-  background-repeat: no-repeat;
-  cursor: pointer;
-}
-
-archetype-list-tree li .draft {
-  padding: 0 10px;
-  height: 16px;
-  background-image: url("../img/draft.png");
-  background-repeat: no-repeat;
-}
-
-archetype-list-tree li .teamreview {
-  padding: 0 10px;
-  height: 16px;
-  background-image: url("../img/teamreview.png");
-  background-repeat: no-repeat;
-}
-
-archetype-list-tree li .published {
-  padding: 0 10px;
-  height: 16px;
-  background-image: url("../img/published.png");
-  background-repeat: no-repeat;
-}
-
-archetype-list-tree {
-  /* prevent user selection */
-  -moz-user-select: -moz-none;
-  -khtml-user-select: none;
-  -webkit-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-
-  /* default */
-  font-size:13px;
-  color: #555;
-  text-decoration: none;
-}
-
-archetype-list-tree ul {
-  margin: 0;
-  padding: 0;
-  list-style: none; 
-  border: none;
-  overflow: hidden;
-}
-
-archetype-list-tree li {
-  position: relative;
-  padding: 5px 0 0 20px;
-  line-height: 20px;
-  font-size: 15px;
-}
-
-archetype-list-tree li i, archetype-list-tree li span {
-  cursor: pointer;
-}
-
-archetype-list-tree li .selected {
-  background-color: #aaddff;
-  font-weight: bold;
-}
-
-/* template list tree */
-template-list-tree li .expanded {
-  padding: 1px 5px;
-  height: 12px;
-  background-image: url("../img/arrow_expanded.png");
-  background-repeat: no-repeat;
-  cursor: pointer;
-}
-
-template-list-tree li .collapsed {
-  padding: 1px 5px;
-  height: 12px;
-  background-image: url("../img/arrow_collapsed_white.png");
-  background-repeat: no-repeat;
-  cursor: pointer;
-}
-template-list-tree {
-  /* prevent user selection */
-  -moz-user-select: -moz-none;
-  -khtml-user-select: none;
-  -webkit-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-
-  /* default */
-  font-size:13px;
-  color: #555;
-  text-decoration: none;
-}
-
-template-list-tree ul {
-  margin: 0;
-  padding: 0;
-  list-style: none; 
-  border: none;
-  overflow: hidden;
-}
-
-template-list-tree li {
-  position: relative;
-  padding: 5px 0 0 20px;
-  line-height: 20px;
-  font-size: 15px;
-}
-template-list-tree li i, archetype-list-tree li span {
-  cursor: pointer;
-}
-
-template-list-tree li .selected {
-  background-color: #aaddff;
-  font-weight: bold;
-}
-template-list-tree li .DV_TEXT {
-  padding: 0 10px;
-  height: 16px;
-  background-image: url("../img/datatype/text.png");
-  background-repeat: no-repeat;
-}
-template-list-tree li .DV_QUANTITY {
-  padding: 0 10px;
-  height: 16px;
-  background-image: url("../img/datatype/quantity.png");
-  background-repeat: no-repeat;
-}
-template-list-tree li .DV_ORDINAL {
-  padding: 0 10px;
-  height: 16px;
-  background-image: url("../img/datatype/ordinal.png");
-  background-repeat: no-repeat;
-}
-template-list-tree li .DV_BOOLEAN {
-  padding: 0 10px;
-  height: 16px;
-  background-image: url("../img/datatype/text.png");
-  background-repeat: no-repeat;
-}
-template-list-tree li .DV_DATE_TIME {
-  padding: 0 10px;
-  height: 16px;
-  background-image: url("../img/datatype/datetime.png");
-  background-repeat: no-repeat;
-}
-template-list-tree li .DV_COUNT {
-  padding: 0 10px;
-  height: 16px;
-  background-image: url("../img/datatype/count.png");
-  background-repeat: no-repeat;
-}
-template-list-tree li .CODE_PHRASE {/*no picture*/
-  padding: 0 10px;
-  height: 16px;
-  background-image: url("../img/datatype/text.png");
-  background-repeat: no-repeat;
-}
-template-list-tree li .DV_CODED_TEXT {/*no picture*/
-  padding: 0 10px;
-  height: 16px;
-  background-image: url("../img/datatype/text.png");
-  background-repeat: no-repeat;
-}
-template-list-tree li .DV_DURATION {
-  padding: 0 10px;
-  height: 16px;
-  background-image: url("../img/datatype/duration.png");
-  background-repeat: no-repeat;
-}
-template-list-tree li .COMPOSITION {
-  padding: 0 10px;
-  height: 16px;
-  background-image: url("../img/datatype/composition.png");
-  background-repeat: no-repeat;
-}
-template-list-tree li .OBSERVATION {
-  padding: 0 10px;
-  height: 16px;
-  background-image: url("../img/datatype/observation.png");
-  background-repeat: no-repeat;
-}
-template-list-tree li .EVENT {
-  padding: 0 10px;
-  height: 16px;
-  background-image: url("../img/datatype/pointintime.png");
-  background-repeat: no-repeat;
-}
-template-list-tree li .CLUSTER {
-  padding: 0 10px;
-  height: 16px;
-  background-image: url("../img/datatype/cluster.png");
-  background-repeat: no-repeat;
-}
-template-list-tree li .HISTORY {
-  padding: 0 10px;
-  height: 16px;
-  background-image: url("../img/datatype/history.png");
-  background-repeat: no-repeat;
-}
-template-list-tree li .SECTION {
-  padding: 0 10px;
-  height: 16px;
-  background-image: url("../img/datatype/section.png");
-  background-repeat: no-repeat;
-}
-template-list-tree li .DV_DURATION {
-  padding: 0 10px;
-  height: 16px;
-  background-image: url("../img/datatype/duration.png");
-  background-repeat: no-repeat;
-}
-#navbar {
-	background-color: whiteSmoke;
-	border: 1px solid #cccccc;
-	border-radius: 4px;
-	margin: -1px;
-	width: 350px;
-}
 .vbox {
 	height: 100%;
 	display: -webkit-box;
 	display: -moz-box;
 	display: -ms-flexbox;
-	/*-webkit-box-orient: vertical;*/
+	-webkit-box-orient: vertical;
 	-moz-box-orient: vertical;
 	-ms-flex-direction: column;
-	overflow: scroll;
 }
-.listBox{
-	margin-top:30px;
-}
-.flexBox{
+
+.flexBox {
 	position: relative;
 	height: 100%;
 	-webkit-box-flex: 1;
 	-moz-box-flex: 1;
 	-ms-flex: 1;
+}
+
+/* high light */
+.ui-match {
+	background-color: yellow;
 }

@@ -1,10 +1,11 @@
 angular.module('clever.management.directives', ['clever.management.directives.filesModel', 'clever.management.directives.busyModel', 'clever.management.directives.archetypeListTree', 'clever.management.directives.archetypeListTreeNode', 
                                                'clever.management.directives.templateListTree', 'clever.management.directives.templateListTreeNode','clever.management.directives.DVTEXT','clever.management.directive.longPress']);
+angular.module('clever.management.directives', ['clever.management.directives.filesModel', 'clever.management.directives.busyModel', 'clever.management.directives.archetypeListTree', 'clever.management.directives.archetypeListTreeNode', 'clever.management.directives.splitter', 'clever.management.directives.templateListTree', 'clever.management.directives.templateListTreeNode','clever.management.directives.DVTEXT']);
 angular.module('clever.management.services', ['clever.management.services.resource', 'clever.management.services.authentication', 'clever.management.services.busy', 'clever.management.services.msgbox','clever.management.services.templateParse']);
-angular.module('clever.management.filters', []);
+angular.module('clever.management.filters', ['clever.management.filters.unsafe']);
 angular.module('clever.management.controllers', ['clever.management.controllers.app']);
 angular.module('clever.management.i18n', ['clever.management.i18n.zh']);
-angular.module('cleverManagementApp', ['ngAnimate', 'ui.bootstrap', 'pascalprecht.translate', 'ui.router', 'clever.management.i18n', 'clever.management.directives', 'clever.management.controllers', 'clever.management.services', 'clever.management.filters', 'clever.management.config']).config(function($stateProvider, $urlRouterProvider, $translateProvider) {
+angular.module('cleverManagementApp', ['ngAnimate', 'ui.bootstrap', 'pascalprecht.translate', 'ui.router', 'ui.utils', 'clever.management.i18n', 'clever.management.directives', 'clever.management.controllers', 'clever.management.services', 'clever.management.filters', 'clever.management.config']).config(function($stateProvider, $urlRouterProvider, $translateProvider) {
 
 	$urlRouterProvider.otherwise('/');
 
