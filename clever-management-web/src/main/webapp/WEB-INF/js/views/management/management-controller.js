@@ -1,64 +1,117 @@
-function ManagementCtrl($scope) {
+function ManagementCtrl($scope, $state) {
 	var undefined;
+	$scope.$watch(function() {
+		return $scope.$parent.containerHeight;
+	}, function(newValue) {
+		$scope.containerHeight = newValue - 110;
+	});
 	$scope.breadcrumbs = [];
+	$scope.menus = [];
 	// Breadcrumb tree initial
 	$scope.breadcrumbTree = {};
 	var management = $scope.breadcrumbTree.management = {
-		title : '管理功能',
+		title : 'MENU_MANAGEMENT',
 		href : '#/management',
+		state : 'management.list',
 	};
 	// Archetype management
 	var archetype = management.archetype = {
-		title : '原型管理',
-		href : '#/management/archetype'
+		title : 'MENU_MANAGEMENT_ARCHETYPE',
+		href : '#/management/archetype',
+		state : 'management.archetype.list',
 	};
 	archetype.view = {
-		title : '原型查看',
+		title : 'MENU_MANAGEMENT_ARCHETYPE_VIEW',
 		href : '#/management/archetype/view',
+		state : 'management.archetype.view',
 	};
 	archetype.upload = {
-		title : '原型上传',
+		title : 'MENU_MANAGEMENT_ARCHETYPE_UPLOAD',
 		href : '#/management/archetype/upload',
+		state : 'management.archetype.upload',
 	};
 	// Storage management
 	var storage = management.storage = {
-		title : '存储管理',
-		href : '#/management/storage'
+		title : 'MENU_MANAGEMENT_STORAGE',
+		href : '#/management/storage',
+		state : 'management.storage.list',
 	};
 	// Application management
 	var application = management.application = {
-		title : '应用管理',
-		href : '#/management/application'
+		title : 'MENU_MANAGEMENT_APPLICATION',
+		href : '#/management/application',
+		state : 'management.application.list',
 	};
-	application.designer = {
-		title : '设计器',
-		href : '#/management/application/designer'
+	application.design = {
+		title : 'MENU_MANAGEMENT_APPLICATION_DESIGN',
+		href : '#/management/application/design',
+		state : 'management.application.design',
 	};
 	application.view = {
-		title : '应用查看',
+		title : 'MENU_MANAGEMENT_APPLICATION_VIEW',
 		href : '#/management/application/view',
+		state : 'management.application.view',
 	};
 	application.edit = {
-		title : '应用编辑',
+		title : 'MENU_MANAGEMENT_APPLICATION_EDIT',
 		href : '#/management/application/edit',
+		state : 'management.application.edit',
 	};
 	// Integration management
 	var integration = management.integration = {
-		title : '集成管理',
-		href : '#/management/archetype'
+		title : 'MENU_MANAGEMENT_INTEGRATION',
+		href : '#/management/integration',
+		state : 'management.integration.list',
 	};
+
+	$scope.selectMenu = function(menu) {
+		$state.go(menu.state);
+	};
+
 	$scope.setBreadcrumbs = function(breadcrumbs) {
 		$scope.breadcrumbs = breadcrumbs;
 	};
+
 	$scope.$watch('$state.current.name', function(newValue) {
+		// Construct breadcrumbs
 		$scope.breadcrumbs = [];
 		var breadcrumbTree = $scope.breadcrumbTree;
-		angular.forEach($scope.$state.current.name.split('.'), function(path) {
+		var stateChain = $scope.$state.current.name.split('.');
+		angular.forEach(stateChain, function(path) {
 			if (breadcrumbTree[path] != undefined) {
 				breadcrumbTree = breadcrumbTree[path];
 				$scope.breadcrumbs.push(breadcrumbTree);
 			}
 		});
+		// Construct dock menu
+		$scope.menus = [];
+		var lastState = stateChain.pop();
+		var menu = $scope.breadcrumbTree;
+		angular.forEach(stateChain, function(path) {
+			if (menu[path] != undefined) {
+				menu = menu[path];
+			}
+		});
+		angular.forEach(menu, function(value) {
+			if (angular.isObject(value)) {
+				$scope.menus.push({
+					title : value.title,
+					imgUrl : 'img/logo.png',
+					state : value.state,
+				});
+			}
+		});
+		if (stateChain.length > 1) {
+			var returnState = '^.list';
+			if (lastState == 'list') {
+				returnState = '^.^.list';
+			}
+			$scope.menus.push({
+				title : 'MENU_RETURN',
+				imgUrl : 'img/logo.png',
+				state : returnState,
+			});
+		}
 	});
 
 }
