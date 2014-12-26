@@ -9,6 +9,7 @@ import javax.persistence.FetchType;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.OneToMany;
@@ -29,6 +30,23 @@ public abstract class AbstractMaster<T extends AbstractFile> extends
 	private String rmEntity;
 	@Column(nullable = false)
 	private String conceptName;
+	@Lob
+	@Column
+	private String conceptDescription;
+	@Column
+	private String keywords;
+	@Lob
+	@Column
+	private String purpose;
+	@Lob
+	@Column
+	private String use;
+	@Lob
+	@Column
+	private String misuse;
+	@Lob
+	@Column
+	private String copyright;
 	@ManyToOne(fetch = FetchType.LAZY)
 	private ArchetypeMaster specialiseArchetypeMaster;
 	@Column(name = "specialise_archetype_master_id", updatable = false, insertable = false)
@@ -176,6 +194,54 @@ public abstract class AbstractMaster<T extends AbstractFile> extends
 
 	public void setLatestFileInternalVersion(Integer latestFileInternalVersion) {
 		this.latestFileInternalVersion = latestFileInternalVersion;
+	}
+
+	public String getConceptDescription() {
+		return conceptDescription;
+	}
+
+	public void setConceptDescription(String conceptDescription) {
+		this.conceptDescription = conceptDescription;
+	}
+
+	public String getKeywords() {
+		return keywords;
+	}
+
+	public void setKeywords(String keywords) {
+		this.keywords = keywords;
+	}
+
+	public String getPurpose() {
+		return purpose;
+	}
+
+	public void setPurpose(String purpose) {
+		this.purpose = purpose;
+	}
+
+	public String getUse() {
+		return use;
+	}
+
+	public void setUse(String use) {
+		this.use = use;
+	}
+
+	public String getMisuse() {
+		return misuse;
+	}
+
+	public void setMisuse(String misuse) {
+		this.misuse = misuse;
+	}
+
+	public String getCopyright() {
+		return copyright;
+	}
+
+	public void setCopyright(String copyright) {
+		this.copyright = copyright;
 	}
 
 }
