@@ -2981,6 +2981,16 @@ angular.module('ui.bootstrap.tabs', [])
 .controller('TabsetController', ['$scope', function TabsetCtrl($scope) {
   var ctrl = this,
       tabs = ctrl.tabs = $scope.tabs = [];
+     
+  $scope.tabControl = {
+  	selectTabById: function(id){
+  	  angular.forEach(tabs, function(tab){
+  	  	if(tab.id == id){
+  	  		ctrl.select(tab);
+  	  	}
+  	  });
+  	},
+  };
 
   ctrl.select = function(selectedTab) {
     angular.forEach(tabs, function(tab) {
@@ -3057,7 +3067,8 @@ angular.module('ui.bootstrap.tabs', [])
     transclude: true,
     replace: true,
     scope: {
-      type: '@'
+      type: '@',
+      tabControl: '=',
     },
     controller: 'TabsetController',
     templateUrl: 'template/tabs/tabset.html',
@@ -3160,40 +3171,51 @@ angular.module('ui.bootstrap.tabs', [])
       heading: '@',
       onSelect: '&select', //This callback is called in contentHeadingTransclude
                           //once it inserts the tab's content into the dom
-      onDeselect: '&deselect'
+      onDeselect: '&deselect',
+      onClose: '&close'
     },
-    controller: function() {
+    controller: function($scope) {
       //Empty controller so other directives can require being 'under' a tab
+      $scope.close = function(){
+      	$scope.onClose();
+      };
     },
+
     compile: function(elm, attrs, transclude) {
-      return function postLink(scope, elm, attrs, tabsetCtrl) {
-        scope.$watch('active', function(active) {
-          if (active) {
-            tabsetCtrl.select(scope);
-          }
-        });
-
-        scope.disabled = false;
-        if ( attrs.disabled ) {
-          scope.$parent.$watch($parse(attrs.disabled), function(value) {
-            scope.disabled = !! value;
+      return{
+        pre: function preLink(scope, elm, attrs, tabsetCtrl){
+      	  scope.closable = angular.isDefined(attrs.closable) ? scope.$parent.$eval(attrs.closable) : false;
+      	  scope.id = angular.isDefined(attrs.id) ? scope.$parent.$eval(attrs.id) : undefined;
+        },
+        post :function postLink(scope, elm, attrs, tabsetCtrl) {
+          scope.$watch('active', function(active) {
+            if (active) {
+              tabsetCtrl.select(scope);
+            }
           });
-        }
 
-        scope.select = function() {
-          if ( !scope.disabled ) {
-            scope.active = true;
+          scope.disabled = false;
+          if ( attrs.disabled ) {
+            scope.$parent.$watch($parse(attrs.disabled), function(value) {
+              scope.disabled = !! value;
+            });
           }
-        };
 
-        tabsetCtrl.addTab(scope);
-        scope.$on('$destroy', function() {
-          tabsetCtrl.removeTab(scope);
-        });
-
-        //We need to transclude later, once the content container is ready.
-        //when this link happens, we're inside a tab heading.
-        scope.$transcludeFn = transclude;
+          scope.select = function() {
+            if ( !scope.disabled ) {
+              scope.active = true;
+            }
+          };
+ 
+          tabsetCtrl.addTab(scope);
+          scope.$on('$destroy', function() {
+            tabsetCtrl.removeTab(scope);
+          });
+ 
+          //We need to transclude later, once the content container is ready.
+          //when this link happens, we're inside a tab heading.
+          scope.$transcludeFn = transclude;
+        },
       };
     }
   };
@@ -4145,7 +4167,10 @@ angular.module("template/rating/rating.html", []).run(["$templateCache", functio
 angular.module("template/tabs/tab.html", []).run(["$templateCache", function($templateCache) {
   $templateCache.put("template/tabs/tab.html",
     "<li ng-class=\"{active: active, disabled: disabled}\">\n" +
-    "  <a href ng-click=\"select()\" tab-heading-transclude>{{heading}}</a>\n" +
+    "  <a href ng-click=\"select()\">\n" +
+    "    <span tab-heading-transclude>{{heading}}</span>\n" +
+    "    <span ng-if=\"closable\" class=\"close\" ng-click=\"close()\" style=\"margin-right: -10px;margin-top: -2px;\">&nbsp;&times;&nbsp;</span>\n" +
+    "  </a>\n" +
     "</li>\n" +
     "");
 }]);
