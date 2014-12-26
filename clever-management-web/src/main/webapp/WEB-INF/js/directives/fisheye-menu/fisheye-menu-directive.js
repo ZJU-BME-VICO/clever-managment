@@ -21,9 +21,9 @@ angular.module('clever.management.directives.fisheyeMenu', []).directive('fishey
 			};
 		},
 		link : function(scope, element, attr) {
-			var itemWidth = attr.itemWidth || 80;
-			var maxWidth = attr.maxWidth || 30;
-			var proximity = attr.proximity || 30;
+			var itemWidth = angular.isDefined(attr.itemWidth) ? scope.$parent.$eval(attr.itemWidth) : 80;
+			var maxWidth = angular.isDefined(attr.maxWidth) ? scope.$parent.$eval(attr.maxWidth) : 30;
+			var proximity = angular.isDefined(attr.proximity) ? scope.$parent.$eval(attr.proximity) : 30;
 			scope.$watch('menus', function(newValue, oldValue) {
 				if (newValue) {
 					$timeout(function() {

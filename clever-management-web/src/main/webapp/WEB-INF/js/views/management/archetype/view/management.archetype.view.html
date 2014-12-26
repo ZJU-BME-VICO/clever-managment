@@ -20,15 +20,18 @@
 		</div>
 		<!-- splitter -->
 		<splitter is-adjust-enabled="!isArchetypeListHidder" style="min-height: 100%;">
-			<i style="cursor: pointer" ng-click="isArchetypeListHidder = !isArchetypeListHidder" ng-show="isArchetypeListHidder" tooltip-placement="right" tooltip="Expand" tooltip-popup-delay="500">
-				<span class="glyphicon glyphicon-chevron-right" ng-style="{'margin-top': containerHeight/2}" ></span>
-			</i>
-			<i style="cursor: pointer" ng-click="isArchetypeListHidder = !isArchetypeListHidder" ng-show="!isArchetypeListHidder" tooltip-placement="right" tooltip="Collapse" tooltip-popup-delay="500">
-				<span class="glyphicon glyphicon-chevron-left" ng-style="{'margin-top': containerHeight/2}" ></span>
-			</i>
+			<i style="cursor: pointer" ng-click="isArchetypeListHidder = !isArchetypeListHidder" ng-show="isArchetypeListHidder" tooltip-placement="right" tooltip="Expand" tooltip-popup-delay="500"> <span class="glyphicon glyphicon-chevron-right" ng-style="{'margin-top': containerHeight/2}" ></span> </i>
+			<i style="cursor: pointer" ng-click="isArchetypeListHidder = !isArchetypeListHidder" ng-show="!isArchetypeListHidder" tooltip-placement="right" tooltip="Collapse" tooltip-popup-delay="500"> <span class="glyphicon glyphicon-chevron-left" ng-style="{'margin-top': containerHeight/2}" ></span> </i>
 		</splitter>
 		<div class="flexBox">
-			abc
+			<tabset tab-control="tabControl">
+				<tab ng-repeat="tab in tabs" closable="true" select="select(tab)" close="close(tab)" id="tab.id">
+					<tab-heading>
+						{{tab.title}}
+					</tab-heading>
+					<span>{{tab.content}}</span>
+				</tab>
+			</tabset>
 		</div>
 	</div>
 </div>
