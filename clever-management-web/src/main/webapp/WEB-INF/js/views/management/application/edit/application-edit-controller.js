@@ -1,101 +1,177 @@
-function ApplicationEditCtrl($scope){
-	$scope.imgUrl = '/clever-management-web/img/logo.png';
-	$scope.applications = [
-		{
-			img : '/clever-management-web/img/logo.png', 
-			name : '知识转化平台', 
-			desc : '将日益增长的医学知识有效转化为临床实践是医学界亟待解决的问题。知识转化平台旨在通过信息学技术来加速知识向实践的转换。通过构建一个包含诊断、治疗、药学等多种医学知识的不断更新的综合知识库，提供推理引擎和知识获取等知识驱动的服务，最终为临床提供多样的循证决策支持应用。', 
-			url : 'url',
-			href: 'f1'
-		},
+function ApplicationEditCtrl($scope, $stateParams, appLibraryService, msgboxService, WEBSITE_DOMAIN){
 
-		{
-			img : 'img', 
-			name : 'CPOE', 
-			desc : '计算机化医生医嘱录入系统（computerized physician order entry，CPOE）系统，即电子处方系统，在这个系统中，每个病人都被指定一条数据，再把患者将要用的药物的数据与病人的数据联系起来。具备规范性、快捷性、安全性、医嘱流程跟踪等特点。', 
-			url : 'url',
-			href: 'f2'
-		},
+	var undefined;
 
-		{
-			img : 'img', 
-			name : '医院消毒物品追溯系统', 
-			desc : 'V-TRACK是一套面向医院消毒供应中心、手术室和临床科室，用于物品质量控制和追溯管理的信息系统。系统利用条形码技术，对重复使用的器械和医疗物品从回收、清洗消毒、包装、灭菌、存储、发放，到使用的全过程进行跟踪记录，从而轻松实现整个处理过程的回溯，帮助医院提高物品质量，保证物品安全。', 
-			url : 'url',
-			href: 'f3'
-		},
+	$scope.nameValidation = {
+		validated : true,
+		msg : undefined,
+	};
+	$scope.urlValidation = {
+		validated : true,
+		msg : undefined,
+	};
+	$scope.descriptionValidation = {
+		validated : true,
+		msg : undefined,
+	};
+	$scope.imgValidation = {
+		validated : true,
+		msg : undefined,
+	};
 
-		{
-			img : 'img', 
-			name : '医院感染监控系统', 
-			desc : 'ICNet NG是基于Web，提供感染控制、病案管理和监视的一款软件。ICNet自动收集医院各系统中的病人、检验、医嘱、放射、病程和手术等信息，来帮助感染人员电子化地管理感染情况，并提供各式的报表。', 
-			url : 'url',
-			href: 'f4'
+	$scope.application = {
+		id : undefined,
+		name : undefined,
+		description : undefined,
+		url : undefined,
+		img : {
+			file : undefined,
+			path : undefined,
 		},
+	};
 
-		{
-			img : 'img', 
-			name : '临床路径分析系统', 
-			desc : '临床进程监控对调高医疗质量，改善治疗模式有尤为重要的作用。本系统通过对临床进程信息进行深入分析，通过过程数据挖掘以及增量分析实现临床过程建模，医疗干预推荐以及医疗过程监控。', 
-			url : 'url',
-			href: 'f5'
-		},
+	$scope.apps = [];
+	$scope.okText = 'APPLICATION_EDTI_BTN_UPLOAD';	
 
-		{
-			img : 'img', 
-			name : '科研数据分析系统', 
-			desc : '科学研究是理论创新和技术创新的动力。随着医疗体制改革的深入，医院之间的竞争日益激烈，科研水平成为衡量医院发展水平的重要因素。伴随着计算机技术和数据分析技术的快速发展，利用各种计算机技术进行科研工作已是大势所趋。然而医疗数据非结构化、非电子化、访问局限等原因使临床数据收集工作成为一个瓶颈。除此之外，不同的医学研究数据需求迥异、多变。本科研平台是基于原型设计实现，旨在构建医生可操控、可配置的自动化科研数据支持系统，功能包括：临床数据自动集成、临床数据补充输入、临床数据按需显示、临床数据高级检索等功能。', 
-			url : 'url',
-			href: 'f6'
-		},
+	refreshData();
 
-		{
-			img : 'img', 
-			name : '头痛辅助决策系统', 
-			desc : ' 头痛辅助决策系统是面向基层医院的，帮助临床医生头痛诊疗的临床决策支持系统。本系统包含完整的门诊头痛诊断流程，包含头痛日志分析、继发性头痛筛查、原发性头痛辅助问诊、辅助诊断、参考用药和自动生成患者病历等。', 
-			url : 'url',
-			href: 'f7'
-		},
+	if($stateParams.id != 'all'){
+		appLibraryService.getApplicationById($stateParams.id).then(function(result){
+			setAppSelected(result);
+		});
+	}
+	
+	$scope.selectApp = function(app){
+		setAppSelected(app);
+	};
 
-		{
-			img : 'img', 
-			name : '老年认知障碍辅助诊断系统', 
-			desc : '老年认知障碍辅助诊断系统是面向基层医院的，帮助临床医生老年认知障碍诊疗的临床决策支持系统。本系统包含完整的门诊老年认知障碍的工作流程，包含基本情况检查、认知检查、辅助诊断等，其中认知检查包括MMSE、词表学习、图形记忆、GDS等医院常用的诊断内容。', 
-			url : 'url',
-			href: 'f8'
-		},
+	$scope.addNewApp = function() {
+		cleanInputArea();
+	};
 
-		{
-			img : 'img', 
-			name : '老年认知障碍辅助诊断系统', 
-			desc : '老年认知障碍辅助诊断系统是面向基层医院的，帮助临床医生老年认知障碍诊疗的临床决策支持系统。本系统包含完整的门诊老年认知障碍的工作流程，包含基本情况检查、认知检查、辅助诊断等，其中认知检查包括MMSE、词表学习、图形记忆、GDS等医院常用的诊断内容。', 
-			url : 'url',
-			href: 'f9'
-		},
+	$scope.deleteApp = function() {
+	    if ($scope.editMode) {
+	        msgboxService.createMessageBox('APPLICATION_EDIT_DELETE', 'APPLICATION_EDIT_DELETE_HINT', {
+	            appName : $scope.application.name
+	        }, 'question', 'yesOrNo').result.then(function(confirm) {
+	            if (confirm) {
+	                appLibraryService.deleteApplication($scope.application).then(function(result) {
+	                    refreshData();
+	                    cleanInputArea();
+	                })
+	            }
+	        })
+	    }
+	};
 
-		{
-			img : 'img', 
-			name : '老年认知障碍辅助诊断系统', 
-			desc : '老年认知障碍辅助诊断系统是面向基层医院的，帮助临床医生老年认知障碍诊疗的临床决策支持系统。本系统包含完整的门诊老年认知障碍的工作流程，包含基本情况检查、认知检查、辅助诊断等，其中认知检查包括MMSE、词表学习、图形记忆、GDS等医院常用的诊断内容。', 
-			url : 'url',
-			href: 'f10'
-		},
 
-		{
-			img : 'img', 
-			name : '老年认知障碍辅助诊断系统', 
-			desc : '老年认知障碍辅助诊断系统是面向基层医院的，帮助临床医生老年认知障碍诊疗的临床决策支持系统。本系统包含完整的门诊老年认知障碍的工作流程，包含基本情况检查、认知检查、辅助诊断等，其中认知检查包括MMSE、词表学习、图形记忆、GDS等医院常用的诊断内容。', 
-			url : 'url',
-			href: 'f11'
-		},
+	$scope.saveApp = function() {
+	    validate();
+	    if ($scope.nameValidation.validated && $scope.descriptionValidation.validated && $scope.urlValidation.validated && $scope.imgValidation.validated) {
+	        if (!$scope.editMode) {
+	            appLibraryService.uploadNewApplication($scope.application).then(function(result) {
+	                if (result.succeeded) {
+	                    msgboxService.createMessageBox('APPLICATION_EDIT_SUCCEEDED', 'APPLICATION_EDIT_UPLOAD_SUCCEEDED_HINT', {}, 'success');
+	                    refreshData();
+	                    cleanInputArea();
+	                } else {
+	                    msgboxService.createMessageBox('APPLICATION_EDIT_FAILED', 'APPLICATION_EDIT_UPLOAD_FAILED_HINT', {
+	                        errorMsg : result.message
+	                    }, 'error');
+	                }
+	            });
+	        } else {
+	            appLibraryService.updateApplication($scope.application).then(function(result) {
+	                if (result.succeeded) {
+	                    msgboxService.createMessageBox('APPLICATION_EDIT_SUCCEEDED', 'APPLICATION_EDIT_UPDATE_SUCCEEDED_HINI', {}, 'success');
+	                    refreshData();
+	                } else {
+	                    msgboxService.createMessageBox('APPLICATION_EDIT_FAILED', 'APPLICATION_EDIT_UPDATE_FAILED_HINI', {
+	                    	errorMsg : result.message
+	                    }, 'error');
+	                }
+	            });
+	        }
+	    }
 
-		{
-			img : 'img', 
-			name : '老年认知障碍辅助诊断系统', 
-			desc : '老年认知障碍辅助诊断系统是面向基层医院的，帮助临床医生老年认知障碍诊疗的临床决策支持系统。本系统包含完整的门诊老年认知障碍的工作流程，包含基本情况检查、认知检查、辅助诊断等，其中认知检查包括MMSE、词表学习、图形记忆、GDS等医院常用的诊断内容。', 
-			url : 'url',
-			href: 'f12'
-		},
+	};
 
-	];
+	$scope.previewImg = function(file) {
+		appLibraryService.uploadTempImage(file.file).then(function(result) {
+			if (result.succeeded) {
+				$scope.imgPath = WEBSITE_DOMAIN + result.message;
+				$scope.imgValidation.validated = true;
+			} else {
+				$scope.imgValidation.validated = false;
+				$scope.imgValidation.msg = result.message;
+				$scope.imgPath = undefined;
+			}
+		});
+	};
+
+	function refreshData() {
+		appLibraryService.getAllApplications().then(function(result) {
+			$scope.apps = result;
+		});
+	}
+
+	function validate() {
+		if (!$scope.application.name || $scope.application.name == '') {
+			$scope.nameValidation.validated = false;
+			$scope.nameValidation.msg = "Name can not be empty.";
+		} else {
+			$scope.nameValidation.validated = true;
+		}
+		if (!$scope.application.description || $scope.application.description == '') {
+			$scope.descriptionValidation.validated = false;
+			$scope.descriptionValidation.msg = "Description can not be empty.";
+		} else {
+			$scope.descriptionValidation.validated = true;
+		}
+		if (!$scope.application.url || $scope.application.url == '') {
+			$scope.urlValidation.validated = false;
+			$scope.urlValidation.msg = "URL can not be empty.";
+		} else {
+			$scope.urlValidation.validated = true;
+		}
+		if (!$scope.editMode && !$scope.application.img.file) {
+			$scope.imgValidation.validated = false;
+			$scope.imgValidation.msg = "Please choose an image.";
+		}
+	}
+
+	function setAppSelected(app){
+		$scope.application.id = app.id;
+		$scope.application.name = app.name;
+		$scope.application.description = app.description;
+		$scope.application.url = app.url;
+		$scope.imgPath = WEBSITE_DOMAIN + app.imgPath;
+		$scope.application.img.path = undefined;
+
+		cleanValidateMessage();
+
+		$scope.editMode = true;
+		$scope.okText = 'APPLICATION_EDTI_BTN_UPDATE';
+	}
+
+	function cleanInputArea(){
+		$scope.application.name = undefined;
+		$scope.application.description = undefined;
+		$scope.application.url = undefined;
+		$scope.application.img.path = undefined;
+		$scope.imgPath = undefined;
+
+		cleanValidateMessage();
+
+		$scope.editMode = false;
+		$scope.okText = 'APPLICATION_EDTI_BTN_UPLOAD';	
+	}
+
+	function cleanValidateMessage(){
+		$scope.nameValidation.validated = true;
+		$scope.descriptionValidation.validated = true;
+		$scope.urlValidation.validated = true;
+		$scope.imgValidation.validated = true;
+	}
 }
+

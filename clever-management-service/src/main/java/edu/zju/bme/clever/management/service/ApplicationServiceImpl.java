@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.UUID;
 
 import javax.annotation.Resource;
+import javax.servlet.ServletContext;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,6 +30,11 @@ public class ApplicationServiceImpl implements ApplicationService {
 
 	@Autowired
 	private ApplicationRepository applicationRepo;
+	
+	@Resource
+	private ServletContext servletContext;
+
+	private static final String APP_FOLDER_PATH = "/upload/app/";
 
 	@Override
 	public List<Application> getAllApplications() {
@@ -37,16 +43,30 @@ public class ApplicationServiceImpl implements ApplicationService {
 
 	@Override
 	public void saveApplication(String name, String description, String url,
-			String imgPath) throws ApplicationPersistException {
+			MultipartFile img) throws ApplicationPersistException {
 		if (this.applicationRepo.findByName(name) != null) {
 			throw new ApplicationPersistException("Application " + name
 					+ " already exists.");
+		}
+		String appFolderUrl = servletContext.getRealPath("/WEB-INF"
+				+ APP_FOLDER_PATH);
+		File appFolder = new File(appFolderUrl);
+		if (!appFolder.exists()) {
+			appFolder.mkdir();
+		}
+		File imgFile = new File(appFolderUrl + "/" + name);
+		try {
+			img.transferTo(imgFile);
+		} catch (IllegalStateException | IOException ex) {
+			this.logger.info("Save application {} img failed.", name, ex);
+			throw new ApplicationPersistException("Save application " + name
+					+ " img failed, error: " + ex.getMessage());
 		}
 		Application application = new Application();
 		application.setName(name);
 		application.setDescription(description);
 		application.setUrl(url);
-		application.setImgPath(imgPath);
+		application.setImgPath(APP_FOLDER_PATH + name);
 		application
 				.setDisplayOrder(this.applicationRepo.getApplicationCount() + 1);
 		this.applicationRepo.save(application);
@@ -54,12 +74,28 @@ public class ApplicationServiceImpl implements ApplicationService {
 
 	@Override
 	public void updateApplication(Integer id, String name, String description,
-			String url, String imgPath) throws ApplicationPersistException {
+			String url, MultipartFile img) throws ApplicationPersistException {
 		Application application = this.applicationRepo.findOne(id);
 		application.setDescription(description);
 		application.setName(name);
 		application.setUrl(url);
-		application.setImgPath(imgPath);
+		if (img != null) {
+			File oldImgFile = new File(
+					servletContext.getRealPath("/WEB-INF"
+							+ application.getImgPath()));
+			oldImgFile.delete();
+			File newImgFile = new File(
+					servletContext.getRealPath("/WEB-INF" + APP_FOLDER_PATH
+							+ name));
+			try {
+				img.transferTo(newImgFile);
+			} catch (IllegalStateException | IOException ex) {
+				this.logger.info("Update application {} img failed.", name, ex);
+				throw new ApplicationPersistException("Update application " + name
+						+ " img failed, error: " + ex.getMessage());
+			}
+			application.setImgPath(APP_FOLDER_PATH + name);
+		}	
 		this.applicationRepo.save(application);
 	}
 
@@ -78,6 +114,9 @@ public class ApplicationServiceImpl implements ApplicationService {
 	@Override
 	public void deleteApplicationById(Integer id) {
 		Application application = this.applicationRepo.findOne(id);
+		File imgFile = new File(servletContext.getRealPath("/WEB-INF"
+				+ APP_FOLDER_PATH + application.getName()));
+		imgFile.delete();
 		this.applicationRepo.delete(application);
 	}
 }
