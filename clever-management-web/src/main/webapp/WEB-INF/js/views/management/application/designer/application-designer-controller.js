@@ -12,10 +12,6 @@ function DesignerCtrl($scope,resourceService,templateParseService){
 	});
 
 	$scope.treeControl = {};
-    
-	$scope.selectNode = function(node) {
-		var a;
-	};
 
 	$scope.collapse = function() {
 		$scope.treeControl.collapseAll();
@@ -23,8 +19,13 @@ function DesignerCtrl($scope,resourceService,templateParseService){
 
 	$scope.expand = function() {
 		$scope.treeControl.expandAll();
+	};	$scope.nodeControl = {};
+	
+	$scope.cloneItems=function(){
+	    nodeData=$scope.treeControl.selectedNodes();
+	    $scope.treeControl.cloneItem(nodeData);
 	};
 	
-	//$scope.dvtextControl={};
+	
 }
 

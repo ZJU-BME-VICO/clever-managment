@@ -35,6 +35,7 @@
 <script src="js/directives/unfold-menu/unfold-menu-directive.js"></script>
 <script src="js/directives/fisheye-menu/fisheye-menu-directive.js"></script>
 <script src="js/directives/application-template/DV-TEXT/DV-TEXT-directive.js"></script>
+<script src="js/directives/application-template/DV-TEXT/DV-QUANTITY-directive.js"></script>
 <script src="js/directives/application-template/GUI/long-press-directive.js"></script>
 
 <!-- controllers -->

@@ -1,4 +1,4 @@
-angular.module('clever.management.directive.longPress',[]).directive('onLongPress', function($timeout) {
+angular.module('clever.management.directives.longPress',[]).directive('onLongPress', function($timeout) {
 	return{
 		//require:'^templateListTree',
 		restrict:'A',
