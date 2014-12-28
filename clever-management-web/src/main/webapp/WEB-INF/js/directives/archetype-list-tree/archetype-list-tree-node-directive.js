@@ -18,10 +18,10 @@ function($compile) {
 
 			var template = '<ul>' +
 								'<li>' +
-									'<img class="collapsed" ng-show="nodeData.specialiseArchetypeMasters.length && nodeData.collapsed" ng-click="selectNodeHead(nodeData)"></img>' +
-									'<img class="expanded" ng-show="nodeData.specialiseArchetypeMasters.length && !nodeData.collapsed" ng-click="selectNodeHead(nodeData)"></img>' +
-									'<span ng-show="!nodeData.specialiseArchetypeMasters.length" style="padding: 1px 5px;width: 15px;"/>' +
-									'<i class="normal" ng-hide="nodeData.specialiseArchetypeMasters.length"></i> ' +
+									'<img class="collapsed" ng-show="nodeData.specialisedArchetypeMasters.length && nodeData.collapsed" ng-click="selectNodeHead(nodeData)"></img>' +
+									'<img class="expanded" ng-show="nodeData.specialisedArchetypeMasters.length && !nodeData.collapsed" ng-click="selectNodeHead(nodeData)"></img>' +
+									'<span ng-show="!nodeData.specialisedArchetypeMasters.length" style="padding: 1px 5px;width: 15px;"/>' +
+									'<i class="normal" ng-hide="nodeData.specialisedArchetypeMasters.length"></i> ' +
 									'<span ng-class="nodeData.selected" ng-click="selectNodeLabel(nodeData)" ng-dblclick="doubleClickNodeLabel(nodeData)">' +
 										'<img ng-class="nodeData.lifecycleState | lowercase"></img>' +
 										'<span ng-bind-html="nodeData.conceptName | highlight:highlightText | unsafe"></span>' +
@@ -29,7 +29,7 @@ function($compile) {
 									'</span>' +
 									'<archetype-list-tree-node ' +
 										'ng-hide="nodeData.collapsed || !node.show" ' +
-										'ng-repeat="node in nodeData.specialiseArchetypeMasters" ' +
+										'ng-repeat="node in nodeData.specialisedArchetypeMasters" ' +
 										'ng-init="node.parent = nodeData;node.show = true;" ' +
 										'node-data="node">' +
 									'</archetype-tree-list-node>' +

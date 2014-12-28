@@ -5,6 +5,7 @@ var config = {
 	'ARCHETYPE_VALIDATE_URL' : prefix + '/archetypes/action/validate',
 	'ARCHETYPE_UPLOAD_URL' : prefix + '/archetypes/action/upload',
 	'ARCHETYPE_LIST_URL' : prefix + '/archetypes/list',
+	'ARCHETYPE_MASTER_BY_ID_URL' : prefix + '/archetypes/master/id/',
 };
 var configModel = angular.module('clever.management.config', []);
 angular.forEach(config, function(value, key) {

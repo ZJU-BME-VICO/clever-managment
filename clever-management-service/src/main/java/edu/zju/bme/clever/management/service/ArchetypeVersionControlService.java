@@ -26,9 +26,6 @@ public interface ArchetypeVersionControlService {
 	public void approveArchetype(Archetype archetype, User user)
 			throws VersionControlException;
 
-	public void approveArchetype(ArchetypeFile archetypeFile, User user)
-			throws VersionControlException;
-
 	public void rejectArchetype(Archetype archetype, User user)
 			throws VersionControlException;
 

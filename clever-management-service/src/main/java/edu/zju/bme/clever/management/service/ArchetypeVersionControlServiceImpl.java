@@ -1,11 +1,14 @@
 package edu.zju.bme.clever.management.service;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Optional;
 
 import org.openehr.am.archetype.Archetype;
 import org.openehr.am.serialize.ADLSerializer;
+import org.openehr.rm.common.resource.ResourceDescription;
+import org.openehr.rm.common.resource.ResourceDescriptionItem;
 import org.openehr.rm.support.identification.ArchetypeID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -291,23 +294,14 @@ public class ArchetypeVersionControlServiceImpl implements
 	@Override
 	public void approveArchetype(Archetype archetype, User user)
 			throws VersionControlException {
+		// Validate user authority
+
 		ArchetypeFile archetypeFile = this.archetypeFileRepo
 				.findByName(archetype.getArchetypeId().getValue());
 		if (archetypeFile == null) {
 			throw new VersionControlException("Archetype "
 					+ archetype.getArchetypeId().getValue()
 					+ " does not exist.");
-		}
-		approveArchetype(archetypeFile, user);
-	}
-
-	@Override
-	public void approveArchetype(ArchetypeFile archetypeFile, User user)
-			throws VersionControlException {
-		// Validate user authority
-
-		if (archetypeFile.getId() == null) {
-			throw new VersionControlException("Archetype does not exist.");
 		}
 		// Validate and set lifecycle state
 		if (!archetypeFile.getLifecycleState()
@@ -325,6 +319,8 @@ public class ArchetypeVersionControlServiceImpl implements
 		ArchetypeMaster archetypeMaster = archetypeFile.getMaster();
 		archetypeMaster.setLatestFileLifecycleState(archetypeFile
 				.getLifecycleState());
+		// Update archetype master basic info
+		this.setArchetypeMasterBasicInfo(archetypeMaster, archetype);
 		this.archetypeMasterRepo.save(archetypeMaster);
 		// Log action
 		logArchetypeAction(archetypeFile, ActionType.Approve, user);
@@ -424,13 +420,8 @@ public class ArchetypeVersionControlServiceImpl implements
 			throws VersionControlException {
 		ArchetypeMaster archetypeMaster = new ArchetypeMaster();
 		// Set archetype info
-		archetypeMaster.setConceptName(archetype.getConceptName(archetype
-				.getOriginalLanguage().getCodeString()));
-		archetypeMaster.setName(archetype.getArchetypeId().base());
-		archetypeMaster.setRmEntity(archetype.getArchetypeId().rmEntity());
-		archetypeMaster.setRmName(archetype.getArchetypeId().rmName());
-		archetypeMaster.setRmOrginator(archetype.getArchetypeId()
-				.rmOriginator());
+		this.setArchetypeMasterBasicInfo(archetypeMaster, archetype);
+
 		// Set specialize archetype master info
 		Optional<ArchetypeID> specialiseArchetypeId = Optional
 				.ofNullable(archetype.getParentArchetypeId());
@@ -450,6 +441,41 @@ public class ArchetypeVersionControlServiceImpl implements
 							.getLatestFileInternalVersion());
 		}
 		return archetypeMaster;
+	}
+
+	protected void setArchetypeMasterBasicInfo(ArchetypeMaster master,
+			Archetype archetype) {
+		master.setConceptName(archetype.getConceptName(archetype
+				.getOriginalLanguage().getCodeString()));
+		master.setName(archetype.getArchetypeId().base());
+		master.setRmEntity(archetype.getArchetypeId().rmEntity());
+		master.setRmName(archetype.getArchetypeId().rmName());
+		master.setRmOrginator(archetype.getArchetypeId().rmOriginator());
+		archetype
+				.getDescription()
+				.getDetails()
+				.stream()
+				.filter(detail -> detail.getLanguage().equals(
+						archetype.getOriginalLanguage()))
+				.findAny()
+				.ifPresent(
+						item -> {
+							master.setPurpose(item.getPurpose());
+							master.setKeywords(String.join(",",
+									Optional.ofNullable(item.getKeywords())
+											.orElse(new ArrayList<String>())));
+							master.setUse(item.getUse());
+							master.setMisuse(item.getMisuse());
+							master.setCopyright(item.getCopyright());
+						});
+		master.setConceptDescription(Optional
+				.ofNullable(
+						archetype.getOntology()
+								.termDefinition(
+										archetype.getOriginalLanguage()
+												.getCodeString(),
+										archetype.getConcept()))
+				.map(term -> term.getDescription()).orElse(""));
 	}
 
 	protected ArchetypeFile constructArchetypeFile(

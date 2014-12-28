@@ -14,21 +14,24 @@
 						</button> </span>
 				</div>
 			</div>
-			<div class="list-group" ng-style="{height: windowHeight - 240}" style="overflow: auto;">
-				<archetype-list-tree tree-data="archetypeList" select-node-callback="selectNode(node)" tree-control="treeControl"></archetype-list-tree>
+			<div class="list-group" ng-style="{height: containerHeight - 55}" style="overflow: auto;">
+				<archetype-list-tree tree-data="archetypeList" select-node-callback="selectNode(value)" tree-control="treeControl"></archetype-list-tree>
 			</div>
 		</div>
 		<!-- splitter -->
 		<splitter is-adjust-enabled="!isArchetypeListHidder" style="min-height: 100%;">
-			<i style="cursor: pointer" ng-click="isArchetypeListHidder = !isArchetypeListHidder" ng-show="isArchetypeListHidder" tooltip-placement="right" tooltip="Expand" tooltip-popup-delay="500">
-				<span class="glyphicon glyphicon-chevron-right" ng-style="{'margin-top': (windowHeight - 200)/2}" ></span>
-			</i>
-			<i style="cursor: pointer" ng-click="isArchetypeListHidder = !isArchetypeListHidder" ng-show="!isArchetypeListHidder" tooltip-placement="right" tooltip="Collapse" tooltip-popup-delay="500">
-				<span class="glyphicon glyphicon-chevron-left" ng-style="{'margin-top': (windowHeight - 200)/2}" ></span>
-			</i>
+			<i style="cursor: pointer" ng-click="isArchetypeListHidder = !isArchetypeListHidder" ng-show="isArchetypeListHidder" tooltip-placement="right" tooltip="Expand" tooltip-popup-delay="500"> <span class="glyphicon glyphicon-chevron-right" ng-style="{'margin-top': containerHeight/2}" ></span> </i>
+			<i style="cursor: pointer" ng-click="isArchetypeListHidder = !isArchetypeListHidder" ng-show="!isArchetypeListHidder" tooltip-placement="right" tooltip="Collapse" tooltip-popup-delay="500"> <span class="glyphicon glyphicon-chevron-left" ng-style="{'margin-top': containerHeight/2}" ></span> </i>
 		</splitter>
 		<div class="flexBox">
-			abc
+			<tabset tab-control="tabControl">
+				<tab ng-repeat="tab in tabs" closable="true" select="select(tab)" close="close(tab)" id="tab.id">
+					<tab-heading>
+						{{tab.title}}
+					</tab-heading>
+					<span>{{tab.content}}</span>
+				</tab>
+			</tabset>
 		</div>
 	</div>
 </div>

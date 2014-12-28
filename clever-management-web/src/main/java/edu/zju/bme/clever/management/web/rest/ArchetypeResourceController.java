@@ -16,6 +16,7 @@ import org.springframework.jmx.export.annotation.ManagedAttribute;
 import org.springframework.jmx.export.annotation.ManagedResource;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -30,6 +31,7 @@ import edu.zju.bme.clever.management.service.entity.AbstractFile.SourceType;
 import edu.zju.bme.clever.management.service.entity.ArchetypeMaster;
 import edu.zju.bme.clever.management.service.entity.FileProcessResult;
 import edu.zju.bme.clever.management.service.entity.User;
+import edu.zju.bme.clever.management.web.entity.ArchetypeActionLogInfo;
 import edu.zju.bme.clever.management.web.entity.ArchetypeMasterInfo;
 import edu.zju.bme.clever.management.web.entity.FileUploadResult;
 import se.acode.openehr.parser.ADLParser;
@@ -89,7 +91,8 @@ public class ArchetypeResourceController {
 									info.setName(master.getName());
 									info.setLatestArchetypeVersion(master
 											.getLatestFileVersion());
-									info.setLifecycleState(master.getLatestFileLifecycleState());
+									info.setLifecycleState(master
+											.getLatestFileLifecycleState());
 									return info;
 								}));
 		masters.forEach(master -> {
@@ -97,12 +100,50 @@ public class ArchetypeResourceController {
 				ArchetypeMasterInfo info = infos.get(master.getId());
 				info.setRoot(false);
 				infos.get(master.getSpecialiseArchetypeMasterId())
-						.getSpecialiseArchetypeMasters().add(info);
+						.getSpecialisedArchetypeMasters().add(info);
 
 			}
 		});
 		return infos.values().stream().filter(info -> info.isRoot())
 				.collect(Collectors.toList());
+	}
+
+	@RequestMapping(value = "/master/id/{id}", method = RequestMethod.GET)
+	public ArchetypeMasterInfo getMasterById(@PathVariable int id) {
+		ArchetypeMaster master = this.archetypeProviderService
+				.getArchetypeMasterById(id);
+		ArchetypeMasterInfo masterInfo = new ArchetypeMasterInfo();
+		// Add basic info
+		masterInfo.setId(master.getId());
+		masterInfo.setName(master.getName());
+		masterInfo.setConceptName(master.getConceptName());
+		masterInfo.setConceptDescription(master.getConceptDescription());
+		masterInfo.setKeywords(master.getKeywords());
+		masterInfo.setCopyright(master.getCopyright());
+		masterInfo.setPurpose(master.getPurpose());
+		masterInfo.setUse(master.getUse());
+		masterInfo.setMisuse(master.getMisuse());
+		ArchetypeMaster specialiseMaster = master
+				.getSpecialiseArchetypeMaster();
+		if (specialiseMaster != null) {
+			ArchetypeMasterInfo specialiseMasterInfo = new ArchetypeMasterInfo();
+			specialiseMasterInfo.setId(specialiseMaster.getId());
+			specialiseMasterInfo.setName(specialiseMaster.getName());
+			specialiseMasterInfo.setLatestArchetypeVersion(specialiseMaster
+					.getLatestFileVersion());
+			masterInfo.setSpecialiseArchetypeMaster(specialiseMasterInfo);
+		}
+		// Add action log
+		master.getActionLogs().stream().forEach(log -> {
+			ArchetypeActionLogInfo logInfo = new ArchetypeActionLogInfo();
+			logInfo.setId(log.getId());
+			logInfo.setAction(log.getActionType().getValue());
+			logInfo.setArchetypeVersion(log.getArchetypeVersion());
+			logInfo.setRecordTime(log.getRecordTime());
+			logInfo.setOperator(log.getOperator().getName());
+			masterInfo.getActionLogs().add(logInfo);
+		});
+		return masterInfo;
 	}
 
 	@RequestMapping(value = "/action/validate", method = RequestMethod.POST)

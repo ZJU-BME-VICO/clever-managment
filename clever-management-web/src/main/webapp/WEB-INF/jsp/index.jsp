@@ -20,7 +20,7 @@ uri="http://www.springframework.org/security/tags"%>
 		<busy-model size="60" window-width="windowWidth" window-height="windowHeight"></busy-model>
 		
 		<!-- content -->
-		<div ui-view class="container responsive-container" ng-style="{height: windowHeight - 100, width: windowWidth}"></div>
+		<div ui-view class="container responsive-container" ng-style="{height: containerHeight}"></div>
 
 		<!-- footer -->
 		<%@ include file="jspf/footer.jspf"%>
