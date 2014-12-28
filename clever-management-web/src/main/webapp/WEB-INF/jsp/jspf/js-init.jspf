@@ -35,9 +35,11 @@
 <script src="js/directives/application-template/template-list-tree/template-list-tree-node-directive.js"></script>
 <script src="js/directives/unfold-menu/unfold-menu-directive.js"></script>
 <script src="js/directives/fisheye-menu/fisheye-menu-directive.js"></script>
-<script src="js/directives/application-template/DV-TEXT/DV-TEXT-directive.js"></script>
-<script src="js/directives/application-template/DV-TEXT/DV-QUANTITY-directive.js"></script>
-<script src="js/directives/application-template/GUI/long-press-directive.js"></script>
+<script src="js/directives/application-template/DV/DV-TEXT-directive.js"></script>
+<script src="js/directives/application-template/DV/DV-QUANTITY-directive.js"></script>
+<script src="js/directives/application-template/DV/DV-ORDINAL-directive.js"></script>
+<script src="js/directives/application-template/Activity/long-press-directive.js"></script>
+<script src="js/directives/application-template/Activity/dragable-directive.js"></script>
 
 <!-- controllers -->
 <script src="js/views/management/management-controller.js"></script>

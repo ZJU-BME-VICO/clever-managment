@@ -1,4 +1,4 @@
-function DesignerCtrl($scope,resourceService,templateParseService){
+function DesignerCtrl($scope,resourceService,templateParseService,$compile){
 	$scope.language = [];
 	$scope.defination={};
 	var url='js/views/management/application/designer/111.xml';
@@ -10,7 +10,18 @@ function DesignerCtrl($scope,resourceService,templateParseService){
 	    $scope.templateList=parseResult.definition.definitionTree;
 	    $scope.nodeList=parseResult.definition.contentTree[1];
 	});
+   
+   /* $scope.selectNode=function(node){
+        var nodeData=node;
+        var id="#"+nodeData.label.code+"_"+nodeData.label.labelContent; 
+          $(id).clone().appendTo("#editArea");//clone all ui contet
+         var addin=angular.element('<dv-text gui-data="nodeList" gui-control="dvtextControl"></dv-text>');
+          var scope={//配置    绑定不同的数据到指令内部的作用域
+            UIData:'=guiData',          
+           };     
+          $("#editArea").append($compile( addin )(scope));
 
+    };*/
 	$scope.treeControl = {};
 
 	$scope.collapse = function() {
@@ -21,10 +32,10 @@ function DesignerCtrl($scope,resourceService,templateParseService){
 		$scope.treeControl.expandAll();
 	};	$scope.nodeControl = {};
 	
-	$scope.cloneItems=function(){
-	    nodeData=$scope.treeControl.selectedNodes();
-	    $scope.treeControl.cloneItem(nodeData);
-	};
+	//$scope.cloneItems=function(){
+	  //  nodeData=$scope.treeControl.getCurrentNode();
+	   // $scope.treeControl.cloneItem(nodeData);
+	//};
 	
 	
 }

@@ -1,8 +1,9 @@
 angular.module('clever.management.directives.templateListTreeNode', []).directive('templateListTreeNode',
 function($compile,$document) {
-    var addin=angular.element('<dv-quantity gui-data="nodeData" gui-control="dvquantityControl"></dv-quantity>');
-    var floatDiv=angular.element('<div class="floatDiv" style="z-index:999" ng-show=true></div>');
-	return {
+    var datatypeList= new Array('DV_QUANTITY','DV_TEXT','DV_ORDINAL', 'DV_DATE_TIME', 'DV_COUNT',  'DV_BOOLEAN','DV_DURATION','CODE_PHRASE','DV_CODED_TEXT');
+         var templateList=new Array('<dv-quantity gui-data="nodeData" gui-control="dvquantityControl"></dv-quantity>','<dv-text gui-data="nodeData" gui-control="dvtextControl"></dv-text>','<dv-ordinal gui-data="nodeData" gui-control="dvordinalControl"></dv-ordinal>','4','5','6','7','8');
+         var floatDiv=angular.element('<div class="floatDiv" style="z-index:999" ng-show=true></div>');  
+    	return {
 		require: ['^templateListTree'],
 		restrict : 'E',
 		scope : {
@@ -14,62 +15,11 @@ function($compile,$document) {
 		    $scope.nodeScope={
 		       currentNode : undefined,
                 nodes : [], 
-		    };
-		    $scope.nodeControl={
-		      /*cloneItems:function(){
-		        var select=$scope.nodeScope.currentNode;
-                var id="#"+select.label.code+"_"+select.label.labelContent;          
-                var startX=0,startY,startZ=0,x=0,y=0;
-                $(".float").css({
-                    position:"relative",    
-                    backgroundColor: 'lightgrey',
-                    cursor: 'pointer' ,
-                    width:'50px',   
-                    height:'20px'   
-                });
-                $(".float").hide();  
-                $element.on('mousedown',function(event){
-                    event.preventDefault();
-                    startX=event.screenX - x;
-                    startY=event.screenY - y;  
-                 $(id).clone().appendTo(".float"); 
-                 $document.on('mousemove',mousemove);
-                 $document.on('mouseup',mouseup);               
-                
-               });
-               
-           
-                function mousemove(event){
-                 $(".float").show();  //append after then present element               
-                 $(".float").css({
-                    display:"block"  
-                 });
-                 y=event.screenY-startY;
-                 x=event.screenX-startX;
-                 $(".float").css({
-                    top:y+'px',
-                    left:x+'px'
-                });
-                 };
-                function mouseup(){
-                  $(id).clone().appendTo("#editArea");//clone all ui contet
-                  $("#editArea").append(addin);
-                  y=event.screenY-startY;
-                  x=event.screenX-startX;
-                  $(id).css({
-                    top:y+'px',
-                    left:x+'px'
-                   });
-                    $(".float").empty();
-                    $(".float").hide();                 
-                    $document.unbind('mousemove', mousemove);
-                    $document.unbind('mouseup', mouseup);
-                };
-        },*/
-        };
+		    };	   
+       
         },
 
-		link : function(scope,element, attrs) { 	 		    
+		link : function(scope,element, attrs,treeCotrol) { 	 		    
 			scope.nodeData.collapsed = true;
 			scope.treeScope.nodes.push(scope.nodeData); 
 			
@@ -83,7 +33,7 @@ function($compile,$document) {
 									'<span ng-class="nodeData.selected"  ng-click="selectNodeLabel(nodeData)" ng-dblclick="doubleClickNodeLabel(nodeData)">' +
 										'{{nodeData.label.labelContent}}' +
 									'</span>' +
-									'<template-list-tree-node ng-hide="nodeData.collapsed" ng-repeat="node in nodeData.children" ng-init="node.parent = nodeData" tree-scope="treeScope" node-data="node" select-node-callback="selectNodeCallback"  ng-mousedown="cloneItems()"></template-tree-list-node>' +
+									'<template-list-tree-node ng-hide="nodeData.collapsed" ng-repeat="node in nodeData.children" ng-init="node.parent = nodeData" tree-scope="treeScope" node-data="node" select-node-callback="selectNodeCallback"  ng-mousedown="cloneItems(nodeData)"></template-tree-list-node>' +
 								'</li>' +
 							'</ul>';
 
@@ -101,6 +51,21 @@ function($compile,$document) {
 				selectedNode.collapsed = !selectedNode.collapsed;				
 				// call back
 				scope.selectNodeCallback(selectedNode); 
+				//clone to edit area
+				 var nodeData=selectedNode;
+                 var id="#"+nodeData.label.code+"_"+nodeData.label.labelContent; 
+                 //$(id).clone().appendTo("#editArea");//clone all ui contet
+                 var type=nodeData.label.dataType;
+                 var html="";
+                 for( var i=0;i<9;i++){
+                     if(type==datatypeList[i])
+                     {
+                        html=templateList[i]; 
+                     }
+                 };
+
+                 var addin=angular.element(html);              
+                 $("#editArea").append($compile( addin )(scope));
 			};		
 					
 			scope.selectNodeLabel = function(selectedNode) {
@@ -118,4 +83,5 @@ function($compile,$document) {
     			
 	},
 	};
+               
 });

@@ -1,4 +1,5 @@
 angular.module('clever.management.directives.templateListTree', []).directive('templateListTree', function() {
+	var addin=angular.element('<dv-quantity gui-data="nodeData" gui-control="dvquantityControl"></dv-quantity>');
 	return {
 		restrict : 'E',
 		scope : {
@@ -7,7 +8,7 @@ angular.module('clever.management.directives.templateListTree', []).directive('t
 			selectNodeCallback : '&',
 		},
 		template : '<template-list-tree-node ng-repeat="node in treeData" node-data="node" tree-scope="treeScope" select-node-callback="selectNode" ng-mousedown="cloneItems(nodeData)"></template-list-tree-node>',
-		controller : function($scope) {
+		controller : function($scope,$element,$document) {
 		
 			$scope.treeScope = {
 				currentNode : undefined,
@@ -31,13 +32,10 @@ angular.module('clever.management.directives.templateListTree', []).directive('t
 						node.collapsed = true;
 					});				
 				},
-				selectedNodes:function(selectedNode){
-				    $scope.selectNodeCallback({
-                    node : selectedNode
-                });
+				/*getCurrentNode :function(){
+				    return $scope.selectNode();
 				},
-				cloneItem:function(node){
-				      // var select=$scope.selectNode();
+				cloneItem:function(node){				      
 				var select=node;      
                 var id="#"+select.label.code+"_"+select.label.labelContent;          
                 var startX=0,startY,startZ=0,x=0,y=0;
@@ -86,7 +84,7 @@ angular.module('clever.management.directives.templateListTree', []).directive('t
                     $document.unbind('mousemove', mousemove);
                     $document.unbind('mouseup', mouseup);
                 };
-				},
+				},*/
 			};
 			
 			$scope.$watch('treeData', function(newValue, oldValue) {
