@@ -20,9 +20,7 @@ function($compile) {
 								'<li>' +
 									'<img class="collapsed" ng-show="nodeData.specialisedArchetypeMasters.length && nodeData.collapsed" ng-click="selectNodeHead(nodeData)"></img>' +
 									'<img class="expanded" ng-show="nodeData.specialisedArchetypeMasters.length && !nodeData.collapsed" ng-click="selectNodeHead(nodeData)"></img>' +
-									'<span ng-show="!nodeData.specialisedArchetypeMasters.length" style="padding: 1px 5px;width: 15px;"/>' +
-									'<i class="normal" ng-hide="nodeData.specialisedArchetypeMasters.length"></i> ' +
-									'<span ng-class="nodeData.selected" ng-click="selectNodeLabel(nodeData)" ng-dblclick="doubleClickNodeLabel(nodeData)">' +
+									'<span ng-style="{\'margin-left\': nodeData.specialisedArchetypeMasters.length ? \'5px\' : \'15px\'}" ng-class="nodeData.selected" ng-click="selectNodeLabel(nodeData)" ng-dblclick="doubleClickNodeLabel(nodeData)">' +
 										'<img ng-class="nodeData.lifecycleState | lowercase"></img>' +
 										'<span ng-bind-html="nodeData.conceptName | highlight:highlightText | unsafe"></span>' +
 										'&nbsp<span style="color: grey;font-size: 10pt;">({{nodeData.latestArchetypeVersion}})</span>' +

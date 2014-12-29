@@ -1,5 +1,5 @@
 /* Archetype list tree */
-archetype-list-tree li .expanded {
+archetype-list-tree-node li .expanded {
 	padding: 1px 5px;
 	height: 12px;
 	background-image: url("../img/arrow_expanded.png");
@@ -7,7 +7,7 @@ archetype-list-tree li .expanded {
 	cursor: pointer;
 }
 
-archetype-list-tree li .collapsed {
+archetype-list-tree-node li .collapsed {
 	padding: 1px 5px;
 	height: 12px;
 	background-image: url("../img/arrow_collapsed_white.png");
@@ -15,28 +15,28 @@ archetype-list-tree li .collapsed {
 	cursor: pointer;
 }
 
-archetype-list-tree li .draft {
+archetype-list-tree-node li .draft {
 	padding: 0 10px;
 	height: 16px;
 	background-image: url("../img/draft.png");
 	background-repeat: no-repeat;
 }
 
-archetype-list-tree li .teamreview {
+archetype-list-tree-node li .teamreview {
 	padding: 0 10px;
 	height: 16px;
 	background-image: url("../img/teamreview.png");
 	background-repeat: no-repeat;
 }
 
-archetype-list-tree li .published {
+archetype-list-tree-node li .published {
 	padding: 0 10px;
 	height: 16px;
 	background-image: url("../img/published.png");
 	background-repeat: no-repeat;
 }
 
-archetype-list-tree {
+archetype-list-tree-node {
 	/* prevent user selection */
 	-moz-user-select: -moz-none;
 	-khtml-user-select: none;
@@ -49,7 +49,7 @@ archetype-list-tree {
 	text-decoration: none;
 }
 
-archetype-list-tree ul {
+archetype-list-tree-node ul {
 	margin: 0;
 	padding: 0;
 	list-style: none;
@@ -57,18 +57,19 @@ archetype-list-tree ul {
 	overflow: hidden;
 }
 
-archetype-list-tree li {
+archetype-list-tree-node li {
 	position: relative;
-	padding: 5px 0 0 20px;
+	margin-left: 20px;
+	margin-top: 5px;
 	line-height: 20px;
 	font-size: 15px;
 }
 
-archetype-list-tree li i, archetype-list-tree li span {
+archetype-list-tree-node li i, archetype-list-tree-node li span {
 	cursor: pointer;
 }
 
-archetype-list-tree li .selected {
+archetype-list-tree-node li .selected {
 	background-color: #aaddff;
 	font-weight: bold;
 }
