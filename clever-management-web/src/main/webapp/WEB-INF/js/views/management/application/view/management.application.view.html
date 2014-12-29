@@ -8,7 +8,7 @@
 	 					<input type="text" placeholder="app name" class="form-control" style="width: 100%;" ng-model="search.name">
 	 				</div>
 					<div class="list-group" ng-style="{height: windowHeight - 277}" style="overflow: auto;">
-						<a href="http://localhost:8080/clever-management-web/#/management/application/view#f1" class="list-group-item" ng-repeat="application in applications | filter:search">
+						<a class="list-group-item" ng-repeat="application in applications | filter:search">
 						{{application.name}}</a>
 					</div>
 				</div>
@@ -16,16 +16,24 @@
 			<div class="col-md-9">
 				<div ng-style="{height: windowHeight - 220}" style="overflow: auto;">
 					<div ng-repeat="application in applications | filter:search">
-						<div class="panel panel-default">
+						<div class="panel panel-default" style="margin-right: 10px;" 
+							ng-mouseenter="editShow = true" ng-mouseleave="editShow = false" >
 				  			<div class="panel-body">
 					  			<div class="row">
 									<div class="col-md-3">
-										<a href="#" class="thumbnail" style="width: 150px; height: 150px; margin-top: 10px; margin-bottom: 10px;">
-										<img ng-src="{{imgUrl}}" style="margin-top: inherit;"></a>
+										<div class="thumbnail" style="margin-bottom: 0px;">
+											<img ng-src="{{websiteDomain + application.imgPath}}" 
+											style="width: 150px;height: 150px;">
+										</div>
 									</div>
 									<div class="col-md-9">
-										<a href="#" name="{{application.href}}"><h4>{{application.name}}</h4></a>
-					  					{{application.desc}}
+										<button type="button" class="btn btn-default pull-right" 
+											ng-show="editShow" ng-click="gotoEditPage(application)">
+				    						<span class="glyphicon glyphicon-edit"></span> Edit
+										</button>
+										<a href="#" style="font-size: 20px;">{{application.name}}</a>
+										<br/>
+					  					{{application.description}}
 					  				</div>
 								</div>
 							</div>

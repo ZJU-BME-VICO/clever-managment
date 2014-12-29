@@ -31,10 +31,6 @@ public class ApplicationResourceController {
 
 	@Autowired
 	private ApplicationService applicationService;
-	@Resource
-	private ServletContext servletContext;
-
-	private static final String APP_FOLDER_PATH = "/upload/app/";
 
 	@RequestMapping(value = "/list", method = RequestMethod.GET)
 	public List<Application> getAllApps() {
@@ -45,12 +41,12 @@ public class ApplicationResourceController {
 						app2.getDisplayOrder())).collect(Collectors.toList());
 	}
 
-	@RequestMapping(value = "/id/{id}", method = RequestMethod.GET)
+	@RequestMapping(value = "application/id/{id}", method = RequestMethod.GET)
 	public Application getApplicationById(@PathVariable Integer id) {
 		return this.applicationService.getApplicationById(id);
 	}
-
-	@RequestMapping(value = "/id/{id}", method = RequestMethod.POST)
+	
+	@RequestMapping(value = "application/id/{id}", method = RequestMethod.POST)
 	@ResponseBody
 	public FileUploadResult updateApplicationById(
 			@PathVariable Integer id,
@@ -61,19 +57,7 @@ public class ApplicationResourceController {
 		FileUploadResult result = new FileUploadResult();
 		result.setSucceeded(true);
 		try {
-			Application application = this.applicationService
-					.getApplicationById(id);
-			if (img != null) {
-				File oldImgFile = new File(
-						servletContext.getRealPath("/WEB-INF"
-								+ application.getImgPath()));
-				oldImgFile.delete();
-				File newImgFile = new File(
-						servletContext.getRealPath("/WEB-INF" + APP_FOLDER_PATH
-								+ name));
-				img.transferTo(newImgFile);
-			}
-			this.applicationService.updateApplication(application);
+			this.applicationService.updateApplication(id, name, description, url, img);
 		} catch (Exception ex) {
 			result.setSucceeded(false);
 			result.setMessage(ex.getMessage());
@@ -95,17 +79,7 @@ public class ApplicationResourceController {
 		FileUploadResult result = new FileUploadResult();
 		result.setSucceeded(true);
 		try {
-			String appFolderUrl = servletContext.getRealPath("/WEB-INF"
-					+ APP_FOLDER_PATH);
-			File appFolder = new File(appFolderUrl);
-			if (!appFolder.exists()) {
-				appFolder.mkdir();
-			}
-			File imgFile = new File(appFolderUrl + "/" + name);
-			img.transferTo(imgFile);
-			this.applicationService
-					.saveApplication(name, description, url, APP_FOLDER_PATH
-							+ name);
+			this.applicationService.saveApplication(name, description, url, img);
 		} catch (Exception ex) {
 			result.setSucceeded(false);
 			result.setMessage(ex.getMessage());
