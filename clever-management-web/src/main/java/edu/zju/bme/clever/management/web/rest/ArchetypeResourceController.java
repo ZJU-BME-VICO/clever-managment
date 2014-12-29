@@ -54,6 +54,7 @@ public class ArchetypeResourceController {
 
 	private boolean manipulateUploadResult;
 	private boolean uploadResult;
+	private boolean validationEnabled = true;
 
 	@ManagedAttribute
 	public boolean isManipulateUploadResult() {
@@ -73,6 +74,16 @@ public class ArchetypeResourceController {
 	@ManagedAttribute
 	public void setUploadResult(boolean uploadResult) {
 		this.uploadResult = uploadResult;
+	}
+
+	@ManagedAttribute
+	public boolean isValidationEnabled() {
+		return validationEnabled;
+	}
+
+	@ManagedAttribute
+	public void setValidationEnabled(boolean validationEnabled) {
+		this.validationEnabled = validationEnabled;
 	}
 
 	@RequestMapping(value = "/list", method = RequestMethod.GET)
@@ -179,7 +190,10 @@ public class ArchetypeResourceController {
 					}
 				});
 		// Validate archetypes
-		this.archetypeValidateService.validateConsistency(archetypes, results);
+		if (this.validationEnabled) {
+			this.archetypeValidateService.validateConsistency(archetypes,
+					results);
+		}
 		return allResults;
 	}
 
