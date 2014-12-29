@@ -1,3 +1,13 @@
+.editBox{
+    position: relative;
+    height: 100%;
+    -webkit-box-flex: 1;
+    -moz-box-flex: 1;
+    -ms-flex: 1;  
+    border:thin solid lightgray;
+    margin-left:20px;
+}
+
 /* template list tree */
 template-list-tree li .expanded {
 	padding: 1px 5px;

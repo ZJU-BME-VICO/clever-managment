@@ -1,33 +1,30 @@
 <div class="row">
-    <div class="col-xs-4 col-md-3 col-lg-3">
-		<!-- left side navbar-->
-	    <nav id="navbar" class="vbox">
-	    	<div class="panel-group" id ="">
+    <div class="col-xs-12 col-md-12 col-lg-12 hbox">  
 	    		<div class="panel panel-default">
 	    			<div class="panel-heading">
 	    				<div class="panel-title row">
-	    					
+	    					<h4> &nbsp;&nbsp; Demo with hide-on-form &nbsp;&nbsp;</h4>
 	    				</div>
 	    			</div>
-	    		</div>
-	
-	    <div class="listBox" ng-style="{height:windowHeight - 200}">
-	        <div class="templateTree">
-                <button ng-click="expand()">expandAll</button>
-                <button ng-click="collapse()">collapseAll</button>
-	        	<!--<template-list-tree tree-data="templateList" select-node-callback="selectNode(node)" tree-control="treeControl" on-long-press="nodeOnLongPress(node)" on-touch-end="nodeOnTouchEnd()"></template-list-tree>-->
-	        	<template-list-tree tree-data="templateList" select-node-callback="selectNode(node)" tree-control="treeControl" ng-mousedown="cloneItems()"></template-list-tree>
-	        </div>	
-	  	    </div>
-	    </nav>
-	    </div>  
-	<div class="col-xs-8 col-md-9 col-lg-9">
-         <div class="flexBox" ng-style="{height:windowHeight - 200}"  >
+	    	        <div class="list-group" ng-style="{height: containerHeight - 55}" style="overflow: auto;">
+                      <div class="btn-group" style="margin-left:30px;">
+                        <button class="btn btn-default" type="button" ng-click="expand()">expandAll</button>
+                        <button class="btn btn-default" type="button" ng-click="collapse()">collapseAll</button>
+                      </div>
+                     <template-list-tree tree-data="templateList" select-node-callback="selectNode(node)" tree-control="treeControl" ng-mousedown="cloneItems()"></template-list-tree>                  
+                  </div>
+	    		</div>	   
+	   
+         <div class="editBox" ng-style="{height:windowHeight - 200}"  >
 	   	    <div id="editArea">
 	   	    </div>
-	</div>
+	   	 	</div>
+   	 	<div class="Toolbox">
+            <button class="btn btn-primary btn-lg ng-binding" style="display:block;margin-bottom:5px;" >新建</button>
+            <button class="btn btn-primary btn-lg ng-binding" style="display:block;margin-bottom:5px;" >保存</button>
+        </div>
          </div>
     <div class="float" style="z-index:999 display:none">
-     <!--   <dv-quantity gui-data="selectedNode" gui-control="dvquantityControl"></dv-quantity>-->
-    </div>
+    </div> 
+    </div>  
 </div>

@@ -1,6 +1,6 @@
 angular.module('clever.management.directives.templateListTreeNode', []).directive('templateListTreeNode',
 function($compile,$document) {
-    var datatypeList= new Array('DV_QUANTITY','DV_TEXT','DV_ORDINAL', 'DV_DATE_TIME', 'DV_COUNT',  'DV_BOOLEAN','DV_DURATION','CODE_PHRASE','DV_CODED_TEXT');
+         var datatypeList= new Array('DV_QUANTITY','DV_TEXT','DV_ORDINAL', 'DV_DATE_TIME', 'DV_COUNT',  'DV_BOOLEAN','DV_DURATION','CODE_PHRASE','DV_CODED_TEXT');
          var templateList=new Array('<dv-quantity gui-data="nodeData" gui-control="dvquantityControl"></dv-quantity>','<dv-text gui-data="nodeData" gui-control="dvtextControl"></dv-text>','<dv-ordinal gui-data="nodeData" gui-control="dvordinalControl"></dv-ordinal>','4','5','6','7','8');
          var floatDiv=angular.element('<div class="floatDiv" style="z-index:999" ng-show=true></div>');  
     	return {
@@ -63,7 +63,6 @@ function($compile,$document) {
                         html=templateList[i]; 
                      }
                  };
-
                  var addin=angular.element(html);              
                  $("#editArea").append($compile( addin )(scope));
 			};		

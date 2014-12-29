@@ -6,10 +6,12 @@ function($document) {
         var startX=0,startY,startZ=0,x=0,y=0;
         element.css({
             position:"relative",
-            cursor: 'pointer'       
+            height:'32px',
+            width:'auto',
+            cursor: 'pointer'
         });
         element.on('mousedown',function(event){
-            event.preventDefault();
+            //event.preventDefault();//阻止浏览器中原来的鼠标选中编辑功能
             startX=event.screenX - x;
             startY=event.screenY - y;
             $document.on('mousemove',mousemove);
@@ -20,7 +22,7 @@ function($document) {
             x=event.screenX-startX;
             element.css({
                 top:y+'px',
-                left:x+'px'
+                left:x+'px',
             });
         }
         function mouseup(){
