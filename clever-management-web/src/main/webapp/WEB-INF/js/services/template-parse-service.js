@@ -115,12 +115,17 @@ angular.module('clever.management.services.templateParse',[]).service('templateP
 			labelType = 'attribute';
 			label = attribute;
 		}
-		//term_definitions
+		//term_definitions 还是有问题。。。。
 		if (node.term_definitions) {
 			term_definitions = node.term_definitions;
-		}else if(termDefinition){	
-				term_definitions=termDefinition;				
-			}
+		}else if(node.parent){ 
+		        if(node.parent.term_definitions){
+    		     term_definitions=node.parent.term_definitions;
+    			 }else if(node.parent.parent){
+    			     if(node.parent.parent.term_definitions)
+                term_definitions=node.parent.parent.term_definitions; } 
+                }              
+            
 		if(term_definitions){
 			name=getDefinition(code,term_definitions);
 		}
@@ -202,6 +207,7 @@ angular.module('clever.management.services.templateParse',[]).service('templateP
     function getDefinition(code,term_definitions){
     	var name="";
     	if(code){
+    	    if(term_definitions){
     		if(term_definitions[0]==undefined){
 					name=term_definitions.items[0].__text;
 				}else{
@@ -210,6 +216,7 @@ angular.module('clever.management.services.templateParse',[]).service('templateP
 					   name=value.items[0].__text;}
 			});
 			}
+    	}
     	}
     	return name;
     }

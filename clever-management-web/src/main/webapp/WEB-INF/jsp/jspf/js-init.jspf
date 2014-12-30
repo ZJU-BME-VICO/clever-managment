@@ -39,6 +39,9 @@
 <script src="js/directives/application-template/DV/DV-TEXT-directive.js"></script>
 <script src="js/directives/application-template/DV/DV-QUANTITY-directive.js"></script>
 <script src="js/directives/application-template/DV/DV-ORDINAL-directive.js"></script>
+<script src="js/directives/application-template/DV/DV-COUNT-directive.js"></script>
+<script src="js/directives/application-template/DV/DV-DATETIME-directive.js"></script>
+<script src="js/directives/application-template/DV/DV-BOOLEAN-directive.js"></script>
 <script src="js/directives/application-template/Activity/long-press-directive.js"></script>
 <script src="js/directives/application-template/Activity/dragable-directive.js"></script>
 
