@@ -103,7 +103,7 @@ public class ArchetypeResourceController {
 									info.setLatestArchetypeVersion(master
 											.getLatestFileVersion());
 									info.setLifecycleState(master
-											.getLatestFileLifecycleState());
+											.getLatestFileLifecycleState().getValue());
 									return info;
 								}));
 		masters.forEach(master -> {
@@ -127,6 +127,9 @@ public class ArchetypeResourceController {
 		// Add basic info
 		masterInfo.setId(master.getId());
 		masterInfo.setName(master.getName());
+		masterInfo.setRmEntity(master.getRmEntity());
+		masterInfo.setRmName(master.getRmName());
+		masterInfo.setRmOrginator(master.getRmOrginator());
 		masterInfo.setConceptName(master.getConceptName());
 		masterInfo.setConceptDescription(master.getConceptDescription());
 		masterInfo.setKeywords(master.getKeywords());
@@ -134,6 +137,8 @@ public class ArchetypeResourceController {
 		masterInfo.setPurpose(master.getPurpose());
 		masterInfo.setUse(master.getUse());
 		masterInfo.setMisuse(master.getMisuse());
+		masterInfo.setLifecycleState(master.getLatestFileLifecycleState().getValue());
+		masterInfo.setLatestArchetypeVersion(master.getLatestFileVersion());
 		ArchetypeMaster specialiseMaster = master
 				.getSpecialiseArchetypeMaster();
 		if (specialiseMaster != null) {
@@ -151,7 +156,8 @@ public class ArchetypeResourceController {
 			logInfo.setAction(log.getActionType().getValue());
 			logInfo.setArchetypeVersion(log.getArchetypeVersion());
 			logInfo.setRecordTime(log.getRecordTime());
-			logInfo.setOperator(log.getOperator().getName());
+			logInfo.setOperatorName(log.getOperatorName());
+			logInfo.setArchetypeLifecycleState(log.getArchetypeLifecycleState().getValue());
 			masterInfo.getActionLogs().add(logInfo);
 		});
 		return masterInfo;

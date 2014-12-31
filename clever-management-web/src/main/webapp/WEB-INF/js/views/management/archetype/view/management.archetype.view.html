@@ -23,13 +23,15 @@
 			<i style="cursor: pointer" ng-click="isArchetypeListHidder = !isArchetypeListHidder" ng-show="isArchetypeListHidder" tooltip-placement="right" tooltip="Expand" tooltip-popup-delay="500"> <span class="glyphicon glyphicon-chevron-right" ng-style="{'margin-top': containerHeight/2}" ></span> </i>
 			<i style="cursor: pointer" ng-click="isArchetypeListHidder = !isArchetypeListHidder" ng-show="!isArchetypeListHidder" tooltip-placement="right" tooltip="Collapse" tooltip-popup-delay="500"> <span class="glyphicon glyphicon-chevron-left" ng-style="{'margin-top': containerHeight/2}" ></span> </i>
 		</splitter>
-		<div class="flexBox">
-			<tabset tab-control="tabControl">
+		<div class="col-xs-12 col-md-12 col-lg-12 flex-box">
+			<tabset class="row" tab-control="tabControl">
 				<tab ng-repeat="tab in tabs" closable="true" select="select(tab)" close="close(tab)" id="tab.id">
 					<tab-heading>
 						{{tab.title}}
 					</tab-heading>
-					<span>{{tab.content}}</span>
+					<div class="col-xs-12 col-md-12 col-lg-12" ng-switch="tab.type">
+						<archetype-master-pane ng-switch-when="master" archetype-master="tab.content" max-height="containerHeight - 35"></archetype-master-pane>
+					</div>
 				</tab>
 			</tabset>
 		</div>

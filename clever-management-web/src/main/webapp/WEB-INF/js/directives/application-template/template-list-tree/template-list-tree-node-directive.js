@@ -1,7 +1,10 @@
 angular.module('clever.management.directives.templateListTreeNode', []).directive('templateListTreeNode',
 function($compile,$document) {
          var datatypeList= new Array('DV_QUANTITY','DV_TEXT','DV_ORDINAL', 'DV_DATE_TIME', 'DV_COUNT',  'DV_BOOLEAN','DV_DURATION','CODE_PHRASE','DV_CODED_TEXT');
-         var templateList=new Array('<dv-quantity gui-data="nodeData" gui-control="dvquantityControl"></dv-quantity>','<dv-text gui-data="nodeData" gui-control="dvtextControl"></dv-text>','<dv-ordinal gui-data="nodeData" gui-control="dvordinalControl"></dv-ordinal>','4','5','6','7','8');
+         var templateList= new Array('<dv-quantity gui-data="nodeData" gui-control="dvquantityControl"></dv-quantity>','<dv-text gui-data="nodeData" gui-control="dvtextControl"></dv-text>',
+                                    '<dv-ordinal gui-data="nodeData" gui-control="dvordinalControl"></dv-ordinal>','<dv-datetime gui-data="nodeData" gui-control="dvdatetimeControl"></dv-datetime>',
+                                    '<dv-count gui-data="nodeData" gui-control="dvcountControl"></dv-count>','<dv-boolean gui-data="nodeData" gui-control="dvbooleanControl"></dv-boolean>',
+                                    '7','8','9');
          var floatDiv=angular.element('<div class="floatDiv" style="z-index:999" ng-show=true></div>');  
     	return {
 		require: ['^templateListTree'],
@@ -51,6 +54,7 @@ function($compile,$document) {
 				selectedNode.collapsed = !selectedNode.collapsed;				
 				// call back
 				scope.selectNodeCallback(selectedNode); 
+				
 				//clone to edit area
 				 var nodeData=selectedNode;
                  var id="#"+nodeData.label.code+"_"+nodeData.label.labelContent; 

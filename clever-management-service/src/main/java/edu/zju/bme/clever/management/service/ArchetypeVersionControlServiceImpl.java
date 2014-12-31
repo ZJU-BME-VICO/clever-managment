@@ -542,8 +542,10 @@ public class ArchetypeVersionControlServiceImpl implements
 		log.setArchetypeMaster(archetypeFile.getMaster());
 		log.setArchetypeVersion(archetypeFile.getVersion());
 		log.setOperator(user);
+		log.setOperatorName(user.getName());
 		log.setRecordTime(Calendar.getInstance());
-		this.archetypeActionLogRepo.saveAndFlush(log);
+		log.setArchetypeLifecycleState(archetypeFile.getLifecycleState());
+		this.archetypeActionLogRepo.save(log);
 	}
 
 	protected boolean validateUserAuthority(User user) {

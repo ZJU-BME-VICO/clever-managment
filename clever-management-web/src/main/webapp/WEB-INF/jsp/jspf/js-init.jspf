@@ -36,9 +36,13 @@
 <script src="js/directives/application-template/template-list-tree/template-list-tree-node-directive.js"></script>
 <script src="js/directives/unfold-menu/unfold-menu-directive.js"></script>
 <script src="js/directives/fisheye-menu/fisheye-menu-directive.js"></script>
+<script src="js/directives/archetype-master-pane/archetype-master-pane-directive.js"></script>
 <script src="js/directives/application-template/DV/DV-TEXT-directive.js"></script>
 <script src="js/directives/application-template/DV/DV-QUANTITY-directive.js"></script>
 <script src="js/directives/application-template/DV/DV-ORDINAL-directive.js"></script>
+<script src="js/directives/application-template/DV/DV-COUNT-directive.js"></script>
+<script src="js/directives/application-template/DV/DV-DATETIME-directive.js"></script>
+<script src="js/directives/application-template/DV/DV-BOOLEAN-directive.js"></script>
 <script src="js/directives/application-template/Activity/long-press-directive.js"></script>
 <script src="js/directives/application-template/Activity/dragable-directive.js"></script>
 
@@ -53,4 +57,7 @@
 
 <!-- filters -->
 <script src="js/filters/unsafe-filter.js"></script>
+
+<!-- util -->
+<script src="js/util/date-format-extension.js"></script>
 
