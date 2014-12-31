@@ -80,7 +80,7 @@ angular.module('cleverManagementApp', ['ngAnimate', 'ui.bootstrap', 'pascalprech
 		templateUrl : 'js/views/management/application/view/management.application.view.html',
 		controller : ApplicationViewCtrl,
 	}).state('management.application.edit', {
-		url : '/edit/:id',
+		url : '/edit',
 		templateUrl : 'js/views/management/application/edit/management.application.edit.html',
 		controller : ApplicationEditCtrl,
 	})

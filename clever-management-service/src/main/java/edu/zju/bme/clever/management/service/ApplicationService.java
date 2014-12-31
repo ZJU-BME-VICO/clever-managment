@@ -12,16 +12,20 @@ public interface ApplicationService {
 	public List<Application> getAllApplications();
 
 	public Application getApplicationById(Integer id);
+	
+	public Application getApplicationByName(String name);
 
 	public void saveApplication(String name, String description, String url,
-			MultipartFile img) throws ApplicationPersistException;
+			String imgPath) throws ApplicationPersistException;
 
 	public void updateApplication(Integer id, String name, String description,
-			String url, MultipartFile img) throws ApplicationPersistException;
+			String url, String imgPath) throws ApplicationPersistException;
 
 	public void updateApplication(Application application)
 			throws ApplicationPersistException;
 
 	public void deleteApplicationById(Integer id);
+	
+	public void deleteApplication(Application application);
 
 }

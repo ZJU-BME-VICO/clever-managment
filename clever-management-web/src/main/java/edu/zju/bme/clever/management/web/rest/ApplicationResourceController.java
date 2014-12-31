@@ -2,6 +2,7 @@ package edu.zju.bme.clever.management.web.rest;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -21,6 +22,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import edu.zju.bme.clever.management.service.ApplicationService;
 import edu.zju.bme.clever.management.service.entity.Application;
+import edu.zju.bme.clever.management.service.exception.ApplicationPersistException;
 import edu.zju.bme.clever.management.web.entity.FileUploadResult;
 
 @RestController
@@ -31,6 +33,11 @@ public class ApplicationResourceController {
 
 	@Autowired
 	private ApplicationService applicationService;
+	
+	@Resource
+	private ServletContext servletContext;
+
+	private static final String APP_FOLDER_PATH = "/upload/app/";
 
 	@RequestMapping(value = "/list", method = RequestMethod.GET)
 	public List<Application> getAllApps() {
@@ -56,8 +63,24 @@ public class ApplicationResourceController {
 			@RequestParam(value = "url", required = true) String url) {
 		FileUploadResult result = new FileUploadResult();
 		result.setSucceeded(true);
+		
 		try {
-			this.applicationService.updateApplication(id, name, description, url, img);
+			Application application = this.applicationService.getApplicationById(id);	
+			if(application.getName().equals(name) == false){
+				if(this.applicationService.getApplicationByName(name) != null){
+					throw new Exception("Application " + name + " already exists.");
+				}	
+				File imgFile = new File(servletContext.getRealPath("/WEB-INF" + application.getImgPath()));
+				imgFile.renameTo(new File(servletContext.getRealPath("/WEB-INF" + APP_FOLDER_PATH + name)));
+				application.setName(name);
+				application.setImgPath(APP_FOLDER_PATH + name); 
+			}
+			if (img != null) {
+				img.transferTo(new File(servletContext.getRealPath("/WEB-INF" + application.getImgPath())));
+			}
+			application.setDescription(description);
+			application.setUrl(url);
+			this.applicationService.updateApplication(application);
 		} catch (Exception ex) {
 			result.setSucceeded(false);
 			result.setMessage(ex.getMessage());
@@ -67,7 +90,10 @@ public class ApplicationResourceController {
 
 	@RequestMapping(value = "/application/id/{id}", method = RequestMethod.DELETE)
 	public void deleteApplicationById(@PathVariable Integer id) {
-		this.applicationService.deleteApplicationById(id);
+		Application application = applicationService.getApplicationById(id);
+		File imgFile = new File(servletContext.getRealPath("/WEB-INF" + APP_FOLDER_PATH + application.getName()));
+		imgFile.delete();
+		this.applicationService.deleteApplication(application);
 	}
 
 	@RequestMapping(value = "/application", method = RequestMethod.POST)
@@ -78,8 +104,20 @@ public class ApplicationResourceController {
 			@RequestParam(value = "url", required = true) String url) {
 		FileUploadResult result = new FileUploadResult();
 		result.setSucceeded(true);
+		
 		try {
-			this.applicationService.saveApplication(name, description, url, img);
+			if (this.applicationService.getApplicationByName(name) != null) {
+				throw new Exception("Application " + name + " already exists.");
+			}
+			String appFolderUrl = servletContext.getRealPath("/WEB-INF" + APP_FOLDER_PATH);
+			File appFolder = new File(appFolderUrl);
+			if (!appFolder.exists()) {
+				appFolder.mkdir();
+			}
+			File imgFile = new File(appFolderUrl + "/" + name);
+			img.transferTo(imgFile);
+			this.applicationService
+					.saveApplication(name, description, url, APP_FOLDER_PATH + name);
 		} catch (Exception ex) {
 			result.setSucceeded(false);
 			result.setMessage(ex.getMessage());

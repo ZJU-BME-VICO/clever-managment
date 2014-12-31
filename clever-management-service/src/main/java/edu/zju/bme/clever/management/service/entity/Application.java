@@ -4,6 +4,7 @@ import java.util.Calendar;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.Lob;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -19,6 +20,7 @@ public class Application extends AbstractIndentifiedEntity {
 
 	@Column
 	private String name;
+	@Lob
 	@Column
 	private String description;
 	@Column

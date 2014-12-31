@@ -1,4 +1,4 @@
-function ApplicationEditCtrl($scope, $stateParams, appLibraryService, msgboxService, WEBSITE_DOMAIN){
+function ApplicationEditCtrl($scope, appLibraryService, msgboxService, WEBSITE_DOMAIN){
 
 	var undefined;
 
@@ -30,23 +30,20 @@ function ApplicationEditCtrl($scope, $stateParams, appLibraryService, msgboxServ
 		},
 	};
 
-	$scope.apps = [];
-	$scope.okText = 'APPLICATION_EDTI_BTN_UPLOAD';	
-
+	setAppAddMode();
 	refreshData();
-
-	if($stateParams.id != 'all'){
-		appLibraryService.getApplicationById($stateParams.id).then(function(result){
-			setAppSelected(result);
-		});
+	
+	if(appLibraryService.getCurrentApp()){
+		setAppEditMode(appLibraryService.getCurrentApp());
+		appLibraryService.setCurrentApp(null);
 	}
 	
 	$scope.selectApp = function(app){
-		setAppSelected(app);
+		setAppEditMode(app);
 	};
 
 	$scope.addNewApp = function() {
-		cleanInputArea();
+		setAppAddMode();
 	};
 
 	$scope.deleteApp = function() {
@@ -57,7 +54,7 @@ function ApplicationEditCtrl($scope, $stateParams, appLibraryService, msgboxServ
 	            if (confirm) {
 	                appLibraryService.deleteApplication($scope.application).then(function(result) {
 	                    refreshData();
-	                    cleanInputArea();
+	                    setAppAddMode();
 	                })
 	            }
 	        })
@@ -73,7 +70,7 @@ function ApplicationEditCtrl($scope, $stateParams, appLibraryService, msgboxServ
 	                if (result.succeeded) {
 	                    msgboxService.createMessageBox('APPLICATION_EDIT_SUCCEEDED', 'APPLICATION_EDIT_UPLOAD_SUCCEEDED_HINT', {}, 'success');
 	                    refreshData();
-	                    cleanInputArea();
+	                    setAppAddMode();
 	                } else {
 	                    msgboxService.createMessageBox('APPLICATION_EDIT_FAILED', 'APPLICATION_EDIT_UPLOAD_FAILED_HINT', {
 	                        errorMsg : result.message
@@ -83,17 +80,17 @@ function ApplicationEditCtrl($scope, $stateParams, appLibraryService, msgboxServ
 	        } else {
 	            appLibraryService.updateApplication($scope.application).then(function(result) {
 	                if (result.succeeded) {
-	                    msgboxService.createMessageBox('APPLICATION_EDIT_SUCCEEDED', 'APPLICATION_EDIT_UPDATE_SUCCEEDED_HINI', {}, 'success');
+	                    msgboxService.createMessageBox('APPLICATION_EDIT_SUCCEEDED', 'APPLICATION_EDIT_UPDATE_SUCCEEDED_HINT', {}, 'success');
 	                    refreshData();
 	                } else {
-	                    msgboxService.createMessageBox('APPLICATION_EDIT_FAILED', 'APPLICATION_EDIT_UPDATE_FAILED_HINI', {
+	                    msgboxService.createMessageBox('APPLICATION_EDIT_FAILED', 'APPLICATION_EDIT_UPDATE_FAILED_HINT', {
 	                    	errorMsg : result.message
 	                    }, 'error');
 	                }
 	            });
 	        }
+	        cleanInputImg();
 	    }
-
 	};
 
 	$scope.previewImg = function(file) {
@@ -110,7 +107,7 @@ function ApplicationEditCtrl($scope, $stateParams, appLibraryService, msgboxServ
 	};
 
 	function refreshData() {
-		appLibraryService.getAllApplications().then(function(result) {
+		appLibraryService.getAllApplications().then(function(result){
 			$scope.apps = result;
 		});
 	}
@@ -140,31 +137,32 @@ function ApplicationEditCtrl($scope, $stateParams, appLibraryService, msgboxServ
 		}
 	}
 
-	function setAppSelected(app){
+	function setAppEditMode(app){
 		$scope.application.id = app.id;
 		$scope.application.name = app.name;
 		$scope.application.description = app.description;
 		$scope.application.url = app.url;
 		$scope.imgPath = WEBSITE_DOMAIN + app.imgPath;
-		$scope.application.img.path = undefined;
+		$scope.selectedAppId = app.id;
 
+		cleanInputImg();
 		cleanValidateMessage();
 
 		$scope.editMode = true;
-		$scope.okText = 'APPLICATION_EDTI_BTN_UPDATE';
+		$scope.okText = 'APPLICATION_EDIT_BTN_UPDATE';
 	}
 
-	function cleanInputArea(){
+	function setAppAddMode(){
 		$scope.application.name = undefined;
 		$scope.application.description = undefined;
 		$scope.application.url = undefined;
-		$scope.application.img.path = undefined;
 		$scope.imgPath = undefined;
 
+		cleanInputImg();
 		cleanValidateMessage();
 
 		$scope.editMode = false;
-		$scope.okText = 'APPLICATION_EDTI_BTN_UPLOAD';	
+		$scope.okText = 'APPLICATION_EDIT_BTN_UPLOAD';	
 	}
 
 	function cleanValidateMessage(){
@@ -172,6 +170,11 @@ function ApplicationEditCtrl($scope, $stateParams, appLibraryService, msgboxServ
 		$scope.descriptionValidation.validated = true;
 		$scope.urlValidation.validated = true;
 		$scope.imgValidation.validated = true;
+	}
+
+	function cleanInputImg(){
+		$scope.application.img.path = undefined;
+		$scope.application.img.file = undefined;
 	}
 }
 
