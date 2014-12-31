@@ -90,5 +90,14 @@ angular.module('clever.management.i18n.zh', ['pascalprecht.translate']).config(f
 		APPLICATION_EDIT_UPDATE_FAILED_HINI : '应用更新失败，错误：{{errorMsg}}',
 		APPLICATION_EDIT_DELETE : '删除',
 		APPLICATION_EDIT_DELETE_HINT : '确定删除"{{appName}}"应用',
+		
+		// Archetype master pane
+		ARCHETYPE_MASTER_PANE_INFO : '基本信息',
+		ARCHETYPE_MASTER_PANE_LOG : '操作记录',
+		ARCHETYPE_MASTER_PANE_VERSION : '版本',
+		ARCHETYPE_MASTER_PANE_STATE : '状态',
+		ARCHETYPE_MASTER_PANE_OPERATION : '操作',
+		ARCHETYPE_MASTER_PANE_OPERATIOR : '操作者',
+		ARCHETYPE_MASTER_PANE_OPERATE_TIME : '操作时间',
 	});
 });

@@ -22,7 +22,7 @@ public class ArchetypeMasterInfo {
 	private String copyright;
 	private String latestArchetypeVersion;
 	private String name;
-	private LifecycleState lifecycleState;
+	private String lifecycleState;
 	private ArchetypeMasterInfo specialiseArchetypeMaster;
 	private Set<ArchetypeMasterInfo> specialisedArchetypeMasters = new HashSet<ArchetypeMasterInfo>();
 	private boolean isRoot = true;
@@ -60,11 +60,11 @@ public class ArchetypeMasterInfo {
 		this.name = name;
 	}
 
-	public LifecycleState getLifecycleState() {
+	public String getLifecycleState() {
 		return lifecycleState;
 	}
 
-	public void setLifecycleState(LifecycleState lifecycleState) {
+	public void setLifecycleState(String lifecycleState) {
 		this.lifecycleState = lifecycleState;
 	}
 
