@@ -23,7 +23,6 @@
 <script src="js/services/busy-service.js"></script>
 <script src="js/services/template-parse-service.js"></script>
 <script src="js/services/msgbox-service.js"></script>
-<script src="js/services/app-library-service.js"></script>
 <!--<script src="js/services/template-retrieve-service.js"></script>-->
 
 <!-- directives -->
@@ -53,7 +52,8 @@
 <script src="js/views/management/archetype/view/archetype-view-controller.js"></script>
 <script src="js/views/management/application/designer/application-designer-controller.js"></script>
 <script src="js/views/management/application/view/application-view-controller.js"></script>
-<script src="js/views/management/application/edit/application-edit-controller.js"></script>
+<script src="js/views/management/application/edit/application-edit-list-controller.js"></script>
+<script src="js/views/management/application/edit/detail/application-edit-detail-controller.js"></script>
 
 <!-- filters -->
 <script src="js/filters/unsafe-filter.js"></script>

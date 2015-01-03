@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import javax.annotation.Resource;
@@ -70,13 +71,20 @@ public class ApplicationResourceController {
 				if(this.applicationService.getApplicationByName(name) != null){
 					throw new Exception("Application " + name + " already exists.");
 				}	
-				File imgFile = new File(servletContext.getRealPath("/WEB-INF" + application.getImgPath()));
-				imgFile.renameTo(new File(servletContext.getRealPath("/WEB-INF" + APP_FOLDER_PATH + name)));
 				application.setName(name);
-				application.setImgPath(APP_FOLDER_PATH + name); 
 			}
 			if (img != null) {
-				img.transferTo(new File(servletContext.getRealPath("/WEB-INF" + application.getImgPath())));
+				File oldFile = new File(servletContext.getRealPath("/WEB-INF" + application.getImgPath()));
+				oldFile.delete();
+				File appFolder = new File(servletContext.getRealPath("/WEB-INF" + APP_FOLDER_PATH));
+				String uuid = UUID.randomUUID().toString();
+				File newFile = new File(appFolder, uuid);
+				while(newFile.exists()){
+					uuid = UUID.randomUUID().toString();
+					newFile = new File(appFolder, uuid);
+				}
+				img.transferTo(newFile);
+				application.setImgPath(APP_FOLDER_PATH + uuid);
 			}
 			application.setDescription(description);
 			application.setUrl(url);
@@ -91,7 +99,7 @@ public class ApplicationResourceController {
 	@RequestMapping(value = "/application/id/{id}", method = RequestMethod.DELETE)
 	public void deleteApplicationById(@PathVariable Integer id) {
 		Application application = applicationService.getApplicationById(id);
-		File imgFile = new File(servletContext.getRealPath("/WEB-INF" + APP_FOLDER_PATH + application.getName()));
+		File imgFile = new File(servletContext.getRealPath("/WEB-INF" + application.getImgPath()));
 		imgFile.delete();
 		this.applicationService.deleteApplication(application);
 	}
@@ -114,10 +122,15 @@ public class ApplicationResourceController {
 			if (!appFolder.exists()) {
 				appFolder.mkdir();
 			}
-			File imgFile = new File(appFolderUrl + "/" + name);
+			String uuid = UUID.randomUUID().toString();
+			File imgFile = new File(appFolder, uuid);
+			while(imgFile.exists()){
+				uuid = UUID.randomUUID().toString();
+				imgFile = new File(appFolder, uuid);
+			}
 			img.transferTo(imgFile);
 			this.applicationService
-					.saveApplication(name, description, url, APP_FOLDER_PATH + name);
+					.saveApplication(name, description, url, APP_FOLDER_PATH + uuid);
 		} catch (Exception ex) {
 			result.setSucceeded(false);
 			result.setMessage(ex.getMessage());

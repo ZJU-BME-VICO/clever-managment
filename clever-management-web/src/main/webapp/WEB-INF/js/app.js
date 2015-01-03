@@ -1,7 +1,7 @@
 angular.module('clever.management.directives', ['clever.management.directives.commons', 'clever.management.directives.templateDesign', 'clever.management.directives.archetypeListTree', 'clever.management.directives.archetypeListTreeNode', 'clever.management.directives.archetypeMasterPane']);
 angular.module('clever.management.directives.commons', ['clever.management.directives.filesModel', 'clever.management.directives.busyModel', 'clever.management.directives.splitter', 'clever.management.directives.fisheyeMenu']);
 angular.module('clever.management.directives.templateDesign', ['clever.management.directives.templateListTree', 'clever.management.directives.templateListTreeNode', 'clever.management.directives.DVTEXT', 'clever.management.directives.longPress','clever.management.directives.DVQUANTITY','clever.management.directives.dragable','clever.management.directives.DVORDINAL','clever.management.directives.DVBOOLEAN','clever.management.directives.DVCOUNT','clever.management.directives.DVDATETIME']);
-angular.module('clever.management.services', ['clever.management.services.resource', 'clever.management.services.authentication', 'clever.management.services.busy', 'clever.management.services.msgbox', 'clever.management.services.templateParse', 'clever.management.services.appLibrary']);
+angular.module('clever.management.services', ['clever.management.services.resource', 'clever.management.services.authentication', 'clever.management.services.busy', 'clever.management.services.msgbox', 'clever.management.services.templateParse']);
 angular.module('clever.management.filters', ['clever.management.filters.unsafe']);
 angular.module('clever.management.controllers', ['clever.management.controllers.app']);
 angular.module('clever.management.i18n', ['clever.management.i18n.zh']);
@@ -81,8 +81,12 @@ angular.module('cleverManagementApp', ['ngAnimate', 'ui.bootstrap', 'pascalprech
 		controller : ApplicationViewCtrl,
 	}).state('management.application.edit', {
 		url : '/edit',
-		templateUrl : 'js/views/management/application/edit/management.application.edit.html',
-		controller : ApplicationEditCtrl,
+		templateUrl : 'js/views/management/application/edit/management.application.edit.list.html',
+		controller : ApplicationEditListCtrl,
+	}).state('management.application.edit.detail', {
+		url : '/id/:id',
+		templateUrl : 'js/views/management/application/edit/detail/management.application.edit.detail.html',
+		controller : ApplicationEditDetailCtrl,
 	})
 	// Integration
 	.state('management.integration', {

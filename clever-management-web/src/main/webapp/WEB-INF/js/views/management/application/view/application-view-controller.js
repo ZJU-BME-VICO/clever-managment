@@ -1,4 +1,4 @@
-function ApplicationViewCtrl($scope, $state, appLibraryService, resourceService, WEBSITE_DOMAIN, APPLICATION_LIST_URL){
+function ApplicationViewCtrl($scope, $state, resourceService, WEBSITE_DOMAIN, APPLICATION_LIST_URL){
 
 	$scope.websiteDomain = WEBSITE_DOMAIN;
 	$scope.currentUrl = WEBSITE_DOMAIN + '/#/management/application/view'
@@ -9,8 +9,9 @@ function ApplicationViewCtrl($scope, $state, appLibraryService, resourceService,
 	});
 
 	$scope.gotoEditPage = function(application){
-		appLibraryService.setCurrentApp(application);
-		$state.go('management.application.edit');
+		$state.go('management.application.edit.detail', {
+			id : application.id,
+		});
 	};
 
 	$scope.selectApp = function(id){
