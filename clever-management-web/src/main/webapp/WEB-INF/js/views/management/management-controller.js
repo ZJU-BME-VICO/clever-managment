@@ -102,14 +102,10 @@ function ManagementCtrl($scope, $state) {
 			}
 		});
 		if (stateChain.length > 1) {
-			var returnState = '^.list';
-			if (lastState == 'list') {
-				returnState = '^.^.list';
-			}
 			$scope.menus.push({
 				title : 'MENU_RETURN',
 				imgUrl : 'img/logo.png',
-				state : returnState,
+				state : $state.current.data.parent,
 			});
 		}
 	});
