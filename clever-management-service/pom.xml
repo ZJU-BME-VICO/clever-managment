@@ -133,6 +133,11 @@
 		</dependency>
 		<dependency>
 			<groupId>openehr</groupId>
+			<artifactId>xml-serializer</artifactId>
+			<version>${openEHR.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>openehr</groupId>
 			<artifactId>adl-parser</artifactId>
 			<version>${openEHR.version}</version>
 			<exclusions>

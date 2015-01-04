@@ -6,6 +6,7 @@ var config = {
 	'ARCHETYPE_UPLOAD_URL' : prefix + '/archetypes/action/upload',
 	'ARCHETYPE_LIST_URL' : prefix + '/archetypes/list',
 	'ARCHETYPE_MASTER_BY_ID_URL' : prefix + '/archetypes/master/id/',
+	'ARCHETYPE_BY_ID_URL' : prefix + '/archetypes/id/',
 	'APPLICATION_LIST_URL' : prefix + '/applications/list',
 	'APPLICATION_UPLOAD_URL' : prefix + '/applications/application',
 	'APPLICATION_BY_ID_URL' : prefix + '/applications/application/id/',

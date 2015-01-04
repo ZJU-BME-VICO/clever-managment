@@ -11,7 +11,7 @@ public class ArchetypeMasterInfo {
 
 	private Integer id;
 	private String conceptName;
-	private String rmOrginator;
+	private String rmOriginator;
 	private String rmName;
 	private String rmEntity;
 	private String conceptDescription;
@@ -25,6 +25,7 @@ public class ArchetypeMasterInfo {
 	private String lifecycleState;
 	private ArchetypeMasterInfo specialiseArchetypeMaster;
 	private Set<ArchetypeMasterInfo> specialisedArchetypeMasters = new HashSet<ArchetypeMasterInfo>();
+	private Set<ArchetypeInfo> archetypes = new HashSet<ArchetypeInfo>();
 	private boolean isRoot = true;
 	private Set<ArchetypeActionLogInfo> actionLogs = new HashSet<ArchetypeActionLogInfo>();
 
@@ -81,16 +82,20 @@ public class ArchetypeMasterInfo {
 		this.specialiseArchetypeMaster = specialiseArchetypeMaster;
 	}
 
+	public Set<ArchetypeInfo> getArchetypes() {
+		return archetypes;
+	}
+
 	public Set<ArchetypeActionLogInfo> getActionLogs() {
 		return actionLogs;
 	}
 
-	public String getRmOrginator() {
-		return rmOrginator;
+	public String getRmOriginator() {
+		return rmOriginator;
 	}
 
-	public void setRmOrginator(String rmOrginator) {
-		this.rmOrginator = rmOrginator;
+	public void setRmOriginator(String rmOrginator) {
+		this.rmOriginator = rmOrginator;
 	}
 
 	public String getRmName() {

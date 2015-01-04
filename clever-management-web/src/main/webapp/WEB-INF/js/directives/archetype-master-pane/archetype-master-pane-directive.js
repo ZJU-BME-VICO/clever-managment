@@ -2,24 +2,20 @@ angular.module('clever.management.directives.archetypeMasterPane', []).directive
 	return {
 		restrict : 'E',
 		scope : {
-			archetypeMaster : '=',
+			archetypeMasterInfo : '=',
+			selectArchetypeCallback : '&',
 		},
 		templateUrl : 'js/directives/archetype-master-pane/archetype-master-pane.html',
 		controller : function($scope) {
-			$scope.tabControl = {};
-			$scope.historyVersions = [];
-			var latestVersion = parseInt($scope.archetypeMaster.latestArchetypeVersion.replace('v', ''));
-			while (latestVersion > 0) {
-				$scope.historyVersions.push({
-					value : 'v' + latestVersion,
-					fullName : $scope.archetypeMaster.name + '.v' + latestVersion,
-				});
-				latestVersion -= 1;
-			}
 			$scope.getFormatedTime = function(time) {
 				var date = new Date();
 				date.setTime(time);
 				return date.format('yyyy-MM-dd hh:mm:ss');
+			};
+			$scope.selectArchetype = function(archtype) {
+				$scope.selectArchetypeCallback({
+					value : archtype,
+				});
 			};
 		},
 		link : function(scope, element, attr) {

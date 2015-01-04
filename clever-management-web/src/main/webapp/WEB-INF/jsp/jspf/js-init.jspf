@@ -22,6 +22,7 @@
 <script src="js/services/authentication-service.js"></script>
 <script src="js/services/busy-service.js"></script>
 <script src="js/services/template-parse-service.js"></script>
+<script src="js/services/archetype-parse-service.js"></script>
 <script src="js/services/msgbox-service.js"></script>
 <!--<script src="js/services/template-retrieve-service.js"></script>-->
 
@@ -36,6 +37,10 @@
 <script src="js/directives/unfold-menu/unfold-menu-directive.js"></script>
 <script src="js/directives/fisheye-menu/fisheye-menu-directive.js"></script>
 <script src="js/directives/archetype-master-pane/archetype-master-pane-directive.js"></script>
+<script src="js/directives/archetype-pane/archetype-pane-directive.js"></script>
+<script src="js/directives/header-pane/header-pane-directive.js"></script>
+<script src="js/directives/definition-pane/definition-pane-directive.js"></script>
+<script src="js/directives/terminology-pane/terminology-pane-directive.js"></script>
 <script src="js/directives/application-template/DV/DV-TEXT-directive.js"></script>
 <script src="js/directives/application-template/DV/DV-QUANTITY-directive.js"></script>
 <script src="js/directives/application-template/DV/DV-ORDINAL-directive.js"></script>

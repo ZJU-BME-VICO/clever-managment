@@ -101,5 +101,9 @@ angular.module('clever.management.i18n.zh', ['pascalprecht.translate']).config(f
 		ARCHETYPE_MASTER_PANE_OPERATION : '操作',
 		ARCHETYPE_MASTER_PANE_OPERATIOR : '操作者',
 		ARCHETYPE_MASTER_PANE_OPERATE_TIME : '操作时间',
+		
+		// Archetype pane
+		ARCHETYPE_PANE_LANGUAGE : '语言',
+		ARCHETYPE_PANE_INFO : '基本信息',
 	});
 });

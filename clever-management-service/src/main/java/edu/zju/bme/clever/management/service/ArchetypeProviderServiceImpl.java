@@ -1,10 +1,17 @@
 package edu.zju.bme.clever.management.service;
 
+import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 
+import org.openehr.am.archetype.Archetype;
+import org.openehr.am.serialize.XMLSerializer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import se.acode.openehr.parser.ADLParser;
 import edu.zju.bme.clever.management.service.entity.ArchetypeFile;
 import edu.zju.bme.clever.management.service.entity.ArchetypeMaster;
 import edu.zju.bme.clever.management.service.repository.ArchetypeActionLogRepository;
@@ -14,12 +21,16 @@ import edu.zju.bme.clever.management.service.repository.ArchetypeMasterRepositor
 @Service
 public class ArchetypeProviderServiceImpl implements ArchetypeProviderService {
 
+	protected final Logger logger = LoggerFactory.getLogger(this.getClass());
+
 	@Autowired
 	private ArchetypeFileRepository fileRepo;
 	@Autowired
 	private ArchetypeMasterRepository masterRepo;
 	@Autowired
 	private ArchetypeActionLogRepository logRepo;
+
+	private XMLSerializer xmlSerializer = new XMLSerializer();
 
 	@Override
 	public List<ArchetypeMaster> getAllArchetypeMasters() {
@@ -47,8 +58,49 @@ public class ArchetypeProviderServiceImpl implements ArchetypeProviderService {
 	}
 
 	@Override
+	public String getArchetypeXmlById(Integer id) {
+		return Optional
+				.ofNullable(this.fileRepo.findOne(id))
+				.map(file -> this.parseArchetype(file.getContent()))
+				.map(archetype -> {
+					try {
+						return this.xmlSerializer.output(archetype);
+					} catch (IOException ex) {
+						this.logger.debug("Searializer archetype {} failed.",
+								archetype.getArchetypeId().getValue());
+						return null;
+					}
+				}).orElse("");
+	}
+
+	@Override
+	public String getArchetypeXmlByName(String name) {
+		return Optional
+				.ofNullable(this.fileRepo.findByName(name))
+				.map(file -> this.parseArchetype(file.getContent()))
+				.map(archetype -> {
+					try {
+						return this.xmlSerializer.output(archetype);
+					} catch (IOException ex) {
+						this.logger.debug("Searializer archetype {} failed.",
+								archetype.getArchetypeId().getValue());
+						return null;
+					}
+				}).orElse("");
+	}
+
+	@Override
 	public List<ArchetypeFile> getAllTeamreviewArchetypeFiles() {
 		return this.fileRepo.getAllTeamreviewArchetypeFiles();
 	}
 
+	protected Archetype parseArchetype(String archetype) {
+		ADLParser parser = new ADLParser(archetype);
+		try {
+			return parser.parse();
+		} catch (Exception ex) {
+			this.logger.info("Parse archetype failed.", ex);
+		}
+		return null;
+	}
 }

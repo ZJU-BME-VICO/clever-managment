@@ -15,7 +15,7 @@
 				</div>
 			</div>
 			<div class="list-group" ng-style="{height: containerHeight - 55}" style="overflow: auto;margin-left: -5px;white-space: nowrap;">
-				<archetype-list-tree tree-data="archetypeList" select-node-callback="selectNode(value)" tree-control="treeControl"></archetype-list-tree>
+				<archetype-list-tree tree-data="archetypeList" select-node-callback="createNewMasterTabById(value.id)" tree-control="treeControl"></archetype-list-tree>
 			</div>
 		</div>
 		<!-- splitter -->
@@ -26,11 +26,13 @@
 		<div class="col-xs-12 col-md-12 col-lg-12 flex-box">
 			<tabset class="row" tab-control="tabControl">
 				<tab ng-repeat="tab in tabs" closable="true" select="select(tab)" close="close(tab)" id="tab.id">
-					<tab-heading>
-						{{tab.title}}
+					<tab-heading tooltip-placement="top" tooltip-popup-delay='500' tooltip='{{tab.title}}'>
+						<span class="archetype-icon" ng-class="tab.type" style="padding: 0px 10px;background-size: 18px;"></span>
+						<sapn>&nbsp;{{getFixedTitle(tab.title)}}</span>
 					</tab-heading>
 					<div class="col-xs-12 col-md-12 col-lg-12" ng-switch="tab.type">
-						<archetype-master-pane ng-switch-when="master" archetype-master="tab.content" max-height="containerHeight - 35"></archetype-master-pane>
+						<archetype-master-pane ng-switch-when="master" archetype-master-info="tab.content" max-height="containerHeight - 35" select-archetype-callback="createNewArchetypeTabById(value.id)"></archetype-master-pane>
+						<archetype-pane ng-switch-when="archetype" archetype-info="tab.content" max-height="containerHeight - 35" select-archetype-callback="createNewArchetypeTabById(value.id)" select-master-callback="createNewMasterTabById(value.id)"></archetype-pane>
 					</div>
 				</tab>
 			</tabset>
