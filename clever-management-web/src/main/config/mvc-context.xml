@@ -35,6 +35,9 @@
 	
 	<mvc:annotation-driven
 		content-negotiation-manager="contentNegotiationManager">
+		<mvc:message-converters register-defaults="true">
+			<bean class="edu.zju.bme.clever.management.web.util.UTF8StringHttpMessageConverter" />
+		</mvc:message-converters>
 	</mvc:annotation-driven>
 	
 	<context:component-scan base-package="edu.zju.bme.clever.management.web" />
