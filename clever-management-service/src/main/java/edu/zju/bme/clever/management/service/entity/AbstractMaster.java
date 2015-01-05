@@ -63,6 +63,8 @@ public abstract class AbstractMaster<T extends AbstractFile> extends
 	private List<T> files;
 	@ManyToOne(fetch = FetchType.LAZY)
 	private T latestFile;
+	@Column(name = "latest_file_id", updatable = false, insertable = false)
+	private Integer latestFileId;
 	@Column
 	private String latestFileVersion;
 	@Column
@@ -165,6 +167,10 @@ public abstract class AbstractMaster<T extends AbstractFile> extends
 
 	public void setLatestFile(T latestFile) {
 		this.latestFile = latestFile;
+	}
+
+	public Integer getLatestFileId() {
+		return latestFileId;
 	}
 
 	public String getLatestFileVersion() {

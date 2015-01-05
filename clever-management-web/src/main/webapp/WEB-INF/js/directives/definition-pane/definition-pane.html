@@ -2,16 +2,16 @@
 	<div class="row" style="padding: 5px 0px;">
 		<div class="input-group pull-left" style="padding: 5px;width: 260px;">
 			<span class="input-group-addon" style="width: 70px;">View:</span>
-			<div class="btn-group" dropdown is-open="isDropdownOpened">
-				<button type="button" class="btn btn-default dropdown-toggle" style="width: 160px;">
+			<div class="btn-group" dropdown>
+				<button type="button" class="btn btn-default dropdown-toggle" dropdown-toggle style="width: 160px;">
 					{{selectedView}} <span class="glyphicon glyphicon-chevron-down pull-right" style="margin-top: 2px;"></span>
 				</button>
 				<ul class="dropdown-menu" role="menu">
 					<li>
-						<a href class="text-center" ng-click="selectedView = 'Table';isDropdownOpened = false;">Table</a>
+						<a href class="text-center" ng-click="selectedView = 'Table';">Table</a>
 					</li>
 					<li>
-						<a href class="text-center" ng-click="selectedView = 'Tree';isDropdownOpened = false;">Tree</a>
+						<a href class="text-center" ng-click="selectedView = 'Tree';">Tree</a>
 					</li>
 				</ul>
 			</div>

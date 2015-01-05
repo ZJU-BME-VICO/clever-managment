@@ -49,6 +49,8 @@
 <script src="js/directives/application-template/DV/DV-BOOLEAN-directive.js"></script>
 <script src="js/directives/application-template/Activity/long-press-directive.js"></script>
 <script src="js/directives/application-template/Activity/dragable-directive.js"></script>
+<script src="js/directives/tree-view/tree-view-directive.js"></script>
+<script src="js/directives/tree-view/tree-view-node-directive.js"></script>
 
 <!-- controllers -->
 <script src="js/views/management/management-controller.js"></script>

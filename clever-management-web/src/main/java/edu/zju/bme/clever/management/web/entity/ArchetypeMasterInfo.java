@@ -20,6 +20,7 @@ public class ArchetypeMasterInfo {
 	private String use;
 	private String misuse;
 	private String copyright;
+	private Integer latestArchetypeId;
 	private String latestArchetypeVersion;
 	private String name;
 	private String lifecycleState;
@@ -51,6 +52,14 @@ public class ArchetypeMasterInfo {
 
 	public void setLatestArchetypeVersion(String latestArchetypeVersion) {
 		this.latestArchetypeVersion = latestArchetypeVersion;
+	}
+
+	public Integer getLatestArchetypeId() {
+		return latestArchetypeId;
+	}
+
+	public void setLatestArchetypeId(Integer latestArchetypeId) {
+		this.latestArchetypeId = latestArchetypeId;
 	}
 
 	public String getName() {

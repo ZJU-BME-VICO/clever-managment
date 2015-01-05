@@ -149,12 +149,16 @@ public class ArchetypeResourceController {
 		info.setLifecycleState(file.getLifecycleState().getValue());
 		info.setMasterName(archetype.getArchetypeId().base());
 		info.setMasterId(file.getMasterId());
+		// Set specialise archetype info
 		if (file.getSpecialiseArchetypeId() != null) {
 			ArchetypeInfo specialiseInfo = new ArchetypeInfo();
 			specialiseInfo.setId(file.getSpecialiseArchetypeId());
 			specialiseInfo.setName(archetype.getParentArchetypeId().getValue());
 			info.setSpecialiseArchetype(specialiseInfo);
 		}
+		// Set editor info
+		info.setEditorId(file.getEditor().getId());
+		info.setEditorName(file.getEditor().getName());
 		return info;
 	}
 
@@ -188,6 +192,8 @@ public class ArchetypeResourceController {
 			specialiseMasterInfo.setName(specialiseMaster.getName());
 			specialiseMasterInfo.setLatestArchetypeVersion(specialiseMaster
 					.getLatestFileVersion());
+			specialiseMasterInfo.setLatestArchetypeId(specialiseMaster
+					.getLatestFileId());
 			masterInfo.setSpecialiseArchetypeMaster(specialiseMasterInfo);
 		}
 		// Add archetypes

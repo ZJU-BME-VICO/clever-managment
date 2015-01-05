@@ -15,6 +15,8 @@ public class ArchetypeInfo {
 	private String lifecycleState;
 	private ArchetypeInfo specialiseArchetype;
 	private int internalVersion;
+	private int editorId;
+	private String editorName;
 
 	public int getId() {
 		return id;
@@ -126,6 +128,22 @@ public class ArchetypeInfo {
 
 	public void setInternalVersion(int internalVersion) {
 		this.internalVersion = internalVersion;
+	}
+
+	public int getEditorId() {
+		return editorId;
+	}
+
+	public void setEditorId(int editorId) {
+		this.editorId = editorId;
+	}
+
+	public String getEditorName() {
+		return editorName;
+	}
+
+	public void setEditorName(String editorName) {
+		this.editorName = editorName;
 	}
 
 	@Override

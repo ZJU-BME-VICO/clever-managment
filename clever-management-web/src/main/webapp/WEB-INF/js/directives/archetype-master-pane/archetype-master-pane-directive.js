@@ -4,6 +4,7 @@ angular.module('clever.management.directives.archetypeMasterPane', []).directive
 		scope : {
 			archetypeMasterInfo : '=',
 			selectArchetypeCallback : '&',
+			selectMasterCallback : '&',
 		},
 		templateUrl : 'js/directives/archetype-master-pane/archetype-master-pane.html',
 		controller : function($scope) {
@@ -15,6 +16,18 @@ angular.module('clever.management.directives.archetypeMasterPane', []).directive
 			$scope.selectArchetype = function(archtype) {
 				$scope.selectArchetypeCallback({
 					value : archtype,
+				});
+			};
+			$scope.selectSpecialiseMaster = function(master) {
+				$scope.selectMasterCallback({
+					value : master,
+				});
+			};
+			$scope.selectSpecialiseArchetypeId = function(id) {
+				$scope.selectArchetypeCallback({
+					value : {
+						id : id,
+					},
 				});
 			};
 		},
