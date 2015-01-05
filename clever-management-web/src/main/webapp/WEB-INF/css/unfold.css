@@ -39,25 +39,6 @@
 		width:40px;
 	}
 
-
-	.icon-home:before{
-		color: #EF1D00;
-	}
-	.icon-th:before{
-		color: #FD6807;
-	}
-	.icon-cog:before{
-		color: #FEA60C;
-	}
-	.icon-list-alt:before{
-		color: #D1D525;
-	}
-	.icon-screenshot:before{
-		color: #B1EB33;
-	}
-
-
-
 	.ring a{
 	 	transition:all 0.5s ease-in-out;
 	 	-webkit-transition:all 0.5s ease-in-out;
@@ -80,3 +61,37 @@
 	  	z-index:2;
 	  	content: attr(title);
 	}
+	
+	.icon-home:before{
+		color: #EF1D00;
+	}
+	.icon-th:before{
+		color: #FD6807;
+	}
+	.icon-cog:before{
+		color: #FEA60C;
+	}
+	.icon-list-alt:before{
+		color: #D1D525;
+	}
+	.icon-screenshot:before{
+		color: #B1EB33;
+	}
+	
+	.icon-film:before{
+		color: #EF1D00;
+	}
+	.icon-upload-alt:before{
+		color: #B1EB33;
+	}
+	
+	.icon-magic:before{
+		color: #FD6807;
+	}
+	.icon-picture:before{
+		color: #B1EB33;
+	}
+	.icon-wrench:before{
+		color: #FEA60C;
+	}
+	

@@ -82,7 +82,7 @@ function ManagementCtrl($scope, $state, $timeout) {
 		title : 'MENU_MANAGEMENT_APPLICATION_EDIT',
 		href : '#/management/application/edit',
 		state : 'management.application.edit',
-		icon : 'icon-edit',
+		icon : 'icon-wrench',
 		info : 'MENU_MANAGEMENT_APPLICATION_EDIT_INFO',
 	};
 	// Integration management
