@@ -6,14 +6,18 @@ function($document) {
 	      UIData:'=guiData',	      
 		},		
 		
-        template: '<div dragable>'+'<a>'+'{{UIData.label.labelContent}}'+'</a>'+'&nbsp;&nbsp:&nbsp;&nbsp&nbsp'+'<input placeholder="{{UIData.label.dataValue[0].range}}">'+
+        /*template: '<div dragable>'+'<a>'+'{{UIData.label.labelContent}}'+'</a>'+'&nbsp;&nbsp:&nbsp;&nbsp&nbsp'+'<input placeholder="{{UIData.label.dataValue[0].range}}">'+
 			      '{{UIData.label.dataValue[0].unit}}'+
-			       '</div>',
+			       '</div>',*/
+			        template: '<div dragable>'+'<a>'+'{{UIData.label.labelContent}}'+'</a>'
+			        +'&nbsp;&nbsp:&nbsp;&nbsp&nbsp'+'<input placeholder="{{UIData.dataValue[0].range}}">'
+			        +'{{UIData.dataValue[0].unit}}'+
+                   '</div>',
 	    controller:function($scope){
 	    	
 	    	$scope.dvquantityControl={};
 	    },
-		link : function(scope, element, attrs) {
+		link : function(scope, element, attrs) {              
 	},
 	};
 });

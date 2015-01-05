@@ -155,6 +155,12 @@ template-list-tree li .DV_DURATION {
 	background-image: url("../img/datatype/duration.png");
 	background-repeat: no-repeat;
 }
+template-list-tree li .DV_PROPORTION {
+    padding: 0 10px;
+    height: 16px;
+    background-image: url("../img/datatype/ratio.png");
+    background-repeat: no-repeat;
+}
 .listBox {
 	margin-top: 30px;
 }
