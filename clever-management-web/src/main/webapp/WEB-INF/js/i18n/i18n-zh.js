@@ -71,6 +71,19 @@ angular.module('clever.management.i18n.zh', ['pascalprecht.translate']).config(f
 		MENU_MANAGEMENT_APPLICATION_EDIT : '应用编辑',
 		MENU_MANAGEMENT_APPLICATION_VIEW : '应用查看',
 		MENU_MANAGEMENT_INTEGRATION : '集成管理',
+		
+		//Menu-infomation
+		MENU_INFO : '概要信息',
+		MENU_MANAGEMENT_INFO : 'CLEVER管理平台，功能模块管理',
+		MENU_MANAGEMENT_ARCHETYPE_INFO : 'Archetype是CLEVER™的核心，它基于openEHR规范实现，是一套从临床基本概念出发的信息模型，而且与软件系统开发独立，因而可由临床人员直接管理和维护，具备较高灵活性。',
+		MENU_MANAGEMENT_ARCHETYPE_VIEW_INFO : '',
+		MENU_MANAGEMENT_ARCHETYPE_UPLOAD_INFO : '',
+		MENU_MANAGEMENT_STORAGE_INFO : 'DataManager负责CLEVER™平台中的数据管理，所有数据均按Archeype进行分类，临床人员可方便地直接进行数据的查询、增加、修改和删除，所有操作都将安全地映射到具体物理存储。',
+		MENU_MANAGEMENT_APPLICATION_INFO : 'CLEVER™提供了一整套标准接口和原型数据访问语言，以及基于Archetype自动生成应用软件模块的方法，可在此基础上快速构建各类数据应用软件，有效促进了数据的开发与利用。',
+		MENU_MANAGEMENT_APPLICATION_DESIGN_INFO : '',
+		MENU_MANAGEMENT_APPLICATION_VIEW_INFO : '',
+		MENU_MANAGEMENT_APPLICATION_EDIT_INFO : '',
+		MENU_MANAGEMENT_INTEGRATION_INFO : 'SHINE™为医疗信息集成引擎，它负责从现有各类异构系统中集成数据到CLEVER™平台，SHINE™提供了基于Archetype的语义集成方法，可方便快速地进行集成配置。',
 
 		// Application edit and view
 		APPLICATION_EDIT_FIND_HINT : '输入应用名称',
