@@ -13,9 +13,9 @@ angular.module('clever.management.directives.archetypeMasterPane', []).directive
 				date.setTime(time);
 				return date.format('yyyy-MM-dd hh:mm:ss');
 			};
-			$scope.selectArchetype = function(archtype) {
+			$scope.selectArchetype = function(archetype) {
 				$scope.selectArchetypeCallback({
-					value : archtype,
+					value : archetype,
 				});
 			};
 			$scope.selectSpecialiseMaster = function(master) {
@@ -23,11 +23,9 @@ angular.module('clever.management.directives.archetypeMasterPane', []).directive
 					value : master,
 				});
 			};
-			$scope.selectSpecialiseArchetypeId = function(id) {
+			$scope.selectSpecialiseArchetype = function(archetype) {
 				$scope.selectArchetypeCallback({
-					value : {
-						id : id,
-					},
+					value : archetype,
 				});
 			};
 		},

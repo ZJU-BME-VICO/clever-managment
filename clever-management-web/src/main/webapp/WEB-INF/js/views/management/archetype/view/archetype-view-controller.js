@@ -22,40 +22,42 @@ function ArchetypeViewCtrl($scope, $timeout, resourceService, ARCHETYPE_LIST_URL
 		}
 	};
 
-	$scope.createNewMasterTabById = function(id) {
-		var tabId = 'master_' + id;
+	$scope.createNewMasterTab = function(master) {
+		var tabId = 'master_' + master.id;
 		if (containsTabId(tabId) < 0) {
-			resourceService.get(ARCHETYPE_MASTER_BY_ID_URL + id).then(function(masterInfo) {
-				$scope.tabs.push({
-					id : 'master_' + masterInfo.id,
-					type : 'master',
-					title : masterInfo.conceptName,
-					content : masterInfo,
-				});
-				// Select after compile finished
-				$timeout(function() {
-					$scope.tabControl.selectTabById(tabId);
-				}, 0);
+			var count = $scope.tabs.push({
+				id : tabId,
+				type : 'master',
+				title : master.name,
+				content : undefined,
+			});
+			var tab = $scope.tabs[count - 1];
+			$timeout(function() {
+				$scope.tabControl.selectTabById(tabId);
+			}, 0);
+			resourceService.get(ARCHETYPE_MASTER_BY_ID_URL + master.id).then(function(masterInfo) {
+				tab.content = masterInfo;
 			});
 		} else {
 			$scope.tabControl.selectTabById(tabId);
 		}
 	};
 
-	$scope.createNewArchetypeTabById = function(id) {
-		var tabId = 'archetype_' + id;
+	$scope.createNewArchetypeTab = function(archetype) {
+		var tabId = 'archetype_' + archetype.id;
 		if (containsTabId(tabId) < 0) {
-			resourceService.get(ARCHETYPE_BY_ID_URL + id).then(function(archetypeInfo) {
-				$scope.tabs.push({
-					id : 'archetype_' + archetypeInfo.id,
-					type : 'archetype',
-					title : archetypeInfo.name,
-					content : archetypeInfo,
-				});
-				// Select after compile finished
-				$timeout(function() {
-					$scope.tabControl.selectTabById(tabId);
-				}, 0);
+			var count = $scope.tabs.push({
+				id : tabId,
+				type : 'archetype',
+				title : archetype.name,
+				content : undefined,
+			});
+			var tab = $scope.tabs[count - 1];
+			$timeout(function() {
+				$scope.tabControl.selectTabById(tabId);
+			}, 0);
+			resourceService.get(ARCHETYPE_BY_ID_URL + archetype.id).then(function(archetypeInfo) {
+				tab.content = archetypeInfo;
 			});
 		} else {
 			$scope.tabControl.selectTabById(tabId);
@@ -68,10 +70,6 @@ function ArchetypeViewCtrl($scope, $timeout, resourceService, ARCHETYPE_LIST_URL
 
 	$scope.expand = function() {
 		$scope.treeControl.expandAll();
-	};
-
-	$scope.select = function(tab) {
-		var a;
 	};
 
 	$scope.close = function(tab) {

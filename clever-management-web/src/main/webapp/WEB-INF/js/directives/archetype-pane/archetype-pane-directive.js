@@ -15,12 +15,16 @@ angular.module('clever.management.directives.archetypePane', []).directive('arch
 				tableItems : [],
 			};
 
-			var archetype = archetypeParseService.parseArchetypeXml($scope.archetypeInfo.xml);
-			$scope.header = archetype.header;
-			$scope.terminologies = archetype.terminologies;
-			$scope.definition = archetype.definitions;
-			$scope.languages = archetype.languages.languages;
-			$scope.selectedLanguage = archetype.languages.originalLanguage;
+			$scope.$watch('archetypeInfo', function(newValue) {
+				if (newValue) {
+					var archetype = archetypeParseService.parseArchetypeXml($scope.archetypeInfo.xml);
+					$scope.header = archetype.header;
+					$scope.terminologies = archetype.terminologies;
+					$scope.definition = archetype.definitions;
+					$scope.languages = archetype.languages.languages;
+					$scope.selectedLanguage = archetype.languages.originalLanguage;
+				}
+			});
 
 			$scope.selectLanguage = function(language) {
 				$scope.selectedLanguage = language;

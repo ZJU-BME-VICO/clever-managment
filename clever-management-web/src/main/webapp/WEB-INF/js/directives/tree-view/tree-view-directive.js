@@ -1,4 +1,4 @@
-angular.module('clever.management.directives.treeView', []).directive('treeView', function() {
+angular.module('clever.management.directives.treeView', []).directive('treeView', function($compile) {
 	return {
 		restrict : 'E',
 		transclude : true,
@@ -7,14 +7,10 @@ angular.module('clever.management.directives.treeView', []).directive('treeView'
 			treeControl : '=',
 			nodeId : '@',
 			nodeChildren : '@',
-			selectNodeCallback : '&',
+			nodeAliasName : '@',
+			clickNodeCallback : '&',
+			doubleClickNodeCallback : '&',
 		},
-		template : '<tree-view-node ' +
-						'ng-repeat="node in treeData" ' +
-						'ng-show="node.show" ' +
-						'ng-init="node.show = true" ' +
-						'node-data="node">' +
-					'</tree-view-node>',
 		controller : function($scope, $transclude) {
 			
 			var nodes = [];
@@ -36,6 +32,13 @@ angular.module('clever.management.directives.treeView', []).directive('treeView'
 			this.getNodeChildren = function(){
 				return nodeChildren;
 			};
+			var nodeAliasName = $scope.nodeAliasName || 'nodeData';
+			if (nodeAliasName == '_node') {
+				throw 'Node alias name cannot be "_node".';
+			}
+			this.getNodeAliasName = function() {
+				return nodeAliasName;
+			}; 
 			var expandedIconElement;
 			this.getExpandedIconElement = function(){
 				return expandedIconElement;
@@ -48,12 +51,16 @@ angular.module('clever.management.directives.treeView', []).directive('treeView'
 			this.getTreeNodeLabelElement = function(){
 				return treeNodeLabelElement;
 			};
-			
-			this.selectNode = function(selectedNode) {
-				$scope.selectNodeCallback({
-					value : selectedNode
+			this.clickNode = function(node) {
+				$scope.clickNodeCallback({
+					value : node,
 				});
 			};
+			this.doubleClickNode = function(node) {
+				$scope.doubleClickNodeCallback({
+					value : node,
+				});
+			}; 
 			
 			$scope.$watch('treeData', function(newValue, oldValue) {
 				if (newValue != oldValue) {
@@ -61,6 +68,19 @@ angular.module('clever.management.directives.treeView', []).directive('treeView'
 					currentNode = undefined;
 				}
 			});
+			
+			$scope.treeControl = {
+				expandAll : function() {
+					angular.forEach(nodes, function(node) {
+						node.collapsed = false;
+					});
+				},
+				collapseAll : function() {
+					angular.forEach(nodes, function(node) {
+						node.collapsed = true;
+					});
+				},
+			};
 			
 			$transclude(function(clone, scope) {
                	angular.forEach(clone, function(node) {
@@ -95,6 +115,20 @@ angular.module('clever.management.directives.treeView', []).directive('treeView'
 				       node.tagName.toLowerCase() === 'tree-node-label'
 				);
 			}
+		},
+		link : function(scope, elm, attrs, ctrl){
+			var template = '<tree-view-node ' +
+								'ng-repeat="_node in treeData" ' +
+								'ng-show="_node.show" ' +
+								ctrl.getNodeAliasName().replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase() + '="_node">' +
+							'</tree-view-node>';
+			
+			scope.$watch('treeData', function(newValue) {
+				if (newValue) {
+					elm.html('').append($compile( template )(scope));
+				}
+			}); 
+
 		},
 	};
 });

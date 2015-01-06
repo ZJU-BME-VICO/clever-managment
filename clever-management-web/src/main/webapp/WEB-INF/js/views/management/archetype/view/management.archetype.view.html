@@ -15,16 +15,16 @@
 				</div>
 			</div>
 			<div class="list-group" ng-style="{height: containerHeight - 55}" style="overflow: auto;margin-left: -5px;white-space: nowrap;">
-				<!--<archetype-list-tree tree-data="archetypeList" select-node-callback="createNewMasterTabById(value.id)" tree-control="treeControl"></archetype-list-tree>-->
-				<tree-view tree-data="archetypeList" node-id="id" node-children="specialisedArchetypeMasters" tree-control="treeControl">
-					<tree-expanded-icon><img class="collapsed"></tree-expanded-icon>
-					<tree-collapsed-icon><img class="expanded"></tree-collapsed-icon>
+				<archetype-list-tree tree-data="archetypeList" select-node-callback="createNewMasterTab(value)" tree-control="treeControl"></archetype-list-tree>
+				<!--<tree-view tree-data="archetypeList" node-id="id" node-children="specialisedArchetypeMasters" tree-control="treeControl" node-alias-name="node">
+					<tree-expanded-icon><span class="clever-icon expanded-icon" style="padding: 0 6px;height: 12px;background-position-y: 6px;"></span></tree-expanded-icon>
+					<tree-collapsed-icon><span class="clever-icon collapsed-icon" style="padding: 0 6px;height: 12px;background-position-y: 6px;"></span></tree-collapsed-icon>
 					<tree-node-label>
-						<img ng-class="nodeData.lifecycleState | lowercase"></img>
-						<span ng-bind="nodeData.conceptName"></span>
-						&nbsp;<span style="color: grey;font-size: 10pt;">(<span ng-bind="nodeData.latestArchetypeVersion"></span>)</span>
+						<img ng-class="node.lifecycleState + '-icon' | lowercase" class="clever-icon" style="padding: 0 10px;height: 16px;"></img>
+						<span ng-bind="node.conceptName"></span>
+						&nbsp;<span style="color: grey;font-size: 10pt;">(<span ng-bind="node.latestArchetypeVersion"></span>)</span>
 					</tree-node-label>
-				</tree-view>
+			</tree-view>-->
 			</div>
 		</div>
 		<!-- splitter -->
@@ -40,8 +40,8 @@
 						<sapn>&nbsp;{{getFixedTitle(tab.title)}}</span>
 					</tab-heading>
 					<div class="col-xs-12 col-md-12 col-lg-12" ng-switch="tab.type">
-						<archetype-master-pane ng-switch-when="master" archetype-master-info="tab.content" max-height="containerHeight - 35" select-archetype-callback="createNewArchetypeTabById(value.id)" select-master-callback="createNewMasterTabById(value.id)"></archetype-master-pane>
-						<archetype-pane ng-switch-when="archetype" archetype-info="tab.content" max-height="containerHeight - 35" select-archetype-callback="createNewArchetypeTabById(value.id)" select-master-callback="createNewMasterTabById(value.id)"></archetype-pane>
+						<archetype-master-pane ng-switch-when="master" archetype-master-info="tab.content" max-height="containerHeight - 35" select-archetype-callback="createNewArchetypeTab(value)" select-master-callback="createNewMasterTab(value)"></archetype-master-pane>
+						<archetype-pane ng-switch-when="archetype" archetype-info="tab.content" max-height="containerHeight - 35" select-archetype-callback="createNewArchetypeTab(value)" select-master-callback="createNewMasterTab(value)"></archetype-pane>
 					</div>
 				</tab>
 			</tabset>
