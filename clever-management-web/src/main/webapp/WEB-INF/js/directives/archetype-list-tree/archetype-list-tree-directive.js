@@ -41,7 +41,7 @@ angular.module('clever.management.directives.archetypeListTree', []).directive('
 
 			$scope.treeControl = {
 				expandAll : function() {
-					angular.forEach(getNodes(), function(node) {
+					angular.forEach(nodes, function(node) {
 						node.collapsed = false;
 					});
 				},

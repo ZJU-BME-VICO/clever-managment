@@ -1,9 +1,14 @@
+<link rel="stylesheet" href="css/font-awesome-fa.css" />  
+<link rel="stylesheet" href="css/font-awesome-icon.css" />  
 <link rel="stylesheet" href="css/bootstrap.css" />
 <link rel="stylesheet" href="css/app.css" />
 <link rel="stylesheet" href="css/archetype-list-tree.css" />
+<link rel="stylesheet" href="css/tree-view.css" />
 <link rel="stylesheet" href="css/template-list-tree.css" />
 <link rel="stylesheet" href="css/file-input.css" />
 <link rel="stylesheet" href="css/home-page.css" />
 <link rel="stylesheet" href="css/fisheye.css" />     
 <link rel="stylesheet" href="css/unfold.css" />     
-<link rel="stylesheet" href="css/font-awesome.css" />  
+<link rel="stylesheet" href="css/archetype-icon.css" />     
+<link rel="stylesheet" href="css/font-awesome.css" />
+

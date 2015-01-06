@@ -27,4 +27,18 @@ angular.module('clever.management.services.resource', []).service('resourceServi
 		});
 		return deferred.promise;
 	};
+
+	this.delete = function(url, data, config) {
+		var deferred = $q.defer();
+		$http.delete(url, data, config).success(function(data, status, headers, config) {
+			deferred.resolve(data);
+		}).error(function(data, status, headers, config) {
+			if (status == 401) {
+				$state.go('login', {
+					errorType : 'SessionExpired'
+				});
+			}
+		});
+		return deferred.promise;
+	};
 });

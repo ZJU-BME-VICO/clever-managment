@@ -15,7 +15,16 @@
 				</div>
 			</div>
 			<div class="list-group" ng-style="{height: containerHeight - 55}" style="overflow: auto;margin-left: -5px;white-space: nowrap;">
-				<archetype-list-tree tree-data="archetypeList" select-node-callback="selectNode(value)" tree-control="treeControl"></archetype-list-tree>
+				<!--<archetype-list-tree tree-data="archetypeList" select-node-callback="createNewMasterTabById(value.id)" tree-control="treeControl"></archetype-list-tree>-->
+				<tree-view tree-data="archetypeList" node-id="id" node-children="specialisedArchetypeMasters" tree-control="treeControl">
+					<tree-expanded-icon><img class="collapsed"></tree-expanded-icon>
+					<tree-collapsed-icon><img class="expanded"></tree-collapsed-icon>
+					<tree-node-label>
+						<img ng-class="nodeData.lifecycleState | lowercase"></img>
+						<span ng-bind="nodeData.conceptName"></span>
+						&nbsp;<span style="color: grey;font-size: 10pt;">(<span ng-bind="nodeData.latestArchetypeVersion"></span>)</span>
+					</tree-node-label>
+				</tree-view>
 			</div>
 		</div>
 		<!-- splitter -->
@@ -23,13 +32,17 @@
 			<i style="cursor: pointer" ng-click="isArchetypeListHidder = !isArchetypeListHidder" ng-show="isArchetypeListHidder" tooltip-placement="right" tooltip="Expand" tooltip-popup-delay="500"> <span class="glyphicon glyphicon-chevron-right" ng-style="{'margin-top': containerHeight/2}" ></span> </i>
 			<i style="cursor: pointer" ng-click="isArchetypeListHidder = !isArchetypeListHidder" ng-show="!isArchetypeListHidder" tooltip-placement="right" tooltip="Collapse" tooltip-popup-delay="500"> <span class="glyphicon glyphicon-chevron-left" ng-style="{'margin-top': containerHeight/2}" ></span> </i>
 		</splitter>
-		<div class="flexBox">
-			<tabset tab-control="tabControl">
+		<div class="col-xs-12 col-md-12 col-lg-12 flex-box">
+			<tabset class="row" tab-control="tabControl">
 				<tab ng-repeat="tab in tabs" closable="true" select="select(tab)" close="close(tab)" id="tab.id">
-					<tab-heading>
-						{{tab.title}}
+					<tab-heading tooltip-placement="top" tooltip-popup-delay='500' tooltip='{{tab.title}}'>
+						<span class="archetype-icon" ng-class="tab.type" style="padding: 0px 10px;background-size: 18px;"></span>
+						<sapn>&nbsp;{{getFixedTitle(tab.title)}}</span>
 					</tab-heading>
-					<span>{{tab.content}}</span>
+					<div class="col-xs-12 col-md-12 col-lg-12" ng-switch="tab.type">
+						<archetype-master-pane ng-switch-when="master" archetype-master-info="tab.content" max-height="containerHeight - 35" select-archetype-callback="createNewArchetypeTabById(value.id)" select-master-callback="createNewMasterTabById(value.id)"></archetype-master-pane>
+						<archetype-pane ng-switch-when="archetype" archetype-info="tab.content" max-height="containerHeight - 35" select-archetype-callback="createNewArchetypeTabById(value.id)" select-master-callback="createNewMasterTabById(value.id)"></archetype-pane>
+					</div>
 				</tab>
 			</tabset>
 		</div>

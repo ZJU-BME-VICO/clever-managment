@@ -1,0 +1,36 @@
+.archetype-icon.action {
+	background-image: url("../img/archetype/action.png");
+	background-repeat: no-repeat;
+}
+.archetype-icon.evaluation {
+	background-image: url("../img/archetype/evaluation.png");
+	background-repeat: no-repeat;
+}
+.archetype-icon.observation {
+	background-image: url("../img/archetype/observation.png");
+	background-repeat: no-repeat;
+}
+.archetype-icon.instruction {
+	background-image: url("../img/archetype/instruction.png");
+	background-repeat: no-repeat;
+}
+.archetype-icon.admin {
+	background-image: url("../img/archetype/admin.png");
+	background-repeat: no-repeat;
+}
+.archetype-icon.cluster {
+	background-image: url("../img/archetype/cluster.png");
+	background-repeat: no-repeat;
+}
+.archetype-icon.section {
+	background-image: url("../img/archetype/section.png");
+	background-repeat: no-repeat;
+}
+.archetype-icon.archetype {
+	background-image: url("../img/letter-a-icon.png");
+	background-repeat: no-repeat;
+}
+.archetype-icon.master {
+	background-image: url("../img/letter-m-icon.png");
+	background-repeat: no-repeat;
+}

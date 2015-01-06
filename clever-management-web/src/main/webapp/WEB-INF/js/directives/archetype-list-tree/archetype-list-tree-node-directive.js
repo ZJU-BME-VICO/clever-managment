@@ -23,7 +23,7 @@ function($compile) {
 									'<span ng-style="{\'margin-left\': nodeData.specialisedArchetypeMasters.length ? \'5px\' : \'15px\'}" ng-class="nodeData.selected" ng-click="selectNodeLabel(nodeData)" ng-dblclick="doubleClickNodeLabel(nodeData)">' +
 										'<img ng-class="nodeData.lifecycleState | lowercase"></img>' +
 										'<span ng-bind-html="nodeData.conceptName | highlight:highlightText | unsafe"></span>' +
-										'&nbsp<span style="color: grey;font-size: 10pt;">({{nodeData.latestArchetypeVersion}})</span>' +
+										'&nbsp;<span style="color: grey;font-size: 10pt;">({{nodeData.latestArchetypeVersion}})</span>' +
 									'</span>' +
 									'<archetype-list-tree-node ' +
 										'ng-hide="nodeData.collapsed || !node.show" ' +

@@ -71,24 +71,52 @@ angular.module('clever.management.i18n.zh', ['pascalprecht.translate']).config(f
 		MENU_MANAGEMENT_APPLICATION_EDIT : '应用编辑',
 		MENU_MANAGEMENT_APPLICATION_VIEW : '应用查看',
 		MENU_MANAGEMENT_INTEGRATION : '集成管理',
+		
+		//Menu-infomation
+		MENU_INFO : '概要信息',
+		MENU_MANAGEMENT_INFO : 'CLEVER管理平台，功能模块管理',
+		MENU_MANAGEMENT_ARCHETYPE_INFO : 'Archetype是CLEVER™的核心，它基于openEHR规范实现，是一套从临床基本概念出发的信息模型，而且与软件系统开发独立，因而可由临床人员直接管理和维护，具备较高灵活性。',
+		MENU_MANAGEMENT_ARCHETYPE_VIEW_INFO : '',
+		MENU_MANAGEMENT_ARCHETYPE_UPLOAD_INFO : '',
+		MENU_MANAGEMENT_STORAGE_INFO : 'DataManager负责CLEVER™平台中的数据管理，所有数据均按Archeype进行分类，临床人员可方便地直接进行数据的查询、增加、修改和删除，所有操作都将安全地映射到具体物理存储。',
+		MENU_MANAGEMENT_APPLICATION_INFO : 'CLEVER™提供了一整套标准接口和原型数据访问语言，以及基于Archetype自动生成应用软件模块的方法，可在此基础上快速构建各类数据应用软件，有效促进了数据的开发与利用。',
+		MENU_MANAGEMENT_APPLICATION_DESIGN_INFO : '',
+		MENU_MANAGEMENT_APPLICATION_VIEW_INFO : '',
+		MENU_MANAGEMENT_APPLICATION_EDIT_INFO : '',
+		MENU_MANAGEMENT_INTEGRATION_INFO : 'SHINE™为医疗信息集成引擎，它负责从现有各类异构系统中集成数据到CLEVER™平台，SHINE™提供了基于Archetype的语义集成方法，可方便快速地进行集成配置。',
 
-		// Application edit
-		APPLICATION_EDIT_FIND_HINI : '输入应用名称',
+		// Application edit and view
+		APPLICATION_EDIT_FIND_HINT : '输入应用名称',
 		APPLICATION_EDIT_NAME : '名称',
 		APPLICATION_EDIT_DESCRIPTION : '简介',
 		APPLICATION_EDIT_URL : 'URL',
 		APPLICATION_EDIT_ADD_APPLICATION : '添加应用',
-		APPLICATION_EDTI_BTN_UPLOAD : '上传',
-		APPLICATION_EDTI_BTN_UPDATE : '更新',
-		APPLICATION_EDTI_BTN_DELETE : '删除',
-		APPLICATION_EDTI_BTN_BROWSE : '浏览',
+		APPLICATION_EDIT_BTN_UPLOAD : '上传',
+		APPLICATION_EDIT_BTN_UPDATE : '更新',
+		APPLICATION_EDIT_BTN_DELETE : '删除',
+		APPLICATION_EDIT_BTN_BROWSE : '浏览',
 		APPLICATION_EDIT_SUCCEEDED : '操作成功',
 		APPLICATION_EDIT_FAILED : '操作失败',
 		APPLICATION_EDIT_UPLOAD_SUCCEEDED_HINT : '应用上传成功。',
 		APPLICATION_EDIT_UPLOAD_FAILED_HINT : '应用上传失败，错误：{{errorMsg}}',
-		APPLICATION_EDIT_UPDATE_SUCCEEDED_HINI : '应用更新成功',
-		APPLICATION_EDIT_UPDATE_FAILED_HINI : '应用更新失败，错误：{{errorMsg}}',
+		APPLICATION_EDIT_UPDATE_SUCCEEDED_HINT : '应用更新成功',
+		APPLICATION_EDIT_UPDATE_FAILED_HINT : '应用更新失败，错误：{{errorMsg}}',
 		APPLICATION_EDIT_DELETE : '删除',
 		APPLICATION_EDIT_DELETE_HINT : '确定删除"{{appName}}"应用',
+		APPLICATION_VIEW_FIND_HINT : '输入应用名称',
+		APPLICATION_VIEW_EDIT : '编辑',
+		
+		// Archetype master pane
+		ARCHETYPE_MASTER_PANE_INFO : '基本信息',
+		ARCHETYPE_MASTER_PANE_LOG : '操作记录',
+		ARCHETYPE_MASTER_PANE_VERSION : '版本',
+		ARCHETYPE_MASTER_PANE_STATE : '状态',
+		ARCHETYPE_MASTER_PANE_OPERATION : '操作',
+		ARCHETYPE_MASTER_PANE_OPERATIOR : '操作者',
+		ARCHETYPE_MASTER_PANE_OPERATE_TIME : '操作时间',
+		
+		// Archetype pane
+		ARCHETYPE_PANE_LANGUAGE : '语言',
+		ARCHETYPE_PANE_INFO : '基本信息',
 	});
 });

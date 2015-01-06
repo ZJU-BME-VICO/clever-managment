@@ -11,7 +11,7 @@ public class ArchetypeMasterInfo {
 
 	private Integer id;
 	private String conceptName;
-	private String rmOrginator;
+	private String rmOriginator;
 	private String rmName;
 	private String rmEntity;
 	private String conceptDescription;
@@ -20,11 +20,13 @@ public class ArchetypeMasterInfo {
 	private String use;
 	private String misuse;
 	private String copyright;
+	private Integer latestArchetypeId;
 	private String latestArchetypeVersion;
 	private String name;
-	private LifecycleState lifecycleState;
+	private String lifecycleState;
 	private ArchetypeMasterInfo specialiseArchetypeMaster;
 	private Set<ArchetypeMasterInfo> specialisedArchetypeMasters = new HashSet<ArchetypeMasterInfo>();
+	private Set<ArchetypeInfo> archetypes = new HashSet<ArchetypeInfo>();
 	private boolean isRoot = true;
 	private Set<ArchetypeActionLogInfo> actionLogs = new HashSet<ArchetypeActionLogInfo>();
 
@@ -52,6 +54,14 @@ public class ArchetypeMasterInfo {
 		this.latestArchetypeVersion = latestArchetypeVersion;
 	}
 
+	public Integer getLatestArchetypeId() {
+		return latestArchetypeId;
+	}
+
+	public void setLatestArchetypeId(Integer latestArchetypeId) {
+		this.latestArchetypeId = latestArchetypeId;
+	}
+
 	public String getName() {
 		return name;
 	}
@@ -60,11 +70,11 @@ public class ArchetypeMasterInfo {
 		this.name = name;
 	}
 
-	public LifecycleState getLifecycleState() {
+	public String getLifecycleState() {
 		return lifecycleState;
 	}
 
-	public void setLifecycleState(LifecycleState lifecycleState) {
+	public void setLifecycleState(String lifecycleState) {
 		this.lifecycleState = lifecycleState;
 	}
 
@@ -81,16 +91,20 @@ public class ArchetypeMasterInfo {
 		this.specialiseArchetypeMaster = specialiseArchetypeMaster;
 	}
 
+	public Set<ArchetypeInfo> getArchetypes() {
+		return archetypes;
+	}
+
 	public Set<ArchetypeActionLogInfo> getActionLogs() {
 		return actionLogs;
 	}
 
-	public String getRmOrginator() {
-		return rmOrginator;
+	public String getRmOriginator() {
+		return rmOriginator;
 	}
 
-	public void setRmOrginator(String rmOrginator) {
-		this.rmOrginator = rmOrginator;
+	public void setRmOriginator(String rmOrginator) {
+		this.rmOriginator = rmOrginator;
 	}
 
 	public String getRmName() {

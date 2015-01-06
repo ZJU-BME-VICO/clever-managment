@@ -6,9 +6,12 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.openehr.am.archetype.Archetype;
+import org.openehr.am.serialize.XMLSerializer;
+import org.openehr.rm.support.identification.ArchetypeID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,13 +31,16 @@ import edu.zju.bme.clever.management.service.ArchetypeValidateService;
 import edu.zju.bme.clever.management.service.ArchetypeVersionControlService;
 import edu.zju.bme.clever.management.service.UserService;
 import edu.zju.bme.clever.management.service.entity.AbstractFile.SourceType;
+import edu.zju.bme.clever.management.service.entity.ArchetypeFile;
 import edu.zju.bme.clever.management.service.entity.ArchetypeMaster;
 import edu.zju.bme.clever.management.service.entity.FileProcessResult;
 import edu.zju.bme.clever.management.service.entity.User;
 import edu.zju.bme.clever.management.web.entity.ArchetypeActionLogInfo;
+import edu.zju.bme.clever.management.web.entity.ArchetypeInfo;
 import edu.zju.bme.clever.management.web.entity.ArchetypeMasterInfo;
 import edu.zju.bme.clever.management.web.entity.FileUploadResult;
 import se.acode.openehr.parser.ADLParser;
+import se.acode.openehr.parser.ParseException;
 
 @RestController
 @ManagedResource
@@ -51,6 +57,8 @@ public class ArchetypeResourceController {
 	private UserService userService;
 	@Autowired
 	private ArchetypeProviderService archetypeProviderService;
+
+	private XMLSerializer xmlSerializer = new XMLSerializer();
 
 	private boolean manipulateUploadResult;
 	private boolean uploadResult;
@@ -103,7 +111,8 @@ public class ArchetypeResourceController {
 									info.setLatestArchetypeVersion(master
 											.getLatestFileVersion());
 									info.setLifecycleState(master
-											.getLatestFileLifecycleState());
+											.getLatestFileLifecycleState()
+											.getValue());
 									return info;
 								}));
 		masters.forEach(master -> {
@@ -119,6 +128,40 @@ public class ArchetypeResourceController {
 				.collect(Collectors.toList());
 	}
 
+	@RequestMapping(value = "/id/{id}", method = RequestMethod.GET)
+	public ArchetypeInfo getArchetypeById(@PathVariable int id)
+			throws Exception {
+		ArchetypeInfo info = new ArchetypeInfo();
+		ArchetypeFile file = this.archetypeProviderService
+				.getArchetypeFileById(id);
+		info.setId(file.getId());
+		info.setName(file.getName());
+		info.setInternalVersion(file.getInternalVersion());
+		info.setAdl(file.getContent());
+		ADLParser parser = new ADLParser(file.getContent());
+		Archetype archetype = parser.parse();
+		info.setRmEntity(archetype.getArchetypeId().rmEntity());
+		info.setRmName(archetype.getArchetypeId().rmName());
+		info.setRmOriginator(archetype.getArchetypeId().rmOriginator());
+		info.setConceptName(archetype.getConceptName(archetype
+				.getOriginalLanguage().getCodeString()));
+		info.setXml(this.xmlSerializer.output(archetype));
+		info.setLifecycleState(file.getLifecycleState().getValue());
+		info.setMasterName(archetype.getArchetypeId().base());
+		info.setMasterId(file.getMasterId());
+		// Set specialise archetype info
+		if (file.getSpecialiseArchetypeId() != null) {
+			ArchetypeInfo specialiseInfo = new ArchetypeInfo();
+			specialiseInfo.setId(file.getSpecialiseArchetypeId());
+			specialiseInfo.setName(archetype.getParentArchetypeId().getValue());
+			info.setSpecialiseArchetype(specialiseInfo);
+		}
+		// Set editor info
+		info.setEditorId(file.getEditor().getId());
+		info.setEditorName(file.getEditor().getName());
+		return info;
+	}
+
 	@RequestMapping(value = "/master/id/{id}", method = RequestMethod.GET)
 	public ArchetypeMasterInfo getMasterById(@PathVariable int id) {
 		ArchetypeMaster master = this.archetypeProviderService
@@ -127,6 +170,9 @@ public class ArchetypeResourceController {
 		// Add basic info
 		masterInfo.setId(master.getId());
 		masterInfo.setName(master.getName());
+		masterInfo.setRmEntity(master.getRmEntity());
+		masterInfo.setRmName(master.getRmName());
+		masterInfo.setRmOriginator(master.getRmOrginator());
 		masterInfo.setConceptName(master.getConceptName());
 		masterInfo.setConceptDescription(master.getConceptDescription());
 		masterInfo.setKeywords(master.getKeywords());
@@ -134,26 +180,47 @@ public class ArchetypeResourceController {
 		masterInfo.setPurpose(master.getPurpose());
 		masterInfo.setUse(master.getUse());
 		masterInfo.setMisuse(master.getMisuse());
+		masterInfo.setLifecycleState(master.getLatestFileLifecycleState()
+				.getValue());
+		masterInfo.setLatestArchetypeVersion(master.getLatestFileVersion());
 		ArchetypeMaster specialiseMaster = master
 				.getSpecialiseArchetypeMaster();
+		// Add specialise master
 		if (specialiseMaster != null) {
 			ArchetypeMasterInfo specialiseMasterInfo = new ArchetypeMasterInfo();
 			specialiseMasterInfo.setId(specialiseMaster.getId());
 			specialiseMasterInfo.setName(specialiseMaster.getName());
 			specialiseMasterInfo.setLatestArchetypeVersion(specialiseMaster
 					.getLatestFileVersion());
+			specialiseMasterInfo.setLatestArchetypeId(specialiseMaster
+					.getLatestFileId());
 			masterInfo.setSpecialiseArchetypeMaster(specialiseMasterInfo);
 		}
-		// Add action log
-		master.getActionLogs().stream().forEach(log -> {
-			ArchetypeActionLogInfo logInfo = new ArchetypeActionLogInfo();
-			logInfo.setId(log.getId());
-			logInfo.setAction(log.getActionType().getValue());
-			logInfo.setArchetypeVersion(log.getArchetypeVersion());
-			logInfo.setRecordTime(log.getRecordTime());
-			logInfo.setOperator(log.getOperator().getName());
-			masterInfo.getActionLogs().add(logInfo);
+		// Add archetypes
+		master.getFiles().forEach(archetype -> {
+			ArchetypeInfo archetypeInfo = new ArchetypeInfo();
+			archetypeInfo.setId(archetype.getId());
+			archetypeInfo.setInternalVersion(archetype.getInternalVersion());
+			archetypeInfo.setName(archetype.getName());
+			archetypeInfo.setVersion(archetype.getVersion());
+			masterInfo.getArchetypes().add(archetypeInfo);
 		});
+		// Add action log
+		master.getActionLogs()
+				.stream()
+				.forEach(
+						log -> {
+							ArchetypeActionLogInfo logInfo = new ArchetypeActionLogInfo();
+							logInfo.setId(log.getId());
+							logInfo.setAction(log.getActionType().getValue());
+							logInfo.setArchetypeVersion(log
+									.getArchetypeVersion());
+							logInfo.setRecordTime(log.getRecordTime());
+							logInfo.setOperatorName(log.getOperatorName());
+							logInfo.setArchetypeLifecycleState(log
+									.getArchetypeLifecycleState().getValue());
+							masterInfo.getActionLogs().add(logInfo);
+						});
 		return masterInfo;
 	}
 

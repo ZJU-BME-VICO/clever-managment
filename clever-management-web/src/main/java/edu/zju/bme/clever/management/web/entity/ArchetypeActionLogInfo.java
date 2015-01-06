@@ -6,8 +6,9 @@ public class ArchetypeActionLogInfo {
 
 	private Integer id;
 	private String archetypeVersion;
+	private String archetypeLifecycleState;
 	private String action;
-	private String operator;
+	private String operatorName;
 	private Calendar recordTime;
 
 	public Integer getId() {
@@ -34,12 +35,20 @@ public class ArchetypeActionLogInfo {
 		this.action = action;
 	}
 
-	public String getOperator() {
-		return operator;
+	public String getArchetypeLifecycleState() {
+		return archetypeLifecycleState;
 	}
 
-	public void setOperator(String operator) {
-		this.operator = operator;
+	public void setArchetypeLifecycleState(String archetypeLifecycleState) {
+		this.archetypeLifecycleState = archetypeLifecycleState;
+	}
+
+	public String getOperatorName() {
+		return operatorName;
+	}
+
+	public void setOperatorName(String operatorName) {
+		this.operatorName = operatorName;
 	}
 
 	public Calendar getRecordTime() {

@@ -42,14 +42,19 @@ public class ArchetypeActionLog extends AbstractIndentifiedEntity {
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	private ArchetypeMaster archetypeMaster;
-	@Column
+	@Column(nullable = false)
 	private String archetypeVersion;
+	@Column(nullable = false)
 	@Enumerated(EnumType.STRING)
-	@Column
+	private LifecycleState archetypeLifecycleState;
+	@Enumerated(EnumType.STRING)
+	@Column(nullable = false)
 	private ActionType actionType;
 	@ManyToOne(fetch = FetchType.LAZY)
 	private User operator;
-	@Column
+	@Column(nullable = false)
+	private String operatorName;
+	@Column(nullable = false)
 	@Temporal(TemporalType.TIMESTAMP)
 	private Calendar recordTime;
 
@@ -69,6 +74,15 @@ public class ArchetypeActionLog extends AbstractIndentifiedEntity {
 		this.archetypeVersion = archetypeVersion;
 	}
 
+	public LifecycleState getArchetypeLifecycleState() {
+		return archetypeLifecycleState;
+	}
+
+	public void setArchetypeLifecycleState(
+			LifecycleState archetypeLifecycleState) {
+		this.archetypeLifecycleState = archetypeLifecycleState;
+	}
+
 	public ActionType getActionType() {
 		return actionType;
 	}
@@ -83,6 +97,14 @@ public class ArchetypeActionLog extends AbstractIndentifiedEntity {
 
 	public void setOperator(User operator) {
 		this.operator = operator;
+	}
+
+	public String getOperatorName() {
+		return operatorName;
+	}
+
+	public void setOperatorName(String operatorName) {
+		this.operatorName = operatorName;
 	}
 
 	public Calendar getRecordTime() {

@@ -1,0 +1,50 @@
+<div>
+	<div ng-if="terminology.term" class="panel panel-default">
+		<div class="panel-heading" style="cursor: pointer" ng-click="isTermCollapsed = !isTermCollapsed">
+			<span ng-show="isTermCollapsed" class="glyphicon glyphicon-chevron-right"></span>
+			<span ng-show="!isTermCollapsed" class="glyphicon glyphicon-chevron-down"></span>
+			<span>  Term</span>
+		</div>
+		<div class="panel-body" collapse="isTermCollapsed">
+			<table class="table table-hover">
+				<thead>
+					<tr>
+						<th>#</th><th>Code</th><th>Text</th><th>Description</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr ng-repeat="term in terminology.term.items">
+						<th style="font-weight: normal">{{$index+1}}</th>
+						<th style="font-weight: normal">{{term.code}}</th>
+						<th style="font-weight: normal">{{term.text}}</th>
+						<th style="font-weight: normal">{{term.description}}</th>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+	<div ng-if="terminology.constraint" class="panel panel-default">
+		<div class="panel-heading" style="cursor: pointer" ng-click="isConstraintCollapsed = !isConstraintCollapsed">
+			<span ng-show="isConstraintCollapsed" class="glyphicon glyphicon-chevron-right"></span>
+			<span ng-show="!isConstraintCollapsed" class="glyphicon glyphicon-chevron-down"></span>
+			<span>  Constraint</span>
+		</div>
+		<div class="panel-body" collapse="isConstraintCollapsed">
+			<table class="table table-hover">
+				<thead>
+					<tr>
+						<th>#</th><th>Code</th><th>Text</th><th>Description</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr ng-repeat="constraint in terminology.constraint.items">
+						<th style="font-weight: normal">{{$index+1}}</th>
+						<th style="font-weight: normal">{{constraint.code}}</th>
+						<th style="font-weight: normal">{{constraint.text}}</th>
+						<th style="font-weight: normal">{{constraint.description}}</th>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>
