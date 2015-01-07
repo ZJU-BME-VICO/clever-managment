@@ -8,58 +8,72 @@ angular.module('clever.management.directives.treeView', []).directive('treeView'
 			nodeId : '@',
 			nodeChildren : '@',
 			nodeAliasName : '@',
+			nodeLabelClass : '@',
 			clickNodeCallback : '&',
 			doubleClickNodeCallback : '&',
+			nodeLabelResources : '=',
+			nodeLabelGenerator : '=',
 		},
 		controller : function($scope, $transclude) {
 			
 			var nodes = [];
-			this.getNodes = function(){
+			$scope.getNodes = function(){
 				return nodes;
 			};
-			this.getCurrentNode = function(){
+			var currentNode = undefined;
+			$scope.getCurrentNode = function(){
 				return currentNode;
 			};
-			var currentNode = undefined;
-			this.setCurrentNode = function(node){
+			$scope.setCurrentNode = function(node){
 				currentNode = node;
 			};
 			var nodeId = $scope.nodeId || 'id';
-			this.getNodeId = function(){
+			$scope.getNodeId = function(){
 				return nodeId;
 			};
 			var nodeChildren = $scope.nodeChildren || 'children';
-			this.getNodeChildren = function(){
+			$scope.getNodeChildren = function(){
 				return nodeChildren;
 			};
 			var nodeAliasName = $scope.nodeAliasName || 'nodeData';
 			if (nodeAliasName == '_node') {
 				throw 'Node alias name cannot be "_node".';
 			}
-			this.getNodeAliasName = function() {
+			$scope.getNodeAliasName = function() {
 				return nodeAliasName;
 			}; 
+			var nodeLabelClass = $scope.nodeLabelClass || '';
+			$scope.getNodeLabelClass = function() {
+				return nodeLabelClass;
+			};
 			var expandedIconElement;
-			this.getExpandedIconElement = function(){
-				return expandedIconElement;
+			$scope.getExpandedIconElement = function(){
+				return expandedIconElement.innerHTML;
 			};
 			var collapsedIconElement;
-			this.getCollapsedIconElement = function(){
-				return collapsedIconElement;
+			$scope.getCollapsedIconElement = function(){
+				return collapsedIconElement.innerHTML;
 			};
 			var treeNodeLabelElement;
-			this.getTreeNodeLabelElement = function(){
-				return treeNodeLabelElement;
-			};
-			this.clickNode = function(node) {
+			$scope.getTreeNodeLabelElement = function() {
+				return treeNodeLabelElement.innerHTML;
+			}; 
+			$scope.clickNode = function(node) {
 				$scope.clickNodeCallback({
 					value : node,
 				});
 			};
-			this.doubleClickNode = function(node) {
+			$scope.doubleClickNode = function(node) {
 				$scope.doubleClickNodeCallback({
 					value : node,
 				});
+			};
+			$scope.getNodeLabel = function(node) {
+				if (treeNodeLabelElement) {
+					return 'getTreeNodeLabelElement()';
+				}else if($scope.nodeLabelResources){
+					return 'nodeLabelGenerator(' + nodeAliasName + ', nodeLabelResources)';
+				}
 			}; 
 			
 			$scope.$watch('treeData', function(newValue, oldValue) {
@@ -116,11 +130,11 @@ angular.module('clever.management.directives.treeView', []).directive('treeView'
 				);
 			}
 		},
-		link : function(scope, elm, attrs, ctrl){
+		link : function(scope, elm, attrs){
 			var template = '<tree-view-node ' +
 								'ng-repeat="_node in treeData" ' +
 								'ng-show="_node.show" ' +
-								ctrl.getNodeAliasName().replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase() + '="_node">' +
+								scope.getNodeAliasName().replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase() + '="_node">' +
 							'</tree-view-node>';
 			
 			scope.$watch('treeData', function(newValue) {

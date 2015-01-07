@@ -1,18 +1,22 @@
 angular.module('clever.management.directives.treeViewNode', []).directive('treeViewNode', function($compile) {
 	return {
 		restrict : 'E',
-		require : '^treeView',
-		link : function(scope, elm, attrs, treeCtrl) {
+		link : function(scope, elm, attrs) {
 			
-			var nodeAliasName = treeCtrl.getNodeAliasName();
+			var nodeAliasName = scope.getNodeAliasName();
+			var nodeData = scope[nodeAliasName] = scope.$eval(attrs[nodeAliasName]);		
+			nodeData.collapsed = true;
+			nodeData.show = true;
+			scope.getNodes().push(nodeData);
+			scope.childNodes = nodeData[scope.getNodeChildren()];
 	
 			var template = '<ul>' +
 								'<li>' +
-									'<span ng-if="childNodes.length" ng-show="!' + nodeAliasName + '.collapsed" ng-click="selectNodeHead(' + nodeAliasName + ')">' + treeCtrl.getExpandedIconElement().innerHTML + '</span>' +
-									'<span ng-if="childNodes.length" ng-show="' + nodeAliasName + '.collapsed" ng-click="selectNodeHead(' + nodeAliasName + ')">' + treeCtrl.getCollapsedIconElement().innerHTML + '</span>' +
+									'<span ng-if="childNodes.length" ng-show="!' + nodeAliasName + '.collapsed" ng-click="selectNodeHead(' + nodeAliasName + ')">' + scope.getExpandedIconElement() + '</span>' +
+									'<span ng-if="childNodes.length" ng-show="' + nodeAliasName + '.collapsed" ng-click="selectNodeHead(' + nodeAliasName + ')">' + scope.getCollapsedIconElement() + '</span>' +
 									'<span ng-class="' + nodeAliasName + '.selected" ng-click="clickNodeLabel(' + nodeAliasName + ')" ng-dblclick="doubleClickNodeLabel(' + nodeAliasName + ')">' + 
-										'<span ng-if="!childNodes.length" style="visibility: hidden;">' + treeCtrl.getExpandedIconElement().innerHTML + '</span>' +
-										treeCtrl.getTreeNodeLabelElement().innerHTML + 
+										'<span ng-if="!childNodes.length" style="visibility: hidden;">' + scope.getExpandedIconElement() + '</span>' +
+										'<span class="' + scope.getNodeLabelClass() + '" ng-bind-html="' + scope.getNodeLabel(nodeData) + ' | unsafe"></span>' +
 									'</span>' +
 									'<tree-view-node ' +
 										'ng-repeat="_node in childNodes" ' +
@@ -23,12 +27,6 @@ angular.module('clever.management.directives.treeViewNode', []).directive('treeV
 								'</li>' +
 							'</ul>';
 							
-			var nodeData = scope[treeCtrl.getNodeAliasName()] = scope.$eval(attrs[treeCtrl.getNodeAliasName()]);		
-			nodeData.collapsed = true;
-			nodeData.show = true;
-			treeCtrl.getNodes().push(nodeData);
-			scope.childNodes = nodeData[treeCtrl.getNodeChildren()];
-
 			if (nodeData) {
 				elm.html('').append($compile( template )(scope));
 			}
@@ -43,22 +41,22 @@ angular.module('clever.management.directives.treeViewNode', []).directive('treeV
 				selectedNode.collapsed = !selectedNode.collapsed;
 
 				// call back
-				treeCtrl.doubleClickNode(selectedNode);
+				scope.doubleClickNode(selectedNode);
 			};
 
 			scope.clickNodeLabel = function(selectedNode) {
 				//remove highlight from previous node
-				if (treeCtrl.getCurrentNode() && treeCtrl.getCurrentNode().selected) {
-					treeCtrl.getCurrentNode().selected = undefined;
+				if (scope.getCurrentNode() && scope.getCurrentNode().selected) {
+					scope.getCurrentNode().selected = undefined;
 				}
 
 				//set highlight to selected node
 				selectedNode.selected = 'selected';
 
 				//set currentNode
-				treeCtrl.setCurrentNode(selectedNode);
+				scope.setCurrentNode(selectedNode);
 
-				treeCtrl.clickNode(selectedNode);
+				scope.clickNode(selectedNode);
 			};
 		},
 	};
