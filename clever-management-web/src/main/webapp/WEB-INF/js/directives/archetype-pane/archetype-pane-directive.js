@@ -74,6 +74,10 @@ angular.module('clever.management.directives.archetypePane', []).directive('arch
 					},
 				});
 			};
+			
+			$scope.copyContentToClipboard = function(content) {
+				
+			};
 
 		},
 		link : function(scope, element, attr) {

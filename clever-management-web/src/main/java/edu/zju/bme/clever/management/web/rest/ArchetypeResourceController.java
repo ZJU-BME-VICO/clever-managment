@@ -162,6 +162,26 @@ public class ArchetypeResourceController {
 		return info;
 	}
 
+	@RequestMapping(value = "/id/{id}.adl", method = RequestMethod.GET)
+	public String getArchetypeAdlById(@PathVariable int id) {
+		return this.archetypeProviderService.getArchetypeAdlById(id);
+	}
+	
+	@RequestMapping(value = "/name/{name}.adl", method = RequestMethod.GET)
+	public String getArchetypeAdlByName(@PathVariable String name) {
+		return this.archetypeProviderService.getArchetypeAdlByName(name);
+	}
+
+	@RequestMapping(value = "/id/{id}.xml", method = RequestMethod.GET)
+	public String getArchetypeXmlById(@PathVariable int id) {
+		return this.archetypeProviderService.getArchetypeXmlById(id);
+	}
+	
+	@RequestMapping(value = "/name/{name}.xml", method = RequestMethod.GET)
+	public String getArchetypeXmlByName(@PathVariable String name) {
+		return this.archetypeProviderService.getArchetypeXmlByName(name);
+	}
+
 	@RequestMapping(value = "/master/id/{id}", method = RequestMethod.GET)
 	public ArchetypeMasterInfo getMasterById(@PathVariable int id) {
 		ArchetypeMaster master = this.archetypeProviderService

@@ -118,5 +118,7 @@ angular.module('clever.management.i18n.zh', ['pascalprecht.translate']).config(f
 		// Archetype pane
 		ARCHETYPE_PANE_LANGUAGE : '语言',
 		ARCHETYPE_PANE_INFO : '基本信息',
+		ARCHETYPE_PANE_DOWNLOAD : '下载',
+		ARCHETYPE_PANE_COPY : '复制',
 	});
 });

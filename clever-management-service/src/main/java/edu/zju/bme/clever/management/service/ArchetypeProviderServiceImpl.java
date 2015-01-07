@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.openehr.am.archetype.Archetype;
+import org.openehr.am.serialize.ADLSerializer;
 import org.openehr.am.serialize.XMLSerializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,6 +32,7 @@ public class ArchetypeProviderServiceImpl implements ArchetypeProviderService {
 	private ArchetypeActionLogRepository logRepo;
 
 	private XMLSerializer xmlSerializer = new XMLSerializer();
+	private ADLSerializer adlSerializer = new ADLSerializer();
 
 	@Override
 	public List<ArchetypeMaster> getAllArchetypeMasters() {
@@ -87,6 +89,18 @@ public class ArchetypeProviderServiceImpl implements ArchetypeProviderService {
 						return null;
 					}
 				}).orElse("");
+	}
+
+	@Override
+	public String getArchetypeAdlById(Integer id) {
+		return Optional.ofNullable(this.fileRepo.findOne(id))
+				.map(file -> file.getContent()).orElse("");
+	}
+	
+	@Override
+	public String getArchetypeAdlByName(String name) {
+		return Optional.ofNullable(this.fileRepo.findByName(name))
+				.map(file -> file.getContent()).orElse("");
 	}
 
 	@Override

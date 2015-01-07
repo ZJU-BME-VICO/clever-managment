@@ -20,6 +20,10 @@ public interface ArchetypeProviderService {
 	public String getArchetypeXmlById(Integer id);
 	
 	public String getArchetypeXmlByName(String name);
+	
+	public String getArchetypeAdlById(Integer id);
+	
+	public String getArchetypeAdlByName(String name);
 
 	public List<ArchetypeFile> getAllTeamreviewArchetypeFiles();
 

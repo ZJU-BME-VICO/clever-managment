@@ -82,12 +82,30 @@
 		<tab-heading>
 			XML
 		</tab-heading>
-		<pre ng-style="{'max-height': maxHeight}" style="overflow: auto;">{{archetypeInfo.xml}}</pre>
+		<div class="col-xs-12 col-md-12 col-lg-12">
+			<div class="row" style="padding: 4px 0;">
+				<div class="btn-group pull-right" role="group">
+					<a ng-href="{{archetypeInfo.xmlDownloadUrl}}" class="btn btn-default"><i class="glyphicon glyphicon-download-alt"></i>{{'ARCHETYPE_PANE_DOWNLOAD' | translate}}</a>
+				</div>
+			</div>
+			<div class="row">
+				<pre ng-style="{'max-height': maxHeight - 46}" style="overflow: auto;">{{archetypeInfo.xml}}</pre>
+			</div>
+		</div>
 	</tab>
 	<tab>
 		<tab-heading>
 			ADL
 		</tab-heading>
-		<pre ng-style="{'max-height': maxHeight}" style="overflow: auto;">{{archetypeInfo.adl}}</pre>
+		<div class="col-xs-12 col-md-12 col-lg-12">
+			<div class="row" style="padding: 4px 0;">
+				<div class="btn-group pull-right" role="group">
+					<a ng-href="{{archetypeInfo.adlDownloadUrl}}" class="btn btn-default"><i class="glyphicon glyphicon-download-alt"></i>{{'ARCHETYPE_PANE_DOWNLOAD' | translate}}</a>
+				</div>
+			</div>
+			<div class="row">
+				<pre ng-style="{'max-height': maxHeight - 46}" style="overflow: auto;">{{archetypeInfo.adl}}</pre>
+			</div>
+		</div>
 	</tab>
 </tabset>
