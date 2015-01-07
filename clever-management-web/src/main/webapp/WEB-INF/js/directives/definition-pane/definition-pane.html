@@ -1,5 +1,5 @@
-<div class="container content-container">
-	<div class="row" style="padding: 5px 0px;">
+<div class="row" style="padding: 5px 0px;">
+	<div class="col-xs-8 col-md-8 col-lg-8">
 		<div class="input-group pull-left" style="padding: 5px;width: 260px;">
 			<span class="input-group-addon" style="width: 70px;">View:</span>
 			<div class="btn-group" dropdown>
@@ -16,153 +16,146 @@
 				</ul>
 			</div>
 		</div>
+		<span ng-show="selectedView == 'Tree'" class="pull-right"><span><b>Expand All:&nbsp;&nbsp;&nbsp;</b></span><toggle-switch model="isExpandedAll"></toggle-switch></span>
 	</div>
-	<!-- tree view -->
-	<div ng-show="selectedView == 'Tree'" class="row">
-		<div class="col-xs-12 col-md-12 col-lg-12">
-			<div class="row" style="padding: 5px 0px;">
-				<div class="col-xs-12 col-md-12 col-lg-12">
-					<span><b>Expand All:&nbsp;&nbsp;&nbsp;</b></span>
-					<toggle-switch model="isExpandedAll"></toggle-switch>
-				</div>
+
+</div>
+<!-- tree view -->
+<div ng-show="selectedView == 'Tree'" class="row">
+	<div class="col-xs-12 col-md-12 col-lg-12">
+		<div class="row">
+			<div class="col-xs-8 col-md-8 col-lg-8" ng-style="{height: contentHeight - 55}" style="overflow: auto;">
+				<tree-view tree-data="definition.treeItems" tree-control="treeControl" node-label-resources="terminology" node-label-generator="getTreeNodeLabel" node-label-class="definition-tree-label" click-node-callback="selectDefinitionItem(value)">
+					<tree-expanded-icon>
+						<span class="clever-icon expanded" style="padding: 0 6px;height: 12px;background-position-y: 6px;"></span>
+					</tree-expanded-icon>
+					<tree-collapsed-icon>
+						<span class="clever-icon collapsed" style="padding: 0 6px;height: 12px;background-position-y: 6px;"></span>
+					</tree-collapsed-icon>
+				</tree-view>
 			</div>
-			<div class="row">
-				<div class="col-xs-8 col-md-8 col-lg-8" ng-style="{height: windowHeight - 320}" style="overflow: auto;">
-					<abn-tree tree-data="definition.treeItems" tree-control="treeControl" terminology="terminology" on-select="selectDefinitionItem(branch)" icon-expand="glyphicon glyphicon-chevron-right" icon-collapse="glyphicon glyphicon-chevron-down" icon-leaf="glyphicon glyphicon-th-large"></abn-tree>
-				</div>
-				<div class="col-xs-4 col-md-4 col-lg-4" ng-style="{height: windowHeight - 320}" style="overflow: auto;">
-					<div ng-show="selectedDefinitionItem">
-						<h4>{{selectedDefinitionItem.text}}</h4>
-						<!-- Terminology -->
-						<div ng-if="selectedDefinitionItem.code" class="panel panel-default">
-							<div class="panel-heading">
-								Terminology
-							</div>
-							<div class="panel-body">
-								<table>
-									<tbody>
-										<tr>
-											<th style="width: 100px;">Code:</th>
-											<th style="font-weight: normal">{{selectedDefinitionItem.code}}</th>
-										</tr>
-										<tr>
-											<th style="width: 100px;">Text:</th>
-											<th style="font-weight: normal">{{getOntologyByCode(selectedDefinitionItem.code).text}}</th>
-										</tr>
-										<tr>
-											<th style="width: 100px;">Description:</th>
-											<th style="font-weight: normal">{{getOntologyByCode(selectedDefinitionItem.code).description}}</th>
-										</tr>
-									</tbody>
-								</table>
-							</div>
+			<div class="col-xs-4 col-md-4 col-lg-4" ng-style="{height: contentHeight - 55}" style="overflow: auto;">
+				<div ng-show="selectedDefinitionItem">
+					<h4>{{selectedDefinitionItem.text}}</h4>
+					<!-- Terminology -->
+					<div ng-if="selectedDefinitionItem.code" class="panel panel-default">
+						<div class="panel-heading">
+							Terminology
 						</div>
-						<!-- Occurrence -->
-						<div ng-if="selectedDefinitionItem.occurrences" class="panel panel-default">
-							<div class="panel-heading">
-								Occurrence
-							</div>
-							<div class="panel-body">
-								<table style="border-collapse:separate;border-spacing: 8px;">
-									<tbody>
-										<tr>
-											<th style="width: 100px;">Min:</th>
-											<th style="font-weight: normal">
-											<input type="number" style="width: 100%;" value="{{selectedDefinitionItem.occurrences.lower}}"/>
-											</th>
-										</tr>
-										<tr>
-											<th style="width: 100px;">Max:</th>
-											<th style="font-weight: normal">
-											<input type="number" style="width: 100%;" value="{{selectedDefinitionItem.occurrences.upper}}"/>
-											</th>
-										</tr>
-										<tr>
-											<th style="width: 100px;">Included:</th>
-											<th style="font-weight: normal">
-											<input type="checkbox" ng-checked="selectedDefinitionItem.occurrences.lower_included == 'true'">
-											</th>
-										</tr>
-										<tr>
-											<th style="width: 100px;">Unbounded:</th>
-											<th style="font-weight: normal">
-											<input type="checkbox" ng-checked="selectedDefinitionItem.occurrences.lower_unbounded == 'true'">
-											</th>
-										</tr>
-									</tbody>
-								</table>
-							</div>
+						<div class="panel-body">
+							<table>
+								<tbody>
+									<tr>
+										<th style="width: 100px;">Code:</th>
+										<th style="font-weight: normal">{{selectedDefinitionItem.code}}</th>
+									</tr>
+									<tr>
+										<th style="width: 100px;">Text:</th>
+										<th style="font-weight: normal">{{getOntologyByCode(selectedDefinitionItem.code).text}}</th>
+									</tr>
+									<tr>
+										<th style="width: 100px;">Description:</th>
+										<th style="font-weight: normal">{{getOntologyByCode(selectedDefinitionItem.code).description}}</th>
+									</tr>
+								</tbody>
+							</table>
 						</div>
-						<!-- Existence -->
-						<div ng-if="selectedDefinitionItem.existence" class="panel panel-default">
-							<div class="panel-heading">
-								Existence
-							</div>
-							<div class="panel-body">
-								<table style="border-collapse:separate;border-spacing: 8px;">
-									<tbody>
-										<tr>
-											<th style="width: 100px;">Min:</th>
-											<th style="font-weight: normal">
-											<input type="number" style="width: 100%;" value="{{selectedDefinitionItem.existence.lower}}"/>
-											</th>
-										</tr>
-										<tr>
-											<th style="width: 100px;">Max:</th>
-											<th style="font-weight: normal">
-											<input type="number" style="width: 100%;" value="{{selectedDefinitionItem.existence.upper}}"/>
-											</th>
-										</tr>
-										<tr>
-											<th style="width: 100px;">Included:</th>
-											<th style="font-weight: normal">
-											<input type="checkbox" ng-checked="selectedDefinitionItem.existence.lower_included == 'true'">
-											</th>
-										</tr>
-										<tr>
-											<th style="width: 100px;">Unbounded:</th>
-											<th style="font-weight: normal">
-											<input type="checkbox" ng-checked="selectedDefinitionItem.existence.lower_unbounded == 'true'">
-											</th>
-										</tr>
-									</tbody>
-								</table>
-							</div>
+					</div>
+					<!-- Occurrence -->
+					<div ng-if="selectedDefinitionItem.occurrences" class="panel panel-default">
+						<div class="panel-heading">
+							Occurrence
+						</div>
+						<div class="panel-body">
+							<table style="border-collapse:separate;border-spacing: 8px;">
+								<tbody>
+									<tr>
+										<th style="width: 100px;">Min:</th>
+										<th style="font-weight: normal">
+										<input type="number" style="width: 100%;" value="{{selectedDefinitionItem.occurrences.lower}}"/>
+										</th>
+									</tr>
+									<tr>
+										<th style="width: 100px;">Max:</th>
+										<th style="font-weight: normal">
+										<input type="number" style="width: 100%;" value="{{selectedDefinitionItem.occurrences.upper}}"/>
+										</th>
+									</tr>
+									<tr>
+										<th style="width: 100px;">Included:</th>
+										<th style="font-weight: normal">
+										<input type="checkbox" ng-checked="selectedDefinitionItem.occurrences.lower_included == 'true'">
+										</th>
+									</tr>
+									<tr>
+										<th style="width: 100px;">Unbounded:</th>
+										<th style="font-weight: normal">
+										<input type="checkbox" ng-checked="selectedDefinitionItem.occurrences.lower_unbounded == 'true'">
+										</th>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+					<!-- Existence -->
+					<div ng-if="selectedDefinitionItem.existence" class="panel panel-default">
+						<div class="panel-heading">
+							Existence
+						</div>
+						<div class="panel-body">
+							<table style="border-collapse:separate;border-spacing: 8px;">
+								<tbody>
+									<tr>
+										<th style="width: 100px;">Min:</th>
+										<th style="font-weight: normal">
+										<input type="number" style="width: 100%;" value="{{selectedDefinitionItem.existence.lower}}"/>
+										</th>
+									</tr>
+									<tr>
+										<th style="width: 100px;">Max:</th>
+										<th style="font-weight: normal">
+										<input type="number" style="width: 100%;" value="{{selectedDefinitionItem.existence.upper}}"/>
+										</th>
+									</tr>
+									<tr>
+										<th style="width: 100px;">Included:</th>
+										<th style="font-weight: normal">
+										<input type="checkbox" ng-checked="selectedDefinitionItem.existence.lower_included == 'true'">
+										</th>
+									</tr>
+									<tr>
+										<th style="width: 100px;">Unbounded:</th>
+										<th style="font-weight: normal">
+										<input type="checkbox" ng-checked="selectedDefinitionItem.existence.lower_unbounded == 'true'">
+										</th>
+									</tr>
+								</tbody>
+							</table>
 						</div>
 					</div>
 				</div>
 			</div>
 		</div>
 	</div>
+</div>
 
-	<!-- table view -->
-	<div class="row" ng-show="selectedView == 'Table'">
-		<div class="col-lg-12 col-md-12 col-sm-12" ng-style="{height: windowHeight - 300}" style="overflow: auto;">
-			<table class="table table-hover" style="padding: 0 20px;">
-				<tbody>
-					<tr ng-repeat="item in definition.tableItems">
-						<td style="width: 200px;"><b>{{getOntologyByCode(item.code).text}}</b>
+<!-- table view -->
+<div class="row" ng-show="selectedView == 'Table'">
+	<div class="col-lg-12 col-md-12 col-sm-12" ng-style="{height: contentHeight}" style="overflow: auto;">
+		<table class="table table-hover" style="padding: 0 20px;">
+			<tbody>
+				<tr ng-repeat="item in definition.tableItems">
+					<td style="width: 200px;"><b>{{getOntologyByCode(item.code).text}}</b>
+					<br />
+					<font color="#8d8d8d" size="2" ng-switch="item.type"> <span class="clever-icon" ng-class="item.type" style="padding: 6px 6px;background-position-y: 7px;"></span> <span ng-switch-when="DV_TEXT">&nbsp;Text&nbsp;</span> <span ng-switch-when="DV_COUNT">&nbsp;Count&nbsp;</span> <span ng-switch-when="DV_QUANTITY">&nbsp;Quantity&nbsp;</span> <span ng-switch-when="DV_DATE_TIME">&nbsp;Date/Time&nbsp;</span> <span ng-switch-when="DV_BOOLEAN">&nbsp;Boolean&nbsp;</span>
 						<br />
-						<font color="#8d8d8d" size="2">
-							<sapn ng-if="item.type == 'DV_TEXT'"><img style="vertical-align:text-bottom;" src="img/text.png">&nbsp;Text&nbsp;
-							</sapn>
-							<sapn ng-if="item.type == 'DV_COUNT'"><img style="vertical-align:text-bottom;" src="img/count.png">&nbsp;Count&nbsp;
-							</sapn>
-							<sapn ng-if="item.type == 'DV_QUANTITY'"><img style="vertical-align:text-bottom;" src="img/quantity.png">&nbsp;Quantity&nbsp;
-							</sapn>
-							<sapn ng-if="item.type == 'DV_DATE_TIME'"><img style="vertical-align:text-bottom;" src="img/datetime.png">&nbsp;Date/Time&nbsp;
-							</sapn>
-							<sapn ng-if="item.type == 'DV_BOOLEAN'"><img style="vertical-align:text-bottom;" src="img/boolean.png">&nbsp;Boolean&nbsp;
-							</sapn>
-							<br />
-							<span ng-if="item.occurrences.lower == 0">Optional&nbsp;</span> <span ng-if="item.occurrences.lower == 1">Mandatory&nbsp;</span> ({{item.occurrences.lower}}..{{item.occurrences.upper}}) </font></td>
-						<td>
-						<div>
-							{{getOntologyByCode(item.code).description}}
-						</div></td>
-					</tr>
-				</tbody>
-			</table>
-		</div>
+						<span ng-if="item.occurrences.lower == 0">Optional&nbsp;</span> <span ng-if="item.occurrences.lower == 1">Mandatory&nbsp;</span> ({{item.occurrences.lower}}..{{item.occurrences.upper}}) </font></td>
+					<td>
+					<div>
+						{{getOntologyByCode(item.code).description}}
+					</div></td>
+				</tr>
+			</tbody>
+		</table>
 	</div>
 </div>

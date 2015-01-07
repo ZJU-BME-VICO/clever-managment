@@ -1,0 +1,82 @@
+/* Data type */
+.clever-icon.DV_TEXT {
+	background-image: url("../img/datatype/text.png");
+	background-repeat: no-repeat;
+}
+.clever-icon.DV_COUNT {
+	background-image: url("../img/datatype/count.png");
+	background-repeat: no-repeat;
+}
+.clever-icon.DV_QUANTITY {
+	background-image: url("../img/datatype/quantity.png");
+	background-repeat: no-repeat;
+}
+.clever-icon.DV_DATE_TIME {
+	background-image: url("../img/datatype/datetime.png");
+	background-repeat: no-repeat;
+}
+.clever-icon.DV_BOOLEAN {
+	background-image: url("../img/datatype/boolean.png");
+	background-repeat: no-repeat;
+}
+
+/* Reference model type */
+.clever-icon.action {
+	background-image: url("../img/archetype/action.png");
+	background-repeat: no-repeat;
+}
+.clever-icon.evaluation {
+	background-image: url("../img/archetype/evaluation.png");
+	background-repeat: no-repeat;
+}
+.clever-icon.observation {
+	background-image: url("../img/archetype/observation.png");
+	background-repeat: no-repeat;
+}
+.clever-icon.instruction {
+	background-image: url("../img/archetype/instruction.png");
+	background-repeat: no-repeat;
+}
+.clever-icon.admin {
+	background-image: url("../img/archetype/admin.png");
+	background-repeat: no-repeat;
+}
+.clever-icon.cluster {
+	background-image: url("../img/archetype/cluster.png");
+	background-repeat: no-repeat;
+}
+.clever-icon.section {
+	background-image: url("../img/archetype/section.png");
+	background-repeat: no-repeat;
+}
+
+/* Life cycle state */
+.clever-icon.draft {
+	background-image: url("../img/draft.png");
+	background-repeat: no-repeat;
+}
+.clever-icon.teamreview {
+	background-image: url("../img/teamreview.png");
+	background-repeat: no-repeat;
+}
+.clever-icon.published {
+	background-image: url("../img/published.png");
+	background-repeat: no-repeat;
+}
+
+.clever-icon.archetype {
+	background-image: url("../img/letter-a-icon.png");
+	background-repeat: no-repeat;
+}
+.clever-icon.master {
+	background-image: url("../img/letter-m-icon.png");
+	background-repeat: no-repeat;
+}
+.clever-icon.expanded {
+	background-image: url("../img/arrow_expanded.png");
+	background-repeat: no-repeat;
+}
+.clever-icon.collapsed {
+	background-image: url("../img/arrow_collapsed_white.png");
+	background-repeat: no-repeat;
+}

@@ -36,7 +36,7 @@
 			<tabset class="row" tab-control="tabControl">
 				<tab ng-repeat="tab in tabs" closable="true" select="select(tab)" close="close(tab)" id="tab.id">
 					<tab-heading tooltip-placement="top" tooltip-popup-delay='500' tooltip='{{tab.title}}'>
-						<span class="archetype-icon" ng-class="tab.type" style="padding: 0px 10px;background-size: 18px;"></span>
+						<span class="clever-icon" ng-class="tab.type" style="padding: 0px 10px;background-size: 18px;"></span>
 						<sapn>&nbsp;{{getFixedTitle(tab.title)}}</span>
 					</tab-heading>
 					<div class="col-xs-12 col-md-12 col-lg-12" ng-switch="tab.type">

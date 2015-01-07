@@ -10,10 +10,6 @@ angular.module('clever.management.directives.archetypePane', []).directive('arch
 		controller : function($scope) {
 
 			$scope.languages = [];
-			$scope.definition = {
-				treeItems : [],
-				tableItems : [],
-			};
 
 			$scope.$watch('archetypeInfo', function(newValue) {
 				if (newValue) {
@@ -74,15 +70,10 @@ angular.module('clever.management.directives.archetypePane', []).directive('arch
 					},
 				});
 			};
-			
-			$scope.copyContentToClipboard = function(content) {
-				
-			};
-
 		},
-		link : function(scope, element, attr) {
-			scope.maxHeight = angular.isDefined(attr.maxHeight) ? scope.$parent.$eval(attr.maxHeight) - 90 : undefined;
-			scope.tableTitleWidth = angular.isDefined(attr.tableTitleWidth) ? scope.$parent.$eval(attr.tableTitleWidth) : 200;
+		link : function(scope, elm, attrs) {
+			scope.paneHeight = angular.isDefined(attrs.maxHeight) ? scope.$parent.$eval(attrs.maxHeight) - 95 : undefined;
+			scope.tableTitleWidth = angular.isDefined(attrs.tableTitleWidth) ? scope.$parent.$eval(attrs.tableTitleWidth) : 200;
 		},
 	};
 });

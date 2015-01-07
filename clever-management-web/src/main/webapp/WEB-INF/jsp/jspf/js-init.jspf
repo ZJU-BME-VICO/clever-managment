@@ -42,6 +42,7 @@
 <script src="js/directives/archetype-master-pane/archetype-master-pane-directive.js"></script>
 <script src="js/directives/archetype-pane/archetype-pane-directive.js"></script>
 <script src="js/directives/header-pane/header-pane-directive.js"></script>
+<script src="js/directives/toggle-switch/angular-toggle-switch.js"></script>
 <script src="js/directives/definition-pane/definition-pane-directive.js"></script>
 <script src="js/directives/terminology-pane/terminology-pane-directive.js"></script>
 <script src="js/directives/application-template/DV/DV-TEXT-directive.js"></script>

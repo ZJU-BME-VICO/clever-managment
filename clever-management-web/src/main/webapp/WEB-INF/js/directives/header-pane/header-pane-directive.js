@@ -3,47 +3,48 @@ function() {
 	return {
 		restrict : 'E',
 		scope : {
-			archetypeId : '=',
-			conceptCode : '=',
+			header : '=',
 			description : '=',
 			terminology : '=',
-			windowHeight : '=',
 		},
-		template : '<table class="table table-hover">' +
-						'<tbody>' +
-							'<tr>' +
-								'<th ng-style="{width: titleWidth + \'px\'}"><b>Archetype ID</b></th>' +
-								'<th style="font-weight: normal">{{archetypeId}}</th>' +
-							'</tr>' +
-							'<tr>' +
-								'<th ng-style="{width: titleWidth + \'px\'}"><b>Concept name</b></th>' +
-								'<th style="font-weight: normal">{{getOntologyByCode(conceptCode).text}}</th>' +
-							'</tr>' +
-							'<tr>' +
-								'<th ng-style="{width: titleWidth + \'px\'}"><b>Concept description</b></th>' +
-								'<th style="font-weight: normal">{{getOntologyByCode(conceptCode).description}}</th>' +
-							'</tr>' +
-							'<tr>' +
-								'<th ng-style="{width: titleWidth + \'px\'}"><b>Copyright</b></th>' +
-								'<th style="font-weight: normal">{{description.copyright}}</th>' +
-							'</tr>' +
-							'<tr>' +
-								'<th ng-style="{width: titleWidth + \'px\'}"><b>Purpose</b></th>' +
-								'<th style="font-weight: normal">{{description.purpose}}</th>' +
-							'</tr>' +
-							'<tr>' +
-								'<th ng-style="{width: titleWidth + \'px\'}"><b>Use</b></th>' +
-								'<th style="font-weight: normal">{{description.use}}</th>' +
-							'</tr>' +
-							'<tr>' +
-								'<th ng-style="{width: titleWidth + \'px\'}"><b>Misuse</b></th>' +
-								'<th style="font-weight: normal">{{description.misuse}}</th>' +
-							'</tr>' +
-						'</tbody>' +
-					'</table>',
+		template :  '<div class="row" ng-style="{height: mxaHeight}">' +
+						'<table class="table table-hover">' +
+							'<tbody>' +
+								'<tr>' +
+									'<th ng-style="{width: titleWidth + \'px\'}"><b>Archetype ID</b></th>' +
+									'<th style="font-weight: normal">{{header.id}}</th>' +
+								'</tr>' +
+								'<tr>' +
+									'<th ng-style="{width: titleWidth + \'px\'}"><b>Concept name</b></th>' +
+									'<th style="font-weight: normal">{{getOntologyByCode(header.concept).text}}</th>' +
+								'</tr>' +
+								'<tr>' +
+									'<th ng-style="{width: titleWidth + \'px\'}"><b>Concept description</b></th>' +
+									'<th style="font-weight: normal">{{getOntologyByCode(header.concept).description}}</th>' +
+								'</tr>' +
+								'<tr>' +
+									'<th ng-style="{width: titleWidth + \'px\'}"><b>Copyright</b></th>' +
+									'<th style="font-weight: normal">{{description.copyright}}</th>' +
+								'</tr>' +
+								'<tr>' +
+									'<th ng-style="{width: titleWidth + \'px\'}"><b>Purpose</b></th>' +
+									'<th style="font-weight: normal">{{description.purpose}}</th>' +
+								'</tr>' +
+								'<tr>' +
+									'<th ng-style="{width: titleWidth + \'px\'}"><b>Use</b></th>' +
+									'<th style="font-weight: normal">{{description.use}}</th>' +
+								'</tr>' +
+								'<tr>' +
+									'<th ng-style="{width: titleWidth + \'px\'}"><b>Misuse</b></th>' +
+									'<th style="font-weight: normal">{{description.misuse}}</th>' +
+								'</tr>' +
+							'</tbody>' +
+						'</table>' +
+					'</div>',
 		replace : true,
-		link : function(scope, element, attrs) {
-			scope.titleWidth = 200;
+		link : function(scope, elm, attrs) {
+			scope.maxHeight = angular.isDefined(attrs.maxHeight) ? scope.$parent.$eval(attrs.maxHeight) : undefined;
+			scope.titleWidth = angular.isDefined(attrs.titleWidth) ? scope.$parent.$eval(attrs.titleWidth) : 200;
 			scope.getOntologyByCode = function(code) {
 				if (scope.terminology && code) {
 					var matchedOntology;

@@ -11,5 +11,8 @@ function() {
 			$scope.isTermCollapsed = false;
 			$scope.isConstraintCollapsed = false;
 		},
+		link : function(scope, element, attrs) {
+			scope.maxHeight = angular.isDefined(attrs.maxHeight) ? scope.$parent.$eval(attrs.maxHeight) : undefined;
+		}
 	};
 }]);
