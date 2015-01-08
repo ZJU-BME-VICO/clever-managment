@@ -1,8 +1,57 @@
-.circle,.ring{
-		height:300px;
-		position:relative;
-		width:300px;
+@media (min-width:1000px){
+	.circle,.ring{
+		height:350px !important;
+		width:350px !important;
 	}
+	.besideInfo img{
+		width:225px !important;
+		height: 105px !important;
+	}
+	.besideInfo strong{
+		margin-left: -25px !important;
+		font-size: 40px !important;
+	}
+	.besideInfo article{
+		margin-top: 15px !important;
+	}
+	.besideInfo article a{
+		font-size: 25px !important;
+	}
+	.besideInfo article{
+		font-size: 15px !important;
+	}
+}
+
+@media (min-width:1800px){
+	.circle,.ring{
+		height:450px !important;
+		width:450px !important;
+	}
+	.besideInfo img{
+		width:300px !important;
+		height: 140px !important;
+	}
+	.besideInfo strong{
+		margin-left: -10px !important;
+		font-size: 60px !important;
+	}
+	.besideInfo article{
+		margin-top: 25px !important;
+	}
+	.besideInfo article a{
+		font-size: 40px !important;
+	}
+	.besideInfo article{
+		font-size: 18px !important;
+	}
+}
+
+.circle,.ring{
+		height:250px;
+		position:relative;
+		width:250px;
+	}
+
 	.circle{
 		margin:100px auto 0 auto;
 	}

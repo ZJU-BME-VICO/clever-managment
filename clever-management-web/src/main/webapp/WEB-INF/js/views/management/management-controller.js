@@ -8,6 +8,12 @@ function ManagementCtrl($scope, $state, $timeout) {
 	$scope.breadcrumbs = [];
 	$scope.menus = [];
 	
+	//查看详细信息
+	$scope.currentbreadcrumbs=[];
+	$scope.showItemTitle=-1;           //选中的功能模块  title
+	$scope.currentIndex=-1;        //当前的功能模块的 index
+	$scope.beforeIndex=-1;         //之前的 index
+	
 	// Breadcrumb tree initial
 	$scope.breadcrumbTree = {};
 	var management = $scope.breadcrumbTree.management = {
@@ -26,14 +32,14 @@ function ManagementCtrl($scope, $state, $timeout) {
 		info : 'MENU_MANAGEMENT_ARCHETYPE_INFO',
 	};
 	archetype.view = {
-		index : 1,
+		index : 5,
 		title : 'MENU_MANAGEMENT_ARCHETYPE_VIEW',
 		state : 'management.archetype.view',
 		icon : 'icon-film',
 		info : 'MENU_MANAGEMENT_ARCHETYPE_VIEW_INFO',
 	};
 	archetype.upload = {
-		index : 2,
+		index : 6,
 		title : 'MENU_MANAGEMENT_ARCHETYPE_UPLOAD',
 		state : 'management.archetype.upload',
 		icon : 'icon-upload-alt',
@@ -56,21 +62,21 @@ function ManagementCtrl($scope, $state, $timeout) {
 		info : 'MENU_MANAGEMENT_APPLICATION_INFO',
 	};
 	application.design = {
-		index : 1,
+		index : 5,
 		title : 'MENU_MANAGEMENT_APPLICATION_DESIGN',
 		state : 'management.application.design',
 		icon : ' icon-magic',
 		info : 'MENU_MANAGEMENT_APPLICATION_DESIGN_INFO',
 	};
 	application.view = {
-		index : 2,
+		index : 6,
 		title : 'MENU_MANAGEMENT_APPLICATION_VIEW',
 		state : 'management.application.view',
 		icon : 'icon-picture',
 		info : 'MENU_MANAGEMENT_APPLICATION_VIEW_INFO',
 	};
 	application.edit = {
-		index : 3,
+		index : 7,
 		title : 'MENU_MANAGEMENT_APPLICATION_EDIT',
 		state : 'management.application.edit',
 		icon : 'icon-wrench',
@@ -104,6 +110,12 @@ function ManagementCtrl($scope, $state, $timeout) {
 				$scope.breadcrumbs.push(breadcrumbTree);
 			}
 		});
+		
+		$scope.currentbreadcrumbs=[];
+		var temp=$scope.breadcrumbs[$scope.breadcrumbs.length-1];
+		$scope.currentbreadcrumbs={'title':temp.title,'icon':temp.icon,'info':temp.info};
+		$scope.currentIndex=temp.index;
+		
 		// Construct dock menu
 		$scope.menus = [];
 		var lastState = stateChain.pop();
@@ -133,54 +145,38 @@ function ManagementCtrl($scope, $state, $timeout) {
 			});
 		}
 	});
-	
-	
-	//查看详细信息
-	$scope.clickItem=-1;           //选中的功能模块  title
-	$scope.currentIndex=-1;        //当前的功能模块的 index
-	$scope.beforeIndex=-1;         //之前的 index
 
-	$scope.menuClick=function(id,index){
-		if(id=="MENU_RETURN"){
-			$scope.clickItem=-1;           
-			$scope.currentIndex=-1;        
-			$scope.beforeIndex=-1;
-			$state.go($state.current.data.parent);
-		}else{
-			$scope.clickItem=id;
-			if($scope.currentIndex!=-1){
-				$scope.beforeIndex=$scope.currentIndex;
+	$scope.menuOver=function(title,index){
+		$scope.showItemTitle=title;
+		$scope.beforeIndex=$scope.currentIndex;
+		$scope.currentIndex=index;
+		
+		$timeout(function(){
+			if($scope.currentIndex > $scope.beforeIndex){
+				$("#"+title).removeClass("off");
+				$("#"+title).transition({
+					scale 	: 1.8,
+					y		: 0
+				},0,function(){
+					$("#"+title).transition({
+						scale : 1,
+						opacity : 1,
+						zIndex : 2
+					},600);
+				});
+			}else if($scope.currentIndex < $scope.beforeIndex){
+				$("#"+title).removeClass("off");
+				$("#"+title).transition({
+					scale : 0.1,
+					y : 0
+				},0,function(){
+					$("#"+title).transition({
+						scale : 1,
+						opacity : 1,
+						zIndex : 2
+					},600);
+				});
 			}
-			$scope.currentIndex=index;
-
-			$timeout(function(){
-				if($scope.currentIndex > $scope.beforeIndex){
-					$("."+id).transition({
-						scale 	: 2.2,
-						y		: 0
-					},0,function(){
-						$("."+id).removeClass("off");
-						$("."+id).transition({
-							scale : 1,
-							opacity : 1,
-							zIndex : 2
-						},600);
-					});
-				}else if($scope.currentIndex < $scope.beforeIndex){
-					$("."+id).transition({
-						scale : 0.1,
-						y : 0
-					},0,function(){
-						$("."+id).removeClass("off");
-						$("."+id).transition({
-							scale : 1,
-							opacity : 1,
-							zIndex : 2
-						},600);
-					});
-				}
-			},0);
-		}
+		},0);
 	};
-
 }
