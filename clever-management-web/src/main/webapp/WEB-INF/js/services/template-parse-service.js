@@ -97,7 +97,7 @@ angular.module('clever.management.services.templateParse',[]).service('templateP
     }
     //不需要显示的节点类型
     var typeList = ['DV_COUNT', 'DV_TEXT', 'DV_DATE_TIME', 'DV_QUANTITY', 'DV_BOOLEAN','DV_QUANTITY','DV_ORDINAL','DV_DURATION','DV_PROPORTION','CODE_PHRASE','DV_CODED_TEXT'];
-	var attributeList = ['value', 'magnitude','data','Tree','name','items','state','defining_code','events'];
+	var attributeList = ['value', 'magnitude','data','Tree','items','name','state','defining_code','events'];
     
     function unNeedNode(node){
         if(node.children){
@@ -147,6 +147,7 @@ angular.module('clever.management.services.templateParse',[]).service('templateP
     function extractNode (node) {
       var type,attribute,code,term_definitions ,name,archtype_id,dataType,picType;
       var dataValue=[];
+      var dataInfo=[];
       type=node.rm_type_name;
       attribute=node.rm_attribute_name;
       if (node.node_id) {
@@ -161,17 +162,15 @@ angular.module('clever.management.services.templateParse',[]).service('templateP
 			labelType = 'attribute';
 			label = attribute;
 		}
-		term_definitions = getDefinitionList(node);	             
-            
-		if(term_definitions){
-			name=getDefinition(code,term_definitions);
-		}
+		 term_definitions = getDefinitionList(node);
 		//data type
 		if (type=="ELEMENT"){
 			if(node.attributes){
 				if(node.attributes.length==undefined){
-					dataType=node.attributes.children.rm_type_name;
-					  if(node.attributes.children.attributes){//attributes or children  number unknown
+					dType=node.attributes.children.rm_type_name;
+				    dIndex=node.attributes.children;
+				    dataInfo.push({dataType:dType,dataValue:dIndex});
+					 /* if(node.attributes.children.attributes){//attributes or children  number unknown
 					     if(node.attributes.children.attributes.children){
 					  	if(node.attributes.children.attributes.children.item){
 					  		dataValue.push(node.attributes.children.attributes.children.item.list);
@@ -182,8 +181,7 @@ angular.module('clever.management.services.templateParse',[]).service('templateP
 					  				dataValue.push(dropdownList);
 					  			});
 					  		}
-					  		}
-						; 
+					  		}; 
 					  }else if(node.attributes.children.list){
 					  	if(dataType=="DV_QUANTITY"){
 					  		if(node.attributes.children.list.magnitude){
@@ -211,17 +209,82 @@ angular.module('clever.management.services.templateParse',[]).service('templateP
 						});
 					  	}
 						
-					  }
+					  }*/
 				}else{
-				  dataType=node.attributes[0].children.rm_type_name;
+				    var i=0;//heart failure   typical smoke amount
+				    while(node.attributes[i]){
+				        if(node.attributes[i].children){
+    				        dType=node.attributes[i].children.rm_type_name;
+    				        dIndex=node.attributes[i].children;
+    				        dataInfo.push({dataType:dType,dataValue:dIndex});}
+    				        i++;				        
+				    }
+				  //dataType=node.attributes[0].children.rm_type_name;
 				}
 				
 				}
 		}
-		if(!name){
-		   name=label;
-		  }
-		if(type=="ELEMENT"){
+		if(dataInfo){
+		 if(dataInfo.length==1){
+                dataType=dataInfo[0].dataType;
+                if(dataType=="DV_ORDINAL"){
+                    var valueList=dataInfo[0].dataValue.list;
+                        angular.forEach(valueList,function(item){
+                            var dropdownList={value:item.value,symbol:getDefinition(item.symbol.defining_code.code_string,term_definitions)};
+                            dataValue.push(dropdownList);
+                    });
+                 }
+                 if(dataType=="DV_CODED_TEXT"){
+                     if(dataInfo[0].dataValue.attributes.children){
+                         var valueList=dataInfo[0].dataValue.attributes.children;
+                         if(valueList.code_list){
+                             angular.forEach(valueList.code_list,function(item){
+                                 var dropdownList={value:"",symbol:getDefinition(item,term_definitions)};
+                                    dataValue.push(dropdownList);
+                                   dataInfo[0].dataType="DV_ORDINAL";
+                             });
+                         }
+                         if(valueList.reference){
+                             dataValue.push(valueList.reference);
+                              dataInfo[0].dataType="DV_TEXT";
+                         }
+                          if(valueList.referenceSeturi){
+                             dataValue.push(valueList.referenceSeturi);
+                             dataInfo[0].dataType="DV_TEXT";
+                         }
+                     }
+                 }
+    }
+    }
+       //real name of items    
+       
+        if(node.attributes){
+            if(node.attributes.length>1){
+                var count;
+                for(var i=0;i<node.attributes.length-1;i++){                    
+                    if(node.attributes[i].rm_attribute_name=="name")
+                    {count=i;}
+                }
+                if(count!=undefined){
+                    if(node.attributes[count].children.attributes){
+                        if(node.attributes[count].children.attributes.rm_attribute_name=="value"){
+                            if(node.attributes[count].children.attributes.children.item){
+                                name=node.attributes[count].children.attributes.children.item.list;
+                            }
+                        }
+                    }
+                 }                
+            }
+        }
+        if(!name){               
+           if(term_definitions&&code){
+                name=getDefinition(code,term_definitions);
+           }else{
+               name=label;
+           }
+          }                     
+        
+		if(type=="ELEMENT"){		   
 		   picType=dataType;
 		}else{
 		   picType=label;
@@ -232,11 +295,12 @@ angular.module('clever.management.services.templateParse',[]).service('templateP
 				type : labelType,
 				text : label,
 				code:code,
-				//term_definitions : term_definitions,
+				term_definitions : term_definitions,
 				labelContent:name,
 				dataType:dataType,
 				dataValue:dataValue,
 				picType:picType,
+				dataInfo:dataInfo
 			}
 		};
       
@@ -244,7 +308,6 @@ angular.module('clever.management.services.templateParse',[]).service('templateP
     
     function getDefinition(code,term_definitions){
     	var name="";
-    	if(code){
     	    if(term_definitions){
     		if(term_definitions[0]==undefined){
 					name=term_definitions.items[0].__text;
@@ -253,8 +316,7 @@ angular.module('clever.management.services.templateParse',[]).service('templateP
 				      if(value._code==code){
 					   name=value.items[0].__text;}
 			});
-			}
-    	}
+			}    	
     	}
     	return name;
     }

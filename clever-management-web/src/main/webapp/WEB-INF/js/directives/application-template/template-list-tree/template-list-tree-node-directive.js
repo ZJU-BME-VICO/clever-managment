@@ -1,6 +1,6 @@
 angular.module('clever.management.directives.templateListTreeNode', []).directive('templateListTreeNode',
 function($compile,$document) {
-         var datatypeList= new Array('DV_QUANTITY','DV_TEXT','DV_ORDINAL', 'DV_DATE_TIME', 'DV_COUNT', 'DV_BOOLEAN','DV_PROPORTION','DV_DURATION','CODE_PHRASE','DV_CODED_TEXT');
+         var datatypeList= new Array('DV_QUANTITY','DV_TEXT','DV_ORDINAL', 'DV_DATE_TIME', 'DV_COUNT', 'DV_BOOLEAN','DV_PROPORTION','DV_DURATION','DV_CODED_TEXT');
          var templateList= new Array('<dv-quantity gui-data="nodeData" gui-control="dvquantityControl"></dv-quantity>','<dv-text gui-data="nodeData" gui-control="dvtextControl"></dv-text>',
                                     '<dv-ordinal gui-data="nodeData" gui-control="dvordinalControl"></dv-ordinal>','<dv-datetime gui-data="nodeData" gui-control="dvdatetimeControl"></dv-datetime>',
                                     '<dv-count gui-data="nodeData" gui-control="dvcountControl"></dv-count>','<dv-boolean gui-data="nodeData" gui-control="dvbooleanControl"></dv-boolean>',
@@ -59,7 +59,7 @@ function($compile,$document) {
 				 var nodeData=selectedNode;
                  //var id="#"+nodeData.label.code+"_"+nodeData.label.labelContent; 
                  //$(id).clone().appendTo("#editArea");//clone all ui contet
-                 var type=nodeData.label.dataType;
+                 var type=nodeData.label.dataInfo[0].dataType;
                  var html="";
                  for( var i=0;i<9;i++){
                      if(type==datatypeList[i])
