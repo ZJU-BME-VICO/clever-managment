@@ -7,8 +7,11 @@ import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.DynamicUpdate;
+
 @Entity
 @Table
+@DynamicUpdate(true)
 public class ArchetypeMaster extends AbstractMaster<ArchetypeFile> {
 
 	/**

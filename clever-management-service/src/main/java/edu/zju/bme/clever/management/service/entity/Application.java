@@ -9,8 +9,11 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import org.hibernate.annotations.DynamicUpdate;
+
 @Entity
 @Table
+@DynamicUpdate(true)
 public class Application extends AbstractIndentifiedEntity {
 
 	/**

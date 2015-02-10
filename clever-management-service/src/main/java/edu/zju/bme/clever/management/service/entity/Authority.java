@@ -8,8 +8,11 @@ import javax.persistence.FetchType;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.DynamicUpdate;
+
 @Entity
 @Table
+@DynamicUpdate(true)
 public class Authority extends AbstractIndentifiedEntity {
 
 	/**

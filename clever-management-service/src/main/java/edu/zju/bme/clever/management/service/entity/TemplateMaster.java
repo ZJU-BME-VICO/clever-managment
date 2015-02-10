@@ -6,8 +6,11 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.DynamicUpdate;
+
 @Entity
 @Table
+@DynamicUpdate(true)
 public class TemplateMaster extends AbstractMaster<TemplateFile> {
 
 	/**
