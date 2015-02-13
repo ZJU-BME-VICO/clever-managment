@@ -7,20 +7,19 @@ import java.util.Optional;
 
 import org.openehr.am.archetype.Archetype;
 import org.openehr.am.serialize.ADLSerializer;
-import org.openehr.rm.common.resource.ResourceDescription;
-import org.openehr.rm.common.resource.ResourceDescriptionItem;
 import org.openehr.rm.support.identification.ArchetypeID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import se.acode.openehr.parser.ADLParser;
 import edu.zju.bme.clever.management.service.entity.ArchetypeActionLog;
 import edu.zju.bme.clever.management.service.entity.ArchetypeFile;
 import edu.zju.bme.clever.management.service.entity.ArchetypeMaster;
 import edu.zju.bme.clever.management.service.entity.LifecycleState;
 import edu.zju.bme.clever.management.service.entity.User;
 import edu.zju.bme.clever.management.service.entity.AbstractFile.SourceType;
-import edu.zju.bme.clever.management.service.entity.ArchetypeActionLog.ActionType;
+import edu.zju.bme.clever.management.service.entity.ActionType;
 import edu.zju.bme.clever.management.service.exception.VersionControlException;
 import edu.zju.bme.clever.management.service.repository.ArchetypeActionLogRepository;
 import edu.zju.bme.clever.management.service.repository.ArchetypeFileRepository;
@@ -75,7 +74,7 @@ public class ArchetypeVersionControlServiceImpl implements
 			archetypeFile.setInternalVersion(nextInternalVersion);
 			archetypeFile.setLastVersionArchetype(latestArchetype.get());
 			// Validate lifecycle state
-			if (!archetypeMaster.getLatestFile().getLifecycleState()
+			if (!latestArchetype.get().getLifecycleState()
 					.equals(LifecycleState.Published)) {
 				throw new VersionControlException(
 						"Illeagal action Create for archetype "
@@ -205,17 +204,10 @@ public class ArchetypeVersionControlServiceImpl implements
 	}
 
 	@Override
-	public void editArchetype(Archetype archetype, SourceType source, User user)
-			throws VersionControlException {
+	public void editArchetype(ArchetypeFile archetypeFile, Archetype archetype,
+			User user) throws VersionControlException {
 		// Validate user authority
 
-		ArchetypeFile archetypeFile = this.archetypeFileRepo
-				.findByName(archetype.getArchetypeId().getValue());
-		if (archetypeFile == null) {
-			throw new VersionControlException("Archetype "
-					+ archetype.getArchetypeId().getValue()
-					+ " does not exist.");
-		}
 		// Validate editor
 		if (!archetypeFile.getEditor().equals(user)) {
 			throw new VersionControlException("Only user"
@@ -244,26 +236,10 @@ public class ArchetypeVersionControlServiceImpl implements
 	}
 
 	@Override
-	public void submitArchetype(Archetype archetype, User user)
-			throws VersionControlException {
-		ArchetypeFile archetypeFile = this.archetypeFileRepo
-				.findByName(archetype.getArchetypeId().getValue());
-		if (archetypeFile == null) {
-			throw new VersionControlException("Archetype "
-					+ archetype.getArchetypeId().getValue()
-					+ " does not exist.");
-		}
-		submitArchetype(archetypeFile, user);
-	}
-
-	@Override
 	public void submitArchetype(ArchetypeFile archetypeFile, User user)
 			throws VersionControlException {
 		// Validate user authority
 
-		if (archetypeFile.getId() == null) {
-			throw new VersionControlException("Archetype does not exist.");
-		}
 		// Validate editor
 		if (!archetypeFile.getEditor().equals(user)) {
 			throw new VersionControlException("Only user"
@@ -292,17 +268,10 @@ public class ArchetypeVersionControlServiceImpl implements
 	}
 
 	@Override
-	public void approveArchetype(Archetype archetype, User user)
+	public void approveArchetype(ArchetypeFile archetypeFile, User user)
 			throws VersionControlException {
 		// Validate user authority
 
-		ArchetypeFile archetypeFile = this.archetypeFileRepo
-				.findByName(archetype.getArchetypeId().getValue());
-		if (archetypeFile == null) {
-			throw new VersionControlException("Archetype "
-					+ archetype.getArchetypeId().getValue()
-					+ " does not exist.");
-		}
 		// Validate and set lifecycle state
 		if (!archetypeFile.getLifecycleState()
 				.equals(LifecycleState.Teamreview)) {
@@ -314,12 +283,19 @@ public class ArchetypeVersionControlServiceImpl implements
 							+ " instead of Teamreview.");
 		}
 		archetypeFile.setLifecycleState(LifecycleState.Published);
-		// Save archetype file and master
+		// Save archetype file
 		this.archetypeFileRepo.save(archetypeFile);
 		ArchetypeMaster archetypeMaster = archetypeFile.getMaster();
+		// Update archetype master info
 		archetypeMaster.setLatestFileLifecycleState(archetypeFile
 				.getLifecycleState());
-		// Update archetype master basic info
+		ADLParser parser = new ADLParser(archetypeFile.getContent());
+		Archetype archetype;
+		try {
+			archetype = parser.parse();
+		} catch (Exception ex) {
+			throw new VersionControlException("Parse archetype failed.", ex);
+		}
 		this.setArchetypeMasterBasicInfo(archetypeMaster, archetype);
 		this.archetypeMasterRepo.save(archetypeMaster);
 		// Log action
@@ -327,26 +303,10 @@ public class ArchetypeVersionControlServiceImpl implements
 	}
 
 	@Override
-	public void rejectArchetype(Archetype archetype, User user)
-			throws VersionControlException {
-		ArchetypeFile archetypeFile = this.archetypeFileRepo
-				.findByName(archetype.getArchetypeId().getValue());
-		if (archetypeFile == null) {
-			throw new VersionControlException("Archetype "
-					+ archetype.getArchetypeId().getValue()
-					+ " does not exist.");
-		}
-		rejectArchetype(archetypeFile, user);
-	}
-
-	@Override
 	public void rejectArchetype(ArchetypeFile archetypeFile, User user)
 			throws VersionControlException {
 		// Validate user authority
 
-		if (archetypeFile.getId() == null) {
-			throw new VersionControlException("Archetype does not exist.");
-		}
 		// Validate and set lifecycle state
 		if (!archetypeFile.getLifecycleState()
 				.equals(LifecycleState.Teamreview)) {
@@ -369,26 +329,10 @@ public class ArchetypeVersionControlServiceImpl implements
 	}
 
 	@Override
-	public void rejectAndRemoveArchetype(Archetype archetype, User user)
-			throws VersionControlException {
-		ArchetypeFile archetypeFile = this.archetypeFileRepo
-				.findByName(archetype.getArchetypeId().getValue());
-		if (archetypeFile == null) {
-			throw new VersionControlException("Archetype "
-					+ archetype.getArchetypeId().getValue()
-					+ " does not exist.");
-		}
-		rejectAndRemoveArchetype(archetypeFile, user);
-	}
-
-	@Override
 	public void rejectAndRemoveArchetype(ArchetypeFile archetypeFile, User user)
 			throws VersionControlException {
 		// Validate user authority
 
-		if (archetypeFile.getId() == null) {
-			throw new VersionControlException("Archetype does not exist.");
-		}
 		// Validate and set lifecycle state
 		if (!archetypeFile.getLifecycleState()
 				.equals(LifecycleState.Teamreview)) {
@@ -403,14 +347,20 @@ public class ArchetypeVersionControlServiceImpl implements
 		ArchetypeMaster archetypeMaster = archetypeFile.getMaster();
 		Optional<ArchetypeFile> lastArchetype = Optional
 				.ofNullable(archetypeFile.getLastVersionArchetype());
-		archetypeMaster.setLatestFile(lastArchetype.orElse(null));
-		archetypeMaster.setLatestFileLifecycleState(lastArchetype.map(
-				archetype -> archetype.getLifecycleState()).orElse(null));
-		archetypeMaster.setLatestFileInternalVersion(lastArchetype.map(
-				archetype -> archetype.getInternalVersion()).orElse(null));
-		archetypeMaster.setLatestFileVersion(lastArchetype.map(
-				archetype -> archetype.getVersion()).orElse(null));
-		this.archetypeMasterRepo.save(archetypeMaster);
+		if (lastArchetype.isPresent()) {
+			// Not the first file of master, update master
+			archetypeMaster.setLatestFile(lastArchetype.get());
+			archetypeMaster.setLatestFileLifecycleState(lastArchetype.get()
+					.getLifecycleState());
+			archetypeMaster.setLatestFileInternalVersion(lastArchetype.get()
+					.getInternalVersion());
+			archetypeMaster.setLatestFileVersion(lastArchetype.get()
+					.getVersion());
+			this.archetypeMasterRepo.save(archetypeMaster);
+		} else {
+			// The first file of master, remove master
+			this.archetypeMasterRepo.delete(archetypeMaster);
+		}
 		this.archetypeFileRepo.delete(archetypeFile);
 		// Log action
 		logArchetypeAction(archetypeFile, ActionType.RejectAndRelease, user);
@@ -498,21 +448,19 @@ public class ArchetypeVersionControlServiceImpl implements
 		Optional<ArchetypeID> specialiseArchetypeId = Optional
 				.ofNullable(archetype.getParentArchetypeId());
 		if (specialiseArchetypeId.isPresent()) {
-			ArchetypeMaster specialiseArchetypeMaster = this.archetypeMasterRepo
-					.findByName(specialiseArchetypeId.get().base());
-			if (specialiseArchetypeMaster != archetypeMaster
-					.getSpecialiseArchetypeMaster()) {
-				throw new VersionControlException(
-						"Specialise archetype master "
-								+ specialiseArchetypeId.get().base()
-								+ " does not exist.");
-			}
 			ArchetypeFile specialiseArchetypeFile = this.archetypeFileRepo
 					.findByName(specialiseArchetypeId.get().getValue());
 			if (specialiseArchetypeFile == null) {
 				throw new VersionControlException("Specialise archetype "
 						+ specialiseArchetypeId.get().getValue()
 						+ " does not exist.");
+			}
+			if (specialiseArchetypeFile.getMaster() != archetypeMaster
+					.getSpecialiseArchetypeMaster()) {
+				throw new VersionControlException(
+						"Specialise archetype master "
+								+ specialiseArchetypeId.get().base()
+								+ " does not match.");
 			}
 			archetypeFile.setSpecialiseArchetype(specialiseArchetypeFile);
 			archetypeFile
@@ -521,8 +469,11 @@ public class ArchetypeVersionControlServiceImpl implements
 			archetypeFile.setSpecialiseArchetypeVersion(specialiseArchetypeFile
 					.getVersion());
 			archetypeMaster
-					.setCurrentSpecialiseArchetypeInternalVersion(archetypeFile
-							.getSpecialiseArchetypeInternalVersion());
+					.setCurrentSpecialiseArchetypeInternalVersion(specialiseArchetypeFile
+							.getInternalVersion());
+			archetypeMaster
+					.setCurrentSpecialiseArchetypeVersion(specialiseArchetypeFile
+							.getVersion());
 		} else {
 			if (archetypeMaster.getSpecialiseArchetypeMaster() != null) {
 				throw new VersionControlException("Archetype "
@@ -539,17 +490,13 @@ public class ArchetypeVersionControlServiceImpl implements
 			ActionType actionType, User user) {
 		ArchetypeActionLog log = new ArchetypeActionLog();
 		log.setActionType(actionType);
-		log.setArchetypeMaster(archetypeFile.getMaster());
-		log.setArchetypeVersion(archetypeFile.getVersion());
+		log.setMaster(archetypeFile.getMaster());
+		log.setVersion(archetypeFile.getVersion());
 		log.setOperator(user);
 		log.setOperatorName(user.getName());
 		log.setRecordTime(Calendar.getInstance());
-		log.setArchetypeLifecycleState(archetypeFile.getLifecycleState());
+		log.setLifecycleState(archetypeFile.getLifecycleState());
 		this.archetypeActionLogRepo.save(log);
-	}
-
-	protected boolean validateUserAuthority(User user) {
-		return true;
 	}
 
 }

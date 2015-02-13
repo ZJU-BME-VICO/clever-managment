@@ -36,15 +36,15 @@ public class TemplateEavTest {
 		TemplateMaster master = this.masterRepo.findOne(2);
 		TemplateFile file = new TemplateFile();
 		file.setMaster(master);
-		file.getProperties().put("abc", "ddd");
+		file.getPropertyMap().put("abc", "ddd");
 		this.fileRepo.save(file);
 	}
 
 	@Test
 	public void updateTemplateFile() {
 		TemplateFile file = this.fileRepo.findOne(4);
-		System.out.println(file.getProperties().get("abc"));
-		file.getProperties().remove("abc");
+		System.out.println(file.getPropertyMap().get("abc"));
+		file.getPropertyMap().remove("abc");
 		this.fileRepo.save(file);
 	}
 }
