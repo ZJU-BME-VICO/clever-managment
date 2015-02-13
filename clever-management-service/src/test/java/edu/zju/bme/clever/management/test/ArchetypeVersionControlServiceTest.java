@@ -16,7 +16,6 @@ import org.springframework.test.context.transaction.TransactionConfiguration;
 import edu.zju.bme.clever.management.service.ArchetypeVersionControlService;
 import edu.zju.bme.clever.management.service.entity.User;
 import edu.zju.bme.clever.management.service.entity.AbstractFile.SourceType;
-import edu.zju.bme.clever.management.service.entity.ArchetypeActionLog.ActionType;
 import edu.zju.bme.clever.management.service.repository.ArchetypeFileRepository;
 import edu.zju.bme.clever.management.service.repository.UserRepository;
 import se.acode.openehr.parser.ADLParser;
@@ -49,8 +48,8 @@ public class ArchetypeVersionControlServiceTest {
 
 		this.versionControlService.createOrUpgradeArchetype(archetype,
 				SourceType.CKM, user);
-		this.versionControlService.editArchetype(archetype, SourceType.CKM,
-				user);
+//		this.versionControlService.editArchetype(archetype
+//				user);
 		this.versionControlService.submitArchetype(archetype, user);
 		// this.versionControlService.rejectAndRemoveArchetype(archetype, user);
 		this.archetypeFileRepo.getAllTeamreviewArchetypeFiles().forEach(
