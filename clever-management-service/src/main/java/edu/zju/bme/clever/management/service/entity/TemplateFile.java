@@ -1,6 +1,7 @@
 package edu.zju.bme.clever.management.service.entity;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.persistence.CollectionTable;
@@ -45,6 +46,8 @@ public class TemplateFile extends AbstractFile<TemplateMaster> {
 	@Column
 	@Enumerated(EnumType.STRING)
 	private TemplateType templateType;
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "templateFile")
+	private List<EntityClass> entityClasses;
 
 	public Integer getSubVersion() {
 		return subVersion;
@@ -62,12 +65,12 @@ public class TemplateFile extends AbstractFile<TemplateMaster> {
 		this.lastVersionTemplate = lastVersionTemplate;
 	}
 
-	public Map<String, String> getProperties() {
+	public Map<String, String> getPropertyMap() {
 		return properties;
 	}
 
-	public void setProperties(Map<String, String> properties) {
-		this.properties = properties;
+	public void addProperty(String propertyName, String value) {
+		this.properties.put(propertyName, value);
 	}
 
 	public TemplateType getTemplateType() {
@@ -76,6 +79,10 @@ public class TemplateFile extends AbstractFile<TemplateMaster> {
 
 	public void setTemplateType(TemplateType templateType) {
 		this.templateType = templateType;
+	}
+
+	public List<EntityClass> getEntityClasses() {
+		return entityClasses;
 	}
 
 }

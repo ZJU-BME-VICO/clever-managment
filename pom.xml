@@ -20,6 +20,7 @@
 		<spring.version>4.0.6.RELEASE</spring.version>
 		<logback.version>1.1.2</logback.version>
 		<slf4j.version>1.7.6</slf4j.version>
+		<clever-cdr.version>0.0.1-SNAPSHOT</clever-cdr.version>
 	</properties>
 
 	<profiles>
@@ -162,6 +163,21 @@
 				<groupId>org.springframework</groupId>
 				<artifactId>spring-web</artifactId>
 				<version>${spring.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>edu.zju.bme.clever</groupId>
+				<artifactId>clever-cdr</artifactId>
+				<version>${clever-cdr.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>edu.zju.bme.clever</groupId>
+				<artifactId>arm-parser</artifactId>
+				<version>${clever-cdr.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>edu.zju.bme.clever</groupId>
+				<artifactId>class-generator</artifactId>
+				<version>${clever-cdr.version}</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>

@@ -85,7 +85,7 @@
 			<artifactId>clever-management-env</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-		
+
 		<!-- jpa -->
 		<dependency>
 			<groupId>org.springframework.data</groupId>
@@ -146,6 +146,16 @@
 					<groupId>log4j</groupId>
 				</exclusion>
 			</exclusions>
+		</dependency>
+
+		<!-- clever cdr -->
+		<dependency>
+			<groupId>edu.zju.bme.clever</groupId>
+			<artifactId>arm-parser</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>edu.zju.bme.clever</groupId>
+			<artifactId>class-generator</artifactId>
 		</dependency>
 	</dependencies>
 </project>

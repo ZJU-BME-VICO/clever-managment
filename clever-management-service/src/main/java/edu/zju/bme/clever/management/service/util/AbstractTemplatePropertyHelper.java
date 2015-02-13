@@ -17,11 +17,11 @@ public abstract class AbstractTemplatePropertyHelper {
 	}
 
 	protected String getProperty(String propertyName) {
-		return this.template.getProperties().get(propertyName);
+		return this.template.getPropertyMap().get(propertyName);
 	}
 
 	protected void setProperty(String propertyName, String value) {
-		this.template.getProperties().put(propertyName, value);
+		this.template.getPropertyMap().put(propertyName, value);
 	}
 
 	public TemplateFile getTemplateFile() {

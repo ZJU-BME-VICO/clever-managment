@@ -7,4 +7,6 @@ import edu.zju.bme.clever.management.service.entity.TemplateMaster;
 public interface TemplateMasterRepository extends
 		JpaRepository<TemplateMaster, Integer> {
 
+	public TemplateMaster findByName(String name);
+
 }
