@@ -13,6 +13,7 @@ import java.util.stream.Collectors;
 import openEHR.v1.template.RESOURCEDESCRIPTIONITEM;
 import openEHR.v1.template.TemplateDocument;
 
+import org.apache.xmlbeans.XmlException;
 import org.openehr.am.archetype.Archetype;
 import org.openehr.am.template.OETParser;
 import org.slf4j.Logger;
@@ -47,8 +48,9 @@ import edu.zju.bme.clever.management.service.repository.TemplateMasterRepository
 import edu.zju.bme.clever.schemas.ArchetypeRelationshipMappingDocument;
 
 @Service
-@Transactional
-public class TemplateVersionControlServiceImpl {
+@Transactional(rollbackFor = { Exception.class })
+public class StorageTemplateVersionControlServiceImpl implements
+		StorageTemplateVersionControlService {
 
 	protected final Logger logger = LoggerFactory.getLogger(this.getClass());
 
@@ -65,8 +67,32 @@ public class TemplateVersionControlServiceImpl {
 	@Autowired
 	private EntityClassGenerator generator;
 
+	private OETParser oetParser = new OETParser();
+	private ArmParser armParser = new ArmParser();
+
 	private static final String ARM = "ArchetypeRelationshipMapping";
 
+	@Override
+	public void createOrUpgradeTemplate(String oet, String arm,
+			SourceType source, User user) throws VersionControlException {
+		TemplateDocument oetDoc;
+		try {
+			oetDoc = this.oetParser.parseTemplate(new ByteArrayInputStream(oet
+					.getBytes(StandardCharsets.UTF_8)));
+		} catch (Exception ex) {
+			throw new VersionControlException("Parse oet failed.", ex);
+		}
+		ArchetypeRelationshipMappingDocument armDoc;
+		try {
+			armDoc = this.armParser.parseArm(new ByteArrayInputStream(arm
+					.getBytes(StandardCharsets.UTF_8)));
+		} catch (Exception ex) {
+			throw new VersionControlException("Parse arm failed.", ex);
+		}
+		this.createOrUpgradeTemplate(oet, arm, source, user);
+	}
+
+	@Override
 	public void createOrUpgradeTemplate(TemplateDocument oet,
 			ArchetypeRelationshipMappingDocument arm, SourceType source,
 			User user) throws VersionControlException {
@@ -96,7 +122,7 @@ public class TemplateVersionControlServiceImpl {
 		TemplateFile templateFile = this.templateFileRepo
 				.findByName(templateName);
 		if (templateFile != null) {
-			throw new VersionControlException("Tempalte " + templateName
+			throw new VersionControlException("Template " + templateName
 					+ " already exists.");
 		}
 		templateFile = this.constructTemplateFile(templateMaster,
@@ -175,6 +201,50 @@ public class TemplateVersionControlServiceImpl {
 		this.logTemplateAction(templateFile, ActionType.Create, user);
 	}
 
+	@Override
+	public void editTemplate(Integer templateId, String oet, String arm,
+			User user) throws VersionControlException {
+		TemplateFile templateFile = this.templateFileRepo.findOne(templateId);
+		if (templateFile == null) {
+			throw new VersionControlException("Cannot find template with id: "
+					+ templateId);
+		}
+		this.editTemplate(templateFile, oet, arm, user);
+	}
+
+	@Override
+	public void editTemplate(String templateName, String oet, String arm,
+			User user) throws VersionControlException {
+		TemplateFile templateFile = this.templateFileRepo
+				.findByName(templateName);
+		if (templateFile == null) {
+			throw new VersionControlException(
+					"Cannot find template with name: " + templateName);
+		}
+		this.editTemplate(templateFile, oet, arm, user);
+	}
+
+	@Override
+	public void editTemplate(TemplateFile templateFile, String oet, String arm,
+			User user) throws VersionControlException {
+		TemplateDocument oetDoc;
+		try {
+			oetDoc = this.oetParser.parseTemplate(new ByteArrayInputStream(oet
+					.getBytes(StandardCharsets.UTF_8)));
+		} catch (Exception ex) {
+			throw new VersionControlException("Parse oet failed.", ex);
+		}
+		ArchetypeRelationshipMappingDocument armDoc;
+		try {
+			armDoc = this.armParser.parseArm(new ByteArrayInputStream(arm
+					.getBytes(StandardCharsets.UTF_8)));
+		} catch (Exception ex) {
+			throw new VersionControlException("Parse arm failed.", ex);
+		}
+		this.editTemplate(templateFile, oetDoc, armDoc, user);
+	}
+
+	@Override
 	public void editTemplate(TemplateFile templateFile, TemplateDocument oet,
 			ArchetypeRelationshipMappingDocument arm, User user)
 			throws VersionControlException {
@@ -204,6 +274,30 @@ public class TemplateVersionControlServiceImpl {
 		this.logTemplateAction(templateFile, ActionType.Edit, user);
 	}
 
+	@Override
+	public void submitTemplate(Integer templateId, User user)
+			throws VersionControlException {
+		TemplateFile templateFile = this.templateFileRepo.findOne(templateId);
+		if (templateFile == null) {
+			throw new VersionControlException("Cannot find template with id: "
+					+ templateId);
+		}
+		this.submitTemplate(templateFile, user);
+	}
+
+	@Override
+	public void submitTemplate(String templateName, User user)
+			throws VersionControlException {
+		TemplateFile templateFile = this.templateFileRepo
+				.findByName(templateName);
+		if (templateFile == null) {
+			throw new VersionControlException(
+					"Cannot find template with name: " + templateName);
+		}
+		this.submitTemplate(templateFile, user);
+	}
+
+	@Override
 	public void submitTemplate(TemplateFile templateFile, User user)
 			throws VersionControlException {
 		// Validate user authority
@@ -235,6 +329,30 @@ public class TemplateVersionControlServiceImpl {
 		this.logTemplateAction(templateFile, ActionType.Submit, user);
 	}
 
+	@Override
+	public void approveTemplate(Integer templateId, User user)
+			throws VersionControlException {
+		TemplateFile templateFile = this.templateFileRepo.findOne(templateId);
+		if (templateFile == null) {
+			throw new VersionControlException("Cannot find template with id: "
+					+ templateId);
+		}
+		this.approveTemplate(templateFile, user);
+	}
+
+	@Override
+	public void approveTemplate(String templateName, User user)
+			throws VersionControlException {
+		TemplateFile templateFile = this.templateFileRepo
+				.findByName(templateName);
+		if (templateFile == null) {
+			throw new VersionControlException(
+					"Cannot find template with name: " + templateName);
+		}
+		this.approveTemplate(templateFile, user);
+	}
+
+	@Override
 	public void approveTemplate(TemplateFile templateFile, User user)
 			throws VersionControlException {
 		// Validate user authority
@@ -250,18 +368,17 @@ public class TemplateVersionControlServiceImpl {
 		}
 		templateFile.setLifecycleState(LifecycleState.Published);
 		// Construct entity classes
-		OETParser oetParser = new OETParser();
 		TemplateDocument oet;
 		try {
-			oet = oetParser.parseTemplate(new ByteArrayInputStream(templateFile
-					.getContent().getBytes(StandardCharsets.UTF_8)));
+			oet = this.oetParser
+					.parseTemplate(new ByteArrayInputStream(templateFile
+							.getContent().getBytes(StandardCharsets.UTF_8)));
 		} catch (Exception ex) {
 			throw new VersionControlException("Parse oet failed.", ex);
 		}
-		ArmParser armParser = new ArmParser();
 		ArchetypeRelationshipMappingDocument arm;
 		try {
-			arm = armParser
+			arm = this.armParser
 					.parseArm(new ByteArrayInputStream(templateFile
 							.getPropertyMap().get(ARM)
 							.getBytes(StandardCharsets.UTF_8)));
@@ -283,6 +400,30 @@ public class TemplateVersionControlServiceImpl {
 		this.logTemplateAction(templateFile, ActionType.Approve, user);
 	}
 
+	@Override
+	public void rejectTemplate(Integer templateId, User user)
+			throws VersionControlException {
+		TemplateFile templateFile = this.templateFileRepo.findOne(templateId);
+		if (templateFile == null) {
+			throw new VersionControlException("Cannot find template with id: "
+					+ templateId);
+		}
+		this.rejectTemplate(templateFile, user);
+	}
+
+	@Override
+	public void rejectTemplate(String templateName, User user)
+			throws VersionControlException {
+		TemplateFile templateFile = this.templateFileRepo
+				.findByName(templateName);
+		if (templateFile == null) {
+			throw new VersionControlException(
+					"Cannot find template with name: " + templateName);
+		}
+		this.rejectTemplate(templateFile, user);
+	}
+
+	@Override
 	public void rejectTemplate(TemplateFile templateFile, User user)
 			throws VersionControlException {
 		// Validate user authority
@@ -307,6 +448,30 @@ public class TemplateVersionControlServiceImpl {
 		this.logTemplateAction(templateFile, ActionType.Reject, user);
 	}
 
+	@Override
+	public void rejectAndRemoveTemplate(Integer templateId, User user)
+			throws VersionControlException {
+		TemplateFile templateFile = this.templateFileRepo.findOne(templateId);
+		if (templateFile == null) {
+			throw new VersionControlException("Cannot find template with id: "
+					+ templateId);
+		}
+		this.rejectAndRemoveTemplate(templateFile, user);
+	}
+
+	@Override
+	public void rejectAndRemoveTemplate(String templateName, User user)
+			throws VersionControlException {
+		TemplateFile templateFile = this.templateFileRepo
+				.findByName(templateName);
+		if (templateFile == null) {
+			throw new VersionControlException(
+					"Cannot find template with name: " + templateName);
+		}
+		this.rejectAndRemoveTemplate(templateFile, user);
+	}
+
+	@Override
 	public void rejectAndRemoveTemplate(TemplateFile templateFile, User user)
 			throws VersionControlException {
 		// Validate user authority
@@ -379,19 +544,16 @@ public class TemplateVersionControlServiceImpl {
 		List<JavaClass> allClasses = new ArrayList<JavaClass>();
 		this.scanAllClasses(entitySource, allClasses);
 		// Construct entity classes
-		return allClasses
-				.stream()
-				.map(cls -> {
-					EntityClass entityClass = new EntityClass();
-					entityClass.setEntityId(entitySource.getEntityId());
-					entityClass.setFullName(entitySource.getFullName());
-					entityClass.setName(entitySource.getName());
-					entityClass.setPackageName(entitySource.getJavaPackage()
-							.getName());
-					entityClass.setContent(entitySource.toString());
-					entityClass.setTemplateFile(templateFile);
-					return entityClass;
-				}).collect(Collectors.toList());
+		return allClasses.stream().map(cls -> {
+			EntityClass entityClass = new EntityClass();
+			entityClass.setEntityId(cls.getEntityId());
+			entityClass.setFullName(cls.getFullName());
+			entityClass.setName(cls.getName());
+			entityClass.setPackageName(cls.getJavaPackage().getName());
+			entityClass.setContent(cls.toString());
+			entityClass.setTemplateFile(templateFile);
+			return entityClass;
+		}).collect(Collectors.toList());
 	}
 
 	private void scanAllClasses(JavaClass clazz, List<JavaClass> classes) {
@@ -411,7 +573,7 @@ public class TemplateVersionControlServiceImpl {
 				.getMaster();
 		// Set master basic info
 		this.setTemplateMasterBasicInfo(templateMaster, oet);
-
+		templateMaster.setTemplateType(TemplateType.Storage);
 		templateMaster.setConceptName(specialiseArchetypeMaster
 				.getConceptName());
 		templateMaster.setConceptDescription(specialiseArchetypeMaster
@@ -435,8 +597,11 @@ public class TemplateVersionControlServiceImpl {
 		RESOURCEDESCRIPTIONITEM details = oet.getTemplate().getDescription()
 				.getDetails();
 		templateMaster.setPurpose(details.getPurpose());
-		templateMaster.setKeywords(String.join(",", details.getKeywords()
-				.getItemArray()));
+		templateMaster.setKeywords(String.join(
+				",",
+				Optional.ofNullable(details.getKeywords())
+						.map(keywords -> keywords.getItemArray())
+						.orElse(new String[] {})));
 		templateMaster.setUse(details.getUse());
 		templateMaster.setMisuse(details.getMisuse());
 		templateMaster.setCopyright(details.getCopyright());
@@ -455,10 +620,10 @@ public class TemplateVersionControlServiceImpl {
 		String templateName = oet.getTemplate().getName();
 		templateFile.setName(templateName);
 		templateFile.setVersion(templateName.substring(templateName
-				.lastIndexOf(".v")));
+				.lastIndexOf(".v") + 1));
 		templateFile.setContent(oet.toString());
 		templateFile.addProperty(ARM, arm.toString());
-		templateFile.setTemplateType(TemplateType.Application);
+		templateFile.setTemplateType(TemplateType.Storage);
 		// Set specialize archetype info
 		templateFile.setSpecialiseArchetype(specialiseArchetypeFile);
 		templateFile

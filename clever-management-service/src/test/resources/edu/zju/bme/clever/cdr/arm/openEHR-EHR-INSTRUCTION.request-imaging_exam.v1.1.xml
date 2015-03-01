@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<archetype-relationship-mapping xmlns="http://schemas.clever.bme.zju.edu">
+
+	<template template-id="openEHR-EHR-INSTRUCTION.request-imaging_exam.v1.1">
+
+		<id path="/protocol[at0008]/items[at0010]/value" target-attribute="value" propagate=""></id>
+		<query-id path="/protocol[at0008]/items[at0011]/value" target-attribute="value"></query-id>
+		<query-id path="/subject[at0.3]/externalRef[at0.4]/id" target-attribute="value"></query-id>
+
+	</template>
+
+</archetype-relationship-mapping>

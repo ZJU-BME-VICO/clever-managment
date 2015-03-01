@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<archetype-relationship-mapping xmlns="http://schemas.clever.bme.zju.edu">
+
+	<template template-id="openEHR-EHR-OBSERVATION.imaging_exam-zju.v1.1">
+
+		<id path="/protocol[at0025]/items[at0027]/items[at0033]/value" target-attribute="id"></id>
+		<query-id path="/subject[at0043]/externalRef[at0044]/id" target-attribute="value"></query-id>
+		<query-id path="/protocol[at0025]/items[at0027]/items[at0031]/value" target-attribute="id"></query-id>
+
+	</template>
+
+</archetype-relationship-mapping>
