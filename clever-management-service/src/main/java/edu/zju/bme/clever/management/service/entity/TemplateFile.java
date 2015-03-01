@@ -14,6 +14,7 @@ import javax.persistence.FetchType;
 import javax.persistence.Index;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
+import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.MapKeyColumn;
 import javax.persistence.MapKeyJoinColumn;
@@ -41,6 +42,7 @@ public class TemplateFile extends AbstractFile<TemplateMaster> {
 	@ElementCollection(fetch = FetchType.LAZY)
 	@CollectionTable
 	@Column(name = "value")
+	@Lob
 	@MapKeyColumn(name = "attribute")
 	private Map<String, String> properties = new HashMap<String, String>();
 	@Column
@@ -67,6 +69,10 @@ public class TemplateFile extends AbstractFile<TemplateMaster> {
 
 	public Map<String, String> getPropertyMap() {
 		return properties;
+	}
+
+	public String getPropertyValue(String propertyName) {
+		return this.properties.get(propertyName);
 	}
 
 	public void addProperty(String propertyName, String value) {

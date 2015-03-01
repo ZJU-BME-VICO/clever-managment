@@ -3,6 +3,7 @@ package edu.zju.bme.clever.management.service.entity;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
@@ -27,6 +28,7 @@ public class EntityClass extends AbstractIndentifiedEntity {
 	@Column(nullable = false)
 	private String entityId;
 	@Column(nullable = false)
+	@Lob
 	private String content;
 	@ManyToOne(fetch = FetchType.LAZY)
 	private TemplateFile templateFile;

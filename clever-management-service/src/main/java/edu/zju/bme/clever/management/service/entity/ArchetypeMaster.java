@@ -19,7 +19,7 @@ public class ArchetypeMaster extends AbstractMaster<ArchetypeFile> {
 	 */
 	private static final long serialVersionUID = 4711360469654915674L;
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "archetypeMaster")
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "master")
 	private List<ArchetypeActionLog> actionLogs;
 
 	public List<ArchetypeActionLog> getActionLogs() {
