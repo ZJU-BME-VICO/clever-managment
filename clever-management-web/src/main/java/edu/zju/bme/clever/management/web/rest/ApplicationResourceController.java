@@ -28,13 +28,13 @@ import edu.zju.bme.clever.management.web.entity.FileUploadResult;
 
 @RestController
 @RequestMapping("/applications")
-public class ApplicationResourceController {
+public class ApplicationResourceController extends AbstractResourceController {
 
 	protected final Logger logger = LoggerFactory.getLogger(this.getClass());
 
 	@Autowired
 	private ApplicationService applicationService;
-	
+
 	@Resource
 	private ServletContext servletContext;
 
@@ -51,9 +51,12 @@ public class ApplicationResourceController {
 
 	@RequestMapping(value = "application/id/{id}", method = RequestMethod.GET)
 	public Application getApplicationById(@PathVariable Integer id) {
-		return this.applicationService.getApplicationById(id);
+		Application application = this.applicationService
+				.getApplicationById(id);
+		this.isResourcesNull(application);
+		return application;
 	}
-	
+
 	@RequestMapping(value = "application/id/{id}", method = RequestMethod.POST)
 	@ResponseBody
 	public FileUploadResult updateApplicationById(
@@ -64,22 +67,26 @@ public class ApplicationResourceController {
 			@RequestParam(value = "url", required = true) String url) {
 		FileUploadResult result = new FileUploadResult();
 		result.setSucceeded(true);
-		
+
 		try {
-			Application application = this.applicationService.getApplicationById(id);	
-			if(application.getName().equals(name) == false){
-				if(this.applicationService.getApplicationByName(name) != null){
-					throw new Exception("Application " + name + " already exists.");
-				}	
+			Application application = this.applicationService
+					.getApplicationById(id);
+			if (application.getName().equals(name) == false) {
+				if (this.applicationService.getApplicationByName(name) != null) {
+					throw new Exception("Application " + name
+							+ " already exists.");
+				}
 				application.setName(name);
 			}
 			if (img != null) {
-				File oldFile = new File(servletContext.getRealPath("/WEB-INF" + application.getImgPath()));
+				File oldFile = new File(servletContext.getRealPath("/WEB-INF"
+						+ application.getImgPath()));
 				oldFile.delete();
-				File appFolder = new File(servletContext.getRealPath("/WEB-INF" + APP_FOLDER_PATH));
+				File appFolder = new File(servletContext.getRealPath("/WEB-INF"
+						+ APP_FOLDER_PATH));
 				String uuid = UUID.randomUUID().toString();
 				File newFile = new File(appFolder, uuid);
-				while(newFile.exists()){
+				while (newFile.exists()) {
 					uuid = UUID.randomUUID().toString();
 					newFile = new File(appFolder, uuid);
 				}
@@ -99,7 +106,8 @@ public class ApplicationResourceController {
 	@RequestMapping(value = "/application/id/{id}", method = RequestMethod.DELETE)
 	public void deleteApplicationById(@PathVariable Integer id) {
 		Application application = applicationService.getApplicationById(id);
-		File imgFile = new File(servletContext.getRealPath("/WEB-INF" + application.getImgPath()));
+		File imgFile = new File(servletContext.getRealPath("/WEB-INF"
+				+ application.getImgPath()));
 		imgFile.delete();
 		this.applicationService.deleteApplication(application);
 	}
@@ -112,25 +120,26 @@ public class ApplicationResourceController {
 			@RequestParam(value = "url", required = true) String url) {
 		FileUploadResult result = new FileUploadResult();
 		result.setSucceeded(true);
-		
+
 		try {
 			if (this.applicationService.getApplicationByName(name) != null) {
 				throw new Exception("Application " + name + " already exists.");
 			}
-			String appFolderUrl = servletContext.getRealPath("/WEB-INF" + APP_FOLDER_PATH);
+			String appFolderUrl = servletContext.getRealPath("/WEB-INF"
+					+ APP_FOLDER_PATH);
 			File appFolder = new File(appFolderUrl);
 			if (!appFolder.exists()) {
 				appFolder.mkdir();
 			}
 			String uuid = UUID.randomUUID().toString();
 			File imgFile = new File(appFolder, uuid);
-			while(imgFile.exists()){
+			while (imgFile.exists()) {
 				uuid = UUID.randomUUID().toString();
 				imgFile = new File(appFolder, uuid);
 			}
 			img.transferTo(imgFile);
-			this.applicationService
-					.saveApplication(name, description, url, APP_FOLDER_PATH + uuid);
+			this.applicationService.saveApplication(name, description, url,
+					APP_FOLDER_PATH + uuid);
 		} catch (Exception ex) {
 			result.setSucceeded(false);
 			result.setMessage(ex.getMessage());

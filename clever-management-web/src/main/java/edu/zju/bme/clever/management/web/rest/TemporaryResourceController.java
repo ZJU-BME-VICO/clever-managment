@@ -30,7 +30,7 @@ import edu.zju.bme.clever.management.web.entity.FileUploadResult;
 @Controller
 @ManagedResource
 @RequestMapping("/temp")
-public class TemporaryResourceController {
+public class TemporaryResourceController extends AbstractResourceController {
 
 	protected final Logger logger = LoggerFactory.getLogger(this.getClass());
 

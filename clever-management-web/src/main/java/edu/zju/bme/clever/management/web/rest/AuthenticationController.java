@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/authentication")
-public class AuthenticationController {
+public class AuthenticationController extends AbstractResourceController {
 
 	@RequestMapping(method = RequestMethod.GET)
 	public Map<String, String> getAuthentication(Authentication authentication) {

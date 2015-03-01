@@ -72,7 +72,7 @@ public class ArchetypeProviderServiceImpl implements ArchetypeProviderService {
 								archetype.getArchetypeId().getValue());
 						return null;
 					}
-				}).orElse("");
+				}).orElse(null);
 	}
 
 	@Override
@@ -88,19 +88,19 @@ public class ArchetypeProviderServiceImpl implements ArchetypeProviderService {
 								archetype.getArchetypeId().getValue());
 						return null;
 					}
-				}).orElse("");
+				}).orElse(null);
 	}
 
 	@Override
 	public String getArchetypeAdlById(Integer id) {
 		return Optional.ofNullable(this.fileRepo.findOne(id))
-				.map(file -> file.getContent()).orElse("");
+				.map(file -> file.getContent()).orElse(null);
 	}
-	
+
 	@Override
 	public String getArchetypeAdlByName(String name) {
 		return Optional.ofNullable(this.fileRepo.findByName(name))
-				.map(file -> file.getContent()).orElse("");
+				.map(file -> file.getContent()).orElse(null);
 	}
 
 	@Override

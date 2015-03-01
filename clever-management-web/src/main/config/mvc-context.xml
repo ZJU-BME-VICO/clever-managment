@@ -38,6 +38,7 @@
 		<mvc:message-converters register-defaults="true">
 			<bean class="edu.zju.bme.clever.management.web.util.UTF8StringHttpMessageConverter" />
 		</mvc:message-converters>
+		<mvc:path-matching registered-suffixes-only="true"/>
 	</mvc:annotation-driven>
 	
 	<context:component-scan base-package="edu.zju.bme.clever.management.web" />

@@ -39,13 +39,14 @@ import edu.zju.bme.clever.management.web.entity.ArchetypeActionLogInfo;
 import edu.zju.bme.clever.management.web.entity.ArchetypeInfo;
 import edu.zju.bme.clever.management.web.entity.ArchetypeMasterInfo;
 import edu.zju.bme.clever.management.web.entity.FileUploadResult;
+import edu.zju.bme.clever.management.web.exception.ResourceNotFoundException;
 import se.acode.openehr.parser.ADLParser;
 import se.acode.openehr.parser.ParseException;
 
 @RestController
 @ManagedResource
 @RequestMapping("/archetypes")
-public class ArchetypeResourceController {
+public class ArchetypeResourceController extends AbstractResourceController {
 
 	protected final Logger logger = LoggerFactory.getLogger(this.getClass());
 
@@ -134,6 +135,7 @@ public class ArchetypeResourceController {
 		ArchetypeInfo info = new ArchetypeInfo();
 		ArchetypeFile file = this.archetypeProviderService
 				.getArchetypeFileById(id);
+		this.isResourcesNull(file);
 		info.setId(file.getId());
 		info.setName(file.getName());
 		info.setInternalVersion(file.getInternalVersion());
@@ -164,28 +166,37 @@ public class ArchetypeResourceController {
 
 	@RequestMapping(value = "/id/{id}.adl", method = RequestMethod.GET)
 	public String getArchetypeAdlById(@PathVariable int id) {
-		return this.archetypeProviderService.getArchetypeAdlById(id);
+		String adl = this.archetypeProviderService.getArchetypeAdlById(id);
+		this.isResourcesNull(adl);
+		return adl;
 	}
-	
+
 	@RequestMapping(value = "/name/{name}.adl", method = RequestMethod.GET)
 	public String getArchetypeAdlByName(@PathVariable String name) {
-		return this.archetypeProviderService.getArchetypeAdlByName(name);
+		String adl = this.archetypeProviderService.getArchetypeAdlByName(name);
+		this.isResourcesNull(adl);
+		return adl;
 	}
 
 	@RequestMapping(value = "/id/{id}.xml", method = RequestMethod.GET)
 	public String getArchetypeXmlById(@PathVariable int id) {
-		return this.archetypeProviderService.getArchetypeXmlById(id);
+		String xml = this.archetypeProviderService.getArchetypeXmlById(id);
+		this.isResourcesNull(xml);
+		return xml;
 	}
-	
+
 	@RequestMapping(value = "/name/{name}.xml", method = RequestMethod.GET)
 	public String getArchetypeXmlByName(@PathVariable String name) {
-		return this.archetypeProviderService.getArchetypeXmlByName(name);
+		String xml = this.archetypeProviderService.getArchetypeXmlByName(name);
+		this.isResourcesNull(xml);
+		return xml;
 	}
 
 	@RequestMapping(value = "/master/id/{id}", method = RequestMethod.GET)
 	public ArchetypeMasterInfo getMasterById(@PathVariable int id) {
 		ArchetypeMaster master = this.archetypeProviderService
 				.getArchetypeMasterById(id);
+		this.isResourcesNull(master);
 		ArchetypeMasterInfo masterInfo = new ArchetypeMasterInfo();
 		// Add basic info
 		masterInfo.setId(master.getId());
@@ -233,12 +244,11 @@ public class ArchetypeResourceController {
 							ArchetypeActionLogInfo logInfo = new ArchetypeActionLogInfo();
 							logInfo.setId(log.getId());
 							logInfo.setAction(log.getActionType().getValue());
-							logInfo.setArchetypeVersion(log
-									.getArchetypeVersion());
+							logInfo.setArchetypeVersion(log.getVersion());
 							logInfo.setRecordTime(log.getRecordTime());
 							logInfo.setOperatorName(log.getOperatorName());
 							logInfo.setArchetypeLifecycleState(log
-									.getArchetypeLifecycleState().getValue());
+									.getLifecycleState().getValue());
 							masterInfo.getActionLogs().add(logInfo);
 						});
 		return masterInfo;
@@ -328,5 +338,4 @@ public class ArchetypeResourceController {
 		}
 		return result;
 	}
-
 }
