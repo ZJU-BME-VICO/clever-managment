@@ -1,8 +1,11 @@
 package edu.zju.bme.clever.management.service;
 
+import java.util.List;
+
+import edu.zju.bme.clever.management.service.entity.EntityClass;
 import edu.zju.bme.clever.management.service.entity.TemplateFile;
 
-public interface TemplateProviderService {
+public interface StorageTemplateProviderService {
 
 	public TemplateFile getTemplateFileById(Integer templateId);
 
@@ -15,5 +18,9 @@ public interface TemplateProviderService {
 	public String getTemplateArmById(Integer templateId);
 
 	public String getTemplateArmByName(String templateName);
+
+	public List<EntityClass> getTemplateEntityClassesById(Integer templateId);
+
+	public List<EntityClass> getTemplateEntityClassesByName(String templateName);
 
 }
