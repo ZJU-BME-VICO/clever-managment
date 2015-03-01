@@ -26,7 +26,7 @@ import edu.zju.bme.clever.management.service.repository.ArchetypeFileRepository;
 import edu.zju.bme.clever.management.service.repository.ArchetypeMasterRepository;
 
 @Service
-@Transactional
+@Transactional(rollbackFor = { Exception.class })
 public class ArchetypeVersionControlServiceImpl implements
 		ArchetypeVersionControlService {
 

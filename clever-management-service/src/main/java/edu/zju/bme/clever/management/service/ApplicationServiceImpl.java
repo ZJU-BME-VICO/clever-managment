@@ -20,7 +20,7 @@ import edu.zju.bme.clever.management.service.exception.ApplicationPersistExcepti
 import edu.zju.bme.clever.management.service.repository.ApplicationRepository;
 
 @Service
-@Transactional
+@Transactional(rollbackFor = { Exception.class })
 public class ApplicationServiceImpl implements ApplicationService {
 
 	protected final Logger logger = LoggerFactory.getLogger(this.getClass());

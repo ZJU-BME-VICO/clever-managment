@@ -5,12 +5,14 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import edu.zju.bme.clever.management.service.entity.User;
 import edu.zju.bme.clever.management.service.exception.UserNotFoundException;
 import edu.zju.bme.clever.management.service.repository.UserRepository;
 
 @Service
+@Transactional(rollbackFor = { Exception.class })
 public class UserServiceImpl implements UserService {
 
 	@Autowired

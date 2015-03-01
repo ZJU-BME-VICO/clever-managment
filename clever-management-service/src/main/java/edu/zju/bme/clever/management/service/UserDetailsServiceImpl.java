@@ -19,7 +19,7 @@ import edu.zju.bme.clever.management.service.entity.User;
 import edu.zju.bme.clever.management.service.repository.UserRepository;
 
 @Service("userDetailsService")
-@Transactional
+@Transactional(rollbackFor = { Exception.class })
 public class UserDetailsServiceImpl implements UserDetailsService {
 
 	protected final Logger logger = LoggerFactory.getLogger(this.getClass());
