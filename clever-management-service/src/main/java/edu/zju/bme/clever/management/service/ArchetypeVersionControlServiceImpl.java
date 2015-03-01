@@ -40,6 +40,19 @@ public class ArchetypeVersionControlServiceImpl implements
 	private ADLSerializer adlSerilizer = new ADLSerializer();
 
 	@Override
+	public void createOrUpgradeArchetype(String adl, SourceType source,
+			User user) throws VersionControlException {
+		ADLParser adlParser = new ADLParser(adl);
+		Archetype archetype;
+		try {
+			archetype = adlParser.parse();
+		} catch (Exception ex) {
+			throw new VersionControlException("Parse adl failed.", ex);
+		}
+		this.createOrUpgradeArchetype(archetype, source, user);
+	}
+
+	@Override
 	public void createOrUpgradeArchetype(Archetype archetype,
 			SourceType source, User user) throws VersionControlException {
 		// Validate user authority
@@ -204,6 +217,43 @@ public class ArchetypeVersionControlServiceImpl implements
 	}
 
 	@Override
+	public void editArchetype(Integer archetypeId, String adl, User user)
+			throws VersionControlException {
+		ArchetypeFile archetypeFile = this.archetypeFileRepo
+				.findOne(archetypeId);
+		if (archetypeFile == null) {
+			throw new VersionControlException("Cannot find archetype with id:"
+					+ archetypeId);
+		}
+		this.editArchetype(archetypeFile, adl, user);
+	}
+
+	@Override
+	public void editArchetype(String archetypeName, String adl, User user)
+			throws VersionControlException {
+		ArchetypeFile archetypeFile = this.archetypeFileRepo
+				.findByName(archetypeName);
+		if (archetypeFile == null) {
+			throw new VersionControlException(
+					"Cannot find archetype with name:" + archetypeName);
+		}
+		this.editArchetype(archetypeFile, adl, user);
+	}
+
+	@Override
+	public void editArchetype(ArchetypeFile archetypeFile, String adl, User user)
+			throws VersionControlException {
+		ADLParser adlParser = new ADLParser(adl);
+		Archetype archetype;
+		try {
+			archetype = adlParser.parse();
+		} catch (Exception ex) {
+			throw new VersionControlException("Parse adl failed.", ex);
+		}
+		this.editArchetype(archetypeFile, archetype, user);
+	}
+
+	@Override
 	public void editArchetype(ArchetypeFile archetypeFile, Archetype archetype,
 			User user) throws VersionControlException {
 		// Validate user authority
@@ -236,6 +286,30 @@ public class ArchetypeVersionControlServiceImpl implements
 	}
 
 	@Override
+	public void submitArchetype(Integer archetypeId, User user)
+			throws VersionControlException {
+		ArchetypeFile archetypeFile = this.archetypeFileRepo
+				.findOne(archetypeId);
+		if (archetypeFile == null) {
+			throw new VersionControlException("Cannot find archetype with id:"
+					+ archetypeId);
+		}
+		this.submitArchetype(archetypeFile, user);
+	}
+
+	@Override
+	public void submitArchetype(String archetypeName, User user)
+			throws VersionControlException {
+		ArchetypeFile archetypeFile = this.archetypeFileRepo
+				.findByName(archetypeName);
+		if (archetypeFile == null) {
+			throw new VersionControlException(
+					"Cannot find archetype with name:" + archetypeName);
+		}
+		this.submitArchetype(archetypeFile, user);
+	}
+
+	@Override
 	public void submitArchetype(ArchetypeFile archetypeFile, User user)
 			throws VersionControlException {
 		// Validate user authority
@@ -265,6 +339,30 @@ public class ArchetypeVersionControlServiceImpl implements
 		this.archetypeMasterRepo.save(archetypeMaster);
 		// Log action
 		logArchetypeAction(archetypeFile, ActionType.Submit, user);
+	}
+
+	@Override
+	public void approveArchetype(Integer archetypeId, User user)
+			throws VersionControlException {
+		ArchetypeFile archetypeFile = this.archetypeFileRepo
+				.findOne(archetypeId);
+		if (archetypeFile == null) {
+			throw new VersionControlException("Cannot find archetype with id:"
+					+ archetypeId);
+		}
+		this.approveArchetype(archetypeFile, user);
+	}
+
+	@Override
+	public void approveArchetype(String archetypeName, User user)
+			throws VersionControlException {
+		ArchetypeFile archetypeFile = this.archetypeFileRepo
+				.findByName(archetypeName);
+		if (archetypeFile == null) {
+			throw new VersionControlException(
+					"Cannot find archetype with name:" + archetypeName);
+		}
+		this.approveArchetype(archetypeFile, user);
 	}
 
 	@Override
@@ -303,6 +401,30 @@ public class ArchetypeVersionControlServiceImpl implements
 	}
 
 	@Override
+	public void rejectArchetype(Integer archetypeId, User user)
+			throws VersionControlException {
+		ArchetypeFile archetypeFile = this.archetypeFileRepo
+				.findOne(archetypeId);
+		if (archetypeFile == null) {
+			throw new VersionControlException("Cannot find archetype with id:"
+					+ archetypeId);
+		}
+		this.rejectArchetype(archetypeFile, user);
+	}
+
+	@Override
+	public void rejectArchetype(String archetypeName, User user)
+			throws VersionControlException {
+		ArchetypeFile archetypeFile = this.archetypeFileRepo
+				.findByName(archetypeName);
+		if (archetypeFile == null) {
+			throw new VersionControlException(
+					"Cannot find archetype with name:" + archetypeName);
+		}
+		this.rejectArchetype(archetypeFile, user);
+	}
+
+	@Override
 	public void rejectArchetype(ArchetypeFile archetypeFile, User user)
 			throws VersionControlException {
 		// Validate user authority
@@ -326,6 +448,30 @@ public class ArchetypeVersionControlServiceImpl implements
 		this.archetypeMasterRepo.save(archetypeMaster);
 		// Log action
 		logArchetypeAction(archetypeFile, ActionType.Reject, user);
+	}
+	
+	@Override
+	public void rejectAndRemoveArchetype(Integer archetypeId, User user)
+			throws VersionControlException {
+		ArchetypeFile archetypeFile = this.archetypeFileRepo
+				.findOne(archetypeId);
+		if (archetypeFile == null) {
+			throw new VersionControlException("Cannot find archetype with id:"
+					+ archetypeId);
+		}
+		this.rejectAndRemoveArchetype(archetypeFile, user);
+	}
+
+	@Override
+	public void rejectAndRemoveArchetype(String archetypeName, User user)
+			throws VersionControlException {
+		ArchetypeFile archetypeFile = this.archetypeFileRepo
+				.findByName(archetypeName);
+		if (archetypeFile == null) {
+			throw new VersionControlException(
+					"Cannot find archetype with name:" + archetypeName);
+		}
+		this.rejectAndRemoveArchetype(archetypeFile, user);
 	}
 
 	@Override
