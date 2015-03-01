@@ -41,13 +41,13 @@
 				<enabled>true</enabled>
 			</snapshots>
 			<id>nexus</id>
-			<url>http://172.16.100.55:8081/nexus/content/groups/public/</url>
+			<url>http://172.16.100.60:8081/nexus/content/groups/public/</url>
 		</repository>
 	</repositories>
 	<pluginRepositories>
 		<pluginRepository>
 			<id>nexus</id>
-			<url>http://172.16.100.55:8081/nexus/content/groups/public/</url>
+			<url>http://172.16.100.60:8081/nexus/content/groups/public/</url>
 			<snapshots>
 				<enabled>true</enabled>
 			</snapshots>
@@ -60,7 +60,7 @@
 		<repository>
 			<id>snapshots</id>
 			<name>Internal Releases</name>
-			<url>http://172.16.100.55:8081/nexus/content/repositories/snapshots/</url>
+			<url>http://172.16.100.60:8081/nexus/content/repositories/snapshots/</url>
 		</repository>
 	</distributionManagement>
 
