@@ -1,3 +1,11 @@
+@media (max-width: 1200px) {
+	.responsive-container {
+		width: 1100px !important;
+	}
+	.responsive-header {
+		width: 1200px !important;
+	}
+}
 @media (min-width: 1200px) {
 	.responsive-container {
 		width: 1100px !important;
@@ -13,6 +21,15 @@
 	.responsive-header {
 		width: 1800px !important;
 	}
+}
+@media (max-height: 700px) {
+	.responsive-container {
+		height: 700px !important;
+	}
+}
+
+.responsive-container {
+	height: 100%;
 }
 
 .responsive-header {

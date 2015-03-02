@@ -1,11 +1,9 @@
-angular.module('clever.management.directives.busyModel', []).directive('busyModel', function(busyService) {
+angular.module('clever.management.directives.busyModel', []).directive('busyModel', function($window, busyService) {
 	return {
 		restrict : 'AE',
 		transclude : true,
 		scope : {
 			size : '@',
-			windowHeight : '=',
-			windowWidth : '=',
 		},
 		templateUrl : 'js/directives/busy-model/busy-model.html',
 		controller : function($scope) {
@@ -18,6 +16,12 @@ angular.module('clever.management.directives.busyModel', []).directive('busyMode
 				//						$scope.zIndex = newValue ? 1000 : -1;
 			});
 
+			angular.element($window).bind('resize', function() {
+				$scope.windowWidth = $window.innerWidth;
+				$scope.windowHeight = $window.innerHeight;
+				$scope.$apply();
+			});
+
 			$scope.$watch(function() {
 				return busyService.getBusyHint();
 			}, function(newValue) {
@@ -25,4 +29,4 @@ angular.module('clever.management.directives.busyModel', []).directive('busyMode
 			});
 		}
 	};
-}); 
+});

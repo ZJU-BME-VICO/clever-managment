@@ -6,7 +6,7 @@
         <button type="button" class="btn btn-default pull-right" ng-click="deleteApp()" ng-show="editMode" style="margin-right: 10px;">
             <span class="glyphicon glyphicon-trash"></span> {{'APPLICATION_EDIT_BTN_DELETE' | translate}}
         </button>
-        <div class="content-container" ng-style="{height: windowHeight - 305}">
+        <div class="content-container" ng-style="{height: containerHeight - 205}">
             <div class="row">
                 <div class="col-lg-6 col-md-6 col-sm-6">
                     <div class="input-group">
@@ -45,12 +45,12 @@
                             <div class="input-group">
                                 <input class="form-control" type="text" value="{{application.img.path}}" disabled="true" style="cursor: default;" />
                                 <span class="input-group-btn">
-                                    <button class="btn btn-success fileinput-button" type="button"
+                                    <button class="btn btn-success btn-file" type="button"
                                             tooltip-placement="top" 
                                             tooltip="{{'APPLICATION_EDIT_BTN_BROWSE' | translate}}"
                                             tooltip-popup-delay="100">
                                             <span class="glyphicon glyphicon-folder-open" ></span>
-                                            <input type="file" style="width:25px;height:0px" file-model 
+                                            <input type="file" file-model 
                                             file="application.img" on-change="previewImg(file)">
                                     </button>
                                 </span>

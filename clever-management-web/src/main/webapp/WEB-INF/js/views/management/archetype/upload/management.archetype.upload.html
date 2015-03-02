@@ -1,8 +1,8 @@
 <div class="modal-body">
-	<div ng-style="{height: windowHeight - 310}">
+	<div ng-style="{height: containerHeight - 110}">
 		<div class="row">
 			<div class="col-sm-12 col-md-12 col-lg-12">
-				<button class="btn btn-success fileinput-button" ng-show="onStatus('ToAddFile')">
+				<button class="btn btn-success btn-file" ng-show="onStatus('ToAddFile')">
 					<span class="glyphicon glyphicon-plus"></span> {{'ARCHETYPE_UPLOAD_ADD_FILE' | translate}}
 					<input id="inputFiles" type="file" multiple accept=".adl" files-model file-list="fileList">
 				</button>
@@ -15,7 +15,7 @@
 		</div>
 		<br/>
 		<div class="row">
-			<div class="col-sm-12 col-md-12 col-lg-12" ng-style="{height: windowHeight - 370}" style="overflow: auto">
+			<div class="col-sm-12 col-md-12 col-lg-12" ng-style="{height: containerHeight - 170}" style="overflow: auto">
 				<table role="presentation" class="table table-striped table-hover" ng-show="fileList.length">
 					<tbody>
 						<tr ng-repeat="file in fileList | orderBy:file.name" ng-class="{TOUPLOAD: '', VALID: 'success', EXISTED: 'info', CHANGED: 'warning', INVALID: 'danger', FAILED: 'danger'}[file.status]">

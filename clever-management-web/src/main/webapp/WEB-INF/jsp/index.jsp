@@ -20,12 +20,12 @@ uri="http://www.springframework.org/security/tags"%>
 		<!-- css init -->
 		<%@ include file="jspf/css-init.jspf"%>
 	</head>
-	<body ng-controller="appCtrl" style="font-family: Microsoft YaHei;" ng-style="{height: windowHeight, width: windowWidth}" ng-cloak>
+	<body ng-controller="appCtrl" style="font-family: Microsoft YaHei;" ng-cloak>
 		<!-- header -->
 		<%@ include file="jspf/header.jspf"%>
 
 		<!-- busy hint -->
-		<busy-model size="60" window-width="windowWidth" window-height="windowHeight"></busy-model>
+		<busy-model size="60"></busy-model>
 
 		<!-- content -->
 		<div ui-view class="container responsive-container" ng-style="{height: containerHeight}"></div>
