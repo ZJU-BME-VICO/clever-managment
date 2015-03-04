@@ -41,7 +41,6 @@ function ArchetypeUploadCtrl($scope, resourceService, msgboxService, ARCHETYPE_V
 			}
 		}).then(function(results) {
 			var isValidationPast = true;
-			var isAllValid = true;
 			angular.forEach(results, function(result) {
 				if (result.status == 'INVALID') {
 					isValidationPast = false;

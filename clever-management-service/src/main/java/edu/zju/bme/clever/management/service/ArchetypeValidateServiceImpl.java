@@ -109,8 +109,7 @@ public class ArchetypeValidateServiceImpl implements ArchetypeValidateService {
 			FileProcessResult result, Optional<ArchetypeFile> file) {
 		file.ifPresent(f -> {
 			result.setStatus(FileProcessResult.FileStatus.INVALID);
-			result.setMessage(result.getMessage()
-					+ "Archetype already exists. ");
+			result.appendMessage("Archetype already exists. ");
 		});
 	}
 
@@ -121,8 +120,8 @@ public class ArchetypeValidateServiceImpl implements ArchetypeValidateService {
 						.orElse(1);
 		if (archetype.getArchetypeId().versionID().compareTo(nextVersion) != 0) {
 			result.setStatus(FileProcessResult.FileStatus.INVALID);
-			result.setMessage(result.getMessage()
-					+ "Archetype version should be " + nextVersion + ". ");
+			result.appendMessage("Archetype version should be " + nextVersion
+					+ ". ");
 		}
 	}
 
@@ -137,8 +136,8 @@ public class ArchetypeValidateServiceImpl implements ArchetypeValidateService {
 							if (!validatedArchetypes.containsKey(id)) {
 								if (this.archetypeFileRepo.findByName(id) == null) {
 									result.setStatus(FileProcessResult.FileStatus.INVALID);
-									result.setMessage("Specialise archetype "
-											+ id + " does not exist.");
+									result.appendMessage("Specialise archetype "
+											+ id + " does not exist. ");
 									specialiseValidationFailedArchetypes.put(
 											archetype.getArchetypeId()
 													.getValue(), archetype);
