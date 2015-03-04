@@ -2,6 +2,7 @@ package edu.zju.bme.clever.management.service;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -13,6 +14,7 @@ import java.util.stream.Collectors;
 import openEHR.v1.template.RESOURCEDESCRIPTIONITEM;
 import openEHR.v1.template.TemplateDocument;
 
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.xmlbeans.XmlException;
 import org.openehr.am.archetype.Archetype;
 import org.openehr.am.template.OETParser;
@@ -75,21 +77,17 @@ public class StorageTemplateVersionControlServiceImpl implements
 	@Override
 	public void createOrUpgradeTemplate(String oet, String arm,
 			SourceType source, User user) throws VersionControlException {
-		TemplateDocument oetDoc;
-		try {
-			oetDoc = this.oetParser.parseTemplate(new ByteArrayInputStream(oet
-					.getBytes(StandardCharsets.UTF_8)));
-		} catch (Exception ex) {
-			throw new VersionControlException("Parse oet failed.", ex);
-		}
-		ArchetypeRelationshipMappingDocument armDoc;
-		try {
-			armDoc = this.armParser.parseArm(new ByteArrayInputStream(arm
-					.getBytes(StandardCharsets.UTF_8)));
-		} catch (Exception ex) {
-			throw new VersionControlException("Parse arm failed.", ex);
-		}
-		this.createOrUpgradeTemplate(oet, arm, source, user);
+		this.createOrUpgradeTemplate(
+				new ByteArrayInputStream(oet.getBytes(StandardCharsets.UTF_8)),
+				new ByteArrayInputStream(arm.getBytes(StandardCharsets.UTF_8)),
+				source, user);
+	}
+
+	@Override
+	public void createOrUpgradeTemplate(InputStream oet, InputStream arm,
+			SourceType source, User user) throws VersionControlException {
+		this.createOrUpgradeTemplate(this.parseOet(oet), this.parseArm(arm),
+				source, user);
 	}
 
 	@Override
@@ -139,7 +137,7 @@ public class StorageTemplateVersionControlServiceImpl implements
 					.getInternalVersion();
 			// Validate template sub version
 			if (currentSpecialiseArchetypeInternalVersion > latestTemplateSpecialiseArchetypeInternalVersion) {
-				if (templateFile.getVersion().equals(
+				if (!templateFile.getVersion().equals(
 						specialiseArchetypeFile.getVersion() + ".1")) {
 					throw new VersionControlException(
 							"Template version should be "
@@ -149,7 +147,7 @@ public class StorageTemplateVersionControlServiceImpl implements
 				templateFile.setSubVersion(1);
 			} else if (currentSpecialiseArchetypeInternalVersion == latestTemplateSpecialiseArchetypeInternalVersion) {
 				Integer nextSubVersion = latestTemplate.get().getSubVersion() + 1;
-				if (templateFile.getVersion().equals(
+				if (!templateFile.getVersion().equals(
 						specialiseArchetypeFile.getVersion() + "."
 								+ nextSubVersion)) {
 					throw new VersionControlException(
@@ -204,17 +202,36 @@ public class StorageTemplateVersionControlServiceImpl implements
 	@Override
 	public void editTemplate(Integer templateId, String oet, String arm,
 			User user) throws VersionControlException {
+		this.editTemplate(templateId,
+				new ByteArrayInputStream(oet.getBytes(StandardCharsets.UTF_8)),
+				new ByteArrayInputStream(arm.getBytes(StandardCharsets.UTF_8)),
+				user);
+	}
+
+	@Override
+	public void editTemplate(Integer templateId, InputStream oet,
+			InputStream arm, User user) throws VersionControlException {
 		TemplateFile templateFile = this.templateFileRepo.findOne(templateId);
 		if (templateFile == null) {
 			throw new VersionControlException("Cannot find template with id: "
 					+ templateId);
 		}
-		this.editTemplate(templateFile, oet, arm, user);
+		this.editTemplate(templateFile, this.parseOet(oet), this.parseArm(arm),
+				user);
 	}
 
 	@Override
 	public void editTemplate(String templateName, String oet, String arm,
 			User user) throws VersionControlException {
+		this.editTemplate(templateName,
+				new ByteArrayInputStream(oet.getBytes(StandardCharsets.UTF_8)),
+				new ByteArrayInputStream(arm.getBytes(StandardCharsets.UTF_8)),
+				user);
+	}
+
+	@Override
+	public void editTemplate(String templateName, InputStream oet,
+			InputStream arm, User user) throws VersionControlException {
 		TemplateFile templateFile = this.templateFileRepo
 				.findByName(templateName);
 		if (templateFile == null) {
@@ -225,23 +242,10 @@ public class StorageTemplateVersionControlServiceImpl implements
 	}
 
 	@Override
-	public void editTemplate(TemplateFile templateFile, String oet, String arm,
-			User user) throws VersionControlException {
-		TemplateDocument oetDoc;
-		try {
-			oetDoc = this.oetParser.parseTemplate(new ByteArrayInputStream(oet
-					.getBytes(StandardCharsets.UTF_8)));
-		} catch (Exception ex) {
-			throw new VersionControlException("Parse oet failed.", ex);
-		}
-		ArchetypeRelationshipMappingDocument armDoc;
-		try {
-			armDoc = this.armParser.parseArm(new ByteArrayInputStream(arm
-					.getBytes(StandardCharsets.UTF_8)));
-		} catch (Exception ex) {
-			throw new VersionControlException("Parse arm failed.", ex);
-		}
-		this.editTemplate(templateFile, oetDoc, armDoc, user);
+	public void editTemplate(TemplateFile templateFile, InputStream oet,
+			InputStream arm, User user) throws VersionControlException {
+		this.editTemplate(templateFile, this.parseOet(oet), this.parseArm(arm),
+				user);
 	}
 
 	@Override
@@ -638,6 +642,30 @@ public class StorageTemplateVersionControlServiceImpl implements
 				.setCurrentSpecialiseArchetypeVersion(specialiseArchetypeFile
 						.getVersion());
 		return templateFile;
+	}
+
+	private TemplateDocument parseOet(InputStream oetStream)
+			throws VersionControlException {
+		TemplateDocument oet;
+		try {
+			oet = this.oetParser.parseTemplate(oetStream);
+		} catch (Exception ex) {
+			throw new VersionControlException("Parse oet failed, error: "
+					+ ex.getMessage(), ex);
+		}
+		return oet;
+	}
+
+	private ArchetypeRelationshipMappingDocument parseArm(InputStream armStream)
+			throws VersionControlException {
+		ArchetypeRelationshipMappingDocument arm;
+		try {
+			arm = this.armParser.parseArm(armStream);
+		} catch (Exception ex) {
+			throw new VersionControlException("Parse arm failed, error: "
+					+ ex.getMessage(), ex);
+		}
+		return arm;
 	}
 
 	protected void logTemplateAction(TemplateFile templateFile,

@@ -1,5 +1,7 @@
 package edu.zju.bme.clever.management.service;
 
+import java.io.InputStream;
+
 import openEHR.v1.template.TemplateDocument;
 import edu.zju.bme.clever.management.service.entity.TemplateFile;
 import edu.zju.bme.clever.management.service.entity.User;
@@ -12,6 +14,9 @@ public interface StorageTemplateVersionControlService {
 	public void createOrUpgradeTemplate(String oet, String arm,
 			SourceType source, User user) throws VersionControlException;
 
+	public void createOrUpgradeTemplate(InputStream oet, InputStream arm,
+			SourceType source, User user) throws VersionControlException;
+
 	public void createOrUpgradeTemplate(TemplateDocument oet,
 			ArchetypeRelationshipMappingDocument arm, SourceType source,
 			User user) throws VersionControlException;
@@ -22,8 +27,14 @@ public interface StorageTemplateVersionControlService {
 	public void editTemplate(String templateName, String oet, String arm,
 			User user) throws VersionControlException;
 
-	public void editTemplate(TemplateFile templateFile, String oet, String arm,
-			User user) throws VersionControlException;
+	public void editTemplate(String templateName, InputStream oet,
+			InputStream arm, User user) throws VersionControlException;
+
+	public void editTemplate(Integer templateId, InputStream oet,
+			InputStream arm, User user) throws VersionControlException;
+
+	public void editTemplate(TemplateFile templateFile, InputStream oet,
+			InputStream arm, User user) throws VersionControlException;
 
 	public void editTemplate(TemplateFile templateFile, TemplateDocument oet,
 			ArchetypeRelationshipMappingDocument arm, User user)
