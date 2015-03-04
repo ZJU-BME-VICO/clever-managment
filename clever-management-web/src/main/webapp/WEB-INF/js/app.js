@@ -5,7 +5,7 @@ angular.module('clever.management.services', ['clever.management.services.resour
 angular.module('clever.management.filters', ['clever.management.filters.unsafe']);
 angular.module('clever.management.controllers', ['clever.management.controllers.app']);
 angular.module('clever.management.i18n', ['clever.management.i18n.zh']);
-angular.module('cleverManagementApp', ['ngAnimate', 'ui.bootstrap', 'pascalprecht.translate', 'ui.router', 'ui.utils', 'clever.management.i18n', 'clever.management.directives', 'clever.management.controllers', 'clever.management.services', 'clever.management.filters', 'clever.management.config']).config(function($stateProvider, $urlRouterProvider, $translateProvider) {
+angular.module('cleverManagementApp', ['ngAnimate', 'ngVisible', 'ui.bootstrap', 'pascalprecht.translate', 'ui.router', 'ui.utils', 'clever.management.i18n', 'clever.management.directives', 'clever.management.controllers', 'clever.management.services', 'clever.management.filters', 'clever.management.config']).config(function($stateProvider, $urlRouterProvider, $translateProvider) {
 
 	// UI router config
 	$urlRouterProvider.otherwise('/');
@@ -73,6 +73,19 @@ angular.module('cleverManagementApp', ['ngAnimate', 'ui.bootstrap', 'pascalprech
 	}).state('management.storage.list', {
 		url : '',
 		templateUrl : 'js/views/management/storage/management.storage.list.html',
+	}).state('management.storage.view', {
+		url : '/view',
+		data : {
+			parent : 'management.storage.list',
+		},
+		templateUrl : 'js/views/management/storage/view/management.storage.view.html',
+	}).state('management.storage.upload', {
+		url : '/upload',
+		data : {
+			parent : 'management.storage.list',
+		},
+		controller : StorageTemplateUploadCtrl,
+		templateUrl : 'js/views/management/storage/upload/management.storage.upload.html',
 	})
 	// Application
 	.state('management.application', {

@@ -4,15 +4,16 @@ angular.module('clever.management.i18n.zh', ['pascalprecht.translate']).config(f
 		LANGUAGE : '语言',
 		LANGUAGE_ZH : '中文',
 		LANGUAGE_EN : '英文',
-		
+
 		// Message box
 		MESSAGE_BOX_BTN_YES : '是',
 		MESSAGE_BOX_BTN_NO : '否',
 		MESSAGE_BOX_BTN_OK : '确定',
 		MESSAGE_BOX_BTN_CANCEL : '取消',
-		
+
 		// Busy service
 		BUSY_LOADING : '加载中',
+		BUSY_UPLOADING : '上传中',
 
 		// Home
 		ARCHETYPE_MANAGEMENT : '原型管理',
@@ -58,7 +59,27 @@ angular.module('clever.management.i18n.zh', ['pascalprecht.translate']).config(f
 		ARCHETYPE_UPLOAD_SUCCEEDED_HINT : '原型上传成功。',
 		ARCHETYPE_UPLOAD_FAILED : '操作失败',
 		ARCHETYPE_UPLOAD_FAILED_HINT : '原型上传失败，错误：{{errorMsg}}',
-		
+
+		// Storage template upload
+		STORAGE_TEMPLATE_UPLOAD_ADD : '添加',
+		STORAGE_TEMPLATE_UPLOAD_BTN_BROWSE : '浏览',
+		STORAGE_TEMPLATE_UPLOAD_BTN_DELETE : '删除',
+		STORAGE_TEMPLATE_UPLOAD_BTN_RETRY : '重试',
+		STORAGE_TEMPLATE_UPLOAD_BTN_UPLOAD : '上传',
+		STORAGE_TEMPLATE_UPLOAD_BTN_RESET : '重置',
+		STORAGE_TEMPLATE_UPLOAD_BTN_VALIDATE : '验证',
+		STORAGE_TEMPLATE_UPLOAD_OET_HINT : '请选择OET文件...',
+		STORAGE_TEMPLATE_UPLOAD_ARM_HINT : '请选择ARM文件...',
+		STORAGE_TEMPLATE_UPLOAD_VALIDATING_HINT : '验证中...',
+		STORAGE_TEMPLATE_UPLOAD_OET_ERROR_HINT : '请选择OET文件。',
+		STORAGE_TEMPLATE_UPLOAD_ARM_ERROR_HINT : '请选择ARM文件。',
+		STORAGE_TEMPLATE_UPLOAD_VALIDATE_ERROR_HINT : '验证失败。',
+		STORAGE_TEMPLATE_UPLOAD_VALIDATE_DETAILS_HINT : '详情...',
+		STORAGE_TEMPLATE_UPLOAD_SUCCEEDED : '操作成功',
+		STORAGE_TEMPLATE_UPLOAD_SUCCEEDED_HINT : '存储模板上传成功。',
+		STORAGE_TEMPLATE_UPLOAD_FAILED : '操作失败',
+		STORAGE_TEMPLATE_UPLOAD_FAILED_HINT : '存储模板上传失败，错误：{{errorMsg}}',
+
 		// Menu
 		MENU_RETURN : '返回上一级',
 		MENU_MANAGEMENT : '管理功能',
@@ -66,12 +87,14 @@ angular.module('clever.management.i18n.zh', ['pascalprecht.translate']).config(f
 		MENU_MANAGEMENT_ARCHETYPE_VIEW : '原型查看',
 		MENU_MANAGEMENT_ARCHETYPE_UPLOAD : '原型上传',
 		MENU_MANAGEMENT_STORAGE : '存储管理',
+		MENU_MANAGEMENT_STORAGE_VIEW : '存储模板查看',
+		MENU_MANAGEMENT_STORAGE_UPLOAD : '存储模板上传',
 		MENU_MANAGEMENT_APPLICATION : '应用管理',
 		MENU_MANAGEMENT_APPLICATION_DESIGN : '设计器',
 		MENU_MANAGEMENT_APPLICATION_EDIT : '应用编辑',
 		MENU_MANAGEMENT_APPLICATION_VIEW : '应用查看',
 		MENU_MANAGEMENT_INTEGRATION : '集成管理',
-		
+
 		//Menu-infomation
 		MENU_INFO : '概要信息',
 		MENU_MANAGEMENT_INFO : 'CLEVER管理平台，功能模块管理',
@@ -105,7 +128,7 @@ angular.module('clever.management.i18n.zh', ['pascalprecht.translate']).config(f
 		APPLICATION_EDIT_DELETE_HINT : '确定删除"{{appName}}"应用',
 		APPLICATION_VIEW_FIND_HINT : '输入应用名称',
 		APPLICATION_VIEW_EDIT : '编辑',
-		
+
 		// Archetype master pane
 		ARCHETYPE_MASTER_PANE_INFO : '基本信息',
 		ARCHETYPE_MASTER_PANE_LOG : '操作记录',
@@ -114,7 +137,7 @@ angular.module('clever.management.i18n.zh', ['pascalprecht.translate']).config(f
 		ARCHETYPE_MASTER_PANE_OPERATION : '操作',
 		ARCHETYPE_MASTER_PANE_OPERATIOR : '操作者',
 		ARCHETYPE_MASTER_PANE_OPERATE_TIME : '操作时间',
-		
+
 		// Archetype pane
 		ARCHETYPE_PANE_LANGUAGE : '语言',
 		ARCHETYPE_PANE_INFO : '基本信息',

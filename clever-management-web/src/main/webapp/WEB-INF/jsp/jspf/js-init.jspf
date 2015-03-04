@@ -61,6 +61,7 @@
 <script src="js/views/management/archetype/archetype-page-controller.js"></script>
 <script src="js/views/management/archetype/upload/archetype-upload-controller.js"></script>
 <script src="js/views/management/archetype/view/archetype-view-controller.js"></script>
+<script src="js/views/management/storage/upload/storage-template-upload-controller.js"></script>
 <script src="js/views/management/application/designer/application-designer-controller.js"></script>
 <script src="js/views/management/application/view/application-view-controller.js"></script>
 <script src="js/views/management/application/edit/application-edit-list-controller.js"></script>
@@ -71,4 +72,5 @@
 
 <!-- util -->
 <script src="js/util/date-format-extension.js"></script>
+<script src="js/util/ng-visible-extension.js"></script>
 

@@ -30,6 +30,10 @@ public class FileProcessResult {
 		this.message = message;
 	}
 
+	public void appendMessage(String message) {
+		this.message += message;
+	}
+
 	public enum FileStatus {
 
 		VALID("VALID"), INVALID("INVALID");

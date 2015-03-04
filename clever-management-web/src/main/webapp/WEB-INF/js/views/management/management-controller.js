@@ -53,6 +53,16 @@ function ManagementCtrl($scope, $state, $timeout) {
 		icon : 'icon-cog',
 		info : 'MENU_MANAGEMENT_STORAGE_INFO',
 	};
+	storage.view = {
+		title : 'MENU_MANAGEMENT_STORAGE_VIEW',
+		state : 'management.storage.view',
+		icon : 'icon-cog',
+	};
+	storage.upload = {
+		title : 'MENU_MANAGEMENT_STORAGE_UPLOAD',
+		state : 'management.storage.upload',
+		icon : 'icon-cog',
+	};
 	// Application management
 	var application = management.application = {
 		index : 3,
