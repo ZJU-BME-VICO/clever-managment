@@ -16,6 +16,9 @@ angular.module('clever.management.directives.busyModel', []).directive('busyMode
 				//						$scope.zIndex = newValue ? 1000 : -1;
 			});
 
+			$scope.windowWidth = $window.innerWidth;
+			$scope.windowHeight = $window.innerHeight;
+
 			angular.element($window).bind('resize', function() {
 				$scope.windowWidth = $window.innerWidth;
 				$scope.windowHeight = $window.innerHeight;
