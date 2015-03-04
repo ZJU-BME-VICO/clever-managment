@@ -78,7 +78,7 @@ public class TemporaryResourceController extends AbstractResourceController {
 
 	@RequestMapping(value = "/img", method = RequestMethod.POST)
 	@ResponseBody
-	public FileUploadResult uploadApplication(
+	public FileUploadResult uploadTemporaryImage(
 			@RequestParam(value = "img", required = true) MultipartFile img,
 			Authentication authentication) {
 		final String lowerCaseFileName = img.getOriginalFilename()
