@@ -50,7 +50,7 @@ public class ArchetypeVersionControlServiceTest {
 				SourceType.CKM, user);
 //		this.versionControlService.editArchetype(archetype
 //				user);
-		this.versionControlService.submitArchetype(archetype, user);
+//		this.versionControlService.submitArchetype(archetype, user);
 		// this.versionControlService.rejectAndRemoveArchetype(archetype, user);
 		this.archetypeFileRepo.getAllTeamreviewArchetypeFiles().forEach(
 				System.out::println);
