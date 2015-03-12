@@ -23,7 +23,6 @@ public class TemplateMaster extends AbstractMaster<TemplateFile> {
 	private static final long serialVersionUID = 3362168676489019640L;
 
 	@Column
-	@Enumerated(EnumType.STRING)
 	private TemplateType templateType;
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "master")
 	private List<ArchetypeActionLog> actionLogs;

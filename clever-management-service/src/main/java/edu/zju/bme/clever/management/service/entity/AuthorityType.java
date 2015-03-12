@@ -1,6 +1,6 @@
 package edu.zju.bme.clever.management.service.entity;
 
-public enum AuthorityType {
+public enum AuthorityType implements StringValueEnum {
 
 	JMX_MANAGE("JmxManage", 1);
 

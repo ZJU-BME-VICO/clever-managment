@@ -28,9 +28,7 @@ public class AbstractActionLog<T extends AbstractMaster> extends
 	@Column(nullable = false)
 	private String version;
 	@Column(nullable = false)
-	@Enumerated(EnumType.STRING)
 	private LifecycleState lifecycleState;
-	@Enumerated(EnumType.STRING)
 	@Column(nullable = false)
 	private ActionType actionType;
 	@ManyToOne(fetch = FetchType.LAZY)

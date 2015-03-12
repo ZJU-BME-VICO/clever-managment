@@ -44,10 +44,8 @@ public class TemplateFile extends AbstractFile<TemplateMaster> {
 	@Column(name = "value")
 	@Lob
 	@MapKeyColumn(name = "attribute")
-	@Enumerated(EnumType.STRING)
 	private Map<TemplatePropertyType, String> properties = new HashMap<TemplatePropertyType, String>();
 	@Column
-	@Enumerated(EnumType.STRING)
 	private TemplateType templateType;
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "templateFile")
 	private List<EntityClass> entityClasses;

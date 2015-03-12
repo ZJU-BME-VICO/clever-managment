@@ -1,7 +1,7 @@
 package edu.zju.bme.clever.management.service.entity;
 
-public enum TemplatePropertyType implements StringValueEnum {
-	ARM("ArchetypeRelationshipMapping");
+public enum SourceType implements StringValueEnum {
+	CKM("CKM"), ZJU("ZJU"), CLEVER("CLEVER");
 
 	private final String value;
 
@@ -13,7 +13,7 @@ public enum TemplatePropertyType implements StringValueEnum {
 		return value;
 	}
 
-	TemplatePropertyType(String value) {
+	SourceType(String value) {
 		this.value = value;
 	}
 }

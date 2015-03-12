@@ -21,16 +21,19 @@ import edu.zju.bme.clever.management.service.StorageTemplateProviderService;
 import edu.zju.bme.clever.management.service.StorageTemplateValidateService;
 import edu.zju.bme.clever.management.service.StorageTemplateVersionControlService;
 import edu.zju.bme.clever.management.service.UserService;
-import edu.zju.bme.clever.management.service.entity.AbstractFile.SourceType;
 import edu.zju.bme.clever.management.service.entity.FileProcessResult.FileStatus;
 import edu.zju.bme.clever.management.service.entity.EntityClass;
 import edu.zju.bme.clever.management.service.entity.FileProcessResult;
+import edu.zju.bme.clever.management.service.entity.SourceType;
 import edu.zju.bme.clever.management.service.entity.TemplateFile;
+import edu.zju.bme.clever.management.service.entity.TemplatePropertyType;
 import edu.zju.bme.clever.management.service.entity.User;
 import edu.zju.bme.clever.management.service.exception.VersionControlException;
 import edu.zju.bme.clever.management.web.entity.EntityClassInfo;
 import edu.zju.bme.clever.management.web.entity.FileUploadResult;
 import edu.zju.bme.clever.management.web.entity.StorageTemplateInfo;
+import edu.zju.bme.clever.management.web.entity.StorageTemplateMasterInfo;
+import edu.zju.bme.clever.management.web.entity.TemplateInfo;
 import edu.zju.bme.clever.management.web.entity.UploadedStorageTemplate;
 
 @RestController
@@ -46,8 +49,25 @@ public class StorageTemplateResourceController extends
 	@Autowired
 	private UserService userService;
 
+	@RequestMapping(value = "/list", method = RequestMethod.GET)
+	public List<StorageTemplateMasterInfo> getStorageTemplateMasterList() {
+		return this.providerService
+				.getAllStorageTemplateMasters()
+				.stream()
+				.map(master -> {
+					StorageTemplateMasterInfo info = new StorageTemplateMasterInfo();
+					info.setId(master.getId());
+					info.setConceptName(master.getConceptName());
+					info.setName(master.getName());
+					info.setLatestTemplateVersion(master.getLatestFileVersion());
+					info.setLifecycleState(master.getLatestFileLifecycleState()
+							.getValue());
+					return info;
+				}).collect(Collectors.toList());
+	}
+
 	@RequestMapping(value = "/id/{id}", method = RequestMethod.GET)
-	public StorageTemplateInfo getTemplateById(@PathVariable int id) {
+	public TemplateInfo getTemplateById(@PathVariable int id) {
 		TemplateFile templateFile = this.providerService
 				.getTemplateFileById(id);
 		this.isResourcesNull(templateFile);
@@ -55,7 +75,7 @@ public class StorageTemplateResourceController extends
 	}
 
 	@RequestMapping(value = "/name/{name}", method = RequestMethod.GET)
-	public StorageTemplateInfo getTemplateByName(@PathVariable String name) {
+	public TemplateInfo getTemplateByName(@PathVariable String name) {
 		TemplateFile templateFile = this.providerService
 				.getTemplateFileByName(name);
 		this.isResourcesNull(templateFile);
@@ -159,14 +179,15 @@ public class StorageTemplateResourceController extends
 		info.setName(templateFile.getName());
 		info.setVersion(templateFile.getVersion());
 		info.setSpecialiseArchetypeId(templateFile.getSpecialiseArchetypeId());
-		info.setSource(templateFile.getSource());
+		info.setSource(templateFile.getSource().getValue());
 		info.setContent(templateFile.getContent());
+		info.setArm(templateFile.getPropertyValue(TemplatePropertyType.ARM));
 		info.setEditorId(templateFile.getEditor().getId());
 		info.setEditorName(templateFile.getEditor().getName());
-		info.setLifecycleState(templateFile.getLifecycleState());
+		info.setLifecycleState(templateFile.getLifecycleState().getValue());
 		info.setEntityClasses(templateFile.getEntityClasses().stream()
 				.map(cls -> this.constructEntityClassInfo(cls))
-				.collect(Collectors.toList()));
+				.collect(Collectors.toSet()));
 		return info;
 	}
 

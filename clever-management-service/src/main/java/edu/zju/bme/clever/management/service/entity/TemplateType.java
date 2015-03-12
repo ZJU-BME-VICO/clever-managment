@@ -1,6 +1,6 @@
 package edu.zju.bme.clever.management.service.entity;
 
-public enum TemplateType {
+public enum TemplateType implements StringValueEnum {
 	STORAGE("Storage"), APPLICATION("Application"), INTEGRATION("Integration");
 
 	private final String value;

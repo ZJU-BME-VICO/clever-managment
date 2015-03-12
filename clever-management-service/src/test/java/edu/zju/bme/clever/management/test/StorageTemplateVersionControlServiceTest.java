@@ -18,7 +18,7 @@ import org.springframework.test.context.transaction.TransactionConfiguration;
 import edu.zju.bme.clever.cdr.arm.parser.ArmParser;
 import edu.zju.bme.clever.commons.archetype.ArchetypeLoader;
 import edu.zju.bme.clever.management.service.StorageTemplateVersionControlService;
-import edu.zju.bme.clever.management.service.entity.AbstractFile.SourceType;
+import edu.zju.bme.clever.management.service.entity.SourceType;
 import edu.zju.bme.clever.management.service.entity.User;
 import edu.zju.bme.clever.management.service.exception.VersionControlException;
 import edu.zju.bme.clever.management.service.repository.UserRepository;

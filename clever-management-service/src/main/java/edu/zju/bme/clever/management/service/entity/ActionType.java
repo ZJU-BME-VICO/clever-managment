@@ -1,6 +1,6 @@
 package edu.zju.bme.clever.management.service.entity;
 
-public enum ActionType {
+public enum ActionType implements StringValueEnum {
 	CREATE("Create"), EDIT("Edit"), SUBMIT("Submit"), REJECT("Reject"), REJECT_AND_REMOVE(
 			"RejectAndRelease"), APPROVE("Approve"), DEPLOY("Deploy");
 

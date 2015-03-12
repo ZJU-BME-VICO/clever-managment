@@ -30,15 +30,16 @@ import edu.zju.bme.clever.cdr.generator.EntityClassGenerateOption;
 import edu.zju.bme.clever.cdr.generator.EntityClassGenerator;
 import edu.zju.bme.clever.cdr.generator.cls.JavaClass;
 import edu.zju.bme.clever.cdr.generator.exception.EntityClassGenerateException;
-import edu.zju.bme.clever.management.service.entity.AbstractFile.SourceType;
 import edu.zju.bme.clever.management.service.entity.ActionType;
 import edu.zju.bme.clever.management.service.entity.ArchetypeFile;
 import edu.zju.bme.clever.management.service.entity.ArchetypeMaster;
 import edu.zju.bme.clever.management.service.entity.EntityClass;
 import edu.zju.bme.clever.management.service.entity.LifecycleState;
+import edu.zju.bme.clever.management.service.entity.SourceType;
 import edu.zju.bme.clever.management.service.entity.TemplateActionLog;
 import edu.zju.bme.clever.management.service.entity.TemplateFile;
 import edu.zju.bme.clever.management.service.entity.TemplateMaster;
+import edu.zju.bme.clever.management.service.entity.TemplatePropertyType;
 import edu.zju.bme.clever.management.service.entity.TemplateType;
 import edu.zju.bme.clever.management.service.entity.User;
 import edu.zju.bme.clever.management.service.exception.VersionControlException;
@@ -71,8 +72,6 @@ public class StorageTemplateVersionControlServiceImpl implements
 
 	private OETParser oetParser = new OETParser();
 	private ArmParser armParser = new ArmParser();
-
-	private static final String ARM = "ArchetypeRelationshipMapping";
 
 	@Override
 	public void createOrUpgradeTemplate(String oet, String arm,
@@ -166,7 +165,7 @@ public class StorageTemplateVersionControlServiceImpl implements
 			templateFile.setInternalVersion(nextInternalVersion);
 			// Validate lifecycle state
 			if (!latestTemplate.get().getLifecycleState()
-					.equals(LifecycleState.Published)) {
+					.equals(LifecycleState.PUBLISHED)) {
 				throw new VersionControlException(
 						"Illeagal action Create for template "
 								+ templateFile.getName()
@@ -185,7 +184,7 @@ public class StorageTemplateVersionControlServiceImpl implements
 			templateFile.setSubVersion(1);
 		}
 		// Set lifecycle state
-		templateFile.setLifecycleState(LifecycleState.Draft);
+		templateFile.setLifecycleState(LifecycleState.DRAFT);
 		// Save template file and master
 		this.templateFileRepo.save(templateFile);
 		templateMaster.setLatestFile(templateFile);
@@ -196,7 +195,7 @@ public class StorageTemplateVersionControlServiceImpl implements
 		templateMaster.setLatestFileVersion(templateFile.getVersion());
 		this.templateMasterRepo.save(templateMaster);
 		// Log action
-		this.logTemplateAction(templateFile, ActionType.Create, user);
+		this.logTemplateAction(templateFile, ActionType.CREATE, user);
 	}
 
 	@Override
@@ -262,7 +261,7 @@ public class StorageTemplateVersionControlServiceImpl implements
 					+ " not user " + user.getName() + ".");
 		}
 		// Validate and set lifecycle state
-		if (!templateFile.getLifecycleState().equals(LifecycleState.Draft)) {
+		if (!templateFile.getLifecycleState().equals(LifecycleState.DRAFT)) {
 			throw new VersionControlException(
 					"Illeagal action Edit for template "
 							+ templateFile.getName()
@@ -272,10 +271,11 @@ public class StorageTemplateVersionControlServiceImpl implements
 		}
 		// Save template file
 		templateFile.setContent(oet.toString());
-		templateFile.getPropertyMap().put(ARM, arm.toString());
+		templateFile.getPropertyMap().put(TemplatePropertyType.ARM,
+				arm.toString());
 		this.templateFileRepo.save(templateFile);
 		// Log action
-		this.logTemplateAction(templateFile, ActionType.Edit, user);
+		this.logTemplateAction(templateFile, ActionType.EDIT, user);
 	}
 
 	@Override
@@ -314,7 +314,7 @@ public class StorageTemplateVersionControlServiceImpl implements
 					+ " not user " + user.getName() + ".");
 		}
 		// Validate and set lifecycle state
-		if (!templateFile.getLifecycleState().equals(LifecycleState.Draft)) {
+		if (!templateFile.getLifecycleState().equals(LifecycleState.DRAFT)) {
 			throw new VersionControlException(
 					"Illeagal action Submit for template "
 							+ templateFile.getName()
@@ -322,7 +322,7 @@ public class StorageTemplateVersionControlServiceImpl implements
 							+ templateFile.getLifecycleState()
 							+ " instead of Draft.");
 		}
-		templateFile.setLifecycleState(LifecycleState.Teamreview);
+		templateFile.setLifecycleState(LifecycleState.TEAMREVIEW);
 		// Save archetype file and master
 		this.templateFileRepo.save(templateFile);
 		TemplateMaster templateMaster = templateFile.getMaster();
@@ -330,7 +330,7 @@ public class StorageTemplateVersionControlServiceImpl implements
 				.getLifecycleState());
 		this.templateMasterRepo.save(templateMaster);
 		// Log action
-		this.logTemplateAction(templateFile, ActionType.Submit, user);
+		this.logTemplateAction(templateFile, ActionType.SUBMIT, user);
 	}
 
 	@Override
@@ -362,7 +362,7 @@ public class StorageTemplateVersionControlServiceImpl implements
 		// Validate user authority
 
 		// Validate and set lifecycle state
-		if (!templateFile.getLifecycleState().equals(LifecycleState.Teamreview)) {
+		if (!templateFile.getLifecycleState().equals(LifecycleState.TEAMREVIEW)) {
 			throw new VersionControlException(
 					"Illeagal action Approve for template "
 							+ templateFile.getName()
@@ -370,7 +370,7 @@ public class StorageTemplateVersionControlServiceImpl implements
 							+ templateFile.getLifecycleState()
 							+ " instead of Teamreview.");
 		}
-		templateFile.setLifecycleState(LifecycleState.Published);
+		templateFile.setLifecycleState(LifecycleState.PUBLISHED);
 		// Construct entity classes
 		TemplateDocument oet;
 		try {
@@ -382,10 +382,9 @@ public class StorageTemplateVersionControlServiceImpl implements
 		}
 		ArchetypeRelationshipMappingDocument arm;
 		try {
-			arm = this.armParser
-					.parseArm(new ByteArrayInputStream(templateFile
-							.getPropertyMap().get(ARM)
-							.getBytes(StandardCharsets.UTF_8)));
+			arm = this.armParser.parseArm(new ByteArrayInputStream(templateFile
+					.getPropertyMap().get(TemplatePropertyType.ARM)
+					.getBytes(StandardCharsets.UTF_8)));
 		} catch (Exception ex) {
 			throw new VersionControlException("Parse arm failed.", ex);
 		}
@@ -397,11 +396,11 @@ public class StorageTemplateVersionControlServiceImpl implements
 		this.templateFileRepo.save(templateFile);
 		// Update template master info
 		TemplateMaster templateMaster = templateFile.getMaster();
-		templateMaster.setLatestFileLifecycleState(LifecycleState.Published);
+		templateMaster.setLatestFileLifecycleState(LifecycleState.PUBLISHED);
 		this.setTemplateMasterBasicInfo(templateMaster, oet);
 		this.templateMasterRepo.save(templateMaster);
 		// Log action
-		this.logTemplateAction(templateFile, ActionType.Approve, user);
+		this.logTemplateAction(templateFile, ActionType.APPROVE, user);
 	}
 
 	@Override
@@ -433,7 +432,7 @@ public class StorageTemplateVersionControlServiceImpl implements
 		// Validate user authority
 
 		// Validate and set lifecycle state
-		if (!templateFile.getLifecycleState().equals(LifecycleState.Teamreview)) {
+		if (!templateFile.getLifecycleState().equals(LifecycleState.TEAMREVIEW)) {
 			throw new VersionControlException(
 					"Illeagal action Reject for template "
 							+ templateFile.getName()
@@ -441,7 +440,7 @@ public class StorageTemplateVersionControlServiceImpl implements
 							+ templateFile.getLifecycleState()
 							+ " instead of Teamreview.");
 		}
-		templateFile.setLifecycleState(LifecycleState.Draft);
+		templateFile.setLifecycleState(LifecycleState.DRAFT);
 		// Save archetype file and master
 		this.templateFileRepo.save(templateFile);
 		TemplateMaster templateMaster = templateFile.getMaster();
@@ -449,7 +448,7 @@ public class StorageTemplateVersionControlServiceImpl implements
 				.getLifecycleState());
 		this.templateMasterRepo.save(templateMaster);
 		// Log action
-		this.logTemplateAction(templateFile, ActionType.Reject, user);
+		this.logTemplateAction(templateFile, ActionType.REJECT, user);
 	}
 
 	@Override
@@ -481,7 +480,7 @@ public class StorageTemplateVersionControlServiceImpl implements
 		// Validate user authority
 
 		// Validate and set lifecycle state
-		if (!templateFile.getLifecycleState().equals(LifecycleState.Teamreview)) {
+		if (!templateFile.getLifecycleState().equals(LifecycleState.TEAMREVIEW)) {
 			throw new VersionControlException(
 					"Illeagal action RejectAndRemove for template "
 							+ templateFile.getName()
@@ -510,7 +509,7 @@ public class StorageTemplateVersionControlServiceImpl implements
 		// Remove file
 		this.templateFileRepo.delete(templateFile);
 		// Log action
-		this.logTemplateAction(templateFile, ActionType.RejectAndRelease, user);
+		this.logTemplateAction(templateFile, ActionType.REJECT_AND_REMOVE, user);
 	}
 
 	private List<EntityClass> constructEntityClasses(TemplateFile templateFile,
@@ -577,7 +576,7 @@ public class StorageTemplateVersionControlServiceImpl implements
 				.getMaster();
 		// Set master basic info
 		this.setTemplateMasterBasicInfo(templateMaster, oet);
-		templateMaster.setTemplateType(TemplateType.Storage);
+		templateMaster.setTemplateType(TemplateType.STORAGE);
 		templateMaster.setConceptName(specialiseArchetypeMaster
 				.getConceptName());
 		templateMaster.setConceptDescription(specialiseArchetypeMaster
@@ -626,8 +625,8 @@ public class StorageTemplateVersionControlServiceImpl implements
 		templateFile.setVersion(templateName.substring(templateName
 				.lastIndexOf(".v") + 1));
 		templateFile.setContent(oet.toString());
-		templateFile.addProperty(ARM, arm.toString());
-		templateFile.setTemplateType(TemplateType.Storage);
+		templateFile.addProperty(TemplatePropertyType.ARM, arm.toString());
+		templateFile.setTemplateType(TemplateType.STORAGE);
 		// Set specialize archetype info
 		templateFile.setSpecialiseArchetype(specialiseArchetypeFile);
 		templateFile
