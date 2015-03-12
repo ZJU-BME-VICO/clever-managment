@@ -28,7 +28,7 @@ public class JmxSecurityAuthenticator implements JMXAuthenticator {
 					.authenticate(new UsernamePasswordAuthenticationToken(
 							info[0], info[1]));
 			SimpleGrantedAuthority granted = new SimpleGrantedAuthority(
-					AuthorityType.JmxManage.getValue());
+					AuthorityType.JMX_MANAGE.getValue());
 			UserDetails user = (UserDetails) auth.getPrincipal();
 			if (!user.getAuthorities().contains(granted)) {
 				throw new SecurityException("User " + user.getUsername()

@@ -2,7 +2,7 @@ package edu.zju.bme.clever.management.service.entity;
 
 public enum AuthorityType {
 
-	JmxManage("JmxManage", 1);
+	JMX_MANAGE("JmxManage", 1);
 
 	private final String value;
 	private final Integer index;

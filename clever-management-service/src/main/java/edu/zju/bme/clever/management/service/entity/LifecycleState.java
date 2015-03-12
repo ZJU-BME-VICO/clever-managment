@@ -2,7 +2,7 @@ package edu.zju.bme.clever.management.service.entity;
 
 public enum LifecycleState {
 
-	Draft("Draft"), Teamreview("Teamreview"), Published("Published");
+	DRAFT("Draft"), TEAMREVIEW("Teamreview"), PUBLISHED("Published");
 
 	private final String value;
 

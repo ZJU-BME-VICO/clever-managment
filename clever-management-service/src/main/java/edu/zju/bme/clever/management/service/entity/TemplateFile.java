@@ -44,7 +44,8 @@ public class TemplateFile extends AbstractFile<TemplateMaster> {
 	@Column(name = "value")
 	@Lob
 	@MapKeyColumn(name = "attribute")
-	private Map<String, String> properties = new HashMap<String, String>();
+	@Enumerated(EnumType.STRING)
+	private Map<TemplatePropertyType, String> properties = new HashMap<TemplatePropertyType, String>();
 	@Column
 	@Enumerated(EnumType.STRING)
 	private TemplateType templateType;
@@ -67,15 +68,15 @@ public class TemplateFile extends AbstractFile<TemplateMaster> {
 		this.lastVersionTemplate = lastVersionTemplate;
 	}
 
-	public Map<String, String> getPropertyMap() {
+	public Map<TemplatePropertyType, String> getPropertyMap() {
 		return properties;
 	}
 
-	public String getPropertyValue(String propertyName) {
+	public String getPropertyValue(TemplatePropertyType propertyName) {
 		return this.properties.get(propertyName);
 	}
 
-	public void addProperty(String propertyName, String value) {
+	public void addProperty(TemplatePropertyType propertyName, String value) {
 		this.properties.put(propertyName, value);
 	}
 

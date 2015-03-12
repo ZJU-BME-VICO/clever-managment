@@ -11,6 +11,7 @@ import org.springframework.test.context.transaction.TransactionConfiguration;
 
 import edu.zju.bme.clever.management.service.entity.TemplateFile;
 import edu.zju.bme.clever.management.service.entity.TemplateMaster;
+import edu.zju.bme.clever.management.service.entity.TemplatePropertyType;
 import edu.zju.bme.clever.management.service.repository.TemplateFileRepository;
 import edu.zju.bme.clever.management.service.repository.TemplateMasterRepository;
 
@@ -36,7 +37,7 @@ public class TemplateEavTest {
 		TemplateMaster master = this.masterRepo.findOne(2);
 		TemplateFile file = new TemplateFile();
 		file.setMaster(master);
-		file.getPropertyMap().put("abc", "ddd");
+		file.getPropertyMap().put(TemplatePropertyType.ARM, "ddd");
 		this.fileRepo.save(file);
 	}
 

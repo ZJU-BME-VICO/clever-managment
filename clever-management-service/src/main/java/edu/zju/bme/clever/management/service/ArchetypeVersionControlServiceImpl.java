@@ -88,7 +88,7 @@ public class ArchetypeVersionControlServiceImpl implements
 			archetypeFile.setLastVersionArchetype(latestArchetype.get());
 			// Validate lifecycle state
 			if (!latestArchetype.get().getLifecycleState()
-					.equals(LifecycleState.Published)) {
+					.equals(LifecycleState.PUBLISHED)) {
 				throw new VersionControlException(
 						"Illeagal action Create for archetype "
 								+ archetypeFile.getName()
@@ -104,7 +104,7 @@ public class ArchetypeVersionControlServiceImpl implements
 			archetypeFile.setInternalVersion(1);
 		}
 		// Set lifecycle state
-		archetypeFile.setLifecycleState(LifecycleState.Draft);
+		archetypeFile.setLifecycleState(LifecycleState.DRAFT);
 		// Save archetype file and master
 		this.archetypeFileRepo.save(archetypeFile);
 		archetypeMaster.setLatestFile(archetypeFile);
@@ -115,7 +115,7 @@ public class ArchetypeVersionControlServiceImpl implements
 		archetypeMaster.setLatestFileVersion(archetypeFile.getVersion());
 		this.archetypeMasterRepo.save(archetypeMaster);
 		// Log action
-		logArchetypeAction(archetypeFile, ActionType.Create, user);
+		logArchetypeAction(archetypeFile, ActionType.CREATE, user);
 	}
 
 	public void createArchetype(Archetype archetype, SourceType source,
@@ -147,7 +147,7 @@ public class ArchetypeVersionControlServiceImpl implements
 		}
 		archetypeFile.setInternalVersion(1);
 		// validate and set lifecycle state
-		archetypeFile.setLifecycleState(LifecycleState.Draft);
+		archetypeFile.setLifecycleState(LifecycleState.DRAFT);
 		// Save archetype file and master
 		this.archetypeFileRepo.save(archetypeFile);
 		archetypeMaster.setLatestFile(archetypeFile);
@@ -158,7 +158,7 @@ public class ArchetypeVersionControlServiceImpl implements
 		archetypeMaster.setLatestFileVersion(archetypeFile.getVersion());
 		this.archetypeMasterRepo.save(archetypeMaster);
 		// Log action
-		logArchetypeAction(archetypeFile, ActionType.Create, user);
+		logArchetypeAction(archetypeFile, ActionType.CREATE, user);
 	}
 
 	public void upgradeArchetype(Archetype archetype, SourceType source,
@@ -194,7 +194,7 @@ public class ArchetypeVersionControlServiceImpl implements
 		archetypeFile.setLastVersionArchetype(archetypeMaster.getLatestFile());
 		// validate and set lifecycle state
 		if (!archetypeMaster.getLatestFile().getLifecycleState()
-				.equals(LifecycleState.Published)) {
+				.equals(LifecycleState.PUBLISHED)) {
 			throw new VersionControlException(
 					"Illeagal action Create for archetype "
 							+ archetypeFile.getName()
@@ -202,7 +202,7 @@ public class ArchetypeVersionControlServiceImpl implements
 							+ archetypeFile.getLifecycleState()
 							+ " instead of Published.");
 		}
-		archetypeFile.setLifecycleState(LifecycleState.Draft);
+		archetypeFile.setLifecycleState(LifecycleState.DRAFT);
 		// Save archetype file and master
 		this.archetypeFileRepo.save(archetypeFile);
 		archetypeMaster.setLatestFile(archetypeFile);
@@ -213,7 +213,7 @@ public class ArchetypeVersionControlServiceImpl implements
 		archetypeMaster.setLatestFileVersion(archetypeFile.getVersion());
 		this.archetypeMasterRepo.save(archetypeMaster);
 		// Log action
-		logArchetypeAction(archetypeFile, ActionType.Create, user);
+		logArchetypeAction(archetypeFile, ActionType.CREATE, user);
 	}
 
 	@Override
@@ -266,7 +266,7 @@ public class ArchetypeVersionControlServiceImpl implements
 					+ " not user " + user.getName() + ".");
 		}
 		// Validate and set lifecycle state
-		if (!archetypeFile.getLifecycleState().equals(LifecycleState.Draft)) {
+		if (!archetypeFile.getLifecycleState().equals(LifecycleState.DRAFT)) {
 			throw new VersionControlException(
 					"Illeagal action Edit for archetype "
 							+ archetypeFile.getName()
@@ -282,7 +282,7 @@ public class ArchetypeVersionControlServiceImpl implements
 		}
 		this.archetypeFileRepo.save(archetypeFile);
 		// Log action
-		logArchetypeAction(archetypeFile, ActionType.Edit, user);
+		logArchetypeAction(archetypeFile, ActionType.EDIT, user);
 	}
 
 	@Override
@@ -322,7 +322,7 @@ public class ArchetypeVersionControlServiceImpl implements
 					+ " not user " + user.getName() + ".");
 		}
 		// Validate and set lifecycle state
-		if (!archetypeFile.getLifecycleState().equals(LifecycleState.Draft)) {
+		if (!archetypeFile.getLifecycleState().equals(LifecycleState.DRAFT)) {
 			throw new VersionControlException(
 					"Illeagal action Submit for archetype "
 							+ archetypeFile.getName()
@@ -330,7 +330,7 @@ public class ArchetypeVersionControlServiceImpl implements
 							+ archetypeFile.getLifecycleState()
 							+ " instead of Draft.");
 		}
-		archetypeFile.setLifecycleState(LifecycleState.Teamreview);
+		archetypeFile.setLifecycleState(LifecycleState.TEAMREVIEW);
 		// Save archetype file and master
 		this.archetypeFileRepo.save(archetypeFile);
 		ArchetypeMaster archetypeMaster = archetypeFile.getMaster();
@@ -338,7 +338,7 @@ public class ArchetypeVersionControlServiceImpl implements
 				.getLifecycleState());
 		this.archetypeMasterRepo.save(archetypeMaster);
 		// Log action
-		logArchetypeAction(archetypeFile, ActionType.Submit, user);
+		logArchetypeAction(archetypeFile, ActionType.SUBMIT, user);
 	}
 
 	@Override
@@ -372,7 +372,7 @@ public class ArchetypeVersionControlServiceImpl implements
 
 		// Validate and set lifecycle state
 		if (!archetypeFile.getLifecycleState()
-				.equals(LifecycleState.Teamreview)) {
+				.equals(LifecycleState.TEAMREVIEW)) {
 			throw new VersionControlException(
 					"Illeagal action Approve for archetype "
 							+ archetypeFile.getName()
@@ -380,7 +380,7 @@ public class ArchetypeVersionControlServiceImpl implements
 							+ archetypeFile.getLifecycleState()
 							+ " instead of Teamreview.");
 		}
-		archetypeFile.setLifecycleState(LifecycleState.Published);
+		archetypeFile.setLifecycleState(LifecycleState.PUBLISHED);
 		// Save archetype file
 		this.archetypeFileRepo.save(archetypeFile);
 		ArchetypeMaster archetypeMaster = archetypeFile.getMaster();
@@ -397,7 +397,7 @@ public class ArchetypeVersionControlServiceImpl implements
 		this.setArchetypeMasterBasicInfo(archetypeMaster, archetype);
 		this.archetypeMasterRepo.save(archetypeMaster);
 		// Log action
-		logArchetypeAction(archetypeFile, ActionType.Approve, user);
+		logArchetypeAction(archetypeFile, ActionType.APPROVE, user);
 	}
 
 	@Override
@@ -431,7 +431,7 @@ public class ArchetypeVersionControlServiceImpl implements
 
 		// Validate and set lifecycle state
 		if (!archetypeFile.getLifecycleState()
-				.equals(LifecycleState.Teamreview)) {
+				.equals(LifecycleState.TEAMREVIEW)) {
 			throw new VersionControlException(
 					"Illeagal action Reject for archetype "
 							+ archetypeFile.getName()
@@ -439,7 +439,7 @@ public class ArchetypeVersionControlServiceImpl implements
 							+ archetypeFile.getLifecycleState()
 							+ " instead of Teamreview.");
 		}
-		archetypeFile.setLifecycleState(LifecycleState.Draft);
+		archetypeFile.setLifecycleState(LifecycleState.DRAFT);
 		// Save archetype file and master
 		this.archetypeFileRepo.save(archetypeFile);
 		ArchetypeMaster archetypeMaster = archetypeFile.getMaster();
@@ -447,7 +447,7 @@ public class ArchetypeVersionControlServiceImpl implements
 				.getLifecycleState());
 		this.archetypeMasterRepo.save(archetypeMaster);
 		// Log action
-		logArchetypeAction(archetypeFile, ActionType.Reject, user);
+		logArchetypeAction(archetypeFile, ActionType.REJECT, user);
 	}
 	
 	@Override
@@ -481,7 +481,7 @@ public class ArchetypeVersionControlServiceImpl implements
 
 		// Validate and set lifecycle state
 		if (!archetypeFile.getLifecycleState()
-				.equals(LifecycleState.Teamreview)) {
+				.equals(LifecycleState.TEAMREVIEW)) {
 			throw new VersionControlException(
 					"Illeagal action RejectAndRemove for archetype "
 							+ archetypeFile.getName()
@@ -509,7 +509,7 @@ public class ArchetypeVersionControlServiceImpl implements
 		}
 		this.archetypeFileRepo.delete(archetypeFile);
 		// Log action
-		logArchetypeAction(archetypeFile, ActionType.RejectAndRelease, user);
+		logArchetypeAction(archetypeFile, ActionType.REJECT_AND_REMOVE, user);
 	}
 
 	protected ArchetypeMaster constructArchetypeMaster(Archetype archetype)

@@ -1,7 +1,7 @@
 package edu.zju.bme.clever.management.service.entity;
 
-public enum TemplateType {
-	STORAGE("Storage"), APPLICATION("Application"), INTEGRATION("Integration");
+public enum TemplatePropertyType {
+	ARM("ArchetypeRelationshipMapping");
 
 	private final String value;
 
@@ -13,7 +13,7 @@ public enum TemplateType {
 		return value;
 	}
 
-	TemplateType(String value) {
+	TemplatePropertyType(String value) {
 		this.value = value;
 	}
 }

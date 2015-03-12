@@ -1,8 +1,8 @@
 package edu.zju.bme.clever.management.service.entity;
 
 public enum ActionType {
-	Create("Create"), Edit("Edit"), Submit("Submit"), Reject("Reject"), RejectAndRelease(
-			"RejectAndRelease"), Approve("Approve"), Deploy("Deploy");
+	CREATE("Create"), EDIT("Edit"), SUBMIT("Submit"), REJECT("Reject"), REJECT_AND_REMOVE(
+			"RejectAndRelease"), APPROVE("Approve"), DEPLOY("Deploy");
 
 	private final String value;
 
