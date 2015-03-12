@@ -7,13 +7,15 @@ angular.module('clever.management.controllers', ['clever.management.controllers.
 angular.module('clever.management.i18n', ['clever.management.i18n.zh']);
 angular.module('cleverManagementApp', ['ngAnimate', 'ngVisible', 'ui.bootstrap', 'pascalprecht.translate', 'ui.router', 'ui.utils', 'clever.management.i18n', 'clever.management.directives', 'clever.management.controllers', 'clever.management.services', 'clever.management.filters', 'clever.management.config']).config(function($stateProvider, $urlRouterProvider, $translateProvider, $controllerProvider, $compileProvider, $filterProvider, $provide) {
 
-	window.lazyLoader = {
-		controller : $controllerProvider.register,
-		directive : $compileProvider.directive,
-		filter : $filterProvider.register,
-		factory : $provide.factory,
-		service : $provide.service
-	}; 
+	define('lazyLoader', function() {
+		return {
+			controller : $controllerProvider.register,
+			directive : $compileProvider.directive,
+			filter : $filterProvider.register,
+			factory : $provide.factory,
+			service : $provide.service
+		};
+	});
 	
 	// UI router config
 	$urlRouterProvider.otherwise('/');
