@@ -22,6 +22,9 @@ function DesignerCtrl($scope,resourceService,templateParseService,$compile){
 	$scope.expand = function() {
 		$scope.treeControl.expandAll();
 	};
+	$scope.saveTemplate = function() {
+        $scope.treeControl.saveTemp();
+    };
 	
 	
 }
