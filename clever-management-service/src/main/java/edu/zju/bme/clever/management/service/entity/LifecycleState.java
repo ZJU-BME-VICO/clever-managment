@@ -1,8 +1,8 @@
 package edu.zju.bme.clever.management.service.entity;
 
-public enum LifecycleState {
+public enum LifecycleState implements StringValueEnum{
 
-	Draft("Draft"), Teamreview("Teamreview"), Published("Published");
+	DRAFT("Draft"), TEAMREVIEW("Teamreview"), PUBLISHED("Published");
 
 	private final String value;
 

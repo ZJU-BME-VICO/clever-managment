@@ -1,6 +1,7 @@
 package edu.zju.bme.clever.management.service.entity;
 
 import javax.persistence.Column;
+import javax.persistence.Convert;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
@@ -15,24 +16,6 @@ import javax.persistence.MappedSuperclass;
 @Inheritance(strategy = InheritanceType.JOINED)
 public abstract class AbstractFile<T extends AbstractMaster> extends
 		AbstractIndentifiedEntity {
-
-	public enum SourceType {
-		CKM("CKM"), ZJU("ZJU"), CLEVER("CLEVER");
-
-		private final String value;
-
-		public String getValue() {
-			return value;
-		}
-
-		public String toString() {
-			return value;
-		}
-
-		SourceType(String value) {
-			this.value = value;
-		}
-	}
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	private T master;
@@ -49,7 +32,6 @@ public abstract class AbstractFile<T extends AbstractMaster> extends
 	@ManyToOne(fetch = FetchType.LAZY)
 	private User editor;
 	@Column(nullable = false)
-	@Enumerated(EnumType.STRING)
 	private SourceType source;
 	@Column(nullable = false)
 	private String name;
@@ -60,7 +42,6 @@ public abstract class AbstractFile<T extends AbstractMaster> extends
 	private String version;
 	@Column(nullable = false)
 	private Integer internalVersion;
-	@Enumerated(EnumType.STRING)
 	@Column(nullable = false)
 	private LifecycleState lifecycleState;
 

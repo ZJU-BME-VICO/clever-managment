@@ -1,7 +1,7 @@
 package edu.zju.bme.clever.management.service.entity;
 
-public enum TemplateType implements StringValueEnum {
-	STORAGE("Storage"), APPLICATION("Application"), INTEGRATION("Integration");
+public enum TemplatePropertyType implements StringValueEnum {
+	ARM("ArchetypeRelationshipMapping");
 
 	private final String value;
 
@@ -13,7 +13,7 @@ public enum TemplateType implements StringValueEnum {
 		return value;
 	}
 
-	TemplateType(String value) {
+	TemplatePropertyType(String value) {
 		this.value = value;
 	}
 }

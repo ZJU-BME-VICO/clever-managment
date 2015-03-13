@@ -30,12 +30,12 @@ import edu.zju.bme.clever.management.service.ArchetypeProviderService;
 import edu.zju.bme.clever.management.service.ArchetypeValidateService;
 import edu.zju.bme.clever.management.service.ArchetypeVersionControlService;
 import edu.zju.bme.clever.management.service.UserService;
-import edu.zju.bme.clever.management.service.entity.AbstractFile.SourceType;
 import edu.zju.bme.clever.management.service.entity.ArchetypeFile;
 import edu.zju.bme.clever.management.service.entity.ArchetypeMaster;
 import edu.zju.bme.clever.management.service.entity.FileProcessResult;
+import edu.zju.bme.clever.management.service.entity.SourceType;
 import edu.zju.bme.clever.management.service.entity.User;
-import edu.zju.bme.clever.management.web.entity.ArchetypeActionLogInfo;
+import edu.zju.bme.clever.management.web.entity.ActionLogInfo;
 import edu.zju.bme.clever.management.web.entity.ArchetypeInfo;
 import edu.zju.bme.clever.management.web.entity.ArchetypeMasterInfo;
 import edu.zju.bme.clever.management.web.entity.FileUploadResult;
@@ -241,7 +241,7 @@ public class ArchetypeResourceController extends AbstractResourceController {
 				.stream()
 				.forEach(
 						log -> {
-							ArchetypeActionLogInfo logInfo = new ArchetypeActionLogInfo();
+							ActionLogInfo logInfo = new ActionLogInfo();
 							logInfo.setId(log.getId());
 							logInfo.setAction(log.getActionType().getValue());
 							logInfo.setArchetypeVersion(log.getVersion());

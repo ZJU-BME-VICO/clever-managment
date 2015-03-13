@@ -14,8 +14,8 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 
 import edu.zju.bme.clever.management.service.ArchetypeVersionControlService;
+import edu.zju.bme.clever.management.service.entity.SourceType;
 import edu.zju.bme.clever.management.service.entity.User;
-import edu.zju.bme.clever.management.service.entity.AbstractFile.SourceType;
 import edu.zju.bme.clever.management.service.repository.ArchetypeFileRepository;
 import edu.zju.bme.clever.management.service.repository.UserRepository;
 import se.acode.openehr.parser.ADLParser;

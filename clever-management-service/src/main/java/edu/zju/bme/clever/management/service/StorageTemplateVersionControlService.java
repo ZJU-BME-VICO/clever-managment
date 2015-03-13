@@ -3,9 +3,9 @@ package edu.zju.bme.clever.management.service;
 import java.io.InputStream;
 
 import openEHR.v1.template.TemplateDocument;
+import edu.zju.bme.clever.management.service.entity.SourceType;
 import edu.zju.bme.clever.management.service.entity.TemplateFile;
 import edu.zju.bme.clever.management.service.entity.User;
-import edu.zju.bme.clever.management.service.entity.AbstractFile.SourceType;
 import edu.zju.bme.clever.management.service.exception.VersionControlException;
 import edu.zju.bme.clever.schemas.ArchetypeRelationshipMappingDocument;
 

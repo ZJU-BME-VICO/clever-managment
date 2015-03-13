@@ -69,7 +69,6 @@ public abstract class AbstractMaster<T extends AbstractFile> extends
 	private String latestFileVersion;
 	@Column
 	private Integer latestFileInternalVersion;
-	@Enumerated(EnumType.STRING)
 	@Column
 	private LifecycleState latestFileLifecycleState;
 

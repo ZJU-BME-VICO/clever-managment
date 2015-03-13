@@ -27,6 +27,14 @@ angular.module('clever.management.services.resource', []).service('resourceServi
 		});
 		return deferred.promise;
 	};
+	
+	this.load = function(urls) {
+		var deferred = $q.defer();
+		require(urls, function() {
+			deferred.resolve();
+		});
+		return deferred.promise;
+	}; 
 
 	this.delete = function(url, data, config) {
 		var deferred = $q.defer();

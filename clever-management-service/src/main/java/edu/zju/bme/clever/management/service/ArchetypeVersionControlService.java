@@ -3,8 +3,8 @@ package edu.zju.bme.clever.management.service;
 import org.openehr.am.archetype.Archetype;
 
 import edu.zju.bme.clever.management.service.entity.ArchetypeFile;
+import edu.zju.bme.clever.management.service.entity.SourceType;
 import edu.zju.bme.clever.management.service.entity.User;
-import edu.zju.bme.clever.management.service.entity.AbstractFile.SourceType;
 import edu.zju.bme.clever.management.service.exception.VersionControlException;
 
 public interface ArchetypeVersionControlService {

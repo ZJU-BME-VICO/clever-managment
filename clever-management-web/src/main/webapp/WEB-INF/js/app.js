@@ -5,8 +5,18 @@ angular.module('clever.management.services', ['clever.management.services.resour
 angular.module('clever.management.filters', ['clever.management.filters.unsafe']);
 angular.module('clever.management.controllers', ['clever.management.controllers.app']);
 angular.module('clever.management.i18n', ['clever.management.i18n.zh']);
-angular.module('cleverManagementApp', ['ngAnimate', 'ngVisible', 'ui.bootstrap', 'pascalprecht.translate', 'ui.router', 'ui.utils', 'clever.management.i18n', 'clever.management.directives', 'clever.management.controllers', 'clever.management.services', 'clever.management.filters', 'clever.management.config']).config(function($stateProvider, $urlRouterProvider, $translateProvider) {
+angular.module('cleverManagementApp', ['ngAnimate', 'ngVisible', 'ui.bootstrap', 'pascalprecht.translate', 'ui.router', 'ui.utils', 'clever.management.i18n', 'clever.management.directives', 'clever.management.controllers', 'clever.management.services', 'clever.management.filters', 'clever.management.config']).config(function($stateProvider, $urlRouterProvider, $translateProvider, $controllerProvider, $compileProvider, $filterProvider, $provide) {
 
+	define('lazyLoader', function() {
+		return {
+			controller : $controllerProvider.register,
+			directive : $compileProvider.directive,
+			filter : $filterProvider.register,
+			factory : $provide.factory,
+			service : $provide.service
+		};
+	});
+	
 	// UI router config
 	$urlRouterProvider.otherwise('/');
 	// Home
@@ -75,8 +85,14 @@ angular.module('cleverManagementApp', ['ngAnimate', 'ngVisible', 'ui.bootstrap',
 		templateUrl : 'js/views/management/storage/management.storage.list.html',
 	}).state('management.storage.view', {
 		url : '/view',
+		controller : 'StorageTemplateViewCtrl',
 		data : {
 			parent : 'management.storage.list',
+		},
+		resolve : {
+			load : function(resourceService) {
+				return resourceService.load(['js/views/management/storage/view/storage-template-view-controller.js']);
+			},
 		},
 		templateUrl : 'js/views/management/storage/view/management.storage.view.html',
 	}).state('management.storage.upload', {

@@ -54,7 +54,12 @@
     
     <bean id="hibernateEmf" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
       <property name="dataSource" ref="c3p0DataSource" />
-      <property name="packagesToScan" value="edu.zju.bme.clever.management.service.entity" />
+      <property name="packagesToScan">
+      	<list>
+      	  <value>edu.zju.bme.clever.management.service.entity</value>
+      	  <value>edu.zju.bme.clever.management.service.converter</value>
+      	</list>
+      </property>
       <property name="jpaVendorAdapter">
          <bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter" />
       </property>
