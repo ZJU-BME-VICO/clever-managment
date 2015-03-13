@@ -3,7 +3,7 @@ function ArchetypeViewCtrl($scope, $timeout, resourceService, ARCHETYPE_LIST_URL
 	$scope.treeControl = {};
 	$scope.tabControl = {};
 	$scope.tabs = [];
-	$scope.isArchetypeListHidder = false;
+	$scope.isArchetypeListHidden = false;
 
 	resourceService.get(ARCHETYPE_LIST_URL).then(function(list) {
 		$scope.archetypeList = list;
