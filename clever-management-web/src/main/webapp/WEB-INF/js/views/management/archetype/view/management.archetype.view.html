@@ -1,6 +1,6 @@
 <div class='row'>
 	<div class="col-xs-12 col-md-12 col-lg-12 hbox">
-		<div class="panel panel-default" ng-show="!isArchetypeListHidder">
+		<div class="panel panel-default" ng-show="!isArchetypeListHidden">
 			<div class="panel-heading">
 				<div class="input-group">
 					<input type="text" class="form-control" ng-model="archetypeListFilter">
@@ -15,22 +15,26 @@
 				</div>
 			</div>
 			<div class="list-group" ng-style="{height: containerHeight - 55}" style="overflow: auto;margin-left: -5px;white-space: nowrap;">
-				<archetype-list-tree tree-data="archetypeList" select-node-callback="createNewMasterTab(value)" tree-control="treeControl"></archetype-list-tree>
-				<!--<tree-view tree-data="archetypeList" node-id="id" node-children="specialisedArchetypeMasters" tree-control="treeControl" node-alias-name="node">
-					<tree-expanded-icon><span class="clever-icon expanded-icon" style="padding: 0 6px;height: 12px;background-position-y: 6px;"></span></tree-expanded-icon>
-					<tree-collapsed-icon><span class="clever-icon collapsed-icon" style="padding: 0 6px;height: 12px;background-position-y: 6px;"></span></tree-collapsed-icon>
+				<!--<archetype-list-tree tree-data="archetypeList" select-node-callback="createNewMasterTab(value)" tree-control="treeControl"></archetype-list-tree>-->
+				<tree-view tree-data="archetypeList" 
+				  double-click-node-callback="createNewMasterTab(value)"
+				  node-id="id" node-children="specialisedArchetypeMasters" 
+				  tree-control="treeControl" node-alias-name="node" 
+				  search-key-mapper="searchKeyMapper">
+					<tree-expanded-icon><span class="clever-icon expanded" style="padding: 0 6px;height: 12px;background-position-y: 6px;"></span></tree-expanded-icon>
+					<tree-collapsed-icon><span class="clever-icon collapsed" style="padding: 0 6px;height: 12px;background-position-y: 6px;"></span></tree-collapsed-icon>
 					<tree-node-label>
-						<img ng-class="node.lifecycleState + '-icon' | lowercase" class="clever-icon" style="padding: 0 10px;height: 16px;"></img>
-						<span ng-bind="node.conceptName"></span>
+						<img ng-class="node.lifecycleState | lowercase" class="clever-icon" style="padding: 0 10px;height: 16px;"></img>
+						<span ng-bind-html="node.conceptName | highlight:keyword | unsafe"></span>
 						&nbsp;<span style="color: grey;font-size: 10pt;">(<span ng-bind="node.latestArchetypeVersion"></span>)</span>
 					</tree-node-label>
-			</tree-view>-->
+				</tree-view>
 			</div>
 		</div>
 		<!-- splitter -->
-		<splitter is-adjust-enabled="!isArchetypeListHidder" style="min-height: 100%;">
-			<i style="cursor: pointer" ng-click="isArchetypeListHidder = !isArchetypeListHidder" ng-show="isArchetypeListHidder" tooltip-placement="right" tooltip="Expand" tooltip-popup-delay="500"> <span class="glyphicon glyphicon-chevron-right" ng-style="{'margin-top': containerHeight/2}" ></span> </i>
-			<i style="cursor: pointer" ng-click="isArchetypeListHidder = !isArchetypeListHidder" ng-show="!isArchetypeListHidder" tooltip-placement="right" tooltip="Collapse" tooltip-popup-delay="500"> <span class="glyphicon glyphicon-chevron-left" ng-style="{'margin-top': containerHeight/2}" ></span> </i>
+		<splitter is-adjust-enabled="!isArchetypeListHidden" style="min-height: 100%;">
+			<i style="cursor: pointer" ng-click="isArchetypeListHidden = !isArchetypeListHidden" ng-show="isArchetypeListHidden" tooltip-placement="right" tooltip="Expand" tooltip-popup-delay="500"> <span class="glyphicon glyphicon-chevron-right" ng-style="{'margin-top': containerHeight/2}" ></span> </i>
+			<i style="cursor: pointer" ng-click="isArchetypeListHidden = !isArchetypeListHidden" ng-show="!isArchetypeListHidden" tooltip-placement="right" tooltip="Collapse" tooltip-popup-delay="500"> <span class="glyphicon glyphicon-chevron-left" ng-style="{'margin-top': containerHeight/2}" ></span> </i>
 		</splitter>
 		<div class="col-xs-12 col-md-12 col-lg-12 flex-box">
 			<tabset class="row" tab-control="tabControl">

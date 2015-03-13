@@ -16,7 +16,7 @@ angular.module('clever.management.directives.treeViewNode', []).directive('treeV
 									'<span ng-if="childNodes.length" ng-show="' + nodeAliasName + '.collapsed" ng-click="selectNodeHead(' + nodeAliasName + ')">' + scope.getCollapsedIconElement() + '</span>' +
 									'<span ng-class="' + nodeAliasName + '.selected" ng-click="clickNodeLabel(' + nodeAliasName + ')" ng-dblclick="doubleClickNodeLabel(' + nodeAliasName + ')">' + 
 										'<span ng-if="!childNodes.length" style="visibility: hidden;">' + scope.getExpandedIconElement() + '</span>' +
-										'<span class="' + scope.getNodeLabelClass() + '" ng-bind-html="' + scope.getNodeLabel(nodeData) + ' | unsafe"></span>' +
+										scope.getNodeLabel(nodeData) +
 									'</span>' +
 									'<tree-view-node ' +
 										'ng-repeat="_node in childNodes" ' +

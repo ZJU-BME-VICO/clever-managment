@@ -21,7 +21,7 @@ function($compile) {
 									'<img class="collapsed" ng-show="nodeData.specialisedArchetypeMasters.length && nodeData.collapsed" ng-click="selectNodeHead(nodeData)"></img>' +
 									'<img class="expanded" ng-show="nodeData.specialisedArchetypeMasters.length && !nodeData.collapsed" ng-click="selectNodeHead(nodeData)"></img>' +
 									'<span ng-style="{\'margin-left\': nodeData.specialisedArchetypeMasters.length ? \'5px\' : \'15px\'}" ng-class="nodeData.selected" ng-click="selectNodeLabel(nodeData)" ng-dblclick="doubleClickNodeLabel(nodeData)">' +
-										'<img ng-class="nodeData.lifecycleState | lowercase"></img>' +
+										'<img ng-class="nodeData.lifecycleState | lowercase" class="clever-icon"></img>' +
 										'<span ng-bind-html="nodeData.conceptName | highlight:highlightText | unsafe"></span>' +
 										'&nbsp;<span style="color: grey;font-size: 10pt;">({{nodeData.latestArchetypeVersion}})</span>' +
 									'</span>' +
@@ -30,7 +30,7 @@ function($compile) {
 										'ng-repeat="node in nodeData.specialisedArchetypeMasters" ' +
 										'ng-init="node.parent = nodeData;node.show = true;" ' +
 										'node-data="node">' +
-									'</archetype-tree-list-node>' +
+									'</archetype-list-tree-node>' +
 								'</li>' +
 							'</ul>';
 

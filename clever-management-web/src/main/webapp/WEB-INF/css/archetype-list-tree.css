@@ -15,25 +15,9 @@ archetype-list-tree-node li .collapsed {
 	cursor: pointer;
 }
 
-archetype-list-tree-node li .draft {
+archetype-list-tree-node li .clever-icon {
 	padding: 0 10px;
 	height: 16px;
-	background-image: url("../img/draft.png");
-	background-repeat: no-repeat;
-}
-
-archetype-list-tree-node li .teamreview {
-	padding: 0 10px;
-	height: 16px;
-	background-image: url("../img/teamreview.png");
-	background-repeat: no-repeat;
-}
-
-archetype-list-tree-node li .published {
-	padding: 0 10px;
-	height: 16px;
-	background-image: url("../img/published.png");
-	background-repeat: no-repeat;
 }
 
 archetype-list-tree-node {

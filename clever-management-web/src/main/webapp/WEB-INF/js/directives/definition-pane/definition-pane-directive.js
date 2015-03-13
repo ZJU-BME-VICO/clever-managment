@@ -23,7 +23,7 @@ function() {
 				$scope.selectedDefinitionItem = definitionItem.label;
 			};
 
-			$scope.getTreeNodeLabel = function(node, terminology) {
+			$scope.getTreeNodeLabel = function(node) {
 				var label = '';
 				if (node.label.type == 'type') {
 					label += '<span class="clever-icon ' + node.label.text + '" style="padding: 7px 7px; background-position-y: 8px;"></span>' + 
@@ -32,7 +32,7 @@ function() {
 					label += '<span style="color: darkblue;">' + node.label.text + '</span>';
 				}
 				if (node.label.code) {
-					label += '<span style="color: green;font-weight: bold;"> [' + getOntologyByCode(node.label.code, terminology).text + ']</span>';
+					label += '<span style="color: green;font-weight: bold;"> [' + getOntologyByCode(node.label.code, $scope.terminology).text + ']</span>';
 				}
 				return label;
 			};

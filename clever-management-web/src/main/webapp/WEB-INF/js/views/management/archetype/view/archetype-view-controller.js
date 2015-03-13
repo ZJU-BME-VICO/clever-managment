@@ -9,6 +9,10 @@ function ArchetypeViewCtrl($scope, $timeout, resourceService, ARCHETYPE_LIST_URL
 		$scope.archetypeList = list;
 	});
 
+	$scope.searchKeyMapper = function(node) {
+		return node.conceptName + ' (' + node.latestArchetypeVersion + ')';
+	};
+
 	$scope.$watch('archetypeListFilter', function(newValue) {
 		if (newValue != undefined) {
 			$scope.treeControl.search(newValue);

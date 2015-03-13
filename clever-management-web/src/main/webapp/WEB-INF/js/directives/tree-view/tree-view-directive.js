@@ -11,8 +11,8 @@ angular.module('clever.management.directives.treeView', []).directive('treeView'
 			nodeLabelClass : '@',
 			clickNodeCallback : '&',
 			doubleClickNodeCallback : '&',
-			nodeLabelResources : '=',
 			nodeLabelGenerator : '=',
+			searchKeyMapper : '=',
 		},
 		controller : function($scope, $transclude) {
 			
@@ -70,11 +70,12 @@ angular.module('clever.management.directives.treeView', []).directive('treeView'
 			};
 			$scope.getNodeLabel = function(node) {
 				if (treeNodeLabelElement) {
-					return 'getTreeNodeLabelElement()';
-				}else if($scope.nodeLabelResources){
-					return 'nodeLabelGenerator(' + nodeAliasName + ', nodeLabelResources)';
+					return '<span class="' + $scope.getNodeLabelClass() + '">' + $scope.getTreeNodeLabelElement() + '</span>';
+				}else if($scope.nodeLabelGenerator){
+					return '<span class="' + $scope.getNodeLabelClass() + '" ng-bind-html="nodeLabelGenerator(' + $scope.getNodeAliasName() + ') | unsafe"></span>';
 				}
-			}; 
+			};
+			$scope.keyword = '';
 			
 			$scope.$watch('treeData', function(newValue, oldValue) {
 				if (newValue != oldValue) {
@@ -93,6 +94,42 @@ angular.module('clever.management.directives.treeView', []).directive('treeView'
 					angular.forEach(nodes, function(node) {
 						node.collapsed = true;
 					});
+				},
+				search : function(keyword) {
+					$scope.keyword = keyword;
+					if (keyword != '') {
+						// Reset node state before search
+						angular.forEach(nodes, function(node) {
+							node.containsTargetChild = undefined;
+						});
+						angular.forEach(nodes, function(node) {
+							if ($scope.searchKeyMapper(node).toLowerCase().indexOf(keyword.toLowerCase()) < 0) {
+								if (!node.containsTargetChild) {
+									node.show = false;
+								}
+							} else {
+								node.show = true;
+								var tempNode = node;
+								while (tempNode.parent) {
+									tempNode = tempNode.parent;
+									if (tempNode.orginalCollapased == undefined) {
+										tempNode.orginalCollapased = tempNode.collapsed;
+									}
+									tempNode.show = true;
+									tempNode.collapsed = false;
+									tempNode.containsTargetChild = true;
+								}
+							}
+						});
+					} else {
+						angular.forEach(nodes, function(node) {
+							node.show = true;
+							if (node.orginalCollapased != undefined) {
+								node.collapsed = node.orginalCollapased;
+								node.orginalCollapased = undefined;
+							}
+						});
+					}
 				},
 			};
 			
