@@ -2,20 +2,28 @@
     <div class="col-xs-12 col-md-12 col-lg-12 hbox">  
 	    		<div class="panel panel-default">
 	    			<div class="panel-heading">
-	    				<div class="panel-title row">
-	    					<h4>{{templateName}}</h4>
-	    				</div>
+	    				<div class="input-group">
+                    <input type="text" class="form-control" ng-model="archetypeListFilter">
+                    <span class="input-group-btn">
+                        <button class="btn btn-default" type="button" ng-click="expand()">
+                            <span class="glyphicon glyphicon-plus"></span>
+                        </button> </span>
+                    <span class="input-group-btn">
+                        <button class="btn btn-default" type="button" ng-click="collapse()">
+                            <span class="glyphicon glyphicon-minus"></span>
+                        </button> </span>
+                </div>
 	    			</div>
 	    	        <div class="list-group" ng-style="{height: containerHeight - 55}" style="overflow: auto;">
                       <div class="btn-group" style="margin-left:30px;">
                         <button class="btn btn-default" type="button" ng-click="expand()">expandAll</button>
                         <button class="btn btn-default" type="button" ng-click="collapse()">collapseAll</button>
                       </div>
-                     <template-list-tree tree-data="templateList" select-node-callback="selectNode(node)" tree-control="treeControl" ng-mousedown="cloneItems()"></template-list-tree>                  
+                     <storagetemplate-list-tree tree-data="templateList" select-node-callback="selectNode(node)" tree-control="treeControl" ng-mousedown="cloneItems()"></storagetemplatetemplate-list-tree>                  
                   </div>
 	    		</div>	   
 	   
-         <div class="editBox" ng-style="{height:containerHeight - 100}"  >
+         <div class="editBox" ng-style="{height:containerHeight - 100}">
 	   	    <div id="editArea">
 	   	    </div>
 	   	 	</div>
