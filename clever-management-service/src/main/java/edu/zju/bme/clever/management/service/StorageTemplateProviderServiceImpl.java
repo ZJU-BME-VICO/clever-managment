@@ -8,6 +8,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import edu.zju.bme.clever.management.service.entity.EntityClass;
 import edu.zju.bme.clever.management.service.entity.TemplateFile;
+import edu.zju.bme.clever.management.service.entity.TemplateMaster;
+import edu.zju.bme.clever.management.service.entity.TemplatePropertyType;
 import edu.zju.bme.clever.management.service.entity.TemplateType;
 import edu.zju.bme.clever.management.service.repository.TemplateFileRepository;
 import edu.zju.bme.clever.management.service.repository.TemplateMasterRepository;
@@ -21,7 +23,20 @@ public class StorageTemplateProviderServiceImpl implements
 	@Autowired
 	private TemplateMasterRepository templateMasterRepo;
 
-	private static final String ARM = "ArchetypeRelationshipMapping";
+	@Override
+	public List<TemplateMaster> getAllStorageTemplateMasters() {
+		return this.templateMasterRepo.findAllStorageTemplateMasters();
+	}
+
+	@Override
+	public TemplateMaster getTemplateMasterById(Integer id) {
+		return this.templateMasterRepo.findOne(id);
+	}
+
+	@Override
+	public TemplateMaster getTemplateMasterByName(String name) {
+		return this.templateMasterRepo.findByName(name);
+	}
 
 	@Override
 	public TemplateFile getTemplateFileById(Integer templateId) {
@@ -67,7 +82,7 @@ public class StorageTemplateProviderServiceImpl implements
 		if (!this.isStorageTemplate(templateFile)) {
 			return null;
 		}
-		return templateFile.getPropertyValue(ARM);
+		return templateFile.getPropertyValue(TemplatePropertyType.ARM);
 	}
 
 	@Override
@@ -77,7 +92,7 @@ public class StorageTemplateProviderServiceImpl implements
 		if (!this.isStorageTemplate(templateFile)) {
 			return null;
 		}
-		return templateFile.getPropertyValue(ARM);
+		return templateFile.getPropertyValue(TemplatePropertyType.ARM);
 	}
 
 	@Override
@@ -103,6 +118,6 @@ public class StorageTemplateProviderServiceImpl implements
 		if (templateFile == null) {
 			return false;
 		}
-		return templateFile.getTemplateType().equals(TemplateType.Storage);
+		return templateFile.getTemplateType().equals(TemplateType.STORAGE);
 	}
 }

@@ -28,7 +28,7 @@ public class ArchetypeMasterInfo {
 	private Set<ArchetypeMasterInfo> specialisedArchetypeMasters = new HashSet<ArchetypeMasterInfo>();
 	private Set<ArchetypeInfo> archetypes = new HashSet<ArchetypeInfo>();
 	private boolean isRoot = true;
-	private Set<ArchetypeActionLogInfo> actionLogs = new HashSet<ArchetypeActionLogInfo>();
+	private Set<ActionLogInfo> actionLogs = new HashSet<ActionLogInfo>();
 
 	public Integer getId() {
 		return id;
@@ -95,7 +95,7 @@ public class ArchetypeMasterInfo {
 		return archetypes;
 	}
 
-	public Set<ArchetypeActionLogInfo> getActionLogs() {
+	public Set<ActionLogInfo> getActionLogs() {
 		return actionLogs;
 	}
 

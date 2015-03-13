@@ -2,7 +2,7 @@ package edu.zju.bme.clever.management.web.entity;
 
 import java.util.Calendar;
 
-public class ArchetypeActionLogInfo {
+public class ActionLogInfo {
 
 	private Integer id;
 	private String archetypeVersion;

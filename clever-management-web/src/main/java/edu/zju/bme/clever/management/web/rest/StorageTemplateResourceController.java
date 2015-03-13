@@ -26,6 +26,7 @@ import edu.zju.bme.clever.management.service.entity.EntityClass;
 import edu.zju.bme.clever.management.service.entity.FileProcessResult;
 import edu.zju.bme.clever.management.service.entity.SourceType;
 import edu.zju.bme.clever.management.service.entity.TemplateFile;
+import edu.zju.bme.clever.management.service.entity.TemplateMaster;
 import edu.zju.bme.clever.management.service.entity.TemplatePropertyType;
 import edu.zju.bme.clever.management.service.entity.User;
 import edu.zju.bme.clever.management.service.exception.VersionControlException;
@@ -64,6 +65,23 @@ public class StorageTemplateResourceController extends
 							.getValue());
 					return info;
 				}).collect(Collectors.toList());
+	}
+
+	@RequestMapping(value = "/master/id/{id}", method = RequestMethod.GET)
+	public StorageTemplateMasterInfo getStorageTemplateMasterById(
+			@PathVariable int id) {
+		TemplateMaster master = this.providerService.getTemplateMasterById(id);
+		this.isResourcesNull(master);
+		StorageTemplateMasterInfo info = new StorageTemplateMasterInfo();
+		info.setId(master.getId());
+		info.setName(master.getName());
+		info.setRmEntity(master.getRmEntity());
+		info.setRmName(master.getRmName());
+		info.setRmOriginator(master.getRmOrginator());
+		info.setConceptName(master.getConceptName());
+		info.setConceptDescription(master.getConceptDescription());
+
+		return info;
 	}
 
 	@RequestMapping(value = "/id/{id}", method = RequestMethod.GET)

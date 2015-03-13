@@ -4,8 +4,15 @@ import java.util.List;
 
 import edu.zju.bme.clever.management.service.entity.EntityClass;
 import edu.zju.bme.clever.management.service.entity.TemplateFile;
+import edu.zju.bme.clever.management.service.entity.TemplateMaster;
 
 public interface StorageTemplateProviderService {
+
+	public List<TemplateMaster> getAllStorageTemplateMasters();
+
+	public TemplateMaster getTemplateMasterById(Integer id);
+
+	public TemplateMaster getTemplateMasterByName(String name);
 
 	public TemplateFile getTemplateFileById(Integer templateId);
 
