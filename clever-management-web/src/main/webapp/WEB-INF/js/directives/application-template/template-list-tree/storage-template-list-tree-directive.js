@@ -8,8 +8,6 @@ angular.module('clever.management.directives.storagetemplateListTree', []).direc
         },
         template : '<storagetemplate-list-tree-node ' +
                         'ng-repeat="node in treeData" ' +
-                        'ng-show="node.show" ' +
-                        'ng-init="node.show = true" ' +
                         'node-data="node">' +
                     '</storagetemplate-list-tree-node>',
         
