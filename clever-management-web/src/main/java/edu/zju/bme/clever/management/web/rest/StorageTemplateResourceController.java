@@ -72,16 +72,16 @@ public class StorageTemplateResourceController extends
 			@PathVariable int id) {
 		TemplateMaster master = this.providerService.getTemplateMasterById(id);
 		this.isResourcesNull(master);
-		StorageTemplateMasterInfo info = new StorageTemplateMasterInfo();
-		info.setId(master.getId());
-		info.setName(master.getName());
-		info.setRmEntity(master.getRmEntity());
-		info.setRmName(master.getRmName());
-		info.setRmOriginator(master.getRmOrginator());
-		info.setConceptName(master.getConceptName());
-		info.setConceptDescription(master.getConceptDescription());
+		return this.constructStorageTemplateMasterInfo(master);
+	}
 
-		return info;
+	@RequestMapping(value = "/master/name/{name}", method = RequestMethod.GET)
+	public StorageTemplateMasterInfo getStorageTemplateMasterByName(
+			@PathVariable String name) {
+		TemplateMaster master = this.providerService
+				.getTemplateMasterByName(name);
+		this.isResourcesNull(master);
+		return this.constructStorageTemplateMasterInfo(master);
 	}
 
 	@RequestMapping(value = "/id/{id}", method = RequestMethod.GET)
@@ -190,15 +190,27 @@ public class StorageTemplateResourceController extends
 		return result;
 	}
 
+	private StorageTemplateMasterInfo constructStorageTemplateMasterInfo(
+			TemplateMaster templateMaster) {
+		StorageTemplateMasterInfo info = new StorageTemplateMasterInfo();
+		info.setId(templateMaster.getId());
+		info.setName(templateMaster.getName());
+		info.setRmEntity(templateMaster.getRmEntity());
+		info.setRmName(templateMaster.getRmName());
+		info.setRmOriginator(templateMaster.getRmOrginator());
+		info.setConceptName(templateMaster.getConceptName());
+		info.setConceptDescription(templateMaster.getConceptDescription());
+
+		return info;
+	}
+
 	private StorageTemplateInfo constructStorageTemplateInfo(
 			TemplateFile templateFile) {
 		StorageTemplateInfo info = new StorageTemplateInfo();
 		info.setId(templateFile.getId());
 		info.setName(templateFile.getName());
 		info.setVersion(templateFile.getVersion());
-		info.setSpecialiseArchetypeId(templateFile.getSpecialiseArchetypeId());
-		info.setSource(templateFile.getSource().getValue());
-		info.setContent(templateFile.getContent());
+		info.setOet(templateFile.getContent());
 		info.setArm(templateFile.getPropertyValue(TemplatePropertyType.ARM));
 		info.setEditorId(templateFile.getEditor().getId());
 		info.setEditorName(templateFile.getEditor().getName());
