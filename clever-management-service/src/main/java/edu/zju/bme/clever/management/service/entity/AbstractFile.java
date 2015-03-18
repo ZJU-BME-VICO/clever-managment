@@ -26,6 +26,8 @@ public abstract class AbstractFile<T extends AbstractMaster> extends
 	@Column(name = "specialise_archetype_id", updatable = false, insertable = false)
 	private Integer specialiseArchetypeId;
 	@Column
+	private String specialiseArchetypeName;
+	@Column
 	private String specialiseArchetypeVersion;
 	@Column
 	private Integer specialiseArchetypeInternalVersion;
@@ -140,6 +142,14 @@ public abstract class AbstractFile<T extends AbstractMaster> extends
 
 	public void setLifecycleState(LifecycleState lifecycleState) {
 		this.lifecycleState = lifecycleState;
+	}
+
+	public String getSpecialiseArchetypeName() {
+		return specialiseArchetypeName;
+	}
+
+	public void setSpecialiseArchetypeName(String specialiseArchetypeName) {
+		this.specialiseArchetypeName = specialiseArchetypeName;
 	}
 
 }

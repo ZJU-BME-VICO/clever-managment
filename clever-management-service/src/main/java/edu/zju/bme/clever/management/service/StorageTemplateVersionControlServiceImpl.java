@@ -629,6 +629,8 @@ public class StorageTemplateVersionControlServiceImpl implements
 		templateFile.setTemplateType(TemplateType.STORAGE);
 		// Set specialize archetype info
 		templateFile.setSpecialiseArchetype(specialiseArchetypeFile);
+		templateFile.setSpecialiseArchetypeName(oet.getTemplate()
+				.getDefinition().getArchetypeId());
 		templateFile
 				.setSpecialiseArchetypeInternalVersion(specialiseArchetypeFile
 						.getInternalVersion());
