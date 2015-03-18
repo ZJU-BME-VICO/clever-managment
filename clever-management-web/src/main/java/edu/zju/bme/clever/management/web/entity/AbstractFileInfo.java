@@ -130,8 +130,8 @@ public abstract class AbstractFileInfo {
 
 	@Override
 	public boolean equals(Object obj) {
-		if (obj instanceof ArchetypeInfo) {
-			return ((ArchetypeInfo) obj).getId() == id;
+		if (this.getClass().isInstance(obj)) {
+			return this.getClass().cast(obj).getId() == id;
 		}
 		return false;
 	}

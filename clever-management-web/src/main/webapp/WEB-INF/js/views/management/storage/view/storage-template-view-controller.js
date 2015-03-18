@@ -1,5 +1,5 @@
 define(['lazyLoader'], function(lazyLoader) {
-	lazyLoader.controller('StorageTemplateViewCtrl', function($scope, resourceService, STORAGE_TEMPLATE_LIST_URL) {
+	lazyLoader.controller('StorageTemplateViewCtrl', function($scope, $timeout, resourceService, STORAGE_TEMPLATE_LIST_URL, STORAGE_TEMPLATE_MASTER_BY_ID_URL) {
 
 		$scope.treeControl = {};
 		$scope.tabControl = {};
@@ -45,7 +45,7 @@ define(['lazyLoader'], function(lazyLoader) {
 				$timeout(function() {
 					$scope.tabControl.selectTabById(tabId);
 				}, 0);
-				resourceService.get(ARCHETYPE_MASTER_BY_ID_URL + master.id).then(function(masterInfo) {
+				resourceService.get(STORAGE_TEMPLATE_MASTER_BY_ID_URL + master.id).then(function(masterInfo) {
 					tab.content = masterInfo;
 				});
 			} else {

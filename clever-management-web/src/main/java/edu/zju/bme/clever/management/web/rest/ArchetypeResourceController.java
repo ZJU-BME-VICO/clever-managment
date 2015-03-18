@@ -1,5 +1,6 @@
 package edu.zju.bme.clever.management.web.rest;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -132,10 +133,24 @@ public class ArchetypeResourceController extends AbstractResourceController {
 	@RequestMapping(value = "/id/{id}", method = RequestMethod.GET)
 	public ArchetypeInfo getArchetypeById(@PathVariable int id)
 			throws Exception {
-		ArchetypeInfo info = new ArchetypeInfo();
 		ArchetypeFile file = this.archetypeProviderService
 				.getArchetypeFileById(id);
 		this.isResourcesNull(file);
+		return this.constructArchetypeInfo(file);
+	}
+
+	@RequestMapping(value = "/name/{name}", method = RequestMethod.GET)
+	public ArchetypeInfo getArchetypeByName(@PathVariable String name)
+			throws Exception {
+		ArchetypeFile file = this.archetypeProviderService
+				.getArchetypeFileByName(name);
+		this.isResourcesNull(file);
+		return this.constructArchetypeInfo(file);
+	}
+
+	private ArchetypeInfo constructArchetypeInfo(ArchetypeFile file)
+			throws ParseException, Exception, IOException {
+		ArchetypeInfo info = new ArchetypeInfo();
 		info.setId(file.getId());
 		info.setName(file.getName());
 		info.setInternalVersion(file.getInternalVersion());
@@ -155,7 +170,7 @@ public class ArchetypeResourceController extends AbstractResourceController {
 		if (file.getSpecialiseArchetypeId() != null) {
 			ArchetypeInfo specialiseInfo = new ArchetypeInfo();
 			specialiseInfo.setId(file.getSpecialiseArchetypeId());
-			specialiseInfo.setName(archetype.getParentArchetypeId().getValue());
+			specialiseInfo.setName(file.getSpecialiseArchetypeName());
 			info.setSpecialiseArchetype(specialiseInfo);
 		}
 		// Set editor info
@@ -197,61 +212,15 @@ public class ArchetypeResourceController extends AbstractResourceController {
 		ArchetypeMaster master = this.archetypeProviderService
 				.getArchetypeMasterById(id);
 		this.isResourcesNull(master);
-		ArchetypeMasterInfo masterInfo = new ArchetypeMasterInfo();
-		// Add basic info
-		masterInfo.setId(master.getId());
-		masterInfo.setName(master.getName());
-		masterInfo.setRmEntity(master.getRmEntity());
-		masterInfo.setRmName(master.getRmName());
-		masterInfo.setRmOriginator(master.getRmOrginator());
-		masterInfo.setConceptName(master.getConceptName());
-		masterInfo.setConceptDescription(master.getConceptDescription());
-		masterInfo.setKeywords(master.getKeywords());
-		masterInfo.setCopyright(master.getCopyright());
-		masterInfo.setPurpose(master.getPurpose());
-		masterInfo.setUse(master.getUse());
-		masterInfo.setMisuse(master.getMisuse());
-		masterInfo.setLifecycleState(master.getLatestFileLifecycleState()
-				.getValue());
-		masterInfo.setLatestArchetypeVersion(master.getLatestFileVersion());
-		ArchetypeMaster specialiseMaster = master
-				.getSpecialiseArchetypeMaster();
-		// Add specialise master
-		if (specialiseMaster != null) {
-			ArchetypeMasterInfo specialiseMasterInfo = new ArchetypeMasterInfo();
-			specialiseMasterInfo.setId(specialiseMaster.getId());
-			specialiseMasterInfo.setName(specialiseMaster.getName());
-			specialiseMasterInfo.setLatestArchetypeVersion(specialiseMaster
-					.getLatestFileVersion());
-			specialiseMasterInfo.setLatestArchetypeId(specialiseMaster
-					.getLatestFileId());
-			masterInfo.setSpecialiseArchetypeMaster(specialiseMasterInfo);
-		}
-		// Add archetypes
-		master.getFiles().forEach(archetype -> {
-			ArchetypeInfo archetypeInfo = new ArchetypeInfo();
-			archetypeInfo.setId(archetype.getId());
-			archetypeInfo.setInternalVersion(archetype.getInternalVersion());
-			archetypeInfo.setName(archetype.getName());
-			archetypeInfo.setVersion(archetype.getVersion());
-			masterInfo.getArchetypes().add(archetypeInfo);
-		});
-		// Add action log
-		master.getActionLogs()
-				.stream()
-				.forEach(
-						log -> {
-							ActionLogInfo logInfo = new ActionLogInfo();
-							logInfo.setId(log.getId());
-							logInfo.setAction(log.getActionType().getValue());
-							logInfo.setArchetypeVersion(log.getVersion());
-							logInfo.setRecordTime(log.getRecordTime());
-							logInfo.setOperatorName(log.getOperatorName());
-							logInfo.setArchetypeLifecycleState(log
-									.getLifecycleState().getValue());
-							masterInfo.getActionLogs().add(logInfo);
-						});
-		return masterInfo;
+		return this.constructArchetypeMasterInfo(master);
+	}
+
+	@RequestMapping(value = "/master/name/{name}", method = RequestMethod.GET)
+	public ArchetypeMasterInfo getMasterByName(@PathVariable String name) {
+		ArchetypeMaster master = this.archetypeProviderService
+				.getArchetypeMasterByName(name);
+		this.isResourcesNull(master);
+		return this.constructArchetypeMasterInfo(master);
 	}
 
 	@RequestMapping(value = "/action/validate", method = RequestMethod.POST)
@@ -338,4 +307,63 @@ public class ArchetypeResourceController extends AbstractResourceController {
 		}
 		return result;
 	}
+
+	private ArchetypeMasterInfo constructArchetypeMasterInfo(
+			ArchetypeMaster master) {
+		ArchetypeMasterInfo masterInfo = new ArchetypeMasterInfo();
+		// Add basic info
+		masterInfo.setId(master.getId());
+		masterInfo.setName(master.getName());
+		masterInfo.setRmEntity(master.getRmEntity());
+		masterInfo.setRmName(master.getRmName());
+		masterInfo.setRmOriginator(master.getRmOrginator());
+		masterInfo.setConceptName(master.getConceptName());
+		masterInfo.setConceptDescription(master.getConceptDescription());
+		masterInfo.setKeywords(master.getKeywords());
+		masterInfo.setCopyright(master.getCopyright());
+		masterInfo.setPurpose(master.getPurpose());
+		masterInfo.setUse(master.getUse());
+		masterInfo.setMisuse(master.getMisuse());
+		masterInfo.setLifecycleState(master.getLatestFileLifecycleState()
+				.getValue());
+		masterInfo.setLatestArchetypeVersion(master.getLatestFileVersion());
+		ArchetypeMaster specialiseMaster = master
+				.getSpecialiseArchetypeMaster();
+		// Add specialise master
+		if (specialiseMaster != null) {
+			ArchetypeMasterInfo info = new ArchetypeMasterInfo();
+			info.setId(specialiseMaster.getId());
+			info.setName(specialiseMaster.getName());
+			info.setLatestArchetypeVersion(specialiseMaster
+					.getLatestFileVersion());
+			info.setLatestArchetypeId(specialiseMaster.getLatestFileId());
+			masterInfo.setSpecialiseArchetypeMaster(info);
+		}
+		// Add archetypes
+		master.getFiles().forEach(archetype -> {
+			ArchetypeInfo info = new ArchetypeInfo();
+			info.setId(archetype.getId());
+			info.setInternalVersion(archetype.getInternalVersion());
+			info.setName(archetype.getName());
+			info.setVersion(archetype.getVersion());
+			masterInfo.getArchetypes().add(info);
+		});
+		// Add action logs
+		master.getActionLogs()
+				.stream()
+				.forEach(
+						log -> {
+							ActionLogInfo info = new ActionLogInfo();
+							info.setId(log.getId());
+							info.setAction(log.getActionType().getValue());
+							info.setArchetypeVersion(log.getVersion());
+							info.setRecordTime(log.getRecordTime());
+							info.setOperatorName(log.getOperatorName());
+							info.setArchetypeLifecycleState(log
+									.getLifecycleState().getValue());
+							masterInfo.getActionLogs().add(info);
+						});
+		return masterInfo;
+	}
+
 }
