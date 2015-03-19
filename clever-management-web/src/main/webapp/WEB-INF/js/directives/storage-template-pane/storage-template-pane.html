@@ -1,0 +1,69 @@
+<div class="row">
+	<div class="col-xs-8 col-md-8 col-lg-8">
+		<span class="clever-icon" ng-class="templateInfo.rmEntity | lowercase" style="padding: 10px 20px;background-size: 30px;"></span>
+		<span style="font-size: 20pt;">{{templateInfo.name}}</span>
+	</div>
+</div>
+<tabset class="row" tab-control="tabControl">
+	<tab>
+		<tab-heading>
+			{{'STORAGE_TEMPLATE_PANE_INFO' | translate}}
+		</tab-heading>
+		<div class="col-xs-12 col-md-12 col-lg-12" style="overflow: auto;margin-top: 5px;">
+			<table class="table table-hover" style="padding-top: 5px;">
+				<tbody>
+					<tr>
+						<th ng-style="{width: tableTitleWidth+ 'px'}"><b>Template ID</b></th>
+						<th style="font-weight: normal">{{templateInfo.name}}</th>
+					</tr>
+					<tr>
+						<th ng-style="{width: tableTitleWidth+ 'px'}"><b>Master ID</b></th>
+						<th style="font-weight: normal"><a href ng-click="selectTemplateMaster()">{{templateInfo.masterName}}</a></th>
+					</tr>
+					<tr>
+						<th ng-style="{width: tableTitleWidth+ 'px'}"><b>Specialise archetype</b></th>
+						<th style="font-weight: normal"><a href ng-click="selectSpecialiseArchetype()">{{templateInfo.specialiseArchetype.name}}</a></th>
+					</tr>
+					<tr>
+						<th ng-style="{width: tableTitleWidth+ 'px'}"><b>Lifecycle state</b></th>
+						<th style="font-weight: normal">{{templateInfo.lifecycleState}}</th>
+					</tr>
+					<tr>
+						<th ng-style="{width: tableTitleWidth+ 'px'}"><b>Editor</b></th>
+						<th style="font-weight: normal">{{templateInfo.editorName}}</th>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</tab>
+	<tab>
+		<tab-heading>
+			OET
+		</tab-heading>
+		<div class="col-xs-12 col-md-12 col-lg-12">
+			<div class="row" style="padding: 4px 0;">
+				<div class="btn-group pull-right" role="group">
+					<a ng-href="{{generateDownloadHref(templateInfo.oet)}}" download="{{templateInfo.name + '.oet'}}" class="btn btn-default"><i class="glyphicon glyphicon-download-alt"></i>{{'STORAGE_TEMPLATE_PANE_DOWNLOAD' | translate}}</a>
+				</div>
+			</div>
+			<div class="row">
+				<pre ng-style="{'max-height': paneHeight - 45}" style="overflow: auto;">{{templateInfo.oet}}</pre>
+			</div>
+		</div>
+	</tab>
+	<tab>
+		<tab-heading>
+			ARM
+		</tab-heading>
+		<div class="col-xs-12 col-md-12 col-lg-12">
+			<div class="row" style="padding: 4px 0;">
+				<div class="btn-group pull-right" role="group">
+					<a ng-href="{{generateDownloadHref(templateInfo.arm)}}" download="{{templateInfo.name + '.arm'}}" class="btn btn-default"><i class="glyphicon glyphicon-download-alt"></i>{{'STORAGE_TEMPLATE_PANE_DOWNLOAD' | translate}}</a>
+				</div>
+			</div>
+			<div class="row">
+				<pre ng-style="{'max-height': paneHeight - 45}" style="overflow: auto;">{{templateInfo.arm}}</pre>
+			</div>
+		</div>
+	</tab>
+</tabset>

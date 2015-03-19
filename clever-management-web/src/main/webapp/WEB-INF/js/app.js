@@ -17,6 +17,8 @@ angular.module('cleverManagementApp', ['ngAnimate', 'ngVisible', 'ui.bootstrap',
 		};
 	});
 	
+	$compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|ftp|mailto|tel|file|data|mias-iv|mias-cpoe|shine):/);
+	
 	// UI router config
 	$urlRouterProvider.otherwise('/');
 	// Home
@@ -91,7 +93,11 @@ angular.module('cleverManagementApp', ['ngAnimate', 'ngVisible', 'ui.bootstrap',
 		},
 		resolve : {
 			load : function(resourceService) {
-				return resourceService.load(['js/views/management/storage/view/storage-template-view-controller.js']);
+				return resourceService.load([
+					'js/views/management/storage/view/storage-template-view-controller.js',
+					'js/directives/template-master-pane/template-master-pane-directive.js',
+					'js/directives/storage-template-pane/storage-template-pane-directive.js'
+				]);
 			},
 		},
 		templateUrl : 'js/views/management/storage/view/management.storage.view.html',

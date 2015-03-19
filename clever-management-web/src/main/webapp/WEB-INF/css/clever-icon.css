@@ -64,14 +64,25 @@
 	background-repeat: no-repeat;
 }
 
+
 .clever-icon.archetype {
-	background-image: url("../img/letter-a-icon.png");
+	background-image: url("../img/letter-A-violet-icon.png");
 	background-repeat: no-repeat;
 }
-.clever-icon.master {
-	background-image: url("../img/letter-m-icon.png");
+.clever-icon.template {
+	background-image: url("../img/letter-T-gold-icon.png");
 	background-repeat: no-repeat;
 }
+.clever-icon.archetype.master {
+	background-image: url("../img/letter-M-violet-icon.png");
+	background-repeat: no-repeat;
+}
+.clever-icon.template.master {
+	background-image: url("../img/letter-M-gold-icon.png");
+	background-repeat: no-repeat;
+}
+
+
 .clever-icon.expanded {
 	background-image: url("../img/arrow_expanded.png");
 	background-repeat: no-repeat;

@@ -1,0 +1,95 @@
+<div class="row" style="padding-top: 5px;padding-bottom: 5px;">
+	<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+		<span class="clever-icon" ng-class="templateMasterInfo.rmEntity | lowercase" style="padding: 10px 20px;background-size: 30px;"></span>
+		<span style="font-size: 20pt;">{{templateMasterInfo.conceptName}}</span>
+	</div>
+</div>
+<tabset class="row" tab-control="tabControl">
+	<tab>
+		<tab-heading>
+			{{'TEMPLATE_MASTER_PANE_INFO' | translate}}
+		</tab-heading>
+		<div class="col-xs-12 col-md-12 col-lg-12" ng-style="{'max-height': tableMaxHeight}" style="overflow: auto;margin-top: 5px;">
+			<table class="table table-hover">
+				<tbody>
+					<tr>
+						<th ng-style="{width: tableTitleWidth+ 'px'}"><b>Master ID</b></th>
+						<th style="font-weight: normal">{{templateMasterInfo.name}}</th>
+					</tr>
+					<tr>
+						<th ng-style="{width: tableTitleWidth+ 'px'}"><b>History version</b></th>
+						<th style="font-weight: normal"><span ng-repeat="template in templateMasterInfo.templates | orderBy:'internalVersion'"> <a href ng-click="selectTemplate(template)">{{template.version}}</a>&nbsp;&nbsp; </span></th>
+					</tr>
+					<tr>
+						<th ng-style="{width: tableTitleWidth+ 'px'}"><b>Latest template lifecycle</b></th>
+						<th style="font-weight: normal">{{templateMasterInfo.lifecycleState}}</th>
+					</tr>
+					<tr>
+						<th ng-style="{width: tableTitleWidth+ 'px'}"><b>Specialise master ID</b></th>
+						<th style="font-weight: normal"><a href ng-click="selectSpecialiseMaster(templateMasterInfo.specialiseArchetypeMaster)">{{templateMasterInfo.specialiseArchetypeMaster.name}}</a></th>
+					</tr>
+					<tr>
+						<th ng-style="{width: tableTitleWidth+ 'px'}"><b>Specialise master latest archetype version</b></th>
+						<th style="font-weight: normal"><a href ng-click="selectSpecialiseArchetype({ id: templateMasterInfo.specialiseArchetypeMaster.latestArchetypeId, name: templateMasterInfo.specialiseArchetypeMaster.name})">{{templateMasterInfo.specialiseArchetypeMaster.latestArchetypeVersion}}</th>
+					</tr>
+					<tr>
+						<th ng-style="{width: tableTitleWidth+ 'px'}"><b>Concept name</b></th>
+						<th style="font-weight: normal">{{templateMasterInfo.conceptName}}</th>
+					</tr>
+					<tr>
+						<th ng-style="{width: tableTitleWidth+ 'px'}"><b>Concept description</b></th>
+						<th style="font-weight: normal">{{templateMasterInfo.conceptDescription}}</th>
+					</tr>
+					<tr>
+						<th ng-style="{width: tableTitleWidth+ 'px'}"><b>Keywords</b></th>
+						<th style="font-weight: normal">{{templateMasterInfo.keywords}}</th>
+					</tr>
+					<tr>
+						<th ng-style="{width: tableTitleWidth+ 'px'}"><b>Copyright</b></th>
+						<th style="font-weight: normal">{{templateMasterInfo.copyright}}</th>
+					</tr>
+					<tr>
+						<th ng-style="{width: tableTitleWidth+ 'px'}"><b>Purpose</b></th>
+						<th style="font-weight: normal">{{templateMasterInfo.purpose}}</th>
+					</tr>
+					<tr>
+						<th ng-style="{width: tableTitleWidth+ 'px'}"><b>Use</b></th>
+						<th style="font-weight: normal">{{templateMasterInfo.use}}</th>
+					</tr>
+					<tr>
+						<th ng-style="{width: tableTitleWidth+ 'px'}"><b>Misuse</b></th>
+						<th style="font-weight: normal">{{templateMasterInfo.misuse}}</th>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</tab>
+	<tab>
+		<tab-heading>
+			{{'TEMPLATE_MASTER_PANE_LOG' | translate}}
+		</tab-heading>
+		<div class="col-xs-12 col-md-12 col-lg-12" ng-style="{'max-height': tableMaxHeight}" style="overflow: auto;margin-top: 5px;">
+			<table class="table table-hover" style="padding-top: 5px;">
+				<thead>
+					<tr>
+						<th>{{'TEMPLATE_MASTER_PANE_VERSION' | translate}}</th>
+						<th>{{'TEMPLATE_MASTER_PANE_STATE' | translate}}</th>
+						<th>{{'TEMPLATE_MASTER_PANE_OPERATION' | translate}}</th>
+						<th>{{'TEMPLATE_MASTER_PANE_OPERATIOR' | translate}}</th>
+						<th>{{'TEMPLATE_MASTER_PANE_OPERATE_TIME' | translate}}</th>
+					</tr>
+				</thead>
+				<tbody>
+
+					<tr ng-repeat="log in templateMasterInfo.actionLogs">
+						<td>{{log.version}}</td>
+						<td>{{log.lifecycleState}}</td>
+						<td>{{log.action}}</td>
+						<td>{{log.operatorName}}</td>
+						<td>{{getFormatedTime(log.recordTime)}}</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</tab>
+</tabset>

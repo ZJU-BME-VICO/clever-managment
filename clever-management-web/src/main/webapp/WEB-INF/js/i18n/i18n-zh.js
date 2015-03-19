@@ -143,5 +143,18 @@ angular.module('clever.management.i18n.zh', ['pascalprecht.translate']).config(f
 		ARCHETYPE_PANE_INFO : '基本信息',
 		ARCHETYPE_PANE_DOWNLOAD : '下载',
 		ARCHETYPE_PANE_COPY : '复制',
+
+		// Template master pane
+		TEMPLATE_MASTER_PANE_INFO : '基本信息',
+		TEMPLATE_MASTER_PANE_LOG : '操作记录',
+		TEMPLATE_MASTER_PANE_VERSION : '版本',
+		TEMPLATE_MASTER_PANE_STATE : '状态',
+		TEMPLATE_MASTER_PANE_OPERATION : '操作',
+		TEMPLATE_MASTER_PANE_OPERATIOR : '操作者',
+		TEMPLATE_MASTER_PANE_OPERATE_TIME : '操作时间',
+
+		// Storage template pane
+		STORAGE_TEMPLATE_PANE_INFO : '基本信息',
+		STORAGE_TEMPLATE_PANE_DOWNLOAD : '下载',
 	});
 });
