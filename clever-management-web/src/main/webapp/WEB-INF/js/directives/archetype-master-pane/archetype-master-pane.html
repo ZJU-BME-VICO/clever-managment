@@ -82,8 +82,8 @@
 				<tbody>
 
 					<tr ng-repeat="log in archetypeMasterInfo.actionLogs">
-						<td>{{log.archetypeVersion}}</td>
-						<td>{{log.archetypeLifecycleState}}</td>
+						<td>{{log.version}}</td>
+						<td>{{log.lifecycleState}}</td>
 						<td>{{log.action}}</td>
 						<td>{{log.operatorName}}</td>
 						<td>{{getFormatedTime(log.recordTime)}}</td>

@@ -356,10 +356,10 @@ public class ArchetypeResourceController extends AbstractResourceController {
 							ActionLogInfo info = new ActionLogInfo();
 							info.setId(log.getId());
 							info.setAction(log.getActionType().getValue());
-							info.setArchetypeVersion(log.getVersion());
+							info.setVersion(log.getVersion());
 							info.setRecordTime(log.getRecordTime());
 							info.setOperatorName(log.getOperatorName());
-							info.setArchetypeLifecycleState(log
+							info.setLifecycleState(log
 									.getLifecycleState().getValue());
 							masterInfo.getActionLogs().add(info);
 						});

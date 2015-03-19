@@ -1,4 +1,4 @@
-function ArchetypeViewCtrl($scope, $timeout, resourceService, ARCHETYPE_LIST_URL, ARCHETYPE_MASTER_BY_ID_URL, ARCHETYPE_BY_ID_URL, ARCHETYPE_BY_NAME_URL) {
+function ArchetypeViewCtrl($scope, $timeout, resourceService, ARCHETYPE_LIST_URL, ARCHETYPE_MASTER_BY_ID_URL, ARCHETYPE_BY_ID_URL) {
 
 	$scope.treeControl = {};
 	$scope.tabControl = {};
@@ -31,7 +31,7 @@ function ArchetypeViewCtrl($scope, $timeout, resourceService, ARCHETYPE_LIST_URL
 		if (containsTabId(tabId) < 0) {
 			var count = $scope.tabs.push({
 				id : tabId,
-				type : 'master',
+				type : 'archetype master',
 				title : master.name,
 				content : undefined,
 			});
@@ -61,8 +61,6 @@ function ArchetypeViewCtrl($scope, $timeout, resourceService, ARCHETYPE_LIST_URL
 				$scope.tabControl.selectTabById(tabId);
 			}, 0);
 			resourceService.get(ARCHETYPE_BY_ID_URL + archetype.id).then(function(archetypeInfo) {
-				archetypeInfo.xmlDownloadUrl = ARCHETYPE_BY_NAME_URL + archetype.name + '.xml';
-				archetypeInfo.adlDownloadUrl = ARCHETYPE_BY_NAME_URL + archetype.name + '.adl';
 				tab.content = archetypeInfo;
 			});
 		} else {
