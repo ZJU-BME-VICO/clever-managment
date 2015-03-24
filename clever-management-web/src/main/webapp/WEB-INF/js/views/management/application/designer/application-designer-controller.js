@@ -9,22 +9,15 @@ function DesignerCtrl($scope,resourceService,templateParseService,$compile,ARCHE
 	    var tmp = x2js.xml_str2json(result).template;	    
 	});*/
 	
-	 resourceService.get(ARCHETYPE_BY_NAME_URL+'openEHR-EHR-INSTRUCTION.request-imaging_exam.v1.xml').then(function(result){
-                    var archetype=result;
-                });
-	
-	 resourceService.get(STORAGE_TEMPLATE_BY_NAME_URL+'openEHR-EHR-INSTRUCTION.request-imaging_exam.v1.1').then(function(temp){
-	    var xml=temp.content;
-	    var x2js=new X2JS();
-	    var template=x2js.xml_str2json(xml).template;
-	    var parseResult=templateParseService.parseTemplate(template).definitions;
-	    /*var url=parseResult[0].archetype_id;
-	    var path=parseResult[0].leafInfo;
-	    resourceService.get(ARCHETYPE_BY_NAME_URL+url).then(function(result){
+	 /*resourceService.get(ARCHETYPE_BY_NAME_URL+'openEHR-EHR-INSTRUCTION.request-imaging_exam.v1.xml').then(function(result){
                     var archetype=result;
                 });*/
-	    
-	    
+	
+	 resourceService.get(STORAGE_TEMPLATE_BY_NAME_URL+'openEHR-EHR-INSTRUCTION.request-imaging_exam.v1.1').then(function(temp){
+	    var xml=temp.oet;
+	    var x2js=new X2JS();
+	    var template=x2js.xml_str2json(xml).template;
+	    var parseResult=templateParseService.parseTemplate(template).definitions;    
 	    $scope.templateList=template;
 	    
 	});

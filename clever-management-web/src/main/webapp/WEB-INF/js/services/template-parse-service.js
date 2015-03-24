@@ -15,36 +15,98 @@ angular.module('clever.management.services.templateParse',[]).service('templateP
     };
     this.parseDefinition=function(template){
     	var operationalTemplate=[];
-    	tranformOet(template.definition,operationalTemplate);    	
+    	operationalTemplate.push({template_name:template.name,template_id:template.id.value});
+    	operationalTemplate.children=[];
+    	tranformOet(template.definition,operationalTemplate.children);    	
     	return operationalTemplate;
     };
     function tranformOet(node,listTree){//proess oet 第一个node是definition
         var nodeHere=node;
-        if(angular.isArray(node)){
-            var optTree=[];
-            getArchetypeInfo(node,optTree);
-            var leafnode=optTree;
-            if(leafnode.length!=0){
-                listTree.push(leafnode);
-                if(node.Items){
-                    leafnode.children=[];
-                    tranformOet(node.Items,leafnode.children);
-                }    
-            }        
+        if(angular.isArray(nodeHere)){
+            angular.forEach(nodeHere,function(nodec){
+            var archetype_name=nodec._archetype_id;
+            var childNode=[];
+            var archetype; 
+            var optTree=[];  
+            var Node={concept:nodec._concept_name,archetype_name:archetype_name}; //root node of archetype in oet   
+            
+            resourceService.get(ARCHETYPE_BY_NAME_URL+archetype_name).then(function(archetype){
+                  parseResult = archetypeParseService.parseArchetypeXml(archetype.xml);
+                  childNode.push(processRules(parseResult.definitions.treeItems,nodec));
+                  /*if(nodec.Items){
+                     for(i=0;i<nodec.Items.length;i++){
+                         var newnode=[];
+                         newnode.conceptName=nodec.Items[i]._concept_name;
+                         newnode.archetype_name=nodec.Items[i]._archetype_id;
+                         childNode.push(newnode);
+                         childNode.children=[];
+                     } 
+                  } */
+                  Node.children=childNode;
+                  optTree.push(Node);   
+                  if(optTree.length!=0){
+                    listTree.push(optTree);
+                    if(nodec.Items){
+                        optTree.children=[];
+                        tranformOet(nodec.Items,optTree.children);
+                    }    
+                    }   
+             });
+            });       
         }else{
-            var optTree=[];
-            getArchetypeInfo(nodeHere,optTree);
-            var leafnode=optTree;
-            if(leafnode.length!=0){
-                listTree.push(leafnode);
-                if(node.Items){
-                    leafnode.children=[];
-                    tranformOet(node.Iems,leafnode.children);
-                }
-            }
+               var nodec=nodeHere;
+               var archetype_name=nodec._archetype_id;
+               var childNode=[];
+               var archetype; 
+               var optTree=[];  
+               var Node={concept:nodec._concept_name,archetype_name:archetype_name}; //root node of archetype in oet 
+              resourceService.get(ARCHETYPE_BY_NAME_URL+archetype_name).then(function(archetype){
+                  parseResult = archetypeParseService.parseArchetypeXml(archetype.xml);
+                  childNode.push(processRules(parseResult.definitions.treeItems,nodec));
+                  if(nodec.Items){
+                     for(i=0;i<nodec.Items.length;i++){
+                         var newnode=[];
+                         newnode.conceptName=nodec.Items[i]._concept_name;
+                         newnode.archetype_name=nodec.Items[i]._archetype_id;
+                         childNode.push(newnode);
+                         childNode.children=[];
+                     } 
+                  } 
+                  Node.children=childNode;
+                  var path=nodec._path;
+                       if(path){//找cluster 原型的父节点,重新遍历书找到节点太麻烦了，，怎么处理
+                          var reg=/\[|\]|\//;
+                          var path_array=path.split(reg);
+                          var name=path_array.slice(-3,-2);
+                          var code=path_array.slice(-2,-1);  
+                          processItems(tree,undefined,name,code,Node,undefined);
+                       }
+                  
+                  optTree.push(Node);   
+                  if(optTree.length!=0){
+                    listTree.push(optTree);
+                    if(nodec.Items){
+                        optTree.children=[];
+                        tranformOet(nodec.Items,optTree.children);
+                    }    
+                    }   
+             });        
          }      
     }
-    
+    function processItems(tree,parent,name,code,name,arResult，newTree){
+        if(angular.isArray(tree)){
+            angular.forEach(tree,function(node){
+                var tip=false;
+                  if(node.label.code==code){//agree
+                    if(value.parent.label.text){
+                        value.children=arResult;
+                        tip=false;
+                    }}
+            });
+        }else{
+            
+        }
+    }
     function getArchetypeInfo(node,optTree){//process archetype for oet
         var archetype_name=node._archetype_id+".xml";
         var childNode=[];
@@ -107,7 +169,7 @@ angular.module('clever.management.services.templateParse',[]).service('templateP
                         tip=true;
                         currentNode.children=[];
                         if(value.children){
-                          return  getArchetypeDetail(value.children,value,ruleList,currentNode.children); 
+                            getArchetypeDetail(value.children,value,ruleList,currentNode.children); 
                         }
                     }
                 }}
@@ -115,7 +177,7 @@ angular.module('clever.management.services.templateParse',[]).service('templateP
                     archetypeTree.push(currentNode);
                     currentNode.children=[];
                     if(value.children){
-                      return  getArchetypeDetail(value.children,value,ruleList,currentNode.children);
+                        getArchetypeDetail(value.children,value,ruleList,currentNode.children);
                      }
                 }
          });
@@ -136,7 +198,7 @@ angular.module('clever.management.services.templateParse',[]).service('templateP
                             tip=true;
                             currentNode.children=[];
                             if(value.children){
-                               return getArchetypeDetail(value.children,value,ruleList,currentNode.children); 
+                                getArchetypeDetail(value.children,value,ruleList,currentNode.children); 
                             }
                         }
                     }
@@ -145,7 +207,7 @@ angular.module('clever.management.services.templateParse',[]).service('templateP
                         archetypeTree.push(currentNode);
                         currentNode.children=[];
                         if(value.children){
-                          return  getArchetypeDetail(value.children,value,ruleList,currentNode.children);
+                            getArchetypeDetail(value.children,value,ruleList,currentNode.children);
                          }                  
                  }
               }
