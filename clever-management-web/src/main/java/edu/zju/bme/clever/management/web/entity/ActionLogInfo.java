@@ -5,8 +5,8 @@ import java.util.Calendar;
 public class ActionLogInfo {
 
 	private Integer id;
-	private String archetypeVersion;
-	private String archetypeLifecycleState;
+	private String version;
+	private String lifecycleState;
 	private String action;
 	private String operatorName;
 	private Calendar recordTime;
@@ -19,14 +19,7 @@ public class ActionLogInfo {
 		this.id = id;
 	}
 
-	public String getArchetypeVersion() {
-		return archetypeVersion;
-	}
-
-	public void setArchetypeVersion(String archetypeVersion) {
-		this.archetypeVersion = archetypeVersion;
-	}
-
+	
 	public String getAction() {
 		return action;
 	}
@@ -35,13 +28,6 @@ public class ActionLogInfo {
 		this.action = action;
 	}
 
-	public String getArchetypeLifecycleState() {
-		return archetypeLifecycleState;
-	}
-
-	public void setArchetypeLifecycleState(String archetypeLifecycleState) {
-		this.archetypeLifecycleState = archetypeLifecycleState;
-	}
 
 	public String getOperatorName() {
 		return operatorName;
@@ -59,4 +45,21 @@ public class ActionLogInfo {
 		this.recordTime = recordTime;
 	}
 
+	public String getVersion() {
+		return version;
+	}
+
+	public void setVersion(String version) {
+		this.version = version;
+	}
+
+	public String getLifecycleState() {
+		return lifecycleState;
+	}
+
+	public void setLifecycleState(String lifecycleState) {
+		this.lifecycleState = lifecycleState;
+	}
+
+	
 }

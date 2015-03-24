@@ -33,11 +33,11 @@
 					</tr>
 					<tr>
 						<th ng-style="{width: tableTitleWidth+ 'px'}"><b>Master ID</b></th>
-						<th style="font-weight: normal"><a href ng-click="selectMasterId(archetypeInfo.masterId)">{{archetypeInfo.masterName}}</a></th>
+						<th style="font-weight: normal"><a href ng-click="selectArchetypeMaster()">{{archetypeInfo.masterName}}</a></th>
 					</tr>
 					<tr>
 						<th ng-style="{width: tableTitleWidth+ 'px'}"><b>Specialise archetype</b></th>
-						<th style="font-weight: normal"><a href ng-click="selectArchetypeId(archetypeInfo.specialiseArchetype.id)">{{archetypeInfo.specialiseArchetype.name}}</a></th>
+						<th style="font-weight: normal"><a href ng-click="selectSpecialiseArchetype()">{{archetypeInfo.specialiseArchetype.name}}</a></th>
 					</tr>
 					<tr>
 						<th ng-style="{width: tableTitleWidth+ 'px'}"><b>Lifecycle state</b></th>
@@ -82,7 +82,7 @@
 		<div class="col-xs-12 col-md-12 col-lg-12">
 			<div class="row" style="padding: 4px 0;">
 				<div class="btn-group pull-right" role="group">
-					<a ng-href="{{archetypeInfo.xmlDownloadUrl}}" class="btn btn-default"><i class="glyphicon glyphicon-download-alt"></i>{{'ARCHETYPE_PANE_DOWNLOAD' | translate}}</a>
+					<a ng-href="{{generateDownloadHref(archetypeInfo.xml)}}" download="{{archetypeInfo.name + '.xml'}}" class="btn btn-default"><i class="glyphicon glyphicon-download-alt"></i>{{'ARCHETYPE_PANE_DOWNLOAD' | translate}}</a>
 				</div>
 			</div>
 			<div class="row">
@@ -97,7 +97,7 @@
 		<div class="col-xs-12 col-md-12 col-lg-12">
 			<div class="row" style="padding: 4px 0;">
 				<div class="btn-group pull-right" role="group">
-					<a ng-href="{{archetypeInfo.adlDownloadUrl}}" class="btn btn-default"><i class="glyphicon glyphicon-download-alt"></i>{{'ARCHETYPE_PANE_DOWNLOAD' | translate}}</a>
+					<a href="{{generateDownloadHref(archetypeInfo.adl)}}" download="{{archetypeInfo.name + '.adl'}}" class="btn btn-default"><i class="glyphicon glyphicon-download-alt"></i>{{'ARCHETYPE_PANE_DOWNLOAD' | translate}}</a>
 				</div>
 			</div>
 			<div class="row">

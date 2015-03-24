@@ -55,18 +55,21 @@ angular.module('clever.management.directives.archetypePane', []).directive('arch
 				}
 			});
 
-			$scope.selectArchetypeId = function(id) {
+			$scope.generateDownloadHref = function(content) {
+				return 'data:text/plain;charset=utf-8,' + encodeURIComponent(content);
+			};
+
+			$scope.selectSpecialiseArchetype = function() {
 				$scope.selectArchetypeCallback({
-					value : {
-						id : id,
-					},
+					value : $scope.archetypeInfo.specialiseArchetype
 				});
 			};
 
-			$scope.selectMasterId = function(id) {
+			$scope.selectArchetypeMaster = function() {
 				$scope.selectMasterCallback({
 					value : {
-						id : id,
+						id : $scope.archetypeInfo.masterId,
+						name : $scope.archetypeInfo.masterName,
 					},
 				});
 			};

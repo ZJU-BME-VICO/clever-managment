@@ -449,7 +449,7 @@ public class ArchetypeVersionControlServiceImpl implements
 		// Log action
 		logArchetypeAction(archetypeFile, ActionType.REJECT, user);
 	}
-	
+
 	@Override
 	public void rejectAndRemoveArchetype(Integer archetypeId, User user)
 			throws VersionControlException {
@@ -609,6 +609,8 @@ public class ArchetypeVersionControlServiceImpl implements
 								+ " does not match.");
 			}
 			archetypeFile.setSpecialiseArchetype(specialiseArchetypeFile);
+			archetypeFile.setSpecialiseArchetypeName(specialiseArchetypeId
+					.get().getValue());
 			archetypeFile
 					.setSpecialiseArchetypeInternalVersion(specialiseArchetypeFile
 							.getInternalVersion());

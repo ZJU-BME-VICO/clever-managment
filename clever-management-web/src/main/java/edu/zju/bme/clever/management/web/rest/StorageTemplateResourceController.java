@@ -3,6 +3,7 @@ package edu.zju.bme.clever.management.web.rest;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +31,9 @@ import edu.zju.bme.clever.management.service.entity.TemplateMaster;
 import edu.zju.bme.clever.management.service.entity.TemplatePropertyType;
 import edu.zju.bme.clever.management.service.entity.User;
 import edu.zju.bme.clever.management.service.exception.VersionControlException;
+import edu.zju.bme.clever.management.web.entity.ActionLogInfo;
+import edu.zju.bme.clever.management.web.entity.ArchetypeInfo;
+import edu.zju.bme.clever.management.web.entity.ArchetypeMasterInfo;
 import edu.zju.bme.clever.management.web.entity.EntityClassInfo;
 import edu.zju.bme.clever.management.web.entity.FileUploadResult;
 import edu.zju.bme.clever.management.web.entity.StorageTemplateInfo;
@@ -72,16 +76,16 @@ public class StorageTemplateResourceController extends
 			@PathVariable int id) {
 		TemplateMaster master = this.providerService.getTemplateMasterById(id);
 		this.isResourcesNull(master);
-		StorageTemplateMasterInfo info = new StorageTemplateMasterInfo();
-		info.setId(master.getId());
-		info.setName(master.getName());
-		info.setRmEntity(master.getRmEntity());
-		info.setRmName(master.getRmName());
-		info.setRmOriginator(master.getRmOrginator());
-		info.setConceptName(master.getConceptName());
-		info.setConceptDescription(master.getConceptDescription());
+		return this.constructStorageTemplateMasterInfo(master);
+	}
 
-		return info;
+	@RequestMapping(value = "/master/name/{name}", method = RequestMethod.GET)
+	public StorageTemplateMasterInfo getStorageTemplateMasterByName(
+			@PathVariable String name) {
+		TemplateMaster master = this.providerService
+				.getTemplateMasterByName(name);
+		this.isResourcesNull(master);
+		return this.constructStorageTemplateMasterInfo(master);
 	}
 
 	@RequestMapping(value = "/id/{id}", method = RequestMethod.GET)
@@ -190,19 +194,83 @@ public class StorageTemplateResourceController extends
 		return result;
 	}
 
+	private StorageTemplateMasterInfo constructStorageTemplateMasterInfo(
+			TemplateMaster templateMaster) {
+		StorageTemplateMasterInfo masterInfo = new StorageTemplateMasterInfo();
+		masterInfo.setId(templateMaster.getId());
+		masterInfo.setName(templateMaster.getName());
+		masterInfo.setRmEntity(templateMaster.getRmEntity());
+		masterInfo.setRmName(templateMaster.getRmName());
+		masterInfo.setRmOriginator(templateMaster.getRmOrginator());
+		masterInfo.setConceptName(templateMaster.getConceptName());
+		masterInfo
+				.setConceptDescription(templateMaster.getConceptDescription());
+		masterInfo.setKeywords(templateMaster.getKeywords());
+		masterInfo.setPurpose(templateMaster.getPurpose());
+		masterInfo.setUse(templateMaster.getUse());
+		masterInfo.setMisuse(templateMaster.getMisuse());
+		masterInfo.setCopyright(templateMaster.getCopyright());
+		masterInfo.setLifecycleState(templateMaster
+				.getLatestFileLifecycleState().getValue());
+		// Add specialise archetype master
+		Optional.ofNullable(templateMaster.getSpecialiseArchetypeMaster())
+				.ifPresent(
+						archetypeMaster -> {
+							ArchetypeMasterInfo info = new ArchetypeMasterInfo();
+							info.setId(archetypeMaster.getId());
+							info.setName(archetypeMaster.getName());
+							info.setLatestArchetypeVersion(archetypeMaster
+									.getLatestFileVersion());
+							info.setLatestArchetypeId(archetypeMaster
+									.getLatestFileId());
+							masterInfo.setSpecialiseArchetypeMaster(info);
+						});
+		// Add templates
+		templateMaster.getFiles().forEach(template -> {
+			StorageTemplateInfo info = new StorageTemplateInfo();
+			info.setId(template.getId());
+			info.setName(template.getName());
+			info.setInternalVersion(template.getInternalVersion());
+			info.setVersion(template.getVersion());
+			masterInfo.getTemplates().add(info);
+		});
+		// Add action logs
+		templateMaster.getActionLogs().forEach(
+				log -> {
+					ActionLogInfo info = new ActionLogInfo();
+					info.setId(log.getId());
+					info.setAction(log.getActionType().getValue());
+					info.setVersion(log.getVersion());
+					info.setRecordTime(log.getRecordTime());
+					info.setOperatorName(log.getOperatorName());
+					info.setLifecycleState(log.getLifecycleState()
+							.getValue());
+					masterInfo.getActionLogs().add(info);
+				});
+		return masterInfo;
+	}
+
 	private StorageTemplateInfo constructStorageTemplateInfo(
 			TemplateFile templateFile) {
 		StorageTemplateInfo info = new StorageTemplateInfo();
 		info.setId(templateFile.getId());
 		info.setName(templateFile.getName());
 		info.setVersion(templateFile.getVersion());
-		info.setSpecialiseArchetypeId(templateFile.getSpecialiseArchetypeId());
-		info.setSource(templateFile.getSource().getValue());
-		info.setContent(templateFile.getContent());
+		info.setInternalVersion(templateFile.getInternalVersion());
+		info.setOet(templateFile.getContent());
 		info.setArm(templateFile.getPropertyValue(TemplatePropertyType.ARM));
+		info.setMasterId(templateFile.getMasterId());
+		info.setMasterName(templateFile.getName().substring(0,
+				templateFile.getName().lastIndexOf(".v")));
 		info.setEditorId(templateFile.getEditor().getId());
 		info.setEditorName(templateFile.getEditor().getName());
 		info.setLifecycleState(templateFile.getLifecycleState().getValue());
+		// Set specialise archetyep info
+		ArchetypeInfo specialiseInfo = new ArchetypeInfo();
+		specialiseInfo.setId(templateFile.getSpecialiseArchetypeId());
+		specialiseInfo.setName(templateFile.getSpecialiseArchetypeName());
+		info.setSpecialiseArchetype(specialiseInfo);
+		// Set entity classes
 		info.setEntityClasses(templateFile.getEntityClasses().stream()
 				.map(cls -> this.constructEntityClassInfo(cls))
 				.collect(Collectors.toSet()));
