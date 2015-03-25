@@ -179,28 +179,28 @@ public class ArchetypeResourceController extends AbstractResourceController {
 		return info;
 	}
 
-	@RequestMapping(value = "/id/{id}.adl", method = RequestMethod.GET)
+	@RequestMapping(value = "/id/{id}/adl", method = RequestMethod.GET)
 	public String getArchetypeAdlById(@PathVariable int id) {
 		String adl = this.archetypeProviderService.getArchetypeAdlById(id);
 		this.isResourcesNull(adl);
 		return adl;
 	}
 
-	@RequestMapping(value = "/name/{name}.adl", method = RequestMethod.GET)
+	@RequestMapping(value = "/name/{name}/adl", method = RequestMethod.GET)
 	public String getArchetypeAdlByName(@PathVariable String name) {
 		String adl = this.archetypeProviderService.getArchetypeAdlByName(name);
 		this.isResourcesNull(adl);
 		return adl;
 	}
 
-	@RequestMapping(value = "/id/{id}.xml", method = RequestMethod.GET)
+	@RequestMapping(value = "/id/{id}/xml", method = RequestMethod.GET)
 	public String getArchetypeXmlById(@PathVariable int id) {
 		String xml = this.archetypeProviderService.getArchetypeXmlById(id);
 		this.isResourcesNull(xml);
 		return xml;
 	}
 
-	@RequestMapping(value = "/name/{name}.xml", method = RequestMethod.GET)
+	@RequestMapping(value = "/name/{name}/xml", method = RequestMethod.GET)
 	public String getArchetypeXmlByName(@PathVariable String name) {
 		String xml = this.archetypeProviderService.getArchetypeXmlByName(name);
 		this.isResourcesNull(xml);
