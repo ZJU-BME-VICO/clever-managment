@@ -4,10 +4,13 @@ import java.util.List;
 
 import edu.zju.bme.clever.management.service.entity.ArchetypeFile;
 import edu.zju.bme.clever.management.service.entity.ArchetypeMaster;
+import edu.zju.bme.clever.management.service.entity.User;
 
 public interface ArchetypeProviderService {
 
 	public List<ArchetypeMaster> getAllArchetypeMasters();
+	
+	public List<ArchetypeFile> getMyArchetypeFiles(User user);
 
 	public ArchetypeMaster getArchetypeMasterByName(String masterName);
 
