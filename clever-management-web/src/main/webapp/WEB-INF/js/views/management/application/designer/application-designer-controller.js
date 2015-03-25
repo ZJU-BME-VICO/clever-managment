@@ -18,8 +18,7 @@ function DesignerCtrl($scope,resourceService,templateParseService,$compile,ARCHE
 	    var x2js=new X2JS();
 	    var template=x2js.xml_str2json(xml).template;
 	    var parseResult=templateParseService.parseTemplate(template).definitions;    
-	    $scope.templateList=template;
-	    
+	    $scope.templateList=parseResult;
 	});
 	
 	

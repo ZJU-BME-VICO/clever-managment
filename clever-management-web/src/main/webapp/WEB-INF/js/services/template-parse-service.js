@@ -17,40 +17,43 @@ angular.module('clever.management.services.templateParse',[]).service('templateP
     	var operationalTemplate=[];
     	operationalTemplate.push({template_name:template.name,template_id:template.id.value});
     	operationalTemplate.children=[];
-    	tranformOet(template.definition,operationalTemplate.children);    	
+    	tranformOet(template.definition,undefined,operationalTemplate);    	
     	return operationalTemplate;
     };
-    function tranformOet(node,listTree){//proess oet 第一个node是definition
+    function tranformOet(node,parent,listTree){//proess oet 第一个node是definition
         var nodeHere=node;
         if(angular.isArray(nodeHere)){
-            angular.forEach(nodeHere,function(nodec){
-            var archetype_name=nodec._archetype_id;
-            var childNode=[];
-            var archetype; 
-            var optTree=[];  
-            var Node={concept:nodec._concept_name,archetype_name:archetype_name}; //root node of archetype in oet   
-            
-            resourceService.get(ARCHETYPE_BY_NAME_URL+archetype_name).then(function(archetype){
+            angular.forEach(nodeHere,function(nodec){              
+                var archetype_name=nodec._archetype_id;
+                var childNode=[];
+                var archetype; 
+                var optTree=[];
+                optTree.parent=parent;  
+                var label={name:nodec._concept_name,archetypeName:archetype_name,code:undefined}; //root node of archetype in oet   
+                var Node=[];
+                Node.label=label;
+                resourceService.get(ARCHETYPE_BY_NAME_URL+archetype_name).then(function(archetype){
                   parseResult = archetypeParseService.parseArchetypeXml(archetype.xml);
-                  childNode.push(processRules(parseResult.definitions.treeItems,nodec));
-                  /*if(nodec.Items){
-                     for(i=0;i<nodec.Items.length;i++){
-                         var newnode=[];
-                         newnode.conceptName=nodec.Items[i]._concept_name;
-                         newnode.archetype_name=nodec.Items[i]._archetype_id;
-                         childNode.push(newnode);
-                         childNode.children=[];
-                     } 
-                  } */
-                  Node.children=childNode;
+                  Node.children=processRules(parseResult.definitions.treeItems,nodec);
+                  var path=nodec._path;
+                       if(path){//找cluster 原型的父节点,重新遍历书找到节点太麻烦了，，怎么处理
+                          var reg=/\[|\]|\//;
+                          var path_array=path.split(reg);
+                          var name=path_array.slice(-3,-2);
+                          var code=path_array.slice(-2,-1);  
+                          var passTree=[]; 
+                          processItems(optTree.parent,undefined,name,code,Node,passTree);
+                          Node=passTree;
+                       }
+                  
                   optTree.push(Node);   
-                  if(optTree.length!=0){
-                    listTree.push(optTree);
+                  //if(optTree.length!=0){
+                   // listTree.push(optTree);
                     if(nodec.Items){
                         optTree.children=[];
-                        tranformOet(nodec.Items,optTree.children);
+                        tranformOet(nodec.Items,optTree,optTree.children);
                     }    
-                    }   
+                   // }   
              });
             });       
         }else{
@@ -58,81 +61,69 @@ angular.module('clever.management.services.templateParse',[]).service('templateP
                var archetype_name=nodec._archetype_id;
                var childNode=[];
                var archetype; 
-               var optTree=[];  
-               var Node={concept:nodec._concept_name,archetype_name:archetype_name}; //root node of archetype in oet 
-              resourceService.get(ARCHETYPE_BY_NAME_URL+archetype_name).then(function(archetype){
+               var optTree=[];
+               optTree.parent=parent;    
+               var label={name:nodec._concept_name,archetypeName:archetype_name,code:undefined}; //root node of archetype in oet   
+               var Node=[];
+               Node.label=label;
+               resourceService.get(ARCHETYPE_BY_NAME_URL+archetype_name).then(function(archetype){
                   parseResult = archetypeParseService.parseArchetypeXml(archetype.xml);
-                  childNode.push(processRules(parseResult.definitions.treeItems,nodec));
-                  if(nodec.Items){
-                     for(i=0;i<nodec.Items.length;i++){
-                         var newnode=[];
-                         newnode.conceptName=nodec.Items[i]._concept_name;
-                         newnode.archetype_name=nodec.Items[i]._archetype_id;
-                         childNode.push(newnode);
-                         childNode.children=[];
-                     } 
-                  } 
-                  Node.children=childNode;
+                  Node.children=processRules(parseResult.definitions.treeItems,nodec);
                   var path=nodec._path;
                        if(path){//找cluster 原型的父节点,重新遍历书找到节点太麻烦了，，怎么处理
                           var reg=/\[|\]|\//;
                           var path_array=path.split(reg);
                           var name=path_array.slice(-3,-2);
-                          var code=path_array.slice(-2,-1);  
-                          processItems(tree,undefined,name,code,Node,undefined);
+                          var code=path_array.slice(-2,-1); 
+                          var passTree=[]; 
+                          processItems(optTree.parent,undefined,name,code,Node,passTree);
+                          Node=passTree;
                        }
                   
                   optTree.push(Node);   
-                  if(optTree.length!=0){
-                    listTree.push(optTree);
+                 // if(optTree.length!=0){
+                    //listTree.push(optTree);
                     if(nodec.Items){
                         optTree.children=[];
-                        tranformOet(nodec.Items,optTree.children);
+                        tranformOet(nodec.Items,optTree,optTree.children);
                     }    
-                    }   
+                  //  }   
              });        
          }      
     }
-    function processItems(tree,parent,name,code,name,arResult，newTree){
+    
+    function processItems(tree,parent,name,code,arResult,newTree){
         if(angular.isArray(tree)){
-            angular.forEach(tree,function(node){
-                var tip=false;
-                  if(node.label.code==code){//agree
+             angular.forEach(tree,function(value){
+                  value.parent=parent;
+                  if(value.label.code==code){//agree
                     if(value.parent.label.text){
-                        value.children=arResult;
-                        tip=false;
-                    }}
-            });
+                       value.children.push(arResult);
+                    }
+                   }
+                  var currentNode=value.label;
+                  newTree.push(currentNode);
+                  if(value.children){
+                      currentNode.children=[];
+                      processItems(value.children,value,name,code,arResult,currentNode.children); 
+                 }
+             });
         }else{
-            
+             tree.parent=parent;
+             if(tree.label.code==code){//agree
+                if(tree.parent.label.text){
+                    tree.children.push(arResult);
+                }
+             }
+             var currentNode=tree.label;
+             newTree.push(currentNode);
+             if(tree.children){
+                 currentNode.children=[];
+                processItems(tree.children,tree,name,code,arResult,currentNode.children); 
+             }
         }
     }
-    function getArchetypeInfo(node,optTree){//process archetype for oet
-        var archetype_name=node._archetype_id+".xml";
-        var childNode=[];
-        var archetype; 
-        var nodec=node;
-        var archTree=[];  
-        var Node={concept:node._concept_name,archetype_name:archetype_name}; //root node of archetype in oet   
-        
-        resourceService.get(ARCHETYPE_BY_NAME_URL+archetype_name).then(function(archetype){
-          parseResult = archetypeParseService.parseArchetypeXml(archetype);
-          childNode.push(processRules(parseResult.definitions.treeItems,nodec));
-          if(nodec.Items){
-             for(i=0;i<nodec.Items.length;i++){
-                 var newnode=[];
-                 newnode.conceptName=nodec.Items[i]._concept_name;
-                 newnode.archetype_name=nodec.Items[i]._archetype_id;
-                 childNode.push(newnode);
-                 childNode.children=[];
-             } 
-          } 
-          Node.children=childNode;
-          optTree.push(Node);    
-          //return optTree; 
-         });
-             
-    }
+       
     function processRules(archetype,node){
        var tree=archetype;
        var parent;
@@ -147,7 +138,9 @@ angular.module('clever.management.services.templateParse',[]).service('templateP
            ruleList.push({code:code,flag:flag});        
            }
        getArchetypeDetail(tree,parent,ruleList,archetypeTree);
-       return archetypeTree;        
+        /*var x2js=new X2JS(); 
+        var xmlDocStr = x2js.json2xml_str(archetypeTree);*/
+        return archetypeTree;        
     }
 
     function getArchetypeDetail(tree,parent,ruleList,archetypeTree) {            
@@ -212,13 +205,12 @@ angular.module('clever.management.services.templateParse',[]).service('templateP
                  }
               }
           }
-      // function 
+          
     function nodeInfo(node){
        var code,name,archtype_id,dataType,picType;
        if (node.label.code) {
            code = node.label.code;
         }
-
        return {
            label : {
                 type : node.label.type,
