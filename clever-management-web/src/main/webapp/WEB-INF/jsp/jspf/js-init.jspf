@@ -64,6 +64,8 @@
 <script src="js/views/management/archetype/archetype-page-controller.js"></script>
 <script src="js/views/management/archetype/upload/archetype-upload-controller.js"></script>
 <script src="js/views/management/archetype/view/archetype-view-controller.js"></script>
+<script src="js/views/management/storage/edit/storage-template-edit-controller.js"></script>
+<script src="js/views/management/storage/verify/storage-template-verify-controller.js"></script>
 <script src="js/views/management/storage/upload/storage-template-upload-controller.js"></script>
 <script src="js/views/management/application/designer/application-designer-controller.js"></script>
 <script src="js/views/management/application/view/application-view-controller.js"></script>

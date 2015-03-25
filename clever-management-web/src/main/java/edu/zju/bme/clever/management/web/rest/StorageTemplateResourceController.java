@@ -89,7 +89,7 @@ public class StorageTemplateResourceController extends
 	}
 
 	@RequestMapping(value = "/id/{id}", method = RequestMethod.GET)
-	public TemplateInfo getTemplateById(@PathVariable int id) {
+	public StorageTemplateInfo getTemplateById(@PathVariable int id) {
 		TemplateFile templateFile = this.providerService
 				.getTemplateFileById(id);
 		this.isResourcesNull(templateFile);
@@ -97,13 +97,111 @@ public class StorageTemplateResourceController extends
 	}
 
 	@RequestMapping(value = "/name/{name}", method = RequestMethod.GET)
-	public TemplateInfo getTemplateByName(@PathVariable String name) {
+	public StorageTemplateInfo getTemplateByName(@PathVariable String name) {
 		TemplateFile templateFile = this.providerService
 				.getTemplateFileByName(name);
 		this.isResourcesNull(templateFile);
 		return this.constructStorageTemplateInfo(templateFile);
 	}
 
+	@RequestMapping(value = "/action/edit/list", method = RequestMethod.GET)
+	public List<StorageTemplateInfo> getTemplateListToEdit(Authentication authentication){
+		String userName = ((UserDetails)authentication.getPrincipal()).getUsername();
+		User user = userService.getUserByName(userName);
+		List<TemplateFile> templateFiles = this.providerService
+				.getTemplateFilesToEdit(user);
+		this.isResourcesNull(templateFiles);
+		return templateFiles.stream().map(file -> this.constructStorageTemplateInfo(file))
+				.collect(Collectors.toList());	
+	}
+	
+	@RequestMapping(value = "/action/submit/id/{id}", method = RequestMethod.GET)
+	public FileUploadResult sumbmitTemplateFile(@PathVariable int id, Authentication authentication){
+		String userName = ((UserDetails)authentication.getPrincipal()).getUsername();
+		User user = this.userService.getUserByName(userName);
+		FileUploadResult result = new FileUploadResult();
+		result.setSucceeded(true);
+		try {
+			this.versionControlService.submitTemplate(id, user);
+		} catch (VersionControlException e) {
+			result.setMessage(e.getMessage());
+			result.setSucceeded(false);
+		}
+		return result;
+	}
+	
+	@RequestMapping(value = "action/verify//list", method = RequestMethod.GET)
+	public List<StorageTemplateInfo> getTemplateFilesToApprove(Authentication authentication){
+		// Validate user authority
+		
+		List<TemplateFile> TemplateFiles = this.providerService.getTemplateFilesToApprove();
+		this.isResourcesNull(TemplateFiles);
+		return TemplateFiles.stream().map(file -> this.constructStorageTemplateInfo(file))
+				.collect(Collectors.toList());	
+	}
+	
+	@RequestMapping(value = "/action/approve/id/{id}", method = RequestMethod.GET)
+	public FileUploadResult approveTemplateFile(@PathVariable int id, Authentication authentication){
+		String userName = ((UserDetails)authentication.getPrincipal()).getUsername();
+		User user = this.userService.getUserByName(userName);
+		FileUploadResult result = new FileUploadResult();
+		result.setSucceeded(true);
+		try {
+			this.versionControlService.approveTemplate(id, user);
+		} catch (VersionControlException e) {
+			result.setMessage(e.getMessage());
+			result.setSucceeded(false);
+		}
+		return result;
+	}
+	
+	@RequestMapping(value = "/action/reject/id/{id}", method = RequestMethod.GET)
+	public FileUploadResult rejectTemplateFile(@PathVariable int id, Authentication authentication){
+		String userName = ((UserDetails)authentication.getPrincipal()).getUsername();
+		User user = this.userService.getUserByName(userName);
+		FileUploadResult result = new FileUploadResult();
+		result.setSucceeded(true);
+		try {
+			this.versionControlService.rejectTemplate(id, user);
+		} catch (VersionControlException e) {
+			result.setMessage(e.getMessage());
+			result.setSucceeded(true);
+		}
+		return result;	
+	}
+	
+	@RequestMapping(value = "/action/remove/id/{id}", method = RequestMethod.GET)
+	public FileUploadResult removeTemplateFile(@PathVariable int id, Authentication authentication){
+		String userName = ((UserDetails)authentication.getPrincipal()).getUsername();
+		User user = this.userService.getUserByName(userName);
+		FileUploadResult result = new FileUploadResult();
+		result.setSucceeded(true);
+		try {
+			this.versionControlService.rejectAndRemoveTemplate(id, user);
+		} catch (VersionControlException e) {
+			result.setMessage(e.getMessage());
+			result.setSucceeded(true);
+		}
+		return result;	
+	}
+	
+	@RequestMapping(value = "/action/upgrade/id/{id}", method = RequestMethod.GET)
+	public FileUploadResult upgradeTemplateFile(@PathVariable int id, Authentication authentication){
+		String userName = ((UserDetails)authentication.getPrincipal()).getUsername();
+		User user = this.userService.getUserByName(userName);
+		FileUploadResult result = new FileUploadResult(); 
+		result.setSucceeded(true);
+		try {
+			this.versionControlService.createOrUpgradeTemplate(
+					this.providerService.getTemplateOetById(id), 
+					this.providerService.getTemplateArmById(id), SourceType.CLEVER, user);
+		} catch (VersionControlException e) {
+			result.setMessage(e.getMessage());
+			result.setSucceeded(false);
+		}
+		return result;	
+	}
+	
 	@RequestMapping(value = "/id/{id}/oet", method = RequestMethod.GET)
 	public String getTemplateOetById(@PathVariable int id) {
 		String oet = this.providerService.getTemplateOetById(id);

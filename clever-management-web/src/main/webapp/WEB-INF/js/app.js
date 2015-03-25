@@ -108,6 +108,14 @@ angular.module('cleverManagementApp', ['ngAnimate', 'ngVisible', 'ui.bootstrap',
 		},
 		controller : StorageTemplateUploadCtrl,
 		templateUrl : 'js/views/management/storage/upload/management.storage.upload.html',
+	}).state('management.storage.edit', {
+		url : '/edit',
+		controller : StorageTemplateEditCtrl,
+		templateUrl : 'js/views/management/storage/edit/management.storage.edit.html',
+	}).state('management.storage.verify', {
+		url : '/verify',
+		controller : StorageTemplateVerifyCtrl,
+		templateUrl : 'js/views/management/storage/verify/management.storage.verify.html',
 	})
 	// Application
 	.state('management.application', {

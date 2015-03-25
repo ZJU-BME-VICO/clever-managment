@@ -89,6 +89,8 @@ angular.module('clever.management.i18n.zh', ['pascalprecht.translate']).config(f
 		MENU_MANAGEMENT_STORAGE : '存储管理',
 		MENU_MANAGEMENT_STORAGE_VIEW : '存储模板查看',
 		MENU_MANAGEMENT_STORAGE_UPLOAD : '存储模板上传',
+		MENU_MANAGEMENT_STORAGE_EDIT : '存储模板编辑',
+		MENU_MANAGEMENT_STORAGE_VERIFY : '存储模板审核',
 		MENU_MANAGEMENT_APPLICATION : '应用管理',
 		MENU_MANAGEMENT_APPLICATION_DESIGN : '设计器',
 		MENU_MANAGEMENT_APPLICATION_EDIT : '应用编辑',
