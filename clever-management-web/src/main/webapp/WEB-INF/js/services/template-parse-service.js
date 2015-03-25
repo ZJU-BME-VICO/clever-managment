@@ -93,7 +93,7 @@ angular.module('clever.management.services.templateParse',[]).service('templateP
              });        
          }      
     }
-    function processItems(tree,parent,name,code,name,arResult，newTree){
+    function processItems(tree,parent,name,code,name,arResult,newTree){
         if(angular.isArray(tree)){
             angular.forEach(tree,function(node){
                 var tip=false;

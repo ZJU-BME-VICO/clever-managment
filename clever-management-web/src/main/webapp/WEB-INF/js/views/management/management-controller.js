@@ -45,6 +45,20 @@ function ManagementCtrl($scope, $state, $timeout) {
 		icon : 'icon-upload-alt',
 		info : 'MENU_MANAGEMENT_ARCHETYPE_UPLOAD_INFO',
 	};
+	archetype.edit = {
+			index : 7,
+			title : 'MENU_MANAGEMENT_ARCHETYPE_EDIT',
+			state : 'management.archetype.edit',
+			icon : 'icon-edit',
+			info : 'MENU_MANAGEMENT_ARCHETYPE_EDIT_INFO',
+	};
+	archetype.verify = {
+			index : 8,
+			title : 'MENU_MANAGEMENT_ARCHETYPE_VERIFY',
+			state : 'management.archetype.verify',
+			icon : 'icon-tags',
+			info : 'MENU_MANAGEMENT_ARCHETYPE_VERIFY_INFO',
+	};
 	// Storage management
 	var storage = management.storage = {
 		index : 2,
