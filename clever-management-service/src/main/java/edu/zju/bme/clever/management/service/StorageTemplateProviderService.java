@@ -31,8 +31,4 @@ public interface StorageTemplateProviderService {
 
 	public String getTemplateArmByName(String templateName);
 
-	public List<EntityClass> getTemplateEntityClassesById(Integer templateId);
-
-	public List<EntityClass> getTemplateEntityClassesByName(String templateName);
-
 }

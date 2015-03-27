@@ -13,10 +13,6 @@ import org.springframework.stereotype.Service;
 
 import se.acode.openehr.parser.ADLParser;
 import edu.zju.bme.clever.cdr.arm.parser.ArmParser;
-import edu.zju.bme.clever.cdr.generator.EntityClassGenerateOption;
-import edu.zju.bme.clever.cdr.generator.EntityClassGenerator;
-import edu.zju.bme.clever.cdr.generator.cls.JavaClass;
-import edu.zju.bme.clever.cdr.generator.exception.EntityClassGenerateException;
 import edu.zju.bme.clever.management.service.entity.ArchetypeFile;
 import edu.zju.bme.clever.management.service.entity.FileProcessResult;
 import edu.zju.bme.clever.management.service.entity.LifecycleState;
@@ -40,8 +36,6 @@ public class StorageTemplateValidateServiceImpl implements
 	private ArchetypeFileRepository archetypeFileRepo;
 	@Autowired
 	private TemplateActionLogRepository templateActionLogRepo;
-	@Autowired
-	private EntityClassGenerator generator;
 
 	private OETParser oetParser = new OETParser();
 	private ArmParser armParser = new ArmParser();
@@ -135,30 +129,30 @@ public class StorageTemplateValidateServiceImpl implements
 			}
 		}
 		// Test entity class generation
-		EntityClassGenerateOption option = new EntityClassGenerateOption();
-		option.setPrintClass(true);
-		Function<String, Archetype> archetypeVisitor = archetypeId -> {
-			ArchetypeFile file = this.archetypeFileRepo.findByName(archetypeId);
-			if (file == null) {
-				return null;
-			} else {
-				ADLParser parser = new ADLParser(file.getContent());
-				try {
-					Archetype archetype = parser.parse();
-					return archetype;
-				} catch (Exception ex) {
-					return null;
-				}
-			}
-		};
-		try {
-			JavaClass entitySource = this.generator.generateEntityClass(oet,
-					arm, archetypeVisitor, option);
-		} catch (EntityClassGenerateException ex) {
-			result.setStatus(FileStatus.INVALID);
-			result.appendMessage("Generate entity class failed, error:"
-					+ ex.getMessage());
-		}
+		// EntityClassGenerateOption option = new EntityClassGenerateOption();
+		// option.setPrintClass(true);
+		// Function<String, Archetype> archetypeVisitor = archetypeId -> {
+		// ArchetypeFile file = this.archetypeFileRepo.findByName(archetypeId);
+		// if (file == null) {
+		// return null;
+		// } else {
+		// ADLParser parser = new ADLParser(file.getContent());
+		// try {
+		// Archetype archetype = parser.parse();
+		// return archetype;
+		// } catch (Exception ex) {
+		// return null;
+		// }
+		// }
+		// };
+		// try {
+		// JavaClass entitySource = this.generator.generateEntityClass(oet,
+		// arm, archetypeVisitor, option);
+		// } catch (EntityClassGenerateException ex) {
+		// result.setStatus(FileStatus.INVALID);
+		// result.appendMessage("Generate entity class failed, error:"
+		// + ex.getMessage());
+		// }
 		return result;
 	}
 
