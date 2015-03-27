@@ -1,16 +1,19 @@
 package edu.zju.bme.clever.management.service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import edu.zju.bme.clever.management.service.entity.EntityClass;
+import edu.zju.bme.clever.management.service.entity.LifecycleState;
 import edu.zju.bme.clever.management.service.entity.TemplateFile;
 import edu.zju.bme.clever.management.service.entity.TemplateMaster;
 import edu.zju.bme.clever.management.service.entity.TemplatePropertyType;
 import edu.zju.bme.clever.management.service.entity.TemplateType;
+import edu.zju.bme.clever.management.service.entity.User;
 import edu.zju.bme.clever.management.service.repository.TemplateFileRepository;
 import edu.zju.bme.clever.management.service.repository.TemplateMasterRepository;
 
@@ -49,12 +52,26 @@ public class StorageTemplateProviderServiceImpl implements
 
 	@Override
 	public TemplateFile getTemplateFileByName(String templateName) {
-		TemplateFile templateFile = this.templateFileRepo
-				.findByName(templateName);
+		TemplateFile templateFile = this.templateFileRepo.findByName(templateName);
 		if (!this.isStorageTemplate(templateFile)) {
 			return null;
 		}
 		return templateFile;
+	}
+
+	@Override
+	public List<TemplateFile> getTemplateFilesToApprove() {
+		List<TemplateFile> tempateFiles = this.templateFileRepo
+				.findByLifecycleState(LifecycleState.TEAMREVIEW);
+		return tempateFiles.stream().filter(file -> this.isStorageTemplate(file))
+				.collect(Collectors.toList());
+	}
+
+	@Override
+	public List<TemplateFile> getTemplateFilesToEdit(User user) {
+		List<TemplateFile> templateFiles = this.templateFileRepo.findToEdit(user);
+		return templateFiles.stream().filter(file -> this.isStorageTemplate(file))
+				.collect(Collectors.toList());
 	}
 
 	@Override
@@ -68,8 +85,7 @@ public class StorageTemplateProviderServiceImpl implements
 
 	@Override
 	public String getTemplateOetByName(String templateName) {
-		TemplateFile templateFile = this.templateFileRepo
-				.findByName(templateName);
+		TemplateFile templateFile = this.templateFileRepo.findByName(templateName);
 		if (!this.isStorageTemplate(templateFile)) {
 			return null;
 		}
@@ -87,8 +103,7 @@ public class StorageTemplateProviderServiceImpl implements
 
 	@Override
 	public String getTemplateArmByName(String templateName) {
-		TemplateFile templateFile = this.templateFileRepo
-				.findByName(templateName);
+		TemplateFile templateFile = this.templateFileRepo.findByName(templateName);
 		if (!this.isStorageTemplate(templateFile)) {
 			return null;
 		}
@@ -106,8 +121,7 @@ public class StorageTemplateProviderServiceImpl implements
 
 	@Override
 	public List<EntityClass> getTemplateEntityClassesByName(String templateName) {
-		TemplateFile templateFile = this.templateFileRepo
-				.findByName(templateName);
+		TemplateFile templateFile = this.templateFileRepo.findByName(templateName);
 		if (!this.isStorageTemplate(templateFile)) {
 			return null;
 		}
@@ -120,4 +134,5 @@ public class StorageTemplateProviderServiceImpl implements
 		}
 		return templateFile.getTemplateType().equals(TemplateType.STORAGE);
 	}
+
 }

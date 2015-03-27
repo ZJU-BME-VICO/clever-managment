@@ -133,6 +133,12 @@
 	.icon-upload-alt:before{
 		color: #B1EB33;
 	}
+	.icon-edit:before{
+		color: #FFFF00;
+	}
+	.icon-tags:before{
+		color: #5AFFFF;
+	}
 	
 	.icon-magic:before{
 		color: #FD6807;

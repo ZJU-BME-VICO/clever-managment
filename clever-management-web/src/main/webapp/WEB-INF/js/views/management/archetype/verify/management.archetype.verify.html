@@ -1,0 +1,19 @@
+<div class="row">
+	<div class="col-md-5">
+		<ul class="list-group">
+			<li ng-repeat="list in archetypeList" style="list-style:none">
+				<a href="javascript:void(0)" style="text-decoration:none" ng-click="setVerifyId(list)">
+					<img ng-class="list.lifecycleState | lowercase" class="clever-icon" style="padding: 0 10px;height: 16px;"></img>
+					<span>{{ list.name }}</span>
+				</a>
+			</li>
+		</ul>
+	</div>
+
+	<div class="col-md-offset-2 col-md-2" style="margin-top:100px">
+		<input type="button" class="btn btn-primary" ng-disabled="getVerifyId()" ng-click="approveFile()"
+		value={{'ARCHETYPE_VERIFY_APPROVE'|translate}} />
+		<input type="button" class="btn btn-warning" ng-disabled="getVerifyId()" ng-click="reject()"
+		value={{'ARCHETYPE_VERIFY_REJECT'|translate}} />
+	</div>
+</div>

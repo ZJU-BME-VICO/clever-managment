@@ -1,0 +1,18 @@
+verify template
+<div class="row">
+    <div class="col-xs-12 col-md-12 col-lg-12">
+        <ul class="list-group" ng-style="{height: containerHeight - 80}" style="overflow: auto;">
+            <li class="list-group-item" ng-repeat="templateFile in templateFiles" style="overflow: hidden;">
+                {{templateFile.name}}
+                <div class="btn-group pull-right btn-group-sm" role="group">
+                    <button type="button" class="btn btn-default" 
+                    	ng-click="approveTemplateFile(templateFile)">Approve</button>
+                    <button type="button" class="btn btn-default"
+                    	ng-click="rejectTemplateFile(templateFile)">Reject</button>
+                    <button type="button" class="btn btn-default"
+                    	ng-click="removeTemplateFile(templateFile)">Remove</button>
+                </div>
+            </li>
+        </ul>
+    </div>
+</div>

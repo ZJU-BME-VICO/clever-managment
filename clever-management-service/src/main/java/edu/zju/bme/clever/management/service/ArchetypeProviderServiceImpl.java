@@ -1,6 +1,7 @@
 package edu.zju.bme.clever.management.service;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Service;
 import se.acode.openehr.parser.ADLParser;
 import edu.zju.bme.clever.management.service.entity.ArchetypeFile;
 import edu.zju.bme.clever.management.service.entity.ArchetypeMaster;
+import edu.zju.bme.clever.management.service.entity.User;
 import edu.zju.bme.clever.management.service.repository.ArchetypeActionLogRepository;
 import edu.zju.bme.clever.management.service.repository.ArchetypeFileRepository;
 import edu.zju.bme.clever.management.service.repository.ArchetypeMasterRepository;
@@ -37,6 +39,22 @@ public class ArchetypeProviderServiceImpl implements ArchetypeProviderService {
 	@Override
 	public List<ArchetypeMaster> getAllArchetypeMasters() {
 		return this.masterRepo.findAll();
+	}
+	
+	@Override
+	public List<ArchetypeFile> getMyArchetypeFiles(User user) {
+		List<ArchetypeFile> result = new ArrayList<ArchetypeFile>();
+		List<ArchetypeMaster> masterMap=getAllArchetypeMasters();
+		List<ArchetypeFile>repeatFiles = this.fileRepo.getMyArchetypeFiles(user);
+		for(int i=0;i<repeatFiles.size();i++){
+			for(ArchetypeMaster temp : masterMap){
+				if(repeatFiles.get(i).getMasterId()==temp.getId()
+						&&repeatFiles.get(i).getInternalVersion()==temp.getLatestFileInternalVersion()){
+					result.add(repeatFiles.get(i));
+				}
+			}
+		}
+		return result;
 	}
 
 	@Override
