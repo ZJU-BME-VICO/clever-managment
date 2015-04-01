@@ -10,7 +10,9 @@ public interface ArchetypeProviderService {
 
 	public List<ArchetypeMaster> getAllArchetypeMasters();
 	
-	public List<ArchetypeFile> getMyArchetypeFiles(User user);
+	public List<ArchetypeFile> getLatestedPublishedArchetypeFiles();
+	
+	public List<ArchetypeFile> getMyDraftArchetypeFiles(User user);
 
 	public ArchetypeMaster getArchetypeMasterByName(String masterName);
 

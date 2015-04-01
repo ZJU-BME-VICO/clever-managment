@@ -3,17 +3,17 @@ function ArchetypeVerifyCtrl($scope, msgboxService, resourceService, ARCHETYPE_V
 
 	$scope.verifyId=0;
 	
-	resourceService.get(ARCHETYPE_VERIFY_URL).then(function(verList){
+	resourceService.get(ARCHETYPE_VERIFY_URL).then(function(list){
 		
-		$scope.archetypeList=verList;
+		$scope.teamreviewArchetypeList=list;
 		
 	});
 	
-	$scope.setVerifyId=function(temp){
-		$scope.verifyId=temp.id
+	$scope.setVerifyId=function(ID){
+		$scope.verifyId=ID;
 	};
 	
-	$scope.getVerifyId=function(){
+	$scope.isValid=function(){
 		if($scope.verifyId==0){
 			return "$invalid";
 		}else{
@@ -22,11 +22,17 @@ function ArchetypeVerifyCtrl($scope, msgboxService, resourceService, ARCHETYPE_V
 	}
 	
 	$scope.reject=function(){
+		var name="";
+		angular.forEach($scope.teamreviewArchetypeList, function(file) {
+			if(file.id==$scope.verifyId){
+				name=file.name;
+			}
+		});
 		msgboxService.createMessageBox("ARCHETYPE_VERIFY_REJECT_HINT", "ARCHETYPE_VERIFY_REJECT_HINT_INFO",
 				 {}, 'warning',"yesOrNo").result.then(function(){
-						 $scope.rejectAndremoveFile();
+						 $scope.rejectAndremoveFile(name);
 				 	},function(){
-				 		$scope.rejectFile();
+				 		$scope.rejectFile(name);
 				 	});
 			
 				 
@@ -34,11 +40,10 @@ function ArchetypeVerifyCtrl($scope, msgboxService, resourceService, ARCHETYPE_V
 
 	$scope.approveFile=function(){
 		var formData = new FormData();
-		angular.forEach($scope.archetypeList, function(file) {
+		angular.forEach($scope.teamreviewArchetypeList, function(file) {
 			if(file.id==$scope.verifyId){
-				formData.append('id',file.id);
 				formData.append('name',file.name);
-			}
+			}	
 		});
 		resourceService.post(ARCHETYPE_VERIFY_APPROVE_URL,formData,{
 			transformRequest : angular.identity,
@@ -61,14 +66,10 @@ function ArchetypeVerifyCtrl($scope, msgboxService, resourceService, ARCHETYPE_V
 		});
 	};
 	
-	$scope.rejectFile=function(){
+	$scope.rejectFile=function(name){
 		var formData = new FormData();
-		angular.forEach($scope.archetypeList, function(file) {
-			if(file.id==$scope.verifyId){
-				formData.append('id',file.id);
-				formData.append('name',file.name);
-			}
-		});
+		formData.append('name',name);
+
 		resourceService.post(ARCHETYPE_VERIFY_REJECT_URL,formData,{
 			transformRequest : angular.identity,
 			headers : {
@@ -90,14 +91,10 @@ function ArchetypeVerifyCtrl($scope, msgboxService, resourceService, ARCHETYPE_V
 		});
 	};
 	
-	$scope.rejectAndremoveFile=function(){
+	$scope.rejectAndremoveFile=function(name){
 		var formData = new FormData();
-		angular.forEach($scope.archetypeList, function(file) {
-			if(file.id==$scope.verifyId){
-				formData.append('id',file.id);
-				formData.append('name',file.name);
-			}
-		});
+		formData.append('name',name);
+
 		resourceService.post(ARCHETYPE_VERIFY_REJECT_AND_REMOVE_URL,formData,{
 			transformRequest : angular.identity,
 			headers : {
@@ -105,7 +102,7 @@ function ArchetypeVerifyCtrl($scope, msgboxService, resourceService, ARCHETYPE_V
 			}
 		}).then(function(result){
 			if(result.succeeded){
-				msgboxService.createMessageBox("ARCHETYPE_VERIFY_SUCCEEDED", "ARCHETYPE_VERIFY_REJECT_AND_REMOVE_SUCCEED_HINT",
+				msgboxService.createMessageBox("ARCHETYPE_VERIFY_SUCCEEDED", "ARCHETYPE_VERIFY_REJECT_AND_REMOVE_SUCCEEDED_HINT",
 						{}, 'success').result.then(function() {
 							$scope.reset();
 						});
@@ -125,7 +122,7 @@ function ArchetypeVerifyCtrl($scope, msgboxService, resourceService, ARCHETYPE_V
 		
 		resourceService.get(ARCHETYPE_VERIFY_URL).then(function(verList){
 			
-			$scope.archetypeList=verList;
+			$scope.teamreviewArchetypeList=verList;
 			
 		});
 	};
