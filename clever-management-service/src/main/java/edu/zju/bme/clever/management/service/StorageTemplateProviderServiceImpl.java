@@ -110,24 +110,6 @@ public class StorageTemplateProviderServiceImpl implements
 		return templateFile.getPropertyValue(TemplatePropertyType.ARM);
 	}
 
-	@Override
-	public List<EntityClass> getTemplateEntityClassesById(Integer templateId) {
-		TemplateFile templateFile = this.templateFileRepo.findOne(templateId);
-		if (!this.isStorageTemplate(templateFile)) {
-			return null;
-		}
-		return templateFile.getEntityClasses();
-	}
-
-	@Override
-	public List<EntityClass> getTemplateEntityClassesByName(String templateName) {
-		TemplateFile templateFile = this.templateFileRepo.findByName(templateName);
-		if (!this.isStorageTemplate(templateFile)) {
-			return null;
-		}
-		return templateFile.getEntityClasses();
-	}
-
 	private boolean isStorageTemplate(TemplateFile templateFile) {
 		if (templateFile == null) {
 			return false;

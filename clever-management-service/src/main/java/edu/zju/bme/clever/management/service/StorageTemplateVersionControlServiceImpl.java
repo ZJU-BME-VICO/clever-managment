@@ -14,7 +14,6 @@ import java.util.stream.Collectors;
 import openEHR.v1.template.RESOURCEDESCRIPTIONITEM;
 import openEHR.v1.template.TemplateDocument;
 
-import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.xmlbeans.XmlException;
 import org.openehr.am.archetype.Archetype;
 import org.openehr.am.template.OETParser;
@@ -26,10 +25,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import se.acode.openehr.parser.ADLParser;
 import edu.zju.bme.clever.cdr.arm.parser.ArmParser;
-import edu.zju.bme.clever.cdr.generator.EntityClassGenerateOption;
-import edu.zju.bme.clever.cdr.generator.EntityClassGenerator;
-import edu.zju.bme.clever.cdr.generator.cls.JavaClass;
-import edu.zju.bme.clever.cdr.generator.exception.EntityClassGenerateException;
 import edu.zju.bme.clever.management.service.entity.ActionType;
 import edu.zju.bme.clever.management.service.entity.ArchetypeFile;
 import edu.zju.bme.clever.management.service.entity.ArchetypeMaster;
@@ -67,8 +62,6 @@ public class StorageTemplateVersionControlServiceImpl implements
 	private ArchetypeFileRepository archetypeFileRepo;
 	@Autowired
 	private TemplateActionLogRepository templateActionLogRepo;
-	@Autowired
-	private EntityClassGenerator generator;
 
 	private OETParser oetParser = new OETParser();
 	private ArmParser armParser = new ArmParser();
@@ -116,15 +109,18 @@ public class StorageTemplateVersionControlServiceImpl implements
 					specialiseArchetypeFile);
 		}
 		// Construct template file
-		
-		// Upgrade template file --> template.setName()  by lvzy
+
+		// Upgrade template file --> template.setName() by lvzy
 		TemplateFile templateFile = this.templateFileRepo
 				.findByName(templateName);
 		if (templateFile != null) {
-			if(templateFile.getLifecycleState().equals(LifecycleState.PUBLISHED)){
-				oet.getTemplate().setName(templateName.substring(0, templateName.lastIndexOf(".") + 1)
-						+ (templateFile.getSubVersion() + 1));
-			}else{
+			if (templateFile.getLifecycleState().equals(
+					LifecycleState.PUBLISHED)) {
+				oet.getTemplate().setName(
+						templateName.substring(0,
+								templateName.lastIndexOf(".") + 1)
+								+ (templateFile.getSubVersion() + 1));
+			} else {
 				throw new VersionControlException("Template " + templateName
 						+ " already exists.");
 			}
@@ -378,7 +374,6 @@ public class StorageTemplateVersionControlServiceImpl implements
 							+ " instead of Teamreview.");
 		}
 		templateFile.setLifecycleState(LifecycleState.PUBLISHED);
-		// Construct entity classes
 		TemplateDocument oet;
 		try {
 			oet = this.oetParser
@@ -395,10 +390,13 @@ public class StorageTemplateVersionControlServiceImpl implements
 		} catch (Exception ex) {
 			throw new VersionControlException("Parse arm failed.", ex);
 		}
-		List<EntityClass> entityClasses = this.constructEntityClasses(
-				templateFile, oet, arm);
+		
+		// Construct entity classes
+		// List<EntityClass> entityClasses = this.constructEntityClasses(
+		// templateFile, oet, arm);
 		// Save entity classes
-		entityClasses.forEach(cls -> this.entityClassRepo.save(cls));
+		// entityClasses.forEach(cls -> this.entityClassRepo.save(cls));
+		
 		// Save template file
 		this.templateFileRepo.save(templateFile);
 		// Update template master info
@@ -519,60 +517,53 @@ public class StorageTemplateVersionControlServiceImpl implements
 		this.logTemplateAction(templateFile, ActionType.REJECT_AND_REMOVE, user);
 	}
 
-	private List<EntityClass> constructEntityClasses(TemplateFile templateFile,
-			TemplateDocument oet, ArchetypeRelationshipMappingDocument arm)
-			throws VersionControlException {
-		// Construct entity class
-		EntityClassGenerateOption option = new EntityClassGenerateOption();
-		option.setPrintClass(true);
-		Function<String, Archetype> archetypeVisitor = archetypeId -> {
-			ArchetypeFile file = this.archetypeFileRepo.findByName(archetypeId);
-			if (file == null) {
-				this.logger.debug("Archetype {} does not exist.", archetypeId);
-				return null;
-			} else {
-				ADLParser parser = new ADLParser(file.getContent());
-				try {
-					Archetype archetype = parser.parse();
-					return archetype;
-				} catch (Exception ex) {
-					this.logger.debug("Parser archetype: {} failed.",
-							file.getName());
-					return null;
-				}
-			}
-		};
-		JavaClass entitySource;
-		try {
-			entitySource = this.generator.generateEntityClass(oet, arm,
-					archetypeVisitor, option);
-		} catch (EntityClassGenerateException ex) {
-			throw new VersionControlException(
-					"Generate entity class failed, error:" + ex.getMessage(),
-					ex);
-		}
-		List<JavaClass> allClasses = new ArrayList<JavaClass>();
-		this.scanAllClasses(entitySource, allClasses);
-		// Construct entity classes
-		return allClasses.stream().map(cls -> {
-			EntityClass entityClass = new EntityClass();
-			entityClass.setEntityId(cls.getEntityId());
-			entityClass.setFullName(cls.getFullName());
-			entityClass.setName(cls.getName());
-			entityClass.setPackageName(cls.getJavaPackage().getName());
-			entityClass.setContent(cls.toString());
-			entityClass.setTemplateFile(templateFile);
-			return entityClass;
-		}).collect(Collectors.toList());
-	}
-
-	private void scanAllClasses(JavaClass clazz, List<JavaClass> classes) {
-		clazz.getEmbeddedClasses().forEach(
-				pair -> this.scanAllClasses(pair.getRight(), classes));
-		clazz.getOneToManyClasses().forEach(
-				pair -> this.scanAllClasses(pair.getRight(), classes));
-		classes.add(clazz);
-	}
+	// private List<EntityClass> constructEntityClasses(TemplateFile
+	// templateFile,
+	// TemplateDocument oet, ArchetypeRelationshipMappingDocument arm)
+	// throws VersionControlException {
+	// // Construct entity class
+	// EntityClassGenerateOption option = new EntityClassGenerateOption();
+	// option.setPrintClass(true);
+	// Function<String, Archetype> archetypeVisitor = archetypeId -> {
+	// ArchetypeFile file = this.archetypeFileRepo.findByName(archetypeId);
+	// if (file == null) {
+	// this.logger.debug("Archetype {} does not exist.", archetypeId);
+	// return null;
+	// } else {
+	// ADLParser parser = new ADLParser(file.getContent());
+	// try {
+	// Archetype archetype = parser.parse();
+	// return archetype;
+	// } catch (Exception ex) {
+	// this.logger.debug("Parser archetype: {} failed.",
+	// file.getName());
+	// return null;
+	// }
+	// }
+	// };
+	// JavaClass entitySource;
+	// try {
+	// entitySource = this.generator.generateEntityClass(oet, arm,
+	// archetypeVisitor, option);
+	// } catch (EntityClassGenerateException ex) {
+	// throw new VersionControlException(
+	// "Generate entity class failed, error:" + ex.getMessage(),
+	// ex);
+	// }
+	// List<JavaClass> allClasses = new ArrayList<JavaClass>();
+	// this.scanAllClasses(entitySource, allClasses);
+	// // Construct entity classes
+	// return allClasses.stream().map(cls -> {
+	// EntityClass entityClass = new EntityClass();
+	// entityClass.setEntityId(cls.getEntityId());
+	// entityClass.setFullName(cls.getFullName());
+	// entityClass.setName(cls.getName());
+	// entityClass.setPackageName(cls.getJavaPackage().getName());
+	// entityClass.setContent(cls.toString());
+	// entityClass.setTemplateFile(templateFile);
+	// return entityClass;
+	// }).collect(Collectors.toList());
+	// }
 
 	private TemplateMaster constructTemplateMaster(TemplateDocument oet,
 			ArchetypeFile specialiseArchetypeFile)

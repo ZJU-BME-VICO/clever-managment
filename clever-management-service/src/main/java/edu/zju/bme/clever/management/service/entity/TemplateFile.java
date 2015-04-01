@@ -47,8 +47,6 @@ public class TemplateFile extends AbstractFile<TemplateMaster> {
 	private Map<TemplatePropertyType, String> properties = new HashMap<TemplatePropertyType, String>();
 	@Column
 	private TemplateType templateType;
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "templateFile")
-	private List<EntityClass> entityClasses;
 
 	public Integer getSubVersion() {
 		return subVersion;
@@ -84,10 +82,6 @@ public class TemplateFile extends AbstractFile<TemplateMaster> {
 
 	public void setTemplateType(TemplateType templateType) {
 		this.templateType = templateType;
-	}
-
-	public List<EntityClass> getEntityClasses() {
-		return entityClasses;
 	}
 
 }

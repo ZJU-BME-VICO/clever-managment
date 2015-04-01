@@ -105,19 +105,24 @@ public class StorageTemplateResourceController extends
 	}
 
 	@RequestMapping(value = "/action/edit/list", method = RequestMethod.GET)
-	public List<StorageTemplateInfo> getTemplateListToEdit(Authentication authentication){
-		String userName = ((UserDetails)authentication.getPrincipal()).getUsername();
+	public List<StorageTemplateInfo> getTemplateListToEdit(
+			Authentication authentication) {
+		String userName = ((UserDetails) authentication.getPrincipal())
+				.getUsername();
 		User user = userService.getUserByName(userName);
 		List<TemplateFile> templateFiles = this.providerService
 				.getTemplateFilesToEdit(user);
 		this.isResourcesNull(templateFiles);
-		return templateFiles.stream().map(file -> this.constructStorageTemplateInfo(file))
-				.collect(Collectors.toList());	
+		return templateFiles.stream()
+				.map(file -> this.constructStorageTemplateInfo(file))
+				.collect(Collectors.toList());
 	}
-	
+
 	@RequestMapping(value = "/action/submit/id/{id}", method = RequestMethod.GET)
-	public FileUploadResult sumbmitTemplateFile(@PathVariable int id, Authentication authentication){
-		String userName = ((UserDetails)authentication.getPrincipal()).getUsername();
+	public FileUploadResult sumbmitTemplateFile(@PathVariable int id,
+			Authentication authentication) {
+		String userName = ((UserDetails) authentication.getPrincipal())
+				.getUsername();
 		User user = this.userService.getUserByName(userName);
 		FileUploadResult result = new FileUploadResult();
 		result.setSucceeded(true);
@@ -129,20 +134,25 @@ public class StorageTemplateResourceController extends
 		}
 		return result;
 	}
-	
+
 	@RequestMapping(value = "action/verify//list", method = RequestMethod.GET)
-	public List<StorageTemplateInfo> getTemplateFilesToApprove(Authentication authentication){
+	public List<StorageTemplateInfo> getTemplateFilesToApprove(
+			Authentication authentication) {
 		// Validate user authority
-		
-		List<TemplateFile> TemplateFiles = this.providerService.getTemplateFilesToApprove();
+
+		List<TemplateFile> TemplateFiles = this.providerService
+				.getTemplateFilesToApprove();
 		this.isResourcesNull(TemplateFiles);
-		return TemplateFiles.stream().map(file -> this.constructStorageTemplateInfo(file))
-				.collect(Collectors.toList());	
+		return TemplateFiles.stream()
+				.map(file -> this.constructStorageTemplateInfo(file))
+				.collect(Collectors.toList());
 	}
-	
+
 	@RequestMapping(value = "/action/approve/id/{id}", method = RequestMethod.GET)
-	public FileUploadResult approveTemplateFile(@PathVariable int id, Authentication authentication){
-		String userName = ((UserDetails)authentication.getPrincipal()).getUsername();
+	public FileUploadResult approveTemplateFile(@PathVariable int id,
+			Authentication authentication) {
+		String userName = ((UserDetails) authentication.getPrincipal())
+				.getUsername();
 		User user = this.userService.getUserByName(userName);
 		FileUploadResult result = new FileUploadResult();
 		result.setSucceeded(true);
@@ -154,10 +164,12 @@ public class StorageTemplateResourceController extends
 		}
 		return result;
 	}
-	
+
 	@RequestMapping(value = "/action/reject/id/{id}", method = RequestMethod.GET)
-	public FileUploadResult rejectTemplateFile(@PathVariable int id, Authentication authentication){
-		String userName = ((UserDetails)authentication.getPrincipal()).getUsername();
+	public FileUploadResult rejectTemplateFile(@PathVariable int id,
+			Authentication authentication) {
+		String userName = ((UserDetails) authentication.getPrincipal())
+				.getUsername();
 		User user = this.userService.getUserByName(userName);
 		FileUploadResult result = new FileUploadResult();
 		result.setSucceeded(true);
@@ -167,12 +179,14 @@ public class StorageTemplateResourceController extends
 			result.setMessage(e.getMessage());
 			result.setSucceeded(true);
 		}
-		return result;	
+		return result;
 	}
-	
+
 	@RequestMapping(value = "/action/remove/id/{id}", method = RequestMethod.GET)
-	public FileUploadResult removeTemplateFile(@PathVariable int id, Authentication authentication){
-		String userName = ((UserDetails)authentication.getPrincipal()).getUsername();
+	public FileUploadResult removeTemplateFile(@PathVariable int id,
+			Authentication authentication) {
+		String userName = ((UserDetails) authentication.getPrincipal())
+				.getUsername();
 		User user = this.userService.getUserByName(userName);
 		FileUploadResult result = new FileUploadResult();
 		result.setSucceeded(true);
@@ -182,26 +196,29 @@ public class StorageTemplateResourceController extends
 			result.setMessage(e.getMessage());
 			result.setSucceeded(true);
 		}
-		return result;	
+		return result;
 	}
-	
+
 	@RequestMapping(value = "/action/upgrade/id/{id}", method = RequestMethod.GET)
-	public FileUploadResult upgradeTemplateFile(@PathVariable int id, Authentication authentication){
-		String userName = ((UserDetails)authentication.getPrincipal()).getUsername();
+	public FileUploadResult upgradeTemplateFile(@PathVariable int id,
+			Authentication authentication) {
+		String userName = ((UserDetails) authentication.getPrincipal())
+				.getUsername();
 		User user = this.userService.getUserByName(userName);
-		FileUploadResult result = new FileUploadResult(); 
+		FileUploadResult result = new FileUploadResult();
 		result.setSucceeded(true);
 		try {
 			this.versionControlService.createOrUpgradeTemplate(
-					this.providerService.getTemplateOetById(id), 
-					this.providerService.getTemplateArmById(id), SourceType.CLEVER, user);
+					this.providerService.getTemplateOetById(id),
+					this.providerService.getTemplateArmById(id),
+					SourceType.CLEVER, user);
 		} catch (VersionControlException e) {
 			result.setMessage(e.getMessage());
 			result.setSucceeded(false);
 		}
-		return result;	
+		return result;
 	}
-	
+
 	@RequestMapping(value = "/id/{id}/oet", method = RequestMethod.GET)
 	public String getTemplateOetById(@PathVariable int id) {
 		String oet = this.providerService.getTemplateOetById(id);
@@ -230,25 +247,26 @@ public class StorageTemplateResourceController extends
 		return arm;
 	}
 
-	@RequestMapping(value = "/id/{id}/classes", method = RequestMethod.GET)
-	public List<EntityClassInfo> getTemplateEntityClassesById(
-			@PathVariable int id) {
-		List<EntityClass> entities = this.providerService
-				.getTemplateEntityClassesById(id);
-		this.isResourcesNull(entities);
-		return entities.stream().map(cls -> this.constructEntityClassInfo(cls))
-				.collect(Collectors.toList());
-	}
-
-	@RequestMapping(value = "/name/{name}/classes", method = RequestMethod.GET)
-	public List<EntityClassInfo> getTemplateEntityClassesByName(
-			@PathVariable String name) {
-		List<EntityClass> entities = this.providerService
-				.getTemplateEntityClassesByName(name);
-		this.isResourcesNull(entities);
-		return entities.stream().map(cls -> this.constructEntityClassInfo(cls))
-				.collect(Collectors.toList());
-	}
+	// @RequestMapping(value = "/id/{id}/classes", method = RequestMethod.GET)
+	// public List<EntityClassInfo> getTemplateEntityClassesById(
+	// @PathVariable int id) {
+	// List<EntityClass> entities = this.providerService
+	// .getTemplateEntityClassesById(id);
+	// this.isResourcesNull(entities);
+	// return entities.stream().map(cls -> this.constructEntityClassInfo(cls))
+	// .collect(Collectors.toList());
+	// }
+	//
+	// @RequestMapping(value = "/name/{name}/classes", method =
+	// RequestMethod.GET)
+	// public List<EntityClassInfo> getTemplateEntityClassesByName(
+	// @PathVariable String name) {
+	// List<EntityClass> entities = this.providerService
+	// .getTemplateEntityClassesByName(name);
+	// this.isResourcesNull(entities);
+	// return entities.stream().map(cls -> this.constructEntityClassInfo(cls))
+	// .collect(Collectors.toList());
+	// }
 
 	@RequestMapping(value = "/action/validate", method = RequestMethod.POST)
 	@ResponseBody
@@ -333,18 +351,16 @@ public class StorageTemplateResourceController extends
 			masterInfo.getTemplates().add(info);
 		});
 		// Add action logs
-		templateMaster.getActionLogs().forEach(
-				log -> {
-					ActionLogInfo info = new ActionLogInfo();
-					info.setId(log.getId());
-					info.setAction(log.getActionType().getValue());
-					info.setVersion(log.getVersion());
-					info.setRecordTime(log.getRecordTime());
-					info.setOperatorName(log.getOperatorName());
-					info.setLifecycleState(log.getLifecycleState()
-							.getValue());
-					masterInfo.getActionLogs().add(info);
-				});
+		templateMaster.getActionLogs().forEach(log -> {
+			ActionLogInfo info = new ActionLogInfo();
+			info.setId(log.getId());
+			info.setAction(log.getActionType().getValue());
+			info.setVersion(log.getVersion());
+			info.setRecordTime(log.getRecordTime());
+			info.setOperatorName(log.getOperatorName());
+			info.setLifecycleState(log.getLifecycleState().getValue());
+			masterInfo.getActionLogs().add(info);
+		});
 		return masterInfo;
 	}
 
@@ -369,9 +385,9 @@ public class StorageTemplateResourceController extends
 		specialiseInfo.setName(templateFile.getSpecialiseArchetypeName());
 		info.setSpecialiseArchetype(specialiseInfo);
 		// Set entity classes
-		info.setEntityClasses(templateFile.getEntityClasses().stream()
-				.map(cls -> this.constructEntityClassInfo(cls))
-				.collect(Collectors.toSet()));
+		// info.setEntityClasses(templateFile.getEntityClasses().stream()
+		// .map(cls -> this.constructEntityClassInfo(cls))
+		// .collect(Collectors.toSet()));
 		return info;
 	}
 
@@ -379,7 +395,7 @@ public class StorageTemplateResourceController extends
 		EntityClassInfo info = new EntityClassInfo();
 		info.setName(entityClass.getName());
 		info.setFullName(entityClass.getFullName());
-		info.setEntityId(entityClass.getEntityId());
+		info.setEntityId(entityClass.getFingerPrint());
 		info.setPackageName(entityClass.getPackageName());
 		info.setContent(entityClass.getContent());
 		return info;

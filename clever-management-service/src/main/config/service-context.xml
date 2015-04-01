@@ -38,8 +38,6 @@
         
 	<jpa:repositories base-package="edu.zju.bme.clever.management.service.repository" entity-manager-factory-ref="hibernateEmf"/>
 	
-	<bean id="entityClassGenerator" class="edu.zju.bme.clever.cdr.generator.EntityClassGenerator"/>
-	
 	<bean id="c3p0DataSource" destroy-method="close" class="com.mchange.v2.c3p0.ComboPooledDataSource">
         <property name="driverClass" value="com.microsoft.sqlserver.jdbc.SQLServerDriver" />
         <property name="jdbcUrl" value="${database.url}" />

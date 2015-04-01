@@ -1,10 +1,13 @@
 package edu.zju.bme.clever.management.service.entity;
 
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.DynamicUpdate;
@@ -26,12 +29,18 @@ public class EntityClass extends AbstractIndentifiedEntity {
 	@Column(nullable = false)
 	private String packageName;
 	@Column(nullable = false)
-	private String entityId;
+	private String fingerPrint;
 	@Column(nullable = false)
 	@Lob
 	private String content;
 	@ManyToOne(fetch = FetchType.LAZY)
-	private TemplateFile templateFile;
+	private DeployRecord deployRecord;
+	@ManyToOne(fetch = FetchType.LAZY)
+	private DeployedStorageTemplate storageTemplate;
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "sourceEntity")
+	private List<EntityRelationship> forwardRelationships;
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "destinationEntity")
+	private List<EntityRelationship> backwardRelationships;
 
 	public String getName() {
 		return name;
@@ -57,12 +66,12 @@ public class EntityClass extends AbstractIndentifiedEntity {
 		this.packageName = packageName;
 	}
 
-	public String getEntityId() {
-		return entityId;
+	public String getFingerPrint() {
+		return fingerPrint;
 	}
 
-	public void setEntityId(String entityId) {
-		this.entityId = entityId;
+	public void setFingerPrint(String fingerPrint) {
+		this.fingerPrint = fingerPrint;
 	}
 
 	public String getContent() {
@@ -73,12 +82,28 @@ public class EntityClass extends AbstractIndentifiedEntity {
 		this.content = content;
 	}
 
-	public TemplateFile getTemplateFile() {
-		return templateFile;
+	public DeployRecord getDeployRecord() {
+		return deployRecord;
 	}
 
-	public void setTemplateFile(TemplateFile templateFile) {
-		this.templateFile = templateFile;
+	public void setDeployRecord(DeployRecord deployRecord) {
+		this.deployRecord = deployRecord;
+	}
+
+	public DeployedStorageTemplate getStorageTemplate() {
+		return storageTemplate;
+	}
+
+	public void setStorageTemplate(DeployedStorageTemplate storageTemplate) {
+		this.storageTemplate = storageTemplate;
+	}
+
+	public List<EntityRelationship> getForwardRelationships() {
+		return forwardRelationships;
+	}
+
+	public List<EntityRelationship> getBackwardRelationships() {
+		return backwardRelationships;
 	}
 
 }

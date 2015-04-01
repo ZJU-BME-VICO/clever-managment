@@ -138,6 +138,11 @@
 		</dependency>
 		<dependency>
 			<groupId>openehr</groupId>
+			<artifactId>oet-parser</artifactId>
+			<version>${openEHR.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>openehr</groupId>
 			<artifactId>openehr-ap</artifactId>
 			<version>${openEHR.version}</version>
 		</dependency>
@@ -180,9 +185,9 @@
 			<groupId>edu.zju.bme.clever</groupId>
 			<artifactId>arm-parser</artifactId>
 		</dependency>
-		<dependency>
-			<groupId>edu.zju.bme.clever</groupId>
-			<artifactId>class-generator</artifactId>
-		</dependency>
+<!-- 		<dependency> -->
+<!-- 			<groupId>edu.zju.bme.clever</groupId> -->
+<!-- 			<artifactId>class-generator</artifactId> -->
+<!-- 		</dependency> -->
 	</dependencies>
 </project>
