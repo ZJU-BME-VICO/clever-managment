@@ -1,0 +1,27 @@
+<div class='row'>
+	<div class="col-md-5">
+		<nav>
+		  <ul class="pagination">
+		    <li>
+		    	<a href="javascript:void(0)" ng-click="tempOnFocus('Draft')">Draft</a>
+		    </li>
+		    <li>
+		    	<a href="javascript:void(0)" ng-click="tempOnFocus('Published')">Published</a>
+		    </li>
+		    </ul>
+
+	    	<ul class="list-group">
+	    		<li ng-repeat="list in archetypeList|filter:dpList" style="list-style:none">
+	    			<a href="javascript:void(0)" style="text-decoration:none" ng-click="setSubmitId(list)">
+	    				<img ng-class="list.lifecycleState | lowercase" class="clever-icon" style="padding: 0 10px;height: 16px;"></img>
+						<span>{{ list.name }}</span>
+					</a>
+	    		</li>
+	    	</ul>
+		</nav>
+	</div>
+	<div class="col-md-1 col-md-offset-2" style="margin-top:150px">
+		<input class="btn btn-primary" style="width:100px;" ng-click="submitFile()" 
+			value={{'ARCHETYPE_EDIT_SUBMIT'|translate}} ng-disabled="getSubmitId()"/>
+	</div>
+</div>

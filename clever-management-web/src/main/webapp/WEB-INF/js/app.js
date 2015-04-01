@@ -73,6 +73,20 @@ angular.module('cleverManagementApp', ['ngAnimate', 'ngVisible', 'ui.bootstrap',
 		},
 		templateUrl : 'js/views/management/archetype/upload/management.archetype.upload.html',
 		controller : ArchetypeUploadCtrl,
+	}).state('management.archetype.edit', {
+		url : '/edit',
+		data : {
+			parent : 'management.archetype.list',
+		},
+		templateUrl : 'js/views/management/archetype/edit/management.archetype.edit.html',
+		controller : ArchetypeEditCtrl,
+	}).state('management.archetype.verify', {
+		url : '/verify',
+		data : {
+			parent : 'management.archetype.list',
+		},
+		templateUrl : 'js/views/management/archetype/verify/management.archetype.verify.html',
+		controller : ArchetypeVerifyCtrl,
 	})
 	// Storage
 	.state('management.storage', {
@@ -108,6 +122,14 @@ angular.module('cleverManagementApp', ['ngAnimate', 'ngVisible', 'ui.bootstrap',
 		},
 		controller : StorageTemplateUploadCtrl,
 		templateUrl : 'js/views/management/storage/upload/management.storage.upload.html',
+	}).state('management.storage.edit', {
+		url : '/edit',
+		controller : StorageTemplateEditCtrl,
+		templateUrl : 'js/views/management/storage/edit/management.storage.edit.html',
+	}).state('management.storage.verify', {
+		url : '/verify',
+		controller : StorageTemplateVerifyCtrl,
+		templateUrl : 'js/views/management/storage/verify/management.storage.verify.html',
 	})
 	// Application
 	.state('management.application', {

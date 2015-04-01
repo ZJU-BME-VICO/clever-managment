@@ -116,11 +116,18 @@ public class StorageTemplateVersionControlServiceImpl implements
 					specialiseArchetypeFile);
 		}
 		// Construct template file
+		
+		// Upgrade template file --> template.setName()  by lvzy
 		TemplateFile templateFile = this.templateFileRepo
 				.findByName(templateName);
 		if (templateFile != null) {
-			throw new VersionControlException("Template " + templateName
-					+ " already exists.");
+			if(templateFile.getLifecycleState().equals(LifecycleState.PUBLISHED)){
+				oet.getTemplate().setName(templateName.substring(0, templateName.lastIndexOf(".") + 1)
+						+ (templateFile.getSubVersion() + 1));
+			}else{
+				throw new VersionControlException("Template " + templateName
+						+ " already exists.");
+			}
 		}
 		templateFile = this.constructTemplateFile(templateMaster,
 				specialiseArchetypeFile, oet, arm, source, user);
