@@ -1,5 +1,6 @@
 package edu.zju.bme.clever.management.service;
 
+import java.io.File;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -61,19 +62,26 @@ public class StorageTemplateProviderServiceImpl implements
 
 	@Override
 	public List<TemplateFile> getTemplateFilesToApprove() {
-		List<TemplateFile> tempateFiles = this.templateFileRepo
-				.findByLifecycleState(LifecycleState.TEAMREVIEW);
-		return tempateFiles.stream().filter(file -> this.isStorageTemplate(file))
-				.collect(Collectors.toList());
+		List<TemplateFile> templateFiles = this.templateFileRepo
+				.findByLifecycleStateAndTemplateType(LifecycleState.TEAMREVIEW, TemplateType.STORAGE);
+		return templateFiles;
 	}
 
 	@Override
-	public List<TemplateFile> getTemplateFilesToEdit(User user) {
-		List<TemplateFile> templateFiles = this.templateFileRepo.findToEdit(user);
-		return templateFiles.stream().filter(file -> this.isStorageTemplate(file))
-				.collect(Collectors.toList());
+	public List<TemplateFile> getDraftTemplateFilesToEdit(User user) {
+		List<TemplateFile> templateFiles = this.templateFileRepo.
+				findByLifecycleStateAndEditorAndTemplateType(LifecycleState.DRAFT, user, TemplateType.STORAGE);
+		return templateFiles;
 	}
 
+	@Override
+	public List<TemplateFile> getLatestPublishedTemplateFilesToEdit(){
+		List<TemplateMaster> templateMaster = this.templateMasterRepo.
+				findByLatestFileLifecycleStateAndTemplateType(LifecycleState.PUBLISHED, TemplateType.STORAGE);	
+		return templateMaster.stream().map(file -> file.getLatestFile())
+				.collect(Collectors.toList());
+	}
+	
 	@Override
 	public String getTemplateOetById(Integer templateId) {
 		TemplateFile templateFile = this.templateFileRepo.findOne(templateId);

@@ -110,20 +110,11 @@ public class StorageTemplateVersionControlServiceImpl implements
 		}
 		// Construct template file
 
-		// Upgrade template file --> template.setName() by lvzy
 		TemplateFile templateFile = this.templateFileRepo
 				.findByName(templateName);
 		if (templateFile != null) {
-			if (templateFile.getLifecycleState().equals(
-					LifecycleState.PUBLISHED)) {
-				oet.getTemplate().setName(
-						templateName.substring(0,
-								templateName.lastIndexOf(".") + 1)
-								+ (templateFile.getSubVersion() + 1));
-			} else {
-				throw new VersionControlException("Template " + templateName
-						+ " already exists.");
-			}
+			throw new VersionControlException("Template " + templateName
+					+ " already exists.");
 		}
 		templateFile = this.constructTemplateFile(templateMaster,
 				specialiseArchetypeFile, oet, arm, source, user);
@@ -201,6 +192,95 @@ public class StorageTemplateVersionControlServiceImpl implements
 		this.logTemplateAction(templateFile, ActionType.CREATE, user);
 	}
 
+	@Override
+	public void upgradeLatestPublishedTemplate(Integer templateId, 
+			User user)throws VersionControlException{
+		TemplateFile templateFile = this.templateFileRepo.findOne(templateId);
+		if(templateFile == null){
+			throw new VersionControlException("Cannot find template with id: "
+					+ templateId);
+		}
+		this.upgradeLatestPublishedTemplate(templateFile, user);
+	}
+	
+	@Override
+	public void upgradeLatestPublishedTemplate(String templateName, 
+			User user)throws VersionControlException{
+		TemplateFile templateFile = this.templateFileRepo.findByName(templateName);
+		if(templateFile == null){
+			throw new VersionControlException("Cannot find template with name: "
+					+ templateName);
+		}
+		this.upgradeLatestPublishedTemplate(templateFile, user);
+	}
+	
+	@Override
+	public void upgradeLatestPublishedTemplate(TemplateFile templateFile, 
+			User user) throws VersionControlException{
+		// Validate user
+		
+		// Validate lifecycleState
+		if(!templateFile.getLifecycleState().equals(LifecycleState.PUBLISHED)){
+			throw new VersionControlException(
+					"Illeagal action Upgrade for latest publshed template"
+					+ templateFile.getName()
+					+ "because this template's lifecycleState is "
+					+ templateFile.getLifecycleState()
+					+ "instead of Published.");
+		}
+		// Validate latestVersion
+		TemplateMaster templateMaster = templateFile.getMaster();
+		if(templateMaster.getLatestFileId() != templateFile.getId()){
+			throw new VersionControlException(
+					"Illeagal action Upgrade for laterst published template"
+					+ templateFile.getName()
+					+ "because this published template is not the latest template");
+		}
+		TemplateDocument oet;
+		try {
+			oet = this.oetParser
+					.parseTemplate(new ByteArrayInputStream(templateFile
+							.getContent().getBytes(StandardCharsets.UTF_8)));
+		} catch (Exception ex) {
+			throw new VersionControlException("Parse oet failed.", ex);
+		}
+		// Set oet's name for upgrading
+		String templateName = templateFile.getName();
+		oet.getTemplate().setName(
+				templateName.substring(0,
+						templateName.lastIndexOf(".") + 1)
+						+ (templateFile.getSubVersion() + 1));
+		ArchetypeRelationshipMappingDocument arm;
+		try {
+			arm = this.armParser.parseArm(new ByteArrayInputStream(templateFile
+					.getPropertyMap().get(TemplatePropertyType.ARM)
+					.getBytes(StandardCharsets.UTF_8)));
+		} catch (Exception ex) {
+			throw new VersionControlException("Parse arm failed.", ex);
+		}
+		// Set arm's template-id for updrading
+		arm.getArchetypeRelationshipMapping().getTemplate().setTemplateId(oet.getTemplate().getName());
+		// Construct template file
+		TemplateFile upgradedTemplateFile = this.constructTemplateFile(
+				templateMaster, templateFile.getSpecialiseArchetype(), 
+				oet, arm, templateFile.getSource(), templateFile.getEditor());
+		// Set upgradeTemplateFile sub version and internal version
+		upgradedTemplateFile.setSubVersion(templateFile.getSubVersion() + 1);
+		upgradedTemplateFile.setLastVersionTemplate(templateFile);
+		upgradedTemplateFile.setInternalVersion(templateFile.getInternalVersion() + 1);
+		// Set lifecycle state
+		upgradedTemplateFile.setLifecycleState(LifecycleState.DRAFT);
+		// Save upgraded template file and master
+		this.templateFileRepo.save(upgradedTemplateFile);
+		templateMaster.setLatestFile(upgradedTemplateFile);
+		templateMaster.setLatestFileInternalVersion(upgradedTemplateFile.getInternalVersion());
+		templateMaster.setLatestFileLifecycleState(upgradedTemplateFile.getLifecycleState());
+		templateMaster.setLatestFileVersion(upgradedTemplateFile.getVersion());
+		this.templateMasterRepo.save(templateMaster);
+		// Log action
+		this.logTemplateAction(upgradedTemplateFile, ActionType.EDIT, user);
+	}
+	
 	@Override
 	public void editTemplate(Integer templateId, String oet, String arm,
 			User user) throws VersionControlException {
@@ -507,14 +587,15 @@ public class StorageTemplateVersionControlServiceImpl implements
 			templateMaster
 					.setLatestFileVersion(lastTemplate.get().getVersion());
 			this.templateMasterRepo.save(templateMaster);
+			// Remove file
+			this.templateFileRepo.delete(templateFile);
+			// Log action
+			this.logTemplateAction(templateFile, ActionType.REJECT_AND_REMOVE, user);
 		} else {
 			// The first file of master, remove master
+			// Cascade delete on template file and log action because of deleting master
 			this.templateMasterRepo.delete(templateMaster);
 		}
-		// Remove file
-		this.templateFileRepo.delete(templateFile);
-		// Log action
-		this.logTemplateAction(templateFile, ActionType.REJECT_AND_REMOVE, user);
 	}
 
 	// private List<EntityClass> constructEntityClasses(TemplateFile

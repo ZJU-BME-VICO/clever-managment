@@ -104,20 +104,29 @@ public class StorageTemplateResourceController extends
 		return this.constructStorageTemplateInfo(templateFile);
 	}
 
-	@RequestMapping(value = "/action/edit/list", method = RequestMethod.GET)
+	@RequestMapping(value = "/list/edit/draft", method = RequestMethod.GET)
 	public List<StorageTemplateInfo> getTemplateListToEdit(
 			Authentication authentication) {
 		String userName = ((UserDetails) authentication.getPrincipal())
 				.getUsername();
 		User user = userService.getUserByName(userName);
 		List<TemplateFile> templateFiles = this.providerService
-				.getTemplateFilesToEdit(user);
+				.getDraftTemplateFilesToEdit(user);
 		this.isResourcesNull(templateFiles);
 		return templateFiles.stream()
 				.map(file -> this.constructStorageTemplateInfo(file))
 				.collect(Collectors.toList());
 	}
 
+	@RequestMapping(value = "/list/edit/published", method = RequestMethod.GET)
+	public List<StorageTemplateInfo> getTemplateListToEdit(){
+		List<TemplateFile> templateFiles = this.providerService.getLatestPublishedTemplateFilesToEdit();
+		this.isResourcesNull(templateFiles);
+		return templateFiles.stream()
+				.map(file -> this.constructStorageTemplateInfo(file))
+				.collect(Collectors.toList());
+	}
+	
 	@RequestMapping(value = "/action/submit/id/{id}", method = RequestMethod.GET)
 	public FileUploadResult sumbmitTemplateFile(@PathVariable int id,
 			Authentication authentication) {
@@ -135,7 +144,7 @@ public class StorageTemplateResourceController extends
 		return result;
 	}
 
-	@RequestMapping(value = "action/verify//list", method = RequestMethod.GET)
+	@RequestMapping(value = "/list/verify", method = RequestMethod.GET)
 	public List<StorageTemplateInfo> getTemplateFilesToApprove(
 			Authentication authentication) {
 		// Validate user authority
@@ -177,7 +186,7 @@ public class StorageTemplateResourceController extends
 			this.versionControlService.rejectTemplate(id, user);
 		} catch (VersionControlException e) {
 			result.setMessage(e.getMessage());
-			result.setSucceeded(true);
+			result.setSucceeded(false);
 		}
 		return result;
 	}
@@ -194,7 +203,7 @@ public class StorageTemplateResourceController extends
 			this.versionControlService.rejectAndRemoveTemplate(id, user);
 		} catch (VersionControlException e) {
 			result.setMessage(e.getMessage());
-			result.setSucceeded(true);
+			result.setSucceeded(false);
 		}
 		return result;
 	}
@@ -208,10 +217,7 @@ public class StorageTemplateResourceController extends
 		FileUploadResult result = new FileUploadResult();
 		result.setSucceeded(true);
 		try {
-			this.versionControlService.createOrUpgradeTemplate(
-					this.providerService.getTemplateOetById(id),
-					this.providerService.getTemplateArmById(id),
-					SourceType.CLEVER, user);
+			this.versionControlService.upgradeLatestPublishedTemplate(id, user);
 		} catch (VersionControlException e) {
 			result.setMessage(e.getMessage());
 			result.setSucceeded(false);

@@ -10,6 +10,8 @@ import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
 import org.hibernate.annotations.DynamicUpdate;
 
 @Entity
@@ -24,7 +26,7 @@ public class TemplateMaster extends AbstractMaster<TemplateFile> {
 
 	@Column
 	private TemplateType templateType;
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "master")
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "master", orphanRemoval=true)
 	private List<ArchetypeActionLog> actionLogs;
 
 	public List<ArchetypeActionLog> getActionLogs() {

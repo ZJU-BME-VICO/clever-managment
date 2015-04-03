@@ -59,7 +59,7 @@ public abstract class AbstractMaster<T extends AbstractFile> extends
 	private Integer currentSpecialiseArchetypeInternalVersion;
 	@Column
 	private String currentSpecialiseArchetypeVersion;
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "master")
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "master", orphanRemoval=true)
 	private List<T> files;
 	@ManyToOne(fetch = FetchType.LAZY)
 	private T latestFile;

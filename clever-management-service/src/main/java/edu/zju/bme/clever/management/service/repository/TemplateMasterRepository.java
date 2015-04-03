@@ -4,8 +4,12 @@ import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
+import edu.zju.bme.clever.management.service.entity.LifecycleState;
+import edu.zju.bme.clever.management.service.entity.TemplateFile;
 import edu.zju.bme.clever.management.service.entity.TemplateMaster;
+import edu.zju.bme.clever.management.service.entity.TemplateType;
 
 public interface TemplateMasterRepository extends
 		JpaRepository<TemplateMaster, Integer> {
@@ -14,5 +18,8 @@ public interface TemplateMasterRepository extends
 
 	@Query("select master from TemplateMaster master where master.templateType = 'Storage'")
 	public List<TemplateMaster> findAllStorageTemplateMasters();
-
+	
+	public List<TemplateMaster> findByLatestFileLifecycleStateAndTemplateType(
+			LifecycleState lifecycleState, TemplateType templateType);
+	
 }
