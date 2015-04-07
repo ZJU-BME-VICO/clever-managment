@@ -15,7 +15,7 @@ import org.hibernate.annotations.DynamicUpdate;
 @Entity
 @Table
 @DynamicUpdate(true)
-public class TemplateMaster1 extends AbstractMaster {
+public class TemplateMaster1 extends AbstractIndentifiedEntity {
 
 	/**
 	 * 
@@ -24,6 +24,33 @@ public class TemplateMaster1 extends AbstractMaster {
 
 	@Column
 	private TemplateType templateType;
+	@Column(nullable = false)
+	private String name;
+	@Column(nullable = false)
+	private String rmOrginator;
+	@Column(nullable = false)
+	private String rmName;
+	@Column(nullable = false)
+	private String rmEntity;
+	@Column(nullable = false)
+	private String conceptName;
+	@Lob
+	@Column
+	private String conceptDescription;
+	@Column
+	private String keywords;
+	@Lob
+	@Column
+	private String purpose;
+	@Lob
+	@Column
+	private String use;
+	@Lob
+	@Column
+	private String misuse;
+	@Lob
+	@Column
+	private String copyright;
 	@Column
 	private String version;
 	@ManyToOne(fetch = FetchType.LAZY)

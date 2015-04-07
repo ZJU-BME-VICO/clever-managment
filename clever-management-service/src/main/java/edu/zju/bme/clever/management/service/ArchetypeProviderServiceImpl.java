@@ -14,9 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import se.acode.openehr.parser.ADLParser;
-import edu.zju.bme.clever.management.service.entity.ArchetypeMaster1;
-import edu.zju.bme.clever.management.service.entity.ArchetypeRevisionFile;
-import edu.zju.bme.clever.management.service.entity.ArchetypeVersionMaster;
 import edu.zju.bme.clever.management.service.entity.LifecycleState;
 import edu.zju.bme.clever.management.service.entity.User;
 import edu.zju.bme.clever.management.service.repository.ArchetypeActionLogRepository;
@@ -25,7 +22,7 @@ import edu.zju.bme.clever.management.service.repository.ArchetypeRevisionFileRep
 import edu.zju.bme.clever.management.service.repository.ArchetypeVersionMasterRepository;
 
 @Service
-public class ArchetypeProvideServiceImpl implements ArchetypeProvideService {
+public class ArchetypeProviderServiceImpl implements ArchetypeProviderService {
 
 	protected final Logger logger = LoggerFactory.getLogger(this.getClass());
 
@@ -42,63 +39,50 @@ public class ArchetypeProvideServiceImpl implements ArchetypeProvideService {
 	private ADLSerializer adlSerializer = new ADLSerializer();
 
 	@Override
-	public List<ArchetypeMaster1> getAllArchetypeMasters() {
-		return this.masterRepo.findAll();
-	}
-
-	// public List<ArchetypeFile> getLatestedPublishedArchetypeFiles() {
-	// List<ArchetypeFile> resultFiles = new ArrayList<ArchetypeFile>();
-	// List<ArchetypeMaster> masterFiles = getAllArchetypeMasters();
-	// List<ArchetypeFile> publishedFiles = this.revisionFileRepo
-	// .findByLifecycleState(LifecycleState.PUBLISHED);
-	// for (int i = 0; i < publishedFiles.size(); i++) {
-	// for (ArchetypeMaster temp : masterFiles) {
-	// if (publishedFiles.get(i).getId() == temp.getLatestFileId()) {
-	// resultFiles.add(publishedFiles.get(i));
-	// break;
-	// }
-	// }
-	// }
-	// return resultFiles;
-	// }
-
-	// public List<ArchetypeFile> getMyDraftArchetypeFiles(User user) {
-	// return this.revisionFileRepo.findByLifecycleStateAndEditor(
-	// LifecycleState.DRAFT, user);
-	// }
-
-	// public List<ArchetypeFile> getAllTeamreviewArchetypeFiles() {
-	// return this.revisionFileRepo
-	// .findByLifecycleState(LifecycleState.TEAMREVIEW);
-	// }
-
-	@Override
-	public ArchetypeMaster1 getArchetypeMasterByName(String masterName) {
-		return this.masterRepo.findByName(masterName);
+	public List<ArchetypeMaster> getAllArchetypeMasters() {
+		return this.versionMasterRepo.findAll();
 	}
 
 	@Override
-	public ArchetypeMaster1 getArchetypeMasterById(Integer Id) {
-		return this.masterRepo.findOne(Id);
+	public List<ArchetypeFile> getLatestedPublishedArchetypeFiles() {
+		List<ArchetypeFile> resultFiles = new ArrayList<ArchetypeFile>();
+		List<ArchetypeMaster> masterFiles = getAllArchetypeMasters();
+		List<ArchetypeFile> publishedFiles = this.revisionFileRepo
+				.findByLifecycleState(LifecycleState.PUBLISHED);
+		for (int i = 0; i < publishedFiles.size(); i++) {
+			for (ArchetypeMaster temp : masterFiles) {
+				if (publishedFiles.get(i).getId() == temp.getLatestFileId()) {
+					resultFiles.add(publishedFiles.get(i));
+					break;
+				}
+			}
+		}
+		return resultFiles;
 	}
 
 	@Override
-	public ArchetypeVersionMaster getArchetypeVersionMasterByName(String name) {
-		return this.versionMasterRepo.findByName(name);
+	public List<ArchetypeFile> getMyDraftArchetypeFiles(User user) {
+		return this.revisionFileRepo.findByLifecycleStateAndEditor(
+				LifecycleState.DRAFT, user);
 	}
 
 	@Override
-	public ArchetypeVersionMaster getArchetypeVersionMasterById(Integer id) {
-		return this.versionMasterRepo.findOne(id);
+	public ArchetypeMaster getArchetypeMasterByName(String masterName) {
+		return this.versionMasterRepo.findByName(masterName);
 	}
 
 	@Override
-	public ArchetypeRevisionFile getArchetypeRevisionFileByName(String fileName) {
+	public ArchetypeMaster getArchetypeMasterById(Integer Id) {
+		return this.versionMasterRepo.findOne(Id);
+	}
+
+	@Override
+	public ArchetypeFile getArchetypeFileByName(String fileName) {
 		return this.revisionFileRepo.findByName(fileName);
 	}
 
 	@Override
-	public ArchetypeRevisionFile getArchetypeRevisionFileById(Integer id) {
+	public ArchetypeFile getArchetypeFileById(Integer id) {
 		return this.revisionFileRepo.findOne(id);
 	}
 
@@ -106,7 +90,7 @@ public class ArchetypeProvideServiceImpl implements ArchetypeProvideService {
 	public String getArchetypeXmlById(Integer id) {
 		return Optional
 				.ofNullable(this.revisionFileRepo.findOne(id))
-				.map(file -> this.parseArchetype(file.getAdl()))
+				.map(file -> this.parseArchetype(file.getContent()))
 				.map(archetype -> {
 					try {
 						return this.xmlSerializer.output(archetype);
@@ -122,7 +106,7 @@ public class ArchetypeProvideServiceImpl implements ArchetypeProvideService {
 	public String getArchetypeXmlByName(String name) {
 		return Optional
 				.ofNullable(this.revisionFileRepo.findByName(name))
-				.map(file -> this.parseArchetype(file.getAdl()))
+				.map(file -> this.parseArchetype(file.getContent()))
 				.map(archetype -> {
 					try {
 						return this.xmlSerializer.output(archetype);
@@ -137,16 +121,22 @@ public class ArchetypeProvideServiceImpl implements ArchetypeProvideService {
 	@Override
 	public String getArchetypeAdlById(Integer id) {
 		return Optional.ofNullable(this.revisionFileRepo.findOne(id))
-				.map(file -> file.getAdl()).orElse(null);
+				.map(file -> file.getContent()).orElse(null);
 	}
 
 	@Override
 	public String getArchetypeAdlByName(String name) {
 		return Optional.ofNullable(this.revisionFileRepo.findByName(name))
-				.map(file -> file.getAdl()).orElse(null);
+				.map(file -> file.getContent()).orElse(null);
 	}
 
-	private Archetype parseArchetype(String archetype) {
+	@Override
+	public List<ArchetypeFile> getAllTeamreviewArchetypeFiles() {
+		return this.revisionFileRepo
+				.findByLifecycleState(LifecycleState.TEAMREVIEW);
+	}
+
+	protected Archetype parseArchetype(String archetype) {
 		ADLParser parser = new ADLParser(archetype);
 		try {
 			return parser.parse();
