@@ -8,6 +8,7 @@ import edu.zju.bme.clever.management.service.entity.FileProcessResult;
 
 public interface ArchetypeValidateService {
 
-	public FileProcessResult validateConsistency(Archetype archetype);
+	public void validateConsistency(Map<String, Archetype> archetypes,
+			Map<String, FileProcessResult> results);
 
 }

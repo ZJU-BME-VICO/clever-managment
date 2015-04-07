@@ -35,7 +35,7 @@ public class DeployedStorageTemplate extends AbstractIndentifiedEntity {
 	@Column(nullable = false)
 	private Integer internalVersion;
 	@ManyToOne(fetch = FetchType.LAZY)
-	private TemplateRevisionFile originalTemplate;
+	private TemplateFile originalTemplate;
 	@ManyToOne(fetch = FetchType.LAZY)
 	private DeployRecord deployRecord;
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "storageTemplate")
@@ -69,11 +69,11 @@ public class DeployedStorageTemplate extends AbstractIndentifiedEntity {
 		this.arm = arm;
 	}
 
-	public TemplateRevisionFile getOriginalTemplate() {
+	public TemplateFile getOriginalTemplate() {
 		return originalTemplate;
 	}
 
-	public void setOriginalTemplate(TemplateRevisionFile originalTemplate) {
+	public void setOriginalTemplate(TemplateFile originalTemplate) {
 		this.originalTemplate = originalTemplate;
 	}
 

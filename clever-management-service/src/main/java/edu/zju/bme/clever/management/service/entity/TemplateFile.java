@@ -1,46 +1,68 @@
 package edu.zju.bme.clever.management.service.entity;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.persistence.CollectionTable;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
+import javax.persistence.Index;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.MapKeyColumn;
+import javax.persistence.MapKeyJoinColumn;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.DynamicUpdate;
 
 @Entity
-@Table
+@Table(indexes = { @Index(name = "Index_Template_File_Name", columnList = "name") })
 @DynamicUpdate(true)
-public class TemplateRevisionFile extends
-		AbstractRevisionFile<TemplateRevisionFile> {
+public class TemplateFile extends AbstractFile<TemplateMaster> {
 
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = -8715669749258421079L;
+	private static final long serialVersionUID = 16763153667340880L;
 
 	@Column
-	private TemplateType templateType;
-	@Lob
-	@Column(nullable = false)
-	private String oet;
+	private Integer subVersion;
+	@ManyToOne(fetch = FetchType.LAZY)
+	private TemplateFile lastVersionTemplate;
 	@ElementCollection(fetch = FetchType.LAZY)
 	@CollectionTable
 	@Column(name = "value")
 	@Lob
 	@MapKeyColumn(name = "attribute")
 	private Map<TemplatePropertyType, String> properties = new HashMap<TemplatePropertyType, String>();
-	@ManyToOne(fetch = FetchType.LAZY)
-	private TemplateMaster1 templateMaster;
 	@Column
-	private String templateMasterVersion;
+	private TemplateType templateType;
+
+	public Integer getSubVersion() {
+		return subVersion;
+	}
+
+	public void setSubVersion(Integer subVersion) {
+		this.subVersion = subVersion;
+	}
+
+	public TemplateFile getLastVersionTemplate() {
+		return lastVersionTemplate;
+	}
+
+	public void setLastVersionTemplate(TemplateFile lastVersionTemplate) {
+		this.lastVersionTemplate = lastVersionTemplate;
+	}
 
 	public Map<TemplatePropertyType, String> getPropertyMap() {
 		return properties;
@@ -60,14 +82,6 @@ public class TemplateRevisionFile extends
 
 	public void setTemplateType(TemplateType templateType) {
 		this.templateType = templateType;
-	}
-
-	public String getOet() {
-		return oet;
-	}
-
-	public void setOet(String oet) {
-		this.oet = oet;
 	}
 
 }
