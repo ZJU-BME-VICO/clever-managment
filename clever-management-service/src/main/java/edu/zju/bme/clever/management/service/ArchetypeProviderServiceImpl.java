@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import se.acode.openehr.parser.ADLParser;
 import edu.zju.bme.clever.management.service.entity.ArchetypeFile;
 import edu.zju.bme.clever.management.service.entity.ArchetypeMaster;
+import edu.zju.bme.clever.management.service.entity.LifecycleState;
 import edu.zju.bme.clever.management.service.entity.User;
 import edu.zju.bme.clever.management.service.repository.ArchetypeActionLogRepository;
 import edu.zju.bme.clever.management.service.repository.ArchetypeFileRepository;
@@ -42,19 +43,24 @@ public class ArchetypeProviderServiceImpl implements ArchetypeProviderService {
 	}
 	
 	@Override
-	public List<ArchetypeFile> getMyArchetypeFiles(User user) {
-		List<ArchetypeFile> result = new ArrayList<ArchetypeFile>();
-		List<ArchetypeMaster> masterMap=getAllArchetypeMasters();
-		List<ArchetypeFile>repeatFiles = this.fileRepo.getMyArchetypeFiles(user);
-		for(int i=0;i<repeatFiles.size();i++){
-			for(ArchetypeMaster temp : masterMap){
-				if(repeatFiles.get(i).getMasterId()==temp.getId()
-						&&repeatFiles.get(i).getInternalVersion()==temp.getLatestFileInternalVersion()){
-					result.add(repeatFiles.get(i));
+	public List<ArchetypeFile> getLatestedPublishedArchetypeFiles(){
+		List<ArchetypeFile> resultFiles = new ArrayList<ArchetypeFile>();
+		List<ArchetypeMaster> masterFiles=getAllArchetypeMasters();
+		List<ArchetypeFile> publishedFiles = this.fileRepo.findByLifecycleState(LifecycleState.PUBLISHED);
+		for(int i=0;i<publishedFiles.size();i++){
+			for(ArchetypeMaster temp:masterFiles){
+				if(publishedFiles.get(i).getId()==temp.getLatestFileId()){
+					resultFiles.add(publishedFiles.get(i));
+					break;
 				}
 			}
 		}
-		return result;
+		return resultFiles;
+	}
+	
+	@Override
+	public List<ArchetypeFile> getMyDraftArchetypeFiles(User user) {
+		return this.fileRepo.findByLifecycleStateAndEditor(LifecycleState.DRAFT,user);
 	}
 
 	@Override
@@ -123,7 +129,7 @@ public class ArchetypeProviderServiceImpl implements ArchetypeProviderService {
 
 	@Override
 	public List<ArchetypeFile> getAllTeamreviewArchetypeFiles() {
-		return this.fileRepo.getAllTeamreviewArchetypeFiles();
+		return this.fileRepo.findByLifecycleState(LifecycleState.TEAMREVIEW);
 	}
 
 	protected Archetype parseArchetype(String archetype) {

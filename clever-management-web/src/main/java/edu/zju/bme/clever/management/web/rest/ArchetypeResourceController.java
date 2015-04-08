@@ -34,6 +34,7 @@ import edu.zju.bme.clever.management.service.UserService;
 import edu.zju.bme.clever.management.service.entity.ArchetypeFile;
 import edu.zju.bme.clever.management.service.entity.ArchetypeMaster;
 import edu.zju.bme.clever.management.service.entity.FileProcessResult;
+import edu.zju.bme.clever.management.service.entity.LifecycleState;
 import edu.zju.bme.clever.management.service.entity.SourceType;
 import edu.zju.bme.clever.management.service.entity.User;
 import edu.zju.bme.clever.management.web.entity.ActionLogInfo;
@@ -130,11 +131,11 @@ public class ArchetypeResourceController extends AbstractResourceController {
 				.collect(Collectors.toList());
 	}
 	
-	@RequestMapping(value = "/mylist", method = RequestMethod.GET)
-	public List<ArchetypeInfo> getMyArchtypeList(Authentication authentication){
+	@RequestMapping(value = "/list/myDraft", method = RequestMethod.GET)
+	public List<ArchetypeInfo> getMyDraftArchtypeList(Authentication authentication){
 		String userName = ((UserDetails) authentication.getPrincipal()).getUsername();
 		User user = this.userService.getUserByName(userName);
-		List<ArchetypeFile> files = this.archetypeProviderService.getMyArchetypeFiles(user);
+		List<ArchetypeFile> files = this.archetypeProviderService.getMyDraftArchetypeFiles(user);
 		Map<Integer, ArchetypeInfo> infos = files
 				.stream()
 				.collect(
@@ -153,20 +154,41 @@ public class ArchetypeResourceController extends AbstractResourceController {
 		return infos.values().stream().collect(Collectors.toList());
 	}
 	
-	@RequestMapping(value = "/verlist", method = RequestMethod.GET)
-	public List<ArchetypeInfo> getVerArchetypeList(){
-		List<ArchetypeFile> verFiles=this.archetypeProviderService.getAllTeamreviewArchetypeFiles();
-		Map<Integer, ArchetypeInfo> infos = verFiles
+	@RequestMapping(value = "/list/latestPublished", method = RequestMethod.GET)
+	public List<ArchetypeInfo> getMyPublishedArchtypeList(Authentication authentication){
+		List<ArchetypeFile> files = this.archetypeProviderService.getLatestedPublishedArchetypeFiles();
+		Map<Integer, ArchetypeInfo> infos = files
 				.stream()
 				.collect(
 						Collectors.toMap(
-								verFile -> verFile.getId(),
-								verFile -> {
+								file -> file.getId(),
+								file -> {
 									ArchetypeInfo info=new ArchetypeInfo();
-									info.setId(verFile.getId());
-									info.setName(verFile.getName());
-									info.setMasterId(verFile.getMasterId());
-									info.setInternalVersion(verFile.getInternalVersion());
+									info.setId(file.getId());
+									info.setName(file.getName());
+									info.setMasterId(file.getMasterId());
+									info.setInternalVersion(file.getInternalVersion());
+									info.setLifecycleState(file.getLifecycleState().toString());
+									return info;
+								}));
+		
+		return infos.values().stream().collect(Collectors.toList());
+	}
+	
+	@RequestMapping(value = "/list/verify", method = RequestMethod.GET)
+	public List<ArchetypeInfo> getVerArchetypeList(){
+		List<ArchetypeFile> files=this.archetypeProviderService.getAllTeamreviewArchetypeFiles();
+		Map<Integer, ArchetypeInfo> infos = files
+				.stream()
+				.collect(
+						Collectors.toMap(
+								file -> file.getId(),
+								file -> {
+									ArchetypeInfo info=new ArchetypeInfo();
+									info.setId(file.getId());
+									info.setName(file.getName());
+									info.setMasterId(file.getMasterId());
+									info.setInternalVersion(file.getInternalVersion());
 									return info;
 						}));
 		return infos.values().stream().collect(Collectors.toList());
@@ -350,18 +372,41 @@ public class ArchetypeResourceController extends AbstractResourceController {
 		return result;
 	}
 	
-	@RequestMapping(value = "/action/submit", method = RequestMethod.POST)
-	public FileUploadResult submitFile(
-			@RequestParam(value = "id", required = true) String id,
+	@RequestMapping(value = "/action/edit", method = RequestMethod.POST)
+	public FileUploadResult editFile(
 			@RequestParam(value = "name", required = true) String name,
 			Authentication authentication){
 		FileUploadResult result = new FileUploadResult();
 		result.setSucceeded(true);
 		String userName = ((UserDetails) authentication.getPrincipal()).getUsername();
 		User user=this.userService.getUserByName(userName);
-		Integer fileId=Integer.parseInt(id);
+		ArchetypeFile file=this.archetypeProviderService.getArchetypeFileByName(name);
+		String fileAdl=this.archetypeProviderService.getArchetypeAdlByName(name);
 		try{
-			this.archetypeVersionControlService.submitArchetype(fileId, user);
+			if(file.getLifecycleState().equals(LifecycleState.PUBLISHED)){
+				SourceType fileSource=file.getSource();
+				this.archetypeVersionControlService.createOrUpgradeArchetype(fileAdl, fileSource, user);
+			}else{
+				this.archetypeVersionControlService.editArchetype(name, fileAdl, user);
+			}
+		}catch(Exception ex){
+			result.setMessage("Persist file " + name+ " failed.");
+			result.setSucceeded(false);
+			return result;
+		}
+		return result;
+	}
+	
+	@RequestMapping(value = "/action/submit", method = RequestMethod.POST)
+	public FileUploadResult submitFile(
+			@RequestParam(value = "name", required = true) String name,
+			Authentication authentication){
+		FileUploadResult result = new FileUploadResult();
+		result.setSucceeded(true);
+		String userName = ((UserDetails) authentication.getPrincipal()).getUsername();
+		User user=this.userService.getUserByName(userName);
+		try{
+			this.archetypeVersionControlService.submitArchetype(name, user);
 		}catch(Exception ex){
 			result.setMessage("Persist file " + name+ " failed.");
 			result.setSucceeded(false);
@@ -372,16 +417,14 @@ public class ArchetypeResourceController extends AbstractResourceController {
 	
 	@RequestMapping(value = "/action/approve", method = RequestMethod.POST)
 	public FileUploadResult approveFile(
-			@RequestParam(value = "id", required = true) String id,
 			@RequestParam(value = "name", required = true) String name,
 			Authentication authentication){
 		FileUploadResult result = new FileUploadResult();
 		result.setSucceeded(true);
 		String userName = ((UserDetails) authentication.getPrincipal()).getUsername();
 		User user=this.userService.getUserByName(userName);
-		Integer fileId=Integer.parseInt(id);
 		try{
-			this.archetypeVersionControlService.approveArchetype(fileId, user);
+			this.archetypeVersionControlService.approveArchetype(name, user);
 		}catch(Exception ex){
 			result.setMessage("Persist file " + name+ " failed.");
 			result.setSucceeded(false);
@@ -393,16 +436,14 @@ public class ArchetypeResourceController extends AbstractResourceController {
 	
 	@RequestMapping(value = "/action/reject", method = RequestMethod.POST)
 	public FileUploadResult rejectFile(
-			@RequestParam(value = "id", required = true) String id,
 			@RequestParam(value = "name", required = true) String name,
 			Authentication authentication){
 		FileUploadResult result = new FileUploadResult();
 		result.setSucceeded(true);
 		String userName = ((UserDetails) authentication.getPrincipal()).getUsername();
 		User user=this.userService.getUserByName(userName);
-		Integer fileId=Integer.parseInt(id);
 		try{
-			this.archetypeVersionControlService.rejectArchetype(fileId, user);
+			this.archetypeVersionControlService.rejectArchetype(name, user);
 		}catch(Exception ex){
 			result.setMessage("Persist file " + name+ " failed.");
 			result.setSucceeded(false);
@@ -414,16 +455,14 @@ public class ArchetypeResourceController extends AbstractResourceController {
 	
 	@RequestMapping(value = "/action/rejectAndremove", method = RequestMethod.POST)
 	public FileUploadResult rejectAndremoveFile(
-			@RequestParam(value = "id", required = true) String id,
 			@RequestParam(value = "name", required = true) String name,
 			Authentication authentication){
 		FileUploadResult result = new FileUploadResult();
 		result.setSucceeded(true);
 		String userName = ((UserDetails) authentication.getPrincipal()).getUsername();
 		User user=this.userService.getUserByName(userName);
-		Integer fileId=Integer.parseInt(id);
 		try{
-			this.archetypeVersionControlService.rejectAndRemoveArchetype(fileId, user);
+			this.archetypeVersionControlService.rejectAndRemoveArchetype(name, user);
 		}catch(Exception ex){
 			result.setMessage("Persist file " + name+ " failed.");
 			result.setSucceeded(false);

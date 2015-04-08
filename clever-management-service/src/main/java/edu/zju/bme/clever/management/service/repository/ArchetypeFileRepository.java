@@ -15,10 +15,7 @@ public interface ArchetypeFileRepository extends
 	
 	public ArchetypeFile findByName(String archetypeName);
 
-	@Query("select f from ArchetypeFile f where f.lifecycleState = 'Teamreview'")
-	public List<ArchetypeFile> getAllTeamreviewArchetypeFiles();
+	public List<ArchetypeFile> findByLifecycleState(LifecycleState lifecycleState); 
 	
-	@Query("select f from ArchetypeFile f where f.lifecycleState = 'Published' "
-			+ "or (f.lifecycleState = 'Draft' and f.editor = :user)")
-	public List<ArchetypeFile> getMyArchetypeFiles(@Param("user")User user);
+	public List<ArchetypeFile> findByLifecycleStateAndEditor(LifecycleState lifecycleState, User user);
 }

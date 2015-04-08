@@ -203,7 +203,7 @@ public class ArchetypeVersionControlServiceImpl implements
 							+ " instead of Published.");
 		}
 		archetypeFile.setLifecycleState(LifecycleState.DRAFT);
-		// Save archetype file and master
+		// Save archetype file and master                  
 		this.archetypeFileRepo.save(archetypeFile);
 		archetypeMaster.setLatestFile(archetypeFile);
 		archetypeMaster.setLatestFileInternalVersion(archetypeFile
@@ -503,13 +503,14 @@ public class ArchetypeVersionControlServiceImpl implements
 			archetypeMaster.setLatestFileVersion(lastArchetype.get()
 					.getVersion());
 			this.archetypeMasterRepo.save(archetypeMaster);
+			
+			this.archetypeFileRepo.delete(archetypeFile);
+			// Log action
+			logArchetypeAction(archetypeFile, ActionType.REJECT_AND_REMOVE, user);
 		} else {
 			// The first file of master, remove master
 			this.archetypeMasterRepo.delete(archetypeMaster);
 		}
-		this.archetypeFileRepo.delete(archetypeFile);
-		// Log action
-		logArchetypeAction(archetypeFile, ActionType.REJECT_AND_REMOVE, user);
 	}
 
 	protected ArchetypeMaster constructArchetypeMaster(Archetype archetype)

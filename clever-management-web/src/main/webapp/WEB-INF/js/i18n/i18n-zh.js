@@ -61,13 +61,19 @@ angular.module('clever.management.i18n.zh', ['pascalprecht.translate']).config(f
 		ARCHETYPE_UPLOAD_FAILED_HINT : '原型上传失败，错误：{{errorMsg}}',
 		
 		// Archetype edit
+		ARCHETYPE_EDIT_EDIT : '编辑',
 		ARCHETYPE_EDIT_SUBMIT : '提交',
-		ARCHETYPE_EDIT_SUBMIT_SUCCEEDED : '操作成功',
-		ARCHETYPE_EDIT_SUBMIT_SUCCEEDED_HINT : '原型提交成功',
-		ARCHETYPE_EDIT_SUBMIT_FAILED : '操作失败',
-		ARCHETYPE_EDIT_SUBMIT_FAILED_HINT : '原型提交失败',
+		ARCHETYPE_EDIT_DRAFT : '我的草稿',
+		ARCHETYPE_EDIT_PUBLISHED : '公共项',
+		ARCHETYPE_EDIT_SUCCEEDED : '操作成功',
+		ARCHETYPE_EDIT_FAILED : '操作失败',
+		ARCHETYPE_EDIT_EDIT_SUCCEEDED_HINT : '成功编辑原型',
+		ARCHETYPE_EDIT_EDIT_FAILED_HINT : '编辑原型失败,错误: {{errorMsg}}',
+		ARCHETYPE_EDIT_SUBMIT_SUCCEEDED_HINT : '成功提交原型',
+		ARCHETYPE_EDIT_SUBMIT_FAILED_HINT : '原型提交失败,错误: {{errorMsg}}',
 		
 		// Archetype verify
+		ARCHETYPE_VERIFY : '所有待审核项',
 		ARCHETYPE_VERIFY_APPROVE : '启用',
 		ARCHETYPE_VERIFY_REJECT : '否决',
 		ARCHETYPE_VERIFY_SUCCEEDED : '操作成功',
@@ -75,7 +81,7 @@ angular.module('clever.management.i18n.zh', ['pascalprecht.translate']).config(f
 		ARCHETYPE_VERIFY_REJECT_HINT : '操作提示',
 		ARCHETYPE_VERIFY_REJECT_HINT_INFO : '是否否决并删除该原型',		
 		ARCHETYPE_VERIFY_APPROVE_SUCCEEDED_HINT : '原型通过审核',
-		ARCHETYPE_VERIFY_APPROVE_FAILED_HINT : '原型审核失败',
+		ARCHETYPE_VERIFY_APPROVE_FAILED_HINT : '原型审核失败,错误: {{errorMsg}}',
 		ARCHETYPE_VERIFY_REJECT_SUCCEEDED_HINT : '成功否决原型',
 		ARCHETYPE_VERIFY_REJECT_FAILED_HINT : '否决原型失败',
 		ARCHETYPE_VERIFY_REJECT_AND_REMOVE_SUCCEEDED_HINT : '成功删除原型',
