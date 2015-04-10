@@ -18,25 +18,29 @@ import edu.zju.bme.clever.management.service.repository.TemplateRevisionFileRepo
 
 @Service
 @Transactional(rollbackFor = { Exception.class })
-public class StorageTemplateProviderServiceImpl {
+public class StorageTemplateProvideServiceImpl implements StorageTemplateProvideService {
 	@Autowired
 	private TemplateRevisionFileRepository templateFileRepo;
 	@Autowired
 	private TemplateMasterRepository TemplateMaster1Repo;
 
+	@Override
 	public List<TemplateMaster> getAllStorageTemplateMaster1s() {
 		return this.TemplateMaster1Repo
 				.findByTemplateType(TemplateType.STORAGE);
 	}
 
+	@Override
 	public TemplateMaster getTemplateMaster1ById(Integer id) {
 		return this.TemplateMaster1Repo.findOne(id);
 	}
 
+	@Override
 	public TemplateMaster getTemplateMaster1ByName(String name) {
 		return this.TemplateMaster1Repo.findByName(name);
 	}
 
+	@Override
 	public TemplateRevisionFile getTemplateFileById(Integer templateId) {
 		TemplateRevisionFile templateFile = this.templateFileRepo
 				.findOne(templateId);
@@ -46,6 +50,7 @@ public class StorageTemplateProviderServiceImpl {
 		return templateFile;
 	}
 
+	@Override
 	public TemplateRevisionFile getTemplateFileByName(String templateName) {
 		TemplateRevisionFile templateFile = this.templateFileRepo
 				.findByName(templateName);
@@ -55,16 +60,19 @@ public class StorageTemplateProviderServiceImpl {
 		return templateFile;
 	}
 
+	@Override
 	public List<TemplateRevisionFile> getTemplateFilesToApprove() {
 		return this.templateFileRepo.findByTemplateTypeAndLifecycleState(
 				TemplateType.STORAGE, LifecycleState.TEAMREVIEW);
 	}
 
+	@Override
 	public List<TemplateRevisionFile> getTemplateFilesToEdit(User user) {
 		return this.templateFileRepo.findByTemplateTypeAndEditor(
 				TemplateType.STORAGE, user);
 	}
 
+	@Override
 	public String getTemplateOetById(Integer templateId) {
 		TemplateRevisionFile templateFile = this.templateFileRepo
 				.findOne(templateId);
@@ -74,6 +82,7 @@ public class StorageTemplateProviderServiceImpl {
 		return templateFile.getOet();
 	}
 
+	@Override
 	public String getTemplateOetByName(String templateName) {
 		TemplateRevisionFile templateFile = this.templateFileRepo
 				.findByName(templateName);
@@ -83,6 +92,7 @@ public class StorageTemplateProviderServiceImpl {
 		return templateFile.getOet();
 	}
 
+	@Override
 	public String getTemplateArmById(Integer templateId) {
 		TemplateRevisionFile templateFile = this.templateFileRepo
 				.findOne(templateId);
@@ -92,6 +102,7 @@ public class StorageTemplateProviderServiceImpl {
 		return templateFile.getPropertyValue(TemplatePropertyType.ARM);
 	}
 
+	@Override
 	public String getTemplateArmByName(String templateName) {
 		TemplateRevisionFile templateFile = this.templateFileRepo
 				.findByName(templateName);
