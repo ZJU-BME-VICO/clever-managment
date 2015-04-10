@@ -59,4 +59,6 @@ public interface ArchetypeVersionControlService {
 	public void rejectAndRemoveArchetype(ArchetypeRevisionFile archetypeFile,
 			User user) throws VersionControlException;
 
+	void acceptArchetype(String archetype, User user) throws VersionControlException;
+
 }

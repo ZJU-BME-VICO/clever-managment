@@ -9,6 +9,8 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import openEHR.v1.template.RESOURCEDESCRIPTIONITEM;
@@ -26,10 +28,14 @@ import org.springframework.transaction.annotation.Transactional;
 import se.acode.openehr.parser.ADLParser;
 import edu.zju.bme.clever.cdr.arm.parser.ArmParser;
 import edu.zju.bme.clever.management.service.entity.ActionType;
+import edu.zju.bme.clever.management.service.entity.ArchetypeRevisionFile;
+import edu.zju.bme.clever.management.service.entity.ArchetypeVersionMaster;
 import edu.zju.bme.clever.management.service.entity.EntityClass;
 import edu.zju.bme.clever.management.service.entity.LifecycleState;
 import edu.zju.bme.clever.management.service.entity.TemplateActionLog;
+import edu.zju.bme.clever.management.service.entity.TemplateMaster1;
 import edu.zju.bme.clever.management.service.entity.TemplatePropertyType;
+import edu.zju.bme.clever.management.service.entity.TemplateRevisionFile;
 import edu.zju.bme.clever.management.service.entity.TemplateType;
 import edu.zju.bme.clever.management.service.entity.User;
 import edu.zju.bme.clever.management.service.exception.VersionControlException;
@@ -42,8 +48,7 @@ import edu.zju.bme.clever.schemas.ArchetypeRelationshipMappingDocument;
 
 @Service
 @Transactional(rollbackFor = { Exception.class })
-public class StorageTemplateVersionControlServiceImpl implements
-		StorageTemplateVersionControlService {
+public class StorageTemplateVersionControlServiceImpl {
 
 	protected final Logger logger = LoggerFactory.getLogger(this.getClass());
 
@@ -61,7 +66,77 @@ public class StorageTemplateVersionControlServiceImpl implements
 	private OETParser oetParser = new OETParser();
 	private ArmParser armParser = new ArmParser();
 
-	@Override
+	public void acceptTemplate(TemplateDocument oet,
+			ArchetypeRelationshipMappingDocument arm)
+			throws VersionControlException {
+		// Validate name consistency, name example
+		// openEHR-EHR-CLUSTER.organisation.v1.1
+		String templateName = oet.getTemplate().getName();
+		if (arm.getArchetypeRelationshipMapping().getTemplate().getId()
+				.equals(templateName)) {
+			throw new VersionControlException(
+					"OET's name and ARM's name is not consisitent.");
+		}
+		Pattern pattern = Pattern.compile("(.+\\.v\\d+)\\..+$");
+		Matcher matcher = pattern.matcher(templateName);
+		String templateMasterName = null;
+		if (matcher.find()) {
+			templateMasterName = matcher.group(1);
+		} else {
+			throw new VersionControlException("Template name is unqulified.");
+		}
+		TemplateMaster1 master = this.templateMasterRepo
+				.findByName(templateMasterName);
+		if (master == null) {
+			master = this.newMaster(templateMasterName, oet, arm);
+		}
+
+	}
+
+	public TemplateMaster1 newMaster(String name, TemplateDocument oet,
+			ArchetypeRelationshipMappingDocument arm)
+			throws VersionControlException {
+		TemplateMaster1 master = new TemplateMaster1();
+		// Validate specialise archetype
+		String specialiseArchetypeName = oet.getTemplate().getDefinition()
+				.getArchetypeId();
+		ArchetypeRevisionFile specialiseArchetype = this.archetypeFileRepo
+				.findByName(specialiseArchetypeName);
+		if (specialiseArchetype == null) {
+			throw new VersionControlException(
+					"Cannot find specialise archetype: "
+							+ specialiseArchetypeName);
+		}
+		ArchetypeVersionMaster specialiseArchetypeVersionMaster = specialiseArchetype
+				.getVersionMaster();
+		if (!specialiseArchetypeVersionMaster.getName().equals(name)) {
+			throw new VersionControlException("Template master name should be "
+					+ specialiseArchetypeVersionMaster.getName());
+		}
+		// Set template master basic info
+		RESOURCEDESCRIPTIONITEM details = oet.getTemplate().getDescription()
+				.getDetails();
+		master.setName(name);
+		master.setPurpose(details.getPurpose());
+		master.setUse(details.getUse());
+		master.setMisuse(details.getMisuse());
+		master.setKeywords(String.join(",", details.getKeywords()
+				.getItemArray()));
+		master.setCopyright(details.getCopyright());
+		
+		return master;
+	}
+
+	public TemplateRevisionFile newRevision(TemplateMaster1 master,
+			TemplateDocument oet, ArchetypeRelationshipMappingDocument arm) {
+
+		TemplateRevisionFile nextRevisionFile = new TemplateRevisionFile();
+		TemplateRevisionFile lastRevisionFile = master.getLatestRevisionFile();
+		// Validate specialise archetype
+		String archetypeId = oet.getTemplate().getDefinition().getArchetypeId();
+		return nextRevisionFile;
+	}
+
 	public void createOrUpgradeTemplate(String oet, String arm,
 			SourceType source, User user) throws VersionControlException {
 		this.createOrUpgradeTemplate(
@@ -70,14 +145,12 @@ public class StorageTemplateVersionControlServiceImpl implements
 				source, user);
 	}
 
-	@Override
 	public void createOrUpgradeTemplate(InputStream oet, InputStream arm,
 			SourceType source, User user) throws VersionControlException {
 		this.createOrUpgradeTemplate(this.parseOet(oet), this.parseArm(arm),
 				source, user);
 	}
 
-	@Override
 	public void createOrUpgradeTemplate(TemplateDocument oet,
 			ArchetypeRelationshipMappingDocument arm, SourceType source,
 			User user) throws VersionControlException {
@@ -196,7 +269,6 @@ public class StorageTemplateVersionControlServiceImpl implements
 		this.logTemplateAction(templateFile, ActionType.CREATE, user);
 	}
 
-	@Override
 	public void editTemplate(Integer templateId, String oet, String arm,
 			User user) throws VersionControlException {
 		this.editTemplate(templateId,
@@ -205,10 +277,10 @@ public class StorageTemplateVersionControlServiceImpl implements
 				user);
 	}
 
-	@Override
 	public void editTemplate(Integer templateId, InputStream oet,
 			InputStream arm, User user) throws VersionControlException {
-		TemplateFile templateFile = this.templateFileRepo.findOne(templateId);
+		TemplateRevisionFile templateFile = this.templateFileRepo
+				.findOne(templateId);
 		if (templateFile == null) {
 			throw new VersionControlException("Cannot find template with id: "
 					+ templateId);
@@ -217,7 +289,6 @@ public class StorageTemplateVersionControlServiceImpl implements
 				user);
 	}
 
-	@Override
 	public void editTemplate(String templateName, String oet, String arm,
 			User user) throws VersionControlException {
 		this.editTemplate(templateName,
@@ -226,10 +297,9 @@ public class StorageTemplateVersionControlServiceImpl implements
 				user);
 	}
 
-	@Override
 	public void editTemplate(String templateName, InputStream oet,
 			InputStream arm, User user) throws VersionControlException {
-		TemplateFile templateFile = this.templateFileRepo
+		TemplateRevisionFile templateFile = this.templateFileRepo
 				.findByName(templateName);
 		if (templateFile == null) {
 			throw new VersionControlException(
@@ -238,17 +308,16 @@ public class StorageTemplateVersionControlServiceImpl implements
 		this.editTemplate(templateFile, oet, arm, user);
 	}
 
-	@Override
-	public void editTemplate(TemplateFile templateFile, InputStream oet,
-			InputStream arm, User user) throws VersionControlException {
+	public void editTemplate(TemplateRevisionFile templateFile,
+			InputStream oet, InputStream arm, User user)
+			throws VersionControlException {
 		this.editTemplate(templateFile, this.parseOet(oet), this.parseArm(arm),
 				user);
 	}
 
-	@Override
-	public void editTemplate(TemplateFile templateFile, TemplateDocument oet,
-			ArchetypeRelationshipMappingDocument arm, User user)
-			throws VersionControlException {
+	public void editTemplate(TemplateRevisionFile templateFile,
+			TemplateDocument oet, ArchetypeRelationshipMappingDocument arm,
+			User user) throws VersionControlException {
 		// Validate user authority
 
 		// Validate editor
@@ -268,7 +337,7 @@ public class StorageTemplateVersionControlServiceImpl implements
 							+ " instead of Draft.");
 		}
 		// Save template file
-		templateFile.setContent(oet.toString());
+		templateFile.setOet(oet.toString());
 		templateFile.getPropertyMap().put(TemplatePropertyType.ARM,
 				arm.toString());
 		this.templateFileRepo.save(templateFile);
@@ -276,10 +345,10 @@ public class StorageTemplateVersionControlServiceImpl implements
 		this.logTemplateAction(templateFile, ActionType.EDIT, user);
 	}
 
-	@Override
 	public void submitTemplate(Integer templateId, User user)
 			throws VersionControlException {
-		TemplateFile templateFile = this.templateFileRepo.findOne(templateId);
+		TemplateRevisionFile templateFile = this.templateFileRepo
+				.findOne(templateId);
 		if (templateFile == null) {
 			throw new VersionControlException("Cannot find template with id: "
 					+ templateId);
@@ -287,10 +356,9 @@ public class StorageTemplateVersionControlServiceImpl implements
 		this.submitTemplate(templateFile, user);
 	}
 
-	@Override
 	public void submitTemplate(String templateName, User user)
 			throws VersionControlException {
-		TemplateFile templateFile = this.templateFileRepo
+		TemplateRevisionFile templateFile = this.templateFileRepo
 				.findByName(templateName);
 		if (templateFile == null) {
 			throw new VersionControlException(
@@ -299,8 +367,7 @@ public class StorageTemplateVersionControlServiceImpl implements
 		this.submitTemplate(templateFile, user);
 	}
 
-	@Override
-	public void submitTemplate(TemplateFile templateFile, User user)
+	public void submitTemplate(TemplateRevisionFile templateFile, User user)
 			throws VersionControlException {
 		// Validate user authority
 
@@ -323,18 +390,18 @@ public class StorageTemplateVersionControlServiceImpl implements
 		templateFile.setLifecycleState(LifecycleState.TEAMREVIEW);
 		// Save archetype file and master
 		this.templateFileRepo.save(templateFile);
-		TemplateMaster templateMaster = templateFile.getMaster();
-		templateMaster.setLatestFileLifecycleState(templateFile
+		TemplateMaster1 templateMaster = templateFile.getTemplateMaster();
+		templateMaster.setLatestRevisionFileLifecycleState(templateFile
 				.getLifecycleState());
 		this.templateMasterRepo.save(templateMaster);
 		// Log action
 		this.logTemplateAction(templateFile, ActionType.SUBMIT, user);
 	}
 
-	@Override
 	public void approveTemplate(Integer templateId, User user)
 			throws VersionControlException {
-		TemplateFile templateFile = this.templateFileRepo.findOne(templateId);
+		TemplateRevisionFile templateFile = this.templateFileRepo
+				.findOne(templateId);
 		if (templateFile == null) {
 			throw new VersionControlException("Cannot find template with id: "
 					+ templateId);
@@ -342,10 +409,9 @@ public class StorageTemplateVersionControlServiceImpl implements
 		this.approveTemplate(templateFile, user);
 	}
 
-	@Override
 	public void approveTemplate(String templateName, User user)
 			throws VersionControlException {
-		TemplateFile templateFile = this.templateFileRepo
+		TemplateRevisionFile templateFile = this.templateFileRepo
 				.findByName(templateName);
 		if (templateFile == null) {
 			throw new VersionControlException(
@@ -354,8 +420,7 @@ public class StorageTemplateVersionControlServiceImpl implements
 		this.approveTemplate(templateFile, user);
 	}
 
-	@Override
-	public void approveTemplate(TemplateFile templateFile, User user)
+	public void approveTemplate(TemplateRevisionFile templateFile, User user)
 			throws VersionControlException {
 		// Validate user authority
 
@@ -371,9 +436,8 @@ public class StorageTemplateVersionControlServiceImpl implements
 		templateFile.setLifecycleState(LifecycleState.PUBLISHED);
 		TemplateDocument oet;
 		try {
-			oet = this.oetParser
-					.parseTemplate(new ByteArrayInputStream(templateFile
-							.getContent().getBytes(StandardCharsets.UTF_8)));
+			oet = this.oetParser.parseTemplate(new ByteArrayInputStream(
+					templateFile.getOet().getBytes(StandardCharsets.UTF_8)));
 		} catch (Exception ex) {
 			throw new VersionControlException("Parse oet failed.", ex);
 		}
@@ -385,28 +449,29 @@ public class StorageTemplateVersionControlServiceImpl implements
 		} catch (Exception ex) {
 			throw new VersionControlException("Parse arm failed.", ex);
 		}
-		
+
 		// Construct entity classes
 		// List<EntityClass> entityClasses = this.constructEntityClasses(
 		// templateFile, oet, arm);
 		// Save entity classes
 		// entityClasses.forEach(cls -> this.entityClassRepo.save(cls));
-		
+
 		// Save template file
 		this.templateFileRepo.save(templateFile);
 		// Update template master info
-		TemplateMaster templateMaster = templateFile.getMaster();
-		templateMaster.setLatestFileLifecycleState(LifecycleState.PUBLISHED);
+		TemplateMaster1 templateMaster = templateFile.getTemplateMaster();
+		templateMaster
+				.setLatestRevisionFileLifecycleState(LifecycleState.PUBLISHED);
 		this.setTemplateMasterBasicInfo(templateMaster, oet);
 		this.templateMasterRepo.save(templateMaster);
 		// Log action
 		this.logTemplateAction(templateFile, ActionType.APPROVE, user);
 	}
 
-	@Override
 	public void rejectTemplate(Integer templateId, User user)
 			throws VersionControlException {
-		TemplateFile templateFile = this.templateFileRepo.findOne(templateId);
+		TemplateRevisionFile templateFile = this.templateFileRepo
+				.findOne(templateId);
 		if (templateFile == null) {
 			throw new VersionControlException("Cannot find template with id: "
 					+ templateId);
@@ -414,10 +479,9 @@ public class StorageTemplateVersionControlServiceImpl implements
 		this.rejectTemplate(templateFile, user);
 	}
 
-	@Override
 	public void rejectTemplate(String templateName, User user)
 			throws VersionControlException {
-		TemplateFile templateFile = this.templateFileRepo
+		TemplateRevisionFile templateFile = this.templateFileRepo
 				.findByName(templateName);
 		if (templateFile == null) {
 			throw new VersionControlException(
@@ -426,8 +490,7 @@ public class StorageTemplateVersionControlServiceImpl implements
 		this.rejectTemplate(templateFile, user);
 	}
 
-	@Override
-	public void rejectTemplate(TemplateFile templateFile, User user)
+	public void rejectTemplate(TemplateRevisionFile templateFile, User user)
 			throws VersionControlException {
 		// Validate user authority
 
@@ -443,18 +506,18 @@ public class StorageTemplateVersionControlServiceImpl implements
 		templateFile.setLifecycleState(LifecycleState.DRAFT);
 		// Save archetype file and master
 		this.templateFileRepo.save(templateFile);
-		TemplateMaster templateMaster = templateFile.getMaster();
-		templateMaster.setLatestFileLifecycleState(templateFile
+		TemplateMaster1 templateMaster = templateFile.getTemplateMaster();
+		templateMaster.setLatestRevisionFileLifecycleState(templateFile
 				.getLifecycleState());
 		this.templateMasterRepo.save(templateMaster);
 		// Log action
 		this.logTemplateAction(templateFile, ActionType.REJECT, user);
 	}
 
-	@Override
 	public void rejectAndRemoveTemplate(Integer templateId, User user)
 			throws VersionControlException {
-		TemplateFile templateFile = this.templateFileRepo.findOne(templateId);
+		TemplateRevisionFile templateFile = this.templateFileRepo
+				.findOne(templateId);
 		if (templateFile == null) {
 			throw new VersionControlException("Cannot find template with id: "
 					+ templateId);
@@ -462,10 +525,9 @@ public class StorageTemplateVersionControlServiceImpl implements
 		this.rejectAndRemoveTemplate(templateFile, user);
 	}
 
-	@Override
 	public void rejectAndRemoveTemplate(String templateName, User user)
 			throws VersionControlException {
-		TemplateFile templateFile = this.templateFileRepo
+		TemplateRevisionFile templateFile = this.templateFileRepo
 				.findByName(templateName);
 		if (templateFile == null) {
 			throw new VersionControlException(
@@ -474,9 +536,10 @@ public class StorageTemplateVersionControlServiceImpl implements
 		this.rejectAndRemoveTemplate(templateFile, user);
 	}
 
-	@Override
-	public void rejectAndRemoveTemplate(TemplateFile templateFile, User user)
-			throws VersionControlException {
+	public void rejectAndRemoveTemplate(TemplateRevisionFile templateFile,
+			User user) throws VersionControlException {
+		// Log action
+		this.logTemplateAction(templateFile, ActionType.REJECT_AND_REMOVE, user);
 		// Validate user authority
 
 		// Validate and set lifecycle state
@@ -489,18 +552,17 @@ public class StorageTemplateVersionControlServiceImpl implements
 							+ " instead of Teamreview.");
 		}
 
-		TemplateMaster templateMaster = templateFile.getMaster();
-		Optional<TemplateFile> lastTemplate = Optional.ofNullable(templateFile
-				.getLastVersionTemplate());
-		if (lastTemplate.isPresent()) {
+		TemplateMaster1 templateMaster = templateFile.getTemplateMaster();
+		TemplateRevisionFile lastTemplate = templateFile.getLastRevisionFile();
+		if (lastTemplate != null) {
 			// Not the first file of master, update master
-			templateMaster.setLatestFile(lastTemplate.get());
-			templateMaster.setLatestFileLifecycleState(lastTemplate.map(
-					archetype -> archetype.getLifecycleState()).get());
-			templateMaster.setLatestFileInternalVersion(lastTemplate.get()
-					.getInternalVersion());
-			templateMaster
-					.setLatestFileVersion(lastTemplate.get().getVersion());
+			templateMaster.setLatestRevisionFile(lastTemplate);
+			templateMaster.setLatestRevisionFileLifecycleState(lastTemplate
+					.getLifecycleState());
+			templateMaster.setLatestRevisionFileSerialVersion(lastTemplate
+					.getSerialVersion());
+			templateMaster.setLatestRevisionFileVersion(lastTemplate
+					.getVersion());
 			this.templateMasterRepo.save(templateMaster);
 		} else {
 			// The first file of master, remove master
@@ -508,8 +570,6 @@ public class StorageTemplateVersionControlServiceImpl implements
 		}
 		// Remove file
 		this.templateFileRepo.delete(templateFile);
-		// Log action
-		this.logTemplateAction(templateFile, ActionType.REJECT_AND_REMOVE, user);
 	}
 
 	// private List<EntityClass> constructEntityClasses(TemplateFile
@@ -662,11 +722,11 @@ public class StorageTemplateVersionControlServiceImpl implements
 		return arm;
 	}
 
-	protected void logTemplateAction(TemplateFile templateFile,
+	protected void logTemplateAction(TemplateRevisionFile templateFile,
 			ActionType actionType, User user) {
 		TemplateActionLog log = new TemplateActionLog();
 		log.setActionType(actionType);
-		log.setMaster(templateFile.getMaster());
+		log.setTemplateMaster(templateFile.getTemplateMaster());
 		log.setVersion(templateFile.getVersion());
 		log.setOperator(user);
 		log.setOperatorName(user.getName());

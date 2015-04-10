@@ -7,5 +7,9 @@ import edu.zju.bme.clever.management.service.entity.Application;
 import edu.zju.bme.clever.management.service.entity.ArchetypeMaster1;
 import edu.zju.bme.clever.management.service.entity.TemplateRevisionFile;
 
-public interface TemplateRevisionFileRepository extends JpaRepository<TemplateRevisionFile, Integer> {
+public interface TemplateRevisionFileRepository extends
+		JpaRepository<TemplateRevisionFile, Integer> {
+
+	public TemplateRevisionFile findByName(String name);
+	
 }

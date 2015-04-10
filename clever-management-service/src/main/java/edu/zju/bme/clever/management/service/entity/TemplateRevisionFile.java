@@ -70,4 +70,24 @@ public class TemplateRevisionFile extends
 		this.oet = oet;
 	}
 
+	public Map<TemplatePropertyType, String> getProperties() {
+		return properties;
+	}
+
+	public TemplateMaster1 getTemplateMaster() {
+		return templateMaster;
+	}
+
+	public void setTemplateMaster(TemplateMaster1 templateMaster) {
+		this.templateMaster = templateMaster;
+	}
+
+	public String getTemplateMasterVersion() {
+		return templateMasterVersion;
+	}
+
+	public void setTemplateMasterVersion(String templateMasterVersion) {
+		this.templateMasterVersion = templateMasterVersion;
+	}
+
 }

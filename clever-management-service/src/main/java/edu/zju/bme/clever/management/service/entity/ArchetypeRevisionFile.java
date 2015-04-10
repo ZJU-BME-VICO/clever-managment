@@ -30,8 +30,6 @@ public class ArchetypeRevisionFile extends
 	private ArchetypeVersionMaster versionMaster;
 	@Column(nullable = false)
 	private String versionMasterVersion;
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "specialiseArchetypeRevisionFile")
-	private List<TemplateMaster1> templateMasters;
 
 	public String getAdl() {
 		return adl;
@@ -55,10 +53,6 @@ public class ArchetypeRevisionFile extends
 
 	public void setVersionMasterVersion(String versionMasterVersion) {
 		this.versionMasterVersion = versionMasterVersion;
-	}
-
-	public List<TemplateMaster1> getTemplateMasters() {
-		return templateMasters;
 	}
 
 }

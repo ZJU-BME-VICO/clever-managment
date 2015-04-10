@@ -27,7 +27,7 @@ public class TemplateMaster1 extends AbstractMaster {
 	@Column
 	private String version;
 	@ManyToOne(fetch = FetchType.LAZY)
-	private ArchetypeRevisionFile specialiseArchetypeRevisionFile;
+	private ArchetypeVersionMaster specialiseArchetypeVersionMaster;
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "templateMaster", orphanRemoval = true)
 	private List<TemplateRevisionFile> revisionFiles;
 	@ManyToOne(fetch = FetchType.LAZY)
@@ -49,109 +49,12 @@ public class TemplateMaster1 extends AbstractMaster {
 		this.templateType = templateType;
 	}
 
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public String getRmOrginator() {
-		return rmOrginator;
-	}
-
-	public void setRmOrginator(String rmOrginator) {
-		this.rmOrginator = rmOrginator;
-	}
-
-	public String getRmName() {
-		return rmName;
-	}
-
-	public void setRmName(String rmName) {
-		this.rmName = rmName;
-	}
-
-	public String getRmEntity() {
-		return rmEntity;
-	}
-
-	public void setRmEntity(String rmEntity) {
-		this.rmEntity = rmEntity;
-	}
-
-	public String getConceptName() {
-		return conceptName;
-	}
-
-	public void setConceptName(String conceptName) {
-		this.conceptName = conceptName;
-	}
-
-	public String getConceptDescription() {
-		return conceptDescription;
-	}
-
-	public void setConceptDescription(String conceptDescription) {
-		this.conceptDescription = conceptDescription;
-	}
-
-	public String getKeywords() {
-		return keywords;
-	}
-
-	public void setKeywords(String keywords) {
-		this.keywords = keywords;
-	}
-
-	public String getPurpose() {
-		return purpose;
-	}
-
-	public void setPurpose(String purpose) {
-		this.purpose = purpose;
-	}
-
-	public String getUse() {
-		return use;
-	}
-
-	public void setUse(String use) {
-		this.use = use;
-	}
-
-	public String getMisuse() {
-		return misuse;
-	}
-
-	public void setMisuse(String misuse) {
-		this.misuse = misuse;
-	}
-
-	public String getCopyright() {
-		return copyright;
-	}
-
-	public void setCopyright(String copyright) {
-		this.copyright = copyright;
-	}
-
 	public String getVersion() {
 		return version;
 	}
 
 	public void setVersion(String version) {
 		this.version = version;
-	}
-
-	public ArchetypeRevisionFile getSpecialiseArchetypeRevisionFile() {
-		return specialiseArchetypeRevisionFile;
-	}
-
-	public void setSpecialiseArchetypeRevisionFile(
-			ArchetypeRevisionFile specialiseArchetypeRevisionFile) {
-		this.specialiseArchetypeRevisionFile = specialiseArchetypeRevisionFile;
 	}
 
 	public TemplateRevisionFile getLatestRevisionFile() {
@@ -202,6 +105,15 @@ public class TemplateMaster1 extends AbstractMaster {
 
 	public void setActionLogs(List<TemplateActionLog> actionLogs) {
 		this.actionLogs = actionLogs;
+	}
+
+	public ArchetypeVersionMaster getSpecialiseArchetypeVersionMaster() {
+		return specialiseArchetypeVersionMaster;
+	}
+
+	public void setSpecialiseArchetypeVersionMaster(
+			ArchetypeVersionMaster specialiseArchetypeVersionMaster) {
+		this.specialiseArchetypeVersionMaster = specialiseArchetypeVersionMaster;
 	}
 
 }

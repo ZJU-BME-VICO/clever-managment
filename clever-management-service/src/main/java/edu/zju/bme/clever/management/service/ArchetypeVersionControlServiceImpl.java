@@ -44,16 +44,31 @@ public class ArchetypeVersionControlServiceImpl implements
 	private ADLSerializer adlSerilizer = new ADLSerializer();
 
 	@Override
+	public void acceptArchetype(String adl, User user) throws VersionControlException {
+		ADLParser adlParser = new ADLParser(adl);
+		Archetype archetype;
+		try {
+			archetype = adlParser.parse();
+		} catch (Exception ex) {
+			throw new VersionControlException("Parse adl failed.", ex);
+		}
+		this.acceptArchetype(archetype, user);
+	}
+
+	@Override
 	public void acceptArchetype(Archetype archetype, User user)
 			throws VersionControlException {
-		ArchetypeMaster1 master = this.masterRepo.findByName(archetype
-				.getArchetypeId().base());
+		String archetypeId = archetype.getArchetypeId().getValue();
+		String archetypeMasterName = archetype.getArchetypeId().base();
+		String archetypeVersion = archetype.getArchetypeId().versionID();
+		ArchetypeMaster1 master = this.masterRepo
+				.findByName(archetypeMasterName);
 		if (master == null) {
 			master = this.newMaster(archetype);
 		}
-		String archetypeId = archetype.getArchetypeId().getValue();
-		String versionMasterName = archetypeId.substring(0,
-				archetypeId.lastIndexOf("."));
+		// Example openEHR-EHR-CLUSTER.organisation.v1.
+		String versionMasterName = archetypeMasterName
+				+ archetypeVersion.substring(0, archetypeVersion.indexOf("."));
 		ArchetypeVersionMaster versionMaster = this.versionMasterRepo
 				.findByName(versionMasterName);
 		if (versionMaster == null) {
