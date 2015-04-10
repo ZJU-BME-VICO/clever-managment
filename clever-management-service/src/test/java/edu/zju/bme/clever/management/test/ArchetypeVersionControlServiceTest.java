@@ -52,7 +52,7 @@ public class ArchetypeVersionControlServiceTest {
 //				user);
 //		this.versionControlService.submitArchetype(archetype, user);
 		// this.versionControlService.rejectAndRemoveArchetype(archetype, user);
-		this.archetypeFileRepo.getAllTeamreviewArchetypeFiles().forEach(
-				System.out::println);
+	//	this.archetypeFileRepo.getAllTeamreviewArchetypeFiles().forEach(
+			//	System.out::println);
 	}
 }

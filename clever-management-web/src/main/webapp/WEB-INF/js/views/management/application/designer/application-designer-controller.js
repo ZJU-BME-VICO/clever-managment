@@ -1,8 +1,8 @@
-function DesignerCtrl($scope,resourceService,templateParseService,$compile,STORAGE_TEMPLATE_LIST_URL,ARCHETYPE_BY_NAME_URL,STORAGE_TEMPLATE_BY_NAME_URL){
+function DesignerCtrl($scope,resourceService,$q,templateParseService,$compile,STORAGE_TEMPLATE_LIST_URL,ARCHETYPE_BY_NAME_URL,STORAGE_TEMPLATE_BY_NAME_URL){
 	$scope.language = [];
 	$scope.defination={};
 	$scope.templateDetail=[];
-	
+
      resourceService.get(STORAGE_TEMPLATE_LIST_URL).then(function(list) {
             $scope.templateList = list;
         });
@@ -10,10 +10,10 @@ function DesignerCtrl($scope,resourceService,templateParseService,$compile,STORA
 	 resourceService.get(STORAGE_TEMPLATE_BY_NAME_URL+'openEHR-EHR-INSTRUCTION.request-imaging_exam.v1.1').then(function(temp){
 	    var xml=temp.oet;
 	    var x2js=new X2JS();
-	    var template=x2js.xml_str2json(xml).template;
-	    var parseResult=templateParseService.parseTemplate(template).definitions;    
-	    templateDetail=parseResult;
-	});s
+	    var template=x2js.xml_str2json(xml).template;	    
+	    var parseResult=templateParseService.parseTemplate(template);    
+	    $scope.templateDetail=parseResult;
+	});
 	
 	
 	$scope.treeControl = {};
@@ -27,7 +27,6 @@ function DesignerCtrl($scope,resourceService,templateParseService,$compile,STORA
 	$scope.saveTemplate = function() {
         $scope.treeControl.saveTemp();
     };
-	
 	
 }
 
