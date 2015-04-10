@@ -11,7 +11,7 @@ import edu.zju.bme.clever.schemas.ArchetypeRelationshipMappingDocument;
 
 public interface StorageTemplateVersionControlService {
 
-	public void acceptTemplate(TemplateDocument oet,
+	public void acceptNewTemplate(TemplateDocument oet,
 			ArchetypeRelationshipMappingDocument arm, User user)
 			throws VersionControlException;
 

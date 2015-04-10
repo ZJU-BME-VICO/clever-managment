@@ -69,7 +69,7 @@ public class StorageTemplateVersionControlServiceImpl implements
 	private ArmParser armParser = new ArmParser();
 
 	@Override
-	public void acceptTemplate(TemplateDocument oet,
+	public void acceptNewTemplate(TemplateDocument oet,
 			ArchetypeRelationshipMappingDocument arm, User user)
 			throws VersionControlException {
 		// Validate name consistency, name example

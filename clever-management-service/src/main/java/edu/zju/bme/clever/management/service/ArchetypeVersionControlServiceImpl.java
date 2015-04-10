@@ -54,11 +54,11 @@ public class ArchetypeVersionControlServiceImpl implements
 		} catch (Exception ex) {
 			throw new VersionControlException("Parse adl failed.", ex);
 		}
-		this.acceptArchetype(archetype, user);
+		this.acceptNewArchetype(archetype, user);
 	}
 
 	@Override
-	public void acceptArchetype(Archetype archetype, User user)
+	public void acceptNewArchetype(Archetype archetype, User user)
 			throws VersionControlException {
 		String archetypeId = archetype.getArchetypeId().getValue();
 		String archetypeMasterName = archetype.getArchetypeId().base();
