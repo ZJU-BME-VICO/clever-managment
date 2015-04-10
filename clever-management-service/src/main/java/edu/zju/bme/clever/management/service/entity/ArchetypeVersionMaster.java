@@ -27,7 +27,7 @@ public class ArchetypeVersionMaster extends AbstractMaster {
 	@Column(updatable = false)
 	private Integer serialVersion;
 	@ManyToOne(fetch = FetchType.LAZY)
-	private ArchetypeMaster1 archetypeMaster;
+	private ArchetypeMaster archetypeMaster;
 	@Column
 	private String archetypeMasterName;
 	@Column(name = "archetype_master_id", updatable = false, insertable = false)
@@ -67,11 +67,11 @@ public class ArchetypeVersionMaster extends AbstractMaster {
 		this.serialVersion = serialVersion;
 	}
 
-	public ArchetypeMaster1 getArchetypeMaster() {
+	public ArchetypeMaster getArchetypeMaster() {
 		return archetypeMaster;
 	}
 
-	public void setArchetypeMaster(ArchetypeMaster1 archetypeMaster) {
+	public void setArchetypeMaster(ArchetypeMaster archetypeMaster) {
 		this.archetypeMaster = archetypeMaster;
 	}
 

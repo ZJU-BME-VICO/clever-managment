@@ -14,7 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import se.acode.openehr.parser.ADLParser;
-import edu.zju.bme.clever.management.service.entity.ArchetypeMaster1;
+import edu.zju.bme.clever.management.service.entity.ArchetypeMaster;
 import edu.zju.bme.clever.management.service.entity.ArchetypeRevisionFile;
 import edu.zju.bme.clever.management.service.entity.ArchetypeVersionMaster;
 import edu.zju.bme.clever.management.service.entity.LifecycleState;
@@ -42,7 +42,7 @@ public class ArchetypeProvideServiceImpl implements ArchetypeProvideService {
 	private ADLSerializer adlSerializer = new ADLSerializer();
 
 	@Override
-	public List<ArchetypeMaster1> getAllArchetypeMasters() {
+	public List<ArchetypeMaster> getAllArchetypeMasters() {
 		return this.masterRepo.findAll();
 	}
 
@@ -73,12 +73,12 @@ public class ArchetypeProvideServiceImpl implements ArchetypeProvideService {
 	// }
 
 	@Override
-	public ArchetypeMaster1 getArchetypeMasterByName(String masterName) {
+	public ArchetypeMaster getArchetypeMasterByName(String masterName) {
 		return this.masterRepo.findByName(masterName);
 	}
 
 	@Override
-	public ArchetypeMaster1 getArchetypeMasterById(Integer Id) {
+	public ArchetypeMaster getArchetypeMasterById(Integer Id) {
 		return this.masterRepo.findOne(Id);
 	}
 

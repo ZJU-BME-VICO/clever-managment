@@ -15,9 +15,6 @@ public abstract class AbstractRevisionFile<T extends AbstractRevisionFile<?>>
 
 	@Column(nullable = false)
 	private String name;
-	@Lob
-	@Column(nullable = false)
-	private String adl;
 	@Column(nullable = false)
 	private String version;
 	@Column(nullable = false)
@@ -41,14 +38,6 @@ public abstract class AbstractRevisionFile<T extends AbstractRevisionFile<?>>
 
 	public void setName(String name) {
 		this.name = name;
-	}
-
-	public String getAdl() {
-		return adl;
-	}
-
-	public void setAdl(String adl) {
-		this.adl = adl;
 	}
 
 	public String getVersion() {

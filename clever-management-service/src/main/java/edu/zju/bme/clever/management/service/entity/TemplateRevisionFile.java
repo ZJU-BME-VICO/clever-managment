@@ -38,7 +38,7 @@ public class TemplateRevisionFile extends
 	@MapKeyColumn(name = "attribute")
 	private Map<TemplatePropertyType, String> properties = new HashMap<TemplatePropertyType, String>();
 	@ManyToOne(fetch = FetchType.LAZY)
-	private TemplateMaster1 templateMaster;
+	private TemplateMaster templateMaster;
 	@Column
 	private String templateMasterVersion;
 
@@ -74,11 +74,11 @@ public class TemplateRevisionFile extends
 		return properties;
 	}
 
-	public TemplateMaster1 getTemplateMaster() {
+	public TemplateMaster getTemplateMaster() {
 		return templateMaster;
 	}
 
-	public void setTemplateMaster(TemplateMaster1 templateMaster) {
+	public void setTemplateMaster(TemplateMaster templateMaster) {
 		this.templateMaster = templateMaster;
 	}
 

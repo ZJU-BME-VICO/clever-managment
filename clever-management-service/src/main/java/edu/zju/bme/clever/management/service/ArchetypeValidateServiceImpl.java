@@ -21,7 +21,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import se.acode.openehr.parser.ADLParser;
-import edu.zju.bme.clever.management.service.entity.ArchetypeMaster1;
+import edu.zju.bme.clever.management.service.entity.ArchetypeMaster;
 import edu.zju.bme.clever.management.service.entity.ArchetypeRevisionFile;
 import edu.zju.bme.clever.management.service.entity.ArchetypeVersionMaster;
 import edu.zju.bme.clever.management.service.entity.FileProcessResult;
@@ -62,7 +62,7 @@ public class ArchetypeValidateServiceImpl implements ArchetypeValidateService {
 		String expectedVersion;
 		if (versionMaster == null) {
 			// First revision
-			ArchetypeMaster1 master = this.masterRepo.findByName(archetypeId
+			ArchetypeMaster master = this.masterRepo.findByName(archetypeId
 					.substring(0, archetypeId.lastIndexOf(".v")));
 			if (master == null) {
 				expectedVersion = "v1.1";

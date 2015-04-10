@@ -7,110 +7,101 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import edu.zju.bme.clever.management.service.entity.EntityClass;
 import edu.zju.bme.clever.management.service.entity.LifecycleState;
-import edu.zju.bme.clever.management.service.entity.TemplateFile;
 import edu.zju.bme.clever.management.service.entity.TemplateMaster;
 import edu.zju.bme.clever.management.service.entity.TemplatePropertyType;
+import edu.zju.bme.clever.management.service.entity.TemplateRevisionFile;
 import edu.zju.bme.clever.management.service.entity.TemplateType;
 import edu.zju.bme.clever.management.service.entity.User;
-import edu.zju.bme.clever.management.service.repository.TemplateFileRepository;
 import edu.zju.bme.clever.management.service.repository.TemplateMasterRepository;
+import edu.zju.bme.clever.management.service.repository.TemplateRevisionFileRepository;
 
 @Service
 @Transactional(rollbackFor = { Exception.class })
-public class StorageTemplateProviderServiceImpl implements
-		StorageTemplateProviderService {
+public class StorageTemplateProviderServiceImpl {
 	@Autowired
-	private TemplateFileRepository templateFileRepo;
+	private TemplateRevisionFileRepository templateFileRepo;
 	@Autowired
-	private TemplateMasterRepository templateMasterRepo;
+	private TemplateMasterRepository TemplateMaster1Repo;
 
-	@Override
-	public List<TemplateMaster> getAllStorageTemplateMasters() {
-		return this.templateMasterRepo.findAllStorageTemplateMasters();
+	public List<TemplateMaster> getAllStorageTemplateMaster1s() {
+		return this.TemplateMaster1Repo
+				.findByTemplateType(TemplateType.STORAGE);
 	}
 
-	@Override
-	public TemplateMaster getTemplateMasterById(Integer id) {
-		return this.templateMasterRepo.findOne(id);
+	public TemplateMaster getTemplateMaster1ById(Integer id) {
+		return this.TemplateMaster1Repo.findOne(id);
 	}
 
-	@Override
-	public TemplateMaster getTemplateMasterByName(String name) {
-		return this.templateMasterRepo.findByName(name);
+	public TemplateMaster getTemplateMaster1ByName(String name) {
+		return this.TemplateMaster1Repo.findByName(name);
 	}
 
-	@Override
-	public TemplateFile getTemplateFileById(Integer templateId) {
-		TemplateFile templateFile = this.templateFileRepo.findOne(templateId);
+	public TemplateRevisionFile getTemplateFileById(Integer templateId) {
+		TemplateRevisionFile templateFile = this.templateFileRepo
+				.findOne(templateId);
 		if (!this.isStorageTemplate(templateFile)) {
 			return null;
 		}
 		return templateFile;
 	}
 
-	@Override
-	public TemplateFile getTemplateFileByName(String templateName) {
-		TemplateFile templateFile = this.templateFileRepo.findByName(templateName);
+	public TemplateRevisionFile getTemplateFileByName(String templateName) {
+		TemplateRevisionFile templateFile = this.templateFileRepo
+				.findByName(templateName);
 		if (!this.isStorageTemplate(templateFile)) {
 			return null;
 		}
 		return templateFile;
 	}
 
-	@Override
-	public List<TemplateFile> getTemplateFilesToApprove() {
-		List<TemplateFile> tempateFiles = this.templateFileRepo
-				.findByLifecycleState(LifecycleState.TEAMREVIEW);
-		return tempateFiles.stream().filter(file -> this.isStorageTemplate(file))
-				.collect(Collectors.toList());
+	public List<TemplateRevisionFile> getTemplateFilesToApprove() {
+		return this.templateFileRepo.findByTemplateTypeAndLifecycleState(
+				TemplateType.STORAGE, LifecycleState.TEAMREVIEW);
 	}
 
-	@Override
-	public List<TemplateFile> getTemplateFilesToEdit(User user) {
-		List<TemplateFile> templateFiles = this.templateFileRepo.findToEdit(user);
-		return templateFiles.stream().filter(file -> this.isStorageTemplate(file))
-				.collect(Collectors.toList());
+	public List<TemplateRevisionFile> getTemplateFilesToEdit(User user) {
+		return this.templateFileRepo.findByTemplateTypeAndEditor(
+				TemplateType.STORAGE, user);
 	}
 
-	@Override
 	public String getTemplateOetById(Integer templateId) {
-		TemplateFile templateFile = this.templateFileRepo.findOne(templateId);
+		TemplateRevisionFile templateFile = this.templateFileRepo
+				.findOne(templateId);
 		if (!this.isStorageTemplate(templateFile)) {
 			return null;
 		}
-		return templateFile.getContent();
+		return templateFile.getOet();
 	}
 
-	@Override
 	public String getTemplateOetByName(String templateName) {
-		TemplateFile templateFile = this.templateFileRepo.findByName(templateName);
+		TemplateRevisionFile templateFile = this.templateFileRepo
+				.findByName(templateName);
 		if (!this.isStorageTemplate(templateFile)) {
 			return null;
 		}
-		return templateFile.getContent();
+		return templateFile.getOet();
 	}
 
-	@Override
 	public String getTemplateArmById(Integer templateId) {
-		TemplateFile templateFile = this.templateFileRepo.findOne(templateId);
+		TemplateRevisionFile templateFile = this.templateFileRepo
+				.findOne(templateId);
 		if (!this.isStorageTemplate(templateFile)) {
 			return null;
 		}
 		return templateFile.getPropertyValue(TemplatePropertyType.ARM);
 	}
 
-	@Override
 	public String getTemplateArmByName(String templateName) {
-		TemplateFile templateFile = this.templateFileRepo.findByName(templateName);
+		TemplateRevisionFile templateFile = this.templateFileRepo
+				.findByName(templateName);
 		if (!this.isStorageTemplate(templateFile)) {
 			return null;
 		}
 		return templateFile.getPropertyValue(TemplatePropertyType.ARM);
 	}
 
-	private boolean isStorageTemplate(TemplateFile templateFile) {
+	private boolean isStorageTemplate(TemplateRevisionFile templateFile) {
 		if (templateFile == null) {
 			return false;
 		}

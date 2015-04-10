@@ -15,13 +15,29 @@ import org.hibernate.annotations.DynamicUpdate;
 @Entity
 @Table
 @DynamicUpdate(true)
-public class TemplateMaster1 extends AbstractMaster {
+public class TemplateMaster {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -8143857887261038766L;
 
+	@Column(nullable = false)
+	private String name;
+	@Column
+	private String keywords;
+	@Lob
+	@Column
+	private String purpose;
+	@Lob
+	@Column
+	private String use;
+	@Lob
+	@Column
+	private String misuse;
+	@Lob
+	@Column
+	private String copyright;
 	@Column
 	private TemplateType templateType;
 	@Column
@@ -40,6 +56,54 @@ public class TemplateMaster1 extends AbstractMaster {
 	private LifecycleState latestRevisionFileLifecycleState;
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "templateMaster", orphanRemoval = true)
 	private List<TemplateActionLog> actionLogs;
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getKeywords() {
+		return keywords;
+	}
+
+	public void setKeywords(String keywords) {
+		this.keywords = keywords;
+	}
+
+	public String getPurpose() {
+		return purpose;
+	}
+
+	public void setPurpose(String purpose) {
+		this.purpose = purpose;
+	}
+
+	public String getUse() {
+		return use;
+	}
+
+	public void setUse(String use) {
+		this.use = use;
+	}
+
+	public String getMisuse() {
+		return misuse;
+	}
+
+	public void setMisuse(String misuse) {
+		this.misuse = misuse;
+	}
+
+	public String getCopyright() {
+		return copyright;
+	}
+
+	public void setCopyright(String copyright) {
+		this.copyright = copyright;
+	}
 
 	public TemplateType getTemplateType() {
 		return templateType;
@@ -93,10 +157,6 @@ public class TemplateMaster1 extends AbstractMaster {
 
 	public List<TemplateRevisionFile> getRevisionFiles() {
 		return revisionFiles;
-	}
-
-	public void setRevisionFiles(List<TemplateRevisionFile> revisionFiles) {
-		this.revisionFiles = revisionFiles;
 	}
 
 	public List<TemplateActionLog> getActionLogs() {

@@ -25,7 +25,7 @@ public class TemplateActionLog extends AbstractIndentifiedEntity {
 	private static final long serialVersionUID = 6405790568374659997L;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	private TemplateMaster1 templateMaster;
+	private TemplateMaster templateMaster;
 	@Column(nullable = false)
 	private String version;
 	@Column(nullable = false)
@@ -40,11 +40,11 @@ public class TemplateActionLog extends AbstractIndentifiedEntity {
 	@Temporal(TemporalType.TIMESTAMP)
 	private Calendar recordTime;
 
-	public TemplateMaster1 getTemplateMaster() {
+	public TemplateMaster getTemplateMaster() {
 		return templateMaster;
 	}
 
-	public void setTemplateMaster(TemplateMaster1 templateMaster) {
+	public void setTemplateMaster(TemplateMaster templateMaster) {
 		this.templateMaster = templateMaster;
 	}
 

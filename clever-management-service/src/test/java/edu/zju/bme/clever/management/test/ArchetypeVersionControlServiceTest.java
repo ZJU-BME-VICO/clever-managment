@@ -14,9 +14,8 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 
 import edu.zju.bme.clever.management.service.ArchetypeVersionControlService;
-import edu.zju.bme.clever.management.service.entity.SourceType;
 import edu.zju.bme.clever.management.service.entity.User;
-import edu.zju.bme.clever.management.service.repository.ArchetypeFileRepository;
+import edu.zju.bme.clever.management.service.repository.ArchetypeRevisionFileRepository;
 import edu.zju.bme.clever.management.service.repository.UserRepository;
 import se.acode.openehr.parser.ADLParser;
 import se.acode.openehr.parser.ParseException;
@@ -32,7 +31,7 @@ public class ArchetypeVersionControlServiceTest {
 	@Autowired
 	private UserRepository userRepo;
 	@Autowired
-	private ArchetypeFileRepository archetypeFileRepo;
+	private ArchetypeRevisionFileRepository archetypeFileRepo;
 
 	@Test
 	public void test() throws ParseException, Exception {
@@ -46,13 +45,10 @@ public class ArchetypeVersionControlServiceTest {
 
 		User user = this.userRepo.findOne(1);
 
-		this.versionControlService.createOrUpgradeArchetype(archetype,
-				SourceType.CKM, user);
-//		this.versionControlService.editArchetype(archetype
-//				user);
-//		this.versionControlService.submitArchetype(archetype, user);
+		this.versionControlService.acceptArchetype(archetype, user);
+		// this.versionControlService.editArchetype(archetype
+		// user);
+		// this.versionControlService.submitArchetype(archetype, user);
 		// this.versionControlService.rejectAndRemoveArchetype(archetype, user);
-		this.archetypeFileRepo.getAllTeamreviewArchetypeFiles().forEach(
-				System.out::println);
 	}
 }

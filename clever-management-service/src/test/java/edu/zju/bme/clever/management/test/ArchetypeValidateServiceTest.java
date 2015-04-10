@@ -33,12 +33,12 @@ public class ArchetypeValidateServiceTest {
 			result.setName(id);
 			results.put(id, result);
 		});
-		archetypeValidateService.validateConsistency(archetypes, results);
-		results.forEach((name, result) -> {
-			if (result.getStatus().equals(FileStatus.VALID)) {
-				System.out.println(name + ": " + result.getMessage());
-			}
-		});
+		// archetypeValidateService.validateConsistency(archetypes, results);
+		// results.forEach((name, result) -> {
+		// if (result.getStatus().equals(FileStatus.VALID)) {
+		// System.out.println(name + ": " + result.getMessage());
+		// }
+		// });
 	}
 
 }
