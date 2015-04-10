@@ -8,6 +8,7 @@ import org.springframework.data.repository.query.Param;
 
 import edu.zju.bme.clever.management.service.entity.LifecycleState;
 import edu.zju.bme.clever.management.service.entity.TemplateFile;
+import edu.zju.bme.clever.management.service.entity.TemplateType;
 import edu.zju.bme.clever.management.service.entity.User;
 
 public interface TemplateFileRepository extends
@@ -15,11 +16,10 @@ public interface TemplateFileRepository extends
 
 	public TemplateFile findByName(String name);
 
-	public List<TemplateFile> findByLifecycleState(LifecycleState lifecycleState);
+	public List<TemplateFile> findByLifecycleStateAndTemplateType(
+			LifecycleState lifecycleState, TemplateType templateType);
 
-	@Query("from TemplateFile f "
-			+ "where (f.lifecycleState = 'Draft' and f.editor = :user) "
-			+ "or (f.lifecycleState = 'Published' and f.master.latestFile = f)")
-	public List<TemplateFile> findToEdit(@Param("user") User user);
+	public List<TemplateFile> findByLifecycleStateAndEditorAndTemplateType(
+			LifecycleState lifecycleState, User user, TemplateType templateType);
 	
 }

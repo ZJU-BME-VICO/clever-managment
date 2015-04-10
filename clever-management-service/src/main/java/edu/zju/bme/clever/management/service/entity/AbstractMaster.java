@@ -14,8 +14,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.OneToMany;
 
-import org.hibernate.annotations.CascadeType;
-
 @SuppressWarnings({ "serial", "rawtypes" })
 @MappedSuperclass
 @Inheritance(strategy = InheritanceType.JOINED)
@@ -61,7 +59,7 @@ public abstract class AbstractMaster<T extends AbstractFile> extends
 	private Integer currentSpecialiseArchetypeInternalVersion;
 	@Column
 	private String currentSpecialiseArchetypeVersion;
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "master",orphanRemoval=true)
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "master", orphanRemoval=true)
 	private List<T> files;
 	@ManyToOne(fetch = FetchType.LAZY)
 	private T latestFile;

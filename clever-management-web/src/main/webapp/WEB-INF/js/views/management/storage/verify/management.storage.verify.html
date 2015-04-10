@@ -1,7 +1,22 @@
-verify template
 <div class="row">
     <div class="col-xs-12 col-md-12 col-lg-12">
-        <ul class="list-group" ng-style="{height: containerHeight - 80}" style="overflow: auto;">
+        <accordion close-others="oneAtATime" ng-style="{height: containerHeight - 80}">
+            <accordion-group is-open="status.open" ng-repeat="templateFile in templateFiles">
+                <accordion-heading>
+                    {{templateFile.name}} <i class="pull-right glyphicon" 
+                    ng-class="{'glyphicon-chevron-down': status.open, 'glyphicon-chevron-right': !status.open}"></i>
+                </accordion-heading>
+                    {{templateFile.oet}}
+            </accordion-group>
+
+<!--              <accordion-group heading="{{templateFile.name}}" ng-repeat="templateFile in templateFiles">
+                {{templateFile.oet}}
+            </accordion-group> -->
+            
+        </accordion>
+
+
+        <!-- <ul class="list-group" ng-style="{height: containerHeight - 80}" style="overflow: auto;">
             <li class="list-group-item" ng-repeat="templateFile in templateFiles" style="overflow: hidden;">
                 {{templateFile.name}}
                 <div class="btn-group pull-right btn-group-sm" role="group">
@@ -13,6 +28,6 @@ verify template
                     	ng-click="removeTemplateFile(templateFile)">Remove</button>
                 </div>
             </li>
-        </ul>
+        </ul> -->
     </div>
 </div>

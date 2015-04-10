@@ -1,9 +1,10 @@
-function StorageTemplateVerifyCtrl($scope, resourceService, msgboxService, STORAGE_TEMPLATE_VERIFY_LIST_URL, STORAGE_TEMPLATE_APPROVE_BY_ID_URL, STORAGE_TEMPLATE_REJECT_BY_ID_URL, STORAGE_TEMPLATE_REMOVE_BY_ID_URL){
+function StorageTemplateVerifyCtrl($scope, resourceService, msgboxService, STORAGE_TEMPLATE_LIST_VERIFY_URL, STORAGE_TEMPLATE_APPROVE_BY_ID_URL, STORAGE_TEMPLATE_REJECT_BY_ID_URL, STORAGE_TEMPLATE_REMOVE_BY_ID_URL){
 
 	$scope.templateFiles = [];
+	$scope.oneAtATime = true;
 
-	resourceService.get(STORAGE_TEMPLATE_VERIFY_LIST_URL).then(function(list){
-		$scope.templateFiles = list;
+	resourceService.get(STORAGE_TEMPLATE_LIST_VERIFY_URL).then(function(list){
+		$scope.templateFiles = list;		
 	});
 
 	$scope.approveTemplateFile = function(templateFile){
@@ -20,7 +21,7 @@ function StorageTemplateVerifyCtrl($scope, resourceService, msgboxService, STORA
 	$scope.rejectTemplateFile = function(templateFile){
 		msgboxService.createMessageBox("prompt", "reject ?", {}, "question", "yesOrNo").result.then(function(confirm){
 			if(confirm){
-				resourceService.get(STORAGE_TEMPLATE_REJECT_BY_ID_URL + template.id).then(function(result){
+				resourceService.get(STORAGE_TEMPLATE_REJECT_BY_ID_URL + templateFile.id).then(function(result){
 					if(result){
 						$scope.templateFiles.pop(templateFile);
 					}else{

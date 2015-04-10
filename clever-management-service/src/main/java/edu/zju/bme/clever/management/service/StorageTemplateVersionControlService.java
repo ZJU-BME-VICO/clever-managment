@@ -20,6 +20,15 @@ public interface StorageTemplateVersionControlService {
 	public void createOrUpgradeTemplate(TemplateDocument oet,
 			ArchetypeRelationshipMappingDocument arm, SourceType source,
 			User user) throws VersionControlException;
+	
+	public void upgradeLatestPublishedTemplate(Integer templateId, 
+			User user) throws VersionControlException;
+	
+	public void upgradeLatestPublishedTemplate(String templateName, 
+			User user) throws VersionControlException;
+	
+	public void upgradeLatestPublishedTemplate(TemplateFile templateFile, 
+			User user) throws VersionControlException;
 
 	public void editTemplate(Integer templateId, String oet, String arm,
 			User user) throws VersionControlException;

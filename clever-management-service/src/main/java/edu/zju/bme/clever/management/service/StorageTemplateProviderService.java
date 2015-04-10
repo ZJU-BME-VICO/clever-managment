@@ -21,7 +21,9 @@ public interface StorageTemplateProviderService {
 	
 	public List<TemplateFile> getTemplateFilesToApprove();
 	
-	public List<TemplateFile> getTemplateFilesToEdit(User user);
+	public List<TemplateFile> getDraftTemplateFilesToEdit(User user);
+	
+	public List<TemplateFile> getLatestPublishedTemplateFilesToEdit();
 
 	public String getTemplateOetById(Integer templateId);
 
