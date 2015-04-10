@@ -15,7 +15,7 @@ import org.hibernate.annotations.DynamicUpdate;
 @Entity
 @Table
 @DynamicUpdate(true)
-public class TemplateMaster {
+public class TemplateMaster extends AbstractIndentifiedEntity {
 
 	/**
 	 * 

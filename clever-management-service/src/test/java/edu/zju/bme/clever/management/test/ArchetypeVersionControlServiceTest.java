@@ -39,13 +39,13 @@ public class ArchetypeVersionControlServiceTest {
 				.getClass()
 				.getClassLoader()
 				.getResourceAsStream(
-						"edu/zju/bme/clever/management/adl/openEHR-DEMOGRAPHIC-PERSON.patient.v1.adl");
+						"edu/zju/bme/clever/cdr/adl/openEHR-EHR-INSTRUCTION.request-imaging_exam.v1.1.adl");
 		ADLParser parser = new ADLParser(is, "UTF-8");
 		Archetype archetype = parser.parse();
 
 		User user = this.userRepo.findOne(1);
 
-		this.versionControlService.acceptArchetype(archetype, user);
+//		this.versionControlService.acceptArchetype(archetype, user);
 		// this.versionControlService.editArchetype(archetype
 		// user);
 		// this.versionControlService.submitArchetype(archetype, user);
