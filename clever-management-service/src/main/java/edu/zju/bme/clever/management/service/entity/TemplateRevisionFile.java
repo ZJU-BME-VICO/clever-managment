@@ -39,6 +39,8 @@ public class TemplateRevisionFile extends
 	private Map<TemplatePropertyType, String> properties = new HashMap<TemplatePropertyType, String>();
 	@ManyToOne(fetch = FetchType.LAZY)
 	private TemplateMaster templateMaster;
+	@Column(name = "template_master_id", insertable = false, updatable = false)
+	private Integer templateMasterId;
 	@Column
 	private String templateMasterVersion;
 
@@ -80,6 +82,10 @@ public class TemplateRevisionFile extends
 
 	public void setTemplateMaster(TemplateMaster templateMaster) {
 		this.templateMaster = templateMaster;
+	}
+
+	public Integer getTemplateMasterId() {
+		return templateMasterId;
 	}
 
 	public String getTemplateMasterVersion() {

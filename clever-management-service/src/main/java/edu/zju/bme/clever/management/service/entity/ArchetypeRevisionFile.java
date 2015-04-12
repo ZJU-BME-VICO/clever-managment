@@ -28,6 +28,8 @@ public class ArchetypeRevisionFile extends
 	private String adl;
 	@ManyToOne(fetch = FetchType.LAZY)
 	private ArchetypeVersionMaster versionMaster;
+	@Column(name = "version_master_id", insertable = false, updatable = false)
+	private Integer versionMasterId;
 	@Column(nullable = false)
 	private String versionMasterVersion;
 
@@ -45,6 +47,10 @@ public class ArchetypeRevisionFile extends
 
 	public void setVersionMaster(ArchetypeVersionMaster versionMaster) {
 		this.versionMaster = versionMaster;
+	}
+
+	public Integer getVersionMasterId() {
+		return versionMasterId;
 	}
 
 	public String getVersionMasterVersion() {

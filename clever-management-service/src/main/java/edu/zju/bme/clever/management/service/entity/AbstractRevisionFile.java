@@ -26,9 +26,13 @@ public abstract class AbstractRevisionFile<T extends AbstractRevisionFile<?>>
 	@ManyToOne(fetch = FetchType.LAZY)
 	private ArchetypeRevisionFile specialiseArchetypeRevisionFile;
 	@Column
+	private String specialiseArchetypeRevisionFileName;
+	@Column
 	private String specialiseArchetypeRevisionFileVersion;
 	@Column
 	private Integer specialiseArchetypeRevisionFileSerialVersion;
+	@Column(name = "specialise_archetype_revision_file_id", insertable = false, updatable = false)
+	private Integer specialiseArchetypeRevisionFileId;
 	@ManyToOne(fetch = FetchType.LAZY)
 	private T lastRevisionFile;
 
@@ -71,6 +75,19 @@ public abstract class AbstractRevisionFile<T extends AbstractRevisionFile<?>>
 	public void setSpecialiseArchetypeRevisionFile(
 			ArchetypeRevisionFile specialiseArchetypeRevisionFile) {
 		this.specialiseArchetypeRevisionFile = specialiseArchetypeRevisionFile;
+	}
+
+	public String getSpecialiseArchetypeRevisionFileName() {
+		return specialiseArchetypeRevisionFileName;
+	}
+
+	public void setSpecialiseArchetypeRevisionFileName(
+			String specialiseArchetypeRevisionFileName) {
+		this.specialiseArchetypeRevisionFileName = specialiseArchetypeRevisionFileName;
+	}
+
+	public Integer getSpecialiseArchetypeRevisionFileId() {
+		return specialiseArchetypeRevisionFileId;
 	}
 
 	public T getLastRevisionFile() {

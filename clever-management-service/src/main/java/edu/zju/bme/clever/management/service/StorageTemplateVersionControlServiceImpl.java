@@ -69,6 +69,14 @@ public class StorageTemplateVersionControlServiceImpl implements
 	private ArmParser armParser = new ArmParser();
 
 	@Override
+	public void acceptNewTemplate(InputStream oet, InputStream arm, User user)
+			throws VersionControlException {
+		TemplateDocument oetDoc = this.parseOet(oet);
+		ArchetypeRelationshipMappingDocument armDoc = this.parseArm(arm);
+		this.acceptNewTemplate(oetDoc, armDoc, user);
+	}
+
+	@Override
 	public void acceptNewTemplate(TemplateDocument oet,
 			ArchetypeRelationshipMappingDocument arm, User user)
 			throws VersionControlException {

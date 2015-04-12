@@ -8,11 +8,11 @@ import edu.zju.bme.clever.management.service.entity.User;
 
 public interface StorageTemplateProvideService {
 
-	public List<TemplateMaster> getAllStorageTemplateMaster1s();
+	public List<TemplateMaster> getAllStorageTemplateMasters();
 
-	public TemplateMaster getTemplateMaster1ById(Integer id);
+	public TemplateMaster getTemplateMasterById(Integer id);
 
-	public TemplateMaster getTemplateMaster1ByName(String name);
+	public TemplateMaster getTemplateMasterByName(String name);
 
 	public TemplateRevisionFile getTemplateFileById(Integer templateId);
 

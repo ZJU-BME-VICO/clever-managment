@@ -25,18 +25,18 @@ public class StorageTemplateProvideServiceImpl implements StorageTemplateProvide
 	private TemplateMasterRepository TemplateMaster1Repo;
 
 	@Override
-	public List<TemplateMaster> getAllStorageTemplateMaster1s() {
+	public List<TemplateMaster> getAllStorageTemplateMasters() {
 		return this.TemplateMaster1Repo
 				.findByTemplateType(TemplateType.STORAGE);
 	}
 
 	@Override
-	public TemplateMaster getTemplateMaster1ById(Integer id) {
+	public TemplateMaster getTemplateMasterById(Integer id) {
 		return this.TemplateMaster1Repo.findOne(id);
 	}
 
 	@Override
-	public TemplateMaster getTemplateMaster1ByName(String name) {
+	public TemplateMaster getTemplateMasterByName(String name) {
 		return this.TemplateMaster1Repo.findByName(name);
 	}
 

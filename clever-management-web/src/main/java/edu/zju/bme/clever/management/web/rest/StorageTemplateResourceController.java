@@ -1,15 +1,14 @@
 package edu.zju.bme.clever.management.web.rest;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.hibernate.annotations.SourceType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -18,17 +17,16 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import edu.zju.bme.clever.management.service.StorageTemplateProviderService;
+import edu.zju.bme.clever.management.service.StorageTemplateProvideService;
 import edu.zju.bme.clever.management.service.StorageTemplateValidateService;
 import edu.zju.bme.clever.management.service.StorageTemplateVersionControlService;
 import edu.zju.bme.clever.management.service.UserService;
-import edu.zju.bme.clever.management.service.entity.FileProcessResult.FileStatus;
 import edu.zju.bme.clever.management.service.entity.EntityClass;
 import edu.zju.bme.clever.management.service.entity.FileProcessResult;
-import edu.zju.bme.clever.management.service.entity.SourceType;
-import edu.zju.bme.clever.management.service.entity.TemplateFile;
+import edu.zju.bme.clever.management.service.entity.FileProcessResult.FileStatus;
 import edu.zju.bme.clever.management.service.entity.TemplateMaster;
 import edu.zju.bme.clever.management.service.entity.TemplatePropertyType;
+import edu.zju.bme.clever.management.service.entity.TemplateRevisionFile;
 import edu.zju.bme.clever.management.service.entity.User;
 import edu.zju.bme.clever.management.service.exception.VersionControlException;
 import edu.zju.bme.clever.management.web.entity.ActionLogInfo;
@@ -38,7 +36,6 @@ import edu.zju.bme.clever.management.web.entity.EntityClassInfo;
 import edu.zju.bme.clever.management.web.entity.FileUploadResult;
 import edu.zju.bme.clever.management.web.entity.StorageTemplateInfo;
 import edu.zju.bme.clever.management.web.entity.StorageTemplateMasterInfo;
-import edu.zju.bme.clever.management.web.entity.TemplateInfo;
 import edu.zju.bme.clever.management.web.entity.UploadedStorageTemplate;
 
 @RestController
@@ -46,7 +43,7 @@ import edu.zju.bme.clever.management.web.entity.UploadedStorageTemplate;
 public class StorageTemplateResourceController extends
 		AbstractResourceController {
 	@Autowired
-	private StorageTemplateProviderService providerService;
+	private StorageTemplateProvideService providerService;
 	@Autowired
 	private StorageTemplateVersionControlService versionControlService;
 	@Autowired
@@ -62,35 +59,37 @@ public class StorageTemplateResourceController extends
 				.map(master -> {
 					StorageTemplateMasterInfo info = new StorageTemplateMasterInfo();
 					info.setId(master.getId());
-					info.setConceptName(master.getConceptName());
+					// info.setConceptName(master.getConceptName());
 					info.setName(master.getName());
-					info.setLatestTemplateVersion(master.getLatestFileVersion());
-					info.setLifecycleState(master.getLatestFileLifecycleState()
-							.getValue());
+					info.setLatestTemplateVersion(master
+							.getLatestRevisionFileVersion());
+					info.setLifecycleState(master
+							.getLatestRevisionFileLifecycleState().getValue());
 					return info;
 				}).collect(Collectors.toList());
 	}
 
-	@RequestMapping(value = "/master/id/{id}", method = RequestMethod.GET)
-	public StorageTemplateMasterInfo getStorageTemplateMasterById(
-			@PathVariable int id) {
-		TemplateMaster master = this.providerService.getTemplateMasterById(id);
-		this.isResourcesNull(master);
-		return this.constructStorageTemplateMasterInfo(master);
-	}
+	// @RequestMapping(value = "/master/id/{id}", method = RequestMethod.GET)
+	// public StorageTemplateMasterInfo getStorageTemplateMasterById(
+	// @PathVariable int id) {
+	// TemplateMaster master = this.providerService.getTemplateMasterById(id);
+	// this.isResourcesNull(master);
+	// return this.constructStorageTemplateMasterInfo(master);
+	// }
 
-	@RequestMapping(value = "/master/name/{name}", method = RequestMethod.GET)
-	public StorageTemplateMasterInfo getStorageTemplateMasterByName(
-			@PathVariable String name) {
-		TemplateMaster master = this.providerService
-				.getTemplateMasterByName(name);
-		this.isResourcesNull(master);
-		return this.constructStorageTemplateMasterInfo(master);
-	}
+	// @RequestMapping(value = "/master/name/{name}", method =
+	// RequestMethod.GET)
+	// public StorageTemplateMasterInfo getStorageTemplateMasterByName(
+	// @PathVariable String name) {
+	// TemplateMaster master = this.providerService
+	// .getTemplateMasterByName(name);
+	// this.isResourcesNull(master);
+	// return this.constructStorageTemplateMasterInfo(master);
+	// }
 
 	@RequestMapping(value = "/id/{id}", method = RequestMethod.GET)
 	public StorageTemplateInfo getTemplateById(@PathVariable int id) {
-		TemplateFile templateFile = this.providerService
+		TemplateRevisionFile templateFile = this.providerService
 				.getTemplateFileById(id);
 		this.isResourcesNull(templateFile);
 		return this.constructStorageTemplateInfo(templateFile);
@@ -98,7 +97,7 @@ public class StorageTemplateResourceController extends
 
 	@RequestMapping(value = "/name/{name}", method = RequestMethod.GET)
 	public StorageTemplateInfo getTemplateByName(@PathVariable String name) {
-		TemplateFile templateFile = this.providerService
+		TemplateRevisionFile templateFile = this.providerService
 				.getTemplateFileByName(name);
 		this.isResourcesNull(templateFile);
 		return this.constructStorageTemplateInfo(templateFile);
@@ -110,7 +109,7 @@ public class StorageTemplateResourceController extends
 		String userName = ((UserDetails) authentication.getPrincipal())
 				.getUsername();
 		User user = userService.getUserByName(userName);
-		List<TemplateFile> templateFiles = this.providerService
+		List<TemplateRevisionFile> templateFiles = this.providerService
 				.getTemplateFilesToEdit(user);
 		this.isResourcesNull(templateFiles);
 		return templateFiles.stream()
@@ -140,7 +139,7 @@ public class StorageTemplateResourceController extends
 			Authentication authentication) {
 		// Validate user authority
 
-		List<TemplateFile> TemplateFiles = this.providerService
+		List<TemplateRevisionFile> TemplateFiles = this.providerService
 				.getTemplateFilesToApprove();
 		this.isResourcesNull(TemplateFiles);
 		return TemplateFiles.stream()
@@ -199,25 +198,26 @@ public class StorageTemplateResourceController extends
 		return result;
 	}
 
-	@RequestMapping(value = "/action/upgrade/id/{id}", method = RequestMethod.GET)
-	public FileUploadResult upgradeTemplateFile(@PathVariable int id,
-			Authentication authentication) {
-		String userName = ((UserDetails) authentication.getPrincipal())
-				.getUsername();
-		User user = this.userService.getUserByName(userName);
-		FileUploadResult result = new FileUploadResult();
-		result.setSucceeded(true);
-		try {
-			this.versionControlService.createOrUpgradeTemplate(
-					this.providerService.getTemplateOetById(id),
-					this.providerService.getTemplateArmById(id),
-					SourceType.CLEVER, user);
-		} catch (VersionControlException e) {
-			result.setMessage(e.getMessage());
-			result.setSucceeded(false);
-		}
-		return result;
-	}
+	// @RequestMapping(value = "/action/upgrade/id/{id}", method =
+	// RequestMethod.GET)
+	// public FileUploadResult upgradeTemplateFile(@PathVariable int id,
+	// Authentication authentication) {
+	// String userName = ((UserDetails) authentication.getPrincipal())
+	// .getUsername();
+	// User user = this.userService.getUserByName(userName);
+	// FileUploadResult result = new FileUploadResult();
+	// result.setSucceeded(true);
+	// try {
+	// this.versionControlService.createOrUpgradeTemplate(
+	// this.providerService.getTemplateOetById(id),
+	// this.providerService.getTemplateArmById(id),
+	// SourceType.CLEVER, user);
+	// } catch (VersionControlException e) {
+	// result.setMessage(e.getMessage());
+	// result.setSucceeded(false);
+	// }
+	// return result;
+	// }
 
 	@RequestMapping(value = "/id/{id}/oet", method = RequestMethod.GET)
 	public String getTemplateOetById(@PathVariable int id) {
@@ -299,9 +299,9 @@ public class StorageTemplateResourceController extends
 		User user = this.userService.getUserByName(userName);
 		try {
 			for (int i = 0; i < count; i++) {
-				this.versionControlService.createOrUpgradeTemplate(
+				this.versionControlService.acceptNewTemplate(
 						oets[i].getInputStream(), arms[i].getInputStream(),
-						SourceType.CLEVER, user);
+						user);
 			}
 		} catch (VersionControlException | IOException ex) {
 			result.setSucceeded(false);
@@ -310,70 +310,70 @@ public class StorageTemplateResourceController extends
 		return result;
 	}
 
-	private StorageTemplateMasterInfo constructStorageTemplateMasterInfo(
-			TemplateMaster templateMaster) {
-		StorageTemplateMasterInfo masterInfo = new StorageTemplateMasterInfo();
-		masterInfo.setId(templateMaster.getId());
-		masterInfo.setName(templateMaster.getName());
-		masterInfo.setRmEntity(templateMaster.getRmEntity());
-		masterInfo.setRmName(templateMaster.getRmName());
-		masterInfo.setRmOriginator(templateMaster.getRmOrginator());
-		masterInfo.setConceptName(templateMaster.getConceptName());
-		masterInfo
-				.setConceptDescription(templateMaster.getConceptDescription());
-		masterInfo.setKeywords(templateMaster.getKeywords());
-		masterInfo.setPurpose(templateMaster.getPurpose());
-		masterInfo.setUse(templateMaster.getUse());
-		masterInfo.setMisuse(templateMaster.getMisuse());
-		masterInfo.setCopyright(templateMaster.getCopyright());
-		masterInfo.setLifecycleState(templateMaster
-				.getLatestFileLifecycleState().getValue());
-		// Add specialise archetype master
-		Optional.ofNullable(templateMaster.getSpecialiseArchetypeMaster())
-				.ifPresent(
-						archetypeMaster -> {
-							ArchetypeMasterInfo info = new ArchetypeMasterInfo();
-							info.setId(archetypeMaster.getId());
-							info.setName(archetypeMaster.getName());
-							info.setLatestArchetypeVersion(archetypeMaster
-									.getLatestFileVersion());
-							info.setLatestArchetypeId(archetypeMaster
-									.getLatestFileId());
-							masterInfo.setSpecialiseArchetypeMaster(info);
-						});
-		// Add templates
-		templateMaster.getFiles().forEach(template -> {
-			StorageTemplateInfo info = new StorageTemplateInfo();
-			info.setId(template.getId());
-			info.setName(template.getName());
-			info.setInternalVersion(template.getInternalVersion());
-			info.setVersion(template.getVersion());
-			masterInfo.getTemplates().add(info);
-		});
-		// Add action logs
-		templateMaster.getActionLogs().forEach(log -> {
-			ActionLogInfo info = new ActionLogInfo();
-			info.setId(log.getId());
-			info.setAction(log.getActionType().getValue());
-			info.setVersion(log.getVersion());
-			info.setRecordTime(log.getRecordTime());
-			info.setOperatorName(log.getOperatorName());
-			info.setLifecycleState(log.getLifecycleState().getValue());
-			masterInfo.getActionLogs().add(info);
-		});
-		return masterInfo;
-	}
+	// private StorageTemplateMasterInfo constructStorageTemplateMasterInfo(
+	// TemplateMaster templateMaster) {
+	// StorageTemplateMasterInfo masterInfo = new StorageTemplateMasterInfo();
+	// masterInfo.setId(templateMaster.getId());
+	// masterInfo.setName(templateMaster.getName());
+	// masterInfo.setRmEntity(templateMaster.getRmEntity());
+	// masterInfo.setRmName(templateMaster.getRmName());
+	// masterInfo.setRmOriginator(templateMaster.getRmOrginator());
+	// masterInfo.setConceptName(templateMaster.getConceptName());
+	// masterInfo
+	// .setConceptDescription(templateMaster.getConceptDescription());
+	// masterInfo.setKeywords(templateMaster.getKeywords());
+	// masterInfo.setPurpose(templateMaster.getPurpose());
+	// masterInfo.setUse(templateMaster.getUse());
+	// masterInfo.setMisuse(templateMaster.getMisuse());
+	// masterInfo.setCopyright(templateMaster.getCopyright());
+	// masterInfo.setLifecycleState(templateMaster
+	// .getLatestRevisionFileLifecycleState().getValue());
+	// // Add specialise archetype master
+	// Optional.ofNullable(templateMaster.getSpecialiseArchetypeVersionMaster())
+	// .ifPresent(
+	// archetypeMaster -> {
+	// ArchetypeMasterInfo info = new ArchetypeMasterInfo();
+	// info.setId(archetypeMaster.getId());
+	// info.setName(archetypeMaster.getName());
+	// info.setLatestArchetypeVersion(archetypeMaster
+	// .getLatestFileVersion());
+	// info.setLatestArchetypeId(archetypeMaster
+	// .getLatestFileId());
+	// masterInfo.setSpecialiseArchetypeMaster(info);
+	// });
+	// // Add templates
+	// templateMaster.getRevisionFiles().forEach(template -> {
+	// StorageTemplateInfo info = new StorageTemplateInfo();
+	// info.setId(template.getId());
+	// info.setName(template.getName());
+	// info.setInternalVersion(template.getSerialVersion());
+	// info.setVersion(template.getVersion());
+	// masterInfo.getTemplates().add(info);
+	// });
+	// // Add action logs
+	// templateMaster.getActionLogs().forEach(log -> {
+	// ActionLogInfo info = new ActionLogInfo();
+	// info.setId(log.getId());
+	// info.setAction(log.getActionType().getValue());
+	// info.setVersion(log.getVersion());
+	// info.setRecordTime(log.getRecordTime());
+	// info.setOperatorName(log.getOperatorName());
+	// info.setLifecycleState(log.getLifecycleState().getValue());
+	// masterInfo.getActionLogs().add(info);
+	// });
+	// return masterInfo;
+	// }
 
 	private StorageTemplateInfo constructStorageTemplateInfo(
-			TemplateFile templateFile) {
+			TemplateRevisionFile templateFile) {
 		StorageTemplateInfo info = new StorageTemplateInfo();
 		info.setId(templateFile.getId());
 		info.setName(templateFile.getName());
 		info.setVersion(templateFile.getVersion());
-		info.setInternalVersion(templateFile.getInternalVersion());
-		info.setOet(templateFile.getContent());
+		info.setInternalVersion(templateFile.getSerialVersion());
+		info.setOet(templateFile.getOet());
 		info.setArm(templateFile.getPropertyValue(TemplatePropertyType.ARM));
-		info.setMasterId(templateFile.getMasterId());
+		info.setMasterId(templateFile.getTemplateMasterId());
 		info.setMasterName(templateFile.getName().substring(0,
 				templateFile.getName().lastIndexOf(".v")));
 		info.setEditorId(templateFile.getEditor().getId());
@@ -381,8 +381,10 @@ public class StorageTemplateResourceController extends
 		info.setLifecycleState(templateFile.getLifecycleState().getValue());
 		// Set specialise archetyep info
 		ArchetypeInfo specialiseInfo = new ArchetypeInfo();
-		specialiseInfo.setId(templateFile.getSpecialiseArchetypeId());
-		specialiseInfo.setName(templateFile.getSpecialiseArchetypeName());
+		specialiseInfo.setId(templateFile
+				.getSpecialiseArchetypeRevisionFileId());
+		specialiseInfo.setName(templateFile
+				.getSpecialiseArchetypeRevisionFileName());
 		info.setSpecialiseArchetype(specialiseInfo);
 		// Set entity classes
 		// info.setEntityClasses(templateFile.getEntityClasses().stream()
