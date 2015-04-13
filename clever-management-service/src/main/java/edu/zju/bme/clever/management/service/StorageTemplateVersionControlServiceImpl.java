@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Optional;
@@ -27,6 +28,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import se.acode.openehr.parser.ADLParser;
 import edu.zju.bme.clever.cdr.arm.parser.ArmParser;
+import edu.zju.bme.clever.commons.util.WordUtils;
 import edu.zju.bme.clever.management.service.entity.ActionType;
 import edu.zju.bme.clever.management.service.entity.ArchetypeRevisionFile;
 import edu.zju.bme.clever.management.service.entity.ArchetypeVersionMaster;
@@ -44,7 +46,6 @@ import edu.zju.bme.clever.management.service.repository.EntityClassRepository;
 import edu.zju.bme.clever.management.service.repository.TemplateActionLogRepository;
 import edu.zju.bme.clever.management.service.repository.TemplateMasterRepository;
 import edu.zju.bme.clever.management.service.repository.TemplateRevisionFileRepository;
-import edu.zju.bme.clever.management.service.util.CleverUtils;
 import edu.zju.bme.clever.schemas.ArchetypeRelationshipMappingDocument;
 
 @Service
@@ -88,7 +89,7 @@ public class StorageTemplateVersionControlServiceImpl implements
 			throw new VersionControlException(
 					"OET's name and ARM's name is not consisitent.");
 		}
-		String templateMasterName = CleverUtils
+		String templateMasterName = WordUtils
 				.extractVersionMasterName(templateName);
 		if (templateMasterName == null) {
 			throw new VersionControlException("Template name is unqualified.");
@@ -136,8 +137,10 @@ public class StorageTemplateVersionControlServiceImpl implements
 		master.setPurpose(details.getPurpose());
 		master.setUse(details.getUse());
 		master.setMisuse(details.getMisuse());
-		master.setKeywords(String.join(",", details.getKeywords()
-				.getItemArray()));
+		Optional.ofNullable(details.getKeywords()).map(k -> k.getItemArray())
+				.ifPresent(keywords -> {
+					master.setKeywords(String.join(",", keywords));
+				});
 		master.setCopyright(details.getCopyright());
 		master.setTemplateType(TemplateType.STORAGE);
 		master.setVersion(specialiseArchetypeVersionMaster.getVersion());

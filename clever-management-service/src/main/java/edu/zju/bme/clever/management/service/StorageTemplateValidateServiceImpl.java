@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import edu.zju.bme.clever.cdr.arm.parser.ArmParser;
+import edu.zju.bme.clever.commons.util.WordUtils;
 import edu.zju.bme.clever.management.service.entity.ArchetypeRevisionFile;
 import edu.zju.bme.clever.management.service.entity.ArchetypeVersionMaster;
 import edu.zju.bme.clever.management.service.entity.FileProcessResult;
@@ -21,7 +22,6 @@ import edu.zju.bme.clever.management.service.repository.ArchetypeRevisionFileRep
 import edu.zju.bme.clever.management.service.repository.TemplateActionLogRepository;
 import edu.zju.bme.clever.management.service.repository.TemplateMasterRepository;
 import edu.zju.bme.clever.management.service.repository.TemplateRevisionFileRepository;
-import edu.zju.bme.clever.management.service.util.CleverUtils;
 import edu.zju.bme.clever.schemas.ArchetypeRelationshipMappingDocument;
 
 @Service
@@ -83,12 +83,13 @@ public class StorageTemplateValidateServiceImpl implements
 			result.appendMessage("Cannot find specialise archetype: "
 					+ specialiseArchetypeName + ". ");
 		} else {
-			String templateMasterName = CleverUtils
+			String templateMasterName = WordUtils
 					.extractVersionMasterName(templateName);
 			if (templateMasterName != null) {
 				// Whether specialise the specific archetype version master
 				ArchetypeVersionMaster specialiseArchetypeVersionMaster = specialiseArchetypeFile
 						.getVersionMaster();
+				String archetypeVersionMasterName = specialiseArchetypeVersionMaster.getName();
 				if (!specialiseArchetypeVersionMaster.getName().equals(
 						templateMasterName)) {
 					result.setStatus(FileStatus.INVALID);

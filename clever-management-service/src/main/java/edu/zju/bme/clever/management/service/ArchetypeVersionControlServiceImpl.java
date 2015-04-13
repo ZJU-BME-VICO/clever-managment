@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import se.acode.openehr.parser.ADLParser;
+import edu.zju.bme.clever.commons.util.WordUtils;
 import edu.zju.bme.clever.management.service.entity.AbstractMaster;
 import edu.zju.bme.clever.management.service.entity.ArchetypeActionLog;
 import edu.zju.bme.clever.management.service.entity.ArchetypeRevisionFile;
@@ -26,7 +27,6 @@ import edu.zju.bme.clever.management.service.repository.ArchetypeActionLogReposi
 import edu.zju.bme.clever.management.service.repository.ArchetypeMaster1Repository;
 import edu.zju.bme.clever.management.service.repository.ArchetypeRevisionFileRepository;
 import edu.zju.bme.clever.management.service.repository.ArchetypeVersionMasterRepository;
-import edu.zju.bme.clever.management.service.util.CleverUtils;
 
 @Service
 @Transactional(rollbackFor = { Exception.class })
@@ -69,7 +69,7 @@ public class ArchetypeVersionControlServiceImpl implements
 			master = this.newMaster(archetype);
 		}
 		// Example openEHR-EHR-CLUSTER.organisation.v1.1
-		String versionMasterName = CleverUtils
+		String versionMasterName = WordUtils
 				.extractVersionMasterName(archetypeId);
 		if (archetypeId == null) {
 			throw new VersionControlException("Archetype name is unqualified.");
@@ -91,6 +91,7 @@ public class ArchetypeVersionControlServiceImpl implements
 	private ArchetypeMaster newMaster(Archetype archetype)
 			throws VersionControlException {
 		ArchetypeMaster master = new ArchetypeMaster();
+		master.setName(archetype.getArchetypeId().base());
 		// Set basic info
 		this.setMasterBasicInfo(master, archetype);
 		// Validate and set specialise archetype info
@@ -587,7 +588,6 @@ public class ArchetypeVersionControlServiceImpl implements
 	protected void setMasterBasicInfo(AbstractMaster master, Archetype archetype) {
 		master.setConceptName(archetype.getConceptName(archetype
 				.getOriginalLanguage().getCodeString()));
-		master.setName(archetype.getArchetypeId().base());
 		master.setRmEntity(archetype.getArchetypeId().rmEntity());
 		master.setRmName(archetype.getArchetypeId().rmName());
 		master.setRmOrginator(archetype.getArchetypeId().rmOriginator());

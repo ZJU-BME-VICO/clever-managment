@@ -75,6 +75,14 @@ public class ArchetypeVersionMaster extends AbstractMaster {
 		this.archetypeMaster = archetypeMaster;
 	}
 
+	public String getArchetypeMasterName() {
+		return archetypeMasterName;
+	}
+
+	public void setArchetypeMasterName(String archetypeMasterName) {
+		this.archetypeMasterName = archetypeMasterName;
+	}
+
 	public ArchetypeVersionMaster getSpecialiseArchetypeVersionMaster() {
 		return specialiseArchetypeVersionMaster;
 	}
