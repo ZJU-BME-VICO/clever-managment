@@ -19,7 +19,7 @@ function DesignerCtrl($scope,resourceService,$q,templateParseService,$compile,ST
 	$scope.treeControl = {};
 	
 	$scope.getTemplateDetail=function(node){
-	    var url=node.name+"."+node.lastTemplateVersion;
+	    var url=node.name+"."+node.latestTemplateVersion;
 	    resourceService.get(STORAGE_TEMPLATE_BY_NAME_URL+url).then(function(temp){
         var xml=temp.oet;
         var x2js=new X2JS();

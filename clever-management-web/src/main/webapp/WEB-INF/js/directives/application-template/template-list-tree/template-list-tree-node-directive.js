@@ -38,7 +38,7 @@ function($compile,$document) {
 									'</span>' +
 									'<template-list-tree-node ng-hide="nodeData.collapsed" ng-repeat="node in nodeData.children" ng-init="node.parent = nodeData" tree-scope="treeScope" node-data="node" select-node-callback="selectNodeCallback"  ng-mousedown="cloneItems(nodeData)"></template-tree-list-node>' +
 								'</li>' +
-							'</ul>';
+							'</ul>'+'<div ng-transclude></div>';
 
 			if (scope.nodeData) {
 				element.html('').append($compile( template )(scope));

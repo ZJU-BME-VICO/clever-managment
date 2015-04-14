@@ -19,8 +19,9 @@
                         <button class="btn btn-default" type="button" ng-click="expand()">expandAll</button>
                         <button class="btn btn-default" type="button" ng-click="collapse()">collapseAll</button>
                       </div>
-                     <storagetemplate-list-tree tree-data="templateList" select-node-callback="selectNode(node)" tree-control="treeControl" ng-mousedown="cloneItems()"></storagetemplatetemplate-list-tree>                  
-                  </div>
+                     <storagetemplate-list-tree tree-data="templateList" select-node-callback="getTemplateDetail(node)" tree-control="treeControl" >
+                        </storagetemplatetemplatelisttree>                  
+                  </div> <templatelisttree tree-data="templateDetail" ng-mousedown="cloneItems()"></templatelisttree>
 	    		</div>	   
 	   
          <div class="editBox" ng-style="{height:containerHeight - 100}">

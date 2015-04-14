@@ -129,14 +129,16 @@ angular.module('clever.management.services.templateParse',[]).service('templateP
        var parent;
        var archetypeTree=[];
        var ruleList=[];
-       for(i=0;i<node.Rule.length;i++){//in the same one archetype
-           var path=node.Rule[i]._path;
-           var reg=/\[|\]|\//;
-           var path_array=path.split(reg);
-           code=path_array.slice(-3,-1); 
-           var flag=node.Rule[i]._max;
-           ruleList.push({code:code,flag:flag});        
-           }
+       if(node.Rule){
+           for(i=0;i<node.Rule.length;i++){//in the same one archetype
+               var path=node.Rule[i]._path;
+               var reg=/\[|\]|\//;
+               var path_array=path.split(reg);
+               code=path_array.slice(-3,-1); 
+               var flag=node.Rule[i]._max;
+               ruleList.push({code:code,flag:flag});        
+               }
+        }
        getArchetypeDetail(tree,parent,ruleList,archetypeTree);
         return archetypeTree;        
     }

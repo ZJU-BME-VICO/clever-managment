@@ -3,6 +3,7 @@ function($compile,$document) {
         return {
         require:'^storagetemplateListTree',
         restrict : 'E',
+        transclude:true,
         scope : {
             nodeData : '=',
             treeScope : '=',
@@ -10,17 +11,17 @@ function($compile,$document) {
             doubleClickNodeCallback:'=',
         },
         restrict : 'E',
-        link : function(scope,element, attrs) {             
+        link : function(scope,element, attrs,treeCtrl) {             
             scope.nodeData.collapsed = true;
             scope.treeScope.nodes.push(scope.nodeData); 
-            
+            treeCtrl.getNodes().push(scope.nodeData);
             var template = '<ul id={{nodeData.name+"."+nodeData.latestTemplateVersion}}>' +
                                 '<li>' +
                                     '<img ng-class="nodeData.picType"></img>' +
                                     '<span ng-class="nodeData.selected"  ng-dblclick="doubleClickNodeLabel(nodeData)">' +
-                                        '{{nodeData.conceptName}}' +'{{nodeData.latestTemplateVersion}}'+
+                                        '{{nodeData.conceptName}}' +'('+'{{nodeData.latestTemplateVersion}}'+')'+
                                     '</span>' +
-                                    '<template-list-tree-node ng-repeat="node in scope.templateDetail" node-data="scope.templateDetail"><template-list-tree-node/>'+
+                                    
                                 '</li>' +
                             '</ul>';
 
@@ -37,7 +38,7 @@ function($compile,$document) {
                 //Collapse or Expand
                 selectedNode.collapsed = !selectedNode.collapsed;
                 // call back
-                scope.selectNodeCallback(selectedNode);
+                treeCtrl.selectNode(selectedNode);
             };      
                     
             scope.selectNodeLabel = function(selectedNode) {
