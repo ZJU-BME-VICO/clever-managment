@@ -1,36 +1,26 @@
 angular.module('clever.management.directives.storagetemplateListTreeNode', []).directive('storagetemplateListTreeNode',
-function($compile) {
-    return {
-        require: '^storagetemplateListTree',
+function($compile,$document) {        
+        return {
+        require:'^storagetemplateListTree',
         restrict : 'E',
         scope : {
             nodeData : '=',
+            treeScope : '=',
+            selectNodeCallback : '=',
+            doubleClickNodeCallback:'=',
         },
-        link : function(scope, element, attrs, treeCtrl) { 
-        
+        restrict : 'E',
+        link : function(scope,element, attrs) {             
             scope.nodeData.collapsed = true;
-            scope.$watch(function() {
-                return treeCtrl.getKeyword();
-            }, function(newValue) {
-                scope.highlightText = newValue;
-            });
-            treeCtrl.getNodes().push(scope.nodeData);
-
-            var template = '<ul>' +
+            scope.treeScope.nodes.push(scope.nodeData); 
+            
+            var template = '<ul id={{nodeData.name+"."+nodeData.latestTemplateVersion}}>' +
                                 '<li>' +
-                                    '<img class="collapsed" ng-show="nodeData.specialisedArchetypeMasters.length && nodeData.collapsed" ng-click="selectNodeHead(nodeData)"></img>' +
-                                    '<img class="expanded" ng-show="nodeData.specialisedArchetypeMasters.length && !nodeData.collapsed" ng-click="selectNodeHead(nodeData)"></img>' +
-                                    '<span ng-style="{\'margin-left\': nodeData.specialisedArchetypeMasters.length ? \'5px\' : \'15px\'}" ng-class="nodeData.selected" ng-click="selectNodeLabel(nodeData)" ng-dblclick="doubleClickNodeLabel(nodeData)">' +
-                                        '<img ng-class="nodeData.lifecycleState | lowercase"></img>' +
-                                        '<span ng-bind-html="nodeData.conceptName | highlight:highlightText | unsafe"></span>' +
-                                        '&nbsp;<span style="color: grey;font-size: 10pt;">({{nodeData.latestArchetypeVersion}})</span>' +
+                                    '<img ng-class="nodeData.picType"></img>' +
+                                    '<span ng-class="nodeData.selected"  ng-dblclick="doubleClickNodeLabel(nodeData)">' +
+                                        '{{nodeData.conceptName}}' +'{{nodeData.latestTemplateVersion}}'+
                                     '</span>' +
-                                    '<archetype-list-tree-node ' +
-                                        'ng-hide="nodeData.collapsed || !node.show" ' +
-                                        'ng-repeat="node in nodeData.specialisedArchetypeMasters" ' +
-                                        'ng-init="node.parent = nodeData;node.show = true;" ' +
-                                        'node-data="node">' +
-                                    '</archetype-tree-list-node>' +
+                                    '<template-list-tree-node ng-repeat="node in scope.templateDetail" node-data="scope.templateDetail"><template-list-tree-node/>'+
                                 '</li>' +
                             '</ul>';
 
@@ -46,23 +36,24 @@ function($compile) {
             scope.doubleClickNodeLabel = function(selectedNode){
                 //Collapse or Expand
                 selectedNode.collapsed = !selectedNode.collapsed;
-                
                 // call back
-                treeCtrl.selectNode(selectedNode);
-            };
+                scope.selectNodeCallback(selectedNode);
+            };      
                     
             scope.selectNodeLabel = function(selectedNode) {
                 //remove highlight from previous node
-                if (treeCtrl.getCurrentNode() && treeCtrl.getCurrentNode().selected) {
-                    treeCtrl.getCurrentNode().selected = undefined;
+                if (scope.treeScope.currentNode && scope.treeScope.currentNode.selected) {
+                    scope.treeScope.currentNode.selected = undefined;
                 }
-
                 //set highlight to selected node
                 selectedNode.selected = 'selected';
-
                 //set currentNode
-                treeCtrl.setCurrentNode(selectedNode);
+                scope.treeScope.currentNode = selectedNode;
+               // scope.nodeScope.currentNode = selectedNode;
+                scope.nodeData=selectedNode;                
             };
-        },
+                
+    },
     };
+               
 });

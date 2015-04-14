@@ -215,8 +215,8 @@ angular.module('clever.management.services.templateParse',[]).service('templateP
                 text : node.label.text,
                 code : code,
                 labelContent : name,
-                dataType : dataType,
-                picType : picType,
+                dataType : "DV_TEXT",//先设置用一下
+                picType : "DV_TEXT",
            }}; 
        
     }

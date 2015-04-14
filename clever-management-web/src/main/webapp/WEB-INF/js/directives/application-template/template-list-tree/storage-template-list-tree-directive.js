@@ -1,98 +1,57 @@
 angular.module('clever.management.directives.storagetemplateListTree', []).directive('storagetemplateListTree', function() {
-   return {
+        return {
         restrict : 'E',
         scope : {
             treeData : '=',
             treeControl : '=',
             selectNodeCallback : '&',
+            clickNodeCallback : '&',
+            doubleClickNodeCallback : '&',
         },
-        template : '<storagetemplate-list-tree-node ' +
-                        'ng-repeat="node in treeData" ' +
-                        'node-data="node">' +
-                    '</storagetemplate-list-tree-node>',
-        
-        controller : function($scope) {
-
-            $scope.highlightText = '';
-
+        template : '<storagetemplate-list-tree-node ng-repeat="node in treeData" node-data="node" tree-scope="treeScope" ng-mousedown="cloneItems(nodeData)"></storagetemplate-list-tree-node>',
+        controller : function($scope,$element,$document) {
+            
+            $scope.treeScope = {
+                currentNode : undefined,
+                nodes : [],
+            };
             var nodes = [];
-            this.getNodes = function(){
+            $scope.getNodes = function(){
                 return nodes;
             };
-            this.getCurrentNode = function(){
-                return currentNode;
-            };
-            var currentNode = undefined;
-            this.setCurrentNode = function(node){
-                currentNode = node;
-            };
-            var keyword = '';
-            this.getKeyword = function(){
-                return keyword;
-            };
-
-            this.selectNode = function(selectedNode) {
+            $scope.selectNode = function(selectedNode) {
                 $scope.selectNodeCallback({
-                    value : selectedNode
+                    node : selectedNode
                 });
             };
-
+           /* $scope.doubleClickNode = function(node) {
+                $scope.doubleClickNodeCallback({
+                    value : node,
+                });
+            };*/
             $scope.treeControl = {
                 expandAll : function() {
-                    angular.forEach(nodes, function(node) {
+                    angular.forEach($scope.treeScope.nodes, function(node) {
                         node.collapsed = false;
                     });
                 },
                 collapseAll : function() {
-                    angular.forEach(nodes, function(node) {
+                    angular.forEach($scope.treeScope.nodes, function(node) {
                         node.collapsed = true;
-                    });
-                },
-                search : function(filter) {
-                    keyword = filter;
-                    if (keyword != '') {
-                        // Reset node state before search
-                        angular.forEach(nodes, function(node) {
-                            node.containsTargetChild = undefined;
-                        });
-                        angular.forEach(nodes, function(node) {
-                            if ((node.conceptName + '(' + node.latestArchetypeVersion + ')').toLowerCase().indexOf(keyword.toLowerCase()) < 0) {
-                                if (!node.containsTargetChild) {
-                                    node.show = false;
-                                }
-                            } else {
-                                node.show = true;
-                                var tempNode = node;
-                                while (tempNode.parent) {
-                                    tempNode = tempNode.parent;
-                                    if (tempNode.orginalCollapased == undefined) {
-                                        tempNode.orginalCollapased = tempNode.collapsed;
-                                    }
-                                    tempNode.show = true;
-                                    tempNode.collapsed = false;
-                                    tempNode.containsTargetChild = true;
-                                }
-                            }
-                        });
-                    } else {
-                        angular.forEach(nodes, function(node) {
-                            node.show = true;
-                            if (node.orginalCollapased != undefined) {
-                                node.collapsed = node.orginalCollapased;
-                                node.orginalCollapased = undefined;
-                            }
-                        });
-                    }
+                    });             
                 },
             };
-
+            
             $scope.$watch('treeData', function(newValue, oldValue) {
                 if (newValue != oldValue) {
-                    nodes = [];
-                    currentNode = undefined;
+                    $scope.treeScope = {
+                        currentNode : undefined,
+                        nodes : [],
+                    };
                 }
             });
-        }, link : function(scope, element, attrs) {
+        },
+        link : function(scope, element, attrs) {
 
         },
     };
