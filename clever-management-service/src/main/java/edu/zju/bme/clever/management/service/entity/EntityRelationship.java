@@ -19,21 +19,21 @@ public class EntityRelationship extends AbstractIndentifiedEntity {
 	private static final long serialVersionUID = -1510121567393953567L;
 
 	@Column(nullable = false)
-	private String sourceEntityFingerPrint;
-	@Column(nullable = false)
+	private String sourceEntityId;
+	@Column
 	private String sourceEntityTargetPath;
 	@Column(nullable = false)
 	private String sourceTemplateName;
 	@Column(nullable = false)
-	private String destinationEntityFingerPrint;
-	@Column(nullable = false)
+	private String destinationEntityId;
+	@Column
 	private String destinationEntityTargetPath;
 	@Column(nullable = false)
 	private String destinationTemplateName;
 	@ManyToOne(fetch = FetchType.LAZY)
-	private EntityClass sourceEntity;
+	private EntityClassSource sourceEntityClassSource;
 	@ManyToOne(fetch = FetchType.LAZY)
-	private EntityClass destinationEntity;
+	private EntityClassSource destinationEntityClassSource;
 	@ManyToOne(fetch = FetchType.LAZY)
 	private DeployedStorageTemplate sourceTemplate;
 	@ManyToOne(fetch = FetchType.LAZY)
@@ -43,12 +43,12 @@ public class EntityRelationship extends AbstractIndentifiedEntity {
 	@ManyToOne(fetch = FetchType.LAZY)
 	private DeployRecord deployRecord;
 
-	public String getSourceEntityFingerPrint() {
-		return sourceEntityFingerPrint;
+	public String getSourceEntityId() {
+		return sourceEntityId;
 	}
 
-	public void setSourceEntityFingerPrint(String sourceEntityFingerPrint) {
-		this.sourceEntityFingerPrint = sourceEntityFingerPrint;
+	public void setSourceEntityId(String sourceEntityId) {
+		this.sourceEntityId = sourceEntityId;
 	}
 
 	public String getSourceEntityTargetPath() {
@@ -67,13 +67,12 @@ public class EntityRelationship extends AbstractIndentifiedEntity {
 		this.sourceTemplateName = sourceTemplateName;
 	}
 
-	public String getDestinationEntityFingerPrint() {
-		return destinationEntityFingerPrint;
+	public String getDestinationEntityId() {
+		return destinationEntityId;
 	}
 
-	public void setDestinationEntityFingerPrint(
-			String destinationEntityFingerPrint) {
-		this.destinationEntityFingerPrint = destinationEntityFingerPrint;
+	public void setDestinationEntityId(String destinationEntityId) {
+		this.destinationEntityId = destinationEntityId;
 	}
 
 	public String getDestinationEntityTargetPath() {
@@ -101,20 +100,20 @@ public class EntityRelationship extends AbstractIndentifiedEntity {
 		this.deployRecord = deployRecord;
 	}
 
-	public EntityClass getSourceEntity() {
-		return sourceEntity;
+	public EntityClassSource getSourceEntity() {
+		return sourceEntityClassSource;
 	}
 
-	public void setSourceEntity(EntityClass sourceEntity) {
-		this.sourceEntity = sourceEntity;
+	public void setSourceEntity(EntityClassSource sourceEntity) {
+		this.sourceEntityClassSource = sourceEntity;
 	}
 
-	public EntityClass getDestinationEntity() {
-		return destinationEntity;
+	public EntityClassSource getDestinationEntity() {
+		return destinationEntityClassSource;
 	}
 
-	public void setDestinationEntity(EntityClass destinationEntity) {
-		this.destinationEntity = destinationEntity;
+	public void setDestinationEntity(EntityClassSource destinationEntity) {
+		this.destinationEntityClassSource = destinationEntity;
 	}
 
 	public DeployedStorageTemplate getSourceTemplate() {

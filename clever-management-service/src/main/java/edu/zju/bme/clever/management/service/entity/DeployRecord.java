@@ -1,11 +1,13 @@
 package edu.zju.bme.clever.management.service.entity;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -31,12 +33,17 @@ public class DeployRecord extends AbstractIndentifiedEntity {
 	@Column(nullable = false)
 	@Temporal(TemporalType.TIMESTAMP)
 	private Calendar deployTime;
+	@Column
+	private boolean succeeded;
+	@Lob
+	@Column
+	private String message;
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "deployRecord")
-	private List<DeployedStorageTemplate> deployedStorageTemplates;
+	private List<DeployedStorageTemplate> deployedStorageTemplates = new ArrayList<DeployedStorageTemplate>();
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "deployRecord")
-	private List<EntityClass> entityClasses;
+	private List<EntityClassSource> entityClasses = new ArrayList<EntityClassSource>();
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "deployRecord")
-	private List<EntityRelationship> entityRelationships;
+	private List<EntityRelationship> entityRelationships = new ArrayList<EntityRelationship>();
 
 	public String getComment() {
 		return comment;
@@ -44,6 +51,22 @@ public class DeployRecord extends AbstractIndentifiedEntity {
 
 	public void setComment(String comment) {
 		this.comment = comment;
+	}
+
+	public boolean isSucceeded() {
+		return succeeded;
+	}
+
+	public void setSucceeded(boolean succeeded) {
+		this.succeeded = succeeded;
+	}
+
+	public String getMessage() {
+		return message;
+	}
+
+	public void setMessage(String message) {
+		this.message = message;
 	}
 
 	public User getDeployer() {
@@ -66,7 +89,7 @@ public class DeployRecord extends AbstractIndentifiedEntity {
 		return deployedStorageTemplates;
 	}
 
-	public List<EntityClass> getEntityClasses() {
+	public List<EntityClassSource> getEntityClasses() {
 		return entityClasses;
 	}
 

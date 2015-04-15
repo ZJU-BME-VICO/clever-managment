@@ -21,7 +21,7 @@ import edu.zju.bme.clever.management.service.StorageTemplateProvideService;
 import edu.zju.bme.clever.management.service.StorageTemplateValidateService;
 import edu.zju.bme.clever.management.service.StorageTemplateVersionControlService;
 import edu.zju.bme.clever.management.service.UserService;
-import edu.zju.bme.clever.management.service.entity.EntityClass;
+import edu.zju.bme.clever.management.service.entity.EntityClassSource;
 import edu.zju.bme.clever.management.service.entity.FileProcessResult;
 import edu.zju.bme.clever.management.service.entity.FileProcessResult.FileStatus;
 import edu.zju.bme.clever.management.service.entity.TemplateMaster;
@@ -393,11 +393,11 @@ public class StorageTemplateResourceController extends
 		return info;
 	}
 
-	private EntityClassInfo constructEntityClassInfo(EntityClass entityClass) {
+	private EntityClassInfo constructEntityClassInfo(EntityClassSource entityClass) {
 		EntityClassInfo info = new EntityClassInfo();
 		info.setName(entityClass.getName());
 		info.setFullName(entityClass.getFullName());
-		info.setEntityId(entityClass.getFingerPrint());
+		info.setEntityId(entityClass.getEntityId());
 		info.setPackageName(entityClass.getPackageName());
 		info.setContent(entityClass.getContent());
 		return info;

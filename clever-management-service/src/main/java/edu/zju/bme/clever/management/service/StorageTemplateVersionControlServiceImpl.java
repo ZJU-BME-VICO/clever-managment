@@ -32,7 +32,7 @@ import edu.zju.bme.clever.commons.util.WordUtils;
 import edu.zju.bme.clever.management.service.entity.ActionType;
 import edu.zju.bme.clever.management.service.entity.ArchetypeRevisionFile;
 import edu.zju.bme.clever.management.service.entity.ArchetypeVersionMaster;
-import edu.zju.bme.clever.management.service.entity.EntityClass;
+import edu.zju.bme.clever.management.service.entity.EntityClassSource;
 import edu.zju.bme.clever.management.service.entity.LifecycleState;
 import edu.zju.bme.clever.management.service.entity.TemplateActionLog;
 import edu.zju.bme.clever.management.service.entity.TemplateMaster;
@@ -42,7 +42,7 @@ import edu.zju.bme.clever.management.service.entity.TemplateType;
 import edu.zju.bme.clever.management.service.entity.User;
 import edu.zju.bme.clever.management.service.exception.VersionControlException;
 import edu.zju.bme.clever.management.service.repository.ArchetypeRevisionFileRepository;
-import edu.zju.bme.clever.management.service.repository.EntityClassRepository;
+import edu.zju.bme.clever.management.service.repository.EntityClassSourceRepository;
 import edu.zju.bme.clever.management.service.repository.TemplateActionLogRepository;
 import edu.zju.bme.clever.management.service.repository.TemplateMasterRepository;
 import edu.zju.bme.clever.management.service.repository.TemplateRevisionFileRepository;
@@ -56,7 +56,7 @@ public class StorageTemplateVersionControlServiceImpl implements
 	protected final Logger logger = LoggerFactory.getLogger(this.getClass());
 
 	@Autowired
-	private EntityClassRepository entityClassRepo;
+	private EntityClassSourceRepository entityClassRepo;
 	@Autowired
 	private TemplateRevisionFileRepository templateFileRepo;
 	@Autowired

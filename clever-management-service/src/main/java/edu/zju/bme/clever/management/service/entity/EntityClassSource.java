@@ -1,5 +1,6 @@
 package edu.zju.bme.clever.management.service.entity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -15,7 +16,7 @@ import org.hibernate.annotations.DynamicUpdate;
 @Entity
 @Table
 @DynamicUpdate(true)
-public class EntityClass extends AbstractIndentifiedEntity {
+public class EntityClassSource extends AbstractIndentifiedEntity {
 
 	/**
 	 * 
@@ -29,18 +30,20 @@ public class EntityClass extends AbstractIndentifiedEntity {
 	@Column(nullable = false)
 	private String packageName;
 	@Column(nullable = false)
-	private String fingerPrint;
+	private String entityId;
 	@Column(nullable = false)
 	@Lob
 	private String content;
 	@ManyToOne(fetch = FetchType.LAZY)
 	private DeployRecord deployRecord;
+	@Column
+	private String storageTemplateName;
 	@ManyToOne(fetch = FetchType.LAZY)
 	private DeployedStorageTemplate storageTemplate;
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "sourceEntity")
-	private List<EntityRelationship> forwardRelationships;
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "destinationEntity")
-	private List<EntityRelationship> backwardRelationships;
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "sourceEntityClassSource")
+	private List<EntityRelationship> forwardRelationships = new ArrayList<EntityRelationship>();
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "destinationEntityClassSource")
+	private List<EntityRelationship> backwardRelationships = new ArrayList<EntityRelationship>();
 
 	public String getName() {
 		return name;
@@ -66,12 +69,12 @@ public class EntityClass extends AbstractIndentifiedEntity {
 		this.packageName = packageName;
 	}
 
-	public String getFingerPrint() {
-		return fingerPrint;
+	public String getEntityId() {
+		return entityId;
 	}
 
-	public void setFingerPrint(String fingerPrint) {
-		this.fingerPrint = fingerPrint;
+	public void setEntityId(String entityId) {
+		this.entityId = entityId;
 	}
 
 	public String getContent() {
@@ -96,6 +99,14 @@ public class EntityClass extends AbstractIndentifiedEntity {
 
 	public void setStorageTemplate(DeployedStorageTemplate storageTemplate) {
 		this.storageTemplate = storageTemplate;
+	}
+
+	public String getStorageTemplateName() {
+		return storageTemplateName;
+	}
+
+	public void setStorageTemplateName(String storageTemplateName) {
+		this.storageTemplateName = storageTemplateName;
 	}
 
 	public List<EntityRelationship> getForwardRelationships() {

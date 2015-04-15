@@ -2,7 +2,7 @@ package edu.zju.bme.clever.management.web.entity;
 
 import java.util.List;
 
-import edu.zju.bme.clever.management.service.entity.EntityClass;
+import edu.zju.bme.clever.management.service.entity.EntityClassSource;
 import edu.zju.bme.clever.management.service.entity.LifecycleState;
 
 public abstract class TemplateInfo extends AbstractFileInfo {
