@@ -25,7 +25,7 @@ angular.module('clever.management.services.templateParse',[]).service('templateP
                 var childNode=[];
                 var archetype; 
                 var optTree=[]; 
-                var label={name:nodec._concept_name,archetypeName:archetype_name,code:undefined}; //root node of archetype in oet   
+                var label={text:nodec._concept_name,labelContent:archetype_name,code:undefined,type:"Archetype"}; //root node of archetype in oet   
                 var Node=[];
                 Node.label=label;                
                 /*test  use Synchronous ajax of jquery */
@@ -36,7 +36,7 @@ angular.module('clever.management.services.templateParse',[]).service('templateP
                     success:function(archetype){
                          parseResult = archetypeParseService.parseArchetypeXml(archetype.xml);}
                  });
-                 Node.children=processRules(parseResult.definitions.treeItems,nodec);
+                 Node.children=processRules(parseResult,nodec);
                  var path=nodec._path;
                  if(path){//找cluster 原型的父节点,重新遍历书找到节点太麻烦了，怎么处理
                       var reg=/\[|\]|\//;
@@ -60,7 +60,7 @@ angular.module('clever.management.services.templateParse',[]).service('templateP
                var childNode=[];
                var archetype; 
                var optTree=[];   
-               var label={name:nodec._concept_name,archetypeName:archetype_name,code:undefined}; //root node of archetype in oet   
+             var label={text:nodec._concept_name,labelContent:archetype_name,code:undefined,type:"Archetype"}; //root node of archetype in oet   
                var Node=[];
                Node.label=label;
                $.ajax({
@@ -70,7 +70,7 @@ angular.module('clever.management.services.templateParse',[]).service('templateP
                     success:function(archetype){
                          parseResult = archetypeParseService.parseArchetypeXml(archetype.xml);}
                   });
-               Node.children=processRules(parseResult.definitions.treeItems,nodec);
+               Node.children=processRules(parseResult,nodec);
                var path=nodec._path;
                if(path){//找cluster 原型的父节点,重新遍历书找到节点太麻烦了，，怎么处理
                   var reg=/\[|\]|\//;
@@ -96,7 +96,12 @@ angular.module('clever.management.services.templateParse',[]).service('templateP
                   value.parent=parent;
                   if(value.label.code==code){//agree
                     if(value.parent.label.text){
-                       value.children.push(arResult);
+                       if(value.children){
+                       value.children.push(arResult);}
+                       else{
+                           value.children=[];
+                            value.children.push(arResult);
+                       }
                     }
                    }
                   var currentNode=[];
@@ -111,7 +116,12 @@ angular.module('clever.management.services.templateParse',[]).service('templateP
              tree.parent=parent;
              if(tree.label.code==code){//agree
                 if(tree.parent.label.text){
-                    tree.children.push(arResult);
+                     if(tree.children){
+                       tree.children.push(arResult);}
+                       else{
+                           tree.children=[];
+                            tree.children.push(arResult);
+                       }
                 }
              }
              var currentNode=[];
@@ -125,7 +135,8 @@ angular.module('clever.management.services.templateParse',[]).service('templateP
     }
        
     function processRules(archetype,node){
-       var tree=archetype;
+       var tree=archetype.definitions.treeItems;
+       var term_definitions=archetype.terminologies;
        var parent;
        var archetypeTree=[];
        var ruleList=[];
@@ -139,15 +150,15 @@ angular.module('clever.management.services.templateParse',[]).service('templateP
                ruleList.push({code:code,flag:flag});        
                }
         }
-       getArchetypeDetail(tree,parent,ruleList,archetypeTree);
+       getArchetypeDetail(tree,parent,ruleList,archetypeTree,term_definitions);
         return archetypeTree;        
     }
 
-    function getArchetypeDetail(tree,parent,ruleList,archetypeTree) {            
+    function getArchetypeDetail(tree,parent,ruleList,archetypeTree,term_definitions) {            
         if(angular.isArray(tree)){//route 1
           angular.forEach(tree,function(value){
               value.parent=parent;
-              var currentNode=nodeInfo(value);
+              var currentNode=nodeInfo(value,term_definitions);
               var tip=false;
               for(i=0;i<ruleList.length;i++){
                 var name=ruleList[i].code[0];
@@ -162,22 +173,47 @@ angular.module('clever.management.services.templateParse',[]).service('templateP
                         tip=true;
                         currentNode.children=[];
                         if(value.children){
-                            getArchetypeDetail(value.children,value,ruleList,currentNode.children); 
+                            getArchetypeDetail(value,parent,ruleList,currentNode.children,term_definitions); 
                         }
                     }
                 }}
-                if(!tip){ // do not agree
-                    archetypeTree.push(currentNode);
-                    currentNode.children=[];
-                    if(value.children){
-                        getArchetypeDetail(value.children,value,ruleList,currentNode.children);
+                if(!tip){ // do not agree 
+                        
+                        var typeT=currentNode.label.text;
+                        if((typeList.indexOf(typeT)==-1)&&(attributeList.indexOf(typeT)==-1)){// ignore type
+                           archetypeTree.push(currentNode);
+                            if(value.children){
+                                currentNode.children=[];
+                                getArchetypeDetail(value.children,value,ruleList,currentNode.children,term_definitions);
+                             } 
+                         }else{                           
+                            if(value.children){
+                                value=value.children;
+                                if(angular.isArray(value)){
+                                    angular.forEach(value,function(item){
+                                         item.parent=parent;
+                                         var currentNode=nodeInfo(item,term_definitions);
+                                         var typeT=currentNode.label.text;
+                                         if((typeList.indexOf(typeT)==-1)&&(attributeList.indexOf(typeT)==-1)){// ignore type
+                                              archetypeTree.push(currentNode);
+                                              if(item.children){
+                                                  currentNode.children=[];
+                                                  getArchetypeDetail(item.children,item,ruleList,currentNode.children,term_definitions);
+                                               }
+                                           }
+                                    });
+                                }else{
+                                    if(value.children){
+                                     getArchetypeDetail(value,parent,ruleList,archetypeTree,term_definitions);}
+                                 }
+                          }  
                      }
                 }
          });
             }else{
                 var value=tree;
                 value.parent=parent;
-                var currentNode=nodeInfo(value);
+                var currentNode=nodeInfo(value,term_definitions);
                 var tip=false;
                 for(i=0;i<ruleList.length;i++){
                     var name=ruleList[i].code[0];
@@ -191,40 +227,104 @@ angular.module('clever.management.services.templateParse',[]).service('templateP
                             tip=true;
                             currentNode.children=[];
                             if(value.children){
-                                getArchetypeDetail(value.children,value,ruleList,currentNode.children); 
+                                getArchetypeDetail(value.children,value,ruleList,currentNode.children,term_definitions); 
                             }
                         }
                     }
                 }
                     if(!tip){ // do not agree
-                        archetypeTree.push(currentNode);
                         currentNode.children=[];
-                        if(value.children){
-                            getArchetypeDetail(value.children,value,ruleList,currentNode.children);
-                         }                  
-                 }
+                        var typeT=currentNode.label.text;
+                        if((typeList.indexOf(typeT)==-1)&&(attributeList.indexOf(typeT)==-1)){// ignore type
+                           archetypeTree.push(currentNode);
+                            if(value.children){
+                                currentNode.children=[];
+                                getArchetypeDetail(value.children,value,ruleList,currentNode.children,term_definitions);
+                             } 
+                         }else{                           
+                            if(value.children){
+                                value=value.children;
+                                if(angular.isArray(value)){
+                                    angular.forEach(value,function(item){
+                                         item.parent=parent;
+                                         var currentNode=nodeInfo(item,term_definitions);
+                                         var typeT=currentNode.label.text;
+                                         if((typeList.indexOf(typeT)==-1)&&(attributeList.indexOf(typeT)==-1)){// ignore type
+                                              archetypeTree.push(currentNode);
+                                              if(item.children){
+                                                  currentNode.children=[];
+                                                  getArchetypeDetail(item.children,item,ruleList,currentNode.children,term_definitions);
+                                               }
+                                           }
+                                    });
+                                }else{
+                                    if(value.children){
+                                     getArchetypeDetail(value.children,value,ruleList,archetypeTree,term_definitions);}
+                                 }
+                          }  
+                       } 
+                       }
+                    }                
               }
-          }
           
-    function nodeInfo(node){
-       var code,name,archtype_id,dataType,picType;
+    function deleteData(tree){                      
+                        var typeT=currentNode.label.text;
+                        if((typeList.indexOf(typeT)!=-1)||(attributeList.indexOf(typeT)!=-1)){// ignore type
+                            if(value.children){
+                                value=value.children;
+                                if(angular.isArray(value)){
+                                    angular.forEach(value,function(item){
+                                         getArchetypeDetail(item.children,item,ruleList,currentNode.children,term_definitions);
+                                    });
+                                }else{
+                                     getArchetypeDetail(value.children,value,ruleList,currentNode.children,term_definitions);
+                                }
+                          }  
+                        }
+    }
+           //不需要显示的节点类型
+    var typeList = ['DV_COUNT', 'DV_TEXT', 'DV_DATE_TIME', 'DV_QUANTITY', 'DV_BOOLEAN','DV_QUANTITY','DV_ORDINAL','DV_DURATION','DV_PROPORTION','CODE_PHRASE','DV_CODED_TEXT'];
+    var attributeList = ['value', 'magnitude','data','Tree','name','state','defining_code','events'];
+
+    function nodeInfo(node,term_definitions){
+       var code,name,type,text,archtype_id,dataType,picType;
+       var type=node.label.type;
+       var text=node.label.text;
        if (node.label.code) {
            code = node.label.code;
+           var items;
+           if(term_definitions){
+               for(i=0;i<term_definitions.terms.length;i++){
+                  if(term_definitions.terms[i].language=="en")
+                   {
+                       items=term_definitions.terms[i].items;
+                       angular.forEach(items,function(value){
+                         if(value.code==code){
+                         name=value.text;}
+                        });
+                   }
+               }       
+            }       
+        }
+        if(!name){
+            name=text;}
+        if(text=="ELEMENT"){
+            dataType=node.children[0].children[0].label.text;
+            picType=dataType;
+        }else{
+            picType=text;
         }
        return {
            label : {
-                type : node.label.type,
-                text : node.label.text,
+                type : type,// type attributes only2
+                text : text,//items
                 code : code,
                 labelContent : name,
-                dataType : "DV_TEXT",//先设置用一下
-                picType : "DV_TEXT",
+                dataType : dataType,//先设置用一下
+                picType : picType,
            }}; 
        
     }
     
-    function MappingToTerminology(code,termDefinitions){
-        var name,dataType,picType;
-          
-    }
+
 });

@@ -6,7 +6,7 @@ function($document) {
 	      UIData:'=guiData',	      
 		},		
 		
-        template: '<div dragable>'+'<a>'+'{{UIData.label.labelContent}}'+'</a>'+'&nbsp;&nbsp:&nbsp;&nbsp&nbsp'+'<input>'+
+        template: '<div dragable>'+'<a>'+'{{UIData.label.labelContent}}'+'</a>'+'&nbsp;&nbsp:&nbsp;&nbsp&nbsp'+'<input id=UIData.label.code>'+
 			       '</div>',
 	    controller:function($scope){
 	    	

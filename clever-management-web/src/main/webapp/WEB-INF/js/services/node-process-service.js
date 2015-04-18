@@ -1,40 +1,31 @@
-angular.module('clever.management.services.templateParse',[]).service('templateParseService',function(){
-    this.parseTemplate=function(template){
-        var id=template.template_id.value;
-        var concept=template.concept;
-        var language=this.parseLanguage(template);
-        var description=this.parseDescription(template);
-        var usseee;
-        var termdefiniton=this.parseTermDefinitions(template);//complete xml with termDefinition info
-        var definition=this.parseDefinition(template);// xml after deleting some node
+angular.module('clever.management.services.UIarchetypeParse',[]).service('UIarchetypeParseService',function(){
+    var x2js = new X2JS();
+
+    this.parseArchetypeXml = function(xml) {
+        var archetype = x2js.xml_str2json(xml).archetype;
+        return this.parseArchetype(archetype);
+    };
+
+    this.parseArchetype = function(archetype) {
+        var terminologies = this.parseTerminology(archetype);
+        var definitions = this.parseDefinition(archetype);
         return {
-            language:language,
-            description:description,
-            definition:definition,
-            termdefiniton:termdefiniton         
-       };
-    };  
-    
-    this.parseLanguage=function(template){
-        var language={
-            terminology:template.language.terminology_id.value,
-            code:template.language.code_string,
+            terminologies : terminologies,
+            definitions : definitions,
         };
-        return language;
     };
-    this.parseDescription=function(template){           
-    };
-    this.parseDefinition=function(template){
+    this.parseDefinition=function(archetype){
         var definition={};
         definition.definitionTree=[];
         definition.contentTree=[];
-        //var tmp=parseTermDefinitions(template);
-        processNode(template.definition,undefined,definition.definitionTree,definition.contentTree);
+        processNode(archetype.definition,undefined,definition.definitionTree,definition.contentTree);
         return definition;
     };
+
      //搜索全部定义信息应该在删除无效节点之前，不然有的节点找不到自己的父辈
     this.parseTermDefinitions=function(template){
-        var termDefined=[];        processedTermDefinition(template.definition,undefined,termDefined);
+        var termDefined=[];        
+        processedTermDefinition(template.definition,undefined,termDefined);
         return termDefined;           
     };
     
@@ -79,7 +70,8 @@ angular.module('clever.management.services.templateParse',[]).service('templateP
                         contentTree.push(leafNode);
                     }
                     if((typeList.indexOf(typeT)==-1)&&(attributeList.indexOf(typeT)==-1)){
-                       treeItems.push(extractedNode); }
+                       treeItems.push(extractedNode); 
+                       }
                        if(item.attributes){ 
                            extractedNode.children=[];
                            processNode(item.attributes,item,extractedNode.children,contentTree);
@@ -89,7 +81,9 @@ angular.module('clever.management.services.templateParse',[]).service('templateP
                 }               
                });
               }else {
-                if(node.children||node.attributes){pushData(node,parent,treeItems,contentTree);}
+                if(node.children||node.attributes){
+                    pushData(node,parent,treeItems,contentTree);
+                    }
                 }
     
             }

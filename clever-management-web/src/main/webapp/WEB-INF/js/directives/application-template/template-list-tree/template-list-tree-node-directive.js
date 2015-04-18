@@ -27,18 +27,18 @@ function($compile,$document) {
 			scope.treeScope.nodes.push(scope.nodeData); 
 			
 			var template = '<ul id={{nodeData.label.code+"_"+nodeData.label.labelContent}}>' +
-								'<li>' +
-									'<img class="collapsed" ng-show="nodeData.children.length && nodeData.collapsed" ng-click="selectNodeHead(nodeData)"></img>' +
-									'<img class="expanded" ng-show="nodeData.children.length  && !nodeData.collapsed" ng-click="selectNodeHead(nodeData)"></img>' +
-									'<span ng-show="!nodeData.children.length" style="padding: 1px 5px;width: 15px;"/>' +
-									'<i class="normal" ng-hide="nodeData.children.length"></i> ' +
+								'<li>'+
+								    '<img class="collapsed" ng-show="nodeData.children.length && nodeData.collapsed" ng-click="selectNodeHead(nodeData)"></img>' +
+                                    '<img class="expanded" ng-show="nodeData.children.length  && !nodeData.collapsed" ng-click="selectNodeHead(nodeData)"></img>' +
+								    '<span ng-show="nodeData.children.length" style="padding: 1px 5px;width: 15px;"/>' +
+                                    '<i class="normal" ng-hide="nodeData.children.length"></i> ' +
 									'<img ng-class="nodeData.label.picType"></img>' +
 									'<span ng-class="nodeData.selected"  ng-click="selectNodeLabel(nodeData)" ng-dblclick="doubleClickNodeLabel(nodeData)">' +
 										'{{nodeData.label.labelContent}}' +
 									'</span>' +
-									'<template-list-tree-node ng-hide="nodeData.collapsed" ng-repeat="node in nodeData.children" ng-init="node.parent = nodeData" tree-scope="treeScope" node-data="node" select-node-callback="selectNodeCallback"  ng-mousedown="cloneItems(nodeData)"></template-tree-list-node>' +
+									'<template-list-tree-node ng-repeat="node in nodeData.children" ng-init="node.parent = nodeData" tree-scope="treeScope" node-data="node" select-node-callback="selectNodeCallback"  ng-mousedown="cloneItems(nodeData)"></template-tree-list-node>' +
 								'</li>' +
-							'</ul>'+'<div ng-transclude></div>';
+							'</ul>';
 
 			if (scope.nodeData) {
 				element.html('').append($compile( template )(scope));
@@ -53,13 +53,13 @@ function($compile,$document) {
 				//Collapse or Expand
 				selectedNode.collapsed = !selectedNode.collapsed;				
 				// call back
-				scope.selectNodeCallback(selectedNode); 
+				//scope.selectNodeCallback(selectedNode); 
 				
 				//clone to edit area
 				 var nodeData=selectedNode;
                  //var id="#"+nodeData.label.code+"_"+nodeData.label.labelContent; 
                  //$(id).clone().appendTo("#editArea");//clone all ui contet
-                 var type=nodeData.label.dataInfo[0].dataType;
+                 var type=nodeData.label.dataType;
                  var html="";
                  for( var i=0;i<9;i++){
                      if(type==datatypeList[i])

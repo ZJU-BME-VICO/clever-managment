@@ -3,8 +3,6 @@ angular.module('clever.management.directives.templateListTree', []).directive('t
 		restrict : 'E',
 		scope : {
 			treeData : '=',
-			treeControl : '=',
-			selectNodeCallback : '&',
 		},
 		template : '<template-list-tree-node ng-repeat="node in treeData" node-data="node" tree-scope="treeScope" select-node-callback="selectNode" ng-mousedown="cloneItems(nodeData)"></template-list-tree-node>',
 		controller : function($scope,$element,$document) {

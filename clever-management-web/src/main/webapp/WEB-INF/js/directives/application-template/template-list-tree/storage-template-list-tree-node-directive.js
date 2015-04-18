@@ -3,8 +3,8 @@ function($compile,$document) {
         return {
         require:'^storagetemplateListTree',
         restrict : 'E',
-        transclude:true,
         scope : {
+            treeData:'=',
             nodeData : '=',
             treeScope : '=',
             selectNodeCallback : '=',
@@ -21,7 +21,7 @@ function($compile,$document) {
                                     '<span ng-class="nodeData.selected"  ng-dblclick="doubleClickNodeLabel(nodeData)">' +
                                         '{{nodeData.conceptName}}' +'('+'{{nodeData.latestTemplateVersion}}'+')'+
                                     '</span>' +
-                                    
+                                    '  <template-list-tree tree-data="templateDetail" ng-mousedown="cloneItems()"></template-list-tree> '+
                                 '</li>' +
                             '</ul>';
 
