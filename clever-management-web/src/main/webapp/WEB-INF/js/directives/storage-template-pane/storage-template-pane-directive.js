@@ -19,8 +19,8 @@ define(['lazyLoader'], function(lazyLoader) {
 				$scope.selectTemplateMaster = function() {
 					$scope.selectMasterCallback({
 						value : {
-							id : $scope.templateInfo.masterId,
-							name : $scope.templateInfo.masterName,
+							id : $scope.templateInfo.versionMasterId,
+							name : $scope.templateInfo.versionMasterName,
 						},
 					});
 				};

@@ -156,6 +156,7 @@ public class ArchetypeVersionControlServiceImpl implements
 		}
 		// Set basic info
 		nextVersionMaster.setArchetypeMaster(master);
+		nextVersionMaster.setArchetypeMasterName(master.getName());
 		nextVersionMaster.setSerialVersion(nextSerialVersion);
 		nextVersionMaster.setVersion("v" + nextSerialVersion);
 		nextVersionMaster.setName(archetype.getArchetypeId().base() + "."

@@ -24,5 +24,8 @@ public interface TemplateRevisionFileRepository extends
 
 	public List<TemplateRevisionFile> findByTemplateTypeAndEditor(
 			TemplateType type, User editor);
+	
+	public List<TemplateRevisionFile> findByTemplateTypeAndEditorAndLifecycleState(
+			TemplateType templateType, User user, LifecycleState lifecycleState);
 
 }

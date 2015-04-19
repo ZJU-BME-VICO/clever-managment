@@ -7,12 +7,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import edu.zju.bme.clever.management.service.entity.EntityClassSource;
 import edu.zju.bme.clever.management.service.entity.LifecycleState;
 import edu.zju.bme.clever.management.service.entity.TemplateMaster;
 import edu.zju.bme.clever.management.service.entity.TemplatePropertyType;
 import edu.zju.bme.clever.management.service.entity.TemplateRevisionFile;
 import edu.zju.bme.clever.management.service.entity.TemplateType;
 import edu.zju.bme.clever.management.service.entity.User;
+import edu.zju.bme.clever.management.service.repository.EntityClassSourceRepository;
 import edu.zju.bme.clever.management.service.repository.TemplateMasterRepository;
 import edu.zju.bme.clever.management.service.repository.TemplateRevisionFileRepository;
 
@@ -23,6 +25,8 @@ public class StorageTemplateProvideServiceImpl implements StorageTemplateProvide
 	private TemplateRevisionFileRepository templateFileRepo;
 	@Autowired
 	private TemplateMasterRepository TemplateMaster1Repo;
+	@Autowired
+	private EntityClassSourceRepository templateEntityClassRepo;
 
 	@Override
 	public List<TemplateMaster> getAllStorageTemplateMasters() {
@@ -61,15 +65,24 @@ public class StorageTemplateProvideServiceImpl implements StorageTemplateProvide
 	}
 
 	@Override
-	public List<TemplateRevisionFile> getTemplateFilesToApprove() {
+	public List<TemplateRevisionFile> getTemplateFilesToVerify() {
 		return this.templateFileRepo.findByTemplateTypeAndLifecycleState(
 				TemplateType.STORAGE, LifecycleState.TEAMREVIEW);
 	}
 
 	@Override
-	public List<TemplateRevisionFile> getTemplateFilesToEdit(User user) {
-		return this.templateFileRepo.findByTemplateTypeAndEditor(
-				TemplateType.STORAGE, user);
+	public List<TemplateRevisionFile> getDraftTemplateFilesToEdit(User user) {
+		return this.templateFileRepo.findByTemplateTypeAndEditorAndLifecycleState(
+				TemplateType.STORAGE, user, LifecycleState.DRAFT);
+	}
+	
+	@Override
+	public List<TemplateRevisionFile> getLatestPublishedTemplateFilesToEdit() {
+		List<TemplateMaster> templateMaster = this.TemplateMaster1Repo
+				.findByTemplateTypeAndLatestRevisionFileLifecycleState(
+						TemplateType.STORAGE, LifecycleState.PUBLISHED);
+		return templateMaster.stream().map(file -> file.getLatestRevisionFile())
+				.collect(Collectors.toList());
 	}
 
 	@Override
@@ -119,4 +132,15 @@ public class StorageTemplateProvideServiceImpl implements StorageTemplateProvide
 		return templateFile.getTemplateType().equals(TemplateType.STORAGE);
 	}
 
+	@Override
+	public List<EntityClassSource> getTemplateEntityClassesById(Integer id) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<EntityClassSource> getTemplateEntityClassesByName(String name) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

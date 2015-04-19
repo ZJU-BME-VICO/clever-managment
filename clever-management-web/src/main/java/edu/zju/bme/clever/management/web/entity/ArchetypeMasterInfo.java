@@ -3,34 +3,23 @@ package edu.zju.bme.clever.management.web.entity;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.persistence.Column;
-
-import edu.zju.bme.clever.management.service.entity.LifecycleState;
-
 public class ArchetypeMasterInfo extends AbstractMasterInfo {
-
-	private Integer latestArchetypeId;
-	private String latestArchetypeVersion;
+	
+	private ArchetypeMasterInfo specialiseArchetypeMaster;
 	private Set<ArchetypeMasterInfo> specialisedArchetypeMasters = new HashSet<ArchetypeMasterInfo>();
-	private Set<ArchetypeInfo> archetypes = new HashSet<ArchetypeInfo>();
+	private Set<ArchetypeVersionMasterInfo> versionMasters = new HashSet<ArchetypeVersionMasterInfo>();
+	private int latestVersionMasterId;
+	private String latestVersionMasterVersion;
 	private boolean isRoot = true;
 
-	public Integer getLatestArchetypeId() {
-		return latestArchetypeId;
+	public void setSpecialiseArchetypeMaster(ArchetypeMasterInfo specialiseArchetypeMaster) {
+		this.specialiseArchetypeMaster = specialiseArchetypeMaster;
 	}
-
-	public void setLatestArchetypeId(Integer latestArchetypeId) {
-		this.latestArchetypeId = latestArchetypeId;
+	
+	public ArchetypeMasterInfo getSpecialiseArchetypeMaster() {
+		return specialiseArchetypeMaster;
 	}
-
-	public String getLatestArchetypeVersion() {
-		return latestArchetypeVersion;
-	}
-
-	public void setLatestArchetypeVersion(String latestArchetypeVersion) {
-		this.latestArchetypeVersion = latestArchetypeVersion;
-	}
-
+	
 	public Set<ArchetypeMasterInfo> getSpecialisedArchetypeMasters() {
 		return specialisedArchetypeMasters;
 	}
@@ -39,15 +28,31 @@ public class ArchetypeMasterInfo extends AbstractMasterInfo {
 			Set<ArchetypeMasterInfo> specialisedArchetypeMasters) {
 		this.specialisedArchetypeMasters = specialisedArchetypeMasters;
 	}
-
-	public Set<ArchetypeInfo> getArchetypes() {
-		return archetypes;
+	
+	public void setVersionMasters(Set<ArchetypeVersionMasterInfo> versionMasters) {
+		this.versionMasters = versionMasters;
 	}
 
-	public void setArchetypes(Set<ArchetypeInfo> archetypes) {
-		this.archetypes = archetypes;
+	public Set<ArchetypeVersionMasterInfo> getVersionMasters() {
+		return versionMasters;
+	}
+	
+	public int getLatestVersionMasterId() {
+		return latestVersionMasterId;
 	}
 
+	public void setLatestVersionMasterId(int latestVersionMasterId) {
+		this.latestVersionMasterId = latestVersionMasterId;
+	}
+
+	public String getLatestVersionMasterVersion() {
+		return latestVersionMasterVersion;
+	}
+
+	public void setLatestVersionMasterVersion(String latestVersionMasterVersion) {
+		this.latestVersionMasterVersion = latestVersionMasterVersion;
+	}
+	
 	public boolean isRoot() {
 		return isRoot;
 	}
@@ -55,5 +60,4 @@ public class ArchetypeMasterInfo extends AbstractMasterInfo {
 	public void setRoot(boolean isRoot) {
 		this.isRoot = isRoot;
 	}
-
 }

@@ -8,6 +8,7 @@ public class StorageTemplateMasterInfo extends AbstractMasterInfo {
 	private Integer latestTemplateId;
 	private String latestTemplateVersion;
 	private Set<StorageTemplateInfo> templates = new HashSet<StorageTemplateInfo>();
+	private ArchetypeVersionMasterInfo specialiseArchetypeVersionMaster = new ArchetypeVersionMasterInfo();
 
 	public Integer getLatestTemplateId() {
 		return latestTemplateId;
@@ -31,6 +32,15 @@ public class StorageTemplateMasterInfo extends AbstractMasterInfo {
 
 	public void setTemplates(Set<StorageTemplateInfo> templates) {
 		this.templates = templates;
+	}
+
+	public ArchetypeVersionMasterInfo getSpecialiseArchetypeVersionMaster() {
+		return specialiseArchetypeVersionMaster;
+	}
+
+	public void setSpecialiseArchetypeVersionMaster(
+			ArchetypeVersionMasterInfo specialiseArchetypeVersionMaster) {
+		this.specialiseArchetypeVersionMaster = specialiseArchetypeVersionMaster;
 	}
 
 }

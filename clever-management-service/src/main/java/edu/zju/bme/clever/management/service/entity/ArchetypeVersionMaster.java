@@ -31,7 +31,7 @@ public class ArchetypeVersionMaster extends AbstractMaster {
 	@Column
 	private String archetypeMasterName;
 	@Column(name = "archetype_master_id", updatable = false, insertable = false)
-	private Integer specialiseArchetypeMasterId;
+	private Integer archetypeMasterId;
 	@ManyToOne(fetch = FetchType.LAZY)
 	private ArchetypeVersionMaster specialiseArchetypeVersionMaster;
 	@Column(name = "specialise_archetype_version_master_id", updatable = false, insertable = false)
@@ -134,8 +134,8 @@ public class ArchetypeVersionMaster extends AbstractMaster {
 		this.latestRevisionFileLifecycleState = latestRevisionFileLifecycleState;
 	}
 
-	public Integer getSpecialiseArchetypeMasterId() {
-		return specialiseArchetypeMasterId;
+	public Integer getArchetypeMasterId() {
+		return archetypeMasterId;
 	}
 
 	public Integer getSpecialiseArchetypeVersionMasterId() {
@@ -150,4 +150,11 @@ public class ArchetypeVersionMaster extends AbstractMaster {
 		this.lastVersionMaster = lastVersionMaster;
 	}
 
+	public List<ArchetypeActionLog> getActionLogs() {
+		return actionLogs;
+	}
+
+	public void setActionLogs(List<ArchetypeActionLog> actionLogs) {
+		this.actionLogs = actionLogs;
+	}
 }

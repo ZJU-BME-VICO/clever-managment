@@ -213,6 +213,9 @@ public class StorageTemplateVersionControlServiceImpl implements
 		nextRevisionFile
 				.setSpecialiseArchetypeRevisionFile(specialiseArchetype);
 		nextRevisionFile
+				.setSpecialiseArchetypeRevisionFileName(specialiseArchetype
+						.getName());
+		nextRevisionFile
 				.setSpecialiseArchetypeRevisionFileSerialVersion(specialiseArchetype
 						.getSerialVersion());
 		nextRevisionFile

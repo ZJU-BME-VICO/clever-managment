@@ -68,8 +68,8 @@ angular.module('clever.management.directives.archetypePane', []).directive('arch
 			$scope.selectArchetypeMaster = function() {
 				$scope.selectMasterCallback({
 					value : {
-						id : $scope.archetypeInfo.masterId,
-						name : $scope.archetypeInfo.masterName,
+						id : $scope.archetypeInfo.versionMasterId,
+						name : $scope.archetypeInfo.versionMasterName,
 					},
 				});
 			};

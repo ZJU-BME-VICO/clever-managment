@@ -18,6 +18,10 @@
 					</tr>
 					<tr>
 						<th ng-style="{width: tableTitleWidth+ 'px'}"><b>History version</b></th>
+						<th style="font-weight: normal"><span ng-repeat="versionMaster in archetypeMasterInfo.historyVersionMasters | orderBy:'version'"> <a href ng-click="selectHistoryVersionMaster(versionMaster)">{{versionMaster.version}}</a>&nbsp;&nbsp; </span></th>
+					</tr>
+					<tr>
+						<th ng-style="{width: tableTitleWidth+ 'px'}"><b>Revision version</b></th>
 						<th style="font-weight: normal"><span ng-repeat="archetype in archetypeMasterInfo.archetypes | orderBy:'internalVersion'"> <a href ng-click="selectArchetype(archetype)">{{archetype.version}}</a>&nbsp;&nbsp; </span></th>
 					</tr>
 					<tr>

@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 
 import edu.zju.bme.clever.management.service.entity.Application;
 import edu.zju.bme.clever.management.service.entity.ArchetypeMaster;
+import edu.zju.bme.clever.management.service.entity.LifecycleState;
 import edu.zju.bme.clever.management.service.entity.TemplateMaster;
 import edu.zju.bme.clever.management.service.entity.TemplateType;
 
@@ -16,4 +17,7 @@ public interface TemplateMasterRepository extends
 	public TemplateMaster findByName(String name);
 	
 	public List<TemplateMaster> findByTemplateType(TemplateType type);
+	
+	public List<TemplateMaster> findByTemplateTypeAndLatestRevisionFileLifecycleState(
+			TemplateType templateType, LifecycleState lifecycleState);
 }

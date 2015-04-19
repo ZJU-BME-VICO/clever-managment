@@ -18,6 +18,11 @@ angular.module('clever.management.directives.archetypeMasterPane', []).directive
 					value : archetype,
 				});
 			};
+			$scope.selectHistoryVersionMaster = function(master) {
+				$scope.selectMasterCallback({
+					value : master,
+				});
+			};
 			$scope.selectSpecialiseMaster = function(master) {
 				$scope.selectMasterCallback({
 					value : master,

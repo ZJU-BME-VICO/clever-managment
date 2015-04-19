@@ -5,6 +5,7 @@ import java.util.List;
 import edu.zju.bme.clever.management.service.entity.ArchetypeMaster;
 import edu.zju.bme.clever.management.service.entity.ArchetypeRevisionFile;
 import edu.zju.bme.clever.management.service.entity.ArchetypeVersionMaster;
+import edu.zju.bme.clever.management.service.entity.User;
 
 public interface ArchetypeProvideService {
 
@@ -21,6 +22,12 @@ public interface ArchetypeProvideService {
 	public ArchetypeRevisionFile getArchetypeRevisionFileByName(String fileName);
 
 	public ArchetypeRevisionFile getArchetypeRevisionFileById(Integer id);
+	
+	public List<ArchetypeRevisionFile> getArchetypeRevisionFileToVerify();
+	
+	public List<ArchetypeRevisionFile> getDraftArchetypeRevisionFileToEdit(User user);
+
+	public List<ArchetypeRevisionFile> getLatestPublishArchetypeRevisionFileToEdit();
 
 	public String getArchetypeXmlById(Integer id);
 

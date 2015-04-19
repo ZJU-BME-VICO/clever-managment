@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.openehr.am.archetype.Archetype;
 import org.openehr.am.serialize.ADLSerializer;
@@ -46,31 +47,23 @@ public class ArchetypeProvideServiceImpl implements ArchetypeProvideService {
 		return this.masterRepo.findAll();
 	}
 
-	// public List<ArchetypeFile> getLatestedPublishedArchetypeFiles() {
-	// List<ArchetypeFile> resultFiles = new ArrayList<ArchetypeFile>();
-	// List<ArchetypeMaster> masterFiles = getAllArchetypeMasters();
-	// List<ArchetypeFile> publishedFiles = this.revisionFileRepo
-	// .findByLifecycleState(LifecycleState.PUBLISHED);
-	// for (int i = 0; i < publishedFiles.size(); i++) {
-	// for (ArchetypeMaster temp : masterFiles) {
-	// if (publishedFiles.get(i).getId() == temp.getLatestFileId()) {
-	// resultFiles.add(publishedFiles.get(i));
-	// break;
-	// }
-	// }
-	// }
-	// return resultFiles;
-	// }
+	@Override
+	public List<ArchetypeRevisionFile> getArchetypeRevisionFileToVerify() {
+		return this.revisionFileRepo.findByLifecycleState(LifecycleState.TEAMREVIEW);
+	}
 
-	// public List<ArchetypeFile> getMyDraftArchetypeFiles(User user) {
-	// return this.revisionFileRepo.findByLifecycleStateAndEditor(
-	// LifecycleState.DRAFT, user);
-	// }
+	@Override
+	public List<ArchetypeRevisionFile> getDraftArchetypeRevisionFileToEdit(User user) {
+		return this.revisionFileRepo.findByEditorAndLifecycleState(user, LifecycleState.DRAFT);
+	}
 
-	// public List<ArchetypeFile> getAllTeamreviewArchetypeFiles() {
-	// return this.revisionFileRepo
-	// .findByLifecycleState(LifecycleState.TEAMREVIEW);
-	// }
+	@Override
+	public List<ArchetypeRevisionFile> getLatestPublishArchetypeRevisionFileToEdit() {
+		List<ArchetypeVersionMaster> archetypeVersionMaster = this.versionMasterRepo.
+				findByLatestRevisionFileLifecycleState(LifecycleState.PUBLISHED);
+		return archetypeVersionMaster.stream().map(master -> master.getLatestRevisionFile())
+				.collect(Collectors.toList());
+	}
 
 	@Override
 	public ArchetypeMaster getArchetypeMasterByName(String masterName) {
