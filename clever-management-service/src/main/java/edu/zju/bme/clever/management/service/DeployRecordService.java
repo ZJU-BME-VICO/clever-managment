@@ -6,4 +6,6 @@ public interface DeployRecordService {
 
 	public void saveDeployRecordRecursively(DeployRecord record);
 
+	public DeployRecord getLastSucceededDeployedRecord();
+
 }

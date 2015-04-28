@@ -59,4 +59,9 @@ public class DeployRecordServiceImpl implements DeployRecordService {
 						});
 
 	}
+
+	@Override
+	public DeployRecord getLastSucceededDeployedRecord() {
+		return this.deployRecordRepo.findFirstBySucceededOrderByIdDesc(true);
+	}
 }
