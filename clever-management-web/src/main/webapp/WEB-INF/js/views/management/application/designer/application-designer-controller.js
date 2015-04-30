@@ -2,6 +2,8 @@ function DesignerCtrl($scope,resourceService,$q,templateParseService,$compile,ST
 	$scope.language = [];
 	$scope.defination={};
 	$scope.templateDetail=[];
+	$scope.tplist=[];
+	$scope.controlList=['btnFn','labelFn'];
 
      resourceService.get(STORAGE_TEMPLATE_LIST_URL).then(function(list) {            
             $scope.templateList = list;
@@ -24,8 +26,13 @@ function DesignerCtrl($scope,resourceService,$q,templateParseService,$compile,ST
         var xml=temp.oet;
         var x2js=new X2JS();
         var template=x2js.xml_str2json(xml).template;       
-        var parseResult=templateParseService.parseTemplate(template);    
-        $scope.templateDetail=parseResult.definitions;
+        var parseResult=templateParseService.parseTemplate(template);  
+        var tempalteName=parseResult.template_name;
+        if($scope.tplist.indexOf(tempalteName)==-1){
+            $scope.tplist.push(tempalteName);
+            $scope.templateDetail.push(parseResult.definitions);
+         }
+       
         });
 	};
 
@@ -37,6 +44,9 @@ function DesignerCtrl($scope,resourceService,$q,templateParseService,$compile,ST
 	};
 	$scope.saveTemplate = function() {
         $scope.treeControl.saveTemp();
+    };
+    $scope.creatFn=function(){
+        var id=this.id;
     };
 	
 }

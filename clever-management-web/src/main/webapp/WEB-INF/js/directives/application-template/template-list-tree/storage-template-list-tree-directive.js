@@ -1,7 +1,7 @@
 angular.module('clever.management.directives.storagetemplateListTree', []).directive('storagetemplateListTree', function() {
         return {
         restrict : 'E',
-        transclude:true,
+        transclude : true,
         scope : {
             treeData : '=',
             treeControl : '=',
@@ -9,7 +9,10 @@ angular.module('clever.management.directives.storagetemplateListTree', []).direc
             clickNodeCallback : '&',
             doubleClickNodeCallback : '&',
         },
-        template : '<storagetemplate-list-tree-node ng-transclue ng-repeat="node in treeData" node-data="node" tree-scope="treeScope" ng-mousedown="cloneItems(nodeData)"></storagetemplate-list-tree-node>',
+        template : '<storagetemplate-list-tree-node ng-transclue ng-repeat="node in treeData" node-data="node" tree-scope="treeScope" ng-mousedown="cloneItems(nodeData)">'
+                    + '<template-list-tree tree-data="templateDetail" ng-mousedown="cloneItems()">'
+                         +'</template-list-tree>'
+                    +'</storagetemplate-list-tree-node>',
         controller : function($scope,$element,$document) {
             
             $scope.treeScope = {

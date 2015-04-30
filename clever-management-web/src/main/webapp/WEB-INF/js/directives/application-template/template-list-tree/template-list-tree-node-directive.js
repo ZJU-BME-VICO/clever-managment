@@ -1,14 +1,15 @@
 angular.module('clever.management.directives.templateListTreeNode', []).directive('templateListTreeNode',
 function($compile,$document) {
-         var datatypeList= new Array('DV_QUANTITY','DV_TEXT','DV_ORDINAL', 'DV_DATE_TIME', 'DV_COUNT', 'DV_BOOLEAN','DV_PROPORTION','DV_DURATION','DV_CODED_TEXT');
-         var templateList= new Array('<dv-quantity gui-data="nodeData" gui-control="dvquantityControl"></dv-quantity>','<dv-text gui-data="nodeData" gui-control="dvtextControl"></dv-text>',
+         var datatypeList= new Array('DV_QUANTITY','DV_TEXT','DV_ORDINAL', 'DV_DATE_TIME', 'DV_COUNT', 'DV_BOOLEAN','DV_CODED_TEXT','DV_PROPORTION','DV_DURATION');
+         var templatestrList= new Array('<dv-quantity gui-data="nodeData" gui-control="dvquantityControl"></dv-quantity>','<dv-text gui-data="nodeData" gui-control="dvtextControl"></dv-text>',
                                     '<dv-ordinal gui-data="nodeData" gui-control="dvordinalControl"></dv-ordinal>','<dv-datetime gui-data="nodeData" gui-control="dvdatetimeControl"></dv-datetime>',
                                     '<dv-count gui-data="nodeData" gui-control="dvcountControl"></dv-count>','<dv-boolean gui-data="nodeData" gui-control="dvbooleanControl"></dv-boolean>',
-                                    '7','8','9');
+                                    '<dv-codedtext gui-data="nodeData" gui-control="dvcodedtextControl"></dv-codedtext>','8','9');
          var floatDiv=angular.element('<div class="floatDiv" style="z-index:999" ng-show=true></div>');  
     	return {
 		require: ['^templateListTree'],
 		restrict : 'E',
+		transclude:true,
 		scope : {
 			nodeData : '=',
 			treeScope : '=',
@@ -26,7 +27,7 @@ function($compile,$document) {
 			scope.nodeData.collapsed = true;
 			scope.treeScope.nodes.push(scope.nodeData); 
 			
-			var template = '<ul id={{nodeData.label.code+"_"+nodeData.label.labelContent}}>' +
+			var template ='<ul id={{nodeData.label.code+"_"+nodeData.label.labelContent}}>' +
 								'<li>'+
 								    '<img class="collapsed" ng-show="nodeData.children.length && nodeData.collapsed" ng-click="selectNodeHead(nodeData)"></img>' +
                                     '<img class="expanded" ng-show="nodeData.children.length  && !nodeData.collapsed" ng-click="selectNodeHead(nodeData)"></img>' +
@@ -36,7 +37,7 @@ function($compile,$document) {
 									'<span ng-class="nodeData.selected"  ng-click="selectNodeLabel(nodeData)" ng-dblclick="doubleClickNodeLabel(nodeData)">' +
 										'{{nodeData.label.labelContent}}' +
 									'</span>' +
-									'<template-list-tree-node ng-repeat="node in nodeData.children" ng-init="node.parent = nodeData" tree-scope="treeScope" node-data="node" select-node-callback="selectNodeCallback"  ng-mousedown="cloneItems(nodeData)"></template-tree-list-node>' +
+									'<template-list-tree-node ng-hide="nodeData.collapsed" ng-repeat="node in nodeData.children" ng-init="node.parent = nodeData" tree-scope="treeScope" node-data="node" select-node-callback="selectNodeCallback"  ng-mousedown="cloneItems(nodeData)"></template-tree-list-node>' +
 								'</li>' +
 							'</ul>';
 
@@ -51,7 +52,7 @@ function($compile,$document) {
 			
 			scope.doubleClickNodeLabel = function(selectedNode){
 				//Collapse or Expand
-				selectedNode.collapsed = !selectedNode.collapsed;				
+	   //selectedNode.collapsed = !selectedNode.collapsed;				
 				// call back
 				//scope.selectNodeCallback(selectedNode); 
 				
@@ -59,14 +60,19 @@ function($compile,$document) {
 				 var nodeData=selectedNode;
                  //var id="#"+nodeData.label.code+"_"+nodeData.label.labelContent; 
                  //$(id).clone().appendTo("#editArea");//clone all ui contet
+                
                  var type=nodeData.label.dataType;
                  var html="";
-                 for( var i=0;i<9;i++){
-                     if(type==datatypeList[i])
-                     {
-                        html=templateList[i]; 
-                     }
-                 };
+                 if(type){
+                     for( var i=0;i<9;i++){
+                         if(type==datatypeList[i])
+                         {
+                            html=templatestrList[i]; 
+                         }
+                     };
+                 }else{
+                      html='<group-node-view gui-data="nodeData" gui-control="groupNodeViewControl"></group-node-view>';
+                 }
                  var addin=angular.element(html);              
                  $("#editArea").append($compile( addin )(scope));
 			};		

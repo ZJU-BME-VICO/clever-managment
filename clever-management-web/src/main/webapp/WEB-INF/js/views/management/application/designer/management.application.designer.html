@@ -1,3 +1,7 @@
+<div class="Toolbox">
+            <button class="btn btn-primary btn-lg ng-binding" style="float:right;margin-right:150px;padding:8px 16px;" >新建</button>
+            <button class="btn btn-primary btn-lg ng-binding" style="float:right;margin-right:20px;padding:8px 16px;"  ng-click="saveTemplate()">保存</button>
+       </div>
 <div class="row">
     <div class="col-xs-4 col-md-3 col-lg-3">  
 	    		<div class="panel panel-default">
@@ -19,21 +23,25 @@
                         <button class="btn btn-default" type="button" ng-click="expand()">expandAll</button>
                         <button class="btn btn-default" type="button" ng-click="collapse()">collapseAll</button>
                       </div>
-                      <div><storagetemplate-list-tree tree-data="templateList" select-node-callback="getTemplateDetail(node)" tree-control="treeControl" ></storagetemplate-list-tree></div>  
-                      <div><template-list-tree tree-data="templateDetail" ng-mousedown="cloneItems()"></template-list-tree></div>                 
+                      <storagetemplate-list-tree tree-data="templateList" select-node-callback="getTemplateDetail(node)" tree-control="treeControl" >
+                      </storagetemplate-list-tree>  
+                      <template-list-tree ng-repeat="node in templateDetail" tree-data="node" ng-mousedown="cloneItems()">
+                          </template-list-tree>
+                                      
                   </div>
 	    		</div>	   
 	   </div>
-         <div class="col-xs-7 col-md-8 col-lg-8 editBox" ng-style="{height:containerHeight}">
-	   	    <div id="editArea" class="">
-	   	        
-	   	    </div>
-	   	 	</div>
-   	 	<div class="Toolbox">
-            <button class="btn btn-primary btn-lg ng-binding" style="display:block;margin-bottom:5px;" >新建</button>
-            <button class="btn btn-primary btn-lg ng-binding" style="display:block;margin-bottom:5px;"  ng-click="saveTemplate()">保存</button>
+    <div class="col-xs-7 col-md-8 col-lg-8 editBox" ng-style="{height:containerHeight}">
+        <div id="editArea" class="">  
         </div>
-         
+	   	 	</div>
+    <div class="style">
+             <a>样式区</a>
+            
+       </div>
+       <div class="Control">
+         <control-box></control-box>         
+</div>         
          
     <div class="float" style="z-index:999 display:none">
     </div> 

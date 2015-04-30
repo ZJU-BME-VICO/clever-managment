@@ -3,6 +3,7 @@ function($compile,$document) {
         return {
         require:'^storagetemplateListTree',
         restrict : 'E',
+        transclude : true,
         scope : {
             treeData:'=',
             nodeData : '=',
@@ -10,20 +11,22 @@ function($compile,$document) {
             selectNodeCallback : '=',
             doubleClickNodeCallback:'=',
         },
-        restrict : 'E',
         link : function(scope,element, attrs,treeCtrl) {             
             scope.nodeData.collapsed = true;
             scope.treeScope.nodes.push(scope.nodeData); 
             treeCtrl.getNodes().push(scope.nodeData);
-            var template = '<ul id={{nodeData.name+"."+nodeData.latestTemplateVersion}}>' +
+            var template = '<div>'+
+                            '<div>'+
+                              '<ul id={{nodeData.name+"."+nodeData.latestTemplateVersion}}>' +
                                 '<li>' +
                                     '<img ng-class="nodeData.picType"></img>' +
                                     '<span ng-class="nodeData.selected"  ng-dblclick="doubleClickNodeLabel(nodeData)">' +
                                         '{{nodeData.conceptName}}' +'('+'{{nodeData.latestTemplateVersion}}'+')'+
                                     '</span>' +
-                                    '  <template-list-tree tree-data="templateDetail" ng-mousedown="cloneItems()"></template-list-tree> '+
                                 '</li>' +
-                            '</ul>';
+                            '</ul>'+
+                            '</div>'+'<template-list-tree tree-data="templateDetail" ng-mousedown="cloneItems()">'+'</template-list-tree>'+
+                          '</div>';
 
             if (scope.nodeData) {
                 element.html('').append($compile( template )(scope));

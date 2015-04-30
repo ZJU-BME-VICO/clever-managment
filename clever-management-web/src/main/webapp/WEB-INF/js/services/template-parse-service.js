@@ -95,11 +95,11 @@ angular.module('clever.management.services.templateParse',[]).service('templateP
              angular.forEach(tree,function(value){
                   value.parent=parent;
                   if(value.label.code==code){//agree
-                    if(value.parent.label.text){
+                    if(value.parent.label.text==name){
                        if(value.children){
                        value.children.push(arResult);}
                        else{
-                           value.children=[];
+                            value.children=[];
                             value.children.push(arResult);
                        }
                     }
@@ -115,7 +115,7 @@ angular.module('clever.management.services.templateParse',[]).service('templateP
         }else{
              tree.parent=parent;
              if(tree.label.code==code){//agree
-                if(tree.parent.label.text){
+                if(tree.parent.label.text==name){
                      if(tree.children){
                        tree.children.push(arResult);}
                        else{
@@ -137,6 +137,13 @@ angular.module('clever.management.services.templateParse',[]).service('templateP
     function processRules(archetype,node){
        var tree=archetype.definitions.treeItems;
        var term_definitions=archetype.terminologies;
+        if(term_definitions){
+           for(i=0;i<term_definitions.terms.length;i++){
+              if(term_definitions.terms[i].language=="en")
+               {
+                   items=term_definitions.terms[i].items;}
+               }
+           }
        var parent;
        var archetypeTree=[];
        var ruleList=[];
@@ -150,7 +157,7 @@ angular.module('clever.management.services.templateParse',[]).service('templateP
                ruleList.push({code:code,flag:flag});        
                }
         }
-       getArchetypeDetail(tree,parent,ruleList,archetypeTree,term_definitions);
+       getArchetypeDetail(tree,parent,ruleList,archetypeTree,items);
         return archetypeTree;        
     }
 
@@ -288,32 +295,36 @@ angular.module('clever.management.services.templateParse',[]).service('templateP
 
     function nodeInfo(node,term_definitions){
        var code,name,type,text,archtype_id,dataType,picType;
+       var dataValue=[];
        var type=node.label.type;
        var text=node.label.text;
        if (node.label.code) {
            code = node.label.code;
-           var items;
            if(term_definitions){
-               for(i=0;i<term_definitions.terms.length;i++){
-                  if(term_definitions.terms[i].language=="en")
-                   {
-                       items=term_definitions.terms[i].items;
-                       angular.forEach(items,function(value){
-                         if(value.code==code){
-                         name=value.text;}
-                        });
-                   }
+               angular.forEach(term_definitions,function(value){
+                 if(value.code==code){
+                 name=value.text;}
+                });
                }       
             }       
-        }
         if(!name){
             name=text;}
         if(text=="ELEMENT"){
             dataType=node.children[0].children[0].label.text;
+           /* var childDt;
+            if(node.children[0].children[0].children[0]){
+                childDt=node.children[0].children[0].children[0].label.text;
+                if(childDt=="DV_CODED_TEXT"){
+                    //原型解析之后 defining code的内容木有了 ，没有默认值；
+                }
+            }*/
             picType=dataType;
+             if(dataType=="DV_CODED_TEXT"){            
+        }
         }else{
             picType=text;
         }
+       
        return {
            label : {
                 type : type,// type attributes only2
@@ -322,6 +333,7 @@ angular.module('clever.management.services.templateParse',[]).service('templateP
                 labelContent : name,
                 dataType : dataType,//先设置用一下
                 picType : picType,
+                dataValue:dataValue
            }}; 
        
     }
