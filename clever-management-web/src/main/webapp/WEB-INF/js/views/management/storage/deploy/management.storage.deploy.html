@@ -1,0 +1,49 @@
+<div class="row">
+    <div class="col-md-7">
+        <div class="panel panel-default">
+            <div class="panel-heading text-center" style="font-size: 1.2em;">To deploy
+                <button class="btn btn-success pull-right" style="margin-top: -5px;"><span class="glyphicon glyphicon-cloud-upload"></span>Deploy</button>
+            </div>
+            <tabset>
+                <tab heading="Template">
+                    <div class="list-group" ng-style="{height: containerHeight - 120}" style="overflow: auto; margin-top: 5px;">
+                        <div class="list-group-item" ng-repeat="master in templateMasterList" style="border:0px; padding: 5px 15px">
+                            <div class="row" ng-click="master.isSelected = !master.isSelected">
+                                <div class="col-xs-5 col-md-8">
+                                    <div class="input-group">
+                                        <span class="input-group-addon"><input type="checkbox" ng-model="master.isSelected" ng-click="$event.stopPropagation()"></span>
+                                        <sapn type="text" class="form-control" style="cursor: pointer" tooltip-placement="right" tooltip-popup-delay='500' tooltip='{{master.name}}'>{{getFixedTitle(master.name)}}</sapn>
+                                    </div>
+                                </div>
+                                <div class="col-xs-5 col-md-4">
+                                    <div class="input-group">
+                                        <span class="input-group-addon" style="cursor: default;">Version</span>
+                                        <select class="form-control" ng-model="master.selectedTemplate" ng-click="$event.stopPropagation()" ng-options="template.version for template in master.templates">
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </tab>
+                <tab heading="Deploy record">
+                    <div ng-style="{height: containerHeight - 120}" style="overflow: auto; margin-top: 5px;">
+                        Deploy records table
+                    </div>
+                </tab>
+            </tabset>
+        </div>
+    </div>
+    <div class="col-md-5">
+        <div class="panel panel-default">
+            <div class="panel-heading text-center" style="font-size: 1.2em;">deployed</div>
+            <!-- <div class="panel-body" ng-style="{height: containerHeight - 80}" style="overflow: auto"> -->
+            <ul class="list-group" ng-style="{height: containerHeight - 80}" style="overflow: auto">
+                <li class="list-group-item" ng-repeat="master in templateMasterList">
+                    {{master.templates[0].name}}
+                </li>
+            </ul>
+        </div>
+        <!-- </div> -->
+    </div>
+</div>

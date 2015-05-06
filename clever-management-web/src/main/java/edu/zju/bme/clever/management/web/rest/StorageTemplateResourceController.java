@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import org.hibernate.annotations.SourceType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -24,6 +23,7 @@ import edu.zju.bme.clever.management.service.UserService;
 import edu.zju.bme.clever.management.service.entity.EntityClassSource;
 import edu.zju.bme.clever.management.service.entity.FileProcessResult;
 import edu.zju.bme.clever.management.service.entity.FileProcessResult.FileStatus;
+import edu.zju.bme.clever.management.service.entity.LifecycleState;
 import edu.zju.bme.clever.management.service.entity.TemplateMaster;
 import edu.zju.bme.clever.management.service.entity.TemplatePropertyType;
 import edu.zju.bme.clever.management.service.entity.TemplateRevisionFile;
@@ -31,7 +31,6 @@ import edu.zju.bme.clever.management.service.entity.User;
 import edu.zju.bme.clever.management.service.exception.VersionControlException;
 import edu.zju.bme.clever.management.web.entity.ActionLogInfo;
 import edu.zju.bme.clever.management.web.entity.ArchetypeInfo;
-import edu.zju.bme.clever.management.web.entity.ArchetypeMasterInfo;
 import edu.zju.bme.clever.management.web.entity.ArchetypeVersionMasterInfo;
 import edu.zju.bme.clever.management.web.entity.EntityClassInfo;
 import edu.zju.bme.clever.management.web.entity.FileUploadResult;
@@ -55,20 +54,19 @@ public class StorageTemplateResourceController extends
 	@RequestMapping(value = "/list", method = RequestMethod.GET)
 	public List<StorageTemplateMasterInfo> getStorageTemplateMasterList() {
 		return this.providerService
-				.getAllStorageTemplateMasters()
-				.stream()
-				.map(master -> {
-					StorageTemplateMasterInfo info = new StorageTemplateMasterInfo();
-					info.setId(master.getId());
-					info.setConceptName(master.
-							getSpecialiseArchetypeVersionMaster().getConceptName());
-					info.setName(master.getName());
-					info.setLatestTemplateVersion(master
-							.getLatestRevisionFileVersion());
-					info.setLifecycleState(master
-							.getLatestRevisionFileLifecycleState().getValue());
-					return info;
-				}).collect(Collectors.toList());
+				   .getAllStorageTemplateMasters()
+				   .stream()
+					.map(master -> {
+						StorageTemplateMasterInfo info = new StorageTemplateMasterInfo();
+						info.setId(master.getId());
+						info.setConceptName(master.getConceptName());
+						info.setName(master.getName());
+						info.setLatestTemplateVersion(master
+								.getLatestRevisionFileVersion());
+						info.setLifecycleState(master
+								.getLatestRevisionFileLifecycleState().getValue());
+						return info;
+					}).collect(Collectors.toList());
 	}
 
 	@RequestMapping(value = "/master/id/{id}", method = RequestMethod.GET)
@@ -127,6 +125,50 @@ public class StorageTemplateResourceController extends
 				.collect(Collectors.toList());
 	}
 
+	@RequestMapping(value = "/list/verify", method = RequestMethod.GET)
+	public List<StorageTemplateInfo> getTemplateFilesToApprove(
+			Authentication authentication) {
+		// Validate user authority
+
+		List<TemplateRevisionFile> TemplateFiles = this.providerService
+				.getTemplateFilesToVerify();
+		this.isResourcesNull(TemplateFiles);
+		return TemplateFiles.stream()
+				.map(file -> this.constructStorageTemplateInfo(file))
+				.collect(Collectors.toList());
+	}
+	
+	@RequestMapping(value = "/list/deploy", method = RequestMethod.GET)
+	public List<StorageTemplateMasterInfo> getStorageMasterListToDeploy(
+			Authentication authentication){
+		// Validate user authority
+		
+		List<TemplateMaster> masters = this.providerService.getAllStorageTemplateMasters();
+		return masters.stream()
+					  .map(master -> {
+						  StorageTemplateMasterInfo masterInfo = new StorageTemplateMasterInfo();
+						  masterInfo.setId(master.getId());
+						  masterInfo.setName(master.getName());
+						  master.getRevisionFiles()
+						   		.stream()
+								.filter(file -> file.getLifecycleState()
+										.equals(LifecycleState.PUBLISHED))
+								.forEach(file -> {
+									StorageTemplateInfo templateInfo = new StorageTemplateInfo();
+									templateInfo.setId(file.getId());
+									templateInfo.setName(file.getName());
+									templateInfo.setOet(file.getOet());
+									templateInfo.setArm(file.getPropertyValue(TemplatePropertyType.ARM));
+									templateInfo.setVersion(file.getVersion());
+									templateInfo.setSerialVersion(file.getSerialVersion());
+									masterInfo.getTemplates().add(templateInfo);
+								});
+						  return masterInfo;
+					  })
+					  .filter(info -> info.getTemplates().size() > 0)
+					  .collect(Collectors.toList());
+	}
+	
 	@RequestMapping(value = "/action/submit/id/{id}", method = RequestMethod.GET)
 	public FileUploadResult sumbmitTemplateFile(@PathVariable int id,
 			Authentication authentication) {
@@ -142,19 +184,6 @@ public class StorageTemplateResourceController extends
 			result.setSucceeded(false);
 		}
 		return result;
-	}
-
-	@RequestMapping(value = "/list/verify", method = RequestMethod.GET)
-	public List<StorageTemplateInfo> getTemplateFilesToApprove(
-			Authentication authentication) {
-		// Validate user authority
-
-		List<TemplateRevisionFile> TemplateFiles = this.providerService
-				.getTemplateFilesToVerify();
-		this.isResourcesNull(TemplateFiles);
-		return TemplateFiles.stream()
-				.map(file -> this.constructStorageTemplateInfo(file))
-				.collect(Collectors.toList());
 	}
 
 	@RequestMapping(value = "/action/approve/id/{id}", method = RequestMethod.GET)
@@ -300,13 +329,14 @@ public class StorageTemplateResourceController extends
 	private StorageTemplateMasterInfo constructStorageTemplateMasterInfo(
 			TemplateMaster templateMaster) {
 		StorageTemplateMasterInfo masterInfo = new StorageTemplateMasterInfo();
+		// Set template master info
 		masterInfo.setId(templateMaster.getId());
 		masterInfo.setName(templateMaster.getName());
-//		masterInfo.setRmEntity(templateMaster.getRmEntity());
-//		masterInfo.setRmName(templateMaster.getRmName());
-//		masterInfo.setRmOriginator(templateMaster.getRmOrginator());
-//		masterInfo.setConceptName(templateMaster.getConceptName());
-//		masterInfo.setConceptDescription(templateMaster.getConceptDescription());
+		masterInfo.setRmEntity(templateMaster.getRmEntity());
+		masterInfo.setRmName(templateMaster.getRmName());
+		masterInfo.setRmOriginator(templateMaster.getRmOrginator());
+		masterInfo.setConceptName(templateMaster.getConceptName());
+		masterInfo.setConceptDescription(templateMaster.getConceptDescription());
 		masterInfo.setKeywords(templateMaster.getKeywords());
 		masterInfo.setPurpose(templateMaster.getPurpose());
 		masterInfo.setUse(templateMaster.getUse());
@@ -355,6 +385,7 @@ public class StorageTemplateResourceController extends
 		StorageTemplateInfo info = new StorageTemplateInfo();
 		info.setId(templateFile.getId());
 		info.setName(templateFile.getName());
+		info.setRmEntity(templateFile.getTemplateMaster().getRmEntity());
 		info.setVersion(templateFile.getVersion());
 		info.setSerialVersion(templateFile.getSerialVersion());
 		info.setOet(templateFile.getOet());
@@ -365,6 +396,13 @@ public class StorageTemplateResourceController extends
 		info.setEditorId(templateFile.getEditor().getId());
 		info.setEditorName(templateFile.getEditor().getName());
 		info.setLifecycleState(templateFile.getLifecycleState().getValue());
+		// Set last template file
+		Optional.ofNullable(templateFile.getLastRevisionFile())
+				.ifPresent(lastTemplate -> {
+					StorageTemplateInfo lastInfo = new StorageTemplateInfo();
+					lastInfo.setOet(lastTemplate.getOet());
+					info.setLastTemplateFile(lastInfo);
+				});
 		// Set specialise archetyep info
 		ArchetypeInfo specialiseInfo = new ArchetypeInfo();
 		specialiseInfo.setId(templateFile

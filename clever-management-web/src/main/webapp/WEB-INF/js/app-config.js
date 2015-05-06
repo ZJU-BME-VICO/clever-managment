@@ -28,6 +28,7 @@ var config = {
 	'STORAGE_TEMPLATE_REJECT_BY_ID_URL' : prefix + '/templates/storage/action/reject/id/',
 	'STORAGE_TEMPLATE_REMOVE_BY_ID_URL' : prefix + '/templates/storage/action/remove/id/',
 	'STORAGE_TEMPLATE_UPGRADE_BY_ID_URL' : prefix + '/templates/storage/action/upgrade/id/',
+	'STORAGE_TEMPLATE_LIST_DEPLOY_URL' : prefix + '/templates/storage/list/deploy',
 	'STORAGE_TEMPLATE_VALIDATE_URL' : prefix + '/templates/storage/action/validate',
 	'STORAGE_TEMPLATE_UPLOAD_URL' : prefix + '/templates/storage/action/upload',
 	'APPLICATION_LIST_URL' : prefix + '/applications/list',

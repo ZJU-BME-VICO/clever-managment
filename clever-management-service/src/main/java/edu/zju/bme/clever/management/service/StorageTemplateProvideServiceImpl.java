@@ -81,8 +81,9 @@ public class StorageTemplateProvideServiceImpl implements StorageTemplateProvide
 		List<TemplateMaster> templateMaster = this.TemplateMaster1Repo
 				.findByTemplateTypeAndLatestRevisionFileLifecycleState(
 						TemplateType.STORAGE, LifecycleState.PUBLISHED);
-		return templateMaster.stream().map(file -> file.getLatestRevisionFile())
-				.collect(Collectors.toList());
+		return templateMaster.stream()
+							 .map(file -> file.getLatestRevisionFile())
+							 .collect(Collectors.toList());
 	}
 
 	@Override

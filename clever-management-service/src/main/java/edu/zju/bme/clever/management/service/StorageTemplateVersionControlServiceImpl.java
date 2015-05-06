@@ -143,6 +143,15 @@ public class StorageTemplateVersionControlServiceImpl implements
 				});
 		master.setCopyright(details.getCopyright());
 		master.setTemplateType(TemplateType.STORAGE);
+		// Set template master specialse info
+		master.setConceptName(specialiseArchetypeVersionMaster
+				.getConceptName());
+		master.setConceptDescription(specialiseArchetypeVersionMaster
+				.getConceptDescription());
+		master.setRmEntity(specialiseArchetypeVersionMaster.getRmEntity());
+		master.setRmName(specialiseArchetypeVersionMaster.getRmName());
+		master.setRmOrginator(specialiseArchetypeVersionMaster
+				.getRmOrginator());
 		master.setVersion(specialiseArchetypeVersionMaster.getVersion());
 		master.setSpecialiseArchetypeVersionMaster(specialiseArchetypeVersionMaster);
 		this.templateMasterRepo.save(master);
@@ -556,12 +565,15 @@ public class StorageTemplateVersionControlServiceImpl implements
 			templateMaster.setLatestRevisionFileVersion(lastTemplate
 					.getVersion());
 			this.templateMasterRepo.save(templateMaster);
+			// Remove file
+			this.templateFileRepo.delete(templateFile);
+			// Log action
+			this.logTemplateAction(templateFile, ActionType.REJECT_AND_REMOVE, user);
 		} else {
 			// The first file of master, remove master
 			this.templateMasterRepo.delete(templateMaster);
 		}
-		// Remove file
-		this.templateFileRepo.delete(templateFile);
+		
 	}
 
 	private TemplateDocument parseOet(InputStream oetStream)

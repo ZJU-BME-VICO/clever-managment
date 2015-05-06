@@ -1,16 +1,13 @@
-<div class="page-header" style="color:#337AB7;font-size:35px">
-  <span style="margin-left:10px;">{{'ARCHETYPE_VERIFY'|translate}}</span>
+<div class="row col-xs-12 col-md-12 col-lg-12" ng-style="{height: containerHeight - 40}"
+    <ul class="list-group" ng-style="{height: containerHeight - 80}" style="overflow: auto;">
+        <li class="list-group-item" ng-repeat="archetypeFile in archetypeFiles" style="overflow: hidden;">
+            {{archetypeFile.name}}
+            <div class="btn-group pull-right btn-group-sm" role="group">
+                <button type="button" class="btn btn-default" ng-click="adlArchetypeFile(archetypeFile)">Adl</button>
+                <button type="button" class="btn btn-default" ng-click="approveArchetypeFile(archetypeFile)">Approve</button>
+                <button type="button" class="btn btn-default" ng-click="rejectArchetypeFile(archetypeFile)">Reject</button>
+                <button type="button" class="btn btn-default" ng-click="removeArchetypeFile(archetypeFile)">Remove</button>
+            </div>
+        </li>
+    </ul>
 </div>
-<div ng-style="{height:containerHeight-220}" style="posotion:absolute;overflow:auto;border-bottom:1px solid #eee">
-	<div class="list-group">
-	  <a href="javascript:void(0)" style="margin-bottom:15px" class="list-group-item" 
-	  		ng-repeat="list in teamreviewArchetypeList" ng-click="setVerifyId(list.id)">
-	    <img class="clever-icon teamreview" style="padding: 0 10px;height: 16px;"></img>
-		<span>{{ list.name }}</span>
-	  </a>
-	</div>
-</div>
-<input class="btn btn-primary" style="position:absolute;right:95px;width:68px;margin-top:15px" ng-click="approveFile()"
-	ng-disabled="isValid()" value="{{'ARCHETYPE_VERIFY_APPROVE'|translate}}" type="button" />
-<input class="btn btn-warning" style="position:absolute;right:20px;width:68px;margin-top:15px" ng-click="reject()"
-	ng-disabled="isValid()" value="{{'ARCHETYPE_VERIFY_REJECT'|translate}}" type="button" />

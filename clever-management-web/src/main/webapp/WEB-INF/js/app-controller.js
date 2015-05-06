@@ -1,4 +1,4 @@
-angular.module('clever.management.controllers.app', []).controller('appCtrl', function($scope, $translate, $window, $timeout, authenticationService) {
+angular.module('clever.management.controllers.app', []).controller('appCtrl', function($scope, $translate, $window, $timeout, authenticationService, containerService) {
 
 	$scope.isAuthenticated = false;
 	$scope.$watch(function() {
@@ -20,9 +20,11 @@ angular.module('clever.management.controllers.app', []).controller('appCtrl', fu
 		}
 	};
 
+
 	$scope.containerHeight = $window.innerHeight - 100;
 
 	angular.element($window).bind('resize', function() {
+		// $scope.containerHeight = $window.innerHeight - 100 < 700?700:$window.innerHeight - 100;
 		$scope.containerHeight = $window.innerHeight - 100;
 		$scope.$apply();
 	});

@@ -6,6 +6,8 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import org.hibernate.annotations.SourceType;
@@ -122,66 +124,38 @@ public class ArchetypeResourceController extends AbstractResourceController {
 				ArchetypeMasterInfo info = infos.get(master.getId());
 				info.setRoot(false);
 				infos.get(master.getSpecialiseArchetypeMasterId())
-						.getSpecialisedArchetypeMasters().add(info);
+					 .getSpecialisedArchetypeMasters().add(info);
 
 			}
 		});
-		return infos.values().stream().filter(info -> info.isRoot())
-				.collect(Collectors.toList());
-	 }
+		return infos.values().stream()
+							 .filter(info -> info.isRoot())
+							 .collect(Collectors.toList());
+	}
 
 	@RequestMapping(value = "/list/edit/draft", method = RequestMethod.GET)
-	public List<ArchetypeInfo> getArchtypeListToEdit(Authentication authentication) {
+	public List<ArchetypeInfo> getArchtypeListToEdit(
+			Authentication authentication) {
 		String userName = ((UserDetails) authentication.getPrincipal())
 				.getUsername();
 		User user = this.userService.getUserByName(userName);
 		List<ArchetypeRevisionFile> files = this.archetypeProvideService
 				.getDraftArchetypeRevisionFileToEdit(user);
-		return files
-				.stream()
-				.map(file -> {
-						ArchetypeInfo info = new ArchetypeInfo();
-						info.setId(file.getId());
-						info.setName(file.getName());
-						info.setVersionMasterId(file.getVersionMasterId());
-						info.setSerialVersion(file.getSerialVersion());
-						info.setLifecycleState(file.getLifecycleState().toString());
-						return info;
-				}).collect(Collectors.toList());
+		return constructArchetypeInfoList(files);
 	}
-	
+
 	@RequestMapping(value = "/list/edit/published", method = RequestMethod.GET)
 	public List<ArchetypeInfo> getArchtypeListToEdit() {
 		List<ArchetypeRevisionFile> files = this.archetypeProvideService
 				.getLatestPublishArchetypeRevisionFileToEdit();
-		return files
-				.stream()
-				.map(file -> {
-						ArchetypeInfo info = new ArchetypeInfo();
-						info.setId(file.getId());
-						info.setName(file.getName());
-						info.setVersionMasterId(file.getVersionMasterId());
-						info.setSerialVersion(file.getSerialVersion());
-						info.setLifecycleState(file.getLifecycleState().toString());
-						return info;
-				}).collect(Collectors.toList());
+		return constructArchetypeInfoList(files);
 	}
-	
+
 	@RequestMapping(value = "/list/verify", method = RequestMethod.GET)
-	public List<ArchetypeInfo> getArchetypeListToVerify() {
+	public List<ArchetypeInfo> getArchetypeListToVerify() throws Exception {
 		List<ArchetypeRevisionFile> files = this.archetypeProvideService
 				.getArchetypeRevisionFileToVerify();
-		return files
-				.stream()
-				.map(file -> {
-						ArchetypeInfo info = new ArchetypeInfo();
-						info.setId(file.getId());
-						info.setName(file.getName());
-						info.setVersionMasterId(file.getVersionMasterId());
-						info.setSerialVersion(file.getSerialVersion());
-						info.setLifecycleState(file.getLifecycleState().toString());
-						return info;
-				}).collect(Collectors.toList());
+		return constructArchetypeInfoList(files);
 	}
 
 	@RequestMapping(value = "/id/{id}", method = RequestMethod.GET)
@@ -200,40 +174,6 @@ public class ArchetypeResourceController extends AbstractResourceController {
 				.getArchetypeRevisionFileByName(name);
 		this.isResourcesNull(file);
 		return this.constructArchetypeInfo(file);
-	}
-
-	private ArchetypeInfo constructArchetypeInfo(ArchetypeRevisionFile file)
-			throws ParseException, Exception, IOException {
-		ArchetypeInfo info = new ArchetypeInfo();
-		info.setId(file.getId());
-		info.setName(file.getName());
-		info.setSerialVersion(file.getSerialVersion());
-		info.setAdl(file.getAdl());
-		ADLParser parser = new ADLParser(file.getAdl());
-		Archetype archetype = parser.parse();
-		info.setRmEntity(archetype.getArchetypeId().rmEntity());
-		info.setRmName(archetype.getArchetypeId().rmName());
-		info.setRmOriginator(archetype.getArchetypeId().rmOriginator());
-		info.setConceptName(archetype.getConceptName(archetype
-				.getOriginalLanguage().getCodeString()));
-		info.setXml(this.xmlSerializer.output(archetype));
-		info.setLifecycleState(file.getLifecycleState().getValue());
-//		info.setVersionMasterName(file.getVersionMaster().getName());
-		String archetypeId = archetype.getArchetypeId().getValue();
-		info.setVersionMasterName(archetypeId.substring(0, archetypeId.lastIndexOf(".")));
-		info.setVersionMasterId(file.getVersionMasterId());
-		// Set specialise archetype info
-		if (file.getSpecialiseArchetypeRevisionFileId() != null) {
-			ArchetypeInfo specialiseInfo = new ArchetypeInfo();
-			specialiseInfo.setId(file.getSpecialiseArchetypeRevisionFileId());
-			specialiseInfo.setName(file
-					.getSpecialiseArchetypeRevisionFileName());
-			info.setSpecialiseArchetype(specialiseInfo);
-		}
-		// Set editor info
-		info.setEditorId(file.getEditor().getId());
-		info.setEditorName(file.getEditor().getName());
-		return info;
 	}
 
 	@RequestMapping(value = "/id/{id}/adl", method = RequestMethod.GET)
@@ -273,7 +213,8 @@ public class ArchetypeResourceController extends AbstractResourceController {
 	}
 
 	@RequestMapping(value = "/master/name/{name}", method = RequestMethod.GET)
-	public ArchetypeVersionMasterInfo getVersionMasterByName(@PathVariable String name) {
+	public ArchetypeVersionMasterInfo getVersionMasterByName(
+			@PathVariable String name) {
 		ArchetypeVersionMaster versionMaster = this.archetypeProvideService
 				.getArchetypeVersionMasterByName(name);
 		this.isResourcesNull(versionMaster);
@@ -361,11 +302,10 @@ public class ArchetypeResourceController extends AbstractResourceController {
 		String userName = ((UserDetails) authentication.getPrincipal())
 				.getUsername();
 		User user = this.userService.getUserByName(userName);
-		String fileAdl = this.archetypeProvideService
-				.getArchetypeAdlById(id);
+		String fileAdl = this.archetypeProvideService.getArchetypeAdlById(id);
 		try {
-			this.archetypeVersionControlService.editArchetype(id, fileAdl,
-					user);
+			this.archetypeVersionControlService
+					.editArchetype(id, fileAdl, user);
 		} catch (Exception ex) {
 			result.setMessage(ex.getMessage());
 			result.setSucceeded(false);
@@ -437,7 +377,8 @@ public class ArchetypeResourceController extends AbstractResourceController {
 				.getUsername();
 		User user = this.userService.getUserByName(userName);
 		try {
-			this.archetypeVersionControlService.rejectAndRemoveArchetype(id, user);
+			this.archetypeVersionControlService.rejectAndRemoveArchetype(id,
+					user);
 		} catch (Exception ex) {
 			result.setMessage(ex.getMessage());
 			result.setSucceeded(false);
@@ -446,7 +387,62 @@ public class ArchetypeResourceController extends AbstractResourceController {
 		return result;
 	}
 
-	private ArchetypeVersionMasterInfo constructArchetypeVersionMasterInfo(ArchetypeVersionMaster versionMaster) {
+	private ArchetypeInfo constructArchetypeInfo(ArchetypeRevisionFile file)
+			throws ParseException, Exception, IOException {
+		ArchetypeInfo info = new ArchetypeInfo();
+		info.setId(file.getId());
+		info.setName(file.getName());
+		info.setSerialVersion(file.getSerialVersion());
+		info.setAdl(file.getAdl());
+		ADLParser parser = new ADLParser(file.getAdl());
+		Archetype archetype = parser.parse();
+		info.setRmEntity(archetype.getArchetypeId().rmEntity());
+		info.setRmName(archetype.getArchetypeId().rmName());
+		info.setRmOriginator(archetype.getArchetypeId().rmOriginator());
+		info.setConceptName(archetype.getConceptName(archetype
+				.getOriginalLanguage().getCodeString()));
+		info.setXml(this.xmlSerializer.output(archetype));
+		info.setLifecycleState(file.getLifecycleState().getValue());
+		// info.setVersionMasterName(file.getVersionMaster().getName());
+		String archetypeId = archetype.getArchetypeId().getValue();
+		info.setVersionMasterName(archetypeId.substring(0,
+				archetypeId.lastIndexOf(".")));
+		info.setVersionMasterId(file.getVersionMasterId());
+		// Set specialise archetype info
+		if (file.getSpecialiseArchetypeRevisionFileId() != null) {
+			ArchetypeInfo specialiseInfo = new ArchetypeInfo();
+			specialiseInfo.setId(file.getSpecialiseArchetypeRevisionFileId());
+			specialiseInfo.setName(file
+					.getSpecialiseArchetypeRevisionFileName());
+			info.setSpecialiseArchetype(specialiseInfo);
+		}
+		// Set last revision archetype file
+		Optional.ofNullable(file.getLastRevisionFile()).ifPresent(
+				lastArchetype -> {
+					ArchetypeInfo lastInfo = new ArchetypeInfo();
+					lastInfo.setAdl(lastArchetype.getAdl());
+					info.setLastRevisionArchetype(lastInfo);
+				});
+		// Set editor info
+		info.setEditorId(file.getEditor().getId());
+		info.setEditorName(file.getEditor().getName());
+		return info;
+	}
+
+	private List<ArchetypeInfo> constructArchetypeInfoList(List<ArchetypeRevisionFile> files){
+		return files.stream()
+				.map(file -> {
+					try {
+						return this.constructArchetypeInfo(file);
+					} catch (Exception e) {
+						System.out.println("hvfdisohv" + e.getMessage());
+						return null;
+					}
+				}).collect(Collectors.toList());
+	}
+	
+	private ArchetypeVersionMasterInfo constructArchetypeVersionMasterInfo(
+			ArchetypeVersionMaster versionMaster) {
 		ArchetypeVersionMasterInfo versionMasterInfo = new ArchetypeVersionMasterInfo();
 		// Add basic info
 		versionMasterInfo.setId(versionMaster.getId());
@@ -455,15 +451,17 @@ public class ArchetypeResourceController extends AbstractResourceController {
 		versionMasterInfo.setRmName(versionMaster.getRmName());
 		versionMasterInfo.setRmOriginator(versionMaster.getRmOrginator());
 		versionMasterInfo.setConceptName(versionMaster.getConceptName());
-		versionMasterInfo.setConceptDescription(versionMaster.getConceptDescription());
+		versionMasterInfo.setConceptDescription(versionMaster
+				.getConceptDescription());
 		versionMasterInfo.setKeywords(versionMaster.getKeywords());
 		versionMasterInfo.setCopyright(versionMaster.getCopyright());
 		versionMasterInfo.setPurpose(versionMaster.getPurpose());
 		versionMasterInfo.setUse(versionMaster.getUse());
 		versionMasterInfo.setMisuse(versionMaster.getMisuse());
-		versionMasterInfo.setLifecycleState(versionMaster.getLatestRevisionFileLifecycleState()
-				.getValue());
-		versionMasterInfo.setLatestArchetypeVersion(versionMaster.getLatestRevisionFileVersion());
+		versionMasterInfo.setLifecycleState(versionMaster
+				.getLatestRevisionFileLifecycleState().getValue());
+		versionMasterInfo.setLatestArchetypeVersion(versionMaster
+				.getLatestRevisionFileVersion());
 		// Set archetpye master
 		versionMasterInfo.setMasterId(versionMaster.getArchetypeMasterId());
 		versionMasterInfo.setMasterName(versionMaster.getArchetypeMasterName());
@@ -477,13 +475,16 @@ public class ArchetypeResourceController extends AbstractResourceController {
 			versionMasterInfo.getHistoryVersionMasters().add(info);
 		});
 		// Add specialise version master
-		ArchetypeVersionMaster specialiseVersionMaster = versionMaster.getSpecialiseArchetypeVersionMaster();
+		ArchetypeVersionMaster specialiseVersionMaster = versionMaster
+				.getSpecialiseArchetypeVersionMaster();
 		if (specialiseVersionMaster != null) {
 			ArchetypeVersionMasterInfo info = new ArchetypeVersionMasterInfo();
 			info.setId(specialiseVersionMaster.getId());
 			info.setName(specialiseVersionMaster.getName());
-			info.setLatestArchetypeVersion(specialiseVersionMaster.getLatestRevisionFileVersion());
-			info.setLatestArchetypeId(specialiseVersionMaster.getLatestRevisionFile().getId());
+			info.setLatestArchetypeVersion(specialiseVersionMaster
+					.getLatestRevisionFileVersion());
+			info.setLatestArchetypeId(specialiseVersionMaster
+					.getLatestRevisionFile().getId());
 			versionMasterInfo.setSpecialiseArchetypeVersionMaster(info);
 		}
 		// Add archetypes

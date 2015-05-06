@@ -15,6 +15,7 @@ public abstract class AbstractFileInfo {
 	private int editorId;
 	private String editorName;
 	private ArchetypeInfo specialiseArchetype;
+	private ArchetypeInfo lastRevisionArchetype;
 
 	public int getId() {
 		return id;
@@ -126,6 +127,14 @@ public abstract class AbstractFileInfo {
 
 	public void setSpecialiseArchetype(ArchetypeInfo specialiseArchetype) {
 		this.specialiseArchetype = specialiseArchetype;
+	}
+
+	public ArchetypeInfo getLastRevisionArchetype() {
+		return lastRevisionArchetype;
+	}
+
+	public void setLastRevisionArchetype(ArchetypeInfo lastRevisionArchetype) {
+		this.lastRevisionArchetype = lastRevisionArchetype;
 	}
 
 	@Override
