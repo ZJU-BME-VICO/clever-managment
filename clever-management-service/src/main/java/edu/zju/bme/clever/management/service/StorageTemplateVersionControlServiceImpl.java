@@ -84,7 +84,7 @@ public class StorageTemplateVersionControlServiceImpl implements
 		// Validate name consistency, name example
 		// openEHR-EHR-CLUSTER.organisation.v1.1
 		String templateName = oet.getTemplate().getName();
-		if (arm.getArchetypeRelationshipMapping().getTemplate().getId()
+		if (!arm.getArchetypeRelationshipMapping().getTemplate().getTemplateId()
 				.equals(templateName)) {
 			throw new VersionControlException(
 					"OET's name and ARM's name is not consisitent.");
