@@ -8,7 +8,6 @@ function StorageTemplateDeployCtrl($scope, resourceService, STORAGE_TEMPLATE_LIS
             master.isSelected = false;
             master.selectedTemplate = master.templates[0];
         });
-        console.log($scope.templateMasterList);
     });
 
     $scope.getFixedTitle = function(title, length) {

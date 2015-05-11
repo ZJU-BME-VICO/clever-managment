@@ -11,22 +11,26 @@ function StorageTemplateVerifyCtrl($scope, $modal, resourceService, msgboxServic
     $scope.approveTemplateFile = function(templateFile){
     	resourceService.get(STORAGE_TEMPLATE_APPROVE_BY_ID_URL + templateFile.id).then(function(result){
     		if(result.succeeded){
-    			msgboxService.createMessageBox("prompt", "approve succeeded", {}, "success");
+    			msgboxService.createMessageBox("STORAGE_TEMPLATE_VERIFY_MSG_HINT", "STORAGE_TEMPLATE_VERIFY_APPROVE_SUCCEEDED_HINT", {}, "success");
     			$scope.templateFiles.pop(templateFile);
     		}else{
-    			msgboxService.createMessageBox("prompt", result.message, {}, "error");
+    			msgboxService.createMessageBox("STORAGE_TEMPLATE_VERIFY_MSG_HINT", "STORAGE_TEMPLATE_VERIFY_APPROVE_FAILED_HINT", {
+                     errorMsg: result.message
+                }, "error");
     		}
     	});
     }
 
     $scope.rejectTemplateFile = function(templateFile){
-    	msgboxService.createMessageBox("prompt", "reject ?", {}, "question", "yesOrNo").result.then(function(confirm){
+    	msgboxService.createMessageBox("STORAGE_TEMPLATE_VERIFY_MSG_HINT", "STORAGE_TEMPLATE_VERIFY_REJECT_HINT", {}, "question", "yesOrNo").result.then(function(confirm){
     		if(confirm){
     			resourceService.get(STORAGE_TEMPLATE_REJECT_BY_ID_URL + templateFile.id).then(function(result){
     				if(result){
     					$scope.templateFiles.pop(templateFile);
     				}else{
-    					msgboxService.createMessageBox("prompt", result.message, {}, "error");
+    					msgboxService.createMessageBox("STORAGE_TEMPLATE_VERIFY_MSG_HINT", "STORAGE_TEMPLATE_VERIFY_REJECT_FAILED_HINT", {
+                             errorMsg: result.message
+                        }, "error");
     				}
     			});
     		}
@@ -34,29 +38,26 @@ function StorageTemplateVerifyCtrl($scope, $modal, resourceService, msgboxServic
     }
 
     $scope.removeTemplateFile = function(templateFile){
-    	msgboxService.createMessageBox("prompt", "reject and remove ?", {}, "question", "yesOrNo").result.then(function(confirm){
+    	msgboxService.createMessageBox("STORAGE_TEMPLATE_VERIFY_MSG_HINT", "STORAGE_TEMPLATE_VERIFY_REMOVE_HINT", {}, "question", "yesOrNo").result.then(function(confirm){
     		if(confirm){
     			resourceService.get(STORAGE_TEMPLATE_REMOVE_BY_ID_URL + templateFile.id).then(function(result){
     				if(result){
     					$scope.templateFiles.pop(templateFile);
     				}else{
-    					msgboxService.createMessageBox("prompt", result.message, {}, "error");
+    					msgboxService.createMessageBox("STORAGE_TEMPLATE_VERIFY_MSG_HINT", "STORAGE_TEMPLATE_VERIFY_REMOVE_FAILED_HINT", {
+                            errorMsg: result.message
+                        }, "error");
     				}
     			});
     		}
     	});
     }
 
-    $scope.modalHeight.modalHeight = $scope.containerHeight - 50;
-    $scope.$watch('containerHeight', function(newValue) {
-        $scope.modalHeight.modalHeight = newValue - 50;
-    });
-
     $scope.oetTemplateFile = function(templateFile) {
         if (templateFile.lastTemplateFile == null) {
-            documentDiffModalService.open("OET Diff", null, templateFile.oet, $scope.modalHeight);
+            documentDiffModalService.open("STORAGE_TEMPLATE_VERIFY_OET_DIFF", null, templateFile.oet);
         } else {
-            documentDiffModalService.open("OET Diff", templateFile.lastTemplateFile.oet, templateFile.oet, $scope.modalHeight);
+            documentDiffModalService.open("STORAGE_TEMPLATE_VERIFY_OET_DIFF", templateFile.lastTemplateFile.oet, templateFile.oet);
         }
     }
 }

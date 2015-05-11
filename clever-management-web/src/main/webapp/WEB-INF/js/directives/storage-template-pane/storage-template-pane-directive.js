@@ -1,5 +1,5 @@
 define(['lazyLoader'], function(lazyLoader) {
-	lazyLoader.directive('storageTemplatePane', function(archetypeParseService) {
+	lazyLoader.directive('storageTemplatePane', function(archetypeParseService, containerService) {
 		return {
 			restrict : 'E',
 			scope : {
@@ -30,7 +30,13 @@ define(['lazyLoader'], function(lazyLoader) {
 				};
 			},
 			link : function(scope, elm, attrs) {
-				scope.paneHeight = angular.isDefined(attrs.maxHeight) ? scope.$parent.$eval(attrs.maxHeight) - 95 : undefined;
+				scope.paneHeight = containerService.getHeight() - 280;
+                scope.$watch(function() {
+                    return containerService.getHeight()
+                }, function(newValue) {
+                    scope.paneHeight = newValue - 280 < 180 ? 180 : newValue - 280;
+                });
+				// scope.paneHeight = angular.isDefined(attrs.maxHeight) ? scope.$parent.$eval(attrs.maxHeight) - 95 : undefined;
 				scope.tableTitleWidth = angular.isDefined(attrs.tableTitleWidth) ? scope.$parent.$eval(attrs.tableTitleWidth) : 200;
 			},
 		};

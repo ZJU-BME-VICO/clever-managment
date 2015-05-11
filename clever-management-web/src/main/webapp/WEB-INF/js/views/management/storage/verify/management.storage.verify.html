@@ -3,10 +3,10 @@
         <li class="list-group-item" ng-repeat="templateFile in templateFiles" style="overflow: hidden;">
             {{templateFile.name}}
             <div class="btn-group pull-right btn-group-sm" role="group">
-                <button type="button" class="btn btn-default" ng-click="oetTemplateFile(templateFile)">Oet</button>
-                <button type="button" class="btn btn-default" ng-click="approveTemplateFile(templateFile)">Approve</button>
-                <button type="button" class="btn btn-default" ng-click="rejectTemplateFile(templateFile)">Reject</button>
-                <button type="button" class="btn btn-default" ng-click="removeTemplateFile(templateFile)">Remove</button>
+                <button type="button" class="btn btn-default" ng-click="oetTemplateFile(templateFile)">{{'STORAGE_TEMPLATE_VERIFY_OET_DIFF'|translate}}</button>
+                <button type="button" class="btn btn-default" ng-click="approveTemplateFile(templateFile)">{{'STORAGE_TEMPLATE_VERIFY_APPROVE'|translate}}</button>
+                <button type="button" class="btn btn-default" ng-click="rejectTemplateFile(templateFile)">{{'STORAGE_TEMPLATE_VERIFY_REJECT'|translate}}</button>
+                <button type="button" class="btn btn-default" ng-click="removeTemplateFile(templateFile)">{{'STORAGE_TEMPLATE_VERIFY_REMOVE'|translate}}</button>
             </div>
         </li>
     </ul>

@@ -3,10 +3,10 @@
         <li class="list-group-item" ng-repeat="archetypeFile in archetypeFiles" style="overflow: hidden;">
             {{archetypeFile.name}}
             <div class="btn-group pull-right btn-group-sm" role="group">
-                <button type="button" class="btn btn-default" ng-click="adlArchetypeFile(archetypeFile)">Adl</button>
-                <button type="button" class="btn btn-default" ng-click="approveArchetypeFile(archetypeFile)">Approve</button>
-                <button type="button" class="btn btn-default" ng-click="rejectArchetypeFile(archetypeFile)">Reject</button>
-                <button type="button" class="btn btn-default" ng-click="removeArchetypeFile(archetypeFile)">Remove</button>
+                <button type="button" class="btn btn-default" ng-click="adlArchetypeFile(archetypeFile)">{{'ARCHETYPE_VERIFY_ADL_DIFF'|translate}}</button>
+                <button type="button" class="btn btn-default" ng-click="approveArchetypeFile(archetypeFile)">{{'ARCHETYPE_VERIFY_APPROVE'|translate}}</button>
+                <button type="button" class="btn btn-default" ng-click="rejectArchetypeFile(archetypeFile)">{{'ARCHETYPE_VERIFY_REJECT'|translate}}</button>
+                <button type="button" class="btn btn-default" ng-click="removeArchetypeFile(archetypeFile)">{{'ARCHETYPE_VERIFY_REMOVE'|translate}}</button>
             </div>
         </li>
     </ul>

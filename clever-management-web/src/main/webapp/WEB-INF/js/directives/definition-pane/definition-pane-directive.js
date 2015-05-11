@@ -1,5 +1,4 @@
-angular.module('clever.management.directives.definitionPane', []).directive('definitionPane', [
-function() {
+angular.module('clever.management.directives.definitionPane', []).directive('definitionPane', function(containerService) {
 	return {
 		restrict : 'E',
 		scope : {
@@ -64,7 +63,13 @@ function() {
 
 		},
 		link : function(scope, elm, attrs) {
-			scope.contentHeight = angular.isDefined(attrs.maxHeight) ? scope.$parent.$eval(attrs.maxHeight) - 54 : undefined;
+			scope.contentHeight = containerService.getHeight() - 280;
+            scope.$watch(function() {
+                return containerService.getHeight()
+            }, function(newValue) {
+                scope.contentHeight = newValue - 280 < 180 ? 180 : newValue - 280;
+            });
+			// scope.contentHeight = angular.isDefined(attrs.maxHeight) ? scope.$parent.$eval(attrs.maxHeight) - 54 : undefined;
 		}
 	};
-}]);
+});

@@ -21,12 +21,15 @@ angular.module('clever.management.controllers.app', []).controller('appCtrl', fu
 	};
 
 
-	$scope.containerHeight = $window.innerHeight - 100;
+	// $scope.containerHeight = $window.innerHeight - 100;
+	containerService.setHeight($window.innerHeight - 100);
 
 	angular.element($window).bind('resize', function() {
 		// $scope.containerHeight = $window.innerHeight - 100 < 700?700:$window.innerHeight - 100;
-		$scope.containerHeight = $window.innerHeight - 100;
-		$scope.$apply();
+		// $scope.containerHeight = $window.innerHeight - 100;
+		// $scope.$apply();
+		containerService.setHeight($window.innerHeight);
+		$scope.containerHeight = containerService.getHeight() - 100; 
 	});
 
 });
