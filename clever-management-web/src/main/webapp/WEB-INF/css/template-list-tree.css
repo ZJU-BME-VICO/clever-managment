@@ -59,118 +59,125 @@ template-list-tree li .selected {
 	background-color: #aaddff;
 	font-weight: bold;
 }
-template-list-tree li .DV_TEXT {
+ li .DV_TEXT {
 	padding: 0 10px;
 	height: 16px;
 	background-image: url("../img/datatype/text.png");
 	background-repeat: no-repeat;
 }
-template-list-tree li .DV_QUANTITY {
+ li .DV_QUANTITY {
 	padding: 0 10px;
 	height: 16px;
 	background-image: url("../img/datatype/quantity.png");
 	background-repeat: no-repeat;
 }
-template-list-tree li .DV_ORDINAL {
+ li .DV_ORDINAL {
 	padding: 0 10px;
 	height: 16px;
 	background-image: url("../img/datatype/ordinal.png");
 	background-repeat: no-repeat;
 }
-template-list-tree li .DV_BOOLEAN {
+ li .DV_BOOLEAN {
 	padding: 0 10px;
 	height: 16px;
 	background-image: url("../img/datatype/boolean.png");
 	background-repeat: no-repeat;
 }
-template-list-tree li .DV_DATE_TIME {
+ li .DV_DATE_TIME {
 	padding: 0 10px;
 	height: 16px;
 	background-image: url("../img/datatype/datetime.png");
 	background-repeat: no-repeat;
 }
-template-list-tree li .DV_COUNT {
+ li .DV_COUNT {
 	padding: 0 10px;
 	height: 16px;
 	background-image: url("../img/datatype/count.png");
 	background-repeat: no-repeat;
 }
-template-list-tree li .CODE_PHRASE {/*no picture*/
+ li .CODE_PHRASE {/*no picture*/
 	padding: 0 10px;
 	height: 16px;
 	background-image: url("../img/datatype/text.png");
 	background-repeat: no-repeat;
 }
-template-list-tree li .DV_CODED_TEXT {/*no picture*/
+ li .DV_CODED_TEXT {/*no picture*/
 	padding: 0 10px;
 	height: 16px;
 	background-image: url("../img/datatype/text.png");
 	background-repeat: no-repeat;
 }
-template-list-tree li .DV_DURATION {
+ li .DV_DURATION {
 	padding: 0 10px;
 	height: 16px;
 	background-image: url("../img/datatype/duration.png");
 	background-repeat: no-repeat;
 }
-template-list-tree li .COMPOSITION {
-	padding: 0 10px;
-	height: 16px;
-	background-image: url("../img/datatype/composition.png");
-	background-repeat: no-repeat;
+ li .DV_DURATION {
+    padding: 0 10px;
+    height: 16px;
+    background-image: url("../img/datatype/duration.png");
+    background-repeat: no-repeat;
 }
-template-list-tree li .OBSERVATION {
-	padding: 0 10px;
-	height: 16px;
-	background-image: url("../img/datatype/observation.png");
-	background-repeat: no-repeat;
-}
-template-list-tree li .EVENT {
-	padding: 0 10px;
-	height: 16px;
-	background-image: url("../img/datatype/pointintime.png");
-	background-repeat: no-repeat;
-}
-template-list-tree li .CLUSTER {
-	padding: 0 10px;
-	height: 16px;
-	background-image: url("../img/datatype/cluster.png");
-	background-repeat: no-repeat;
-}
-template-list-tree li .HISTORY {
-	padding: 0 10px;
-	height: 16px;
-	background-image: url("../img/datatype/history.png");
-	background-repeat: no-repeat;
-}
-template-list-tree li .SECTION {
-	padding: 0 10px;
-	height: 16px;
-	background-image: url("../img/datatype/section.png");
-	background-repeat: no-repeat;
-}
-template-list-tree li .DV_DURATION {
-	padding: 0 10px;
-	height: 16px;
-	background-image: url("../img/datatype/duration.png");
-	background-repeat: no-repeat;
-}
-template-list-tree li .DV_PROPORTION {
+ li .DV_PROPORTION {
     padding: 0 10px;
     height: 16px;
     background-image: url("../img/datatype/ratio.png");
     background-repeat: no-repeat;
 }
+ li .COMPOSITION {
+	padding: 0 10px;
+	height: 16px;
+	background-image: url("../img/datatype/composition.png");
+	background-repeat: no-repeat;
+}
+ li .OBSERVATION {
+	padding: 0 10px;
+	height: 16px;
+	background-image: url("../img/datatype/observation.png");
+	background-repeat: no-repeat;
+}
+ li .EVENT {
+	padding: 0 10px;
+	height: 16px;
+	background-image: url("../img/datatype/pointintime.png");
+	background-repeat: no-repeat;
+}
+ li .CLUSTER {
+	padding: 0 10px;
+	height: 16px;
+	background-image: url("../img/datatype/cluster.png");
+	background-repeat: no-repeat;
+}
+ li .HISTORY {
+	padding: 0 10px;
+	height: 16px;
+	background-image: url("../img/datatype/history.png");
+	background-repeat: no-repeat;
+}
+ li .SECTION {
+	padding: 0 10px;
+	height: 16px;
+	background-image: url("../img/datatype/section.png");
+	background-repeat: no-repeat;
+}
+ li .INSTRUCTION {
+    padding: 0 10px;
+    height: 16px;
+    background-image: url("../img/datatype/instruction.png");
+    background-repeat: no-repeat;
+}
+ li .ACTIVITY {
+    padding: 0 10px;
+    height: 16px;
+    background-image: url("../img/datatype/activity.png");
+    background-repeat: no-repeat;
+}
+
 .listBox {
 	margin-top: 30px;
 }
 
-.editBox img .DV_BOOLEAN {
-    padding: 0 10px;
-    height: 16px;
-    background-image: url("../img/datatype/boolean.png");
-    background-repeat: no-repeat;
-}
 .style{
     float:left;
     width:120px;
@@ -195,4 +202,26 @@ template-list-tree li .DV_PROPORTION {
 .controlItem img{
     width : 100%;
 }
+#editArea li {
+    list-style: none;
+}
 
+
+body,ul,li{margin:0;padding:0;}
+body{font:12px/24px arial;}
+
+#menu{position:absolute;top:-9999px;left:-9999px;width:100px;border-radius:3px;list-style-type:none;border:1px solid #8f8f8f;padding:2px;background:#fff;}
+#menu li{position:relative;height:24px;padding-left:24px;background:#eaead7;vertical-align:top;}
+#menu li a{display:block;color:#333;background:#fff;padding-left:5px;text-decoration:none;}
+#menu li.active{background:#999;}
+#menu li.active a{color:#fff;background:#8f8f8f;}
+#menu li em{position:absolute;top:0;left:0;width:24px;height:24px;background:url(/jscss/demoimg/201211/ico.png) no-repeat;}
+#menu li em.cur{background-position:0 0;}
+#menu li em.copy{background-position:0 -24px;}
+#menu li em.paste{background-position:0 -48px;}
+
+#contextmenu-node{
+    position: absolute;
+    top: 20px;
+    left:50px;
+}

@@ -5,7 +5,9 @@ function($compile,$document) {
         transclude:true,
         scope:{
             UIData:'=guiData',
-        },      
+        },  
+        template:'<cluster node-data="UIData" tree-scope="treeScope">'
+                    +'</cluster>',
         controller:function($scope,$transclude){
             $scope.groupNodeViewControl={};
         },

@@ -4,6 +4,7 @@ function DesignerCtrl($scope,resourceService,$q,templateParseService,$compile,ST
 	$scope.templateDetail=[];
 	$scope.tplist=[];
 	$scope.controlList=['btnFn','labelFn'];
+	$scope.selected="1";
 
      resourceService.get(STORAGE_TEMPLATE_LIST_URL).then(function(list) {            
             $scope.templateList = list;
@@ -16,9 +17,29 @@ function DesignerCtrl($scope,resourceService,$q,templateParseService,$compile,ST
 	    var parseResult=templateParseService.parseTemplate(template);    
 	    $scope.templateDetail=parseResult;
 	});*/
+
+    console.log("Main Controller loaded.");
+    $scope.isVisible = false;
+  
+    $scope.$watch('isVisible', function(){
+        console.log('change');
+    });
+    
+	$scope.$watch("selected", function(newValue, oldValue) {
+    if (newValue!=oldValue) {
+        alert("watch"); 
+        alert(newValue); 
+    }
+  });
 	
-	
-	$scope.treeControl = {};
+	$scope.deleteElement=function(){
+	    var aa=$scope.selected;
+	    alert("delete");
+	    alert(aa);
+	    var parent=document.getElementById('editArea');
+	    var child=document.getElementById('editArea').currentElement;
+	   // alert(child);
+	};
 	
 	$scope.getTemplateDetail=function(node){
 	    var url=node.name+"."+node.latestTemplateVersion;
@@ -35,19 +56,73 @@ function DesignerCtrl($scope,resourceService,$q,templateParseService,$compile,ST
        
         });
 	};
-
+    
 	$scope.collapse = function() {
-		$scope.treeControl.collapseAll();
+		for(i=0;i<$scope.templateDetail.length;i++){
+            var data=$scope.templateDetail[i];
+            collapseAll(data);
+        }
 	};
 	$scope.expand = function() {
-		$scope.treeControl.expandAll();
+	    for(i=0;i<$scope.templateDetail.length;i++){
+	        var data=$scope.templateDetail[i];
+	        expandAll(data);
+	    }	
 	};
+	
+	
 	$scope.saveTemplate = function() {
-        $scope.treeControl.saveTemp();
+        var html=$('#editArea').html();
+        load("ss.html",html);
     };
-    $scope.creatFn=function(){
-        var id=this.id;
+    $scope.newTemplate = function() {
+      document.getElementById('editArea').innerHTML="";
     };
+    
+    function fake_click(obj) {
+        var ev = document.createEvent("MouseEvents");
+        ev.initMouseEvent("click", true, false, window, 0, 0, 0, 0, 0 , false, false, false, false, 0, null);
+        obj.dispatchEvent(ev);
+    }
+    
+    function load(name,data){             
+        var urlObject=window.URL||window.weblitURL||window;
+        var export_blob=new Blob([data]); 
+        var save_link=document.createElementNS("http://www.w3.org/1999/xhtml","a");
+        save_link.href=urlObject.createObjectURL(export_blob);
+        save_link.download=name;
+        fake_click(save_link);
+    }
+    function collapseAll(data){
+        if(angular.isArray(data)){
+            angular.forEach(data, function(node) {
+                node.collapsed = true;
+                if(node.children){
+                    collapseAll(node.children);
+                }  
+                });
+        }else{
+           data.collapsed = true;
+           if(data.children){
+             collapseAll(data.children);
+           }
+       }
+    }
+    function expandAll(data){
+        if(angular.isArray(data)){
+            angular.forEach(data, function(node) {
+                node.collapsed = false;
+                if(node.children){
+                    expandAll(node.children);
+                }  
+                });
+        }else{
+           data.collapsed = false;
+           if(data.children){
+             expandAll(data.children);
+           }
+       }
+    }
 	
 }
 

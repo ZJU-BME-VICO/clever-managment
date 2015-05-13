@@ -1,11 +1,12 @@
 angular.module('clever.management.directives.templateListTreeNode', []).directive('templateListTreeNode',
 function($compile,$document) {
-         var datatypeList= new Array('DV_QUANTITY','DV_TEXT','DV_ORDINAL', 'DV_DATE_TIME', 'DV_COUNT', 'DV_BOOLEAN','DV_CODED_TEXT','DV_PROPORTION','DV_DURATION');
-         var templatestrList= new Array('<dv-quantity gui-data="nodeData" gui-control="dvquantityControl"></dv-quantity>','<dv-text gui-data="nodeData" gui-control="dvtextControl"></dv-text>',
-                                    '<dv-ordinal gui-data="nodeData" gui-control="dvordinalControl"></dv-ordinal>','<dv-datetime gui-data="nodeData" gui-control="dvdatetimeControl"></dv-datetime>',
+         var datatypeList= new Array('DV_QUANTITY','DV_TEXT','DV_ORDINAL', 'DV_DATE_TIME','DV_DATE', 'DV_COUNT', 'DV_BOOLEAN','DV_CODED_TEXT','CLUSTER','DV_PROPORTION','DV_DURATION');
+         var templatestrList= new Array('<dv-quantity gui-data="nodeData" gui-control="dvquantityControl"></dv-quantity>','<dv-text gui-data="nodeData" gui-control="dvtextControl" selected-Element="selectedElement"></dv-text>',
+                                    '<dv-ordinal gui-data="nodeData" gui-control="dvordinalControl"></dv-ordinal>','<dv-datetime gui-data="nodeData" gui-control="dvdatetimeControl"></dv-datetime>','<dv-datetime gui-data="nodeData" gui-control="dvdatetimeControl"></dv-datetime>',
                                     '<dv-count gui-data="nodeData" gui-control="dvcountControl"></dv-count>','<dv-boolean gui-data="nodeData" gui-control="dvbooleanControl"></dv-boolean>',
-                                    '<dv-codedtext gui-data="nodeData" gui-control="dvcodedtextControl"></dv-codedtext>','8','9');
+                                    '<dv-codedtext gui-data="nodeData" gui-control="dvcodedtextControl"></dv-codedtext>','<cluster gui-data="nodeData"></cluster>','9');
          var floatDiv=angular.element('<div class="floatDiv" style="z-index:999" ng-show=true></div>');  
+    	
     	return {
 		require: ['^templateListTree'],
 		restrict : 'E',
@@ -14,6 +15,7 @@ function($compile,$document) {
 			nodeData : '=',
 			treeScope : '=',
 			selectNodeCallback : '=',
+			selectedElement:'=',
 		},
 		controller:function($scope,$element){
 		    $scope.nodeScope={
@@ -23,7 +25,7 @@ function($compile,$document) {
        
         },
 
-		link : function(scope,element, attrs,treeCotrol) { 	 		    
+		link : function(scope,element, attrs,tempControl) { 	 		    
 			scope.nodeData.collapsed = true;
 			scope.treeScope.nodes.push(scope.nodeData); 
 			
@@ -37,7 +39,7 @@ function($compile,$document) {
 									'<span ng-class="nodeData.selected"  ng-click="selectNodeLabel(nodeData)" ng-dblclick="doubleClickNodeLabel(nodeData)">' +
 										'{{nodeData.label.labelContent}}' +
 									'</span>' +
-									'<template-list-tree-node ng-hide="nodeData.collapsed" ng-repeat="node in nodeData.children" ng-init="node.parent = nodeData" tree-scope="treeScope" node-data="node" select-node-callback="selectNodeCallback"  ng-mousedown="cloneItems(nodeData)"></template-tree-list-node>' +
+									'<template-list-tree-node ng-hide="nodeData.collapsed" ng-repeat="node in nodeData.children" ng-init="node.parent = nodeData" tree-scope="treeScope" node-data="node" select-node-callback="selectNodeCallback"  ng-mousedown="cloneItems(nodeData)" selected-Element="selectedElement"></template-tree-list-node>' +
 								'</li>' +
 							'</ul>';
 
@@ -72,6 +74,7 @@ function($compile,$document) {
                      };
                  }else{
                       html='<group-node-view gui-data="nodeData" gui-control="groupNodeViewControl"></group-node-view>';
+                        //html='<template-list-tree tree-data="nodeData" ng-mousedown="cloneItems()" temp-control="tempControl"></template-list-tree>';
                  }
                  var addin=angular.element(html);              
                  $("#editArea").append($compile( addin )(scope));

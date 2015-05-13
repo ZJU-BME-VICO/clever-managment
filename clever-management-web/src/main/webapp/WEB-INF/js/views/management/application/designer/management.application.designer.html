@@ -1,5 +1,5 @@
 <div class="Toolbox">
-            <button class="btn btn-primary btn-lg ng-binding" style="float:right;margin-right:150px;padding:8px 16px;" >新建</button>
+            <button class="btn btn-primary btn-lg ng-binding" style="float:right;margin-right:150px;padding:8px 16px;" ng-click="newTemplate()">新建</button>
             <button class="btn btn-primary btn-lg ng-binding" style="float:right;margin-right:20px;padding:8px 16px;"  ng-click="saveTemplate()">保存</button>
        </div>
 <div class="row">
@@ -23,27 +23,42 @@
                         <button class="btn btn-default" type="button" ng-click="expand()">expandAll</button>
                         <button class="btn btn-default" type="button" ng-click="collapse()">collapseAll</button>
                       </div>
-                      <storagetemplate-list-tree tree-data="templateList" select-node-callback="getTemplateDetail(node)" tree-control="treeControl" >
+                      <storagetemplate-list-tree tree-data="templateList" select-node-callback="getTemplateDetail(node)" tree-control="treeControl">
                       </storagetemplate-list-tree>  
-                      <template-list-tree ng-repeat="node in templateDetail" tree-data="node" ng-mousedown="cloneItems()">
+                      <template-list-tree ng-repeat="node in templateDetail" tree-data="node" ng-mousedown="cloneItems()" temp-control="tempControl" selected-Element="selected">
                           </template-list-tree>
                                       
                   </div>
 	    		</div>	   
 	   </div>
     <div class="col-xs-7 col-md-8 col-lg-8 editBox" ng-style="{height:containerHeight}">
-        <div id="editArea" class="">  
+        <div id="editArea" ng-context-menu> 
+       <!--  <div>
+            <p>124</p>
+            <ul>
+                <li>1111</li>
+                <li>2222</li>
+            </ul>
         </div>
-	   	 	</div>
+            <ul id="contextmenu-node" ng-show="isVisible">
+                <li> Item 1 </li>
+                <li> Item 2 </li>
+            </ul>-->
+            <ul id="menu" menu-controller="">
+                <li ng-click="deleteElement()"><em class="cut"></em><a href="javascript:;">删除</a></li>
+                <li><em class="copy"></em><a href="javascript:;">复制</a></li>
+                <li><em class="paste"></em><a href="javascript:;">粘贴</a></li>
+            </ul>
+        </div>
+	</div>
     <div class="style">
-             <a>样式区</a>
-            
-       </div>
-       <div class="Control">
-         <control-box></control-box>         
-</div>         
-         
+         <a>样式区</a>     
+    </div>
+    <control-box></control-box>
+    </div>    
     <div class="float" style="z-index:999 display:none">
     </div> 
     </div>  
 </div>
+
+

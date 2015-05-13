@@ -290,7 +290,7 @@ angular.module('clever.management.services.templateParse',[]).service('templateP
                         }
     }
            //不需要显示的节点类型
-    var typeList = ['DV_COUNT', 'DV_TEXT', 'DV_DATE_TIME', 'DV_QUANTITY', 'DV_BOOLEAN','DV_QUANTITY','DV_ORDINAL','DV_DURATION','DV_PROPORTION','CODE_PHRASE','DV_CODED_TEXT'];
+    var typeList = ['DV_COUNT', 'DV_TEXT', 'DV_DATE_TIME','DV_DATE', 'DV_QUANTITY', 'DV_BOOLEAN','DV_QUANTITY','DV_ORDINAL','DV_DURATION','DV_PROPORTION','CODE_PHRASE','DV_CODED_TEXT'];
     var attributeList = ['value', 'magnitude','data','Tree','name','state','defining_code','events'];
 
     function nodeInfo(node,term_definitions){
