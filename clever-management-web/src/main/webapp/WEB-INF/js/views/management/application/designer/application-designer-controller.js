@@ -4,7 +4,8 @@ function DesignerCtrl($scope,resourceService,$q,templateParseService,$compile,ST
 	$scope.templateDetail=[];
 	$scope.tplist=[];
 	$scope.controlList=['btnFn','labelFn'];
-	$scope.selected="1";
+	$scope.selectedElement="初始化";
+	$scope.tempControl={};
 
      resourceService.get(STORAGE_TEMPLATE_LIST_URL).then(function(list) {            
             $scope.templateList = list;
@@ -25,7 +26,7 @@ function DesignerCtrl($scope,resourceService,$q,templateParseService,$compile,ST
         console.log('change');
     });
     
-	$scope.$watch("selected", function(newValue, oldValue) {
+	$scope.$watch("selectedElement", function(newValue, oldValue) {
     if (newValue!=oldValue) {
         alert("watch"); 
         alert(newValue); 
@@ -33,7 +34,7 @@ function DesignerCtrl($scope,resourceService,$q,templateParseService,$compile,ST
   });
 	
 	$scope.deleteElement=function(){
-	    var aa=$scope.selected;
+	    var aa=$scope.selectedElement;
 	    alert("delete");
 	    alert(aa);
 	    var parent=document.getElementById('editArea');
@@ -52,8 +53,7 @@ function DesignerCtrl($scope,resourceService,$q,templateParseService,$compile,ST
         if($scope.tplist.indexOf(tempalteName)==-1){
             $scope.tplist.push(tempalteName);
             $scope.templateDetail.push(parseResult.definitions);
-         }
-       
+         }       
         });
 	};
     

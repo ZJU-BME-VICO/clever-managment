@@ -63,6 +63,8 @@
 <script src="js/directives/application-template/control-box/control-box-directive.js"></script>
 <script src="js/directives/application-template/template-designer-directive.js"></script>
 <script src="js/directives/application-template/Activity/right-click-directive.js"></script>
+<script src="js/directives/application-template/Activity/context-menu-directive.js"></script>
+<script src="js/directives/application-template/control-box/button-directive.js"></script>
 
 <!-- controllers -->
 <script src="js/views/management/management-controller.js"></script>

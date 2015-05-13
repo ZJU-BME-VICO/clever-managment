@@ -10,7 +10,7 @@ function($document) {
 		},		
 		
         template: '<li dragable id=UIData.label.labelContent+UIData.label.code">'+
-                    '<img ng-class="UIData.label.picType"></img>'+
+                   +'{{selectedElement}} '+'<img ng-class="UIData.label.picType"></img>'+
                     '<span>'+'{{UIData.label.labelContent}}'+'</span>'+'&nbsp;&nbsp:&nbsp;&nbsp&nbsp'+'<input id=UIData.label.code>'+
 			       '</li>',
 	    controller:function($scope){
@@ -19,15 +19,16 @@ function($document) {
 	    	
 	    	$scope.$watch("selectedElement", function(newValue, oldValue) {
                 if (newValue!=oldValue) {
+                    $scope.selectedElement=$scope.UIData.label.labelContent+$scope.UIData.label.code;
+                    alert("directive");
                     alert(newValue); 
                 }
               });
 	    },
 		link : function(scope, element, attrs) {
-		    element.on('mousedown',function(e){		        
-                scope.$apply(function(){
-                    scope.selectedElement=scope.UIData.label.labelContent+scope.UIData.label.code;
-                });
+		    element.on('mousedown',function(){	        
+		        scope.selectedElement=scope.UIData.label.labelContent+scope.UIData.label.code;
+                scope.$apply();
 		    });
 	}
 	};

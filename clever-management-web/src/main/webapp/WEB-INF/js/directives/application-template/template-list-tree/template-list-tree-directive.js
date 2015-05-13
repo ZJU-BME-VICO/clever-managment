@@ -31,11 +31,6 @@ angular.module('clever.management.directives.templateListTree', []).directive('t
 					};
 				}
 			});
-			$scope.$watch("selectedElement", function(newValue, oldValue) {
-                if (newValue!=oldValue) {
-                    alert(newValue); 
-                }
-              });
 		},
 		link : function(scope, element, attrs) {
 

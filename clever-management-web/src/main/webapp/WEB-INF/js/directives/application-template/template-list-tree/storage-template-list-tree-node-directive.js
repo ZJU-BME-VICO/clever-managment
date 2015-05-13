@@ -25,7 +25,7 @@ function($compile,$document) {
                                     '</span>' +
                                 '</li>' +
                             '</ul>'+
-                            '</div>'+'<template-list-tree tree-data="templateDetail" ng-mousedown="cloneItems()">'+'</template-list-tree>'+
+                            '</div>'+
                           '</div>';
 
             if (scope.nodeData) {

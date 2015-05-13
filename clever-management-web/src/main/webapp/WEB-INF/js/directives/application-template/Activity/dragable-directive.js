@@ -12,10 +12,12 @@ function($document) {
         });
         element.on('mousedown',function(event){
             //event.preventDefault();//阻止浏览器中原来的鼠标选中编辑功能
+            if(event.button!=2){
             startX=event.screenX - x;
             startY=event.screenY - y;
             $document.on('mousemove',mousemove);
             $document.on('mouseup',mouseup);
+            }
         });
         function mousemove(event){
             y=event.screenY-startY;

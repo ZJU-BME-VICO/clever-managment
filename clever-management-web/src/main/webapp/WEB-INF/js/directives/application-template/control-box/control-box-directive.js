@@ -18,7 +18,8 @@ function($compile,$document) {
                  var addin=angular.element(html); 
                  //$("#editArea").append($compile( addin )(scope));             
                  $("#editArea").append(addin); 
-             });             
-        },
-    };
+                 }
+             });   
+             },
+         };          
 }]);

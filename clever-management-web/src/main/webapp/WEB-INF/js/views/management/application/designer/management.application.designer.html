@@ -25,25 +25,18 @@
                       </div>
                       <storagetemplate-list-tree tree-data="templateList" select-node-callback="getTemplateDetail(node)" tree-control="treeControl">
                       </storagetemplate-list-tree>  
-                      <template-list-tree ng-repeat="node in templateDetail" tree-data="node" ng-mousedown="cloneItems()" temp-control="tempControl" selected-Element="selected">
-                          </template-list-tree>
+                      <template-list-tree ng-repeat="node in templateDetail" tree-data="node" ng-mousedown="cloneItems()" temp-control="tempControl">
+                      </template-list-tree>
                                       
                   </div>
 	    		</div>	   
 	   </div>
     <div class="col-xs-7 col-md-8 col-lg-8 editBox" ng-style="{height:containerHeight}">
         <div id="editArea" ng-context-menu> 
-       <!--  <div>
-            <p>124</p>
-            <ul>
-                <li>1111</li>
-                <li>2222</li>
-            </ul>
+        <div>
+            <p>selected:{{selectedElement}}</p>
         </div>
-            <ul id="contextmenu-node" ng-show="isVisible">
-                <li> Item 1 </li>
-                <li> Item 2 </li>
-            </ul>-->
+
             <ul id="menu" menu-controller="">
                 <li ng-click="deleteElement()"><em class="cut"></em><a href="javascript:;">删除</a></li>
                 <li><em class="copy"></em><a href="javascript:;">复制</a></li>
