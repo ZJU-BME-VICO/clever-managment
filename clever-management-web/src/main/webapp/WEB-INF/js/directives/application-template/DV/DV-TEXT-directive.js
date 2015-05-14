@@ -9,9 +9,9 @@ function($document) {
 	      selectedElement:'=',	      
 		},		
 		
-        template: '<li dragable id=UIData.label.labelContent+UIData.label.code">'+
-                   +'{{selectedElement}} '+'<img ng-class="UIData.label.picType"></img>'+
-                    '<span>'+'{{UIData.label.labelContent}}'+'</span>'+'&nbsp;&nbsp:&nbsp;&nbsp&nbsp'+'<input id=UIData.label.code>'+
+        template: '<li dragable id={{UIData.label.labelContent+"_"+UIData.label.code}}>'+
+                   +'{{selectedElement}}'+'<img class={{UIData.label.picType}}></img>'+
+                    '<span>'+'{{UIData.label.labelContent}}'+'</span>'+'&nbsp;&nbsp:&nbsp;&nbsp&nbsp'+'<input id={{UIData.label.labelContent+UIData.label.code}}>'+
 			       '</li>',
 	    controller:function($scope){
 	    	
