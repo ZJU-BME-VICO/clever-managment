@@ -7,7 +7,10 @@ function($document) {
           UIData:'=guiData',          
         },      
         
-        template: '<li dragable>'+'<a>'+'{{UIData.label.labelContent}}'+'</a>'+'&nbsp;&nbsp:&nbsp;&nbsp&nbsp'+'<input>'+'年&nbsp;'+'<input>'+'月&nbsp;'+'<input>'+'日'+
+        template: '<li dragable id={{UIData.label.labelContent+"_"+UIData.label.code}}>'
+                   +'<img class={{UIData.label.picType}}></img>'
+                   +'<span>'+'{{UIData.label.labelContent}}'+'</span>'+'&nbsp;&nbsp:&nbsp;&nbsp&nbsp'
+                   +'<input id={{UIData.label.labelContent+"/"+UIData.label.code}}>'+'年&nbsp;'+'<input>'+'月&nbsp;'+'<input>'+'日'+
                    '</li>',
         controller:function($scope){
             

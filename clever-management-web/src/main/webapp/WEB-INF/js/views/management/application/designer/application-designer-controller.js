@@ -1,4 +1,4 @@
-function DesignerCtrl($scope,resourceService,$q,templateParseService,$compile,STORAGE_TEMPLATE_LIST_URL,ARCHETYPE_BY_NAME_URL,STORAGE_TEMPLATE_BY_NAME_URL){
+function DesignerCtrl($scope,resourceService,$q,templateParseService,archetypeParseService,$compile,STORAGE_TEMPLATE_LIST_URL,ARCHETYPE_BY_NAME_URL,STORAGE_TEMPLATE_BY_NAME_URL,ARCHETYPE_LIST_URL){
 	$scope.language = [];
 	$scope.defination={};
 	$scope.templateDetail=[];
@@ -7,10 +7,47 @@ function DesignerCtrl($scope,resourceService,$q,templateParseService,$compile,ST
 	$scope.selectedElement="初始化";
 	$scope.tempControl={};
 
-     resourceService.get(STORAGE_TEMPLATE_LIST_URL).then(function(list) {            
+     //for template display don't delete!!
+     /*resourceService.get(STORAGE_TEMPLATE_LIST_URL).then(function(list) {            
             $scope.templateList = list;
         });
-	
+        $scope.getTemplateDetail=function(node){
+        var url=node.name+"."+node.latestTemplateVersion;
+        resourceService.get(STORAGE_TEMPLATE_BY_NAME_URL+url).then(function(temp){
+        var xml=temp.oet;
+        var x2js=new X2JS();
+        var template=x2js.xml_str2json(xml).template;       
+        var parseResult=templateParseService.parseTemplate(template);  
+        var tempalteName=parseResult.template_name;
+        if($scope.tplist.indexOf(tempalteName)==-1){
+            $scope.tplist.push(tempalteName);
+            $scope.templateDetail.push(parseResult.definitions);
+         }       
+        });
+    };*/
+    
+       
+      //for archetype display
+      resourceService.get(ARCHETYPE_LIST_URL).then(function(list) {            
+            $scope.templateList = list;
+        });
+      $scope.getTemplateDetail=function(node){
+        var url=node.name+"."+node.latestArchetypeVersion;
+        resourceService.get(ARCHETYPE_BY_NAME_URL+url).then(function(temp){
+        var xml=temp.xml;
+        var x2js=new X2JS();
+        var archetype=x2js.xml_str2json(xml).archetype;       
+        var parseResult=archetypeParseService.parseArchetype(archetype);  
+        var archetypeName=node.name;
+        if($scope.tplist.indexOf(archetypeName)==-1){
+            $scope.tplist.push(archetypeName);
+            var simplifyTree=processTreeContent(parseResult.definitions.treeItems);
+            $scope.templateDetail.push(simplifyTree);
+         }       
+        });
+    };
+    
+	//local file
 	/* resourceService.get(STORAGE_TEMPLATE_BY_NAME_URL+'openEHR-EHR-INSTRUCTION.request-imaging_exam.v1.1').then(function(temp){
 	    var xml=temp.oet;
 	    var x2js=new X2JS();
@@ -27,11 +64,11 @@ function DesignerCtrl($scope,resourceService,$q,templateParseService,$compile,ST
     });
     
 	$scope.$watch("selectedElement", function(newValue, oldValue) {
-    if (newValue!=oldValue) {
-        alert("watch"); 
-        alert(newValue); 
-    }
-  });
+       if (newValue!=oldValue) {
+            alert("watch"); 
+            alert(newValue); 
+        }
+    });
 	
 	$scope.deleteElement=function(){
 	    var aa=$scope.selectedElement;
@@ -41,22 +78,7 @@ function DesignerCtrl($scope,resourceService,$q,templateParseService,$compile,ST
 	    var child=document.getElementById('editArea').currentElement;
 	   // alert(child);
 	};
-	
-	$scope.getTemplateDetail=function(node){
-	    var url=node.name+"."+node.latestTemplateVersion;
-	    resourceService.get(STORAGE_TEMPLATE_BY_NAME_URL+url).then(function(temp){
-        var xml=temp.oet;
-        var x2js=new X2JS();
-        var template=x2js.xml_str2json(xml).template;       
-        var parseResult=templateParseService.parseTemplate(template);  
-        var tempalteName=parseResult.template_name;
-        if($scope.tplist.indexOf(tempalteName)==-1){
-            $scope.tplist.push(tempalteName);
-            $scope.templateDetail.push(parseResult.definitions);
-         }       
-        });
-	};
-    
+	   
 	$scope.collapse = function() {
 		for(i=0;i<$scope.templateDetail.length;i++){
             var data=$scope.templateDetail[i];
@@ -69,7 +91,6 @@ function DesignerCtrl($scope,resourceService,$q,templateParseService,$compile,ST
 	        expandAll(data);
 	    }	
 	};
-	
 	
 	$scope.saveTemplate = function() {
         var html=$('#editArea').html();
@@ -92,7 +113,8 @@ function DesignerCtrl($scope,resourceService,$q,templateParseService,$compile,ST
         save_link.href=urlObject.createObjectURL(export_blob);
         save_link.download=name;
         fake_click(save_link);
-    }
+    }  
+      
     function collapseAll(data){
         if(angular.isArray(data)){
             angular.forEach(data, function(node) {
@@ -108,6 +130,7 @@ function DesignerCtrl($scope,resourceService,$q,templateParseService,$compile,ST
            }
        }
     }
+   
     function expandAll(data){
         if(angular.isArray(data)){
             angular.forEach(data, function(node) {
@@ -124,5 +147,89 @@ function DesignerCtrl($scope,resourceService,$q,templateParseService,$compile,ST
        }
     }
 	
-}
+	// delete archetype node for display
+	function processTreeContent(tree){
+	    var definition=[];
+        processNode(tree,undefined,definition);
+        return definition; 
+	};
+	function processNode(tree,parent,archetypeTree){
+	    if(angular.isArray(tree)){//route 1
+          angular.forEach(tree,function(value){
+              value.parent=parent;
+              var currentNode={};
+              currentNode.label=value.label;
+                var typeT=currentNode.label.text;
+                if((typeList.indexOf(typeT)==-1)&&(attributeList.indexOf(typeT)==-1)){// ignore type
+                   archetypeTree.push(currentNode);
+                    if(value.children){
+                        currentNode.children=[];
+                        processNode(value.children,value,currentNode.children);
+                     } 
+                 }else{                           
+                    if(value.children){
+                        value=value.children;
+                        if(angular.isArray(value)){
+                            angular.forEach(value,function(item){
+                                 item.parent=parent;
+                                 var currentNode={};
+                                 currentNode.label=item.label;
+                                 var typeT=currentNode.label.text;
+                                 if((typeList.indexOf(typeT)==-1)&&(attributeList.indexOf(typeT)==-1)){// ignore type
+                                      archetypeTree.push(currentNode);
+                                      if(item.children){
+                                          currentNode.children=[];
+                                          processNode(item.children,item,currentNode.children);
+                                       }
+                                   }
+                            });
+                        }else{
+                            if(value.children){
+                             processNode(value,parent,archetypeTree);}
+                         }
+                  }  
+             }      
+	       });
+    }else{
+        var value=tree;
+        value.parent=parent;
+        var currentNode={};
+        currentNode.label=value.label;
+           currentNode.children=[];
+            var typeT=currentNode.label.text;
+            if((typeList.indexOf(typeT)==-1)&&(attributeList.indexOf(typeT)==-1)){// ignore type
+               archetypeTree.push(currentNode);
+                if(value.children){
+                    currentNode.children=[];
+                    processNode(value.children,value,currentNode.children);
+                 } 
+             }else{                           
+                if(value.children){
+                    value=value.children;
+                    if(angular.isArray(value)){
+                        angular.forEach(value,function(item){
+                             item.parent=parent;
+                             var currentNode={};
+                             currentNode.label=item.label;
+                             var typeT=currentNode.label.text;
+                             if((typeList.indexOf(typeT)==-1)&&(attributeList.indexOf(typeT)==-1)){// ignore type
+                                  archetypeTree.push(currentNode);
+                                  if(item.children){
+                                      currentNode.children=[];
+                                      processNode(item.children,item,currentNode.children);
+                                   }
+                               }
+                        });
+                    }else{
+                        if(value.children){
+                         processNode(value.children,value,archetypeTree);}
+                     }
+              }  
+           } 
+        }
+        };
+    var typeList = ['DV_COUNT', 'DV_TEXT', 'DV_DATE_TIME','DV_DATE', 'DV_QUANTITY', 'DV_BOOLEAN','DV_QUANTITY','DV_ORDINAL','DV_DURATION','DV_PROPORTION','CODE_PHRASE','DV_CODED_TEXT'];
+    var attributeList = ['value', 'magnitude','data','Tree','name','state','defining_code','events','items'];
+
+};
 

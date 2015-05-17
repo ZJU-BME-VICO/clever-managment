@@ -9,9 +9,9 @@ function($document) {
 	      selectedElement:'=',	      
 		},		
 		
-        template: '<li dragable id={{UIData.label.labelContent+"_"+UIData.label.code}}>'+
-                   +'{{selectedElement}}'+'<img class={{UIData.label.picType}}></img>'+
-                    '<span>'+'{{UIData.label.labelContent}}'+'</span>'+'&nbsp;&nbsp:&nbsp;&nbsp&nbsp'+'<input id={{UIData.label.labelContent+UIData.label.code}}>'+
+        template: '<li dragable id={{UIData.label.labelContent+"_"+UIData.label.code}}>'
+                  +'<img class={{UIData.label.picType}}></img>'+
+                    '<span>'+'{{UIData.label.labelContent}}'+'</span>'+'&nbsp;&nbsp:&nbsp;&nbsp&nbsp'+'<input id={{UIData.label.labelContent+"/"+UIData.label.code}}>'+
 			       '</li>',
 	    controller:function($scope){
 	    	
@@ -20,8 +20,8 @@ function($document) {
 	    	$scope.$watch("selectedElement", function(newValue, oldValue) {
                 if (newValue!=oldValue) {
                     $scope.selectedElement=$scope.UIData.label.labelContent+$scope.UIData.label.code;
-                    alert("directive");
-                    alert(newValue); 
+                    //alert("directive");
+                    //alert(newValue); 
                 }
               });
 	    },

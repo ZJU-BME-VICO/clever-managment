@@ -65,21 +65,24 @@ function($compile,$document) {
                  var html="";
                  if(type){
                      for( var i=0;i<9;i++){
+                         type=nodeData.label.dataInfo[0].dataType;
                          if(type==datatypeList[i])
                          {
                             html=templatestrList[i]; 
-                         var addin=angular.element(html);              
-                         $("#editArea").append($compile( addin )(scope));
                          }
                      };
                  }else{
-                      html='<group-node-view gui-data="nodeData" gui-control="groupNodeViewControl"></group-node-view>';
+                      //html='<group-node-view gui-data="nodeData" gui-control="groupNodeViewControl"></group-node-view>';
                         //html='<template-list-tree tree-data="nodeData" ng-mousedown="cloneItems()" temp-control="tempControl"></template-list-tree>';
+                   html='<dv-label gui-data="nodeData"></dv-label>';
+                   }
+              var addin=angular.element(html);              
+              $("#editArea").append($compile( addin )(scope));
                  
-                 var data=[];
-                 data.push(nodeData);
-                 createTemplate(data,"#editArea");
-             
+                 
+                // var data=[];
+                 //data.push(nodeData);
+                 //createTemplate(data,"#editArea");
              function createTemplate(node,parentId){
                  if(angular.isArray(node)){
                    angular.forEach(node,function(data){
@@ -115,7 +118,6 @@ function($compile,$document) {
                                  };
                                  }
                              } 
-                             
                                   var parentDiv=document.getElementById(parentId);
                                   var addin=angular.element(part_template);
                                   $("#editArea").append($compile( part_template )(scope));
@@ -170,10 +172,8 @@ function($compile,$document) {
                      }
                  }
              };          
-                 
-                 }
-                // var addin=angular.element(html);              
-                 //$("#editArea").append($compile( addin )(scope));
+                    
+
 			};		
 					
 			scope.selectNodeLabel = function(selectedNode) {

@@ -7,7 +7,9 @@ function($document) {
           UIData:'=guiData',          
         },      
         
-        template: '<li dragable>'+'<a>'+'{{UIData.label.labelContent}}'+'</a>'+'&nbsp;&nbsp:&nbsp;&nbsp&nbsp'+'<input>'+
+        template: '<li dragable id={{UIData.label.labelContent+"_"+UIData.label.code}}>'
+                    +'<img ng-class="UIData.label.picType"></img>'
+                    +'<span>'+'{{UIData.label.labelContent}}'+'</span>'+'&nbsp;&nbsp:&nbsp;&nbsp&nbsp'+'<input id={{UIData.label.labelContent+UIData.label.code}}>'+
                    '</li>',
         controller:function($scope){
             

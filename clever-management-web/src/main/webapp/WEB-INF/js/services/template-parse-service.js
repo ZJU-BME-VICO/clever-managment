@@ -44,7 +44,8 @@ angular.module('clever.management.services.templateParse',[]).service('templateP
                       var name=path_array.slice(-3,-2);
                       var code=path_array.slice(-2,-1);  
                       var passTree=[]; 
-                      processItems(parent,undefined,name,code,Node,passTree);
+                      var flag=false;
+                      processItems(parent,undefined,name,code,Node,passTree,flag);
                       optTree=passTree;
                     }else{
                        optTree.push(Node);
@@ -78,7 +79,8 @@ angular.module('clever.management.services.templateParse',[]).service('templateP
                   var name=path_array.slice(-3,-2);
                   var code=path_array.slice(-2,-1); 
                   var passTree=[]; 
-                  processItems(parent,undefined,name,code,Node,passTree);
+                  var flag=false;
+                  processItems(parent,undefined,name,code,Node,passTree,flag);
                   optTree=passTree;
                 }else{                  
                   optTree.push(Node);
@@ -90,12 +92,14 @@ angular.module('clever.management.services.templateParse',[]).service('templateP
          }             
     }
     
-    function processItems(tree,parent,name,code,arResult,newTree){
+    function processItems(tree,parent,name,code,arResult,newTree,flag){
         if(angular.isArray(tree)){
              angular.forEach(tree,function(value){
                   value.parent=parent;
+                  if(flag==false){
                   if(value.label.code==code){//agree
                     if(value.parent.label.text==name){
+                        flag=true;
                        if(value.children){
                        value.children.push(arResult);}
                        else{
@@ -104,18 +108,21 @@ angular.module('clever.management.services.templateParse',[]).service('templateP
                        }
                     }
                    }
+                   }
                   var currentNode=[];
                   currentNode.label=value.label;
                   newTree.push(currentNode);
                   if(value.children){
                       currentNode.children=[];
-                      processItems(value.children,value,name,code,arResult,currentNode.children); 
+                      processItems(value.children,value,name,code,arResult,currentNode.children,flag); 
                  }
              });
         }else{
              tree.parent=parent;
+             if(flag==false){
              if(tree.label.code==code){//agree
                 if(tree.parent.label.text==name){
+                    flag=true;
                      if(tree.children){
                        tree.children.push(arResult);}
                        else{
@@ -124,12 +131,13 @@ angular.module('clever.management.services.templateParse',[]).service('templateP
                        }
                 }
              }
+             }
              var currentNode=[];
              currentNode.label=tree.label;
              newTree.push(currentNode);
              if(tree.children){
                  currentNode.children=[];
-                processItems(tree.children,tree,name,code,arResult,currentNode.children); 
+                processItems(tree.children,tree,name,code,arResult,currentNode.children,flag); 
              }
         }
     }
@@ -165,7 +173,8 @@ angular.module('clever.management.services.templateParse',[]).service('templateP
         if(angular.isArray(tree)){//route 1
           angular.forEach(tree,function(value){
               value.parent=parent;
-              var currentNode=nodeInfo(value,term_definitions);
+              var currentNode={};
+              currentNode.label=value.label;
               var tip=false;
               for(i=0;i<ruleList.length;i++){
                 var name=ruleList[i].code[0];
@@ -199,7 +208,8 @@ angular.module('clever.management.services.templateParse',[]).service('templateP
                                 if(angular.isArray(value)){
                                     angular.forEach(value,function(item){
                                          item.parent=parent;
-                                         var currentNode=nodeInfo(item,term_definitions);
+                                         var currentNode={};
+                                         currentNode.label=item.label;
                                          var typeT=currentNode.label.text;
                                          if((typeList.indexOf(typeT)==-1)&&(attributeList.indexOf(typeT)==-1)){// ignore type
                                               archetypeTree.push(currentNode);
@@ -220,7 +230,8 @@ angular.module('clever.management.services.templateParse',[]).service('templateP
             }else{
                 var value=tree;
                 value.parent=parent;
-                var currentNode=nodeInfo(value,term_definitions);
+                var currentNode={};
+                currentNode.label=value.label;
                 var tip=false;
                 for(i=0;i<ruleList.length;i++){
                     var name=ruleList[i].code[0];
@@ -254,7 +265,8 @@ angular.module('clever.management.services.templateParse',[]).service('templateP
                                 if(angular.isArray(value)){
                                     angular.forEach(value,function(item){
                                          item.parent=parent;
-                                         var currentNode=nodeInfo(item,term_definitions);
+                                         var currentNode={};
+                                         currentNode.label=item.label;
                                          var typeT=currentNode.label.text;
                                          if((typeList.indexOf(typeT)==-1)&&(attributeList.indexOf(typeT)==-1)){// ignore type
                                               archetypeTree.push(currentNode);
@@ -272,22 +284,21 @@ angular.module('clever.management.services.templateParse',[]).service('templateP
                        } 
                        }
                     }                
-              }
-          
+          }
     function deleteData(tree){                      
-                        var typeT=currentNode.label.text;
-                        if((typeList.indexOf(typeT)!=-1)||(attributeList.indexOf(typeT)!=-1)){// ignore type
-                            if(value.children){
-                                value=value.children;
-                                if(angular.isArray(value)){
-                                    angular.forEach(value,function(item){
-                                         getArchetypeDetail(item.children,item,ruleList,currentNode.children,term_definitions);
-                                    });
-                                }else{
-                                     getArchetypeDetail(value.children,value,ruleList,currentNode.children,term_definitions);
-                                }
-                          }  
-                        }
+        var typeT=currentNode.label.text;
+        if((typeList.indexOf(typeT)!=-1)||(attributeList.indexOf(typeT)!=-1)){// ignore type
+            if(value.children){
+                value=value.children;
+                if(angular.isArray(value)){
+                    angular.forEach(value,function(item){
+                         getArchetypeDetail(item.children,item,ruleList,currentNode.children,term_definitions);
+                    });
+                }else{
+                     getArchetypeDetail(value.children,value,ruleList,currentNode.children,term_definitions);
+                }
+          }  
+        }
     }
            //不需要显示的节点类型
     var typeList = ['DV_COUNT', 'DV_TEXT', 'DV_DATE_TIME','DV_DATE', 'DV_QUANTITY', 'DV_BOOLEAN','DV_QUANTITY','DV_ORDINAL','DV_DURATION','DV_PROPORTION','CODE_PHRASE','DV_CODED_TEXT'];
@@ -311,20 +322,6 @@ angular.module('clever.management.services.templateParse',[]).service('templateP
             name=text;}
         if(text=="ELEMENT"){
             dataType=node.children[0].children[0].label.text;
-           /* var childDt;
-            if(node.children[0].children[0].children[0]){
-                childDt=node.children[0].children[0].children[0].label.text;
-                if(childDt=="DV_CODED_TEXT"){
-                    //原型解析之后 defining code的内容木有了 ，没有默认值；
-                }
-            }*/
-            picType=dataType;
-             if(dataType=="DV_CODED_TEXT"){            
-        }
-        }else{
-            picType=text;
-        }
-       
        return {
            label : {
                 type : type,// type attributes only2
@@ -336,6 +333,7 @@ angular.module('clever.management.services.templateParse',[]).service('templateP
                 dataValue:dataValue
            }}; 
        
+    }
     }
     
 
