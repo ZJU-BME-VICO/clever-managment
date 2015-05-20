@@ -1,12 +1,13 @@
 angular.module('clever.management.directives.templateListTree', []).directive('templateListTree', function() {
 		return {
 		restrict : 'E',
+		transclude : true,
 		scope : {
 			treeData : '=',
-			treeControl : '=',
-			selectNodeCallback : '&',
+			tempControl : '=',
 		},
-		template : '<template-list-tree-node ng-repeat="node in treeData" node-data="node" tree-scope="treeScope" select-node-callback="selectNode" ng-mousedown="cloneItems(nodeData)"></template-list-tree-node>',
+		template : '<template-list-tree-node ng-repeat="node in treeData" node-data="node" tree-scope="treeScope" select-node-callback="selectNode" ng-mousedown="cloneItems(nodeData)">'
+		            +'</template-list-tree-node>',
 		controller : function($scope,$element,$document) {
 		
 			$scope.treeScope = {
@@ -20,18 +21,7 @@ angular.module('clever.management.directives.templateListTree', []).directive('t
 				});
 			};
 			
-			$scope.treeControl = {
-				expandAll : function() {
-					angular.forEach($scope.treeScope.nodes, function(node) {
-						node.collapsed = false;
-					});
-				},
-				collapseAll : function() {
-					angular.forEach($scope.treeScope.nodes, function(node) {
-						node.collapsed = true;
-					});				
-				},
-			};
+			$scope.tempControl = {};
 			
 			$scope.$watch('treeData', function(newValue, oldValue) {
 				if (newValue != oldValue) {

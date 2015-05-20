@@ -1,0 +1,18 @@
+<div>
+    <ul id={{nodeData.label.code+"_"+nodeData.label.labelContent}}>+
+        <li> 
+            <img class="collapsed" ng-show="nodeData.children.length && nodeData.collapsed" ng-click="selectNodeHead(nodeData)"></img>
+            <img class="expanded" ng-show="nodeData.children.length  && !nodeData.collapsed" ng-click="selectNodeHead(nodeData)"></img>
+            <span ng-show="!nodeData.children.length" style="padding: 1px 5px;width: 15px;"></span>
+            <i class="normal" ng-hide="nodeData.children.length"></i>
+            <img ng-class="nodeData.label.picType"></img>
+            <span ng-class="nodeData.selected"  ng-click="selectNodeLabel(nodeData)" ng-dblclick="doubleClickNodeLabel(nodeData)">
+                {{nodeData.label.labelContent}} 
+            </span>
+        </li> 
+    </ul>
+</div>
+<div>
+    <templatelisttree tree-data="templateDetail" ng-mousedown="cloneItems()"></templatelisttree>  
+</template-tree-list>
+</div>

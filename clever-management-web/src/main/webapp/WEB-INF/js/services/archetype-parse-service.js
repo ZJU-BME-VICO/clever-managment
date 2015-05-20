@@ -201,21 +201,30 @@ angular.module('clever.management.services.archetypeParse', []).service('archety
 		var definitions = {};
 		definitions.tableItems = [];
 		definitions.treeItems = [];
-		processNode(archetype.definition, undefined, definitions.treeItems, definitions.tableItems);
+		var terminologies=parseTermDefinition(archetype.ontology.term_definitions);
+		var term_definitions;
+        if(terminologies){
+        for(i=0;i<terminologies.length;i++){
+          if(terminologies[i].language=="en"||terminologies[i].language=="zh")
+           {
+               term_definitions=terminologies[i].items;}
+           }
+       }  
+		processNode(archetype.definition, undefined, definitions.treeItems, definitions.tableItems,term_definitions);
 		return definitions;
 	};
 
-	function processNode(node, parent, treeItems, tableItems) {
+	function processNode(node, parent, treeItems, tableItems,terminologies) {
 		if (angular.isArray(node)) {
 			angular.forEach(node, function(value) {
-				var extractedNode = extractNode(value);
+				var extractedNode = extractNode(value,terminologies);
 				value.parent = parent;
 				if (value.attributes) {
 					extractedNode.children = [];
-					processNode(value.attributes, value, extractedNode.children, tableItems);
+					processNode(value.attributes, value, extractedNode.children, tableItems,terminologies);
 				} else if (value.children) {
 					extractedNode.children = [];
-					processNode(value.children, value, extractedNode.children, tableItems);
+					processNode(value.children, value, extractedNode.children, tableItems,terminologies);
 				} else {
 					/*var leafNode = extractLeafNode(value);
 					 if (leafNode) {
@@ -231,14 +240,14 @@ angular.module('clever.management.services.archetypeParse', []).service('archety
 				treeItems.push(extractedNode);
 			});
 		} else {
-			var extractedNode = extractNode(node);
+			var extractedNode = extractNode(node,terminologies);
 			node.parent = parent;
 			if (node.attributes) {
 				extractedNode.children = [];
-				processNode(node.attributes, node, extractedNode.children, tableItems);
+				processNode(node.attributes, node, extractedNode.children, tableItems,terminologies);
 			} else if (node.children) {
 				extractedNode.children = [];
-				processNode(node.children, node, extractedNode.children, tableItems);
+				processNode(node.children, node, extractedNode.children, tableItems,terminologies);
 			} else {
 				/*var leafNode = extractLeafNode(value);
 				 if (leafNode) {
@@ -255,8 +264,11 @@ angular.module('clever.management.services.archetypeParse', []).service('archety
 		}
 	}
 
-	function extractNode(node) {
-		var type, attribute, code, occurrences, existence, cardinality;
+	function extractNode(node,term_definitions) {
+		var type, attribute, code, occurrences, existence, cardinality,name,dataType,picType;
+	    var dataValue=[];
+        var dataInfo=[];
+
 		type = node.rm_type_name;
 		attribute = node.rm_attribute_name;
 		if (node.node_id) {
@@ -280,6 +292,95 @@ angular.module('clever.management.services.archetypeParse', []).service('archety
 		if (node.cardinality) {
 			cardinality = node.cardinality;
 		}
+		
+		//5/17 add	
+          
+        if (type=="ELEMENT"){
+            if(node.attributes){
+                if(node.attributes.length==undefined){
+                    dType=node.attributes.children.rm_type_name;
+                    dIndex=node.attributes.children;
+                    dataInfo.push({dataType:dType,dataValue:dIndex});
+                }else{
+                    var i=0;//heart failure   typical smoke amount
+                    while(node.attributes[i]){
+                        if(node.attributes[i].children){
+                            dType=node.attributes[i].children.rm_type_name;
+                            dIndex=node.attributes[i].children;
+                            dataInfo.push({dataType:dType,dataValue:dIndex});}
+                            i++;                        
+                    }
+                  //dataType=node.attributes[0].children.rm_type_name;
+                } 
+            }
+        }
+        if(dataInfo){
+         if(dataInfo.length==1){
+                dataType=dataInfo[0].dataType;
+                if(dataType=="DV_ORDINAL"){
+                    var valueList=dataInfo[0].dataValue.list;
+                        angular.forEach(valueList,function(item){
+                            var dropdownList={value:item.value,symbol:getDefinition(item.symbol.defining_code.code_string,term_definitions)};
+                            dataValue.push(dropdownList);
+                    });
+                 }
+                 if(dataType=="DV_CODED_TEXT"){
+                     if(dataInfo[0].dataValue.attributes){
+                     if(dataInfo[0].dataValue.attributes.children){
+                         var valueList=dataInfo[0].dataValue.attributes.children;
+                         if(valueList.code_list){
+                             angular.forEach(valueList.code_list,function(item){
+                                 var dropdownList={value:"",symbol:getDefinition(item,term_definitions)};
+                                    dataValue.push(dropdownList);
+                                   dataInfo[0].dataType="DV_ORDINAL";
+                             });
+                         }
+                         if(valueList.reference){
+                             dataValue.push(valueList.reference);
+                              dataInfo[0].dataType="DV_TEXT";
+                         }
+                          if(valueList.referenceSeturi){
+                             dataValue.push(valueList.referenceSeturi);
+                             dataInfo[0].dataType="DV_TEXT";
+                         }
+                     }
+                 }
+                 }
+             }
+        }
+       //real name of items           
+        if(node.attributes){
+            if(node.attributes.length>1){
+                var count;
+                for(var i=0;i<node.attributes.length-1;i++){                    
+                    if(node.attributes[i].rm_attribute_name=="name")
+                    {count=i;}
+                }
+                if(count!=undefined){
+                    if(node.attributes[count].children.attributes){
+                        if(node.attributes[count].children.attributes.rm_attribute_name=="value"){
+                            if(node.attributes[count].children.attributes.children.item){
+                                name=node.attributes[count].children.attributes.children.item.list;
+                            }
+                        }
+                    }
+                 }                
+            }
+        }
+        
+        if(!name){               
+           if(term_definitions&&code){
+                name=getDefinition(code,term_definitions);
+           }else{
+               name=label;
+           }
+          }                     
+        
+        if(type=="ELEMENT"){           
+           picType=dataType;
+        }else{
+           picType=label;
+        }   		
 		return {
 			label : {
 				type : labelType,
@@ -287,10 +388,27 @@ angular.module('clever.management.services.archetypeParse', []).service('archety
 				code : code,
 				occurrences : occurrences,
 				existence : existence,
-				cardinality : cardinality
+				cardinality : cardinality,
+				labelContent:name,
+				dataType:dataType,
+				picType:picType,
+				dataValue:dataValue,
+				dataInfo:dataInfo
 			}
 		};
 	}
+
+   function getDefinition(code,term_definitions){
+        var name="";
+        if(term_definitions){       
+            angular.forEach(term_definitions,function(value){
+              if(value.code==code){
+               name=value.text;
+               }
+            });
+            }       
+        return name;
+    }
 
 	function processCodePhrase(codePhraseNode, nodes) {
 		var labelType = 'codePhrase';
