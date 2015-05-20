@@ -265,7 +265,7 @@ angular.module('clever.management.services.archetypeParse', []).service('archety
 	}
 
 	function extractNode(node,term_definitions) {
-		var type, attribute, code, occurrences, existence, cardinality,name,dataType,picType;
+		var type, attribute, code, occurrences, existence, cardinality,name,dataType,picType,tableName;
 	    var dataValue=[];
         var dataInfo=[];
 
@@ -371,6 +371,7 @@ angular.module('clever.management.services.archetypeParse', []).service('archety
         if(!name){               
            if(term_definitions&&code){
                 name=getDefinition(code,term_definitions);
+                tableName=term_definitions[0].text;
            }else{
                name=label;
            }
@@ -393,7 +394,8 @@ angular.module('clever.management.services.archetypeParse', []).service('archety
 				dataType:dataType,
 				picType:picType,
 				dataValue:dataValue,
-				dataInfo:dataInfo
+				dataInfo:dataInfo,
+				tableName:tableName
 			}
 		};
 	}

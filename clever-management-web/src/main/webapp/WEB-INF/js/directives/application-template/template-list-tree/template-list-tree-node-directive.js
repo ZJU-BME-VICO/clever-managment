@@ -64,8 +64,13 @@ function($compile,$document) {
                  var type=nodeData.label.dataType;
                  var html="";
                  if(type){
+                     if(nodeData.parent.label.occurrences.upper_unbounded=="true"){
+                            nodeData.label.tableName=nodeData.parent.label.labelContent;
+                            html='<cluster gui-data="nodeData"></cluster>'
+                         }
                      for( var i=0;i<9;i++){
                          type=nodeData.label.dataInfo[0].dataType;
+                         
                          if(type==datatypeList[i])
                          {
                             html=templatestrList[i]; 
