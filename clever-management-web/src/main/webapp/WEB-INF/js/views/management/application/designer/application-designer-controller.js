@@ -8,7 +8,7 @@ function DesignerCtrl($scope,resourceService,$q,templateParseService,archetypePa
 	$scope.tempControl={};
 
      //for template display don't delete!!
-     /*resourceService.get(STORAGE_TEMPLATE_LIST_URL).then(function(list) {            
+     resourceService.get(STORAGE_TEMPLATE_LIST_URL).then(function(list) {            
             $scope.templateList = list;
         });
         $scope.getTemplateDetail=function(node){
@@ -24,11 +24,11 @@ function DesignerCtrl($scope,resourceService,$q,templateParseService,archetypePa
             $scope.templateDetail.push(parseResult.definitions);
          }       
         });
-    };*/
+    };
     
        
       //for archetype display
-      resourceService.get(ARCHETYPE_LIST_URL).then(function(list) {            
+    /*  resourceService.get(ARCHETYPE_LIST_URL).then(function(list) {            
             $scope.templateList = list;
         });
       $scope.getTemplateDetail=function(node){
@@ -45,7 +45,7 @@ function DesignerCtrl($scope,resourceService,$q,templateParseService,archetypePa
             $scope.templateDetail.push(simplifyTree);
          }       
         });
-    };
+    };*/
     
 	//local file
 	/* resourceService.get(STORAGE_TEMPLATE_BY_NAME_URL+'openEHR-EHR-INSTRUCTION.request-imaging_exam.v1.1').then(function(temp){

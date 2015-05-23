@@ -12,7 +12,7 @@ function($document) {
                   +'<img ng-class="UIData.label.picType"></img>'
                   +'<span>'+'{{UIData.label.labelContent}}'
                   +'</span>'+'&nbsp;&nbsp:&nbsp;&nbsp&nbsp'
-                  +'<select ng-model="dataEntry" ng-options="index.symbol for index in UIData.label.dataValue" name={{UIData.label.labelContent}} id={{UIData.label.tableName+"/"+UIData.label.code}}>'
+                  +'<select ng-model="dataEntry" ng-options="index.symbol for index in UIData.label.dataValue" name={{UIData.label.labelContent}} id={{UIData.label.labelContent+"/"+UIData.label.code}}>'
                   +'</select>'+'</li>',
         controller:function($scope){
             

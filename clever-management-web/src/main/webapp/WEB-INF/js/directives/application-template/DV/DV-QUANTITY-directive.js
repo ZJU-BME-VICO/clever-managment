@@ -13,7 +13,7 @@ function($document) {
 			        template: '<li dragable id={{UIData.label.labelContent+"_"+UIData.label.code}}>'
 			                     +'<img ng-class="UIData.label.picType"></img>'
 			                     +'<span>'+'{{UIData.label.labelContent}}'+'</span>'
-			                     +'&nbsp;&nbsp:&nbsp;&nbsp&nbsp'+'<input placeholder="{{UIData.dataValue[0].magnitude}}" name={{UIData.label.labelContent}} id={{UIData.label.tableName+"/"+UIData.label.code}}>'
+			                     +'&nbsp;&nbsp:&nbsp;&nbsp&nbsp'+'<input placeholder="{{UIData.dataValue[0].magnitude}}" name={{UIData.label.labelContent}} id={{UIData.label.labelContent+"/"+UIData.label.code}}>'
             			        +'{{UIData.label.dataValue[0].unit}}'+
                                '</li>',
 	    controller:function($scope){

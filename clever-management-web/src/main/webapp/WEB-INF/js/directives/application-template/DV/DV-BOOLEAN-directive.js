@@ -9,7 +9,7 @@ function($document) {
         
         template: '<li dragable id={{UIData.label.labelContent+"_"+UIData.label.code}}>'+
                     '<img ng-class="UIData.label.picType"></img>'+
-                    '<a>'+'{{UIData.label.labelContent}}'+'</a>'+'&nbsp;&nbsp:&nbsp;&nbsp&nbsp'+'<input name={{UIData.label.labelContent}} id={{UIData.label.tableName+"/"+UIData.label.code}} type="checkbox">'+ 
+                    '<a>'+'{{UIData.label.labelContent}}'+'</a>'+'&nbsp;&nbsp:&nbsp;&nbsp&nbsp'+'<input name={{UIData.label.labelContent}} id={{UIData.label.labelContent+"/"+UIData.label.code}} type="checkbox">'+ 
                   '</li>',
         controller:function($scope){
             

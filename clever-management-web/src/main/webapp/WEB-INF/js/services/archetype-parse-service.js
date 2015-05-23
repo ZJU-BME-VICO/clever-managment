@@ -205,7 +205,7 @@ angular.module('clever.management.services.archetypeParse', []).service('archety
 		var term_definitions;
         if(terminologies){
         for(i=0;i<terminologies.length;i++){
-          if(terminologies[i].language=="en"||terminologies[i].language=="zh")
+          if(terminologies[i].language=="zh-cn")
            {
                term_definitions=terminologies[i].items;}
            }

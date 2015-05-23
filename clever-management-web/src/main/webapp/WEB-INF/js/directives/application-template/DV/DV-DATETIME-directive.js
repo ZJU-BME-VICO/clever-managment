@@ -10,7 +10,7 @@ function($document) {
         template: '<li dragable id={{UIData.label.labelContent+"_"+UIData.label.code}}>'
                    +'<img class={{UIData.label.picType}}></img>'
                    +'<span>'+'{{UIData.label.labelContent}}'+'</span>'+'&nbsp;&nbsp:&nbsp;&nbsp&nbsp'
-                   +'<input name={{UIData.label.labelContent}} id={{UIData.label.tableName+"/"+UIData.label.code}}>'+
+                   +'<input name={{UIData.label.labelContent}} id={{UIData.label.labelContent+"/"+UIData.label.code}}>'+
                    '</li>',
         controller:function($scope){
             
