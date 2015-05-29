@@ -1,4 +1,4 @@
-angular.module('clever.management.directives.headerPane', []).directive('headerPane', function(containerService) {
+angular.module('clever.management.directives.headerPane', []).directive('headerPane', function() {
 	return {
 		restrict : 'E',
 		scope : {
@@ -6,7 +6,7 @@ angular.module('clever.management.directives.headerPane', []).directive('headerP
 			description : '=',
 			terminology : '=',
 		},
-		template :  '<div class="row" ng-style="{height: maxHeight}"> style' +
+		template :  '<div class="row" ng-style="{\'max-height\': maxHeight.value - 5}">' +
 						'<table class="table table-hover">' +
 							'<tbody>' +
 								'<tr>' +
@@ -42,13 +42,7 @@ angular.module('clever.management.directives.headerPane', []).directive('headerP
 					'</div>',
 		replace : true,
 		link : function(scope, elm, attrs) {
-			scope.maxHeight = containerService.getHeight() - 280;
-            scope.$watch(function() {
-                return containerService.getHeight()
-            }, function(newValue) {
-                scope.maxHeight = newValue - 280 < 180 ? 180 : newValue - 280;
-            });
-			// scope.maxHeight = angular.isDefined(attrs.maxHeight) ? scope.$parent.$eval(attrs.maxHeight) : undefined;
+			scope.maxHeight = angular.isDefined(attrs.maxHeight) ? scope.$parent.$eval(attrs.maxHeight) : undefined;
 			scope.titleWidth = angular.isDefined(attrs.titleWidth) ? scope.$parent.$eval(attrs.titleWidth) : 200;
 			scope.getOntologyByCode = function(code) {
 				if (scope.terminology && code) {

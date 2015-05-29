@@ -5,6 +5,15 @@ function ArchetypeViewCtrl($scope, $timeout, resourceService, ARCHETYPE_LIST_URL
 	$scope.tabs = [];
 	$scope.isArchetypeListHidden = false;
 
+	$scope.tabContainerHeight = {
+		value : $scope.$parent.containerHeight - 35
+	};
+	$scope.$watch(function() {
+		return $scope.$parent.containerHeight;
+	}, function(newValue) {
+		$scope.tabContainerHeight.value = newValue - 35;
+	});
+
 	resourceService.get(ARCHETYPE_LIST_URL).then(function(list) {
 		$scope.archetypeList = list;
 	});

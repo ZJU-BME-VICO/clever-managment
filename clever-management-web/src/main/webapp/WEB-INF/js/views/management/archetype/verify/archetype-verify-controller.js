@@ -2,6 +2,15 @@ function ArchetypeVerifyCtrl($scope, msgboxService, resourceService, documentDif
 
     $scope.archetypeFiles = [];
 
+    $scope.modalContainerHeight = {
+        value : $scope.$parent.containerHeight - 100
+    };
+    $scope.$watch(function() {
+        return $scope.$parent.containerHeight - 100;
+    }, function(newValue) {
+        $scope.modalContainerHeight.value = $scope.$parent.containerHeight - 100;
+    });
+
     resourceService.get(ARCHETYPE_LIST_VERIFY_URL).then(function(list) {
         $scope.archetypeFiles = list;
         console.log(list);
@@ -10,7 +19,7 @@ function ArchetypeVerifyCtrl($scope, msgboxService, resourceService, documentDif
     $scope.approveArchetypeFile = function(archetypeFile) {
         resourceService.get(ARCHETYPE_APPROVE_BY_ID_URL + archetypeFile.id).then(function(result) {
             if (result.succeeded) {
-                msgboxService.createMessageBox("ARCHETYPE_VERIFY_SUCCEEDED", "ARCHETYPE_VERIFY_APPROVE_SUCCEEDED_HINT", {}, 'success');
+                msgboxService.createMessageBox("ARCHETYPE_VERIFY_MSG_HINT", "ARCHETYPE_VERIFY_APPROVE_SUCCEEDED_HINT", {}, 'success');
                 $scope.archetypeFiles.pop(archetypeFile);
             } else {
                 msgboxService.createMessageBox("ARCHETYPE_VERIFY_FAILED", "ARCHETYPE_VERIFY_APPROVE_FAILED_HINT", {
@@ -54,9 +63,9 @@ function ArchetypeVerifyCtrl($scope, msgboxService, resourceService, documentDif
 
     $scope.adlArchetypeFile = function(archetypeFile) {
         if (archetypeFile.lastRevisionArchetype == null) {
-            documentDiffModalService.open("ARCHETYPE_VERIFY_ADL_DIFF", null, archetypeFile.adl);
+            documentDiffModalService.open("ARCHETYPE_VERIFY_ADL_DIFF", null, archetypeFile.adl, $scope.modalContainerHeight);
         } else {
-            documentDiffModalService.open("ARCHETYPE_VERIFY_ADL_DIFF", archetypeFile.lastRevisionArchetype.adl, archetypeFile.adl);
+            documentDiffModalService.open("ARCHETYPE_VERIFY_ADL_DIFF", archetypeFile.lastRevisionArchetype.adl, archetypeFile.adl, $scope.modalContainerHeight);
         }
     }
 }

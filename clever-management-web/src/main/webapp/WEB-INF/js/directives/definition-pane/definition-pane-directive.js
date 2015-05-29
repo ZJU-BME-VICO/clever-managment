@@ -1,4 +1,4 @@
-angular.module('clever.management.directives.definitionPane', []).directive('definitionPane', function(containerService) {
+angular.module('clever.management.directives.definitionPane', []).directive('definitionPane', function() {
 	return {
 		restrict : 'E',
 		scope : {
@@ -60,16 +60,9 @@ angular.module('clever.management.directives.definitionPane', []).directive('def
 					return matchedOntology;
 				}
 			}
-
 		},
 		link : function(scope, elm, attrs) {
-			scope.contentHeight = containerService.getHeight() - 280;
-            scope.$watch(function() {
-                return containerService.getHeight()
-            }, function(newValue) {
-                scope.contentHeight = newValue - 280 < 180 ? 180 : newValue - 280;
-            });
-			// scope.contentHeight = angular.isDefined(attrs.maxHeight) ? scope.$parent.$eval(attrs.maxHeight) - 54 : undefined;
+			scope.contentHeight = angular.isDefined(attrs.maxHeight) ? scope.$parent.$eval(attrs.maxHeight) : undefined;
 		}
 	};
 });

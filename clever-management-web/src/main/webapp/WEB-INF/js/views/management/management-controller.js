@@ -1,17 +1,11 @@
-function ManagementCtrl($scope, $state, $timeout, containerService) {
+function ManagementCtrl($scope, $state, $timeout) {
 	var undefined;
-	// $scope.$watch(function() {
-	// 	return $scope.$parent.containerHeight;
-	// }, function(newValue) {
-	// 	$scope.containerHeight = newValue - 110;
-	// });
-	$scope.containerHeight = containerService.getHeight() - 150;
-	$scope.$watch(function(){
-		return containerService.getHeight()
+	$scope.containerHeight = {};
+	$scope.$watch(function() {
+		return $scope.$parent.containerHeight;
 	}, function(newValue) {
-	    $scope.containerHeight = newValue - 150 < 300 ? 300 : newValue - 150;
+		$scope.containerHeight = newValue - 110;
 	});
-
 	
 	$scope.breadcrumbs = [];
 	$scope.menus = [];

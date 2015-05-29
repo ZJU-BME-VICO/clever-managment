@@ -15,6 +15,7 @@ import edu.zju.bme.clever.management.service.entity.ArchetypeRevisionFile;
 import edu.zju.bme.clever.management.service.entity.ArchetypeVersionMaster;
 import edu.zju.bme.clever.management.service.entity.FileProcessResult;
 import edu.zju.bme.clever.management.service.entity.FileProcessResult.FileStatus;
+import edu.zju.bme.clever.management.service.entity.LifecycleState;
 import edu.zju.bme.clever.management.service.entity.TemplateMaster;
 import edu.zju.bme.clever.management.service.entity.TemplateRevisionFile;
 import edu.zju.bme.clever.management.service.exception.VersionControlException;
@@ -102,6 +103,14 @@ public class StorageTemplateValidateServiceImpl implements
 				if (templateMaster != null) {
 					TemplateRevisionFile latestTemplate = templateMaster
 							.getLatestRevisionFile();
+					// Validate lifecycle state
+					if(!latestTemplate.getLifecycleState().equals(
+							LifecycleState.PUBLISHED)) {
+						result.setStatus(FileStatus.INVALID);
+						result.appendMessage("The latest revision template "
+								+ latestTemplate.getName()
+								+ "'s lifecycle state is not PUBLISHED.");
+					}
 					nextSerialVersion = latestTemplate.getSerialVersion() + 1;
 					Integer latestTemplateSpecialiseArchetypeSerialVersion = latestTemplate
 							.getSpecialiseArchetypeRevisionFileSerialVersion();

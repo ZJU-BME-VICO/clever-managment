@@ -187,14 +187,14 @@ public class StorageTemplateVersionControlServiceImpl implements
 		if (latestRevisionFile != null) {
 			nextSerialVersion = latestRevisionFile.getSerialVersion() + 1;
 			nextRevisionFile.setLastRevisionFile(latestRevisionFile);
-			// Validate lifecycle state
-			if (!latestRevisionFile.getLifecycleState().equals(
-					LifecycleState.PUBLISHED)) {
-				throw new VersionControlException(
-						"The latest revision template "
-								+ latestRevisionFile.getName()
-								+ "'s lifecycle state is not PUBLISHED.");
-			}
+			// Validate lifecycle state  This validate is removed to ValidateService
+//			if (!latestRevisionFile.getLifecycleState().equals(
+//					LifecycleState.PUBLISHED)) {
+//				throw new VersionControlException(
+//						"The latest revision template "
+//								+ latestRevisionFile.getName()
+//								+ "'s lifecycle state is not PUBLISHED.");
+//			}
 			// Validate specialise archetype order
 			if (specialiseArchetype.getSerialVersion() < latestRevisionFile
 					.getSpecialiseArchetypeRevisionFileSerialVersion()) {

@@ -32,7 +32,6 @@
 <script src="js/services/msgbox-service.js"></script>
 <!--<script src="js/services/template-retrieve-service.js"></script>-->
 <script src="js/services/document-diff-service.js"></script>
-<script src="js/services/container-service.js"></script>
 
 <!-- directives -->
 <script src="js/directives/files-model/files-model-directive.js"></script>

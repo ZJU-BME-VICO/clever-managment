@@ -133,6 +133,10 @@ angular.module('clever.management.i18n.zh', ['pascalprecht.translate']).config(f
 		STORAGE_TEMPLATE_DEPLOY_TODO_LIST : '模板列表',
 		STORAGE_TEMPLATE_DEPLOY_RECORD : '部署记录',
 		STORAGE_TEMPLATE_DEPLOY_VERSION : '版本',
+		STORAGE_TEMPLATE_DEPLOY_FILE_DEPLOYING : '部署中',
+		STORAGE_TEMPLATE_DEPLOY_MSG_HINI : '部署提示',
+		STORAGE_TEMPLATE_DEPLOY_SUCCEEDED_HINI : '部署成功',
+		STORAGE_TEMPLATE_DEPLOY_FIALED_HINI : '部署失败， 错误：{{errorMsg}}',
 
 		// Menu
 		MENU_RETURN : '返回上一级',

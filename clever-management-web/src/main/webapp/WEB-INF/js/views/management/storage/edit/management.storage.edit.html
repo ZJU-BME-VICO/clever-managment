@@ -1,22 +1,26 @@
 <div class="row">
-	<div class="col-xs-6 col-md-6 col-lg-6">
-		<h4 class="text-center">Draft</h4>
-		<ul class="list-group" ng-style="{height: containerHeight - 80}" style="overflow: auto;">
-			<li class="list-group-item list-group-item-success" ng-repeat="templateFile in templateFiles.draft">
-				{{templateFile.name}}
-				<button type="button" class="btn btn-default pull-right" 
-				style="padding: 0px 8px;" ng-click="submitTemplateFile(templateFile)">Submit</button>
-			</li>
-		</ul>
-	</div>
-	<div class="col-xs-6 col-md-6 col-lg-6">
-		<h4 class="text-center">Publish</h4>
-		<ul class="list-group" ng-style="{height: containerHeight - 80}" style="overflow: auto;">
-			<li class="list-group-item list-group-item-success" ng-repeat="templateFile in templateFiles.published">
-				{{templateFile.name}}
-				<button type="button" class="btn btn-default pull-right" 
-				style="padding: 0px 8px;" ng-click="upgradeTemplateFile(templateFile)">Upgrade</button>
-			</li>
-		</ul>
-	</div>
+    <div class="col-xs-4 col-md-4 col-lg-4">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <div class="btn-group pull-right" dropdown>
+                    <button class="btn btn-default dropdown-toggle" dropdown-toggle style="width: 110px;">{{selectedLifecycle}} <span class="glyphicon glyphicon-chevron-down pull-right" style="margin-top: 2px;"></span></button>
+                    <ul class="dropdown-menu" style="min-width: 110px;">
+                        <li><a href="" class="text-center" ng-click="selectedLifecycle = 'Draft';">Draft</a></li>
+                        <li><a href="" class="text-center" ng-click="selectedLifecycle = 'Published';">Published</a></li>
+               <!--          <li><a href="" ng-click="selectedLifecycle = 'Draft';">
+                        	<img ng-class="{draft: true}" class="clever-icon" style="padding: 0 10px;height: 16px;">Draft</img>
+                        </a></li>
+                        <li><a href="" ng-click="selectedLifecycle = 'Published';">
+                        	<img ng-class="{published: true}" class="clever-icon" style="padding: 0 10px;height: 16px;">Published</img>
+                        </a></li> -->
+                    </ul>
+                </div>
+                <input type="text" class="form-control" style="width: 63%;">
+            </div>
+            <div class="panel-body" ng-style="{height: containerHeight - 55}" style="overflow: auto;">
+            </div>
+        </div>
+    </div>
+    <div class="col-xs-8 col-md-8 col-lg-8">
+    </div>
 </div>

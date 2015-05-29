@@ -6,6 +6,15 @@ define(['lazyLoader'], function(lazyLoader) {
 		$scope.tabs = [];
 		$scope.isTemplateListHidden = false;
 
+		$scope.tabContainerHeight = {
+		    value: $scope.$parent.containerHeight - 35
+		};
+		$scope.$watch(function() {
+		    return $scope.$parent.containerHeight;
+		}, function(newValue) {
+		    $scope.tabContainerHeight.value = newValue - 35;
+		});
+
 		resourceService.get(STORAGE_TEMPLATE_LIST_URL).then(function(list) {
 			$scope.templateList = list;
 		});

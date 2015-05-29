@@ -1,5 +1,6 @@
-function StorageTemplateDeployCtrl($scope, resourceService, STORAGE_TEMPLATE_LIST_DEPLOY_URL) {
+function StorageTemplateDeployCtrl($scope, resourceService, busyService, msgboxService, STORAGE_TEMPLATE_LIST_DEPLOY_URL, STORAGE_TEMPLATE_DEPLOY_URL) {
     $scope.templateMasterList = [];
+    $scope.selectedCount = 0;
 
     resourceService.get(STORAGE_TEMPLATE_LIST_DEPLOY_URL).then(function(list) {
         $scope.templateMasterList = list;
@@ -8,6 +9,8 @@ function StorageTemplateDeployCtrl($scope, resourceService, STORAGE_TEMPLATE_LIS
             master.isSelected = false;
             master.selectedTemplate = master.templates[0];
         });
+
+        console.log($scope.templateMasterList);
     });
 
     $scope.getFixedTitle = function(title, length) {
@@ -18,5 +21,43 @@ function StorageTemplateDeployCtrl($scope, resourceService, STORAGE_TEMPLATE_LIS
             return title;
         }
     };
+
+    $scope.selectTemplate = function(templateMaster) {
+        templateMaster.isSelected = !templateMaster.isSelected;
+        if(templateMaster.isSelected) {
+            $scope.selectedCount ++;
+        } else {
+            $scope.selectedCount --;
+        }
+    }
+
+    $scope.deployTemplates = function() {
+        var busyId = busyService.pushBusy('STORAGE_TEMPLATE_DEPLOY_FILE_DEPLOYING');
+        var formData = new FormData();
+        angular.forEach($scope.templateMasterList, function(master) {
+            if(master.isSelected) {
+                formData.append('ids', master.selectedTemplate.id);
+                formData.append('names', master.selectedTemplate.name);
+            }
+        });
+        resourceService.post(STORAGE_TEMPLATE_DEPLOY_URL, formData, {
+            transformRequest : angular.identity,
+            headers : {
+                'Content-Type' : undefined
+            }
+        }).then(function(result) {
+            busyService.popBusy(busyId);
+            if(result.succeeded) {
+                msgboxService.createMessageBox('STORAGE_TEMPLATE_DEPLOY_MSG_HINI', 'STORAGE_TEMPLATE_DEPLOY_SUCCEEDED_HINI', {}, 'success').result.then(function() {
+                    // Rest tempate list to be deployed  
+                    console.log(result.message);
+                });
+            } else {
+                msgboxService.createMessageBox('STORAGE_TEMPLATE_DEPLOY_MSG_HINI', 'STORAGE_TEMPLATE_DEPLOY_FIALED_HINI', {
+                    errorMsg : result.message
+                }, 'error');
+            }
+        });
+    }
 
 }

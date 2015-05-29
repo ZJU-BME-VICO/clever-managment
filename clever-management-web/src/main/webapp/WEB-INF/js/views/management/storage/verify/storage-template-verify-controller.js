@@ -3,6 +3,15 @@ function StorageTemplateVerifyCtrl($scope, $modal, resourceService, msgboxServic
     $scope.templateFiles = [];
     $scope.modalHeight = {};
 
+    $scope.modalContainerHeight = {
+        value : $scope.$parent.containerHeight - 100
+    };
+    $scope.$watch(function() {
+        return $scope.$parent.containerHeight - 100;
+    }, function(newValue) {
+        $scope.modalContainerHeight.value = $scope.$parent.containerHeight - 100;
+    });
+
     resourceService.get(STORAGE_TEMPLATE_LIST_VERIFY_URL).then(function(list) {
         $scope.templateFiles = list;
         console.log(list);
@@ -55,9 +64,9 @@ function StorageTemplateVerifyCtrl($scope, $modal, resourceService, msgboxServic
 
     $scope.oetTemplateFile = function(templateFile) {
         if (templateFile.lastTemplateFile == null) {
-            documentDiffModalService.open("STORAGE_TEMPLATE_VERIFY_OET_DIFF", null, templateFile.oet);
+            documentDiffModalService.open("STORAGE_TEMPLATE_VERIFY_OET_DIFF", null, templateFile.oet, $scope.modalContainerHeight);
         } else {
-            documentDiffModalService.open("STORAGE_TEMPLATE_VERIFY_OET_DIFF", templateFile.lastTemplateFile.oet, templateFile.oet);
+            documentDiffModalService.open("STORAGE_TEMPLATE_VERIFY_OET_DIFF", templateFile.lastTemplateFile.oet, templateFile.oet, $scope.modalContainerHeight);
         }
     }
 }

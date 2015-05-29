@@ -1,5 +1,5 @@
 define(['lazyLoader'], function(lazyLoader) {
-    lazyLoader.directive('templateMasterPane', function(containerService) {
+    lazyLoader.directive('templateMasterPane', function() {
         return {
             restrict: 'E',
             scope: {
@@ -32,13 +32,7 @@ define(['lazyLoader'], function(lazyLoader) {
                 };
             },
             link: function(scope, element, attr) {
-                scope.tableMaxHeight = containerService.getHeight() - 280;
-                scope.$watch(function() {
-                    return containerService.getHeight()
-                }, function(newValue) {
-                    scope.tableMaxHeight = newValue - 280 < 180 ? 180 : newValue - 280;
-                });
-                // scope.tableMaxHeight = angular.isDefined(attr.maxHeight) ? scope.$parent.$eval(attr.maxHeight) - 90 : undefined;
+                scope.tableMaxHeight = angular.isDefined(attr.maxHeight) ? scope.$parent.$eval(attr.maxHeight) : undefined;
                 scope.tableTitleWidth = angular.isDefined(attr.tableTitleWidth) ? scope.$parent.$eval(attr.tableTitleWidth) : 200;
             },
         };

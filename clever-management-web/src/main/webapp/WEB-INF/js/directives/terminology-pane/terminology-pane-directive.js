@@ -1,4 +1,4 @@
-angular.module('clever.management.directives.terminologyPane', []).directive('terminologyPane', function(containerService) {
+angular.module('clever.management.directives.terminologyPane', []).directive('terminologyPane', function() {
 	return {
 		restrict : 'E',
 		scope : {
@@ -11,13 +11,7 @@ angular.module('clever.management.directives.terminologyPane', []).directive('te
 			$scope.isConstraintCollapsed = false;
 		},
 		link : function(scope, element, attrs) {
-			scope.maxHeight = containerService.getHeight() - 280;
-            scope.$watch(function() {
-                return containerService.getHeight()
-            }, function(newValue) {
-                scope.maxHeight = newValue - 280 < 180 ? 180 : newValue - 280;
-            });
-			// scope.maxHeight = angular.isDefined(attrs.maxHeight) ? scope.$parent.$eval(attrs.maxHeight) : undefined;
+			scope.maxHeight = angular.isDefined(attrs.maxHeight) ? scope.$parent.$eval(attrs.maxHeight) : undefined;
 		}
 	};
 });

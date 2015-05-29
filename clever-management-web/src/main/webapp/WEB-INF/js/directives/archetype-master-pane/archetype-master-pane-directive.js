@@ -1,4 +1,4 @@
-angular.module('clever.management.directives.archetypeMasterPane', []).directive('archetypeMasterPane', function(containerService) {
+angular.module('clever.management.directives.archetypeMasterPane', []).directive('archetypeMasterPane', function() {
     return {
         restrict: 'E',
         scope: {
@@ -35,15 +35,7 @@ angular.module('clever.management.directives.archetypeMasterPane', []).directive
             };
         },
         link: function(scope, element, attr) {
-            // scope.tableMaxHeight = angular.isDefined(attr.maxHeight) ? scope.$parent.$eval(attr.maxHeight) - 90 : undefined;
-            // scope.tableTitleWidth = angular.isDefined(attr.tableTitleWidth) ? scope.$parent.$eval(attr.tableTitleWidth) : 200;
-
-            scope.tableMaxHeight = containerService.getHeight() - 280;
-            scope.$watch(function() {
-                return containerService.getHeight()
-            }, function(newValue) {
-                scope.tableMaxHeight = newValue - 280 < 180 ? 180 : newValue - 280;
-            });
+            scope.tableMaxHeight = angular.isDefined(attr.maxHeight) ? scope.$parent.$eval(attr.maxHeight) : undefined;
             scope.tableTitleWidth = angular.isDefined(attr.tableTitleWidth) ? scope.$parent.$eval(attr.tableTitleWidth) : 200;
         },
     };

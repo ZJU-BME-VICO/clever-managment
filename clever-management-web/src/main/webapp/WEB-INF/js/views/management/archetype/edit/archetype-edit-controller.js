@@ -1,5 +1,4 @@
-function ArchetypeEditCtrl($scope, msgboxService, resourceService, ARCHETYPE_LIST_EDIT_DRAFT_URL,
-    ARCHETYPE_LIST_EDIT_PUBLISHED_URL, ARCHETYPE_EDIT_BY_ID_URL, ARCHETYPE_SUBMIT_BY_ID_URL) {
+function ArchetypeEditCtrl($scope, msgboxService, resourceService, ARCHETYPE_LIST_EDIT_DRAFT_URL, ARCHETYPE_LIST_EDIT_PUBLISHED_URL, ARCHETYPE_EDIT_BY_ID_URL, ARCHETYPE_SUBMIT_BY_ID_URL) {
 
     $scope.editId = 0;
     $scope.focusTab = "ARCHETYPE_EDIT_SUBMIT";

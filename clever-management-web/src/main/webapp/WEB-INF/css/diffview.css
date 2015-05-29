@@ -95,6 +95,7 @@ table.diff th.author {
 }
 
 .app-modal-window .modal-dialog{
+    margin-top: 50px;
     width: 85%;
     height: 80%;
 }

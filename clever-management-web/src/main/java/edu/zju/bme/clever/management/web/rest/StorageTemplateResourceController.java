@@ -169,6 +169,25 @@ public class StorageTemplateResourceController extends
 					  .collect(Collectors.toList());
 	}
 	
+	@RequestMapping(value = "/action/deploy", method = RequestMethod.POST)
+	public FileUploadResult deployTemplateFiles(
+			@RequestParam(value = "ids", required = true) Integer[] ids,
+			@RequestParam(value = "names", required = true) String[] names,
+			Authentication authentication) {
+		String userName = ((UserDetails) authentication.getPrincipal())
+				.getUsername();
+		User user = this.userService.getUserByName(userName);
+		FileUploadResult result = new FileUploadResult();
+		result.setSucceeded(true);
+		String msg = "";
+		for(String name : names) {
+			msg += name;
+		}
+		result.setMessage(msg);
+		return result;
+	}
+
+	
 	@RequestMapping(value = "/action/submit/id/{id}", method = RequestMethod.GET)
 	public FileUploadResult sumbmitTemplateFile(@PathVariable int id,
 			Authentication authentication) {
