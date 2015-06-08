@@ -1,7 +1,7 @@
 angular.module('clever.management.directives.templateListTreeNode', []).directive('templateListTreeNode',
 function($compile,$document) {
          var datatypeList= new Array('DV_QUANTITY','DV_TEXT','DV_ORDINAL', 'DV_DATE_TIME','DV_DATE', 'DV_COUNT', 'DV_BOOLEAN','DV_CODED_TEXT','DV_PROPORTION','DV_DURATION');
-         var templatestrList= new Array('<dv-quantity gui-data="nodeData" gui-control="dvquantityControl"></dv-quantity>','<dv-text gui-data="nodeData" gui-control="dvtextControl" selected-Element="$parent.selectedElement"></dv-text>',
+         var templatestrList= new Array('<dv-quantity gui-data="nodeData" gui-control="dvquantityControl"></dv-quantity>','<dv-text gui-data="nodeData" gui-control="dvtextControl" number="number" selected-Element="$parent.selectedElement"></dv-text>',
                                     '<dv-ordinal gui-data="nodeData" gui-control="dvordinalControl"></dv-ordinal>','<dv-datetime gui-data="nodeData" gui-control="dvdatetimeControl"></dv-datetime>','<dv-datetime gui-data="nodeData" gui-control="dvdatetimeControl"></dv-datetime>',
                                     '<dv-count gui-data="nodeData" gui-control="dvcountControl"></dv-count>','<dv-boolean gui-data="nodeData" gui-control="dvbooleanControl"></dv-boolean>',
                                     '<dv-codedtext gui-data="nodeData" gui-control="dvcodedtextControl"></dv-codedtext>','9');
@@ -63,6 +63,16 @@ function($compile,$document) {
                 
                  var type=nodeData.label.dataType;
                  var html="";
+                 
+                 var name=nodeData.label.enText+"/"+nodeData.label.tableName;
+			//var parent=document.getElementById("editArea");
+			//var eles=parent.getElementsByName(name);
+			 var eles=document.getElementsByName(name);
+			 var number="0";
+			if(eles){
+			 number=eles.length.toString();
+			}	
+                 
                  if(type){
                     /* if(nodeData.parent.label.occurrences.upper_unbounded=="true"){
                             nodeData.label.tableName=nodeData.parent.label.labelContent;

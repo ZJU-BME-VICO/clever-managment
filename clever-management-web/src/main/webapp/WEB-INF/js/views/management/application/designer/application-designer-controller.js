@@ -3,6 +3,7 @@ function DesignerCtrl($scope,resourceService,$q,templateParseService,archetypePa
 	$scope.defination={};
 	$scope.templateDetail=[];
 	$scope.tplist=[];
+	$scope.isTemolateListHidden = false;
 	$scope.controlList=['btnFn','labelFn'];
 	$scope.selectedElement="初始化";
 	$scope.tempControl={};
@@ -21,7 +22,9 @@ function DesignerCtrl($scope,resourceService,$q,templateParseService,archetypePa
         var tempalteName=parseResult.template_name;
         if($scope.tplist.indexOf(tempalteName)==-1){
             $scope.tplist.push(tempalteName);
-            $scope.templateDetail.push(parseResult.definitions);
+           // $scope.templateDetail.push(parseResult.definitions);
+             var simplifyTree=processTreeContent(parseResult.definitions);
+            $scope.templateDetail.push(simplifyTree);
          }       
         });
     };
@@ -159,7 +162,7 @@ function DesignerCtrl($scope,resourceService,$q,templateParseService,archetypePa
               value.parent=parent;
               var currentNode={};
               currentNode.label=value.label;
-                var typeT=currentNode.label.text;
+                var typeT=currentNode.label.picType;
                 if((typeList.indexOf(typeT)==-1)&&(attributeList.indexOf(typeT)==-1)){// ignore type
                    archetypeTree.push(currentNode);
                     if(value.children){
@@ -174,7 +177,7 @@ function DesignerCtrl($scope,resourceService,$q,templateParseService,archetypePa
                                  item.parent=parent;
                                  var currentNode={};
                                  currentNode.label=item.label;
-                                 var typeT=currentNode.label.text;
+                                 var typeT=currentNode.label.picType;
                                  if((typeList.indexOf(typeT)==-1)&&(attributeList.indexOf(typeT)==-1)){// ignore type
                                       archetypeTree.push(currentNode);
                                       if(item.children){
@@ -196,7 +199,7 @@ function DesignerCtrl($scope,resourceService,$q,templateParseService,archetypePa
         var currentNode={};
         currentNode.label=value.label;
            currentNode.children=[];
-            var typeT=currentNode.label.text;
+            var typeT=currentNode.label.picType;
             if((typeList.indexOf(typeT)==-1)&&(attributeList.indexOf(typeT)==-1)){// ignore type
                archetypeTree.push(currentNode);
                 if(value.children){
@@ -211,7 +214,7 @@ function DesignerCtrl($scope,resourceService,$q,templateParseService,archetypePa
                              item.parent=parent;
                              var currentNode={};
                              currentNode.label=item.label;
-                             var typeT=currentNode.label.text;
+                             var typeT=currentNode.label.picType;
                              if((typeList.indexOf(typeT)==-1)&&(attributeList.indexOf(typeT)==-1)){// ignore type
                                   archetypeTree.push(currentNode);
                                   if(item.children){
@@ -228,8 +231,9 @@ function DesignerCtrl($scope,resourceService,$q,templateParseService,archetypePa
            } 
         }
         };
-    var typeList = ['DV_COUNT', 'DV_TEXT', 'DV_DATE_TIME','DV_DATE', 'DV_QUANTITY', 'DV_BOOLEAN','DV_QUANTITY','DV_ORDINAL','DV_DURATION','DV_PROPORTION','CODE_PHRASE','DV_CODED_TEXT'];
-    var attributeList = ['value', 'magnitude','data','Tree','name','state','defining_code','events','items'];
+    //var typeList = ['DV_COUNT', 'DV_TEXT', 'DV_DATE_TIME','DV_DATE', 'DV_QUANTITY', 'DV_BOOLEAN','DV_QUANTITY','DV_ORDINAL','DV_DURATION','DV_PROPORTION','CODE_PHRASE','DV_CODED_TEXT'];
+    var typeList=[];
+    var attributeList = ['value', 'magnitude','data','Tree','name','state','defining_code','events','items','Archetype'];
 
 };
 

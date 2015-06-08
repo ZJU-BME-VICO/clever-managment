@@ -7,9 +7,9 @@ function($document) {
           UIData:'=guiData',          
         },      
         
-        template: '<li dragable id={{UIData.label.labelContent+"_"+UIData.label.code}}>'+
+        template: '<li dragable id={{UIData.label.enText+"_"+UIData.label.code}}>'+
                     '<img ng-class="UIData.label.picType"></img>'+
-                    '<a>'+'{{UIData.label.labelContent}}'+'</a>'+'&nbsp;&nbsp:&nbsp;&nbsp&nbsp'+'<input name={{UIData.label.labelContent}} id={{UIData.label.labelContent+"/"+UIData.label.code}} type="checkbox">'+ 
+                    '<a>'+'{{UIData.label.labelContent}}'+'</a>'+'&nbsp;&nbsp:&nbsp;&nbsp&nbsp'+'<input name={{UIData.label.enText+"_"+UIData.label.tableName}} id={{UIData.label.enText+"_"+UIData.label.code+"_"+number}}  type="checkbox">'+ 
                   '</li>',
         controller:function($scope){
             

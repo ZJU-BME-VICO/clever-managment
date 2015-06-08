@@ -25,7 +25,7 @@ angular.module('clever.management.services.templateParse',[]).service('templateP
                 var childNode=[];
                 var archetype; 
                 var optTree=[]; 
-                var label={text:nodec._concept_name,labelContent:archetype_name,code:undefined,type:"Archetype"}; //root node of archetype in oet   
+                var label={text:nodec._concept_name,labelContent:archetype_name,code:undefined,picType:"Archetype"}; //root node of archetype in oet   
                 var Node=[];
                 Node.label=label;                
                 /*test  use Synchronous ajax of jquery */
@@ -61,7 +61,7 @@ angular.module('clever.management.services.templateParse',[]).service('templateP
                var childNode=[];
                var archetype; 
                var optTree=[];   
-             var label={text:nodec._concept_name,labelContent:archetype_name,code:undefined,type:"Archetype"}; //root node of archetype in oet   
+             var label={text:nodec._concept_name,labelContent:archetype_name,code:undefined,picType:"Archetype"}; //root node of archetype in oet   
                var Node=[];
                Node.label=label;
                $.ajax({
@@ -309,6 +309,8 @@ angular.module('clever.management.services.templateParse',[]).service('templateP
        var dataValue=[];
        var type=node.label.type;
        var text=node.label.text;
+       var tabelName=node.label.tableName;
+       var enText=node.label.enText;
        if (node.label.code) {
            code = node.label.code;
            if(term_definitions){
@@ -328,9 +330,11 @@ angular.module('clever.management.services.templateParse',[]).service('templateP
                 text : text,//items
                 code : code,
                 labelContent : name,
+                enText:enText,
                 dataType : dataType,//先设置用一下
                 picType : picType,
-                dataValue:dataValue
+                dataValue:dataValue,
+                tableName:tableName
            }}; 
        
     }

@@ -3,8 +3,8 @@
             <button class="btn btn-primary btn-lg ng-binding" style="float:right;margin-right:20px;padding:8px 16px;"  ng-click="saveTemplate()">保存</button>
        </div>
 <div class="row">
-    <div class="col-xs-4 col-md-3 col-lg-3">  
-	    		<div class="panel panel-default">
+    <div class="col-xs-12 col-md-12 col-lg-12 hbox">  
+	   <div class="panel panel-default" ng-show="!isTemolateListHidden" >
 	    			<div class="panel-heading">
 	    				<div class="input-group">
                     <input type="text" class="form-control" ng-model="archetypeListFilter">
@@ -30,8 +30,12 @@
                                       
                   </div>
 	    		</div>	   
-	   </div>
-    <div class="col-xs-7 col-md-8 col-lg-8 editBox" style="height:2800px">
+	   <!-- splitter -->
+	   <splitter is-adjust-enabled="!isTemolateListHidden" style="min-height: 100%;">
+			<i style="cursor: pointer" ng-click="isTemolateListHidden = !isTemolateListHidden" ng-show="isTemolateListHidden" tooltip-placement="right" tooltip="Expand" tooltip-popup-delay="500"> <span class="glyphicon glyphicon-chevron-right" ng-style="{'margin-top': containerHeight/2}" ></span> </i>
+			<i style="cursor: pointer" ng-click="isTemolateListHidden = !isTemolateListHidden" ng-show="!isTemolateListHidden" tooltip-placement="right" tooltip="Collapse" tooltip-popup-delay="500"> <span class="glyphicon glyphicon-chevron-left" ng-style="{'margin-top': containerHeight/2}" ></span> </i>
+		</splitter>
+    <div class="col-xs-12 col-md-12 col-lg-12 edit-box" style="height:2800px">
         <div id="editArea"> 
             <ul id="menu" menu-controller="">
                 <li ng-click="deleteElement()"><em class="cut"></em><a href="javascript:;">删除</a></li>
@@ -40,13 +44,13 @@
             </ul>
         </div>
 	</div>
+	<!--<div class="col-xs-12 col-md-12 col-lg-12 function-Box" > 
     <div class="style">
          <a>样式区</a>     
     </div>
     <control-box></control-box>
-    </div>    
-    <div class="float" style="z-index:999 display:none">
-    </div> 
+ </div>    -->
+
     </div>  
 </div>
 

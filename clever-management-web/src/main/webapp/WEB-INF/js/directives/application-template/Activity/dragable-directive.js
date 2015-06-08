@@ -5,7 +5,7 @@ function($document) {
         //其中： - scope是angular scope对象 - element指令匹配的jqLite封装的元素(angular内部实现的类jquery的库) - attrs是一个带有规范化后属性名字和相应值的对象
         var startX=0,startY,startZ=0,x=0,y=0;
         element.css({
-            position:"relative",
+            position:"relative",//初始按顺序排列，位置移动的topleft 是相对于原始位置
             height:'32px',
             width:'auto',
             cursor: 'pointer'
@@ -23,6 +23,7 @@ function($document) {
             y=event.screenY-startY;
             x=event.screenX-startX;
             element.css({
+            	position:"absolute",//定位计算根据祖先元素的绝对位置top、left
                 top:y+'px',
                 left:x+'px',
             });
