@@ -26,23 +26,18 @@ import org.springframework.transaction.annotation.Transactional;
 import se.acode.openehr.parser.ADLParser;
 import edu.zju.bme.clever.cdr.arm.parser.ArmParser;
 import edu.zju.bme.clever.management.service.entity.ActionType;
-import edu.zju.bme.clever.management.service.entity.ArchetypeFile;
-import edu.zju.bme.clever.management.service.entity.ArchetypeMaster;
 import edu.zju.bme.clever.management.service.entity.EntityClass;
 import edu.zju.bme.clever.management.service.entity.LifecycleState;
-import edu.zju.bme.clever.management.service.entity.SourceType;
 import edu.zju.bme.clever.management.service.entity.TemplateActionLog;
-import edu.zju.bme.clever.management.service.entity.TemplateFile;
-import edu.zju.bme.clever.management.service.entity.TemplateMaster;
 import edu.zju.bme.clever.management.service.entity.TemplatePropertyType;
 import edu.zju.bme.clever.management.service.entity.TemplateType;
 import edu.zju.bme.clever.management.service.entity.User;
 import edu.zju.bme.clever.management.service.exception.VersionControlException;
-import edu.zju.bme.clever.management.service.repository.ArchetypeFileRepository;
+import edu.zju.bme.clever.management.service.repository.ArchetypeRevisionFileRepository;
 import edu.zju.bme.clever.management.service.repository.EntityClassRepository;
 import edu.zju.bme.clever.management.service.repository.TemplateActionLogRepository;
-import edu.zju.bme.clever.management.service.repository.TemplateFileRepository;
-import edu.zju.bme.clever.management.service.repository.TemplateMasterRepository;
+import edu.zju.bme.clever.management.service.repository.TemplateMaster1Repository;
+import edu.zju.bme.clever.management.service.repository.TemplateRevisionFileRepository;
 import edu.zju.bme.clever.schemas.ArchetypeRelationshipMappingDocument;
 
 @Service
@@ -55,11 +50,11 @@ public class StorageTemplateVersionControlServiceImpl implements
 	@Autowired
 	private EntityClassRepository entityClassRepo;
 	@Autowired
-	private TemplateFileRepository templateFileRepo;
+	private TemplateRevisionFileRepository templateFileRepo;
 	@Autowired
-	private TemplateMasterRepository templateMasterRepo;
+	private TemplateMaster1Repository templateMasterRepo;
 	@Autowired
-	private ArchetypeFileRepository archetypeFileRepo;
+	private ArchetypeRevisionFileRepository archetypeFileRepo;
 	@Autowired
 	private TemplateActionLogRepository templateActionLogRepo;
 
