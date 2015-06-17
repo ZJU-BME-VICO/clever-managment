@@ -2,7 +2,7 @@ package edu.zju.bme.clever.management.service.entity;
 
 public enum EntityRelationshipType implements StringValueEnum {
 
-	ONE_TO_MANY("OneToMany"), LINK("Link");
+	ONE_TO_MANY("OneToMany"), MANY_TO_ONE("ManyToOne"), LINK("Link");
 
 	private final String value;
 

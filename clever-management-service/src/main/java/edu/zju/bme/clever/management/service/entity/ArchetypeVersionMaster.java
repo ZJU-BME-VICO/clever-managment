@@ -27,11 +27,11 @@ public class ArchetypeVersionMaster extends AbstractMaster {
 	@Column(updatable = false)
 	private Integer serialVersion;
 	@ManyToOne(fetch = FetchType.LAZY)
-	private ArchetypeMaster1 archetypeMaster;
+	private ArchetypeMaster archetypeMaster;
 	@Column
 	private String archetypeMasterName;
 	@Column(name = "archetype_master_id", updatable = false, insertable = false)
-	private Integer specialiseArchetypeMasterId;
+	private Integer archetypeMasterId;
 	@ManyToOne(fetch = FetchType.LAZY)
 	private ArchetypeVersionMaster specialiseArchetypeVersionMaster;
 	@Column(name = "specialise_archetype_version_master_id", updatable = false, insertable = false)
@@ -67,12 +67,20 @@ public class ArchetypeVersionMaster extends AbstractMaster {
 		this.serialVersion = serialVersion;
 	}
 
-	public ArchetypeMaster1 getArchetypeMaster() {
+	public ArchetypeMaster getArchetypeMaster() {
 		return archetypeMaster;
 	}
 
-	public void setArchetypeMaster(ArchetypeMaster1 archetypeMaster) {
+	public void setArchetypeMaster(ArchetypeMaster archetypeMaster) {
 		this.archetypeMaster = archetypeMaster;
+	}
+
+	public String getArchetypeMasterName() {
+		return archetypeMasterName;
+	}
+
+	public void setArchetypeMasterName(String archetypeMasterName) {
+		this.archetypeMasterName = archetypeMasterName;
 	}
 
 	public ArchetypeVersionMaster getSpecialiseArchetypeVersionMaster() {
@@ -126,8 +134,8 @@ public class ArchetypeVersionMaster extends AbstractMaster {
 		this.latestRevisionFileLifecycleState = latestRevisionFileLifecycleState;
 	}
 
-	public Integer getSpecialiseArchetypeMasterId() {
-		return specialiseArchetypeMasterId;
+	public Integer getArchetypeMasterId() {
+		return archetypeMasterId;
 	}
 
 	public Integer getSpecialiseArchetypeVersionMasterId() {
@@ -142,4 +150,11 @@ public class ArchetypeVersionMaster extends AbstractMaster {
 		this.lastVersionMaster = lastVersionMaster;
 	}
 
+	public List<ArchetypeActionLog> getActionLogs() {
+		return actionLogs;
+	}
+
+	public void setActionLogs(List<ArchetypeActionLog> actionLogs) {
+		this.actionLogs = actionLogs;
+	}
 }

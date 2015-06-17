@@ -68,14 +68,26 @@ angular.module('clever.management.directives.archetypePane', []).directive('arch
 			$scope.selectArchetypeMaster = function() {
 				$scope.selectMasterCallback({
 					value : {
-						id : $scope.archetypeInfo.masterId,
-						name : $scope.archetypeInfo.masterName,
+						id : $scope.archetypeInfo.versionMasterId,
+						name : $scope.archetypeInfo.versionMasterName,
 					},
 				});
 			};
 		},
 		link : function(scope, elm, attrs) {
-			scope.paneHeight = angular.isDefined(attrs.maxHeight) ? scope.$parent.$eval(attrs.maxHeight) - 95 : undefined;
+			var heightObj = scope.$parent.$eval(attrs.maxHeight);
+			if(angular.isDefined(attrs.maxHeight)) {
+				scope.paneHeight = {
+					value : heightObj.value - 95
+				};
+				scope.$watch(function() {
+					return heightObj.value;
+				}, function(newValue) {
+					scope.paneHeight.value = heightObj.value - 95;
+				});
+			} else {
+				scope.paneHeight = undefined;
+			}
 			scope.tableTitleWidth = angular.isDefined(attrs.tableTitleWidth) ? scope.$parent.$eval(attrs.tableTitleWidth) : 200;
 		},
 	};

@@ -29,34 +29,32 @@ function ArchetypeUploadCtrl($scope, resourceService, msgboxService, ARCHETYPE_V
 
 	$scope.validateFiles = function() {
 		$scope.status = pageStatus.Validating;
-		var formData = new FormData();
+		var isValidationPast = true;
+		var count = $scope.fileList.length;
 		angular.forEach($scope.fileList, function(file, index) {
-			formData.append('files', file.file);
+			var formData = new FormData();
+			formData.append('file', file.file);
 			file.status = 'VALIDATING';
-		});
-		resourceService.post(ARCHETYPE_VALIDATE_URL, formData, {
-			transformRequest : angular.identity,
-			headers : {
-				'Content-Type' : undefined
-			}
-		}).then(function(results) {
-			var isValidationPast = true;
-			angular.forEach(results, function(result) {
+			resourceService.post(ARCHETYPE_VALIDATE_URL, formData, {
+				transformRequest : angular.identity,
+				headers : {
+					'Content-Type' : undefined
+				}
+			}).then(function(result) {
 				if (result.status == 'INVALID') {
 					isValidationPast = false;
 				}
-				angular.forEach($scope.fileList, function(file) {
-					if (file.name == result.name) {
-						file.status = result.status;
-						file.message = result.message;
+				file.status = result.status;
+				file.message = result.message;
+				count--;
+				if (count == 0) {
+					if (isValidationPast) {
+						$scope.status = pageStatus.ValidationPast;
+					} else {
+						$scope.status = pageStatus.ValidationFailed;
 					}
-				});
+				}
 			});
-			if (isValidationPast) {
-				$scope.status = pageStatus.ValidationPast;
-			} else {
-				$scope.status = pageStatus.ValidationFailed;
-			}
 		});
 	};
 

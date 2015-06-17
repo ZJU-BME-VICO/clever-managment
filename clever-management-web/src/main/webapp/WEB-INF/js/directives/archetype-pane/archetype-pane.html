@@ -33,7 +33,7 @@
 					</tr>
 					<tr>
 						<th ng-style="{width: tableTitleWidth+ 'px'}"><b>Master ID</b></th>
-						<th style="font-weight: normal"><a href ng-click="selectArchetypeMaster()">{{archetypeInfo.masterName}}</a></th>
+						<th style="font-weight: normal"><a href ng-click="selectArchetypeMaster()">{{archetypeInfo.versionMasterName}}</a></th>
 					</tr>
 					<tr>
 						<th ng-style="{width: tableTitleWidth+ 'px'}"><b>Specialise archetype</b></th>
@@ -56,7 +56,7 @@
 			Header
 		</tab-heading>
 		<div class="col-xs-12 col-md-12 col-lg-12" style="overflow: auto;">
-			<header-pane max-height="paneHeight - 5" header="header" description="currentDescription" terminology="currentTerminology" style="margin-top: 5px;"></header-tab>
+			<header-pane max-height="paneHeight" header="header" description="currentDescription" terminology="currentTerminology" style="margin-top: 5px; margin-bottom: 20px;"></header-tab>
 		</div>
 	</tab>
 	<tab>
@@ -64,7 +64,7 @@
 			Definition
 		</tab-heading>
 		<div class="col-xs-12 col-md-12 col-lg-12" style="overflow: auto;">
-			<definition-pane definition="definition" max-height="paneHeight - 5" terminology="currentTerminology" style="margin-top: 5px;"></definition-tab>
+			<definition-pane definition="definition" max-height="paneHeight" terminology="currentTerminology" style="margin-top: 5px; margin-bottom: 20px;"></definition-tab>
 		</div>
 	</tab>
 	<tab>
@@ -72,7 +72,7 @@
 			Terminology
 		</tab-heading>
 		<div class="col-xs-12 col-md-12 col-lg-12" style="overflow: auto;">
-			<terminology-pane terminology="currentTerminology" max-height="paneHeight - 5" style="margin-top: 5px;"></terminology-tab>
+			<terminology-pane terminology="currentTerminology" max-height="paneHeight" style="margin-top: 5px; margin-bottom: 20px;"></terminology-tab>
 		</div>
 	</tab>
 	<tab>
@@ -86,7 +86,7 @@
 				</div>
 			</div>
 			<div class="row">
-				<pre ng-style="{'max-height': paneHeight - 45}" style="overflow: auto;">{{archetypeInfo.xml}}</pre>
+				<pre ng-style="{height: paneHeight.value - 45}" style="overflow: auto; margin-bottom: 20px;">{{archetypeInfo.xml}}</pre>
 			</div>
 		</div>
 	</tab>
@@ -101,7 +101,7 @@
 				</div>
 			</div>
 			<div class="row">
-				<pre ng-style="{'max-height': paneHeight - 45}" style="overflow: auto;">{{archetypeInfo.adl}}</pre>
+				<pre ng-style="{height: paneHeight.value - 45}" style="overflow: auto; margin-bottom: 20px;">{{archetypeInfo.adl}}</pre>
 			</div>
 		</div>
 	</tab>

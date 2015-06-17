@@ -19,8 +19,8 @@ define(['lazyLoader'], function(lazyLoader) {
 				$scope.selectTemplateMaster = function() {
 					$scope.selectMasterCallback({
 						value : {
-							id : $scope.templateInfo.masterId,
-							name : $scope.templateInfo.masterName,
+							id : $scope.templateInfo.versionMasterId,
+							name : $scope.templateInfo.versionMasterName,
 						},
 					});
 				};
@@ -30,7 +30,7 @@ define(['lazyLoader'], function(lazyLoader) {
 				};
 			},
 			link : function(scope, elm, attrs) {
-				scope.paneHeight = angular.isDefined(attrs.maxHeight) ? scope.$parent.$eval(attrs.maxHeight) - 95 : undefined;
+				scope.paneHeight = angular.isDefined(attrs.maxHeight) ? scope.$parent.$eval(attrs.maxHeight): undefined;
 				scope.tableTitleWidth = angular.isDefined(attrs.tableTitleWidth) ? scope.$parent.$eval(attrs.tableTitleWidth) : 200;
 			},
 		};

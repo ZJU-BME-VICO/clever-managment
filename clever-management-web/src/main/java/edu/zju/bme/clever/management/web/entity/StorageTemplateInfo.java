@@ -5,7 +5,8 @@ import java.util.Set;
 public class StorageTemplateInfo extends TemplateInfo {
 	private String arm;
 	private Set<EntityClassInfo> entityClasses;
-
+	private StorageTemplateInfo lastTemplateFile;
+	
 	public Set<EntityClassInfo> getEntityClasses() {
 		return entityClasses;
 	}
@@ -20,6 +21,14 @@ public class StorageTemplateInfo extends TemplateInfo {
 
 	public void setArm(String arm) {
 		this.arm = arm;
+	}
+
+	public StorageTemplateInfo getLastTemplateFile() {
+		return lastTemplateFile;
+	}
+
+	public void setLastTemplateFile(StorageTemplateInfo lastTemplateFile) {
+		this.lastTemplateFile = lastTemplateFile;
 	}
 
 }

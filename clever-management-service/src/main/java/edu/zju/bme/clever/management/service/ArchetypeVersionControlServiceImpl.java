@@ -13,10 +13,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import se.acode.openehr.parser.ADLParser;
+import edu.zju.bme.clever.commons.util.WordUtils;
 import edu.zju.bme.clever.management.service.entity.AbstractMaster;
 import edu.zju.bme.clever.management.service.entity.ArchetypeActionLog;
 import edu.zju.bme.clever.management.service.entity.ArchetypeRevisionFile;
-import edu.zju.bme.clever.management.service.entity.ArchetypeMaster1;
+import edu.zju.bme.clever.management.service.entity.ArchetypeMaster;
 import edu.zju.bme.clever.management.service.entity.ArchetypeVersionMaster;
 import edu.zju.bme.clever.management.service.entity.LifecycleState;
 import edu.zju.bme.clever.management.service.entity.User;
@@ -44,20 +45,39 @@ public class ArchetypeVersionControlServiceImpl implements
 	private ADLSerializer adlSerilizer = new ADLSerializer();
 
 	@Override
-	public void acceptArchetype(Archetype archetype, User user)
+	public void acceptArchetype(String adl, User user)
 			throws VersionControlException {
-		ArchetypeMaster1 master = this.masterRepo.findByName(archetype
-				.getArchetypeId().base());
+		ADLParser adlParser = new ADLParser(adl);
+		Archetype archetype;
+		try {
+			archetype = adlParser.parse();
+		} catch (Exception ex) {
+			throw new VersionControlException("Parse adl failed.", ex);
+		}
+		this.acceptNewArchetype(archetype, user);
+	}
+
+	@Override
+	public void acceptNewArchetype(Archetype archetype, User user)
+			throws VersionControlException {
+		String archetypeId = archetype.getArchetypeId().getValue();
+		String archetypeMasterName = archetype.getArchetypeId().base();
+		String archetypeVersion = archetype.getArchetypeId().versionID();
+		ArchetypeMaster master = this.masterRepo
+				.findByName(archetypeMasterName);
 		if (master == null) {
 			master = this.newMaster(archetype);
 		}
-		String archetypeId = archetype.getArchetypeId().getValue();
-		String versionMasterName = archetypeId.substring(0,
-				archetypeId.lastIndexOf("."));
+		// Example openEHR-EHR-CLUSTER.organisation.v1.1
+		String versionMasterName = WordUtils
+				.extractVersionMasterName(archetypeId);
+		if (archetypeId == null) {
+			throw new VersionControlException("Archetype name is unqualified.");
+		}
 		ArchetypeVersionMaster versionMaster = this.versionMasterRepo
 				.findByName(versionMasterName);
 		if (versionMaster == null) {
-			versionMaster = this.newVersionMaster(master, archetype, user);
+			versionMaster = this.newVersionMaster(master, archetype);
 		}
 		ArchetypeRevisionFile revisionFile = this.revisionFileRepo
 				.findByName(archetypeId);
@@ -68,9 +88,10 @@ public class ArchetypeVersionControlServiceImpl implements
 		revisionFile = this.newRevisionFile(versionMaster, archetype, user);
 	}
 
-	private ArchetypeMaster1 newMaster(Archetype archetype)
+	private ArchetypeMaster newMaster(Archetype archetype)
 			throws VersionControlException {
-		ArchetypeMaster1 master = new ArchetypeMaster1();
+		ArchetypeMaster master = new ArchetypeMaster();
+		master.setName(archetype.getArchetypeId().base());
 		// Set basic info
 		this.setMasterBasicInfo(master, archetype);
 		// Validate and set specialise archetype info
@@ -91,8 +112,8 @@ public class ArchetypeVersionControlServiceImpl implements
 		return master;
 	}
 
-	private ArchetypeVersionMaster newVersionMaster(ArchetypeMaster1 master,
-			Archetype archetype, User user) throws VersionControlException {
+	private ArchetypeVersionMaster newVersionMaster(ArchetypeMaster master,
+			Archetype archetype) throws VersionControlException {
 		ArchetypeVersionMaster nextVersionMaster = new ArchetypeVersionMaster();
 		ArchetypeVersionMaster latestVersionMaster = master
 				.getLatestVersionMaster();
@@ -135,6 +156,7 @@ public class ArchetypeVersionControlServiceImpl implements
 		}
 		// Set basic info
 		nextVersionMaster.setArchetypeMaster(master);
+		nextVersionMaster.setArchetypeMasterName(master.getName());
 		nextVersionMaster.setSerialVersion(nextSerialVersion);
 		nextVersionMaster.setVersion("v" + nextSerialVersion);
 		nextVersionMaster.setName(archetype.getArchetypeId().base() + "."
@@ -181,7 +203,7 @@ public class ArchetypeVersionControlServiceImpl implements
 					versionMaster.getSpecialiseArchetypeVersionMaster())) {
 				throw new VersionControlException("Specialise archetype "
 						+ specialiseArchetypeId.getValue()
-						+ " should be one of the revisions of version master "
+						+ " should be one of the revisions of "
 						+ versionMaster.getName());
 			}
 		}
@@ -205,7 +227,7 @@ public class ArchetypeVersionControlServiceImpl implements
 					throw new VersionControlException(
 							"Specialise archetype "
 									+ specialiseArchetypeId.getValue()
-									+ "'version should be greater than "
+									+ "'version should not be earlier "
 									+ latestRevisionFile
 											.getSpecialiseArchetypeRevisionFileVersion());
 				}
@@ -213,12 +235,6 @@ public class ArchetypeVersionControlServiceImpl implements
 		} else {
 			// It is a new version master
 			nextSerialVersion = 1;
-			// Set specialise version master
-			if (specialiseArchetypeRevisionFile != null) {
-				versionMaster
-						.setSpecialiseArchetypeVersionMaster(specialiseArchetypeRevisionFile
-								.getVersionMaster());
-			}
 		}
 		// Construct next revision file
 		nextRevisionFile.setEditor(user);
@@ -573,7 +589,6 @@ public class ArchetypeVersionControlServiceImpl implements
 	protected void setMasterBasicInfo(AbstractMaster master, Archetype archetype) {
 		master.setConceptName(archetype.getConceptName(archetype
 				.getOriginalLanguage().getCodeString()));
-		master.setName(archetype.getArchetypeId().base());
 		master.setRmEntity(archetype.getArchetypeId().rmEntity());
 		master.setRmName(archetype.getArchetypeId().rmName());
 		master.setRmOrginator(archetype.getArchetypeId().rmOriginator());

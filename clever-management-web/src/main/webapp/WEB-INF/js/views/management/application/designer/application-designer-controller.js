@@ -13,7 +13,9 @@ function DesignerCtrl($scope,resourceService,$q,templateParseService,archetypePa
             $scope.templateList = list;
         });
         $scope.getTemplateDetail=function(node){
-        var url=node.name+"."+node.latestTemplateVersion;
+        var tempName=node.name;
+        var pos=tempName.lastIndexOf(".v");        
+        var url=tempName.substring(0,pos)+"."+node.latestTemplateVersion;
         resourceService.get(STORAGE_TEMPLATE_BY_NAME_URL+url).then(function(temp){
         var xml=temp.oet;
         var x2js=new X2JS();

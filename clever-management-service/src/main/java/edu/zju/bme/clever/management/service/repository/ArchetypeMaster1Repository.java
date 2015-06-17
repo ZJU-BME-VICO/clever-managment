@@ -4,9 +4,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import edu.zju.bme.clever.management.service.entity.Application;
-import edu.zju.bme.clever.management.service.entity.ArchetypeMaster1;
+import edu.zju.bme.clever.management.service.entity.ArchetypeMaster;
 
 public interface ArchetypeMaster1Repository extends
-		JpaRepository<ArchetypeMaster1, Integer> {
-	public ArchetypeMaster1 findByName(String name);
+		JpaRepository<ArchetypeMaster, Integer> {
+	public ArchetypeMaster findByName(String name);
 }

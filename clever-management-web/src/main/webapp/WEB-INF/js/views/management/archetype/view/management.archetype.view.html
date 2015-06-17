@@ -26,7 +26,7 @@
 					<tree-node-label>
 						<img ng-class="node.lifecycleState | lowercase" class="clever-icon" style="padding: 0 10px;height: 16px;"></img>
 						<span ng-bind-html="node.conceptName | highlight:keyword | unsafe"></span>
-						&nbsp;<span style="color: grey;font-size: 10pt;">(<span ng-bind="node.latestArchetypeVersion"></span>)</span>
+						&nbsp;<span style="color: grey;font-size: 10pt;">(<span ng-bind="node.latestVersionMasterVersion"></span>)</span>
 					</tree-node-label>
 				</tree-view>
 			</div>
@@ -44,8 +44,8 @@
 						<sapn>&nbsp;{{getFixedTitle(tab.title)}}</span>
 					</tab-heading>
 					<div class="col-xs-12 col-md-12 col-lg-12" ng-switch="tab.type">
-						<archetype-master-pane ng-switch-when="archetype master" archetype-master-info="tab.content" max-height="containerHeight - 35" select-archetype-callback="createNewArchetypeTab(value)" select-master-callback="createNewMasterTab(value)"></archetype-master-pane>
-						<archetype-pane ng-switch-when="archetype" archetype-info="tab.content" max-height="containerHeight - 35" select-archetype-callback="createNewArchetypeTab(value)" select-master-callback="createNewMasterTab(value)"></archetype-pane>
+						<archetype-master-pane ng-switch-when="archetype master" archetype-master-info="tab.content" max-height="tabContainerHeight" select-archetype-callback="createNewArchetypeTab(value)" select-master-callback="createNewMasterTab(value)"></archetype-master-pane>
+						<archetype-pane ng-switch-when="archetype" archetype-info="tab.content" max-height="tabContainerHeight" select-archetype-callback="createNewArchetypeTab(value)" select-master-callback="createNewMasterTab(value)"></archetype-pane>
 					</div>
 				</tab>
 			</tabset>

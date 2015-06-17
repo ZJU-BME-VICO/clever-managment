@@ -15,7 +15,7 @@ import org.hibernate.annotations.DynamicUpdate;
 @Entity
 @Table
 @DynamicUpdate(true)
-public class ArchetypeMaster1 extends AbstractMaster {
+public class ArchetypeMaster extends AbstractMaster {
 
 	/**
 	 * 
@@ -23,7 +23,7 @@ public class ArchetypeMaster1 extends AbstractMaster {
 	private static final long serialVersionUID = 761446383299658145L;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	private ArchetypeMaster1 specialiseArchetypeMaster;
+	private ArchetypeMaster specialiseArchetypeMaster;
 	@Column(name = "specialise_archetype_master_id", updatable = false, insertable = false)
 	private Integer specialiseArchetypeMasterId;
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "archetypeMaster", orphanRemoval = true)
@@ -35,12 +35,12 @@ public class ArchetypeMaster1 extends AbstractMaster {
 	@Column
 	private String latestVersionMasterVersion;
 
-	public ArchetypeMaster1 getSpecialiseArchetypeMaster() {
+	public ArchetypeMaster getSpecialiseArchetypeMaster() {
 		return specialiseArchetypeMaster;
 	}
 
 	public void setSpecialiseArchetypeMaster(
-			ArchetypeMaster1 specialiseArchetypeMaster) {
+			ArchetypeMaster specialiseArchetypeMaster) {
 		this.specialiseArchetypeMaster = specialiseArchetypeMaster;
 	}
 

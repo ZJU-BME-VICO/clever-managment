@@ -1,10 +1,12 @@
 function ManagementCtrl($scope, $state, $timeout) {
 	var undefined;
+	$scope.containerHeight = {};
 	$scope.$watch(function() {
 		return $scope.$parent.containerHeight;
 	}, function(newValue) {
 		$scope.containerHeight = newValue - 110;
 	});
+	
 	$scope.breadcrumbs = [];
 	$scope.menus = [];
 	
@@ -68,23 +70,33 @@ function ManagementCtrl($scope, $state, $timeout) {
 		info : 'MENU_MANAGEMENT_STORAGE_INFO',
 	};
 	storage.view = {
+		index : 5,
 		title : 'MENU_MANAGEMENT_STORAGE_VIEW',
 		state : 'management.storage.view',
 		icon : 'icon-cog',
 	};
 	storage.upload = {
+		index : 6,
 		title : 'MENU_MANAGEMENT_STORAGE_UPLOAD',
 		state : 'management.storage.upload',
 		icon : 'icon-cog',
 	};
 	storage.edit = {
+		index : 7,
 		title : 'MENU_MANAGEMENT_STORAGE_EDIT',
 		state : 'management.storage.edit',
 		icon : 'icon-cog',
 	};
 	storage.verify = {
+		index : 8,
 		title : 'MENU_MANAGEMENT_STORAGE_VERIFY',
 		state : 'management.storage.verify',
+		icon : 'icon-cog',
+	};
+	storage.deploy = {
+		index : 9,
+		title : 'MENU_MANAGEMENT_STORAGE_DEPLOY',
+		state : 'management.storage.deploy',
 		icon : 'icon-cog',
 	};
 	// Application management

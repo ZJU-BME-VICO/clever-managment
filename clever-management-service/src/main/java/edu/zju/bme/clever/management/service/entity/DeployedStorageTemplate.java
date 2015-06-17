@@ -1,5 +1,6 @@
 package edu.zju.bme.clever.management.service.entity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -33,17 +34,17 @@ public class DeployedStorageTemplate extends AbstractIndentifiedEntity {
 	@Column(nullable = false)
 	private String version;
 	@Column(nullable = false)
-	private Integer internalVersion;
+	private Integer serialVersion;
 	@ManyToOne(fetch = FetchType.LAZY)
 	private TemplateRevisionFile originalTemplate;
 	@ManyToOne(fetch = FetchType.LAZY)
 	private DeployRecord deployRecord;
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "storageTemplate")
-	private List<EntityClass> entityClasses;
+	private List<EntityClassSource> entityClassSources = new ArrayList<EntityClassSource>();
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "sourceTemplate")
-	private List<EntityRelationship> forwardRelationships;
+	private List<EntityRelationship> forwardRelationships = new ArrayList<EntityRelationship>();
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "destinationTemplate")
-	private List<EntityRelationship> backwardRelationships;
+	private List<EntityRelationship> backwardRelationships = new ArrayList<EntityRelationship>();
 
 	public String getName() {
 		return name;
@@ -93,16 +94,16 @@ public class DeployedStorageTemplate extends AbstractIndentifiedEntity {
 		this.version = version;
 	}
 
-	public Integer getInternalVersion() {
-		return internalVersion;
+	public Integer getSerialVersion() {
+		return serialVersion;
 	}
 
-	public void setInternalVersion(Integer internalVersion) {
-		this.internalVersion = internalVersion;
+	public void setSerialVersion(Integer serialVersion) {
+		this.serialVersion = serialVersion;
 	}
 
-	public List<EntityClass> getEntityClasses() {
-		return entityClasses;
+	public List<EntityClassSource> getEntityClassSources() {
+		return entityClassSources;
 	}
 
 	public List<EntityRelationship> getForwardRelationships() {

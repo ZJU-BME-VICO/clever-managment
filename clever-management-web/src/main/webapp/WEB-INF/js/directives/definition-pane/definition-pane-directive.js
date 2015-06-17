@@ -1,5 +1,4 @@
-angular.module('clever.management.directives.definitionPane', []).directive('definitionPane', [
-function() {
+angular.module('clever.management.directives.definitionPane', []).directive('definitionPane', function() {
 	return {
 		restrict : 'E',
 		scope : {
@@ -61,10 +60,9 @@ function() {
 					return matchedOntology;
 				}
 			}
-
 		},
 		link : function(scope, elm, attrs) {
-			scope.contentHeight = angular.isDefined(attrs.maxHeight) ? scope.$parent.$eval(attrs.maxHeight) - 54 : undefined;
+			scope.contentHeight = angular.isDefined(attrs.maxHeight) ? scope.$parent.$eval(attrs.maxHeight) : undefined;
 		}
 	};
-}]);
+});

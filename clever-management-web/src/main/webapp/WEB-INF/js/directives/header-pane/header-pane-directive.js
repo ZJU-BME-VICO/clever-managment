@@ -1,5 +1,4 @@
-angular.module('clever.management.directives.headerPane', []).directive('headerPane', [
-function() {
+angular.module('clever.management.directives.headerPane', []).directive('headerPane', function() {
 	return {
 		restrict : 'E',
 		scope : {
@@ -7,7 +6,7 @@ function() {
 			description : '=',
 			terminology : '=',
 		},
-		template :  '<div class="row" ng-style="{height: mxaHeight}">' +
+		template :  '<div class="row" ng-style="{\'max-height\': maxHeight.value - 5}">' +
 						'<table class="table table-hover">' +
 							'<tbody>' +
 								'<tr>' +
@@ -67,4 +66,4 @@ function() {
 			}; 
 		}
 	};
-}]);
+});

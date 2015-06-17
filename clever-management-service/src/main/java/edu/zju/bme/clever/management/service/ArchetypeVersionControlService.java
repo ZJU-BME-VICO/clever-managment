@@ -8,7 +8,7 @@ import edu.zju.bme.clever.management.service.exception.VersionControlException;
 
 public interface ArchetypeVersionControlService {
 
-	public void acceptArchetype(Archetype archetype, User user)
+	public void acceptNewArchetype(Archetype archetype, User user)
 			throws VersionControlException;
 
 	public void editArchetype(Integer archetypeId, String adl, User user)
@@ -58,5 +58,7 @@ public interface ArchetypeVersionControlService {
 
 	public void rejectAndRemoveArchetype(ArchetypeRevisionFile archetypeFile,
 			User user) throws VersionControlException;
+
+	void acceptArchetype(String archetype, User user) throws VersionControlException;
 
 }

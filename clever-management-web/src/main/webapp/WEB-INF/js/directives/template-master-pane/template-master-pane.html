@@ -9,7 +9,7 @@
 		<tab-heading>
 			{{'TEMPLATE_MASTER_PANE_INFO' | translate}}
 		</tab-heading>
-		<div class="col-xs-12 col-md-12 col-lg-12" ng-style="{'max-height': tableMaxHeight}" style="overflow: auto;margin-top: 5px;">
+		<div class="col-xs-12 col-md-12 col-lg-12" ng-style="{'max-height': tableMaxHeight.value - 100}" style="overflow: auto;margin-top: 5px; margin-bottom: 20px;">
 			<table class="table table-hover">
 				<tbody>
 					<tr>
@@ -26,11 +26,11 @@
 					</tr>
 					<tr>
 						<th ng-style="{width: tableTitleWidth+ 'px'}"><b>Specialise master ID</b></th>
-						<th style="font-weight: normal"><a href ng-click="selectSpecialiseMaster(templateMasterInfo.specialiseArchetypeMaster)">{{templateMasterInfo.specialiseArchetypeMaster.name}}</a></th>
+						<th style="font-weight: normal"><a href ng-click="selectSpecialiseMaster(templateMasterInfo.specialiseArchetypeVersionMaster)">{{templateMasterInfo.specialiseArchetypeVersionMaster.name}}</a></th>
 					</tr>
 					<tr>
 						<th ng-style="{width: tableTitleWidth+ 'px'}"><b>Specialise master latest archetype version</b></th>
-						<th style="font-weight: normal"><a href ng-click="selectSpecialiseArchetype({ id: templateMasterInfo.specialiseArchetypeMaster.latestArchetypeId, name: templateMasterInfo.specialiseArchetypeMaster.name})">{{templateMasterInfo.specialiseArchetypeMaster.latestArchetypeVersion}}</th>
+						<th style="font-weight: normal"><a href ng-click="selectSpecialiseArchetype({ id: templateMasterInfo.specialiseArchetypeVersionMaster.latestArchetypeId, name: templateMasterInfo.specialiseArchetypeVersionMaster.name})">{{templateMasterInfo.specialiseArchetypeVersionMaster.latestArchetypeVersion}}</th>
 					</tr>
 					<tr>
 						<th ng-style="{width: tableTitleWidth+ 'px'}"><b>Concept name</b></th>
@@ -68,7 +68,7 @@
 		<tab-heading>
 			{{'TEMPLATE_MASTER_PANE_LOG' | translate}}
 		</tab-heading>
-		<div class="col-xs-12 col-md-12 col-lg-12" ng-style="{'max-height': tableMaxHeight}" style="overflow: auto;margin-top: 5px;">
+		<div class="col-xs-12 col-md-12 col-lg-12" ng-style="{'max-height': tableMaxHeight.value - 100}" style="overflow: auto;margin-top: 5px; margin-bottom: 20px;">
 			<table class="table table-hover" style="padding-top: 5px;">
 				<thead>
 					<tr>

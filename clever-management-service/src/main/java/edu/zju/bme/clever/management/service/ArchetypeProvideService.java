@@ -2,17 +2,18 @@ package edu.zju.bme.clever.management.service;
 
 import java.util.List;
 
-import edu.zju.bme.clever.management.service.entity.ArchetypeMaster1;
+import edu.zju.bme.clever.management.service.entity.ArchetypeMaster;
 import edu.zju.bme.clever.management.service.entity.ArchetypeRevisionFile;
 import edu.zju.bme.clever.management.service.entity.ArchetypeVersionMaster;
+import edu.zju.bme.clever.management.service.entity.User;
 
 public interface ArchetypeProvideService {
 
-	public List<ArchetypeMaster1> getAllArchetypeMasters();
+	public List<ArchetypeMaster> getAllArchetypeMasters();
 
-	public ArchetypeMaster1 getArchetypeMasterByName(String masterName);
+	public ArchetypeMaster getArchetypeMasterByName(String masterName);
 
-	public ArchetypeMaster1 getArchetypeMasterById(Integer Id);
+	public ArchetypeMaster getArchetypeMasterById(Integer Id);
 
 	public ArchetypeVersionMaster getArchetypeVersionMasterByName(String name);
 
@@ -21,6 +22,12 @@ public interface ArchetypeProvideService {
 	public ArchetypeRevisionFile getArchetypeRevisionFileByName(String fileName);
 
 	public ArchetypeRevisionFile getArchetypeRevisionFileById(Integer id);
+	
+	public List<ArchetypeRevisionFile> getArchetypeRevisionFileToVerify();
+	
+	public List<ArchetypeRevisionFile> getDraftArchetypeRevisionFileToEdit(User user);
+
+	public List<ArchetypeRevisionFile> getLatestPublishArchetypeRevisionFileToEdit();
 
 	public String getArchetypeXmlById(Integer id);
 

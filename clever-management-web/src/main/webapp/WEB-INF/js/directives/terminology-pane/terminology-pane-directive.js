@@ -1,5 +1,4 @@
-angular.module('clever.management.directives.terminologyPane', []).directive('terminologyPane', [
-function() {
+angular.module('clever.management.directives.terminologyPane', []).directive('terminologyPane', function() {
 	return {
 		restrict : 'E',
 		scope : {
@@ -15,4 +14,4 @@ function() {
 			scope.maxHeight = angular.isDefined(attrs.maxHeight) ? scope.$parent.$eval(attrs.maxHeight) : undefined;
 		}
 	};
-}]);
+});

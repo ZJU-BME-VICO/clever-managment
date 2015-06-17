@@ -9,7 +9,7 @@
 		<tab-heading>
 			{{'ARCHETYPE_MASTER_PANE_INFO' | translate}}
 		</tab-heading>
-		<div class="col-xs-12 col-md-12 col-lg-12" ng-style="{'max-height': tableMaxHeight}" style="overflow: auto;margin-top: 5px;">
+		<div class="col-xs-12 col-md-12 col-lg-12" ng-style="{'max-height': tableMaxHeight.value - 100}" style="overflow: auto; margin-top: 5px; margin-bottom: 20px;">
 			<table class="table table-hover">
 				<tbody>
 					<tr>
@@ -18,6 +18,10 @@
 					</tr>
 					<tr>
 						<th ng-style="{width: tableTitleWidth+ 'px'}"><b>History version</b></th>
+						<th style="font-weight: normal"><span ng-repeat="versionMaster in archetypeMasterInfo.historyVersionMasters | orderBy:'version'"> <a href ng-click="selectHistoryVersionMaster(versionMaster)">{{versionMaster.version}}</a>&nbsp;&nbsp; </span></th>
+					</tr>
+					<tr>
+						<th ng-style="{width: tableTitleWidth+ 'px'}"><b>History revision</b></th>
 						<th style="font-weight: normal"><span ng-repeat="archetype in archetypeMasterInfo.archetypes | orderBy:'internalVersion'"> <a href ng-click="selectArchetype(archetype)">{{archetype.version}}</a>&nbsp;&nbsp; </span></th>
 					</tr>
 					<tr>
@@ -68,7 +72,7 @@
 		<tab-heading>
 			{{'ARCHETYPE_MASTER_PANE_LOG' | translate}}
 		</tab-heading>
-		<div class="col-xs-12 col-md-12 col-lg-12" ng-style="{'max-height': tableMaxHeight}" style="overflow: auto;margin-top: 5px;">
+		<div class="col-xs-12 col-md-12 col-lg-12" ng-style="{'max-height': tableMaxHeight.value - 100}" style="overflow: auto;margin-top: 5px; margin-bottom: 20px;">
 			<table class="table table-hover" style="padding-top: 5px;">
 				<thead>
 					<tr>

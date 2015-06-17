@@ -6,6 +6,8 @@ import org.springframework.data.jpa.repository.Query;
 import edu.zju.bme.clever.management.service.entity.Application;
 import edu.zju.bme.clever.management.service.entity.DeployRecord;
 
-public interface DeployRecordRepository extends JpaRepository<DeployRecord, Integer> {
-	
+public interface DeployRecordRepository extends
+		JpaRepository<DeployRecord, Integer> {
+
+	public DeployRecord findFirstBySucceededOrderByIdDesc(boolean succeeded);
 }

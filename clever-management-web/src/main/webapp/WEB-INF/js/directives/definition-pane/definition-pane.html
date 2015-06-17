@@ -24,7 +24,7 @@
 <div ng-show="selectedView == 'Tree'" class="row">
 	<div class="col-xs-12 col-md-12 col-lg-12">
 		<div class="row">
-			<div class="col-xs-8 col-md-8 col-lg-8" ng-style="{height: contentHeight - 55}" style="overflow: auto;">
+			<div class="col-xs-8 col-md-8 col-lg-8" ng-style="{height: contentHeight.value - 57}" style="overflow: auto;">
 				<tree-view tree-data="definition.treeItems" tree-control="treeControl" node-label-generator="getTreeNodeLabel" node-label-class="definition-tree-label" click-node-callback="selectDefinitionItem(value)">
 					<tree-expanded-icon>
 						<span class="clever-icon expanded" style="padding: 0 6px;height: 12px;background-position-y: 6px;"></span>
@@ -34,7 +34,7 @@
 					</tree-collapsed-icon>
 				</tree-view>
 			</div>
-			<div class="col-xs-4 col-md-4 col-lg-4" ng-style="{height: contentHeight - 55}" style="overflow: auto;">
+			<div class="col-xs-4 col-md-4 col-lg-4" ng-style="{height: contentHeight.value - 57}" style="overflow: auto;">
 				<div ng-show="selectedDefinitionItem">
 					<h4>{{selectedDefinitionItem.text}}</h4>
 					<!-- Terminology -->
@@ -141,7 +141,7 @@
 
 <!-- table view -->
 <div class="row" ng-show="selectedView == 'Table'">
-	<div class="col-lg-12 col-md-12 col-sm-12" ng-style="{height: contentHeight}" style="overflow: auto;">
+	<div class="col-lg-12 col-md-12 col-sm-12" ng-style="{height: contentHeight.value - 60}" style="overflow: auto; margin-bottom: 20px;">
 		<table class="table table-hover" style="padding: 0 20px;">
 			<tbody>
 				<tr ng-repeat="item in definition.tableItems">

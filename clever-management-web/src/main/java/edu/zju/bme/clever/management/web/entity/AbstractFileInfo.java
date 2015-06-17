@@ -8,13 +8,14 @@ public abstract class AbstractFileInfo {
 	private String rmEntity;
 	private String conceptName;
 	private String version;
-	private int masterId;
-	private String masterName;
+	private int versionMasterId;
+	private String versionMasterName;
 	private String lifecycleState;
-	private int internalVersion;
+	private int serialVersion;
 	private int editorId;
 	private String editorName;
 	private ArchetypeInfo specialiseArchetype;
+	private ArchetypeInfo lastRevisionArchetype;
 
 	public int getId() {
 		return id;
@@ -72,20 +73,20 @@ public abstract class AbstractFileInfo {
 		this.version = version;
 	}
 
-	public int getMasterId() {
-		return masterId;
+	public int getVersionMasterId() {
+		return versionMasterId;
 	}
 
-	public void setMasterId(int masterId) {
-		this.masterId = masterId;
+	public void setVersionMasterId(int versionMasterId) {
+		this.versionMasterId = versionMasterId;
 	}
 
-	public String getMasterName() {
-		return masterName;
+	public String getVersionMasterName() {
+		return versionMasterName;
 	}
 
-	public void setMasterName(String masterName) {
-		this.masterName = masterName;
+	public void setVersionMasterName(String versionMasterName) {
+		this.versionMasterName = versionMasterName;
 	}
 
 	public String getLifecycleState() {
@@ -96,12 +97,12 @@ public abstract class AbstractFileInfo {
 		this.lifecycleState = lifecycleState;
 	}
 
-	public int getInternalVersion() {
-		return internalVersion;
+	public int getSerialVersion() {
+		return serialVersion;
 	}
 
-	public void setInternalVersion(int internalVersion) {
-		this.internalVersion = internalVersion;
+	public void setSerialVersion(int serialVersion) {
+		this.serialVersion = serialVersion;
 	}
 
 	public int getEditorId() {
@@ -126,6 +127,14 @@ public abstract class AbstractFileInfo {
 
 	public void setSpecialiseArchetype(ArchetypeInfo specialiseArchetype) {
 		this.specialiseArchetype = specialiseArchetype;
+	}
+
+	public ArchetypeInfo getLastRevisionArchetype() {
+		return lastRevisionArchetype;
+	}
+
+	public void setLastRevisionArchetype(ArchetypeInfo lastRevisionArchetype) {
+		this.lastRevisionArchetype = lastRevisionArchetype;
 	}
 
 	@Override

@@ -9,11 +9,11 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 
-import edu.zju.bme.clever.management.service.entity.TemplateFile;
 import edu.zju.bme.clever.management.service.entity.TemplateMaster;
 import edu.zju.bme.clever.management.service.entity.TemplatePropertyType;
-import edu.zju.bme.clever.management.service.repository.TemplateFileRepository;
+import edu.zju.bme.clever.management.service.entity.TemplateRevisionFile;
 import edu.zju.bme.clever.management.service.repository.TemplateMasterRepository;
+import edu.zju.bme.clever.management.service.repository.TemplateRevisionFileRepository;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "classpath:service-context.xml")
@@ -22,7 +22,7 @@ import edu.zju.bme.clever.management.service.repository.TemplateMasterRepository
 public class TemplateEavTest {
 
 	@Autowired
-	private TemplateFileRepository fileRepo;
+	private TemplateRevisionFileRepository fileRepo;
 	@Autowired
 	private TemplateMasterRepository masterRepo;
 
@@ -35,15 +35,15 @@ public class TemplateEavTest {
 	@Test
 	public void addTemplateFile() {
 		TemplateMaster master = this.masterRepo.findOne(2);
-		TemplateFile file = new TemplateFile();
-		file.setMaster(master);
+		TemplateRevisionFile file = new TemplateRevisionFile();
+		file.setTemplateMaster(master);
 		file.getPropertyMap().put(TemplatePropertyType.ARM, "ddd");
 		this.fileRepo.save(file);
 	}
 
 	@Test
 	public void updateTemplateFile() {
-		TemplateFile file = this.fileRepo.findOne(4);
+		TemplateRevisionFile file = this.fileRepo.findOne(4);
 		System.out.println(file.getPropertyMap().get("abc"));
 		file.getPropertyMap().remove("abc");
 		this.fileRepo.save(file);

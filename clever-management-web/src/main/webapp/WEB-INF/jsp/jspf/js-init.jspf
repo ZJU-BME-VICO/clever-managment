@@ -12,6 +12,8 @@
 <script src="js/lib/jquery.min.js"></script>
 <script src="js/lib/fisheye-run.js"></script>
 <script src="js/lib/jquery-transit.js"></script>
+<script src="js/lib/difflib.js"></script>
+<script src="js/lib/diffview.js"></script>
 
 <!-- app init -->
 <script src="js/app-config.js"></script>
@@ -29,6 +31,7 @@
 <script src="js/services/archetype-parse-service.js"></script>
 <script src="js/services/msgbox-service.js"></script>
 <!--<script src="js/services/template-retrieve-service.js"></script>-->
+<script src="js/services/document-diff-service.js"></script>
 
 <!-- directives -->
 <script src="js/directives/files-model/files-model-directive.js"></script>
@@ -66,6 +69,7 @@
 <script src="js/directives/application-template/Activity/context-menu-directive.js"></script>
 <script src="js/directives/application-template/control-box/button-directive.js"></script>
 <script src="js/directives/application-template/DV/DV-LABEL-directive.js"></script>
+<script src="js/directives/document-diff/document-diff-directive.js"></script>
 
 <!-- controllers -->
 <script src="js/views/management/management-controller.js"></script>
@@ -76,6 +80,7 @@
 <script src="js/views/management/archetype/verify/archetype-verify-controller.js"></script>
 <script src="js/views/management/storage/edit/storage-template-edit-controller.js"></script>
 <script src="js/views/management/storage/verify/storage-template-verify-controller.js"></script>
+<script src="js/views/management/storage/deploy/storage-template-deploy-controller.js"></script>
 <script src="js/views/management/storage/upload/storage-template-upload-controller.js"></script>
 <script src="js/views/management/application/designer/application-designer-controller.js"></script>
 <script src="js/views/management/application/view/application-view-controller.js"></script>

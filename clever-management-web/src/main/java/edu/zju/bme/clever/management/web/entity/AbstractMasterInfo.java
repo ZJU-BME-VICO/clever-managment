@@ -17,7 +17,6 @@ public class AbstractMasterInfo {
 	private String copyright;
 	private String name;
 	private String lifecycleState;
-	private ArchetypeMasterInfo specialiseArchetypeMaster;
 	private Set<ActionLogInfo> actionLogs = new HashSet<ActionLogInfo>();
 
 	public Integer getId() {
@@ -123,7 +122,7 @@ public class AbstractMasterInfo {
 	public void setLifecycleState(String lifecycleState) {
 		this.lifecycleState = lifecycleState;
 	}
-
+	
 	public Set<ActionLogInfo> getActionLogs() {
 		return actionLogs;
 	}
@@ -131,16 +130,7 @@ public class AbstractMasterInfo {
 	public void setActionLogs(Set<ActionLogInfo> actionLogs) {
 		this.actionLogs = actionLogs;
 	}
-
-	public ArchetypeMasterInfo getSpecialiseArchetypeMaster() {
-		return specialiseArchetypeMaster;
-	}
-
-	public void setSpecialiseArchetypeMaster(
-			ArchetypeMasterInfo specialiseArchetypeMaster) {
-		this.specialiseArchetypeMaster = specialiseArchetypeMaster;
-	}
-
+	
 	@Override
 	public boolean equals(Object obj) {
 		if (this.getClass().isInstance(obj)) {
