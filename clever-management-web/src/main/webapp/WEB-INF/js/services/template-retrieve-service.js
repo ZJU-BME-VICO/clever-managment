@@ -1,5 +1,4 @@
-angular.module('clever.management.services.templateRetrieve',[]).service('templateRetreiveService',
-['$http','TEMPLATE_BY_ID',function($http,TEMPLATE_BY_NAME_URL){
+angular.module('clever.management.services.templateRetrieve',[]).service('templateRetreiveService', ['$http','TEMPLATE_BY_ID',function($http,TEMPLATE_BY_NAME_URL){
       this.getTemplateXmlByName=function(templateName){
       	return getFromUrl(TEMPLATE_BY_NAME_URL+templateName+'.xml')
       };

@@ -66,6 +66,11 @@ public class ArchetypeProvideServiceImpl implements ArchetypeProvideService {
 	}
 
 	@Override
+	public List<ArchetypeVersionMaster> getAllArchetypeVersionMasters() {
+		return this.versionMasterRepo.findAll();
+	}
+
+	@Override
 	public ArchetypeMaster getArchetypeMasterByName(String masterName) {
 		return this.masterRepo.findByName(masterName);
 	}

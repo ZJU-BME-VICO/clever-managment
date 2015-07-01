@@ -12,8 +12,9 @@
 <script src="js/lib/jquery.min.js"></script>
 <script src="js/lib/fisheye-run.js"></script>
 <script src="js/lib/jquery-transit.js"></script>
-<script src="js/lib/difflib.js"></script>
 <script src="js/lib/diffview.js"></script>
+<script src="js/lib/difflib.js"></script>
+<script src="js/lib/ng-context-menu.js"></script>
 
 <!-- app init -->
 <script src="js/app-config.js"></script>
@@ -28,6 +29,7 @@
 <script src="js/services/authentication-service.js"></script>
 <script src="js/services/busy-service.js"></script>
 <script src="js/services/template-parse-service.js"></script>
+<script src="js/services/template-parse-to-edit-service.js"></script>
 <script src="js/services/archetype-parse-service.js"></script>
 <script src="js/services/msgbox-service.js"></script>
 <!--<script src="js/services/template-retrieve-service.js"></script>-->

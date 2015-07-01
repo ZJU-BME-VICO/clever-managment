@@ -7,6 +7,7 @@ angular.module('clever.management.directives.definitionPane', []).directive('def
 		},
 		templateUrl : 'js/directives/definition-pane/definition-pane.html',
 		controller : function($scope, $element, $attrs) {
+
 			$scope.selectedView = "Table";
 
 			$scope.isExpandedAll = false;

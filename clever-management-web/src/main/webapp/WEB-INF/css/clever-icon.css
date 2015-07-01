@@ -50,6 +50,80 @@
 	background-repeat: no-repeat;
 }
 
+/* Data type  */
+.clever-icon.history {
+	background-image: url("../img/datatype/history.png");
+	background-repeat: no-repeat;
+}
+.clever-icon.structure {
+	background-image: url("../img/datatype/structure.png");
+	background-repeat: no-repeat;
+}
+.clever-icon.composition {
+	background-image: url("../img/datatype/composition.png");
+	background-repeat: no-repeat;
+}
+.clever-icon.slot {
+	background-image: url("../img/datatype/slot.png");
+	background-repeat: no-repeat;
+}
+.clever-icon.element {
+	background-image: url("../img/datatype/element.png");
+	background-repeat: no-repeat;
+}
+.clever-icon.text {
+	background-image: url("../img/datatype/text.png");
+	background-repeat: no-repeat;
+}
+.clever-icon.uri {
+	background-image: url("../img/datatype/uri.png");
+	background-repeat: no-repeat;
+}
+.clever-icon.datetime {
+	background-image: url("../img/datatype/datetime.png");
+	background-repeat: no-repeat;
+}
+.clever-icon.quantity {
+	background-image: url("../img/datatype/quantity.png");
+	background-repeat: no-repeat;
+}
+.clever-icon.duration {
+	background-image: url("../img/datatype/duration.png");
+	background-repeat: no-repeat;
+}
+.clever-icon.multimedia {
+	background-image: url("../img/datatype/multimedia.png");
+	background-repeat: no-repeat;
+}
+.clever-icon.id {
+	background-image: url("../img/datatype/id.png");
+	background-repeat: no-repeat;
+}
+.clever-icon.pointintime {
+	background-image: url("../img/datatype/pointintime.png");
+	background-repeat: no-repeat;
+}
+.clever-icon.interval {
+	background-image: url("../img/datatype/interval.png");
+	background-repeat: no-repeat;
+}
+.clever-icon.count {
+	background-image: url("../img/datatype/count.png");
+	background-repeat: no-repeat;
+}
+.clever-icon.interval_datetime {
+	background-image: url("../img/datatype/interval_datetime.png");
+	background-repeat: no-repeat;
+}
+.clever-icon.any {
+	background-image: url("../img/datatype/any.png");
+	background-repeat: no-repeat;
+}
+.clever-icon.truefalse {
+	background-image: url("../img/datatype/truefalse.png");
+	background-repeat: no-repeat;
+}
+
 /* Life cycle state */
 .clever-icon.draft {
 	background-image: url("../img/draft.png");

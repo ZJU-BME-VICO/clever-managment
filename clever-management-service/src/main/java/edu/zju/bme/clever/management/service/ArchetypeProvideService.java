@@ -14,6 +14,8 @@ public interface ArchetypeProvideService {
 	public ArchetypeMaster getArchetypeMasterByName(String masterName);
 
 	public ArchetypeMaster getArchetypeMasterById(Integer Id);
+	
+	public List<ArchetypeVersionMaster> getAllArchetypeVersionMasters();
 
 	public ArchetypeVersionMaster getArchetypeVersionMasterByName(String name);
 

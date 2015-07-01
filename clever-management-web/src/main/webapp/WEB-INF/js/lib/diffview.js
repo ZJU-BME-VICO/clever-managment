@@ -136,27 +136,27 @@ diffview = {
 			var botrows = [];
 			for (var i = 0; i < rowcnt; i++) {
 				// jump ahead if we've alredy provided leading context or if this is the first range
-				if (contextSize && opcodes.length > 1 && ((idx > 0 && i == contextSize) || (idx == 0 && i == 0)) && change=="equal") {
-					var jump = rowcnt - ((idx == 0 ? 1 : 2) * contextSize);
-					if (jump > 1) {
-						toprows.push(node = document.createElement("tr"));
+				// if (contextSize && opcodes.length > 1 && ((idx > 0 && i == contextSize) || (idx == 0 && i == 0)) && change=="equal") {
+				// 	var jump = rowcnt - ((idx == 0 ? 1 : 2) * contextSize);
+				// 	if (jump > 1) {
+				// 		toprows.push(node = document.createElement("tr"));
 						
-						b += jump;
-						n += jump;
-						i += jump - 1;
-						node.appendChild(telt("th", "..."));
-						if (!inline) node.appendChild(ctelt("td", "skip", ""));
-						node.appendChild(telt("th", "..."));
-						node.appendChild(ctelt("td", "skip", ""));
+				// 		b += jump;
+				// 		n += jump;
+				// 		i += jump - 1;
+				// 		node.appendChild(telt("th", "..."));
+				// 		if (!inline) node.appendChild(ctelt("td", "skip", ""));
+				// 		node.appendChild(telt("th", "..."));
+				// 		node.appendChild(ctelt("td", "skip", ""));
 						
-						// skip last lines if they're all equal
-						if (idx + 1 == opcodes.length) {
-							break;
-						} else {
-							continue;
-						}
-					}
-				}
+				// 		// skip last lines if they're all equal
+				// 		if (idx + 1 == opcodes.length) {
+				// 			break;
+				// 		} else {
+				// 			continue;
+				// 		}
+				// 	}
+				// }
 				
 				toprows.push(node = document.createElement("tr"));
 				if (inline) {

@@ -11,6 +11,8 @@ angular.module('clever.management.directives.treeView', []).directive('treeView'
 			nodeLabelClass : '@',
 			clickNodeCallback : '&',
 			doubleClickNodeCallback : '&',
+			clickNodeMenuCallback : '&',
+			nodeMenuGenerator : '=',
 			nodeLabelGenerator : '=',
 			searchKeyMapper : '=',
 		},
@@ -63,18 +65,44 @@ angular.module('clever.management.directives.treeView', []).directive('treeView'
 					value : node,
 				});
 			};
+			$scope.clickNodeMenu = function(node, value) {
+				$scope.clickNodeMenuCallback({
+					node : node,
+					value : value
+				});
+			}
 			$scope.doubleClickNode = function(node) {
 				$scope.doubleClickNodeCallback({
 					value : node,
 				});
 			};
-			$scope.getNodeLabel = function(node) {
+			$scope.getNodeLabel = function(node, aliasName) {
 				if (treeNodeLabelElement) {
 					return '<span class="' + $scope.getNodeLabelClass() + '">' + $scope.getTreeNodeLabelElement() + '</span>';
 				}else if($scope.nodeLabelGenerator){
-					return '<span class="' + $scope.getNodeLabelClass() + '" ng-bind-html="nodeLabelGenerator(' + $scope.getNodeAliasName() + ') | unsafe"></span>';
+					if ($scope.nodeMenuGenerator) {
+						return $scope.nodeLabelGenerator(node, aliasName);
+					} else {
+						return '<span class="' + $scope.getNodeLabelClass() + 
+							'" ng-bind-html="nodeLabelGenerator(' + $scope.getNodeAliasName() + ') | unsafe"></span>';
+					}
 				}
 			};
+
+			$scope.isContextMenu = function() {
+				if ($scope.nodeMenuGenerator) {
+					return true;
+				} else {
+					return false;
+				}
+			}
+
+			$scope.getNodeMenu = function(node, aliasName) {
+				if ($scope.nodeMenuGenerator) {
+					return $scope.nodeMenuGenerator(node, aliasName);
+				}
+			}
+
 			$scope.keyword = '';
 			
 			$scope.$watch('treeData', function(newValue, oldValue) {
