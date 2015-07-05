@@ -5,6 +5,7 @@ var config = {
 	'ARCHETYPE_VALIDATE_URL' : prefix + '/archetypes/action/validate',
 	'ARCHETYPE_UPLOAD_URL' : prefix + '/archetypes/action/upload',
 	'ARCHETYPE_LIST_URL' : prefix + '/archetypes/list',
+	'ARCHETYPE_LIST_REFERENCE_URL' : prefix + '/archetypes/list/reference',
 	'ARCHETYPE_LIST_EDIT_DRAFT_URL' : prefix + '/archetypes/list/edit/draft',
 	'ARCHETYPE_LIST_EDIT_PUBLISHED_URL' : prefix + '/archetypes/list/edit/published',
 	'ARCHETYPE_EDIT_BY_ID_URL' : prefix + '/archetypes/action/edit/id/',

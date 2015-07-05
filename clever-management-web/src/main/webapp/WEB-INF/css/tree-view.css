@@ -31,7 +31,26 @@ tree-view-node li i, tree-view-node li span {
 	cursor: pointer;
 }
 
+tree-view-node li[role="context-menu"] i, tree-view-node li[role="context-menu"] span {
+	cursor: default;
+}
+
 tree-view-node li .selected {
 	background-color: #aaddff;
 	font-weight: bold;
+}
+
+tree-view-node li[role="context-menu"] .selected {
+	background-color: #aaddff;
+	font-weight: normal;
+}
+
+.position-fixed {
+	position: fixed;
+	z-index: 10;
+}
+
+tree-view-node li[role="context-menu"] .node-label-max {
+	font-weight: bold;
+	/* color: gray; */
 }

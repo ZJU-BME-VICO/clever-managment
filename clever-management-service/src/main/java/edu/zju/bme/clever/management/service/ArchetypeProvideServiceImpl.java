@@ -66,6 +66,11 @@ public class ArchetypeProvideServiceImpl implements ArchetypeProvideService {
 	}
 
 	@Override
+	public List<ArchetypeRevisionFile> getArchetypeRevisionFileToReference() {
+		return this.revisionFileRepo.findAll();
+	}
+
+	@Override
 	public ArchetypeMaster getArchetypeMasterByName(String masterName) {
 		return this.masterRepo.findByName(masterName);
 	}

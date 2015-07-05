@@ -2,25 +2,76 @@
     <div class="col-xs-4 col-md-4 col-lg-4">
         <div class="panel panel-default">
             <div class="panel-heading">
-                <div class="btn-group pull-right" dropdown>
-                    <button class="btn btn-default dropdown-toggle" dropdown-toggle style="width: 110px;">{{selectedLifecycle}} <span class="glyphicon glyphicon-chevron-down pull-right" style="margin-top: 2px;"></span></button>
-                    <ul class="dropdown-menu" style="min-width: 110px;">
-                        <li><a href="" class="text-center" ng-click="selectedLifecycle = 'Draft';">Draft</a></li>
-                        <li><a href="" class="text-center" ng-click="selectedLifecycle = 'Published';">Published</a></li>
-               <!--          <li><a href="" ng-click="selectedLifecycle = 'Draft';">
-                        	<img ng-class="{draft: true}" class="clever-icon" style="padding: 0 10px;height: 16px;">Draft</img>
-                        </a></li>
-                        <li><a href="" ng-click="selectedLifecycle = 'Published';">
-                        	<img ng-class="{published: true}" class="clever-icon" style="padding: 0 10px;height: 16px;">Published</img>
-                        </a></li> -->
-                    </ul>
+                <div class="input-group">
+                    <div class="btn-group input-group-btn" dropdown>
+                        <button class="btn btn-default dropdown-toggle" dropdown-toggle style="width: 110px;">{{selectedLifecycle}} <span class="glyphicon glyphicon-chevron-down pull-right" style="margin-top: 2px;"></span></button>
+                        <ul class="dropdown-menu" style="min-width: 110px;">
+                            <li><a href="" class="text-center" ng-click="selectedLifecycle = 'Draft';">Draft</a></li>
+                            <li><a href="" class="text-center" ng-click="selectedLifecycle = 'Published';">Published</a></li>
+                            <!-- <li>
+                                <a href="" ng-click="selectedLifecycle = 'Draft';">
+                                    <img ng-class="{draft: true}" class="clever-icon" style="padding: 0 10px;height: 16px;">Draft</img>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="" ng-click="selectedLifecycle = 'Published';">
+                                    <img ng-class="{published: true}" class="clever-icon" style="padding: 0 10px;height: 16px;">Published</img>
+                                </a>
+                            </li> -->
+                        </ul>
+                    </div>
+                    <input type="text" class="form-control">
                 </div>
-                <input type="text" class="form-control" style="width: 63%;">
             </div>
-            <div class="panel-body" ng-style="{height: containerHeight - 55}" style="overflow: auto;">
-            </div>
+            <ul class="list-group" ng-style="{height: containerHeight - 55}" style="overflow: auto;" >
+            	<a href="" ng-class="{active: selectedTemplate.id == template.id}" class="list-group-item" ng-repeat="template in templateFiles.draft" ng-if="selectedLifecycle == 'Draft'" ng-click="selectTemplate(template)">{{template.name}}</a>
+            	<a href="" ng-class="{active: selectedTemplate.id == template.id}" class="list-group-item" ng-repeat="template in templateFiles.published" ng-if="selectedLifecycle == 'Published'" ng-click="selectTemplate(template)">{{template.name}}</a>
+        	</ul>
         </div>
     </div>
     <div class="col-xs-8 col-md-8 col-lg-8">
-    </div>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <span><span><b>Expand All:&nbsp;&nbsp;&nbsp;</b></span><toggle-switch model="isExpandedAll" ng-disabled="selectedTemplate == null"></toggle-switch></span>
+                <button class="btn btn-primary pull-right" style="margin-left: 10px;" ng-disabled="selectedTemplate == null" ng-click="">Save</button>
+                <button class="btn btn-info pull-right" ng-disabled="selectedTemplate == null" ng-click="generateOetDiff()">Open</button>
+            </div>
+            <div class="panel-body" ng-style="{height: containerHeight - 50}" style="overflow: auto;">
+                 <tree-view tree-data="parsedTemplate.definition" tree-control="treeControl" node-label-generator="getTreeNodeLabel" click-node-menu-callback="setNodeByContextMenu(node, type, value)" node-menu-generator="getTreeNodeMenu">
+                        <tree-expanded-icon>
+                            <span class="clever-icon expanded" style="padding: 0 6px;height: 12px;background-position-y: 6px;"></span>
+                        </tree-expanded-icon>
+                        <tree-collapsed-icon>
+                            <span class="clever-icon collapsed" style="padding: 0 6px;height: 12px;background-position-y: 6px;"></span>
+                        </tree-collapsed-icon>
+                    </tree-view>
+            </div>
+        </div>
+
+	<!-- 	<tabset tab-control="tabControl">
+			<tab heading="Edit"> 
+                <div class="col-md-12" ng-style="{height: containerHeight - 55}" style="overflow: auto;">
+                    <tree-view tree-data="selectedDefinitions.definitions" tree-control="treeControl" node-label-generator="getTreeNodeLabel" node-label-class="definition-tree-label" click-node-callback="selectDefinitionItem(value)">
+                        <tree-expanded-icon>
+                            <span class="clever-icon expanded" style="padding: 0 6px;height: 12px;background-position-y: 6px;"></span>
+                        </tree-expanded-icon>
+                        <tree-collapsed-icon>
+                            <span class="clever-icon collapsed" style="padding: 0 6px;height: 12px;background-position-y: 6px;"></span>
+                        </tree-collapsed-icon>
+                    </tree-view>
+                </div>
+			</tab>
+			<tab heading="View">
+				<pre ng-style="{height: containerHeight - 51}" style="overflow: auto; margin-top: 10px;">{{selectedTemplateOet}}</pre>
+			</tab>
+		</tabset> -->
+    
+	   <!--  <h4 class="text-center">Draft</h4>
+	    <ul class="list-group" ng-style="{height: containerHeight - 80}" style="overflow: auto;">
+	        <li class="list-group-item list-group-item-success" ng-repeat="templateFile in templateFiles.draft">
+	            {{templateFile.name}}
+	            <button type="button" class="btn btn-default pull-right" style="padding: 0px 8px;" ng-click="submitTemplateFile(templateFile)">Submit</button>
+	        </li>
+	    </ul> -->
+	</div>
 </div>

@@ -1,4 +1,4 @@
-angular.module('clever.management.services.documentDiffModal', []).service('documentDiffModalService', function($modal, containerService) {
+angular.module('clever.management.services.documentDiffModal', []).service('documentDiffModalService', function($modal) {
 
     this.open = function(title, baseDoc, newDoc, modalHeight) {
         $modal.open({
@@ -10,7 +10,7 @@ angular.module('clever.management.services.documentDiffModal', []).service('docu
                                  '<button class="btn" ng-class="{\'btn-primary\': viewMode == 1, \'btn-default\': viewMode == 0}" ng-click="viewMode = 1">{{"DOCUMENT_DIFF_SERVICE_INLINE" | translate}}</button>' +
                             '</div>' +
                         '</div>' +
-                		'<div class="modal-body" ng-style="{height: modalHeight.value}" style="min-height: 200px; overflow: auto;">' +
+                		'<div class="modal-body" ng-style="{height: modalHeight.value}" style="\'min-height\': 200px; overflow: auto;">' +
                 			'<document-diff base-file="baseDoc" new-file="newDoc" view-mode="viewMode"></document-diff>' +
                 		'</div>' +
                 		'<div class="modal-footer">' +
@@ -18,16 +18,19 @@ angular.module('clever.management.services.documentDiffModal', []).service('docu
                 		'</div>' +
                 	  '</div>',
             controller: function($scope, $modalInstance) {
-             $scope.title = title;
-             $scope.baseDoc = baseDoc || '';
-             $scope.newDoc = newDoc || '';
-             $scope.viewMode = 0;
-             $scope.modalHeight = modalHeight || 400;
-             $scope.ok = function() {
-                 $modalInstance.close();
-             }
-         }, windowClass: 'app-modal-window', //this CSS class is in the diffview.css file
-         // size: 'lg',
+                $scope.title = title;
+                $scope.baseDoc = baseDoc || '';
+                $scope.newDoc = newDoc || '';
+                $scope.viewMode = 0;
+                $scope.modalHeight = modalHeight || {
+                    value : 400,
+                };
+                $scope.ok = function() {
+                    $modalInstance.close();
+                }
+            },
+            windowClass: 'app-modal-window', //this CSS class is in the diffview.css file
+            // size: 'lg',
      });
 
      }

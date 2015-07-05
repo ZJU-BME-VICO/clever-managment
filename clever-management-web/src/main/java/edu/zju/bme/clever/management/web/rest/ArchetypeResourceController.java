@@ -1,16 +1,12 @@
 package edu.zju.bme.clever.management.web.rest;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
-import org.hibernate.annotations.SourceType;
 import org.openehr.am.archetype.Archetype;
 import org.openehr.am.serialize.XMLSerializer;
 import org.slf4j.Logger;
@@ -37,7 +33,6 @@ import edu.zju.bme.clever.management.service.entity.ArchetypeMaster;
 import edu.zju.bme.clever.management.service.entity.ArchetypeRevisionFile;
 import edu.zju.bme.clever.management.service.entity.ArchetypeVersionMaster;
 import edu.zju.bme.clever.management.service.entity.FileProcessResult;
-import edu.zju.bme.clever.management.service.entity.LifecycleState;
 import edu.zju.bme.clever.management.service.entity.User;
 import edu.zju.bme.clever.management.web.entity.ActionLogInfo;
 import edu.zju.bme.clever.management.web.entity.ArchetypeInfo;
@@ -133,6 +128,28 @@ public class ArchetypeResourceController extends AbstractResourceController {
 							 .collect(Collectors.toList());
 	}
 
+	@RequestMapping(value = "/list/reference", method = RequestMethod.GET)
+	public List<ArchetypeInfo> getArchetypeListToReference() {	
+		List<ArchetypeRevisionFile> files = this.archetypeProvideService
+				.getArchetypeRevisionFileToReference();
+		return files.stream()
+					 .map(file -> {
+						 ArchetypeInfo info = new ArchetypeInfo();
+						 info.setId(file.getId());
+						 info.setName(file.getName());
+						 info.setAdl(file.getAdl());
+						 ADLParser parser = new ADLParser(file.getAdl());
+						 Archetype archetype;
+						 try {
+							 archetype = parser.parse();
+							 info.setXml(this.xmlSerializer.output(archetype));
+						 } catch (Exception e) {
+							 return null;
+						 }
+						 return info;
+					 }).collect(Collectors.toList());
+	}
+	
 	@RequestMapping(value = "/list/edit/draft", method = RequestMethod.GET)
 	public List<ArchetypeInfo> getArchtypeListToEdit(
 			Authentication authentication) {
@@ -435,7 +452,6 @@ public class ArchetypeResourceController extends AbstractResourceController {
 					try {
 						return this.constructArchetypeInfo(file);
 					} catch (Exception e) {
-						System.out.println("hvfdisohv" + e.getMessage());
 						return null;
 					}
 				}).collect(Collectors.toList());

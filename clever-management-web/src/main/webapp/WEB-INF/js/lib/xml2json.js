@@ -320,7 +320,7 @@ function X2JS(config) {
 				var attrVal = jsonObj[attrName];
 				if(config.escapeMode)
 					attrVal=escapeXmlChars(attrVal);
-				resultStr+=" "+attrName.substr(config.attributePrefix.length)+"='"+attrVal+"'";
+				resultStr+=' '+attrName.substr(config.attributePrefix.length)+'="'+attrVal+'"';
 			}
 		}
 		if(!closed)
@@ -412,9 +412,13 @@ function X2JS(config) {
 		}
 		else {
 			for(var arIdx = 0; arIdx < jsonArrRoot.length; arIdx++) {
-				result+=startTag(jsonArrRoot[arIdx], jsonArrObj, parseJSONAttributes(jsonArrRoot[arIdx]), false);
-				result+=parseJSONObject(jsonArrRoot[arIdx]);
-				result+=endTag(jsonArrRoot[arIdx],jsonArrObj);						
+				if(parseJSONObject(jsonArrRoot[arIdx]) == '') {
+					result+=startTag(jsonArrRoot[arIdx], jsonArrObj, parseJSONAttributes(jsonArrRoot[arIdx]), true);
+				} else {
+					result+=startTag(jsonArrRoot[arIdx], jsonArrObj, parseJSONAttributes(jsonArrRoot[arIdx]), false);
+					result+=parseJSONObject(jsonArrRoot[arIdx]);
+					result+=endTag(jsonArrRoot[arIdx],jsonArrObj);						
+				}				
 			}
 		}
 		return result;

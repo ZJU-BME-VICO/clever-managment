@@ -64,7 +64,7 @@ function StorageTemplateVerifyCtrl($scope, $modal, resourceService, msgboxServic
 
     $scope.oetTemplateFile = function(templateFile) {
         if (templateFile.lastTemplateFile == null) {
-            documentDiffModalService.open("STORAGE_TEMPLATE_VERIFY_OET_DIFF", null, templateFile.oet, $scope.modalContainerHeight);
+            documentDiffModalService.open("STORAGE_TEMPLATE_VERIFY_OET_DIFF", undefined, templateFile.oet, $scope.modalContainerHeight);
         } else {
             documentDiffModalService.open("STORAGE_TEMPLATE_VERIFY_OET_DIFF", templateFile.lastTemplateFile.oet, templateFile.oet, $scope.modalContainerHeight);
         }

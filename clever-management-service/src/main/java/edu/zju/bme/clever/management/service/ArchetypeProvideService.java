@@ -25,6 +25,8 @@ public interface ArchetypeProvideService {
 	
 	public List<ArchetypeRevisionFile> getArchetypeRevisionFileToVerify();
 	
+	public List<ArchetypeRevisionFile> getArchetypeRevisionFileToReference();
+	
 	public List<ArchetypeRevisionFile> getDraftArchetypeRevisionFileToEdit(User user);
 
 	public List<ArchetypeRevisionFile> getLatestPublishArchetypeRevisionFileToEdit();
