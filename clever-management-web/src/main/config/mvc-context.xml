@@ -77,6 +77,20 @@
         <property name="maxInMemorySize" value="40960" />  
     </bean>  
     
+    <!-- Jackson Mapper -->
+	<!--<bean id="jacksonObjectMapper" class="com.fasterxml.jackson.databind.ObjectMapper" />
+	<bean
+	    class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+	    <property name="targetObject" ref="jacksonObjectMapper" />
+	    <property name="targetMethod" value="configure" />
+	    <property name="arguments">
+	        <list>
+	            <value type="com.fasterxml.jackson.databind.DeserializationFeature">ACCEPT_SINGLE_VALUE_AS_ARRAY</value>
+	            <value>false</value>
+	        </list>
+	    </property>
+	</bean>-->
+    
     <!-- jmx config -->
     <context:mbean-export default-domain="clever.management"/>
     

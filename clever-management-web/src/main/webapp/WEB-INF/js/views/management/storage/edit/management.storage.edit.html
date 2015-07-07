@@ -32,9 +32,10 @@
     <div class="col-xs-8 col-md-8 col-lg-8">
         <div class="panel panel-default">
             <div class="panel-heading">
-                <span><span><b>Expand All:&nbsp;&nbsp;&nbsp;</b></span><toggle-switch model="isExpandedAll" ng-disabled="selectedTemplate == null"></toggle-switch></span>
-                <button class="btn btn-primary pull-right" style="margin-left: 10px;" ng-disabled="selectedTemplate == null" ng-click="">Save</button>
-                <button class="btn btn-info pull-right" ng-disabled="selectedTemplate == null" ng-click="generateOetDiff()">Open</button>
+                <span><span><b>Expand All:&nbsp;&nbsp;&nbsp;</b></span><toggle-switch model="isExpandedAll" ng-disabled="selectedTemplate == undefined"></toggle-switch></span>
+                <button class="btn btn-primary pull-right" style="margin-left: 10px;" ng-disabled="selectedTemplate == undefined" ng-click="">Save</button>
+                <button class="btn btn-primary pull-right" style="margin-left: 10px;" ng-disabled="selectedTemplate == undefined" ng-click="submitTemplateFile(selectedTemplate)">Submit</button>
+                <button class="btn btn-info pull-right" ng-disabled="selectedTemplate == undefined" ng-click="generateOetDiff()">Open</button>
             </div>
             <div class="panel-body" ng-style="{height: containerHeight - 50}" style="overflow: auto;">
                  <tree-view tree-data="parsedTemplate.definition" tree-control="treeControl" node-label-generator="getTreeNodeLabel" click-node-menu-callback="setNodeByContextMenu(node, type, value)" node-menu-generator="getTreeNodeMenu">

@@ -30,6 +30,7 @@ var config = {
 	'STORAGE_TEMPLATE_REMOVE_BY_ID_URL' : prefix + '/templates/storage/action/remove/id/',
 	'STORAGE_TEMPLATE_UPGRADE_BY_ID_URL' : prefix + '/templates/storage/action/upgrade/id/',
 	'STORAGE_TEMPLATE_LIST_DEPLOY_URL' : prefix + '/templates/storage/list/deploy',
+	'STORAGE_TEMPLATE_LIST_DEPLOYED_URL' : prefix + '/templates/storage/list/deployed',
 	'STORAGE_TEMPLATE_DEPLOY_URL' : prefix + '/templates/storage/action/deploy',
 	'STORAGE_TEMPLATE_VALIDATE_URL' : prefix + '/templates/storage/action/validate',
 	'STORAGE_TEMPLATE_UPLOAD_URL' : prefix + '/templates/storage/action/upload',

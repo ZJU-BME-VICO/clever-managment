@@ -115,41 +115,39 @@ public class ArchetypeResourceController extends AbstractResourceController {
 									return info;
 								}));
 		masters.forEach(master -> {
-			if (master.getSpecialiseArchetypeMaster() != null) {
+			if (master.getSpecialiseArchetypeMasterId() != null) {
 				ArchetypeMasterInfo info = infos.get(master.getId());
 				info.setRoot(false);
 				infos.get(master.getSpecialiseArchetypeMasterId())
-					 .getSpecialisedArchetypeMasters().add(info);
+						.getSpecialisedArchetypeMasters().add(info);
 
 			}
 		});
-		return infos.values().stream()
-							 .filter(info -> info.isRoot())
-							 .collect(Collectors.toList());
+		return infos.values().stream().filter(info -> info.isRoot())
+				.collect(Collectors.toList());
 	}
 
 	@RequestMapping(value = "/list/reference", method = RequestMethod.GET)
-	public List<ArchetypeInfo> getArchetypeListToReference() {	
+	public List<ArchetypeInfo> getArchetypeListToReference() {
 		List<ArchetypeRevisionFile> files = this.archetypeProvideService
 				.getArchetypeRevisionFileToReference();
-		return files.stream()
-					 .map(file -> {
-						 ArchetypeInfo info = new ArchetypeInfo();
-						 info.setId(file.getId());
-						 info.setName(file.getName());
-						 info.setAdl(file.getAdl());
-						 ADLParser parser = new ADLParser(file.getAdl());
-						 Archetype archetype;
-						 try {
-							 archetype = parser.parse();
-							 info.setXml(this.xmlSerializer.output(archetype));
-						 } catch (Exception e) {
-							 return null;
-						 }
-						 return info;
-					 }).collect(Collectors.toList());
+		return files.stream().map(file -> {
+			ArchetypeInfo info = new ArchetypeInfo();
+			info.setId(file.getId());
+			info.setName(file.getName());
+			info.setAdl(file.getAdl());
+			ADLParser parser = new ADLParser(file.getAdl());
+			Archetype archetype;
+			try {
+				archetype = parser.parse();
+				info.setXml(this.xmlSerializer.output(archetype));
+			} catch (Exception e) {
+				return null;
+			}
+			return info;
+		}).collect(Collectors.toList());
 	}
-	
+
 	@RequestMapping(value = "/list/edit/draft", method = RequestMethod.GET)
 	public List<ArchetypeInfo> getArchtypeListToEdit(
 			Authentication authentication) {
@@ -446,17 +444,17 @@ public class ArchetypeResourceController extends AbstractResourceController {
 		return info;
 	}
 
-	private List<ArchetypeInfo> constructArchetypeInfoList(List<ArchetypeRevisionFile> files){
-		return files.stream()
-				.map(file -> {
-					try {
-						return this.constructArchetypeInfo(file);
-					} catch (Exception e) {
-						return null;
-					}
-				}).collect(Collectors.toList());
+	private List<ArchetypeInfo> constructArchetypeInfoList(
+			List<ArchetypeRevisionFile> files) {
+		return files.stream().map(file -> {
+			try {
+				return this.constructArchetypeInfo(file);
+			} catch (Exception e) {
+				return null;
+			}
+		}).collect(Collectors.toList());
 	}
-	
+
 	private ArchetypeVersionMasterInfo constructArchetypeVersionMasterInfo(
 			ArchetypeVersionMaster versionMaster) {
 		ArchetypeVersionMasterInfo versionMasterInfo = new ArchetypeVersionMasterInfo();

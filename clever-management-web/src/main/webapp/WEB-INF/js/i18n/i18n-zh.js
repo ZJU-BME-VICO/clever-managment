@@ -114,6 +114,7 @@ angular.module('clever.management.i18n.zh', ['pascalprecht.translate']).config(f
 		STORAGE_TEMPLATE_VERIFY_REJECT : '否决',
 		STORAGE_TEMPLATE_VERIFY_REMOVE : '删除',
 		STORAGE_TEMPLATE_VERIFY_MSG_HINT : '操作提示',
+		STORAGE_TEMPLATE_VERIFY_APPROVE_HINT : '是否通过模板',
 		STORAGE_TEMPLATE_VERIFY_APPROVE_SUCCEEDED_HINT : '审核模板通过',
 		STORAGE_TEMPLATE_VERIFY_APPROVE_FAILED_HINT : '审核模板失败，错误：{{errorMsg}}',
 		STORAGE_TEMPLATE_VERIFY_REJECT_HINT : '是否否决模板',

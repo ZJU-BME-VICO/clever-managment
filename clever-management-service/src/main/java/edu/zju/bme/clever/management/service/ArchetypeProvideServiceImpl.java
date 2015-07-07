@@ -13,6 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import se.acode.openehr.parser.ADLParser;
 import edu.zju.bme.clever.management.service.entity.ArchetypeMaster;
@@ -26,6 +27,7 @@ import edu.zju.bme.clever.management.service.repository.ArchetypeRevisionFileRep
 import edu.zju.bme.clever.management.service.repository.ArchetypeVersionMasterRepository;
 
 @Service
+@Transactional
 public class ArchetypeProvideServiceImpl implements ArchetypeProvideService {
 
 	protected final Logger logger = LoggerFactory.getLogger(this.getClass());
@@ -44,24 +46,30 @@ public class ArchetypeProvideServiceImpl implements ArchetypeProvideService {
 
 	@Override
 	public List<ArchetypeMaster> getAllArchetypeMasters() {
-		return this.masterRepo.findAll();
+		List<ArchetypeMaster> masters = this.masterRepo.findAll();
+		masters.forEach(master -> master.getLatestVersionMaster());
+		return masters;
 	}
 
 	@Override
 	public List<ArchetypeRevisionFile> getArchetypeRevisionFileToVerify() {
-		return this.revisionFileRepo.findByLifecycleState(LifecycleState.TEAMREVIEW);
+		return this.revisionFileRepo
+				.findByLifecycleState(LifecycleState.TEAMREVIEW);
 	}
 
 	@Override
-	public List<ArchetypeRevisionFile> getDraftArchetypeRevisionFileToEdit(User user) {
-		return this.revisionFileRepo.findByEditorAndLifecycleState(user, LifecycleState.DRAFT);
+	public List<ArchetypeRevisionFile> getDraftArchetypeRevisionFileToEdit(
+			User user) {
+		return this.revisionFileRepo.findByEditorAndLifecycleState(user,
+				LifecycleState.DRAFT);
 	}
 
 	@Override
 	public List<ArchetypeRevisionFile> getLatestPublishArchetypeRevisionFileToEdit() {
-		List<ArchetypeVersionMaster> archetypeVersionMaster = this.versionMasterRepo.
-				findByLatestRevisionFileLifecycleState(LifecycleState.PUBLISHED);
-		return archetypeVersionMaster.stream().map(master -> master.getLatestRevisionFile())
+		List<ArchetypeVersionMaster> archetypeVersionMaster = this.versionMasterRepo
+				.findByLatestRevisionFileLifecycleState(LifecycleState.PUBLISHED);
+		return archetypeVersionMaster.stream()
+				.map(master -> master.getLatestRevisionFile())
 				.collect(Collectors.toList());
 	}
 

@@ -89,4 +89,12 @@
     	<property name="port" value="${jmx.port}"/>
 	</bean>
 	
+	<bean class="edu.zju.bme.clever.commons.rest.RestClientSpringImpl" >
+		<constructor-arg value="localhost" />
+		<constructor-arg value="8090" />
+		<constructor-arg value="clever-cdr-service" />
+		<constructor-arg value="admin" />
+		<constructor-arg value="admin" />
+	</bean>
+	
 </beans>
