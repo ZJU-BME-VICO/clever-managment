@@ -202,15 +202,7 @@ angular.module('clever.management.services.archetypeParse', []).service('archety
         definitions.tableItems = [];
         definitions.treeItems = [];
         var terminologies = parseTermDefinition(archetype.ontology.term_definitions);
-        var term_definitions;
-        if (terminologies) {
-            for (i = 0; i < terminologies.length; i++) {
-                if (terminologies[i].language == "zh-cn") {
-                    term_definitions = terminologies[i].items;
-                }
-            }
-        }
-        processNode(archetype.definition, undefined, definitions.treeItems, definitions.tableItems, term_definitions);
+        processNode(archetype.definition, undefined, definitions.treeItems, definitions.tableItems, terminologies);
         return definitions;
     };
 
@@ -265,14 +257,14 @@ angular.module('clever.management.services.archetypeParse', []).service('archety
     }
 
     function extractNode(node, term_definitions) {
-        var type, attribute, code, occurrences, existence, cardinality, name, dataType, picType, tableName, targetPath;
+        var type, attribute, code, occurrences, existence, cardinality, cnname,enname, dataType, picType, tableName, targetPath,name;
         var dataValue = [];
         var dataInfo = [];
 
         var archetypeSlot, includes, excludes;
 
         if (node['_xsi:type'] == 'ARCHETYPE_SLOT') {
-            archetypeSlot = true
+            archetypeSlot = true;
             if (node.includes) {
                 includes = node.includes;
             }
@@ -388,7 +380,8 @@ angular.module('clever.management.services.archetypeParse', []).service('archety
 
         if (!name) {
             if (term_definitions && code) {
-                name = getDefinition(code, term_definitions);
+                cnname = getDefinition(code, term_definitions,"zh-cn");
+                enname=getDefinition(code, term_definitions,"en");
                 tableName = term_definitions[0].text;
             } else {
                 name = label;
@@ -408,7 +401,8 @@ angular.module('clever.management.services.archetypeParse', []).service('archety
                 occurrences: occurrences,
                 existence: existence,
                 cardinality: cardinality,
-                labelContent: name,
+                labelContent: cnname,
+                enText:enname,
                 dataType: dataType,
                 picType: picType,
                 dataValue: dataValue,
@@ -429,7 +423,7 @@ angular.module('clever.management.services.archetypeParse', []).service('archety
             angular.forEach(valueList, function(item) {
                 var dropdownList = {
                     value: item.value,
-                    symbol: getDefinition(item.symbol.defining_code.code_string, term_definitions)
+                    symbol: getDefinition(item.symbol.defining_code.code_string, term_definitions,"zh-cn")
                 };
                 dataValue.push(dropdownList);
             });
@@ -442,7 +436,7 @@ angular.module('clever.management.services.archetypeParse', []).service('archety
                         angular.forEach(valueList.code_list, function(item) {
                             var dropdownList = {
                                 value: "",
-                                symbol: getDefinition(item, term_definitions)
+                                symbol: getDefinition(item, term_definitions,"zh-cn")
                             };
                             dataValue.push(dropdownList);
                             dataInfo.dataType = "DV_ORDINAL";
@@ -478,8 +472,16 @@ angular.module('clever.management.services.archetypeParse', []).service('archety
     }
 
 
-    function getDefinition(code, term_definitions) {
+    function getDefinition(code, terminologies, language) {
         var name = "";
+        var term_definitions;
+        if(terminologies){
+            for(i=0;i<terminologies.length;i++){
+                if(terminologies[i].language==language){
+                    term_definitions=terminologies[i].items;
+                }               
+            }
+        }
         if (term_definitions) {
             angular.forEach(term_definitions, function(value) {
                 if (value.code == code) {

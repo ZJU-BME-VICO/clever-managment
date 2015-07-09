@@ -8,7 +8,7 @@ function($document) {
         },      
         
         template: '<li dragable>'+'<a>'+'{{UIData.label.labelContent}}'+'</a>'+
-                  '&nbsp;&nbsp:&nbsp;&nbsp&nbsp'+'<input>'+
+                  '&nbsp;:&nbsp;'+'<input>'+
                   '</li>',
         controller:function($scope){
             

@@ -9,8 +9,8 @@ function($document) {
         
         template: '<li dragable id={{UIData.label.enText+"_"+UIData.label.code}} ng-style="width:280px;">'
                     +'<img ng-class="UIData.label.picType"></img>'
-                    +'<span>'+'{{UIData.label.labelContent}}'+'</span>'+'&nbsp;&nbsp:&nbsp;&nbsp&nbsp'
-                    +'<input name={{UIData.label.enText+"_"+UIData.label.tableName}} id={{UIData.label.enText+"_"+UIData.label.code+"_"+number}} style="width:80px;">'+
+                    +'<span>'+'{{UIData.label.labelContent}}'+'</span>'+'&nbsp;:&nbsp;'
+                    +'<input name={{UIData.label.enText+"_"+UIData.label.tableName}} id={{UIData.label.enText+"_"+UIData.label.code}} style="width:80px;">'+
                    '</li>',
         controller:function($scope){
             

@@ -7,10 +7,15 @@ function($document) {
           UIData:'=guiData',          
         },      
         
-        template: '<li dragable id={{UIData.label.enText+"_"+UIData.label.code}}>'+
+       /* template: '<li dragable id={{UIData.label.enText+"_"+UIData.label.code}}>'+
                     '<img ng-class="UIData.label.picType"></img>'+
                     '<a>'+'{{UIData.label.labelContent}}'+'</a>'+'&nbsp;&nbsp:&nbsp;&nbsp&nbsp'+'<input name={{UIData.label.enText+"_"+UIData.label.tableName}} id={{UIData.label.enText+"_"+UIData.label.code+"_"+number}}  type="checkbox">'+ 
-                  '</li>',
+                  '</li>',*/
+         template: '<li dragable id={{UIData.label.enText+"_"+UIData.label.code}}>'
+                    +'<img ng-class="UIData.label.picType"></img>'
+                    +'<select ng-model="dataEntry" name={{UIData.label.enText+"_"+UIData.label.tableName}} id={{UIData.label.enText+"_"+UIData.label.code}>'
+                    +'<option>无</option>'+'<option>有</option>'
+                    +'</li>',        
         controller:function($scope){
             
             $scope.dvbooleanControl={};
