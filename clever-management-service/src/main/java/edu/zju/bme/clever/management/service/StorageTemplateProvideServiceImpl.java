@@ -133,15 +133,4 @@ public class StorageTemplateProvideServiceImpl implements StorageTemplateProvide
 		return templateFile.getTemplateType().equals(TemplateType.STORAGE);
 	}
 
-	@Override
-	public List<EntityClassSource> getTemplateEntityClassesById(Integer id) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public List<EntityClassSource> getTemplateEntityClassesByName(String name) {
-		// TODO Auto-generated method stub
-		return null;
-	}
 }

@@ -1,13 +1,20 @@
 package edu.zju.bme.clever.management.service;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.Optional;
+
+import javax.xml.transform.stream.StreamSource;
+import javax.xml.validation.Schema;
+import javax.xml.validation.SchemaFactory;
+import javax.xml.validation.Validator;
 
 import openEHR.v1.template.TemplateDocument;
 
 import org.openehr.am.template.OETParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.xml.sax.SAXException;
 
 import edu.zju.bme.clever.cdr.arm.parser.ArmParser;
 import edu.zju.bme.clever.commons.util.WordUtils;
@@ -74,6 +81,19 @@ public class StorageTemplateValidateServiceImpl implements
 		}
 		// Validate existence
 		this.validateExistence(templateName, result);
+		// Validate arm against xsd
+		try {
+			SchemaFactory factory = SchemaFactory
+					.newInstance("http://www.w3.org/2001/XMLSchema");
+			Schema schema = factory.newSchema(this.getClass().getClassLoader()
+					.getResource("archetype-relationship-mapping.xsd"));
+			Validator validator = schema.newValidator();
+			validator.validate(new StreamSource(arm.newInputStream()));
+		} catch (IOException | SAXException ex) {
+			result.setStatus(FileStatus.INVALID);
+			result.appendMessage("Validate arm against xsd failed, error: "
+					+ ex.getMessage());
+		}
 		// Validate specialize archetype
 		String specialiseArchetypeName = oet.getTemplate().getDefinition()
 				.getArchetypeId();
@@ -90,7 +110,8 @@ public class StorageTemplateValidateServiceImpl implements
 				// Whether specialise the specific archetype version master
 				ArchetypeVersionMaster specialiseArchetypeVersionMaster = specialiseArchetypeFile
 						.getVersionMaster();
-				String archetypeVersionMasterName = specialiseArchetypeVersionMaster.getName();
+				String archetypeVersionMasterName = specialiseArchetypeVersionMaster
+						.getName();
 				if (!specialiseArchetypeVersionMaster.getName().equals(
 						templateMasterName)) {
 					result.setStatus(FileStatus.INVALID);
@@ -104,7 +125,7 @@ public class StorageTemplateValidateServiceImpl implements
 					TemplateRevisionFile latestTemplate = templateMaster
 							.getLatestRevisionFile();
 					// Validate lifecycle state
-					if(!latestTemplate.getLifecycleState().equals(
+					if (!latestTemplate.getLifecycleState().equals(
 							LifecycleState.PUBLISHED)) {
 						result.setStatus(FileStatus.INVALID);
 						result.appendMessage("The latest revision template "
