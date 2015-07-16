@@ -7,11 +7,11 @@ function($document) {
           UIData:'=guiData',          
         },      
         
-        template: '<li dragable id={{UIData.label.enText+"_"+UIData.label.code}} ng-style="width:280px;">'
+        template: '<li dragable id={{UIData.label.enText+"_"+UIData.label.code}}>'
                     +'<img ng-class="UIData.label.picType"></img>'
                     +'<span>'+'{{UIData.label.labelContent}}'+'</span>'+'&nbsp;:&nbsp;'
-                    +'<input name={{UIData.label.enText+"_"+UIData.label.tableName}} id={{UIData.label.enText+"_"+UIData.label.code}} style="width:80px;">'+
-                   '</li>',
+                    +'<input name={{UIData.label.enText+"_"+UIData.label.tableName}} id={{UIData.label.enText+"_"+UIData.label.code}} style="width:80px;">'
+                    +'</li>',
         controller:function($scope){
             
             $scope.dvcountControl={};

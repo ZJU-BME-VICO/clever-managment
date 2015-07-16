@@ -10,9 +10,9 @@ function($document) {
         template: '<li dragable id={{UIData.label.enText+"_"+UIData.label.code}}>'
                    +'<img class={{UIData.label.picType}}></img>'
                    +'<span>'+'{{UIData.label.labelContent}}'+'</span>'+'&nbsp;:&nbsp;'
-                   +'<input name={{UIData.label.enText+"_"+UIData.label.tableName}} id={{UIData.label.enText+"_"+UIData.label.code+"_year_"+number}} style="width:70px">'
-                   +'{{"年"}}'+'<input name={{UIData.label.enText+"_"+UIData.label.tableName}} id={{UIData.label.enText+"_"+UIData.label.code+"_month_"+number}} style="width:50px">'
-                   +'{{"月"}}'+'<input name={{UIData.label.enText+"_"+UIData.label.tableName}} id={{UIData.label.enText+"_"+UIData.label.code+"_day_"+number}} style="width:50px">'
+                   +'<input name={{UIData.label.enText+"_"+UIData.label.tableName}} id={{UIData.label.enText+"_"+UIData.label.code+"_year"}} style="width:70px">'
+                   +'{{"年"}}'+'<input name={{UIData.label.enText+"_"+UIData.label.tableName}} id={{UIData.label.enText+"_"+UIData.label.code+"_month"}} style="width:50px">'
+                   +'{{"月"}}'+'<input name={{UIData.label.enText+"_"+UIData.label.tableName}} id={{UIData.label.enText+"_"+UIData.label.code+"_day"}} style="width:50px">'
                    +'{{"日"}}'+'</li>',
         controller:function($scope){
             
