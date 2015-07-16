@@ -7,7 +7,7 @@ function($document) {
                 UIData:'=guiData',    
         },      
         
-        template: '<li dragable id={{UIData.label.labelContent+"_"+UIData.label.code}}>'+
+        template: '<li dragable id={{UIData.label.enText+"_"+UIData.label.code}}>'+
                     '<img ng-class="UIData.label.picType"></img>'+
                     '<span>'+'<b>'+'{{UIData.label.labelContent}}'+'</b>'+ '</span>'+
                   '</li>',

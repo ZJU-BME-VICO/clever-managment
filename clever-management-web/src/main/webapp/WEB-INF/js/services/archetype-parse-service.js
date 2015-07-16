@@ -380,9 +380,9 @@ angular.module('clever.management.services.archetypeParse', []).service('archety
 
         if (!name) {
             if (term_definitions && code) {
-                cnname = getDefinition(code, term_definitions,"zh-cn");
+                name = getDefinition(code, term_definitions,"zh-cn");
                 enname=getDefinition(code, term_definitions,"en");
-                tableName = term_definitions[0].text;
+                tableName = term_definitions[0].items[0].text;
             } else {
                 name = label;
             }
@@ -401,7 +401,7 @@ angular.module('clever.management.services.archetypeParse', []).service('archety
                 occurrences: occurrences,
                 existence: existence,
                 cardinality: cardinality,
-                labelContent: cnname,
+                labelContent: name,
                 enText:enname,
                 dataType: dataType,
                 picType: picType,
