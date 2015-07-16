@@ -2,6 +2,8 @@ function StorageTemplateDeployCtrl($scope, authenticationService, resourceServic
 	$scope.templateMasterList = [];
 	$scope.deployedTemplateList = [];
 	$scope.selectedCount = 0;
+	$scope.selectAll = false;
+	$scope.selectIndeterminate = false;
 
 	resourceService.get(STORAGE_TEMPLATE_LIST_DEPLOY_URL).then(function(list) {
 		$scope.templateMasterList = list;
@@ -12,13 +14,26 @@ function StorageTemplateDeployCtrl($scope, authenticationService, resourceServic
 		});
 	});
 
-	resourceService.get(STORAGE_TEMPLATE_LIST_DEPLOYED_URL).then(function(list) {
-		if (angular.isArray(list)) {
-			$scope.deployedTemplateList = list;
+	/*resourceService.get(STORAGE_TEMPLATE_LIST_DEPLOYED_URL).then(function(list) {
+	 if (angular.isArray(list)) {
+	 $scope.deployedTemplateList = list;
+	 } else {
+	 $scope.deployedTemplateList = [list];
+	 }
+	 });*/
+
+	$scope.checkAll = function() {
+		if ($scope.selectIndeterminate) {
+			$scope.selectAll = false;
 		} else {
-			$scope.deployedTemplateList = [list];
+			$scope.selectAll = !$scope.selectAll;
 		}
-	});
+		$scope.selectIndeterminate = false;
+		$scope.selectedCount = $scope.selectAll ? $scope.templateMasterList.length : 0;
+		angular.forEach($scope.templateMasterList, function(master) {
+			master.isSelected = $scope.selectAll;
+		});
+	};
 
 	$scope.getFixedTitle = function(title, length) {
 		var titleLength = length || 35;
@@ -35,6 +50,15 @@ function StorageTemplateDeployCtrl($scope, authenticationService, resourceServic
 			$scope.selectedCount++;
 		} else {
 			$scope.selectedCount--;
+		}
+		if ($scope.selectedCount == 0) {
+			$scope.selectAll = false;
+			$scope.selectIndeterminate = false;
+		} else if ($scope.selectedCount == $scope.templateMasterList.length) {
+			$scope.selectAll = true;
+			$scope.selectIndeterminate = false;
+		} else {
+			$scope.selectIndeterminate = true;
 		}
 	};
 

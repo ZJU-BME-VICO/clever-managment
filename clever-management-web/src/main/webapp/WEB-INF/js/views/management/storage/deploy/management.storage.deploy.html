@@ -6,6 +6,7 @@
             </div>
             <tabset tab-control="tabControl">
                 <tab heading="{{'STORAGE_TEMPLATE_DEPLOY_TODO_LIST'|translate}}">
+                	<span style="margin-left: 15px;cursor: pointer;" ng-click="checkAll()"><input type="checkbox" ui-indeterminate="selectIndeterminate" ng-checked="selectAll"> {{'STORAGE_TEMPLATE_DEPLOY_SELECT_ALL'|translate}}</span>
                     <div class="list-group" ng-style="{height: containerHeight - 120}" style="overflow: auto; margin-top: 5px;">
                         <div class="list-group-item" ng-repeat="master in templateMasterList" style="border:0px; padding: 5px 15px">
                             <div class="row">

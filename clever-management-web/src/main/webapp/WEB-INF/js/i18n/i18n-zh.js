@@ -131,6 +131,7 @@ angular.module('clever.management.i18n.zh', ['pascalprecht.translate']).config(f
 		STORAGE_TEMPLATE_DEPLOY : '部署',
 		STORAGE_TEMPLATE_DEPLOY_TODO : '未部署',
 		STORAGE_TEMPLATE_DEPLOY_DONE : '已部署',
+		STORAGE_TEMPLATE_DEPLOY_SELECT_ALL : '全选',
 		STORAGE_TEMPLATE_DEPLOY_TODO_LIST : '模板列表',
 		STORAGE_TEMPLATE_DEPLOY_RECORD : '部署记录',
 		STORAGE_TEMPLATE_DEPLOY_VERSION : '版本',
