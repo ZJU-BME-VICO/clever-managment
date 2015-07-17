@@ -215,6 +215,26 @@ public class StorageTemplateResourceController extends
 		return result;
 	}
 
+	@RequestMapping(value = "/action/edit/id/{id}", method = RequestMethod.POST)
+	public FileUploadResult editTemplateFile(@PathVariable int id,
+			@RequestBody StorageTemplateInfo templateInfo,
+			Authentication authentication) {
+		String userName = ((UserDetails) authentication.getPrincipal())
+				.getUsername();
+		User user = this.userService.getUserByName(userName);
+		FileUploadResult result = new FileUploadResult();
+		result.setSucceeded(true);
+		try {
+			this.versionControlService.editTemplate(templateInfo.getId(),
+					templateInfo.getOet(), templateInfo.getArm(), user);
+		} catch (VersionControlException ex) {
+			result.setSucceeded(false);
+			result.setMessage("Edit template " + templateInfo.getName()
+					+ " failed, error: " + ex.getMessage());
+		}
+		return result;
+	}
+
 	@RequestMapping(value = "/action/approve/id/{id}", method = RequestMethod.GET)
 	public FileUploadResult approveTemplateFile(@PathVariable int id,
 			Authentication authentication) {

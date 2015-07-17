@@ -24,6 +24,7 @@ var config = {
 	'STORAGE_TEMPLATE_LIST_EDIT_DRAFT_URL' : prefix + '/templates/storage/list/edit/draft',
 	'STORAGE_TEMPLATE_LIST_EDIT_PUBLISHED_URL' : prefix + '/templates/storage/list/edit/published',
 	'STORAGE_TEMPLATE_SUBMIT_BY_ID_URL' : prefix + '/templates/storage/action/submit/id/',
+	'STORAGE_TEMPLATE_EDIT_BY_ID_URL' : prefix + '/templates/storage/action/edit/id/',
 	'STORAGE_TEMPLATE_LIST_VERIFY_URL' : prefix + '/templates/storage/list/verify',
 	'STORAGE_TEMPLATE_APPROVE_BY_ID_URL' : prefix + '/templates/storage/action/approve/id/',
 	'STORAGE_TEMPLATE_REJECT_BY_ID_URL' : prefix + '/templates/storage/action/reject/id/',

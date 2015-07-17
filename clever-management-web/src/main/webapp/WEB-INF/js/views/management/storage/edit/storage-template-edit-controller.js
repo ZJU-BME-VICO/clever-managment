@@ -1,5 +1,6 @@
-function StorageTemplateEditCtrl($scope, resourceService, msgboxService, templateParseToEditService, archetypeParseService, documentDiffModalService, STORAGE_TEMPLATE_LIST_EDIT_DRAFT_URL, STORAGE_TEMPLATE_LIST_EDIT_PUBLISHED_URL, STORAGE_TEMPLATE_SUBMIT_BY_ID_URL, ARCHETYPE_LIST_REFERENCE_URL) {
+function StorageTemplateEditCtrl($scope, resourceService, busyService, msgboxService, templateParseToEditService, archetypeParseService, documentDiffModalService, STORAGE_TEMPLATE_LIST_EDIT_DRAFT_URL, STORAGE_TEMPLATE_LIST_EDIT_PUBLISHED_URL, STORAGE_TEMPLATE_SUBMIT_BY_ID_URL, STORAGE_TEMPLATE_EDIT_BY_ID_URL, ARCHETYPE_LIST_REFERENCE_URL) {
 
+	$scope.treeControl = {};
 	$scope.templateFiles = {
 		draft : [],
 		published : []
@@ -15,10 +16,10 @@ function StorageTemplateEditCtrl($scope, resourceService, msgboxService, templat
 
 	$scope.isExpandedAll = false;
 	$scope.$watch('isExpandedAll', function(newValue, oldValue) {
-		if ($scope.treeControl && newValue) {
-			$scope.treeControl.expandAll();
-		} else if ($scope.treeControl && !newValue) {
-			$scope.treeControl.collapseAll();
+		if ($scope.treeControl.value && newValue) {
+			$scope.treeControl.value.expandAll();
+		} else if ($scope.treeControl.value && !newValue) {
+			$scope.treeControl.value.collapseAll();
 		}
 	});
 
@@ -33,12 +34,14 @@ function StorageTemplateEditCtrl($scope, resourceService, msgboxService, templat
 	});
 
 	$scope.selectTemplate = function(template) {
+		var bid = busyService.pushBusy('BUSY_LOADING');
 		$scope.selectedTemplate = template;
 		$scope.oetObj = x2js.xml_str2json(template.oet);
 		$scope.parsedTemplate = templateParseToEditService.parseTemplate($scope.oetObj.template);
 		console.log($scope.oetObj);
 		console.log($scope.parsedTemplate);
 		$scope.isExpandedAll = false;
+		busyService.popBusy(bid);
 	};
 
 	$scope.generateOetDiff = function() {
@@ -47,6 +50,10 @@ function StorageTemplateEditCtrl($scope, resourceService, msgboxService, templat
 		// console.log($scope.selectedTemplate.oet);
 		// console.log(formatXml(xmlDocStr));
 		documentDiffModalService.open('Modify records', $scope.selectedTemplate.oet, formatXml(xmlDocStr));
+	};
+
+	$scope.getOet = function() {
+		return formatXml(x2js.json2xml_str($scope.oetObj));
 	};
 
 	$scope.getTreeNodeLabel = function(node, aliasName) {
@@ -348,14 +355,25 @@ function StorageTemplateEditCtrl($scope, resourceService, msgboxService, templat
 	refreshDraftTemplateData();
 	refreshPublishedTemplateData();
 
-	$scope.submitTemplateFile = function(templateFile) {
-		resourceService.get(STORAGE_TEMPLATE_SUBMIT_BY_ID_URL + templateFile.id).then(function(result) {
+	$scope.submitTemplateFile = function() {
+		resourceService.get(STORAGE_TEMPLATE_SUBMIT_BY_ID_URL + $scope.selectedTemplate.id).then(function(result) {
 			if (result.succeeded) {
 				msgboxService.createMessageBox("prompt", "Submit succeeded", {}, "success");
 				$scope.templateFiles.draft.splice($scope.templateFiles.draft.indexOf(templateFile), 1);
 				$scope.selectedTemplate = undefined;
 				$scope.oetObj = undefined;
 				$scope.parsedTemplate = undefined;
+			} else {
+				msgboxService.createMessageBox("prompt", result.message, {}, "error");
+			}
+		});
+	};
+
+	$scope.saveTemplateFile = function() {
+		$scope.selectedTemplate.oet = x2js.json2xml_str($scope.oetObj);
+		resourceService.post(STORAGE_TEMPLATE_EDIT_BY_ID_URL + $scope.selectedTemplate.id, $scope.selectedTemplate).then(function(result) {
+			if (result.succeeded) {
+				msgboxService.createMessageBox("prompt", "Save succeeded", {}, "success");
 			} else {
 				msgboxService.createMessageBox("prompt", result.message, {}, "error");
 			}
