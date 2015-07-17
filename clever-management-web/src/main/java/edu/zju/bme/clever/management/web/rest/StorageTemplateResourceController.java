@@ -189,13 +189,27 @@ public class StorageTemplateResourceController extends
 		String userName = ((UserDetails) authentication.getPrincipal())
 				.getUsername();
 		config.setUserName(userName);
-		return this.restClient.post("/cdr/deploy", config,
-				FileUploadResult.class);
+		FileUploadResult result = new FileUploadResult();
+		result.setSucceeded(true);
+		try {
+			result = this.restClient.post("/cdr/deploy", config,
+					FileUploadResult.class);
+		} catch (Exception ex) {
+			result.setSucceeded(false);
+			result.setMessage("Deploy failed, error: " + ex.getMessage());
+		}
+		return result;
 	}
 
 	@RequestMapping(value = "/list/deployed", method = RequestMethod.GET)
 	public List<String> getDeployedTemplates() {
-		return this.restClient.get("/cdr/deployedTemplates", List.class);
+		List<String> result = new ArrayList<String>();
+		try {
+			result = this.restClient.get("/cdr/deployedTemplates", List.class);
+		} catch (Exception ex) {
+			this.logger.debug("Get deployed template list failed.", ex);
+		}
+		return result;
 	}
 
 	@RequestMapping(value = "/action/submit/id/{id}", method = RequestMethod.GET)

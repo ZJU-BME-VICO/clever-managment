@@ -67,10 +67,11 @@
 							</div>
 						</tab>
 						<tab heading="OET">
-							<pre ng-style="{height: containerHeight - 135}" style="overflow: auto;">{{getOet()}}</pre>
+							<!--<pre ng-style="{height: containerHeight - 135}" style="overflow: auto;">{{getOet()}}</pre>-->
+							<textarea ng-style="{height: containerHeight - 135}" style="overflow: auto;width: 100%;" ng-model="selectedTemplate.oet"></textarea>
 						</tab>
 						<tab heading="ARM">
-							<pre ng-style="{height: containerHeight - 135}" style="overflow: auto;">{{selectedTemplate.arm}}</pre>
+							<textarea ng-style="{height: containerHeight - 135}" style="overflow: auto;width: 100%;" ng-model="selectedTemplate.arm"></textarea>
 						</tab>
 					</tabset>
 				</div>

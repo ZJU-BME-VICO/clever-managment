@@ -16,6 +16,12 @@ function ArchetypeVerifyCtrl($scope, msgboxService, resourceService, documentDif
 		console.log(list);
 	});
 
+	$scope.approveAll = function() {
+		angular.forEach($scope.archetypeFiles, function(file) {
+			$scope.approveArchetypeFile(file);
+		});
+	};
+
 	$scope.approveArchetypeFile = function(archetypeFile) {
 		resourceService.get(ARCHETYPE_APPROVE_BY_ID_URL + archetypeFile.id).then(function(result) {
 			if (result.succeeded) {
