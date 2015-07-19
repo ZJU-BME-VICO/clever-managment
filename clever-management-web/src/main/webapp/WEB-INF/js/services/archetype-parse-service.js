@@ -171,7 +171,7 @@ angular.module('clever.management.services.archetypeParse', []).service('archety
                 });
             } else {
                 var constraint = {
-                    language: termDefinitions._language,
+                    language: constraintDefinitions._language,
                     items: []
                 };
                 angular.forEach(constraintDefinitions.items, function(definition) {
