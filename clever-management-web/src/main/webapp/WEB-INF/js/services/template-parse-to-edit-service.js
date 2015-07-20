@@ -81,26 +81,29 @@ angular.module('clever.management.services.templateParseToEdit', []).service('te
     }
 
     function findAllowArchetypeNode(optNode, path, node) {
-        if (angular.isArray(optNode)) {
-            angular.forEach(optNode, function(value) {
-                if (value.label.path == path) {
-                    node.value = value;
-                } else {
-                    if (value.children) {
-                        findAllowArchetypeNode(value.children, path, node);
-                    }
-                }
-            });
-        } else {
-            if (optNode.label.path == path) {
-                node.value = optNode;
+        // if (angular.isArray(optNode)) {
+        for (var i = 0; i < optNode.length; i++) {
+            if (optNode[i].label.path == path) {
+                node.value = optNode[i];
+                break;
             } else {
-                if (optNode.children) {
-                    findAllowArchetypeNode(optNode.children, path, node);
+                if (optNode[i].children && optNode[i].children.length > 0) {
+                    findAllowArchetypeNode(optNode[i].children, path, node);
                 }
             }
         }
+        // } else {
+        //     if (optNode.label.path == path) {
+        //         node.value = optNode;
+        //         return;
+        //     } else {
+        //         if (optNode.children && optNode.children.length > 0) {
+        //             findAllowArchetypeNode(optNode.children, path, node);
+        //         }
+        //     }
+        // }
     }
+
 
     this.processArchetypeNodes = function(archetypeTree, parent, optTree, oet, terminologies) {
         angular.forEach(archetypeTree, function(value) {
@@ -108,7 +111,7 @@ angular.module('clever.management.services.templateParseToEdit', []).service('te
                 archetypeNode: true,
                 text: undefined,
                 code: value.label.code,
-                picType: value.label.picType,
+                picType: picTypes[value.label.picType] ? picTypes[value.label.picType] : value.label.picType,
                 path: oet._archetype_id,
                 occurrences: {
                     lower: value.label.occurrences.lower,
@@ -186,7 +189,7 @@ angular.module('clever.management.services.templateParseToEdit', []).service('te
         'CHOICE': 'choice',
         'DV_MULTIMEDIA': 'multimedia',
         'DV_URI': 'uri',
-        'DV_PROPORTION': 'radio',
+        'DV_PROPORTION': 'ratio',
         'DV_IDENTIFIER': 'id',
         'DV_PARSABLE': 'parseable',
         'DV_BOOLEAN': 'truefalse',
@@ -196,7 +199,18 @@ angular.module('clever.management.services.templateParseToEdit', []).service('te
         'INTERVAL_EVENT': 'interval',
 
         'ITEM_LIST': 'structure',
-        'ITEM_TREE': 'structure'
+        'ITEM_TREE': 'structure',
+        'PARTY_INDENTITY': 'party_identity',
+        'ANDDRESS': 'address',
+        'PARTY_RELATIONSHIP': 'party_relationship',
+        'CAPABILITY': 'capbliity',
+        'ORGANISATION': 'organisation',
+        'CONTACT': 'contact',
+        'PERSON': 'demographic',
+        'ROLE': 'role',
+        'ADMIN_ENTRY': 'admin',
+        'PARTICIPATION': 'participation',
+
     }
 
     function findNodeFromParsedArchetype(archetypeTree, codeId, targetNode) {
@@ -255,8 +269,15 @@ angular.module('clever.management.services.templateParseToEdit', []).service('te
                 occurrences.upper = '*';
                 occurrenceType = '*';
             }
-        } else if (occurrences.lower == 1 && occurrences.upper == 1){
+        }
+        // } else if (occurrences.lower == 1 && occurrences.upper == 1){
+        //     occurrenceType = undefined;
+        // }
+        else if (occurrences.lower == 1) {
             occurrenceType = undefined;
+            if (!occurrences.upper) {
+                occurrences.upper = "*";
+            }
         }
 
         if (typeNode.label.slot) {

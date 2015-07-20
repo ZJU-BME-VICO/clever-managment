@@ -314,6 +314,21 @@ angular.module('clever.management.services.archetypeParse', []).service('archety
                             break;
                         }
                     }
+                    var count;
+                    for (var i = 0; i < node.attributes.length - 1; i++) {
+                        if (node.attributes[i].rm_attribute_name == "name") {
+                            count = i;
+                        }
+                    }
+                    if (count != undefined) {
+                        if (node.attributes[count].children.attributes) {
+                            if (node.attributes[count].children.attributes.rm_attribute_name == "value") {
+                                if (node.attributes[count].children.attributes.children.item) {
+                                    name = node.attributes[count].children.attributes.children.item.list;
+                                }
+                            }
+                        }
+                    }
                 } else {
                     if (nodeAttributes.rm_attribute_name == 'value') {
                         setDataInfo(nodeAttributes.children, dataInfo);
@@ -358,25 +373,25 @@ angular.module('clever.management.services.archetypeParse', []).service('archety
             }
         }
         //real name of items           
-        if (node.attributes) {
-            if (node.attributes.length > 1) {
-                var count;
-                for (var i = 0; i < node.attributes.length - 1; i++) {
-                    if (node.attributes[i].rm_attribute_name == "name") {
-                        count = i;
-                    }
-                }
-                if (count != undefined) {
-                    if (node.attributes[count].children.attributes) {
-                        if (node.attributes[count].children.attributes.rm_attribute_name == "value") {
-                            if (node.attributes[count].children.attributes.children.item) {
-                                name = node.attributes[count].children.attributes.children.item.list;
-                            }
-                        }
-                    }
-                }
-            }
-        }
+        // if (node.attributes) {
+        //     if (node.attributes.length > 1) {
+        //         var count;
+        //         for (var i = 0; i < node.attributes.length - 1; i++) {
+        //             if (node.attributes[i].rm_attribute_name == "name") {
+        //                 count = i;
+        //             }
+        //         }
+        //         if (count != undefined) {
+        //             if (node.attributes[count].children.attributes) {
+        //                 if (node.attributes[count].children.attributes.rm_attribute_name == "value") {
+        //                     if (node.attributes[count].children.attributes.children.item) {
+        //                         name = node.attributes[count].children.attributes.children.item.list;
+        //                     }
+        //                 }
+        //             }
+        //         }
+        //     }
+        // }
 
         if (!name) {
             if (term_definitions && code) {

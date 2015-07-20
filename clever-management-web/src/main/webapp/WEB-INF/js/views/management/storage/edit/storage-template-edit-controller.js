@@ -63,9 +63,10 @@ function StorageTemplateEditCtrl($scope, resourceService, busyService, msgboxSer
 
 	$scope.getTreeNodeLabel = function(node, aliasName) {
 		var label = '';
-		label += '<span class="clever-icon ' + node.label.picType.toLowerCase() + '" style="padding: 7px 10px; background-position-y: 10px;"></span>' + '<span ng-class="{\'node-label-max\': ' + aliasName + '.label.occurrences.upper != 0}"';
+		label += '<span class="clever-icon ' + node.label.picType.toLowerCase() + '" style="padding: 7px 10px; background-position-y: 10px;"></span>' + 
+			'<span ng-class="{\'node-label-max\': ' + aliasName + '.label.occurrences.upper != 0}"';
 		if (node.label.text) {
-			label += '<span style="color: darkblue;">' + node.label.text;
+			label += '<span style="color: brown;">' + node.label.text;
 		}
 		if (node.label.code) {
 			if (node.label.archetypeNode) {
@@ -75,9 +76,10 @@ function StorageTemplateEditCtrl($scope, resourceService, busyService, msgboxSer
 			}
 			label += getOntologyByNode(node);
 		}
-		label += '<span ng-if="' + aliasName + '.label.occurrences.upper != 0">&nbsp&nbsp[{{' + aliasName + '.label.occurrences.lower}}..{{' + aliasName + '.label.occurrences.upper}}]' + '<span ng-if="' + aliasName + '.label.occurrenceType == \'*\' && ' + aliasName + '.label.occurrences.upper == 1">&nbsp&nbsp&nbsp<em>[0..*] to [0..1]</em></span>' + '</span>' + '</span>' + '</span>';
+		label += '<span ng-if="' + aliasName + '.label.occurrences.upper != 0">&nbsp&nbsp[{{' + aliasName + '.label.occurrences.lower}}..{{' + aliasName + '.label.occurrences.upper}}]' + 
+			'<span ng-if="' + aliasName + '.label.occurrenceType == \'*\' && ' + aliasName + '.label.occurrences.upper == 1">&nbsp&nbsp&nbsp<em>[0..*] to [0..1]</em></span>' + '</span>' + '</span>' + '</span>';
 		return label;
-		// + '<span>[' + node.label.path + ']</span>'
+		// return label + '<span>[' + node.label.path + ']</span>'
 	};
 
 	function getOntologyByNode(node) {
@@ -101,63 +103,88 @@ function StorageTemplateEditCtrl($scope, resourceService, busyService, msgboxSer
 		return matchedOntology;
 	}
 
-
 	$scope.getTreeNodeMenu = function(node, aliasName) {
-		var menuHtml = '<ul class="dropdown-menu" role="menu" ng-if="' + aliasName + '.parent.label.occurrences.upper != 0">';
-		if (node.label.archetypeNode) {
-			if (node.parent) {
-				menuHtml += '<li><a class="pointer" role="menuitem" tabindex="1" ng-click="setNodeByContextMenu(' + aliasName + ', 3)">Delete archetype</a></li>';
-			} else {
-				menuHtml = '';
-			}
-		} else if (node.label.slot) {
-			menuHtml += constructSlotMenu(node, aliasName);
-		} else {
-			if (node.label.occurrenceType) {
-				if (node.label.occurrenceType == 1) {
-					menuHtml += '<li><a class="pointer" role="menuitem" tabindex="1" ng-click="setNodeByContextMenu(' + aliasName + ', 1, 0)">Zero Occurrence</a></li>' + '<li><a class="pointer" role="menuitem" tabindex="2" ng-click="setNodeByContextMenu(' + aliasName + ', 1, 1)">Single Occurrence</a></li>';
-				} else if (node.label.occurrenceType == '*') {
-					menuHtml += '<li><a class="pointer" role="menuitem" tabindex="1" ng-click="setNodeByContextMenu(' + aliasName + ', 1, 0)">Zero Occurrence</a></li>' + '<li><a class="pointer" role="menuitem" tabindex="2" ng-click="setNodeByContextMenu(' + aliasName + ', 1, 1)">Single Occurrence</a></li>' + '<li><a class="pointer" role="menuitem" tabindex="3" ng-click="setNodeByContextMenu(' + aliasName + ', 1, \'*\')">Unlimited Occurrence</a></li>';
-				}
-			} else {
-				menuHtml = '';
-			}
-		}
+	    var menuHtml = '<ul class="dropdown-menu" role="menu" ng-if="' + aliasName + '.parent.label.occurrences.upper != 0">';
+	    if (node.label.archetypeNode) {
+	        if (node.parent) {
+	            menuHtml += '<li><a class="pointer" role="menuitem" tabindex="1" ng-click="setNodeByContextMenu(' + aliasName + ', 3)">Delete archetype</a></li>';
+	        } else {
+	            menuHtml = '';
+	        }
+	    } else if (node.label.slot) {
+	        menuHtml += constructSlotMenu(node, aliasName);
+	    } else {
+	        if (node.label.occurrenceType) {
+	            if (node.label.occurrenceType == 1) {
+	                menuHtml += '<li><a class="pointer" role="menuitem" tabindex="1" ng-click="setNodeByContextMenu(' + aliasName + ', 1, 0)">Zero Occurrence</a></li>' + '<li><a class="pointer" role="menuitem" tabindex="2" ng-click="setNodeByContextMenu(' + aliasName + ', 1, 1)">Single Occurrence</a></li>';
+	            } else if (node.label.occurrenceType == '*') {
+	                menuHtml += '<li><a class="pointer" role="menuitem" tabindex="1" ng-click="setNodeByContextMenu(' + aliasName + ', 1, 0)">Zero Occurrence</a></li>' + '<li><a class="pointer" role="menuitem" tabindex="2" ng-click="setNodeByContextMenu(' + aliasName + ', 1, 1)">Single Occurrence</a></li>' + '<li><a class="pointer" role="menuitem" tabindex="3" ng-click="setNodeByContextMenu(' + aliasName + ', 1, \'*\')">Unlimited Occurrence</a></li>';
+	            }
+	        } else {
+	            menuHtml = '';
+	        }
+	    }
 
-		if (menuHtml == '') {
-			return menuHtml;
-		} else {
-			return menuHtml += '</ul>';
-		}
+	    if (menuHtml == '') {
+	        return menuHtml;
+	    } else {
+	        return menuHtml += '</ul>';
+	    }
 	};
+
+	function getRegExpsBySlotExpression(slotExpression) {
+		var regExps = [];
+		var expression;
+		if (angular.isArray(slotExpression)) {
+			angular.forEach(slotExpression, function(item) {
+				expression = item.string_expression;
+				expression = expression.substring(expression.indexOf('{/') + 2, expression.lastIndexOf('/}'));
+				regExps.push(new RegExp(expression));
+			});
+		} else {
+			expression = slotExpression.string_expression;
+			expression = expression.substring(expression.indexOf('{/') + 2, expression.lastIndexOf('/}'));
+			regExps.push(new RegExp(expression));
+		}
+		return regExps;
+	}
 
 	function constructSlotMenu(node, aliasName) {
 		var slotMenu = '';
 		var reg = /\{|\}/;
-		var regExp = new RegExp();
 		var matchedArchetypes = [];
 		if (node.label.includes) {
-			var expression = node.label.includes.string_expression;
-			regExp.compile(expression.substring(expression.indexOf('{/') + 2, expression.lastIndexOf('/}')));
+			var regExps = getRegExpsBySlotExpression(node.label.includes);
 			angular.forEach($scope.archetypeList, function(value) {
-				if (regExp.test(value.name)) {
-					matchedArchetypes.push(value);
-				}
+				angular.forEach(regExps, function(item) {
+					if (item.test(value.name)) {
+						matchedArchetypes.push(value);
+					}
+				});
 			});
 		}
 		if (node.label.excludes) {
-			var expression = node.label.excludes.string_expression;
-			regExp.compile(expression.substring(expression.indexOf('{/') + 2, expression.lastIndexOf('/}')));
+			var regExps = getRegExpsBySlotExpression(node.label.excludes);
 			if (matchedArchetypes.length > 0) {
 				for (var i = 0; i < matchedArchetypes.length; i++) {
-					if (regExp.test(matchedArchetypes[i]).name) {
-						matchedArchetypes.splice(i, 1);
-						i--;
-					}
+					angular.forEach(regExps, function(item) {
+						if (item.test(matchedArchetypes[i]).name) {
+							matchedArchetypes.splice(i, 1);
+							i--;
+						}
+					});
 				}
 			} else {
+				var isExclude;
 				angular.forEach($scope.archetypeList, function(value) {
-					if (!regExp.test(value.name)) {
+					isExclude = false;
+					for (var i = 0; i < regExps.length; i++) {
+						if (regExps[i].test(value.name)) {
+							isExlude = true;
+							break;
+						}
+					}
+					if (!isExclude) {
 						matchedArchetypes.push(value);
 					}
 				});
@@ -172,7 +199,6 @@ function StorageTemplateEditCtrl($scope, resourceService, busyService, msgboxSer
 		}
 		return slotMenu;
 	}
-
 
 	$scope.setNodeByContextMenu = function(node, type, value) {
 		switch (type) {

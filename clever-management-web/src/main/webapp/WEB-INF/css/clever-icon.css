@@ -127,6 +127,54 @@
 	background-image: url("../img/datatype/choice.png");
 	background-repeat: no-repeat;
 }
+.clever-icon.ratio {
+	background-image: url("../img/datatype/ratio.png");
+	background-repeat: no-repeat;
+}
+.clever-icon.party_identity {
+	background-image: url("../img/datatype/partyIdentity.png");
+	background-repeat: no-repeat;
+}
+.clever-icon.address {
+	background-image: url("../img/datatype/address.png");
+	background-repeat: no-repeat;
+}
+.clever-icon.party_relationship {
+	background-image: url("../img/datatype/partyRelationship.png");
+	background-repeat: no-repeat;
+}
+.clever-icon.capability {
+	background-image: url("../img/datatype/capability.png");
+	background-repeat: no-repeat;
+}
+.clever-icon.organisation {
+	background-image: url("../img/datatype/organisation.png");
+	background-repeat: no-repeat;
+}
+.clever-icon.contact {
+	background-image: url("../img/datatype/contact.png");
+	background-repeat: no-repeat;
+}
+.clever-icon.demographic {
+	background-image: url("../img/datatype/demographic.png");
+	background-repeat: no-repeat;
+}
+.clever-icon.role {
+	background-image: url("../img/datatype/role.png");
+	background-repeat: no-repeat;
+}
+.clever-icon.admin {
+	background-image: url("../img/datatype/admin.png");
+	background-repeat: no-repeat;
+}
+.clever-icon.participation {
+	background-image: url("../img/datatype/participation.png");
+	background-repeat: no-repeat;
+}
+.clever-icon.party_ref {
+	background-image: url("../img/datatype/partyRef.png");
+	background-repeat: no-repeat;
+}
 
 /* Life cycle state */
 .clever-icon.draft {
