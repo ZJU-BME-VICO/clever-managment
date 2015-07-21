@@ -24,24 +24,24 @@ public class StorageTemplateProvideServiceImpl implements StorageTemplateProvide
 	@Autowired
 	private TemplateRevisionFileRepository templateFileRepo;
 	@Autowired
-	private TemplateMasterRepository TemplateMaster1Repo;
+	private TemplateMasterRepository TemplateMasterRepo;
 	@Autowired
 	private EntityClassSourceRepository templateEntityClassRepo;
 
 	@Override
 	public List<TemplateMaster> getAllStorageTemplateMasters() {
-		return this.TemplateMaster1Repo
-				.findByTemplateType(TemplateType.STORAGE);
+		return this.TemplateMasterRepo
+				.findByTemplateTypeFetchRevisionFiles(TemplateType.STORAGE);
 	}
-
+	
 	@Override
 	public TemplateMaster getTemplateMasterById(Integer id) {
-		return this.TemplateMaster1Repo.findOne(id);
+		return this.TemplateMasterRepo.findOne(id);
 	}
 
 	@Override
 	public TemplateMaster getTemplateMasterByName(String name) {
-		return this.TemplateMaster1Repo.findByName(name);
+		return this.TemplateMasterRepo.findByName(name);
 	}
 
 	@Override
@@ -72,13 +72,13 @@ public class StorageTemplateProvideServiceImpl implements StorageTemplateProvide
 
 	@Override
 	public List<TemplateRevisionFile> getDraftTemplateFilesToEdit(User user) {
-		return this.templateFileRepo.findByTemplateTypeAndEditorAndLifecycleState(
+		return this.templateFileRepo.findByTemplateTypeAndEditorAndLifecycleStateFetchAll(
 				TemplateType.STORAGE, user, LifecycleState.DRAFT);
 	}
 	
 	@Override
 	public List<TemplateRevisionFile> getLatestPublishedTemplateFilesToEdit() {
-		List<TemplateMaster> templateMaster = this.TemplateMaster1Repo
+		List<TemplateMaster> templateMaster = this.TemplateMasterRepo
 				.findByTemplateTypeAndLatestRevisionFileLifecycleState(
 						TemplateType.STORAGE, LifecycleState.PUBLISHED);
 		return templateMaster.stream()

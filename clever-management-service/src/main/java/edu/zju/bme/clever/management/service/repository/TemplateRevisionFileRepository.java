@@ -24,8 +24,12 @@ public interface TemplateRevisionFileRepository extends
 
 	public List<TemplateRevisionFile> findByTemplateTypeAndEditor(
 			TemplateType type, User editor);
-	
+
 	public List<TemplateRevisionFile> findByTemplateTypeAndEditorAndLifecycleState(
+			TemplateType templateType, User user, LifecycleState lifecycleState);
+
+	@Query("select file from TemplateRevisionFile file left join fetch file.editor left join fetch file.properties where file.templateType = ?1 and file.editor = ?2 and file.lifecycleState = ?3")
+	public List<TemplateRevisionFile> findByTemplateTypeAndEditorAndLifecycleStateFetchAll(
 			TemplateType templateType, User user, LifecycleState lifecycleState);
 
 }
