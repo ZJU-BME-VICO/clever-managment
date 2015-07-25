@@ -1,0 +1,48 @@
+
+public enum ReferenceModelName {
+	
+	
+	DV_TEXT("DV_TEXT"),
+	DV_BOOLEAN("DV_BOOLEAN"),
+	DV_COUNT("DV_COUNT"),
+	DV_QUANTITY("DV_QUANTITY"),
+	DV_PROPORTION("DV_PROPORTION"),	
+	DV_CODED_TEXT("DV_CODED_TEXT"),
+	DV_ORDINAL("DV_ORDINAL"),
+	CODE_PHRASE("CODE_PHRASE"),
+	DV_DATE_TIME("DV_DATE_TIME"),
+    DV_DATE("DV_DATE"),
+    DV__TIME("DV_TIME"),
+    DV_DURATION("DV_DURATION"),
+    
+	CLUSTER("CLUSTER"),
+	DV_INTERVAL_DV_COUNT("DV_INTERVAL<DV_COUNT>"),
+	DV_INTERVAL_DV_QUANTITY("DV_INTERVAL<DV_QUANTITY>"),
+	DV_INTERVAL_DV_DATE_TIME("DV_INTERVAL<DV_COUNT>"),
+	ELEMENT("ELEMENT"),
+	DV_MULTIMEDIA("DV_MULTIMEDIA"),
+	DV_URI("DV_URI"),
+	DV_IDENTIFIER("DV_IDENTIFIER"),
+	DV_PARSEABLE("DV_PARSEABLE"),
+	ITEM_TREE("ITEM_TREE"),
+	ITEM_LIST("ITEM_LIST")
+	;
+	
+	//C_DV_QUANTITY("C_DV_QUANTITY");
+	
+	
+	private final String name;
+	
+	public String getName() {
+		return name;
+	}
+	
+	public String toString() {
+		return name;
+	}
+	
+	ReferenceModelName(String name) {
+		this.name = name;
+	}
+}
+
