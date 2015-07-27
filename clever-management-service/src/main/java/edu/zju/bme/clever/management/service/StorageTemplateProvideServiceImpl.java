@@ -20,7 +20,8 @@ import edu.zju.bme.clever.management.service.repository.TemplateRevisionFileRepo
 
 @Service
 @Transactional(rollbackFor = { Exception.class })
-public class StorageTemplateProvideServiceImpl implements StorageTemplateProvideService {
+public class StorageTemplateProvideServiceImpl implements
+		StorageTemplateProvideService {
 	@Autowired
 	private TemplateRevisionFileRepository templateFileRepo;
 	@Autowired
@@ -33,7 +34,7 @@ public class StorageTemplateProvideServiceImpl implements StorageTemplateProvide
 		return this.TemplateMasterRepo
 				.findByTemplateTypeFetchRevisionFiles(TemplateType.STORAGE);
 	}
-	
+
 	@Override
 	public TemplateMaster getTemplateMasterById(Integer id) {
 		return this.TemplateMasterRepo.findOne(id);
@@ -72,18 +73,16 @@ public class StorageTemplateProvideServiceImpl implements StorageTemplateProvide
 
 	@Override
 	public List<TemplateRevisionFile> getDraftTemplateFilesToEdit(User user) {
-		return this.templateFileRepo.findByTemplateTypeAndEditorAndLifecycleStateFetchAll(
-				TemplateType.STORAGE, user, LifecycleState.DRAFT);
+		return this.templateFileRepo
+				.findByTemplateTypeAndEditorAndLifecycleStateFetchAll(
+						TemplateType.STORAGE, user, LifecycleState.DRAFT);
 	}
-	
+
 	@Override
 	public List<TemplateRevisionFile> getLatestPublishedTemplateFilesToEdit() {
-		List<TemplateMaster> templateMaster = this.TemplateMasterRepo
-				.findByTemplateTypeAndLatestRevisionFileLifecycleState(
+		return this.templateFileRepo
+				.findByTemplateTypeAndLifecycleStateFetchAll(
 						TemplateType.STORAGE, LifecycleState.PUBLISHED);
-		return templateMaster.stream()
-							 .map(file -> file.getLatestRevisionFile())
-							 .collect(Collectors.toList());
 	}
 
 	@Override
