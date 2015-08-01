@@ -72,7 +72,7 @@ angular.module('clever.management.directives.treeView', []).directive('treeView'
 					type : type,
 					value : value
 				});
-			}
+			};
 			$scope.doubleClickNode = function(node) {
 				$scope.doubleClickNodeCallback({
 					value : node,

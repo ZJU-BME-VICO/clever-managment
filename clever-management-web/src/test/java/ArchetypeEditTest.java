@@ -42,11 +42,49 @@ public class ArchetypeEditTest {
 		private Archetype arc;
 		
 		
-		public ArchetypeEditTest(Archetype arc)
+		/*public ArchetypeEditTest(Archetype arc)
 		{
 			this.arc = arc;
 		}
+		*/
+		public ArchetypeEditTest()
+		{
+			this.arc = null;
+		}
 		
+		
+		@Test
+		public void test()
+		{
+			File arcFile = new File("C:\\Users\\fdgf\\Desktop\\剖析用--原型\\archetypeEditor\\action\\openEHR-EHR-ACTION.procedure.v1.adl");
+			if(arcFile!=null)System.out.println("open file successfully");
+			else System.out.println("can not open file");
+			
+			
+			try {
+			ADLParser parser = new ADLParser(arcFile);
+			arc = parser.parse();
+			
+			System.out.println(arc.getPathNodeMap().get(arc.getPathByNodeId("at0073")+"/value/value").getClass());
+			//CPrimitiveObject PriObject = (CPrimitiveObject)(arc.getPathNodeMap().get(arc.getPathByNodeId("at0069")+"/value"));
+			System.out.println(arc.getPathNodeMap().get(arc.getPathByNodeId("at0069")+"/value").getClass());
+			ADLSerializer serialiser = new ADLSerializer();
+			
+			//	System.out.println(serialiser.output(arc));
+				
+				assertEquals(5,5);
+			}catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			catch(Exception e)
+			{
+				e.printStackTrace();
+			}
+			
+		
+	
+		}
 		//+++++++++++++++++++复  制  区+++++++++++++++++++++++++++++++++++++++++++++++
 		//----------------------辅助方法------------------------------------
 		//获得path路径下的AttributeName为 rmAttributeName的CAttribute节点      
