@@ -1,16 +1,36 @@
-function ArchetypeEditCtrl($scope, msgboxService, resourceService, ARCHETYPE_LIST_EDIT_DRAFT_URL, ARCHETYPE_LIST_EDIT_PUBLISHED_URL, ARCHETYPE_EDIT_BY_ID_URL, ARCHETYPE_SUBMIT_BY_ID_URL) {
+function ArchetypeEditCtrl($scope, $modal,$log,msgboxService, resourceService, ARCHETYPE_LIST_EDIT_DRAFT_URL, ARCHETYPE_LIST_EDIT_PUBLISHED_URL, ARCHETYPE_EDIT_BY_ID_URL, ARCHETYPE_SUBMIT_BY_ID_URL) {
 
 	$scope.editId = 0;
 	$scope.focusTab = "ARCHETYPE_EDIT_SUBMIT";
 
 	resourceService.get(ARCHETYPE_LIST_EDIT_DRAFT_URL).then(function(list) {
 		$scope.draftArchetypeList = list;
+		console.log($scope.draftArchetypeList);
 	});
 
 	resourceService.get(ARCHETYPE_LIST_EDIT_PUBLISHED_URL).then(function(list) {
 		$scope.publishedArchetypeList = list;
+		console.log($scope.publishedArchetypeList);
 	});
+	
+	
 
+   $scope.selectArchetype = function(archetype){
+   	  $scope.selectedArchetype = archetype;
+   	  //console.log($scope.selectedArchetype);
+   };
+   $scope.saveSelectedArchetype = function(){
+   	
+   };
+   $scope.submitSelectedAtrchetype=function(){
+   	
+   };   
+   
+   
+   
+   
+  /* $scope.
+   
 	$("#draft").hover(function() {
 		draft.style.borderBottom = "3px solid red";
 		published.style.borderBottom = "";
@@ -28,83 +48,63 @@ function ArchetypeEditCtrl($scope, msgboxService, resourceService, ARCHETYPE_LIS
 			$scope.focusTab = "ARCHETYPE_EDIT_EDIT";
 		});
 	});
-
-	$scope.setEditId = function(ID) {
-		$scope.editId = ID;
-	};
-
-	$scope.isValid = function() {
-		if ($scope.editId == 0) {
-			return "$invalid";
-		} else {
-			return false;
-		}
-	};
-
-	$scope.operateFile = function() {
-		if ($scope.focusTab == "ARCHETYPE_EDIT_EDIT") {
-			angular.forEach($scope.publishedArchetypeList, function(file) {
-				if ($scope.editId == file.id) {
-					editFile(file.id);
+	*/
+	$scope.isArchetypeListHidden = false;
+	
+	$scope.archetypeInfo="asdfa";
+	 $scope.orgnizationList =["CEN","Open_EHR",];
+	//for creat a new archetype ---use angular modals
+	$scope.open=function(size){
+		var modalInstance=$modal.open({
+			animation: true,
+			templateUrl: 'archetypeCreate.html',
+			controller: function ArchetypeCreatCtrl($scope,$modalInstance,orgnizationList){
+				              $scope.orgnizationList=orgnizationList;
+	                           //$scope.archetypeInfo = archetypeInfo;
+	                           $scope.okMessage = "successfull";
+	                           $scope.ok = function(){
+		                            $modalInstance.close($scope.okMessage);
+	                             };
+	                           $scope.cancel = function(){
+		                             $modalInstance.dismiss('cancel');
+	                              };
+                                },
+			size:size,
+			resolve:{
+				orgnizationList:function(){
+					return $scope.orgnizationList;
 				}
-			});
-		} else {
-			angular.forEach($scope.draftArchetypeList, function(file) {
-				if ($scope.editId == file.id) {
-					submitFile(file.id);
-				}
-			});
-		}
-	};
-
-	function editFile(fileId) {
-		resourceService.get(ARCHETYPE_EDIT_BY_ID_URL + fileId).then(function(result) {
-			if (result.succeeded) {
-				msgboxService.createMessageBox("ARCHETYPE_EDIT_SUCCEEDED", "ARCHETYPE_EDIT_EDIT_SUCCEEDED_HINT", {}, 'success').result.then(function() {
-					$scope.reset();
-				});
-			} else {
-				msgboxService.createMessageBox("ARCHETYPE_EDIT_FAILED", "ARCHETYPE_EDIT_EDIT_FAILED_HINT", {
-					errorMsg : result.message
-				}, 'error').result.then(function() {
-					$scope.reset();
-				});
 			}
 		});
-	}
-
-	function submitFile(fileId) {
-		resourceService.get(ARCHETYPE_SUBMIT_BY_ID_URL + fileId).then(function(result) {
-			if (result.succeeded) {
-				msgboxService.createMessageBox("ARCHETYPE_EDIT_SUCCEEDED", "ARCHETYPE_EDIT_SUBMIT_SUCCEEDED_HINT", {}, 'success').result.then(function() {
-					$scope.reset();
-				});
-			} else {
-				msgboxService.createMessageBox("ARCHETYPE_EDIT_FAILED", "ARCHETYPE_EDIT_SUBMIT_FAILED_HINT", {
-					errorMsg : result.message
-				}, 'error').result.then(function() {
-					$scope.reset();
-				});
-			}
-		});
-	}
+		modalInstance.result.then(function (message) {
+        console.log(message);
+        });
+  
+	};//---open end----
+	
+	
+	
+};
 
 
-	$scope.reset = function() {
-		$scope.editId = 0;
+//for creat a new archetype ---use the angular modals
 
-		resourceService.get(ARCHETYPE_LIST_EDIT_DRAFT_URL).then(function(list) {
-			$scope.draftArchetypeList = list;
-		});
 
-		resourceService.get(ARCHETYPE_LIST_EDIT_PUBLISHED_URL).then(function(list) {
-			$scope.publishedArchetypeList = list;
-		});
-	};
 
-	$scope.submitAll = function() {
-		angular.forEach($scope.draftArchetypeList, function(file) {
-			submitFile(file.id);
-		});
-	};
-}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

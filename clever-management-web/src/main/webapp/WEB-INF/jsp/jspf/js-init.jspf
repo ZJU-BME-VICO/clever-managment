@@ -15,6 +15,8 @@
 <script src="js/lib/diffview.js"></script>
 <script src="js/lib/difflib.js"></script>
 <script src="js/lib/ng-context-menu.js"></script>
+<script src="js/lib/ui-bootstrap-typeahead.js"></script>
+
 
 <!-- app init -->
 <script src="js/app-config.js"></script>
@@ -73,6 +75,14 @@
 <script src="js/directives/application-template/DV/DV-LABEL-directive.js"></script>
 <script src="js/directives/document-diff/document-diff-directive.js"></script>
 
+<script src="js/directives/archetype-edit-directives/definition-pane/edit-definition-pane.js"></script>
+<script src="js/directives/archetype-edit-directives/display-pane/edit-display-pane.js"></script>
+<script src="js/directives/archetype-edit-directives/header-pane/edit-header-pane.js"></script>
+<script src="js/directives/archetype-edit-directives/ontology-pane/edit-ontology-pane.js"></script>
+<script src="js/directives/accordion/ui-bootstrap-accordion.js"></script>
+
+
+
 <!-- controllers -->
 <script src="js/views/management/management-controller.js"></script>
 <script src="js/views/management/archetype/archetype-page-controller.js"></script>
@@ -88,6 +98,7 @@
 <script src="js/views/management/application/view/application-view-controller.js"></script>
 <script src="js/views/management/application/edit/application-edit-list-controller.js"></script>
 <script src="js/views/management/application/edit/detail/application-edit-detail-controller.js"></script>
+
 
 <!-- filters -->
 <script src="js/filters/unsafe-filter.js"></script>

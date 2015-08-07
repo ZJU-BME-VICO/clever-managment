@@ -16,6 +16,7 @@ function ArchetypeViewCtrl($scope, $timeout, resourceService, ARCHETYPE_LIST_URL
 
 	resourceService.get(ARCHETYPE_LIST_URL).then(function(list) {
 		$scope.archetypeList = list;
+		
 	});
 
 	$scope.searchKeyMapper = function(node) {

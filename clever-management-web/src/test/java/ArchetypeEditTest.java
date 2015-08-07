@@ -56,7 +56,7 @@ public class ArchetypeEditTest {
 		@Test
 		public void test()
 		{
-			File arcFile = new File("C:\\Users\\fdgf\\Desktop\\剖析用--原型\\archetypeEditor\\action\\openEHR-EHR-ACTION.procedure.v1.adl");
+			File arcFile = new File("F:\\桌面\\wenjian\\剖析用--原型\\archetypeEditor\\action\\openEHR-EHR-ACTION.procedure.v1.adl");
 			if(arcFile!=null)System.out.println("open file successfully");
 			else System.out.println("can not open file");
 			
@@ -64,13 +64,13 @@ public class ArchetypeEditTest {
 			try {
 			ADLParser parser = new ADLParser(arcFile);
 			arc = parser.parse();
-			
-			System.out.println(arc.getPathNodeMap().get(arc.getPathByNodeId("at0073")+"/value/value").getClass());
+			CComplexObject CCObj = (CComplexObject) arc.getPathNodeMap().get(arc.getPathByNodeId("at0070"));
+			//System.out.println(CCObj.getAssumedValue());
 			//CPrimitiveObject PriObject = (CPrimitiveObject)(arc.getPathNodeMap().get(arc.getPathByNodeId("at0069")+"/value"));
-			System.out.println(arc.getPathNodeMap().get(arc.getPathByNodeId("at0069")+"/value").getClass());
+			System.out.println(arc.getPathNodeMap().get(arc.getPathByNodeId("at0071")+"/value").getClass());
 			ADLSerializer serialiser = new ADLSerializer();
 			
-			//	System.out.println(serialiser.output(arc));
+			//System.out.println(serialiser.output(arc));
 				
 				assertEquals(5,5);
 			}catch (IOException e) {

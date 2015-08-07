@@ -1,0 +1,97 @@
+
+<div class= "col-xs-12 col-md-12 col-lg-12 flex-box">	
+	 <accordion close-others="oneAtATime">
+	 	<accordion-group heading="Base information" is-open="status.isBaseInfoOpen" is-disabled="status.isBaseInfoDisabled">
+	 	
+	     <form>
+	    	<div class="form-group">
+	  	 	 	<label for="ArchetypeId"><strong>Archetype Id<strong></label>
+	  			<input type="text" class="form-control" id="ArchetypeId" placeholder="Archetype Id ..">
+	  		</div>	  		
+	  	</form>
+	  	
+	  	<accordion close-others="oneAtATime">
+	  		<accordion-group heading="Concept" is-open="status.isConceptOpen" is-disabled="status.isConceptDisabled" >
+	  		  <textarea ng-model="concept" rows="8" cols="60"></textarea>
+	  		</accordion-group>
+	  		<accordion-group heading="Description"  is-open="status.isDescriptionOpen" is-disabled="status.isDescriptionDisabled">
+	  		  <textarea ng-model="description" rows="8" cols="60"></textarea>
+	  		</accordion-group>
+	  		<accordion-group heading="Comment" is-open="status.isCommentOpen" is-disabled="status.isCommentDisabled">
+	  		  <textarea ng-model="Comment" rows="8" cols="60"></textarea>
+	  		</accordion-group>	
+	  	</accordion>
+	  	<div class="row">
+	  		<div class= "col-xs-6 col-md-6 col-lg-6">
+	    		<label>Language:</label>
+	  			<select  class ="form-control" ng-model="language" ng-options ="lan for lan in languageList"></select>
+	  		</div>
+	  		<div class= "col-xs-6 col-md-6 col-lg-6">
+	    		<label>LifeCircle:</label>
+	  			<select  class ="form-control" ng-model="language" ng-options ="lan for lan in languageList"></select>
+	  		</div>
+	  	</div>   
+	 	</accordion-group>
+	   <accordion-group heading="Author Ship" is-open="status.isAuthorShipOpen" is-disabled="status.isAuthorShipDisabled">
+	       
+	        <div class="row">
+	        	<div class="col-xs-6 col-md-6 col-lg-6">
+	        		<label>Authors:</label>
+	        		<button class="btn btn-default" type="button" ng-click="newAuthor()">
+							<span class="glyphicon glyphicon-plus"></span>
+					</button>
+	        		<ul>
+	        			<li ng-repeat="author in authorList">
+	        				<span class="glyphicon glyphicon-chevron-right"></span>
+	        				<a href="#" ng-click="$event.preventDefault(); selectAuthor(author)">{{author.name}}</a>
+	        			</li>
+	        		</ul>
+	        		
+	        	</div>
+	        	<div class="col-xs-6 col-md-6 col-lg-6" ng-show="selectedAuthor!=undefined">
+	        		<form>
+	        			<div class="form-group">
+	        				<label for="OriAuthorName">Name:</label>
+	        				<input type="text" class="form-control" id = "OriAuthorName" placeholder="Mecro" ng-model="selectedAuthor.name">
+	        			</div>
+	        			<div class="form-group">
+	        				<label for="OriAuthorEmail">Email:</label>
+	        				<input type="text" class="form-control" id = "OriAuthorEmail" placeholder="example@xxx.com">
+	        			</div>
+	        			<div class="form-group">
+	        				<label for="OriAuthorOrgnization">Orgnization:</label>
+	        				<input type="text" class="form-control" id = "OriAuthorOrgnization" placeholder="ZJU">
+	        			</div>
+	        			<div class="form-group">
+	        				<label for="OriAuthorName">Name:</label>
+	        				<input type="text" class="form-control" id = "OriAuthorName" placeholder="Mecro">
+	        			</div>
+	        		</form>
+	        	</div>
+	        </div>
+	   </accordion-group>
+	   <accordion-group heading="Details"  is-open="status.isDetailsOpen"  is-disabled="status.isDetailsDisabled">
+	        This is Details!
+	   	<div class="form-group">
+	    	<label for="purpose"><strong>Purpose<strong></label>
+	  		<input type="text" class="form-control" id="purpose" placeholder="purpose...">
+	  	    </div>
+	  	<div class="form-group">
+	  		<label for="use"><strong>Use</strong></label>
+	  	    <input type="text" class="form-control" id="use" placeholder="use for ?..." >
+	  	</div>
+	  	<div class="form-group">
+	  		<label for="issue"><strong>Issue</strong></label>
+	  		<input type="text" class="form-control" id="issue"  placeholder="Issue...">
+	  	</div> 
+	  	<div class="form-group">
+	  		<label for="copyright"><strong>Copyright</strong></label>
+	  		<input type="text" class="form-control" id="copyright"  placeholder="Copyright...">
+	  	</div> 
+	   </accordion-group>
+	 </accordion> 
+   
+  
+
+	
+</div>
