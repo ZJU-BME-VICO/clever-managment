@@ -20,6 +20,29 @@
 	background-repeat: no-repeat;
 }
 
+
+/* Data type in lower case */
+
+.clever-icon.dv_count {
+	background-image: url("../img/datatype/count.png");
+	background-repeat: no-repeat;
+}
+.clever-icon.dv_quantity {
+	background-image: url("../img/datatype/quantity.png");
+	background-repeat: no-repeat;
+}
+.clever-icon.dv_date_time {
+	background-image: url("../img/datatype/datetime.png");
+	background-repeat: no-repeat;
+}
+.clever-icon.dv_boolean {
+	background-image: url("../img/datatype/boolean.png");
+	background-repeat: no-repeat;
+}
+
+
+
+ 
 /* Reference model type */
 .clever-icon.action {
 	background-image: url("../img/archetype/action.png");

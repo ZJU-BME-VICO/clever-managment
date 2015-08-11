@@ -88,11 +88,11 @@ angular.module('clever.management.directives.treeViewNode', []).directive('treeV
 
 			scope.setNodeByContextMenu = function(node, type, value) {
 				scope.clickNodeMenu(node, type, value);
-			}
+			};
 
 			scope.onShow = function(node) {
 				scope.clickNodeLabel(node);
-			}
+			};
 		},
 	};
 });

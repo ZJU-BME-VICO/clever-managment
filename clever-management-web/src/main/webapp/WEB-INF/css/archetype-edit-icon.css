@@ -1,0 +1,286 @@
+
+
+
+
+/* Data types */
+
+.archetype-edit-icon.dv_count {
+	background-image: url("../img/datatype/count.png");
+	background-repeat: no-repeat;
+}
+.archetype-edit-icon.dv_quantity {
+	background-image: url("../img/datatype/quantity.png");
+	background-repeat: no-repeat;
+}
+.archetype-edit-icon.dv_date_time {
+	background-image: url("../img/datatype/datetime.png");
+	background-repeat: no-repeat;
+}
+.archetype-edit-icon.dv_boolean {
+	background-image: url("../img/datatype/boolean.png");
+	background-repeat: no-repeat;
+}
+
+
+
+ 
+/* Reference model type */
+.archetype-edit-icon.action {
+	background-image: url("../img/archetype/action.png");
+	background-repeat: no-repeat;
+}
+.archetype-edit-icon.evaluation {
+	background-image: url("../img/archetype/evaluation.png");
+	background-repeat: no-repeat;
+}
+.archetype-edit-icon.observation {
+	background-image: url("../img/archetype/observation.png");
+	background-repeat: no-repeat;
+}
+.archetype-edit-icon.instruction {
+	background-image: url("../img/archetype/instruction.png");
+	background-repeat: no-repeat;
+}
+.archetype-edit-icon.admin {
+	background-image: url("../img/archetype/admin.png");
+	background-repeat: no-repeat;
+}
+.archetype-edit-icon.cluster {
+	background-image: url("../img/archetype/cluster.png");
+	background-repeat: no-repeat;
+}
+.archetype-edit-icon.section {
+	background-image: url("../img/archetype/section.png");
+	background-repeat: no-repeat;
+}
+
+/* Data type  */
+   /* base type*/
+.archetype-edit-icon.dv_text {
+	background-image: url("../img/datatype/text.png");
+	background-repeat: no-repeat;
+}
+.archetype-edit-icon.dv_coded_text {
+	background-image: url("../img/datatype/text.png");
+	background-repeat: no-repeat;
+}
+.archetype-edit-icon.dv_quantity {
+	background-image: url("../img/datatype/quantity.png");
+	background-repeat: no-repeat;
+}
+.archetype-edit-icon.dv_count {
+	background-image: url("../img/datatype/count.png");
+	background-repeat: no-repeat;
+}
+.archetype-edit-icon.dv_date_time {
+	background-image: url("../img/datatype/datetime.png");
+	background-repeat: no-repeat;
+}
+.archetype-edit-icon.dv_date {
+	background-image: url("../img/datatype/datetime.png");
+	background-repeat: no-repeat;
+}
+.archetype-edit-icon.dv_time {
+	background-image: url("../img/datatype/datetime.png");
+	background-repeat: no-repeat;
+}
+.archetype-edit-icon.dv_duration {
+	background-image: url("../img/datatype/duration.png");
+	background-repeat: no-repeat;
+}
+.archetype-edit-icon.dv_ordinal {
+	background-image: url("../img/datatype/ordinal.png");
+	background-repeat: no-repeat;
+}
+.archetype-edit-icon.dv_boolean {
+	background-image: url("../img/datatype/boolean.png");
+	background-repeat: no-repeat;
+}
+.archetype-edit-icon.dv_interval {
+	background-image: url("../img/datatype/interval.png");
+	background-repeat: no-repeat;
+}
+.archetype-edit-icon.dv_multimedia {
+	background-image: url("../img/datatype/multimedia.png");
+	background-repeat: no-repeat;
+}
+.archetype-edit-icon.dv_uri {
+	background-image: url("../img/datatype/uri.png");
+	background-repeat: no-repeat;
+}
+.archetype-edit-icon.dv_proportion{
+    background-image: url("../img/datatype/ratio.png");
+    background-repeat: no-repeat;
+}
+.archetype-edit-icon.dv_identifier{
+	background-image:  url("../img/datatype/identifier.png");
+	background-repeat: no-repeat;
+}
+.archetype-edit-icon.dv_amount{
+    background-image: ;/*no image*/
+	background-repeat: no-repeat;
+}
+.archetype-edit-icon.dv_parseble{
+/*no image*/
+}
+.archetype-edit-icon.any {
+	background-image: url("../img/datatype/any.png");
+	background-repeat: no-repeat;
+}
+.archetype-edit-icon.choice {
+	background-image: url("../img/datatype/choice.png");
+	background-repeat: no-repeat;
+}
+.archetype-edit-icon.id {
+	background-image: url("../img/datatype/id.png");
+	background-repeat: no-repeat;
+}
+
+
+
+/*do not know whether we need these image*/
+.archetype-edit-icon.pointintime {
+	background-image: url("../img/datatype/pointintime.png");
+	background-repeat: no-repeat;
+}
+.archetype-edit-icon.interval_datetime {
+	background-image: url("../img/datatype/interval_datetime.png");
+	background-repeat: no-repeat;
+}
+.archetype-edit-icon.ratio {
+	background-image: url("../img/datatype/ratio.png");
+	background-repeat: no-repeat;
+}
+
+  
+  
+  
+  
+ /*other type*/
+.archetype-edit-icon.history {
+	background-image: url("../img/datatype/history.png");
+	background-repeat: no-repeat;
+}
+.archetype-edit-icon.structure {
+	background-image: url("../img/datatype/structure.png");
+	background-repeat: no-repeat;
+}
+.archetype-edit-icon.composition {
+	background-image: url("../img/datatype/composition.png");
+	background-repeat: no-repeat;
+}
+
+.archetype-edit-icon.element {
+	background-image: url("../img/datatype/element.png");
+	background-repeat: no-repeat;
+}
+
+.archetype-edit-icon.party_identity {
+	background-image: url("../img/datatype/partyIdentity.png");
+	background-repeat: no-repeat;
+}
+.archetype-edit-icon.address {
+	background-image: url("../img/datatype/address.png");
+	background-repeat: no-repeat;
+}
+.archetype-edit-icon.party_relationship {
+	background-image: url("../img/datatype/partyRelationship.png");
+	background-repeat: no-repeat;
+}
+.archetype-edit-icon.capability {
+	background-image: url("../img/datatype/capability.png");
+	background-repeat: no-repeat;
+}
+.archetype-edit-icon.organisation {
+	background-image: url("../img/datatype/organisation.png");
+	background-repeat: no-repeat;
+}
+.archetype-edit-icon.contact {
+	background-image: url("../img/datatype/contact.png");
+	background-repeat: no-repeat;
+}
+.archetype-edit-icon.demographic {
+	background-image: url("../img/datatype/demographic.png");
+	background-repeat: no-repeat;
+}
+.archetype-edit-icon.role {
+	background-image: url("../img/datatype/role.png");
+	background-repeat: no-repeat;
+}
+.archetype-edit-icon.admin {
+	background-image: url("../img/datatype/admin.png");
+	background-repeat: no-repeat;
+}
+.archetype-edit-icon.participation {
+	background-image: url("../img/datatype/participation.png");
+	background-repeat: no-repeat;
+}
+.archetype-edit-icon.party_ref {
+	background-image: url("../img/datatype/partyRef.png");
+	background-repeat: no-repeat;
+}
+
+
+
+
+
+
+
+
+
+
+
+/* Life cycle state */
+.archetype-edit-icon.draft {
+	background-image: url("../img/draft.png");
+	background-repeat: no-repeat;
+}
+.archetype-edit-icon.teamreview {
+	background-image: url("../img/teamreview.png");
+	background-repeat: no-repeat;
+}
+.archetype-edit-icon.published {
+	background-image: url("../img/published.png");
+	background-repeat: no-repeat;
+}
+
+
+.archetype-edit-icon.archetype {
+	background-image: url("../img/letter-A-violet-icon.png");
+	background-repeat: no-repeat;
+}
+.archetype-edit-icon.template {
+	background-image: url("../img/letter-T-gold-icon.png");
+	background-repeat: no-repeat;
+}
+.archetype-edit-icon.archetype.master {
+	background-image: url("../img/letter-M-violet-icon.png");
+	background-repeat: no-repeat;
+}
+.archetype-edit-icon.template.master {
+	background-image: url("../img/letter-M-gold-icon.png");
+	background-repeat: no-repeat;
+}
+
+
+.archetype-edit-icon.expanded {
+	background-image: url("../img/arrow_expanded.png");
+	background-repeat: no-repeat;
+}
+.archetype-edit-icon.collapsed {
+	background-image: url("../img/arrow_collapsed_white.png");
+	background-repeat: no-repeat;
+}
+
+
+
+
+
+
+code{
+	padding:2px 4px;
+	color:#c7254e;
+	background-color: #f9f2f4;
+	border-radius:4px;
+	
+}

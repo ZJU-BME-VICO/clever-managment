@@ -16,6 +16,7 @@ function StorageTemplateEditCtrl($scope, resourceService, busyService, msgboxSer
 
 	$scope.isExpandedAll = false;
 	$scope.$watch('isExpandedAll', function(newValue, oldValue) {
+		
 		if ($scope.treeControl.value && newValue) {
 			$scope.treeControl.value.expandAll();
 		} else if ($scope.treeControl.value && !newValue) {
@@ -40,6 +41,7 @@ function StorageTemplateEditCtrl($scope, resourceService, busyService, msgboxSer
 		try {
 			$scope.oetObj = x2js.xml_str2json(template.oet);
 			$scope.parsedTemplate = templateParseToEditService.parseTemplate($scope.oetObj.template);
+			console.log($scope.parsedTemplate.definition);
 		} catch(ex) {
 			console.log(ex);
 		}
@@ -63,7 +65,7 @@ function StorageTemplateEditCtrl($scope, resourceService, busyService, msgboxSer
 
 	$scope.getTreeNodeLabel = function(node, aliasName) {
 		var label = '';
-		label += '<span class="clever-icon ' + node.label.picType.toLowerCase() + '" style="padding: 7px 10px; background-position-y: 10px;"></span>' + 
+		label += '<span class="clever-icon ' + node.label.picType.toLowerCase() + '" style="padding: 7px 10px; background-position-y: 10px;"></span>'+
 			'<span ng-class="{\'node-label-max\': ' + aliasName + '.label.occurrences.upper != 0}"';
 		if (node.label.text) {
 			label += '<span style="color: brown;">' + node.label.text;

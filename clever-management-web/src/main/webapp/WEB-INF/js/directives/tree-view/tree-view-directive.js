@@ -97,13 +97,13 @@ angular.module('clever.management.directives.treeView', []).directive('treeView'
 				} else {
 					return false;
 				}
-			}
+			};
 
 			$scope.getNodeMenu = function(node, aliasName) {
 				if ($scope.nodeMenuGenerator) {
 					return $scope.nodeMenuGenerator(node, aliasName);
 				}
-			}
+			};
 
 			$scope.keyword = '';
 			

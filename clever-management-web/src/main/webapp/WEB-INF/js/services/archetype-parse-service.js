@@ -4,7 +4,14 @@ angular.module('clever.management.services.archetypeParse', []).service('archety
 
     this.parseArchetypeXml = function(xml) {
         var archetype = x2js.xml_str2json(xml).archetype;
+       
+        console.log(archetype);
+        
         return this.parseArchetype(archetype);
+    };
+    this.getOriginalArchetype = function(xml){
+    	var archetype = x2js.xml_str2json(xml).archetype;
+    	return archetype;
     };
 
     this.parseArchetype = function(archetype) {
@@ -22,31 +29,89 @@ angular.module('clever.management.services.archetypeParse', []).service('archety
 
     this.parseHeader = function(archetype) {
         var header = {};
+        console.log("this is the origarchetype");
+        console.log(archetype);
         header.concept = archetype.concept;
         header.id = archetype.archetype_id.value;
-        header.descriptions = [];
+        //parse header details
+        header.description={
+        	details:'',
+        	original_author:'',
+        	lifecycle_state:'',
+        	other_contributors:'',
+        	other_details:'',
+        };
+        
+        header.description.lifecycle_state = archetype.description.lifecycle;
+        header.description.other_contributors = archetype.description.other_contributors;
+        //----------------parse details--------------
         var details = archetype.description.details;
+        var description_details = [];
         if (angular.isArray(details)) {
             angular.forEach(details, function(detail) {
-                var description = {
+                var _detail = {
                     copyright: detail.copyright,
                     miuse: detail.miuse,
                     purpose: detail.purpose,
                     use: detail.use,
                     language: detail.language.code_string
                 };
-                header.descriptions.push(description);
+               // header.description.details.push(_detail);
+               description_details.push(_detail);                          
             });
         } else {
-            var description = {
+            var detail = {
                 copyright: details.copyright,
                 miuse: details.miuse,
                 purpose: details.purpose,
                 use: details.use,
                 language: details.language.code_string
             };
-            header.descriptions.push(description);
+            //header.description.details.push(detail);
+             description_details.push(detail);
         }
+        header.description.details=description_details;
+        //------------parse details end-------------
+        
+        
+       //------------parse original_author--------------  
+        var original_author=[];
+       
+        original_author=archetype.description.original_author;
+        var description_originalAuthor = [];
+        angular.forEach(original_author,function(authorInfo){
+        	var info={
+        		text:authorInfo.__text,
+        		id:authorInfo._id,
+        	};
+        	description_originalAuthor.push(info);
+        	//header.description.original_author.push(info);
+        });
+        header.description.original_author=description_originalAuthor;
+        //-------parse original_author end ------------------
+        
+        //------parse other_details-------------
+        var other_details = archetype.description.other_details;
+        var description_otherDetails = [];
+        if(angular.isArray(other_details)){
+        	angular.forEach(other_details,function(other_detail){
+        		var detail = {
+        			text:other_detail.text,
+        			id:other_detail.id,
+        		};
+        		description_otherDetails.push(detail);
+        	});
+        }
+        else{
+            var detail={
+            	text:other_details.text,
+            	id:other_details.id,
+            };
+            description_otherDetails.push(detail);
+          } 
+          header.description.other_details = description_otherDetails;
+        console.log("this is the header");
+        console.log(header);
         return header;
     };
 
@@ -56,18 +121,18 @@ angular.module('clever.management.services.archetypeParse', []).service('archety
             code: archetype.original_language.code_string,
             terminology: archetype.original_language.terminology_id.value,
         };
-        var descriptions = archetype.description.details;
-        if (angular.isArray(descriptions)) {
-            angular.forEach(descriptions, function(description) {
+        var details = archetype.description.details;
+        if (angular.isArray(details)) {
+            angular.forEach(details, function(detail) {
                 languages.push({
-                    code: description.language.code_string,
-                    terminology: description.language.terminology_id.value
+                    code: detail.language.code_string,
+                    terminology: detail.language.terminology_id.value
                 });
             });
         } else {
             languages.push({
-                code: descriptions.language.code_string,
-                terminology: descriptions.language.terminology_id.value
+                code: details.language.code_string,
+                terminology: details.language.terminology_id.value
             });
         }
         return {

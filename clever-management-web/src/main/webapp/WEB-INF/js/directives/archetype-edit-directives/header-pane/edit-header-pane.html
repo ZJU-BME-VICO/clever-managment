@@ -6,87 +6,111 @@
 	     <form>
 	    	<div class="form-group">
 	  	 	 	<label for="ArchetypeId"><strong>Archetype Id<strong></label>
-	  			<input type="text" class="form-control" id="ArchetypeId" placeholder="Archetype Id ..">
+	  			<input type="text"  ng-model="archetypeId" class="form-control" id="ArchetypeId" placeholder="Archetype Id ..">
 	  		</div>	  		
 	  	</form>
 	  	
 	  	<accordion close-others="oneAtATime">
 	  		<accordion-group heading="Concept" is-open="status.isConceptOpen" is-disabled="status.isConceptDisabled" >
-	  		  <textarea ng-model="concept" rows="8" cols="60"></textarea>
+	  		  <input class="form-control" ng-model="baseInfo.concept">
 	  		</accordion-group>
 	  		<accordion-group heading="Description"  is-open="status.isDescriptionOpen" is-disabled="status.isDescriptionDisabled">
-	  		  <textarea ng-model="description" rows="8" cols="60"></textarea>
+	  		  <textarea  rows="4" cols="70" ng-model="baseInfo.description"></textarea>
 	  		</accordion-group>
 	  		<accordion-group heading="Comment" is-open="status.isCommentOpen" is-disabled="status.isCommentDisabled">
-	  		  <textarea ng-model="Comment" rows="8" cols="60"></textarea>
+	  		  <textarea  rows="4" cols="70" ng-model="baseInfo.comment"></textarea>
 	  		</accordion-group>	
 	  	</accordion>
 	  	<div class="row">
 	  		<div class= "col-xs-6 col-md-6 col-lg-6">
 	    		<label>Language:</label>
-	  			<select  class ="form-control" ng-model="language" ng-options ="lan for lan in languageList"></select>
+	  			<select  class ="form-control" ng-model="selectedLanguage" ng-options ="lan for lan in languageList"></select>
 	  		</div>
 	  		<div class= "col-xs-6 col-md-6 col-lg-6">
 	    		<label>LifeCircle:</label>
-	  			<select  class ="form-control" ng-model="language" ng-options ="lan for lan in languageList"></select>
+	  			<select  class ="form-control" ng-model="archetypeLifeCycle" ng-options ="lifeCycle for lifeCycle in archetypeLifeCycleList"></select>
 	  		</div>
 	  	</div>   
 	 	</accordion-group>
 	   <accordion-group heading="Author Ship" is-open="status.isAuthorShipOpen" is-disabled="status.isAuthorShipDisabled">
 	       
 	        <div class="row">
+	        	
 	        	<div class="col-xs-6 col-md-6 col-lg-6">
-	        		<label>Authors:</label>
-	        		<button class="btn btn-default" type="button" ng-click="newAuthor()">
-							<span class="glyphicon glyphicon-plus"></span>
-					</button>
-	        		<ul>
-	        			<li ng-repeat="author in authorList">
-	        				<span class="glyphicon glyphicon-chevron-right"></span>
-	        				<a href="#" ng-click="$event.preventDefault(); selectAuthor(author)">{{author.name}}</a>
-	        			</li>
-	        		</ul>
-	        		
-	        	</div>
-	        	<div class="col-xs-6 col-md-6 col-lg-6" ng-show="selectedAuthor!=undefined">
+	        		<label>Original Author:</label>
 	        		<form>
 	        			<div class="form-group">
 	        				<label for="OriAuthorName">Name:</label>
-	        				<input type="text" class="form-control" id = "OriAuthorName" placeholder="Mecro" ng-model="selectedAuthor.name">
+	        				<input type="text" class="form-control" id = "OriAuthorName" placeholder="Mecro" ng-model="originalAuthorInfo.name">
 	        			</div>
 	        			<div class="form-group">
 	        				<label for="OriAuthorEmail">Email:</label>
-	        				<input type="text" class="form-control" id = "OriAuthorEmail" placeholder="example@xxx.com">
+	        				<input type="text" class="form-control" id = "OriAuthorEmail" placeholder="example@xxx.com" ng-model="originalAuthorInfo.email">
 	        			</div>
 	        			<div class="form-group">
 	        				<label for="OriAuthorOrgnization">Orgnization:</label>
-	        				<input type="text" class="form-control" id = "OriAuthorOrgnization" placeholder="ZJU">
+	        				<input type="text" class="form-control" id = "OriAuthorOrgnization" placeholder="ZJU" ng-model="originalAuthorInfo.orgniaztion">
 	        			</div>
-	        			<div class="form-group">
-	        				<label for="OriAuthorName">Name:</label>
-	        				<input type="text" class="form-control" id = "OriAuthorName" placeholder="Mecro">
-	        			</div>
+	        		<!--	<div class="form-group">
+	        				<label for="OriAuthorName">Date:</label>
+	        				<input type="text" class="form-control" id = "OriAuthorName" placeholder="Mecro" ng-model="originalAuthorInfo.date">
+	        		</div>-->
+	        		<div class="form-group">
+	        	    <label for="OriAuthorName">Date:</label>
+             			 <p class="input-group">
+              			 <input type="date" class="form-control" datepicker-popup="{{format}}" ng-model="dt" is-open="opened"  datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" />
+             			 <span class="input-group-btn">
+                		 <button type="button" class="btn btn-default" ng-click="open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+             	   </span>
+                   </p>
+                   </div>
+           			    <div style="display:inline-block; min-height:290px;" ng-show="datepickerOpened">
+                           <datepicker ng-model="dt"  show-weeks="true" class="well well-sm" custom-class="getDayClass(date, mode)"></datepicker>
+                         </div>
 	        		</form>
+	        	</div>
+	        	
+	        	<div class="col-xs-6 col-md-6 col-lg-6">
+	        		<label>Other Contributors:</label>
+	        		<button class="btn btn-default" type="button" ng-click="addContributor()">
+							<span class="glyphicon glyphicon-plus"></span>
+					</button>
+					<form>
+					<div class="form-group">
+						<label>Selected:</label>
+						<input type="text"  class="form-control" ng-model="selectedContributor.name" placeholder="name,orgnization,country">
+					</div>
+					<div class="form-group">
+	        		<ul>
+	        			<li ng-repeat="contributor in otherContributorList track by $index">
+	        				<span class="glyphicon glyphicon-chevron-right"></span>
+	        				<a href="#" ng-click="$event.preventDefault(); selectContributor(contributor)">{{contributor.name}}</a>
+	        			</li>
+	        		</ul>
+	        	   </div>
+	        	     </form>
+	        		</form>
+	        		
 	        	</div>
 	        </div>
 	   </accordion-group>
 	   <accordion-group heading="Details"  is-open="status.isDetailsOpen"  is-disabled="status.isDetailsDisabled">
-	        This is Details!
+	        This is Detail!
 	   	<div class="form-group">
 	    	<label for="purpose"><strong>Purpose<strong></label>
-	  		<input type="text" class="form-control" id="purpose" placeholder="purpose...">
+	  		<input type="text" class="form-control" id="purpose" placeholder="purpose..." ng-model="detail.purpose">
 	  	    </div>
 	  	<div class="form-group">
 	  		<label for="use"><strong>Use</strong></label>
-	  	    <input type="text" class="form-control" id="use" placeholder="use for ?..." >
+	  	    <input type="text" class="form-control" id="use" placeholder="use for ?..."  ng-model="detail.use">
 	  	</div>
 	  	<div class="form-group">
 	  		<label for="issue"><strong>Issue</strong></label>
-	  		<input type="text" class="form-control" id="issue"  placeholder="Issue...">
+	  		<input type="text" class="form-control" id="issue"  placeholder="Issue..." ng-model="detail.issue">
 	  	</div> 
 	  	<div class="form-group">
 	  		<label for="copyright"><strong>Copyright</strong></label>
-	  		<input type="text" class="form-control" id="copyright"  placeholder="Copyright...">
+	  		<input type="text" class="form-control" id="copyright"  placeholder="Copyright..." ng-model="detail.copyright">
 	  	</div> 
 	   </accordion-group>
 	 </accordion> 

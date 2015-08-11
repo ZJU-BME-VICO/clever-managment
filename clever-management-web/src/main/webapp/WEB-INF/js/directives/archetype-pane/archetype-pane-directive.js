@@ -13,7 +13,9 @@ angular.module('clever.management.directives.archetypePane', []).directive('arch
 
 			$scope.$watch('archetypeInfo', function(newValue) {
 				if (newValue) {
+					console.log($scope.archetypeInfo);
 					var archetype = archetypeParseService.parseArchetypeXml($scope.archetypeInfo.xml);
+					console.log(archetype);
 					$scope.header = archetype.header;
 					$scope.terminologies = archetype.terminologies;
 					$scope.definition = archetype.definitions;
@@ -47,9 +49,9 @@ angular.module('clever.management.directives.archetypePane', []).directive('arch
 						term : currentTerm,
 						constraint : currentConstraint
 					};
-					angular.forEach($scope.header.descriptions, function(description) {
-						if (description.language == language.code) {
-							$scope.currentDescription = description;
+					angular.forEach($scope.header.description.details, function(detail) {
+						if (detail.language == language.code) {
+							$scope.currentDescription = detail;
 						}
 					});
 				}

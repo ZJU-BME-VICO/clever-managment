@@ -31,7 +31,7 @@
         		 Hedear
         		</tab-heading>
         		<div class="col-xs-12 col-md-12 col-lg-12" style="overflow:auto;">
-        			<edit-header-pane  max-height="paneHeight"  style="magin-top:5px; margin-bottom:20px;"></edit-header-pane>
+        			<edit-header-pane  max-height="paneHeight"  header="header"  languages="languages" ontology="ontology" style="magin-top:5px; margin-bottom:20px;"></edit-header-pane>
         		</div>       		
         	</tab>
         	
@@ -40,7 +40,7 @@
         		 Definition
         		</tab-heading>
         		<div class="col-xs-12 col-md-12 col-lg-12" style="overflow:auto;">
-        			<edit-definition-pane style="margin-top:5px; margin-bottom:20px;"></edit-definition-pane>
+        			<edit-definition-pane style="margin-top:5px; margin-bottom:20px;" definition="definition" ontology="ontology" selectedLanguage="languages.selectedLanguage"></edit-definition-pane>
         		</div>       		
         	</tab>
         	
@@ -77,16 +77,20 @@
 	<div class="modal-header">
 		<h3 class="modal-title">Create Your Owm Archetype</h3>
 	</div>
-	<div class="modal-body">
-		This is Archetype message Modal!
+	<div class="modal-body">		
 		<div class="row">
-		<label>Orgnization:</label>
-		<select class="form-control" ng-options="org for org in orgnizationList"></select>
-		<select class ="form-control" ng-options ="org for org in orgnizationList"></select>
-		</div>
+			<div class="col-xs-6 col-sm-6 col-lg-6 flex-box" >							
+				<label>Orgnization:</label>
+				<select class="form-control" ng-model="archetypeOrgnization" ng-options="org for org in orgnizationList"></select>	
+			</div>
+			<div class="col-xs-6 col-sm-6 col-lg-6 flex-box" >							
+				<label>Type:</label>
+				<select class="form-control" ng-model="archetypeType" ng-options="type for type in archetypeTypeList"></select>	
+			</div>
+		</div>		
 	</div>
 	<div class="modal-footer">
-		<button class="btn btn-primary" ng-click="ok()">OK</button>
+		<button class="btn btn-primary" ng-click="ok()">CREATE</button>
 		<button class="btn btn-warning" ng-click="cancel()">CANCEL</button>
 	</div>
 	</script>

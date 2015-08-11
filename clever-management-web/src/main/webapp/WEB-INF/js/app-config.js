@@ -17,6 +17,7 @@ var config = {
 	'ARCHETYPE_MASTER_BY_ID_URL' : prefix + '/archetypes/master/id/',
 	'ARCHETYPE_BY_ID_URL' : prefix + '/archetypes/id/',
 	'ARCHETYPE_BY_NAME_URL' : prefix + '/archetypes/name/',
+	'ARCHETYPE_CREATE_URL': prefix+'/archetypes/edit/create',
 	'STORAGE_TEMPLATE_LIST_URL' :prefix +'/templates/storage/list',
 	'STORAGE_TEMPLATE_MASTER_BY_ID_URL' : prefix + '/templates/storage/master/id/',
 	'STORAGE_TEMPLATE_BY_NAME_URL' : prefix + '/templates/storage/name/',

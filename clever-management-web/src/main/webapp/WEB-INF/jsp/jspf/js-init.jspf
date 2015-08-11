@@ -16,6 +16,7 @@
 <script src="js/lib/difflib.js"></script>
 <script src="js/lib/ng-context-menu.js"></script>
 <script src="js/lib/ui-bootstrap-typeahead.js"></script>
+<script src="js/lib/angular-drag-and-drop-list.js"></script>
 
 
 <!-- app init -->
@@ -36,6 +37,7 @@
 <script src="js/services/msgbox-service.js"></script>
 <!--<script src="js/services/template-retrieve-service.js"></script>-->
 <script src="js/services/document-diff-service.js"></script>
+<script src="js/services/archetype-serialize-service.js"></script>
 
 <!-- directives -->
 <script src="js/directives/files-model/files-model-directive.js"></script>
