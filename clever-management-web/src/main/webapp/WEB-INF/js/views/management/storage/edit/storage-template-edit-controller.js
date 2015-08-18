@@ -37,11 +37,17 @@ function StorageTemplateEditCtrl($scope, resourceService, busyService, msgboxSer
 	$scope.selectTemplate = function(template) {
 		var bid = busyService.pushBusy('BUSY_LOADING');
 		$scope.selectedTemplate = template;
+		//console.log("this is selected template");
+	    //console.log($scope.selectedTemplate);
 		$scope.selectedTemplate.oet = formatXml($scope.selectedTemplate.oet);
 		try {
 			$scope.oetObj = x2js.xml_str2json(template.oet);
+			
+			//console.log("this is the oet object---------------------------------------------------------");
+		    //console.log($scope.oetObj);
 			$scope.parsedTemplate = templateParseToEditService.parseTemplate($scope.oetObj.template);
-			console.log($scope.parsedTemplate.definition);
+		    console.log("----------------------this is the parsedTemplate definition");
+		    console.log($scope.parsedTemplate.definition);
 		} catch(ex) {
 			console.log(ex);
 		}

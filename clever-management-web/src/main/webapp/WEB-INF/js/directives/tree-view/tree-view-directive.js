@@ -15,8 +15,13 @@ angular.module('clever.management.directives.treeView', []).directive('treeView'
 			nodeMenuGenerator : '=',
 			nodeLabelGenerator : '=',
 			searchKeyMapper : '=',
+			
+			nodeMessageGenerator:'=',
 		},
 		controller : function($scope, $transclude) {
+			
+			
+			
 			
 			var nodes = [];
 
@@ -65,6 +70,7 @@ angular.module('clever.management.directives.treeView', []).directive('treeView'
 				$scope.clickNodeCallback({
 					value : node,
 				});
+				//$scope.nodeMessageGenerator(node);
 			};
 			$scope.clickNodeMenu = function(node, type, value) {
 				$scope.clickNodeMenuCallback({
@@ -78,6 +84,8 @@ angular.module('clever.management.directives.treeView', []).directive('treeView'
 					value : node,
 				});
 			};
+			
+			
 			$scope.getNodeLabel = function(node, aliasName) {
 				if (treeNodeLabelElement) {
 					return '<span class="' + $scope.getNodeLabelClass() + '">' + $scope.getTreeNodeLabelElement() + '</span>';
@@ -109,9 +117,10 @@ angular.module('clever.management.directives.treeView', []).directive('treeView'
 			
 			$scope.$watch('treeData', function(newValue, oldValue) {
 				if (newValue != oldValue) {
-					nodes = [];
 					currentNode = undefined;
-				}
+					nodes = [];
+				}	
+				
 			});
 			
 			$scope.treeControl = {
@@ -204,8 +213,12 @@ angular.module('clever.management.directives.treeView', []).directive('treeView'
 								scope.getNodeAliasName().replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase() + '="_node">' +
 							'</tree-view-node>';
 			
-			scope.$watch('treeData', function(newValue) {
-				if (newValue) {
+			scope.$watch('treeData', function(newValue, oldValue) {
+				if (newValue === oldValue){return;}
+				else if(newValue){
+					//scope.nodes=[];
+					console.log("this is tree data ====================================");
+					console.log(scope.treeData);
 					elm.html('').append($compile( template )(scope));
 				}
 			}); 

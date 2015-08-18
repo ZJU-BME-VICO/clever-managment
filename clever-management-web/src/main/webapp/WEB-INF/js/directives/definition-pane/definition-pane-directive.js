@@ -22,6 +22,9 @@ angular.module('clever.management.directives.definitionPane', []).directive('def
 				$scope.selectedDefinitionItem = definitionItem.label;
 			};
 
+			
+		},
+		link : function($scope, elm, attrs) {
 			$scope.getTreeNodeLabel = function(node) {
 				var label = '';
 				if (node.label.type == 'type') {
@@ -60,9 +63,7 @@ angular.module('clever.management.directives.definitionPane', []).directive('def
 					return matchedOntology;
 				}
 			}
-		},
-		link : function(scope, elm, attrs) {
-			scope.contentHeight = angular.isDefined(attrs.maxHeight) ? scope.$parent.$eval(attrs.maxHeight) : undefined;
+			$scope.contentHeight = angular.isDefined(attrs.maxHeight) ? $scope.$parent.$eval(attrs.maxHeight) : undefined;
 		}
 	};
 });

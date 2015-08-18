@@ -38,6 +38,8 @@
 <!--<script src="js/services/template-retrieve-service.js"></script>-->
 <script src="js/services/document-diff-service.js"></script>
 <script src="js/services/archetype-serialize-service.js"></script>
+<script src="js/services/archetype-parse-to-edit-service.js"></script>
+<script src="js/services/archetype-parse-edit-service.js"></script>
 
 <!-- directives -->
 <script src="js/directives/files-model/files-model-directive.js"></script>

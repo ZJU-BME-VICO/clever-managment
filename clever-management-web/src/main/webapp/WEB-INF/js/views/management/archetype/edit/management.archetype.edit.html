@@ -3,96 +3,111 @@
 		<div class="panel panel-default" ng-show="!isArchetypeListHidden" >
 			<div class="panel-heading">
 				<div class="input-group">
-					<div class="btn-group input-group-btn" dropdown>					 
-						 <button class="btn btn-primary"  ng-click="open('lg')">
-						   New	 
-						 </button>					    
-					  </div>	
-					  <input type="text" class="form-control" placeholder="Search for...">						 		
+					<div class="btn-group input-group-btn" dropdown>
+						<button class="btn btn-primary"  ng-click="open('lg')">
+							New
+						</button>
+					</div>
+					<input type="text" class="form-control" placeholder="Search for...">
 				</div>
 			</div>
 			<ul class="list-group" ng-style="{height:containerHeight-55}" style="overflow:auto;">
 				<a href=""  ng-class="{active:selectedArchetype.id == archetype.id}" class="list-group-item" ng-repeat="archetype in draftArchetypeList"  ng-click="selectArchetype(archetype)">{{archetype.name}}</a>
 			</ul>
 		</div>
-			
-	
-	<splitter is-adjust-enabled="!isArchetypeListHidden"  style="min-height: 100%;" >
-		<i style="cursor: pointer" ng-click="isArchetypeListHidden = !isArchetypeListHidden" ng-show="isArchetypeListHidden"   tooltip-placement="right" tooltip="Expand" tooltip-popup-delay="500"> <span class="glyphicon glyphicon-chevron-right" ng-style="{'margin-top': containerHeight/2}" ></span> </i>
-	    <i style="cursor: pointer" ng-click="isArchetypeListHidden = !isArchetypeListHidden" ng-show="!isArchetypeListHidden"  tooltip-placement="right" tooltip="Collapse" tooltip-popup-delay="500"> <span class="glyphicon glyphicon-chevron-left" ng-style="{'margin-top': containerHeight/2}" ></span> </i>
-    </splitter>
-    <div class="col-xs-12 col-md-12 col-lg-12 flex-box">
-    	<ins>{{selectedArchetype.name}}</ins>   	
-    	
-        <div class="col-xs-12 col-md-12 col-lg-12 flex-box">
-        <tabset class="row" tab-control="tabControl">
-        	<tab>
-        		<tab-heading>
-        		 Hedear
-        		</tab-heading>
-        		<div class="col-xs-12 col-md-12 col-lg-12" style="overflow:auto;">
-        			<edit-header-pane  max-height="paneHeight"  header="header"  languages="languages" ontology="ontology" style="magin-top:5px; margin-bottom:20px;"></edit-header-pane>
-        		</div>       		
-        	</tab>
-        	
-        	<tab>
-        		<tab-heading>
-        		 Definition
-        		</tab-heading>
-        		<div class="col-xs-12 col-md-12 col-lg-12" style="overflow:auto;">
-        			<edit-definition-pane style="margin-top:5px; margin-bottom:20px;" definition="definition" ontology="ontology" selectedLanguage="languages.selectedLanguage"></edit-definition-pane>
-        		</div>       		
-        	</tab>
-        	
-        	<tab>
-        		<tab-heading>
-        		 Ontology
-        		</tab-heading>
-        		<div class="col-xs-12 col-md-12 col-lg-12" style="overflow:auto;">
-        			<edit-ontology-pane  max-height="paneHeight"  style="magin-top:5px; margin-bottom:20px;"></edit-ontology-pane>
-        		</div>       		
-        	</tab>
-        	
-        	<tab>
-        		<tab-heading>
-        		 Display
-        		</tab-heading>
-        		<div class="col-xs-12 col-md-12 col-lg-12" style="overflow:auto;">
-        			<edit-display-pane  max-height="paneHeight"  style="magin-top:5px; margin-bottom:20px;"></edit-display-pane>
-        		</div>       		
-        	</tab>
 
-        <button class="btn btn-primary" pull-right  style="margin-left:10px;" ng-disabled="selectedArchetype==undefined" ng-click="saveSelectedArchetype()">
-    	   Save
-    	</button>	
-        <button class="btn btn-primary" pull-right  style="margin-left:10px"; ng-disabled="selectedArchetype==undefined" ng-click="submitSelectedArchetype()">
-        	Submit 
-        </button>    
+		<splitter is-adjust-enabled="!isArchetypeListHidden"  style="min-height: 100%;" >
+			<i style="cursor: pointer" ng-click="isArchetypeListHidden = !isArchetypeListHidden" ng-show="isArchetypeListHidden"   tooltip-placement="right" tooltip="Expand" tooltip-popup-delay="500"> <span class="glyphicon glyphicon-chevron-right" ng-style="{'margin-top': containerHeight/2}" ></span> </i>
+			<i style="cursor: pointer" ng-click="isArchetypeListHidden = !isArchetypeListHidden" ng-show="!isArchetypeListHidden"  tooltip-placement="right" tooltip="Collapse" tooltip-popup-delay="500"> <span class="glyphicon glyphicon-chevron-left" ng-style="{'margin-top': containerHeight/2}" ></span> </i>
+		</splitter>
+		<div class="col-xs-12 col-md-12 col-lg-12 flex-box">
+			<ins>{{selectedArchetype.name}}</ins>
 
-        </tabset>	
-        </div>
-    </div>
+			<div class="col-xs-12 col-md-12 col-lg-12 flex-box">
+				<tabset class="row" tab-control="tabControl">
+					<tab>
+						<tab-heading>
+							Hedear
+						</tab-heading>
+						<div class="col-xs-12 col-md-12 col-lg-12" style="overflow:auto;">
+							<edit-header-pane  max-height="paneHeight"  header="header"  languages="languages" ontology="ontology" style="magin-top:5px; margin-bottom:20px;"></edit-header-pane>
+						</div>
+					</tab>
+
+					<tab>
+						<tab-heading>
+							Definition
+						</tab-heading>
+						<div class="col-xs-12 col-md-12 col-lg-12" style="overflow:auto;">
+							<edit-definition-pane style="margin-top:5px; margin-bottom:20px;" definition="definition"  ontology="ontology" selectedLanguage="languages.selectedLanguage"></edit-definition-pane>
+						</div>
+					</tab>
+
+					<tab>
+						<tab-heading>
+							Ontology
+						</tab-heading>
+						<div class="col-xs-12 col-md-12 col-lg-12" style="overflow:auto;">
+							<edit-ontology-pane  max-height="paneHeight"  style="margin-top:5px; margin-bottom:20px;"></edit-ontology-pane>
+						</div>
+					</tab>
+
+					<tab>
+						<tab-heading>
+							Display
+						</tab-heading>
+						<div class="col-xs-12 col-md-12 col-lg-12" style="overflow:auto;">
+							<tabset class="row" style= "margin-top:5px;margin-bottom: 10px;">
+								<tab>
+									<tab-heading>
+										ADL
+									</tab-heading>
+									<textarea ng-style="{height: containerHeight - 135}" style="overflow: auto; width: 100%; height: 803px;"readonly="true" ng-model="selectedArchetype.adl" class="ng-pristine ng-untouched ng-valid ng-scope">	                    	
+		                    </textarea>
+								</tab>
+								<tab>
+									<tab-heading>
+										XML
+									</tab-heading>
+									<textarea ng-style="{height: containerHeight - 135}" style="overflow: auto; width: 100%; height: 803px;"readonly="true" ng-model="selectedArchetype.xml" class="ng-pristine ng-untouched ng-valid ng-scope">	                    	
+                           </textarea>
+								</tab>
+							</tabset>
+
+							<!--	<edit-display-pane  max-height="paneHeight"  style="magin-top:5px; margin-bottom:20px;" ArchetypeInfo = "selectedArchetype"></edit-display-pane>-->
+						</div>
+					</tab>
+
+					<button class="btn btn-primary" pull-right  style="margin-left:10px;" ng-disabled="selectedArchetype==undefined" ng-click="saveSelectedArchetype()">
+						Save
+					</button>
+					<button class="btn btn-primary" pull-right  style="margin-left:10px"; ng-disabled="selectedArchetype==undefined" ng-click="submitSelectedArchetype()">
+						Submit
+					</button>
+
+				</tabset>
+			</div>
+		</div>
 	</div>
 	<script type="text/ng-template" id="archetypeCreate.html">
-	<div class="modal-header">
+		<div class="modal-header">
 		<h3 class="modal-title">Create Your Owm Archetype</h3>
-	</div>
-	<div class="modal-body">		
+		</div>
+		<div class="modal-body">
 		<div class="row">
-			<div class="col-xs-6 col-sm-6 col-lg-6 flex-box" >							
-				<label>Orgnization:</label>
-				<select class="form-control" ng-model="archetypeOrgnization" ng-options="org for org in orgnizationList"></select>	
-			</div>
-			<div class="col-xs-6 col-sm-6 col-lg-6 flex-box" >							
-				<label>Type:</label>
-				<select class="form-control" ng-model="archetypeType" ng-options="type for type in archetypeTypeList"></select>	
-			</div>
-		</div>		
-	</div>
-	<div class="modal-footer">
+		<div class="col-xs-6 col-sm-6 col-lg-6 flex-box" >
+		<label>Orgnization:</label>
+		<select class="form-control" ng-model="archetypeOrgnization" ng-options="org for org in orgnizationList"></select>
+		</div>
+		<div class="col-xs-6 col-sm-6 col-lg-6 flex-box" >
+		<label>Type:</label>
+		<select class="form-control" ng-model="archetypeType" ng-options="type for type in archetypeTypeList"></select>
+		</div>
+		</div>
+		</div>
+		<div class="modal-footer">
 		<button class="btn btn-primary" ng-click="ok()">CREATE</button>
 		<button class="btn btn-warning" ng-click="cancel()">CANCEL</button>
-	</div>
+		</div>
 	</script>
 </div>
-	

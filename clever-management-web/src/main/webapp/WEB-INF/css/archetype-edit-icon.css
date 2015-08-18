@@ -108,6 +108,10 @@
 	background-image: url("../img/datatype/uri.png");
 	background-repeat: no-repeat;
 }
+.archetype-edit-icon.dv_ehr_uri {
+	background-image: url("../img/datatype/uri.png");
+	background-repeat: no-repeat;
+}
 .archetype-edit-icon.dv_proportion{
     background-image: url("../img/datatype/ratio.png");
     background-repeat: no-repeat;

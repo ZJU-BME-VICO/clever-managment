@@ -7,7 +7,7 @@ angular.module('clever.management.directives.editDisplayPane',[]).directive('edi
 		},
 		templateUrl:'js/directives/archetype-edit-directives/display-pane/edit-display-pane.html',
 		controller: function($scope,$element,$attr){
-			
+			$scope.tabControl = {};
 		},
 		links: function(scope,element,attr){
 			

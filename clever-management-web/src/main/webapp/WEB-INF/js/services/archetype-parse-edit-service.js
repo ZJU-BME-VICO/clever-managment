@@ -1,40 +1,34 @@
-angular.module('clever.management.services.archetypeParse', []).service('archetypeParseService', function() {
+/*this service is created for construct a archetype from the original archetype .with a reference to the
+ original node ,when we operate in the diaplay element ,we can bind the operation to the original archetype,
+ by edit original archetype directly*/
 
+angular.module('clever.management.service.archetypeParseEdit', []).service('archetypeParseEditService', function() {
 	var x2js = new X2JS();
-
 	this.parseArchetypeXml = function(xml) {
 		var archetype = x2js.xml_str2json(xml).archetype;
-
-		//  console.log(archetype);
-
 		return this.parseArchetype(archetype);
 	};
-	this.getOriginalArchetype = function(xml) {
-		var archetype = x2js.xml_str2json(xml).archetype;
-		return archetype;
-	};
-
 	this.parseArchetype = function(archetype) {
 		var header = this.parseHeader(archetype);
 		var terminologies = this.parseTerminology(archetype);
 		var definitions = this.parseDefinition(archetype);
 		var languages = this.parseLanguage(archetype);
 		return {
+			oriNodeRef : archetype, //---------for edit
 			header : header,
 			terminologies : terminologies,
 			definitions : definitions,
 			languages : languages
 		};
 	};
-
 	this.parseHeader = function(archetype) {
 		var header = {};
-		// console.log("this is the origarchetype");
-		// console.log(archetype);
 		header.concept = archetype.concept;
+		//archetype concept
 		header.id = archetype.archetype_id.value;
+		//archetype_id
 		//parse header details
-		header.description = {
+		header.description = {//description: not an editable array.just the content
 			details : '',
 			original_author : '',
 			lifecycle_state : '',
@@ -71,6 +65,8 @@ angular.module('clever.management.services.archetypeParse', []).service('archety
 			description_details.push(detail);
 		}
 		header.description.details = description_details;
+		header.description.details.oriNodeRef = details;
+		//details : editable array. save the reference
 		//------------parse details end-------------
 
 		//------------parse original_author--------------
@@ -87,6 +83,8 @@ angular.module('clever.management.services.archetypeParse', []).service('archety
 			//header.description.original_author.push(info);
 		});
 		header.description.original_author = description_originalAuthor;
+		//original author : not an editable array
+
 		//-------parse original_author end ------------------
 
 		//------parse other_details-------------
@@ -108,14 +106,14 @@ angular.module('clever.management.services.archetypeParse', []).service('archety
 			description_otherDetails.push(detail);
 		}
 		header.description.other_details = description_otherDetails;
-		console.log("this is the header");
-		console.log(header);
+		header.description.other_details.oriNodeRef = other_details;
+		//other_details  : editable array save the reference
 		return header;
 	};
-
+	//--------------parse languages---------------------
 	this.parseLanguage = function(archetype) {
 		var languages = [];
-		var originalLanguage = {
+		var originalLanguage = {//original language. not an editable array
 			code : archetype.original_language.code_string,
 			terminology : archetype.original_language.terminology_id.value,
 		};
@@ -133,6 +131,10 @@ angular.module('clever.management.services.archetypeParse', []).service('archety
 				terminology : details.language.terminology_id.value
 			});
 		}
+
+		languages.oriNodeRef = details;
+		//make details as original reference,is just because when we want to add a
+		//language ,we must add it in the details
 		return {
 			originalLanguage : originalLanguage,
 			languages : languages
@@ -142,18 +144,24 @@ angular.module('clever.management.services.archetypeParse', []).service('archety
 	this.parseTerminology = function(archetype) {
 		var termDefinitions = archetype.ontology.term_definitions;
 		var constrainDefinitions = archetype.ontology.constraint_definitions;
+		var termBindings = archetype.ontology.term_bindingd;
+		var constraintBindings = archetype.ontology.constraint_bindings;
 		return {
-			terms : parseTermDefinition(termDefinitions),
-			constraints : parseConstrainDefinition(constrainDefinitions)
+			oriNodeRef : archetype.terminology, //add a reference to ontology, because it is a editable array,
+			terms_definitions : parseTermDefinition(termDefinitions),
+			constraint_definitions : parseConstrainDefinition(constrainDefinitions),
+			term_bindings : parseTermBindings(termBindings),
+			constraintBindings : parseConstraintBindings(constraintBindings),
 		};
 	};
 
 	function parseTermDefinition(termDefinitions) {
 		if (termDefinitions) {
 			var terms = [];
-			if (angular.isArray(termDefinitions)) {
+			if (angular.isArray(termDefinitions)) {//termDefinition is an array with element which consist of an language an an archetypTermList
 				angular.forEach(termDefinitions, function(termDefinition) {
 					var term = {
+						//oriNodeRef:termDefinition,                 // no need
 						language : termDefinition._language,
 						items : []
 					};
@@ -175,7 +183,10 @@ angular.module('clever.management.services.archetypeParse', []).service('archety
 							description : description,
 							comment : comment,
 						});
+
 					});
+					term.items.oriNodeRef = termDefinition.items;
+					// here is termDefinition in termDefinitions
 					terms.push(term);
 				});
 			} else {
@@ -198,9 +209,13 @@ angular.module('clever.management.services.archetypeParse', []).service('archety
 						text : text,
 						description : description,
 					});
+
 				});
+				term.oriNodeRef = termDefinitions.items;
+				//here is termDefinitions directly
 				terms.push(term);
 			}
+			terms.oriNodeRef = termDefinitions;
 			return terms;
 		}
 	}
@@ -229,7 +244,10 @@ angular.module('clever.management.services.archetypeParse', []).service('archety
 							text : text,
 							description : description,
 						});
+
 					});
+					constrain.items.oriNoderef = constraintDefintion.items;
+					// editable array:constraint.items
 					constraints.push(constraint);
 				});
 			} else {
@@ -254,18 +272,112 @@ angular.module('clever.management.services.archetypeParse', []).service('archety
 					});
 				});
 				constraints.push(constraint);
+				constrain.items.oriNoderef = constraintDefintions.items;
+				// editable array:constraint.items  ....here is constraintDefinitions
+
 			}
+
+			constraints.oriNodeRef = constraintDefinitions;
+			//editable array: constaintDefinitions
 			return constraints;
+		}
+	}
+
+	function parseTermBindings(termBindings) {
+		if (termBindings) {
+			var myTermBindings = [];
+			if (angular.isArray(termBindins)) {
+				angular.forEach(termBindings, function(termBinding) {
+					var term = {
+						terminology : termBinding.terminology,
+						items : []
+					};
+					anglar.forEach(termBinding.items, function(item) {
+						var myItem = {
+							code : item.code,
+							termonology_id : item.value.terminology_id,
+							code_string : item.value.code_string,
+						};
+
+						term.items.push(myItem);
+					});
+					term.items.oriNodeRef = termBinding.items;
+					myTermBindings.push(term);
+				});
+			} else {
+				var term = {
+					terminology : termBindings.terminology,
+					items : []
+				};
+				anglar.forEach(termBindings.items, function(item) {
+					var myItem = {
+						code : item.code,
+						termonology_id : item.value.terminology_id,
+						code_string : item.value.code_string,
+					};
+
+					term.items.push(myItem);
+				});
+				term.items.oriNodeRef = termBindings.items;
+				myTermBindings.push(term);
+
+			}
+			myTermBindings.oriNodeRef = termBindings;
+			return myTermBindings;
+		}
+	}
+
+	function parseConstraintBindings(constraintBindings) {
+		if (constraintBindings) {
+			var myConstraintBindings = [];
+			if (angular.isArray(constraintBindings)) {
+				angular.forEach(constraintBindings, function(constraintBinding) {
+					var term = {
+						terminology : constraintBinding.terminology,
+						items : []
+					};
+					angular.forEach(constraintBinding.items, function(item) {
+						var myItem = {
+							code : item.code,
+							value : item.value,
+						};
+						term.items.push(myItem);
+
+					});
+					term.items.oriNodeRef = constraintBinding.items;
+					myConstraintBindings.push(term);
+
+				});
+
+			} else {
+				var term = {
+					terminology : constraintBindings.terminology,
+					items : []
+				};
+				angular.forEach(constraintBindings.items, function(item) {
+					var myItem = {
+						code : item.code,
+						value : item.value,
+					};
+					term.items.push(myItem);
+
+				});
+				term.items.oriNodeRef = constraintBindings.items;
+				myConstraintBindings.push(term);
+			}
+
+			myConstraintBindings.oriNodeRef = constraintBindings;
+			return myConstraintBindings;
 		}
 	}
 
 
 	this.parseDefinition = function(archetype) {
 		var definitions = {};
-		definitions.tableItems = [];
+		// definitions.tableItems = [];
 		definitions.treeItems = [];
 		var terminologies = parseTermDefinition(archetype.ontology.term_definitions);
-		processNode(archetype.definition, undefined, definitions.treeItems, definitions.tableItems, terminologies);
+		myProcessNode(archetype.definition, undefined, definitions.treeItems, definitions.tableItems, terminologies, undefined);
 		return definitions;
 	};
 
@@ -273,53 +385,115 @@ angular.module('clever.management.services.archetypeParse', []).service('archety
 		if (angular.isArray(node)) {
 			angular.forEach(node, function(value) {
 				var extractedNode = extractNode(value, terminologies);
+				extractedNode.oriNodeRef = value;
 				value.parent = parent;
 				if (value.attributes) {
 					extractedNode.children = [];
 					processNode(value.attributes, value, extractedNode.children, tableItems, terminologies);
+					extractedNode.children.oriNodeRef = value.attributes;
+
 				} else if (value.children) {
 					extractedNode.children = [];
 					processNode(value.children, value, extractedNode.children, tableItems, terminologies);
-				} else {
-					/*var leafNode = extractLeafNode(value);
-					 if (leafNode) {
-					 tableItems.push(leafNode);
-					 }*/
-				}
-				if (value.parent && value.parent.parent && value.parent.parent.rm_type_name == 'ELEMENT') {
-					var leafNode = extractLeafNode(value);
-					if (leafNode) {
-						tableItems.push(leafNode);
-					}
+					extractedNode.children.oriNodeRef = value.children;
 				}
 				treeItems.push(extractedNode);
 			});
 		} else {
 			var extractedNode = extractNode(node, terminologies);
 			node.parent = parent;
+			extractedNode.oriNodeRef = node;
 			if (node.attributes) {
 				extractedNode.children = [];
 				processNode(node.attributes, node, extractedNode.children, tableItems, terminologies);
+				extractedNode.oriNodeRef = node.attributes;
 			} else if (node.children) {
 				extractedNode.children = [];
 				processNode(node.children, node, extractedNode.children, tableItems, terminologies);
-			} else {
-				/*var leafNode = extractLeafNode(value);
-				 if (leafNode) {
-				 tableItems.push(leafNode);
-				 }*/
+				extractedNode.oriNodeRef = node.children;
 			}
-			if (node.parent && node.parent.parent && node.parent.parent.rm_type_name == 'ELEMENT') {
-				var leafNode = extractLeafNode(node);
-				if (leafNode) {
-					tableItems.push(leafNode);
-				}
-			}
+
 			treeItems.push(extractedNode);
 		}
 	}
 
-	function extractNode(node, term_definitions) {
+	function myProcessNode(typeNode, parent, treeItems, terminologies, parentAttribute) {
+		if (angular.isArray(typeNode)) {
+			angular.forEach(typeNode, function(value) {
+				if (noTraverseTypeList.indexOf(value.rm_type_name) == -1) {
+					var extractedNode = extractNode(value, terminologies, parentAttribute);
+					if (value.attributes) {
+						extractedNode.children = [];
+						processAttribute(value.attributes, value, extractedNode.children, terminologies);
+					}
+					if (parentAttribute) {
+						extractedNode.parentAttribute = parentAttribute;
+					}
+					extractedNode.oriNodeRef = value;
+					treeItems.push(extractedNode);
+				}
+			});
+
+		} else {
+			if (noTraverseTypeList.indexOf(typeNode.rm_type_name) == -1) {
+				var extractedNode = extractNode(typeNode, terminologies, parentAttribute);
+				if (typeNode.attributes) {
+					extractedNode.children = [];
+					processAttribute(typeNode.attributes, extractedNode, extractedNode.children, terminologies);
+				}
+				if (parentAttribute) {
+					extractedNode.parentAttribute = parentAttribute;
+				}
+				extractedNode.oriNodeRef = typeNode;
+				treeItems.push(extractedNode);
+			}
+		}
+	}
+
+	function processAttribute(attributes, parent, treeItems, terminologies) {
+		if (attributes) {
+
+			if (angular.isArray(attributes)) {
+
+				angular.forEach(attributes, function(attribute) {
+					if (noTraverseAttributes.indexOf(attribute.rm_attribute_name) != -1 && attribute.children) {//if attribute type should be keep
+						var keepAttribute = extractNode(attribute, terminologies, undefined);
+						keepAttribute.children = [];
+						myProcessNode(attribute.children, keepAttribute, keepAttribute.children, terminologies, undefined);
+						keepAttribute.oriNodeRef = attribute;
+						treeItems.push(keepAttribute);
+					} else {
+						var noKeepAttribute = extractNode(attribute, terminologies, undefined);
+						noKeepAttribute.oriNodeRef = attribute;
+						if (attribute.children) {
+							myProcessNode(attribute.children, treeItems.parent, treeItems, terminologies, noKeepAttribute);
+						}
+
+					}
+				});
+			} else {
+				if (noTraverseAttributes.indexOf(attributes.rm_attribute_name) != -1 && attributes.children) {//if attribute type should be keep
+					var keepAttribute = extractNode(attributes, terminologies, undefined);
+					keepAttribute.children = [];
+					keepAttribute.oriNodeRef = attributes;
+					myProcessNode(attributes.children, keepAttribute, keepAttribute.children, terminologies, undefined);
+					treeItems.push(keepAttribute);
+				} else {
+					var noKeepAttribute = extractNode(attributes, terminologies, undefined);
+					noKeepAttribute.oriNodeRef = attributes;
+					if (attributes.children) {
+						myProcessNode(attributes.children, treeItems.parent, treeItems, terminologies, noKeepAttribute);
+					}
+				}
+
+			}
+		}
+	}
+
+	var noTraverseTypeList = ['DV_TEXT', 'DV_CODED_TEXT', 'DV_QUANTITY', 'DV_ORDINAL', 'DV_DATE_TIME', 'DV_DATE', 'DV_TIME', 'DV_BOOLEAN', 'DV_COUNT', 'DV_DURATION', 'DV_INTERVAL<DV_DATE>', 'DV_INTERVAl<DV_TIME>', 'DV_INTERVAL<DV_DATE_TIME>', 'DV_INTERVAL<COUNT>', 'DV_INTERVAL<QUANTITY>', 'DV_MULTIMEDIA', 'DV_URI', 'DV_EHR_URI', 'DV_PROPORTION', 'DV_IDENTIFIER', 'DV_PARSABLE', 'DV_BOOLEAN'];
+	var noTraverseAttributes = ['subject', 'ism_transition', 'otherParticipations', 'links'];
+	var typeList = ['ITEM_LIST', 'ITEM_TREE', 'HISTORY'];
+	function extractNode(node, term_definitions, parentAttribute) {
 		var type, attribute, code, occurrences, existence, cardinality, cnname, enname, dataType, picType, tableName, targetPath, name;
 		var dataValue = [];
 		var dataInfo = [];
@@ -346,7 +520,11 @@ angular.module('clever.management.services.archetypeParse', []).service('archety
 		var label, labelType;
 		if (type) {
 			labelType = 'type';
-			label = type;
+			if (typeList.indexOf(type) != -1) {
+				label = parentAttribute.label.text;
+			} else {
+				label = type;
+			}
 		}
 		if (attribute) {
 			labelType = 'attribute';
@@ -365,8 +543,6 @@ angular.module('clever.management.services.archetypeParse', []).service('archety
 			targetPath = node.target_path;
 		}
 
-		//5/17 add
-
 		if (type == "ELEMENT") {
 			if (node.attributes) {
 				var nodeAttributes = node.attributes;
@@ -379,12 +555,12 @@ angular.module('clever.management.services.archetypeParse', []).service('archety
 					}
 					var count;
 					for (var i = 0; i < node.attributes.length - 1; i++) {
-						if (node.attributes[i].rm_attribute_name == "name") {
+						if (node.attributes[i].rm_attribute_name == "name") {//find a attribute which name is "name"?
 							count = i;
 						}
 					}
 					if (count != undefined) {
-						if (node.attributes[count].children.attributes) {
+						if (node.attributes[count].children.attributes) {//if there is a attribute which name is 'name'.there might be children, the base type and its attributes?
 							if (node.attributes[count].children.attributes.rm_attribute_name == "value") {
 								if (node.attributes[count].children.attributes.children.item) {
 									name = node.attributes[count].children.attributes.children.item.list;
@@ -397,28 +573,6 @@ angular.module('clever.management.services.archetypeParse', []).service('archety
 						setDataInfo(nodeAttributes.children, dataInfo);
 					}
 				}
-				// if (node.attributes.length == undefined) {
-				//     dType = node.attributes.children.rm_type_name;
-				//     dIndex = node.attributes.children;
-				//     dataInfo.push({
-				//         dataType: dType,
-				//         dataValue: dIndex
-				//     });
-				// } else {
-				//     var i = 0; //heart failure   typical smoke amount
-				//     while (node.attributes[i]) {
-				//         if (node.attributes[i].children) {
-				//             dType = node.attributes[i].children.rm_type_name;
-				//             dIndex = node.attributes[i].children;
-				//             dataInfo.push({
-				//                 dataType: dType,
-				//                 dataValue: dIndex
-				//             });
-				//         }
-				//         i++;
-				//     }
-				//     //dataType=node.attributes[0].children.rm_type_name;
-				// }
 
 			} else {
 				dataType = 'ANY';
@@ -435,26 +589,6 @@ angular.module('clever.management.services.archetypeParse', []).service('archety
 				});
 			}
 		}
-		//real name of items
-		// if (node.attributes) {
-		//     if (node.attributes.length > 1) {
-		//         var count;
-		//         for (var i = 0; i < node.attributes.length - 1; i++) {
-		//             if (node.attributes[i].rm_attribute_name == "name") {
-		//                 count = i;
-		//             }
-		//         }
-		//         if (count != undefined) {
-		//             if (node.attributes[count].children.attributes) {
-		//                 if (node.attributes[count].children.attributes.rm_attribute_name == "value") {
-		//                     if (node.attributes[count].children.attributes.children.item) {
-		//                         name = node.attributes[count].children.attributes.children.item.list;
-		//                     }
-		//                 }
-		//             }
-		//         }
-		//     }
-		// }
 
 		if (!name) {
 			if (term_definitions && code) {
@@ -471,6 +605,7 @@ angular.module('clever.management.services.archetypeParse', []).service('archety
 		} else {
 			picType = label;
 		}
+
 		return {
 			label : {
 				type : labelType,
@@ -479,14 +614,14 @@ angular.module('clever.management.services.archetypeParse', []).service('archety
 				occurrences : occurrences,
 				existence : existence,
 				cardinality : cardinality,
-				labelContent : name,
-				enText : enname,
+				//  labelContent: name,
+				//  enText:enname,
 				dataType : dataType,
 				picType : picType,
 				dataValue : dataValue,
 				dataInfo : dataInfo,
-				tableName : tableName,
-				targetPath : targetPath,
+				//    tableName: tableName,
+				//    targetPath: targetPath,
 
 				slot : archetypeSlot,
 				includes : includes,
@@ -567,53 +702,6 @@ angular.module('clever.management.services.archetypeParse', []).service('archety
 			});
 		}
 		return name;
-	}
-
-	function processCodePhrase(codePhraseNode, nodes) {
-		var labelType = 'codePhrase';
-		var codeList;
-		if (codePhraseNode.code_list) {
-			codeList = codePhraseNode.code_list;
-		}
-		if (codePhraseNode.reference) {
-			codeList = codePhraseNode.reference;
-		}
-		if (angular.isArray(codeList)) {
-			angular.forEach(codeList, function(code) {
-				nodes.push({
-					label : {
-						type : labelType,
-						text : '',
-						code : code
-					}
-				});
-			});
-		} else {
-			nodes.push({
-				label : {
-					type : labelType,
-					text : '',
-					code : codeList
-				}
-			});
-		}
-	}
-
-	var typeList = ['DV_COUNT', 'DV_TEXT', 'DV_DATE_TIME', 'DV_QUANTITY', 'DV_BOOLEAN'];
-	var attributeList = ['value', 'magnitude'];
-
-	function extractLeafNode(node) {
-		var type = node.rm_type_name;
-		var attribute = node.parent.rm_attribute_name;
-		if (typeList.indexOf(type) != -1) {
-			if (attributeList.indexOf(attribute) != -1) {
-				return {
-					type : type,
-					code : node.parent.parent.node_id,
-					occurrences : node.parent.parent.occurrences,
-				};
-			}
-		}
 	}
 
 });
