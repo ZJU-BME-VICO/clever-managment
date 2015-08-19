@@ -83,7 +83,7 @@
 <script src="js/directives/archetype-edit-directives/display-pane/edit-display-pane.js"></script>
 <script src="js/directives/archetype-edit-directives/header-pane/edit-header-pane.js"></script>
 <script src="js/directives/archetype-edit-directives/ontology-pane/edit-ontology-pane.js"></script>
-<script src="js/directives/accordion/ui-bootstrap-accordion.js"></script>
+
 
 
 
