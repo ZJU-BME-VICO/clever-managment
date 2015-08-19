@@ -36,6 +36,7 @@ var config = {
 	'STORAGE_TEMPLATE_DEPLOY_URL' : prefix + '/templates/storage/action/deploy',
 	'STORAGE_TEMPLATE_VALIDATE_URL' : prefix + '/templates/storage/action/validate',
 	'STORAGE_TEMPLATE_UPLOAD_URL' : prefix + '/templates/storage/action/upload',
+	'DEPLOY_RECORDS_LIST_URL' : prefix + '/deployRecords/list',
 	'APPLICATION_LIST_URL' : prefix + '/applications/list',
 	'APPLICATION_UPLOAD_URL' : prefix + '/applications/application',
 	'APPLICATION_BY_ID_URL' : prefix + '/applications/application/id/',

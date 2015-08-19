@@ -1,4 +1,4 @@
-function ArchetypeVerifyCtrl($scope, msgboxService, resourceService, documentDiffModalService, ARCHETYPE_LIST_VERIFY_URL, ARCHETYPE_APPROVE_BY_ID_URL, ARCHETYPE_REJECT_BY_ID_URL, ARCHETYPE_REMOVE_BY_ID_URL) {
+function ArchetypeVerifyCtrl($scope, busyService, msgboxService, resourceService, documentDiffModalService, ARCHETYPE_LIST_VERIFY_URL, ARCHETYPE_APPROVE_BY_ID_URL, ARCHETYPE_REJECT_BY_ID_URL, ARCHETYPE_REMOVE_BY_ID_URL) {
 
 	$scope.archetypeFiles = [];
 
@@ -11,9 +11,11 @@ function ArchetypeVerifyCtrl($scope, msgboxService, resourceService, documentDif
 		$scope.modalContainerHeight.value = $scope.$parent.containerHeight - 100;
 	});
 
+	var busyId = busyService.pushBusy('BUSY_LOADING');
 	resourceService.get(ARCHETYPE_LIST_VERIFY_URL).then(function(list) {
 		$scope.archetypeFiles = list;
-		console.log(list);
+		busyService.popBusy(busyId);
+		//console.log(list);
 	});
 
 	$scope.approveAll = function() {
@@ -23,20 +25,28 @@ function ArchetypeVerifyCtrl($scope, msgboxService, resourceService, documentDif
 	};
 
 	$scope.approveArchetypeFile = function(archetypeFile) {
-		resourceService.get(ARCHETYPE_APPROVE_BY_ID_URL + archetypeFile.id).then(function(result) {
-			if (result.succeeded) {
-				msgboxService.createMessageBox("ARCHETYPE_VERIFY_MSG_HINT", "ARCHETYPE_VERIFY_APPROVE_SUCCEEDED_HINT", {}, 'success');
-				$scope.archetypeFiles.splice($scope.archetypeFiles.indexOf(archetypeFile), 1);
-			} else {
-				msgboxService.createMessageBox("ARCHETYPE_VERIFY_FAILED", "ARCHETYPE_VERIFY_APPROVE_FAILED_HINT", {
-					errorMsg : result.message
-				}, 'error');
+		msgboxService.createMessageBox("ARCHETYPE_VERIFY_MSG_HINT", "ARCHETYPE_VERIFY_APPROVE_HINT", {
+			archetypeName : archetypeFile.name
+		}, "question", "yesOrNo").result.then(function(confirm) {
+			if (confirm) {
+				resourceService.get(ARCHETYPE_APPROVE_BY_ID_URL + archetypeFile.id).then(function(result) {
+					if (result.succeeded) {
+						msgboxService.createMessageBox("ARCHETYPE_VERIFY_MSG_HINT", "ARCHETYPE_VERIFY_APPROVE_SUCCEEDED_HINT", {}, 'success');
+						$scope.archetypeFiles.splice($scope.archetypeFiles.indexOf(archetypeFile), 1);
+					} else {
+						msgboxService.createMessageBox("ARCHETYPE_VERIFY_FAILED", "ARCHETYPE_VERIFY_APPROVE_FAILED_HINT", {
+							errorMsg : result.message
+						}, 'error');
+					}
+				});
 			}
 		});
 	};
 
 	$scope.rejectArchetypeFile = function(archetypeFile) {
-		msgboxService.createMessageBox("ARCHETYPE_VERIFY_MSG_HINT", "ARCHETYPE_VERIFY_REJECT_HINT", {}, "question", "yesOrNo").result.then(function(confirm) {
+		msgboxService.createMessageBox("ARCHETYPE_VERIFY_MSG_HINT", "ARCHETYPE_VERIFY_REJECT_HINT", {
+			archetypeName : archetypeFile.name
+		}, "question", "yesOrNo").result.then(function(confirm) {
 			if (confirm) {
 				resourceService.get(ARCHETYPE_REJECT_BY_ID_URL + archetypeFile.id).then(function(result) {
 					if (result.succeeded) {
@@ -52,7 +62,9 @@ function ArchetypeVerifyCtrl($scope, msgboxService, resourceService, documentDif
 	};
 
 	$scope.removeArchetypeFile = function(archetypeFile) {
-		msgboxService.createMessageBox("ARCHETYPE_VERIFY_MSG_HINT", "ARCHETYPE_VERIFY_REMOVE_HINT", {}, "question", "yesOrNo").result.then(function(confirm) {
+		msgboxService.createMessageBox("ARCHETYPE_VERIFY_MSG_HINT", "ARCHETYPE_VERIFY_REMOVE_HINT", {
+			archetypeName : archetypeFile.name
+		}, "question", "yesOrNo").result.then(function(confirm) {
 			if (confirm) {
 				resourceService.get(ARCHETYPE_REMOVE_BY_ID_URL + archetypeFile.id).then(function(result) {
 					if (result.succeeded) {

@@ -18,7 +18,9 @@ function StorageTemplateVerifyCtrl($scope, $modal, resourceService, msgboxServic
 	});
 
 	$scope.approveTemplateFile = function(templateFile) {
-		msgboxService.createMessageBox("STORAGE_TEMPLATE_VERIFY_MSG_HINT", "STORAGE_TEMPLATE_VERIFY_APPROVE_HINT", {}, "question", "yesOrNo").result.then(function(confirm) {
+		msgboxService.createMessageBox("STORAGE_TEMPLATE_VERIFY_MSG_HINT", "STORAGE_TEMPLATE_VERIFY_APPROVE_HINT", {
+			templateName : templateFile.name
+		}, "question", "yesOrNo").result.then(function(confirm) {
 			if (confirm) {
 				resourceService.get(STORAGE_TEMPLATE_APPROVE_BY_ID_URL + templateFile.id).then(function(result) {
 					if (result.succeeded) {
@@ -36,7 +38,9 @@ function StorageTemplateVerifyCtrl($scope, $modal, resourceService, msgboxServic
 	};
 
 	$scope.rejectTemplateFile = function(templateFile) {
-		msgboxService.createMessageBox("STORAGE_TEMPLATE_VERIFY_MSG_HINT", "STORAGE_TEMPLATE_VERIFY_REJECT_HINT", {}, "question", "yesOrNo").result.then(function(confirm) {
+		msgboxService.createMessageBox("STORAGE_TEMPLATE_VERIFY_MSG_HINT", "STORAGE_TEMPLATE_VERIFY_REJECT_HINT", {
+			templateName : templateFile.name
+		}, "question", "yesOrNo").result.then(function(confirm) {
 			if (confirm) {
 				resourceService.get(STORAGE_TEMPLATE_REJECT_BY_ID_URL + templateFile.id).then(function(result) {
 					if (result) {
@@ -52,7 +56,9 @@ function StorageTemplateVerifyCtrl($scope, $modal, resourceService, msgboxServic
 	};
 
 	$scope.removeTemplateFile = function(templateFile) {
-		msgboxService.createMessageBox("STORAGE_TEMPLATE_VERIFY_MSG_HINT", "STORAGE_TEMPLATE_VERIFY_REMOVE_HINT", {}, "question", "yesOrNo").result.then(function(confirm) {
+		msgboxService.createMessageBox("STORAGE_TEMPLATE_VERIFY_MSG_HINT", "STORAGE_TEMPLATE_VERIFY_REMOVE_HINT", {
+			templateName : templateFile.name
+		}, "question", "yesOrNo").result.then(function(confirm) {
 			if (confirm) {
 				resourceService.get(STORAGE_TEMPLATE_REMOVE_BY_ID_URL + templateFile.id).then(function(result) {
 					if (result) {

@@ -22,7 +22,7 @@ import edu.zju.bme.clever.management.service.entity.ArchetypeMaster;
 import edu.zju.bme.clever.management.service.entity.ArchetypeRevisionFile;
 import edu.zju.bme.clever.management.service.entity.ArchetypeVersionMaster;
 import edu.zju.bme.clever.management.service.entity.User;
-import edu.zju.bme.clever.management.service.repository.ArchetypeMaster1Repository;
+import edu.zju.bme.clever.management.service.repository.ArchetypeMasterRepository;
 import edu.zju.bme.clever.management.service.repository.ArchetypeRevisionFileRepository;
 import edu.zju.bme.clever.management.service.repository.ArchetypeVersionMasterRepository;
 import edu.zju.bme.clever.management.service.repository.UserRepository;
@@ -40,7 +40,7 @@ public class ArchetypeVersionControlServiceTest {
 	@Autowired
 	private ArchetypeRevisionFileRepository archetypeFileRepo;
 	@Autowired
-	private ArchetypeMaster1Repository masterRepo;
+	private ArchetypeMasterRepository masterRepo;
 	@Autowired
 	private ArchetypeVersionMasterRepository archetypeVersionMasterRepo;
 

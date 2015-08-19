@@ -13,9 +13,9 @@ angular.module('clever.management.services.busy', []).service('busyService', fun
 	};
 
 	this.pushBusy = function(busyHint) {
-		var randomId = this.random();
+		var randomId = random();
 		while (threads.indexOf("" + randomId) >= 0) {//indexof某字符串在一串字符中第一次出现的位置
-			ranmowId = this.random();
+			ranmowId = random();
 		}
 		threads.push("" + randomId);
 		hints.push(busyHint);
@@ -34,7 +34,7 @@ angular.module('clever.management.services.busy', []).service('busyService', fun
 		}
 	};
 
-	this.random = function() {
+	function random() {
 		return Math.ceil(Math.random() * 100);
 	};
 	//	var s={

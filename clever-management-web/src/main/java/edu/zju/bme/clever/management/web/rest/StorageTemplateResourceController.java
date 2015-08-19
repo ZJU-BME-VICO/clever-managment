@@ -446,6 +446,8 @@ public class StorageTemplateResourceController extends
 			info.setLifecycleState(log.getLifecycleState().getValue());
 			masterInfo.getActionLogs().add(info);
 		});
+		masterInfo.getActionLogs().sort(
+				(log1, log2) -> log1.getId() - log2.getId());
 		return masterInfo;
 	}
 

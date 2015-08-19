@@ -1,18 +1,36 @@
-function StorageTemplateDeployCtrl($scope, authenticationService, resourceService, busyService, msgboxService, STORAGE_TEMPLATE_LIST_DEPLOY_URL, STORAGE_TEMPLATE_LIST_DEPLOYED_URL, STORAGE_TEMPLATE_DEPLOY_URL) {
+function StorageTemplateDeployCtrl($scope, authenticationService, resourceService, busyService, msgboxService, STORAGE_TEMPLATE_LIST_DEPLOY_URL, STORAGE_TEMPLATE_LIST_DEPLOYED_URL, STORAGE_TEMPLATE_DEPLOY_URL, DEPLOY_RECORDS_LIST_URL) {
 	$scope.templateMasterList = [];
 	$scope.deployedTemplateList = [];
 	$scope.selectedCount = 0;
 	$scope.selectAll = false;
 	$scope.selectIndeterminate = false;
+	$scope.deployedRecords = [];
 
-	resourceService.get(STORAGE_TEMPLATE_LIST_DEPLOY_URL).then(function(list) {
-		$scope.templateMasterList = list;
+	function refreshTemplateList() {
+		var busyId = busyService.pushBusy('BUSY_LOADING');
+		resourceService.get(STORAGE_TEMPLATE_LIST_DEPLOY_URL).then(function(list) {
+			$scope.templateMasterList = list;
 
-		angular.forEach($scope.templateMasterList, function(master) {
-			master.isSelected = false;
-			master.selectedTemplate = master.templates[0];
+			angular.forEach($scope.templateMasterList, function(master) {
+				master.isSelected = false;
+				master.selectedTemplate = master.templates[0];
+			});
+
+			busyService.popBusy(busyId);
 		});
-	});
+	}
+	
+	refreshTemplateList();
+
+	function refreshDeployRecords() {
+		var busyId = busyService.pushBusy('BUSY_LOADING');
+		resourceService.get(DEPLOY_RECORDS_LIST_URL).then(function(list) {
+			$scope.deployRecords = list;
+			busyService.popBusy(busyId);
+		});
+	}
+
+	refreshDeployRecords();
 
 	/*resourceService.get(STORAGE_TEMPLATE_LIST_DEPLOYED_URL).then(function(list) {
 	 if (angular.isArray(list)) {
@@ -33,6 +51,12 @@ function StorageTemplateDeployCtrl($scope, authenticationService, resourceServic
 		angular.forEach($scope.templateMasterList, function(master) {
 			master.isSelected = $scope.selectAll;
 		});
+	};
+
+	$scope.getFormatedTime = function(time) {
+		var date = new Date();
+		date.setTime(time);
+		return date.format('yyyy-MM-dd hh:mm:ss');
 	};
 
 	$scope.getFixedTitle = function(title, length) {
@@ -78,9 +102,10 @@ function StorageTemplateDeployCtrl($scope, authenticationService, resourceServic
 			if (result.succeeded) {
 				msgboxService.createMessageBox('STORAGE_TEMPLATE_DEPLOY_MSG_HINI', 'STORAGE_TEMPLATE_DEPLOY_SUCCEEDED_HINI', {}, 'success').result.then(function() {
 					$scope.deployedTemplateList = deployConfig.templateNames;
+					refreshDeployRecords();
 				});
 			} else {
-				msgboxService.createMessageBox('STORAGE_TEMPLATE_DEPLOY_MSG_HINI', 'STORAGE_TEMPLATE_DEPLOY_FIALED_HINI', {
+				msgboxService.createMessageBox('STORAGE_TEMPLATE_DEPLOY_MSG_HINI', 'STORAGE_TEMPLATE_DEPLOY_FAILED_HINI', {
 					errorMsg : result.message
 				}, 'error');
 			}
