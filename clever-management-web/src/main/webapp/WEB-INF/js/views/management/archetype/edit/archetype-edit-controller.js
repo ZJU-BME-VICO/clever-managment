@@ -1,4 +1,4 @@
-function ArchetypeEditCtrl($scope, $modal,$log,msgboxService, resourceService,archetypeParseEditService, archetypeParseToEditService ,templateParseToEditService,archetypeSerializeService, archetypeParseService,ARCHETYPE_LIST_EDIT_DRAFT_URL, ARCHETYPE_LIST_EDIT_PUBLISHED_URL,ARCHETYPE_CREATE_URL, ARCHETYPE_EDIT_BY_ID_URL, ARCHETYPE_SUBMIT_BY_ID_URL) {
+function ArchetypeEditCtrl($scope, $modal,$log,msgboxService,busyService, resourceService,archetypeParseEditService, archetypeParseToEditService ,templateParseToEditService,archetypeSerializeService, archetypeParseService,ARCHETYPE_LIST_EDIT_DRAFT_URL, ARCHETYPE_LIST_EDIT_PUBLISHED_URL,ARCHETYPE_CREATE_URL, ARCHETYPE_EDIT_BY_ID_URL, ARCHETYPE_SUBMIT_BY_ID_URL) {
 
 	
 	$scope.editId = 0;
@@ -6,7 +6,7 @@ function ArchetypeEditCtrl($scope, $modal,$log,msgboxService, resourceService,ar
 
 	
 	
-	
+	var busyId = busyService.pushBusy('BUSY_LOADING');
 	resourceService.get(ARCHETYPE_LIST_EDIT_DRAFT_URL).then(function(list) {
 		$scope.draftArchetypeList = list;
 		$scope.draftArchetypeList[2].specialiseArchetype = [], $scope.draftArchetypeList[2].specialiseArchetype.push($scope.draftArchetypeList[4]);
@@ -24,7 +24,9 @@ function ArchetypeEditCtrl($scope, $modal,$log,msgboxService, resourceService,ar
 				archetype.specialiseArchetype = [];
 			}
 		}
-		//console.log($scope.draftArchetypeList);
+		busyService.popBusy(busyId);
+		console.log("empty list");
+		console.log($scope.draftArchetypeList);
 	}); 
 
 
@@ -32,7 +34,16 @@ function ArchetypeEditCtrl($scope, $modal,$log,msgboxService, resourceService,ar
 		$scope.publishedArchetypeList = list;
 		//console.log($scope.publishedArchetypeList);
 	});
-
+   
+   
+   $scope.tabContainerHeight = {
+		value : $scope.$parent.containerHeight - 35
+	};
+	$scope.$watch(function() {
+		return $scope.$parent.containerHeight;
+	}, function(newValue) {
+		$scope.tabContainerHeight.value = newValue - 35;
+	});
  
      
 	//call to background
@@ -78,6 +89,8 @@ function ArchetypeEditCtrl($scope, $modal,$log,msgboxService, resourceService,ar
 		//console.log(editTemplate);
 
 		$scope.ontology = archetype.terminologies;
+		console.log("this is ontology");
+		console.log($scope.ontology);
 		var temp = {};
 
 		temp.oriDefinition = archetype.definitions;

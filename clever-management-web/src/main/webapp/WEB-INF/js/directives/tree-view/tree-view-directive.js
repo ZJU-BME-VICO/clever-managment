@@ -85,6 +85,7 @@ angular.module('clever.management.directives.treeView', []).directive('treeView'
 			
 			
 			$scope.clickEditNodeMenu = function(node,type){
+				
 				$scope.clickEditMenuCallback({
 					node:node,
 					type:type,

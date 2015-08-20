@@ -1,27 +1,18 @@
 <div class="row">
-
-	<div class="col-xs-2 col-md-2 col-lg-2" style="overflow: auto;height:1000px;" >
-		<div class="toolbox box box-grey box-padding">
-			<h3>New Elements</h3>
-			<ul>
-				<!-- The toolbox only allows to copy objects, not move it. After a new
-				element was created, dnd-copied is invoked and we generate the next id -->
-				<li ng-repeat="item in models.templates"
-				dnd-draggable="item"
-				dnd-effect-allowed="move"
-				dnd-copied="item.id = item.id + 1"
-				>
-					<button type="button" class="btn btn-default btn-lg" disabled="disabled">
-						{{item.type}}
-					</button>
-				</li>
-			</ul>
-		</div>
-
+  <div class="row">
+  	<div class="col-xs-1 col-md-1 col-sm-1" style="margin-right:0px;padding-right: 0px" ng-show="definition">
+	<span class="input-group-btn">
+		<button class="btn btn-default" type="button" ng-click="expand()" ng-show="isCollapse">
+			<span class="glyphicon glyphicon-plus"></span>
+		</button> </span>
+	<span class="input-group-btn">
+		<button class="btn btn-default" type="button" ng-click="collapse()" ng-show="!isCollapse">
+			<span class="glyphicon glyphicon-minus"></span>
+		</button> </span>
 	</div>
+	<div class="col-xs-5 col-md-5 col-lg-5"  ng-style="{height: contentHeight.value - 57}" style="overflow: auto; padding-left:0px; margin-left:0px;" >
 
-	<div class="col-xs-4 col-md-4 col-lg-4">
-		<tree-view tree-data="definition.editableDefinition.treeItems"  class="definition-tree"tree-control="treeControl" node-label-generator="getEditableTreeNodeLabel" node-menu-generator="getTreeNodeMenu" click-edit-menu-callback="editArchetype(value)">
+		<tree-view tree-data="definition.editableDefinition.treeItems"  class="definition-tree" tree-control="treeControl" node-label-generator="getEditableTreeNodeLabel" node-menu-generator="getTreeNodeMenu" click-edit-menu-callback="editArchetype(node,type)">
 			<tree-expanded-icon>
 				<span class="clever-icon expanded" style="padding: 0 6px;height: 12px;background-position-y: 6px;"></span>
 			</tree-expanded-icon>
@@ -30,14 +21,5 @@
 			</tree-collapsed-icon>
 		</tree-view>
 	</div>
-	<div>
-		<ul>
-			<li ng-repeat= "item in [{name:"afd"},{name:"adsffas"},{name:"afsdaga"}] ">
-				{{item.name}}
-			</li>
-		</ul>
-	</div>
-
-
-	
+</div>
 </div>
