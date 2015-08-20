@@ -1,6 +1,8 @@
 package edu.zju.bme.clever.management.web.entity;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class AbstractMasterInfo {
@@ -17,7 +19,7 @@ public class AbstractMasterInfo {
 	private String copyright;
 	private String name;
 	private String lifecycleState;
-	private Set<ActionLogInfo> actionLogs = new HashSet<ActionLogInfo>();
+	private final List<ActionLogInfo> actionLogs = new ArrayList<ActionLogInfo>();
 
 	public Integer getId() {
 		return id;
@@ -123,12 +125,8 @@ public class AbstractMasterInfo {
 		this.lifecycleState = lifecycleState;
 	}
 	
-	public Set<ActionLogInfo> getActionLogs() {
+	public List<ActionLogInfo> getActionLogs() {
 		return actionLogs;
-	}
-
-	public void setActionLogs(Set<ActionLogInfo> actionLogs) {
-		this.actionLogs = actionLogs;
 	}
 	
 	@Override

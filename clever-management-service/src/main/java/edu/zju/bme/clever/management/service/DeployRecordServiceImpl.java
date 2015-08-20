@@ -1,5 +1,7 @@
 package edu.zju.bme.clever.management.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -63,5 +65,10 @@ public class DeployRecordServiceImpl implements DeployRecordService {
 	@Override
 	public DeployRecord getLastSucceededDeployedRecord() {
 		return this.deployRecordRepo.findFirstBySucceededOrderByIdDesc(true);
+	}
+
+	@Override
+	public List<DeployRecord> getAllDeployRecords() {
+		return this.deployRecordRepo.findAllFetchDeployer();
 	}
 }

@@ -22,7 +22,7 @@ import edu.zju.bme.clever.management.service.entity.ArchetypeVersionMaster;
 import edu.zju.bme.clever.management.service.entity.LifecycleState;
 import edu.zju.bme.clever.management.service.entity.User;
 import edu.zju.bme.clever.management.service.repository.ArchetypeActionLogRepository;
-import edu.zju.bme.clever.management.service.repository.ArchetypeMaster1Repository;
+import edu.zju.bme.clever.management.service.repository.ArchetypeMasterRepository;
 import edu.zju.bme.clever.management.service.repository.ArchetypeRevisionFileRepository;
 import edu.zju.bme.clever.management.service.repository.ArchetypeVersionMasterRepository;
 
@@ -37,7 +37,7 @@ public class ArchetypeProvideServiceImpl implements ArchetypeProvideService {
 	@Autowired
 	private ArchetypeVersionMasterRepository versionMasterRepo;
 	@Autowired
-	private ArchetypeMaster1Repository masterRepo;
+	private ArchetypeMasterRepository masterRepo;
 	@Autowired
 	private ArchetypeActionLogRepository logRepo;
 
@@ -46,7 +46,7 @@ public class ArchetypeProvideServiceImpl implements ArchetypeProvideService {
 
 	@Override
 	public List<ArchetypeMaster> getAllArchetypeMasters() {
-		List<ArchetypeMaster> masters = this.masterRepo.findAll();
+		List<ArchetypeMaster> masters = this.masterRepo.findAllFetchLatestVersionMaster();
 		masters.forEach(master -> master.getLatestVersionMaster());
 		return masters;
 	}

@@ -1,4 +1,4 @@
-function ArchetypeViewCtrl($scope, $timeout, resourceService, ARCHETYPE_LIST_URL, ARCHETYPE_MASTER_BY_ID_URL, ARCHETYPE_BY_ID_URL) {
+function ArchetypeViewCtrl($scope, $timeout, busyService, resourceService, ARCHETYPE_LIST_URL, ARCHETYPE_MASTER_BY_ID_URL, ARCHETYPE_BY_ID_URL) {
 
 	$scope.treeControl = {};
 	$scope.tabControl = {};
@@ -14,9 +14,10 @@ function ArchetypeViewCtrl($scope, $timeout, resourceService, ARCHETYPE_LIST_URL
 		$scope.tabContainerHeight.value = newValue - 35;
 	});
 
+	var busyId = busyService.pushBusy('BUSY_LOADING');
 	resourceService.get(ARCHETYPE_LIST_URL).then(function(list) {
 		$scope.archetypeList = list;
-		
+		busyService.popBusy(busyId);
 	});
 
 	$scope.searchKeyMapper = function(node) {

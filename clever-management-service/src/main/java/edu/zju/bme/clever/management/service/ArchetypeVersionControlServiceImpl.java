@@ -24,7 +24,7 @@ import edu.zju.bme.clever.management.service.entity.User;
 import edu.zju.bme.clever.management.service.entity.ActionType;
 import edu.zju.bme.clever.management.service.exception.VersionControlException;
 import edu.zju.bme.clever.management.service.repository.ArchetypeActionLogRepository;
-import edu.zju.bme.clever.management.service.repository.ArchetypeMaster1Repository;
+import edu.zju.bme.clever.management.service.repository.ArchetypeMasterRepository;
 import edu.zju.bme.clever.management.service.repository.ArchetypeRevisionFileRepository;
 import edu.zju.bme.clever.management.service.repository.ArchetypeVersionMasterRepository;
 
@@ -34,7 +34,7 @@ public class ArchetypeVersionControlServiceImpl implements
 		ArchetypeVersionControlService {
 
 	@Autowired
-	private ArchetypeMaster1Repository masterRepo;
+	private ArchetypeMasterRepository masterRepo;
 	@Autowired
 	private ArchetypeVersionMasterRepository versionMasterRepo;
 	@Autowired

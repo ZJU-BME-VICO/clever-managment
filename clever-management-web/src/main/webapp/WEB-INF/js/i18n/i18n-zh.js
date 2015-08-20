@@ -75,15 +75,18 @@ angular.module('clever.management.i18n.zh', ['pascalprecht.translate']).config(f
 		// Archetype verify
 		ARCHETYPE_VERIFY : '所有待审核项',
 		ARCHETYPE_VERIFY_ADL_DIFF : 'ADL对比',
+		ARCHETYPE_VERIFY_EDITOR : '编辑者',
+		ARCHETYPE_VERIFY_TOTAL : '待审核',
 		ARCHETYPE_VERIFY_APPROVE : '通过',
 		ARCHETYPE_VERIFY_REJECT : '否决',
 		ARCHETYPE_VERIFY_REMOVE : '删除',
 		ARCHETYPE_VERIFY_MSG_HINT : '操作提示',
+		ARCHETYPE_VERIFY_APPROVE_HINT : '是否通过原型{{archetypeName}}?',
 		ARCHETYPE_VERIFY_APPROVE_SUCCEEDED_HINT : '原型通过审核',
 		ARCHETYPE_VERIFY_APPROVE_FAILED_HINT : '原型审核失败, 错误: {{errorMsg}}',
-		ARCHETYPE_VERIFY_REJECT_HINT : '是否否决原型',	
+		ARCHETYPE_VERIFY_REJECT_HINT : '是否否决原型{{archetypeName}}?',	
 		ARCHETYPE_VERIFY_REJECT_FAILED_HINT : '否决原型失败, 错误: {{errorMsg}}',
-		ARCHETYPE_VERIFY_REMOVE_HINT : '是否否决并删除原型',
+		ARCHETYPE_VERIFY_REMOVE_HINT : '是否否决并删除原型{{archetypeName}}?',
 		ARCHETYPE_VERIFY_REMOVE_FAILED_HINT : '否决并删除原型失败, 错误: {{errorMsg}}',
 
 		// Storage template upload
@@ -111,15 +114,17 @@ angular.module('clever.management.i18n.zh', ['pascalprecht.translate']).config(f
 		// Storage template verify
 		STORAGE_TEMPLATE_VERIFY_OET_DIFF : 'OET对比',
 		STORAGE_TEMPLATE_VERIFY_APPROVE : '通过',
+		STORAGE_TEMPLATE_VERIFY_TOTAL : '待审核',
+		STORAGE_TEMPLATE_VERIFY_EDITOR : '编辑者',
 		STORAGE_TEMPLATE_VERIFY_REJECT : '否决',
 		STORAGE_TEMPLATE_VERIFY_REMOVE : '删除',
 		STORAGE_TEMPLATE_VERIFY_MSG_HINT : '操作提示',
-		STORAGE_TEMPLATE_VERIFY_APPROVE_HINT : '是否通过模板',
+		STORAGE_TEMPLATE_VERIFY_APPROVE_HINT : '是否通过模板{{templateName}}?',
 		STORAGE_TEMPLATE_VERIFY_APPROVE_SUCCEEDED_HINT : '审核模板通过',
 		STORAGE_TEMPLATE_VERIFY_APPROVE_FAILED_HINT : '审核模板失败，错误：{{errorMsg}}',
-		STORAGE_TEMPLATE_VERIFY_REJECT_HINT : '是否否决模板',
+		STORAGE_TEMPLATE_VERIFY_REJECT_HINT : '是否否决模板{{templateName}}?',
 		STORAGE_TEMPLATE_VERIFY_REJECT_FAILED_HINT : '否决模板失败，错误：{{errorMsg}}',
-		STORAGE_TEMPLATE_VERIFY_REMOVE_HINT : '是否否决并删除模板',
+		STORAGE_TEMPLATE_VERIFY_REMOVE_HINT : '是否否决并删除模板{{templateName}}?',
 		STORAGE_TEMPLATE_VERIFY_REMOVE_FAILED_HINT : '否决并删除模板失败，错误：{{errorMsg}}',
 
 		// Document diff service
@@ -138,7 +143,14 @@ angular.module('clever.management.i18n.zh', ['pascalprecht.translate']).config(f
 		STORAGE_TEMPLATE_DEPLOY_FILE_DEPLOYING : '部署中',
 		STORAGE_TEMPLATE_DEPLOY_MSG_HINI : '部署提示',
 		STORAGE_TEMPLATE_DEPLOY_SUCCEEDED_HINI : '部署成功',
-		STORAGE_TEMPLATE_DEPLOY_FIALED_HINI : '部署失败， 错误：{{errorMsg}}',
+		STORAGE_TEMPLATE_DEPLOY_FAILED_HINI : '部署失败， 错误：{{errorMsg}}',
+		STORAGE_TEMPLATE_DEPLOY_SUCCEEDED: '成功',
+		STORAGE_TEMPLATE_DEPLOY_FAILED : '失败',
+		STORAGE_TEMPLATE_DEPLOY_TIME : '部署时间',
+		STORAGE_TEMPLATE_DEPLOY_DEPLOYER : '部署者',
+		STORAGE_TEMPLATE_DEPLOY_IS_SUCCEEDED : '结果',
+		STORAGE_TEMPLATE_DEPLOY_COMMENT : '备注',
+		STORAGE_TEMPLATE_DEPLOY_DETAILS : '详细信息',
 
 		// Menu
 		MENU_RETURN : '返回上一级',

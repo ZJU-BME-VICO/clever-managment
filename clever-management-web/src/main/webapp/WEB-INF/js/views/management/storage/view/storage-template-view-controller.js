@@ -7,12 +7,12 @@ define(['lazyLoader'], function(lazyLoader) {
 		$scope.isTemplateListHidden = false;
 
 		$scope.tabContainerHeight = {
-		    value: $scope.$parent.containerHeight - 35
+			value : $scope.$parent.containerHeight - 35
 		};
 		$scope.$watch(function() {
-		    return $scope.$parent.containerHeight;
+			return $scope.$parent.containerHeight;
 		}, function(newValue) {
-		    $scope.tabContainerHeight.value = newValue - 35;
+			$scope.tabContainerHeight.value = newValue - 35;
 		});
 
 		resourceService.get(STORAGE_TEMPLATE_LIST_URL).then(function(list) {
@@ -25,6 +25,10 @@ define(['lazyLoader'], function(lazyLoader) {
 
 		$scope.expand = function() {
 			$scope.treeControl.expandAll();
+		};
+
+		$scope.searchKeyMapper = function(node) {
+			return node.conceptName + ' (' + node.latestArchetypeVersion + ')';
 		};
 
 		$scope.$watch('templateListFilter', function(newValue) {

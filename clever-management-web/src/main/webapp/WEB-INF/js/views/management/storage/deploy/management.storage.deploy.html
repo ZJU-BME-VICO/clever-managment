@@ -1,50 +1,86 @@
 <div class="row">
-    <div class="col-md-7">
-        <div class="panel panel-default">
-            <div class="panel-heading text-center" style="font-size: 1.2em;">{{'STORAGE_TEMPLATE_DEPLOY_TODO'|translate}}
-                <button class="btn btn-success pull-right" style="margin-top: -5px;" ng-click="deployTemplates()" ng-disabled="selectedCount == 0"><span class="glyphicon glyphicon-cloud-upload" style="margin-right: 5px;"></span>{{'STORAGE_TEMPLATE_DEPLOY'|translate}}</button>
-            </div>
-            <tabset tab-control="tabControl">
-                <tab heading="{{'STORAGE_TEMPLATE_DEPLOY_TODO_LIST'|translate}}">
-                	<span style="margin-left: 15px;cursor: pointer;" ng-click="checkAll()"><input type="checkbox" ui-indeterminate="selectIndeterminate" ng-checked="selectAll"> {{'STORAGE_TEMPLATE_DEPLOY_SELECT_ALL'|translate}}</span>
-                    <div class="list-group" ng-style="{height: containerHeight - 120}" style="overflow: auto; margin-top: 5px;">
-                        <div class="list-group-item" ng-repeat="master in templateMasterList" style="border:0px; padding: 5px 15px">
-                            <div class="row">
-                                <div class="col-xs-5 col-md-8">
-                                    <div class="input-group" ng-click="selectTemplate(master)">
-                                        <span class="input-group-addon"><input type="checkbox" ng-checked="master.isSelected"></span>
-                                        <sapn type="text" class="form-control" style="cursor: pointer" tooltip-placement="right" tooltip-popup-delay='500' tooltip='{{master.name}}'>{{getFixedTitle(master.name)}}</sapn>
-                                    </div>
-                                </div>
-                                <div class="col-xs-5 col-md-4">
-                                    <div class="input-group">
-                                        <span class="input-group-addon" style="cursor: default;">{{'STORAGE_TEMPLATE_DEPLOY_VERSION'|translate}}</span>
-                                        <select class="form-control" ng-model="master.selectedTemplate" ng-options="template.version for template in master.templates">
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </tab>
-                <tab heading="{{'STORAGE_TEMPLATE_DEPLOY_RECORD'|translate}}">
-                    <div ng-style="{height: containerHeight - 120}" style="overflow: auto; margin-top: 5px;">
-                        {{'STORAGE_TEMPLATE_DEPLOY_RECORD'|translate}}
-                    </div>
-                </tab>
-            </tabset>
-        </div>
-    </div>
-    <div class="col-md-5">
-        <div class="panel panel-default">
-            <div class="panel-heading text-center" style="font-size: 1.2em;">{{'STORAGE_TEMPLATE_DEPLOY_DONE'|translate}}</div>
-            <!-- <div class="panel-body" ng-style="{height: containerHeight - 80}" style="overflow: auto"> -->
-            <ul class="list-group" ng-style="{height: containerHeight - 80}" style="overflow: auto">
-                <li class="list-group-item" ng-repeat="template in deployedTemplateList">
-                    {{template}}
-                </li>
-            </ul>
-        </div>
-        <!-- </div> -->
-    </div>
+	<div class="col-md-7">
+		<div class="panel panel-default">
+			<div class="panel-heading text-center" style="font-size: 1.2em;">
+				{{'STORAGE_TEMPLATE_DEPLOY_TODO'|translate}}
+				<button class="btn btn-success pull-right" style="margin-top: -5px;" ng-click="deployTemplates()" ng-disabled="selectedCount == 0">
+					<span class="glyphicon glyphicon-cloud-upload" style="margin-right: 5px;"></span>{{'STORAGE_TEMPLATE_DEPLOY'|translate}}
+				</button>
+			</div>
+			<tabset tab-control="tabControl">
+				<tab heading="{{'STORAGE_TEMPLATE_DEPLOY_TODO_LIST'|translate}}">
+					<span style="margin-left: 15px;cursor: pointer;" ng-click="checkAll()">
+						<input type="checkbox" ui-indeterminate="selectIndeterminate" ng-checked="selectAll">
+						{{'STORAGE_TEMPLATE_DEPLOY_SELECT_ALL'|translate}}</span>
+					<div class="list-group" ng-style="{height: containerHeight - 125}" style="overflow: auto; margin-top: 5px;">
+						<div class="list-group-item" ng-repeat="master in templateMasterList" style="border:0px; padding: 5px 15px">
+							<div class="row">
+								<div class="col-xs-5 col-md-8">
+									<div class="input-group" ng-click="selectTemplate(master)">
+										<span class="input-group-addon">
+											<input type="checkbox" ng-checked="master.isSelected">
+										</span>
+										<sapn type="text" class="form-control" style="cursor: pointer" tooltip-placement="right" tooltip-popup-delay='500' tooltip='{{master.name}}'>
+											{{getFixedTitle(master.name)}}
+										</sapn>
+									</div>
+								</div>
+								<div class="col-xs-5 col-md-4">
+									<div class="input-group">
+										<span class="input-group-addon" style="cursor: default;">{{'STORAGE_TEMPLATE_DEPLOY_VERSION'|translate}}</span>
+										<select class="form-control" ng-model="master.selectedTemplate" ng-options="template.version for template in master.templates"></select>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</tab>
+				<tab heading="{{'STORAGE_TEMPLATE_DEPLOY_RECORD'|translate}}">
+					<div class="col-xs-12 col-md-12 col-lg-12" ng-style="{height: containerHeight - 125}" style="overflow: auto; margin-top: 5px;">
+						<table class="table table-hover" style="padding-top: 5px;">
+							<thead>
+								<tr>
+									<th>#</th>
+									<th>{{'STORAGE_TEMPLATE_DEPLOY_TIME' | translate}}</th>
+									<th>{{'STORAGE_TEMPLATE_DEPLOY_DEPLOYER' | translate}}</th>
+									<th>{{'STORAGE_TEMPLATE_DEPLOY_IS_SUCCEEDED' | translate}}</th>
+									<th>{{'STORAGE_TEMPLATE_DEPLOY_COMMENT' | translate}}</th>
+									<th>{{'STORAGE_TEMPLATE_DEPLOY_DETAILS' | translate}}</th>
+								</tr>
+							</thead>
+							<tbody>
+
+								<tr ng-repeat="record in deployRecords">
+									<td>{{$index + 1}}</td>
+									<td>{{getFormatedTime(record.deployTime)}}</td>
+									<td>{{record.deployerName}}</td>
+									<td>{{record.succeeded ? 'STORAGE_TEMPLATE_DEPLOY_SUCCEEDED' : 'STORAGE_TEMPLATE_DEPLOY_FAILED' | translate}}</td>
+									<td>{{record.comment}}</td>
+									<td>
+										<a ng-if="!record.succeeded" style="cursor: pointer;" popover-placement="bottom" popover="{{record.message}}" popover-trigger="mouseenter" popover-append-to-body="true"> 
+											<span class="glyphicon glyphicon-exclamation-sign"></span> 
+										</a>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</tab>
+			</tabset>
+		</div>
+	</div>
+	<div class="col-md-5">
+		<div class="panel panel-default">
+			<div class="panel-heading text-center" style="font-size: 1.2em;">
+				{{'STORAGE_TEMPLATE_DEPLOY_DONE'|translate}}
+			</div>
+			<!-- <div class="panel-body" ng-style="{height: containerHeight - 80}" style="overflow: auto"> -->
+			<ul class="list-group" ng-style="{height: containerHeight - 35}" style="overflow: auto">
+				<li class="list-group-item" ng-repeat="template in deployedTemplateList">
+					{{template}}
+				</li>
+			</ul>
+		</div>
+		<!-- </div> -->
+	</div>
 </div>
