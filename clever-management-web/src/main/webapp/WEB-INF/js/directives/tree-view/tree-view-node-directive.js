@@ -58,6 +58,17 @@ angular.module('clever.management.directives.treeViewNode', []).directive('treeV
 				}
 			}
 
+
+           scope.nodeMenu = {
+			 ACTION:["Time","Description","Ism_transition","Subject","Participation","Links"],
+			 OBSERVATION:["Data","State","Subject","Participation","Links"],
+			 EVALUATION:["Data","State","Subject","Participation","Links"],
+			 INSTRUCTION:["Activity","Narrative","State","Subject","Participation","Links"],
+			 ADMIN_ENTRY:["Data","State","Subject","Participation","Links"],	
+			 ITEM_TREE:["TEXT","CODE_TEXT","QUANTITY","COUNT","DATE_TIME","DURATION","ORDINARY","BOOLEAN","INTERVAL","MULTIMEDIA","URI","IDENTIFIER","PROPERTION","CLUSTER"],
+			 ITEM_LIST:	["TEXT","CODE_TEXT","QUANTITY","COUNT","DATE_TIME","DURATION","ORDINARY","BOOLEAN","INTERVAL","MULTIMEDIA","URI","IDENTIFIER","PROPERTION","CLUSTER"],
+			};
+            
 			scope.selectNodeHead = function(selectedNode) {
 				//Collapse or Expand
 				selectedNode.collapsed = !selectedNode.collapsed;
@@ -89,7 +100,21 @@ angular.module('clever.management.directives.treeViewNode', []).directive('treeV
 			scope.setNodeByContextMenu = function(node, type, value) {
 				scope.clickNodeMenu(node, type, value);
 			};
-
+			
+			scope.editNodeByMenu = function(node,type){
+				scope.clickEditNodeMenu(node,type);
+			};
+			scope.specialiseNodeByMenu = function(node){
+				console.log("specialise archetype here");
+				console.log(node);
+				scope.specialiseArchetype(node);
+				
+			};
+           scope.deleteNodeByMenu = function(node){
+           	    console.log("delete archetype here");
+           	    console.log(node);
+           	    scope.deleteArchetype(node);
+           };
 			scope.onShow = function(node) {
 				scope.clickNodeLabel(node);
 			};

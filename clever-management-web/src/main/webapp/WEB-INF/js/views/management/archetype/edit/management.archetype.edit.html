@@ -4,7 +4,7 @@
 			<div class="panel-heading">
 				<div class="input-group">
 					<div class="btn-group input-group-btn" dropdown>
-						<button class="btn btn-primary"  ng-click="open('lg')">
+						<button class="btn btn-primary"  ng-click="openCreate('lg')">
 							New
 						</button>
 					</div>
@@ -12,7 +12,24 @@
 				</div>
 			</div>
 			<ul class="list-group" ng-style="{height:containerHeight-55}" style="overflow:auto;">
-				<a href=""  ng-class="{active:selectedArchetype.id == archetype.id}" class="list-group-item" ng-repeat="archetype in draftArchetypeList"  ng-click="selectArchetype(archetype)">{{archetype.name}}</a>
+			<!--<a href=""  ng-class="{active:selectedArchetype.id == archetype.id}" class="list-group-item" ng-repeat="archetype in draftArchetypeList"  ng-click="selectArchetype(archetype)">{{archetype.name}}</a>-->
+			<tree-view tree-data="draftArchetypeList" 
+			      class="archetype-tree"
+				  double-click-node-callback="selectArchetype(value)"
+				  node-id="id" node-children="specialiseArchetype" 
+				  node-menu-generator = "getTreeNodeMenu"
+				  specialise-archetype-callback="specialiseArchetype(value)"
+				  delete-archetype-callback="deleteArchetype(value)"
+				  tree-control="treeControl" node-alias-name="node"
+				  search-key-mapper="searchKeyMapper">
+					<tree-expanded-icon><span class="clever-icon expanded" style="padding: 0 6px;height: 12px;background-position-y: 6px;"></span></tree-expanded-icon>
+					<tree-collapsed-icon><span class="clever-icon collapsed" style="padding: 0 6px;height: 12px;background-position-y: 6px;"></span></tree-collapsed-icon>
+					<tree-node-label>
+						<img ng-class="node.lifecycleState | lowercase" class="clever-icon" style="padding: 0 10px;height: 16px;"></img>
+						<span ng-bind-html="node.conceptName | highlight:keyword | unsafe"></span>
+						&nbsp;<span style="color:red;font-size: 10pt;"></span>
+					</tree-node-label>
+				</tree-view>
 			</ul>
 		</div>
 
@@ -57,7 +74,7 @@
 							Display
 						</tab-heading>
 						<div class="col-xs-12 col-md-12 col-lg-12" style="overflow:auto;">
-							<tabset class="row" style= "margin-top:5px;margin-bottom: 10px;">
+							<tabset class="row" style= "margin-top:5px;margin-bottom: 10px;" tab-control = "tabControl">
 								<tab>
 									<tab-heading>
 										ADL
@@ -107,6 +124,24 @@
 		</div>
 		<div class="modal-footer">
 		<button class="btn btn-primary" ng-click="ok()">CREATE</button>
+		<button class="btn btn-warning" ng-click="cancel()">CANCEL</button>
+		</div>
+	</script>
+	
+	
+	<script type="text/ng-template" id="archetypeSpecialise.html">
+		<div class="modal-header">
+		<h3 class="modal-title">Specialise this Archetype: <h4>{{archetypeName}}</h4></h3>
+		
+		</div>
+		<div class="modal-body">
+		<div class="row">
+			<label style="margin-left:10px">Enter a New Concept : </label>
+			<input type="text" ng-model="newConceptName" style="margin-left:10px;width:500px;margin-right:10px;">
+		</div>
+		</div>
+		<div class="modal-footer">
+		<button class="btn btn-primary" ng-click="ok()">DOWN</button>
 		<button class="btn btn-warning" ng-click="cancel()">CANCEL</button>
 		</div>
 	</script>

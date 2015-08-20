@@ -17,6 +17,9 @@ angular.module('clever.management.directives.treeView', []).directive('treeView'
 			searchKeyMapper : '=',
 			
 			nodeMessageGenerator:'=',
+			clickEditMenuCallback:'&',
+			specialiseArchetypeCallback:'&',
+			deleteArchetypeCallback:'&',
 		},
 		controller : function($scope, $transclude) {
 			
@@ -72,14 +75,36 @@ angular.module('clever.management.directives.treeView', []).directive('treeView'
 				});
 				//$scope.nodeMessageGenerator(node);
 			};
-			$scope.clickNodeMenu = function(node, type, value) {
+			$scope.clickNodeMenu = function(node, type, value) {//for template edit
 				$scope.clickNodeMenuCallback({
 					node : node,
 					type : type,
 					value : value
 				});
 			};
+			
+			
+			$scope.clickEditNodeMenu = function(node,type){
+				$scope.clickEditMenuCallback({
+					node:node,
+					type:type,
+				});
+			};
+			
+			$scope.specialiseArchetype = function(node){
+				$scope.specialiseArchetypeCallback({
+					value:node,
+				});
+			};
+			$scope.deleteArchetype = function(node){
+				$scope.deleteArchetypeCallback({
+					value:node,
+				});
+			};
+			
+			
 			$scope.doubleClickNode = function(node) {
+				//console.log(node);
 				$scope.doubleClickNodeCallback({
 					value : node,
 				});

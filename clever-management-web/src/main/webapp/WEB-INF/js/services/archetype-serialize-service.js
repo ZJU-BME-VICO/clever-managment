@@ -3,6 +3,10 @@ angular.module('clever.management.service.archetypeSerialize', []).service('arch
 	this.adlOutput = "";
 	this.indent = "    ";
 	//4 white space characters
+	var x2js = new X2JS();
+	this.serializeArchetypeToXml = function(archetype){
+		return x2js.json2xml_str(archetype);
+	};
 	this.serializeArchetype = function(archetype) {
 		this.adlOutput = "";
 		this.printHeader(archetype);

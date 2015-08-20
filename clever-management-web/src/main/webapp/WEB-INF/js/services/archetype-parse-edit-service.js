@@ -8,19 +8,32 @@ angular.module('clever.management.service.archetypeParseEdit', []).service('arch
 		var archetype = x2js.xml_str2json(xml).archetype;
 		return this.parseArchetype(archetype);
 	};
+	this.getOriginalArchetype = function(xml) {
+		return  x2js.xml_str2json(xml).archetype;
+	};
+	this.parseArchetypeJson = function(archetype) {
+		return this.parseArchetype(archetype);
+	};
 	this.parseArchetype = function(archetype) {
 		var header = this.parseHeader(archetype);
 		var terminologies = this.parseTerminology(archetype);
 		var definitions = this.parseDefinition(archetype);
 		var languages = this.parseLanguage(archetype);
+		if (archetype.parent_archetype_id) {
+			var parentArchetype = archetype.parent_archetype_id.value;
+		} else {
+			var parentArchetype = undefined;
+		}
 		return {
 			oriNodeRef : archetype, //---------for edit
 			header : header,
 			terminologies : terminologies,
 			definitions : definitions,
-			languages : languages
+			languages : languages,
+			parent : parentArchetype,
 		};
 	};
+
 	this.parseHeader = function(archetype) {
 		var header = {};
 		header.concept = archetype.concept;
@@ -148,7 +161,7 @@ angular.module('clever.management.service.archetypeParseEdit', []).service('arch
 		var constraintBindings = archetype.ontology.constraint_bindings;
 		return {
 			oriNodeRef : archetype.terminology, //add a reference to ontology, because it is a editable array,
-			terms_definitions : parseTermDefinition(termDefinitions),
+			term_definitions : parseTermDefinition(termDefinitions),
 			constraint_definitions : parseConstrainDefinition(constrainDefinitions),
 			term_bindings : parseTermBindings(termBindings),
 			constraintBindings : parseConstraintBindings(constraintBindings),
@@ -520,11 +533,7 @@ angular.module('clever.management.service.archetypeParseEdit', []).service('arch
 		var label, labelType;
 		if (type) {
 			labelType = 'type';
-			if (typeList.indexOf(type) != -1) {
-				label = parentAttribute.label.text;
-			} else {
-				label = type;
-			}
+			label = type;
 		}
 		if (attribute) {
 			labelType = 'attribute';
@@ -606,6 +615,9 @@ angular.module('clever.management.service.archetypeParseEdit', []).service('arch
 			picType = label;
 		}
 
+		if (typeList.indexOf(type) != -1) {
+			label = parentAttribute.label.text;
+		}
 		return {
 			label : {
 				type : labelType,
