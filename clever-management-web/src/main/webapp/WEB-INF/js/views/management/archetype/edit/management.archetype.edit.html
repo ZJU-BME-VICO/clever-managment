@@ -17,7 +17,7 @@
 				class="archetype-tree"
 				double-click-node-callback="selectArchetype(value)"
 				node-id="id" node-children="specialiseArchetype"
-				node-menu-generator = "getTreeNodeMenu"
+				node-menu-generator = "getTreeElementMenu"
 				specialise-archetype-callback="specialiseArchetype(value)"
 				delete-archetype-callback="deleteArchetype(value)"
 				tree-control="treeControl" node-alias-name="node"
@@ -46,11 +46,15 @@
 				
 				<div class="panel-heading" style="height: 50px">
 					<span style="font-size: large">{{selectedArchetype.name}}</span>
+					
 					<button class="btn btn-primary pull-right"   style="margin-left:20px; margin-right: 30px;" ng-disabled="selectedArchetype==undefined" ng-click="saveSelectedArchetype()">
 							Save
 						</button>
 						<button class="btn btn-primary pull-right"   style="margin-left:20px"; ng-disabled="selectedArchetype==undefined" ng-click="submitSelectedArchetype()">
 							Submit
+					</button>
+					<button class="btn btn-info pull-right" style="margin-left:20px";ng-disabled="selectedArchetype==undefined" ng-click="generatorDiff()">
+						   Diff
 					</button>
 				</div>
                 <div class="panel-body"ng-style="{height: containerHeight - 50}" style="overflow: auto;">

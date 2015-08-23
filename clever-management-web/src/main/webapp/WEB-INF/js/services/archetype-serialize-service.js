@@ -486,7 +486,7 @@ angular.module('clever.management.service.archetypeSerialize', []).service('arch
 
 	this.printCObject = function(cobject, number, ontology) {
 		//for c_dv_domain_type
-		if (cobject['_xsi:type'] == "C_DV_ORDINARY") {
+		if (cobject['_xsi:type'] == "C_DV_ORDINAL") {
 			this.printCDvOrdinal(cobject, number);
 		} else if (cobject['_xsi:type'] == "C_DV_QUANTITY") {
 			this.printCDvQuantity(cobject, number);
@@ -939,7 +939,7 @@ angular.module('clever.management.service.archetypeSerialize', []).service('arch
 		self.write("|");
 
 	};
-	this.printCDvOdinal = function(cordinal, number) {
+	this.printCDvOrdinal = function(cordinal, number) {
 		if (cordinal.list) {
 			var list = cordinal.list;
 			for (var i = 0; i < list.length; i++) {
@@ -1028,7 +1028,7 @@ angular.module('clever.management.service.archetypeSerialize', []).service('arch
 								if (item._code == nodeId) {
 									angular.forEach(item.items, function(item) {
 										if (item._id == "text") {
-											self.write("\t--" + item.__text);
+											self.write("\t--\t" + item.__text);
 										}
 									});
 

@@ -437,7 +437,7 @@ angular.module('clever.management.service.archetypeParseEdit', []).service('arch
 					var extractedNode = extractNode(value, terminologies, parentAttribute);
 					if (value.attributes) {
 						extractedNode.children = [];
-						processAttribute(value.attributes, value, extractedNode.children, terminologies);
+						processAttribute(value.attributes, extractNode, extractedNode.children, terminologies);
 					}
 					if (parentAttribute) {
 						extractedNode.parentAttribute = parentAttribute;
@@ -478,6 +478,7 @@ angular.module('clever.management.service.archetypeParseEdit', []).service('arch
 					} else {
 						var noKeepAttribute = extractNode(attribute, terminologies, undefined);
 						noKeepAttribute.oriNodeRef = attribute;
+						parent.childrenAttribute = noKeepAttribute;
 						if (attribute.children) {
 							myProcessNode(attribute.children, treeItems.parent, treeItems, terminologies, noKeepAttribute);
 						}
@@ -494,6 +495,7 @@ angular.module('clever.management.service.archetypeParseEdit', []).service('arch
 				} else {
 					var noKeepAttribute = extractNode(attributes, terminologies, undefined);
 					noKeepAttribute.oriNodeRef = attributes;
+					parent.childrenAttribute = noKeepAttribute;
 					if (attributes.children) {
 						myProcessNode(attributes.children, treeItems.parent, treeItems, terminologies, noKeepAttribute);
 					}
@@ -631,7 +633,7 @@ angular.module('clever.management.service.archetypeParseEdit', []).service('arch
 				dataType : dataType,
 				picType : picType,
 				dataValue : dataValue,
-				dataInfo : dataInfo,
+				//dataInfo : dataInfo,
 				//    tableName: tableName,
 				//    targetPath: targetPath,
 

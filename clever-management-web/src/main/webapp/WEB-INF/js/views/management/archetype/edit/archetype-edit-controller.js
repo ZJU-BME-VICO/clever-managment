@@ -1,4 +1,4 @@
-function ArchetypeEditCtrl($scope, $modal,$log,msgboxService,busyService, resourceService,archetypeParseEditService, archetypeParseToEditService ,templateParseToEditService,archetypeSerializeService, archetypeParseService,ARCHETYPE_LIST_EDIT_DRAFT_URL, ARCHETYPE_LIST_EDIT_PUBLISHED_URL,ARCHETYPE_CREATE_URL, ARCHETYPE_EDIT_BY_ID_URL, ARCHETYPE_SUBMIT_BY_ID_URL) {
+function ArchetypeEditCtrl($scope, $modal,$log,msgboxService,busyService,documentDiffModalService, resourceService,archetypeParseEditService, archetypeParseToEditService ,templateParseToEditService,archetypeSerializeService, archetypeParseService,ARCHETYPE_LIST_EDIT_DRAFT_URL, ARCHETYPE_LIST_EDIT_PUBLISHED_URL,ARCHETYPE_CREATE_URL, ARCHETYPE_EDIT_BY_ID_URL, ARCHETYPE_SUBMIT_BY_ID_URL) {
 
 	
 	$scope.editId = 0;
@@ -44,7 +44,7 @@ function ArchetypeEditCtrl($scope, $modal,$log,msgboxService,busyService, resour
 	}, function(newValue) {
 		$scope.tabContainerHeight.value = newValue - 35;
 	});
- 
+    
      
 	//call to background
 	//create a new archetype test
@@ -56,66 +56,68 @@ function ArchetypeEditCtrl($scope, $modal,$log,msgboxService,busyService, resour
 		});
 	}; 
 
-	
+	$scope.generatorDiff = function(){
+		console.log($scope.originalAdl);
+		var editedArchetype = archetypeSerializeService.serializeArchetype($scope.oriArchetype);
+		console.log(editedArchetype);
+		documentDiffModalService.open('Modify records', $scope.originalAdl, editedArchetype);
+	};
 	
 	$scope.selectArchetype = function(archetype) {
-
-		//test
-		$scope.selectedArchetype = archetype;
-
-		//parse achetype edit service test
-		var result = archetypeParseEditService.parseArchetypeXml($scope.selectedArchetype.xml);
-		//console.log("this is result archetype ==============================================");
-		//parse archetype edit service test end
-		//console.log(result);
-		//$scope.resultDefinition = result.definitions.treeItems;
-
-		//console.log($scope.selectedArchetype);
-		var oriArchetype = archetypeParseService.getOriginalArchetype($scope.selectedArchetype.xml);
-		//console.log("==================this is the original archetype=================");
-		//console.log(oriArchetype);
-		var serializedArchetype = archetypeSerializeService.serializeArchetype(oriArchetype);
-		//console.log(serializedArchetype);
 		
+		//object test
+	
+
+		
+		$scope.selectedArchetype = archetype;
+		
+		$scope.originalAdl = archetype.adl;
+		console.log($scope.originalAdl);
+		
+		
+		
+		//var result = archetypeParseEditService.parseArchetypeXml($scope.selectedArchetype.xml);
+			
+		var oriArchetype = archetypeParseEditService.getOriginalArchetype($scope.selectedArchetype.xml);
+		var result = archetypeParseEditService.parseArchetypeJson(oriArchetype);	
+		//var oriArchetype = archetypeParseService.getOriginalArchetype($scope.selectedArchetype.xml);
+				
 		var archetype = archetypeParseService.parseArchetypeXml($scope.selectedArchetype.xml);
-		//console.log("================this is editable definition==============");
-		//console.log(archetype);
-		$scope.editableDefinition = archetypeParseToEditService.parseDefinitionToEdit(archetype);
+		
+		//$scope.editableDefinition = archetypeParseToEditService.parseDefinitionToEdit(archetype);
+		
+		$scope.editableArchetype = result;
+		$scope.oriArchetype = oriArchetype;
+		$scope.ontology = result.terminologies;
+		
+		$scope.definition = result.definitions;
 
-		//console.log("=========================this is editable archetype==========================");
-		//console.log($scope.editableDefinition);
-		//	var editTemplate = templateParseToEditService.parseDefinition(archetype);
-		//	console.log("===========this is eidtable template============");
-		//console.log(editTemplate);
-
-		$scope.ontology = archetype.terminologies;
-		console.log("this is ontology");
+		$scope.header = result.header;
+	
+		$scope.languages = result.languages;
+		$scope.languages.selectedLanguage = result.languages.originalLanguage;
+		
+		
+		
+		
+		
+		console.log("==========this is oriArchetype===========");
+		console.log(oriArchetype);
+		console.log("==========this is parsedResult Archetype===========");
+		console.log(result);
+		console.log("==========this is ontology===========");
 		console.log($scope.ontology);
-		var temp = {};
-
-		temp.oriDefinition = archetype.definitions;
-		//var addItem = {asdf:'dfa',};
-		//	$scope.definition.oriDefinition.treeItems[0].children.push(addItem);
-		//temp.editableDefinition = $scope.editableDefinition;
-		temp.editableDefinition = result.definitions;
-		$scope.definition = temp;
-		//console.log("=======================this is the definition==================");
-		//console.log($scope.definition);
-
-		$scope.header = archetype.header;
-
-		//console.log("------------------this is the archetype after edit--------------");
-		//console.log(oriArchetype);
-		$scope.languages = archetype.languages;
-		$scope.languages.selectedLanguage = archetype.languages.originalLanguage;
-		//$scope.selectedLanguage = archetype.languages.originalLanguage;
-		//console.log($scope.selectedLanguage);
-		//console.log("parse over");
-
-		//console.log(archetype);
+		console.log("==========this is definition===========");
+		console.log($scope.definition);
+		console.log("==========this is header===========");
+		console.log($scope.header);		
+		console.log("==========this is languages===========");
+		console.log($scope.languages);
+		
+		
 	};
 	  
-	$scope.getTreeNodeMenu = function(node,aliasName){
+	$scope.getTreeElementMenu = function(node,aliasName){
 		if(node){
 			console.log(aliasName);
 			var menuHtml = '<ul class="dropdown-menu"  role="menu" ng-if = "true">';
