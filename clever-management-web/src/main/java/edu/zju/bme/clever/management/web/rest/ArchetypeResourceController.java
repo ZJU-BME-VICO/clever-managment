@@ -1,6 +1,8 @@
 package edu.zju.bme.clever.management.web.rest;
 
 import java.io.IOException;
+import java.io.OutputStream;
+import java.io.Writer;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -34,6 +36,7 @@ import edu.zju.bme.clever.management.service.entity.ArchetypeRevisionFile;
 import edu.zju.bme.clever.management.service.entity.ArchetypeVersionMaster;
 import edu.zju.bme.clever.management.service.entity.FileProcessResult;
 import edu.zju.bme.clever.management.service.entity.User;
+import edu.zju.bme.clever.management.service.exception.ResourceExportException;
 import edu.zju.bme.clever.management.web.entity.ActionLogInfo;
 import edu.zju.bme.clever.management.web.entity.ArchetypeInfo;
 import edu.zju.bme.clever.management.web.entity.ArchetypeMasterInfo;
@@ -90,6 +93,12 @@ public class ArchetypeResourceController extends AbstractResourceController {
 	@ManagedAttribute
 	public void setValidationEnabled(boolean validationEnabled) {
 		this.validationEnabled = validationEnabled;
+	}
+
+	@RequestMapping(value = "/export", method = RequestMethod.GET)
+	public void exportArchetypes(OutputStream out)
+			throws ResourceExportException {
+		this.archetypeProvideService.exportArchetypes(out);
 	}
 
 	@RequestMapping(value = "/list", method = RequestMethod.GET)

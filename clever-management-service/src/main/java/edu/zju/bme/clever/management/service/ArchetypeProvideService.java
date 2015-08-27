@@ -1,11 +1,13 @@
 package edu.zju.bme.clever.management.service;
 
+import java.io.OutputStream;
 import java.util.List;
 
 import edu.zju.bme.clever.management.service.entity.ArchetypeMaster;
 import edu.zju.bme.clever.management.service.entity.ArchetypeRevisionFile;
 import edu.zju.bme.clever.management.service.entity.ArchetypeVersionMaster;
 import edu.zju.bme.clever.management.service.entity.User;
+import edu.zju.bme.clever.management.service.exception.ResourceExportException;
 
 public interface ArchetypeProvideService {
 
@@ -38,5 +40,7 @@ public interface ArchetypeProvideService {
 	public String getArchetypeAdlById(Integer id);
 
 	public String getArchetypeAdlByName(String name);
+
+	public void exportArchetypes(OutputStream out) throws ResourceExportException;
 
 }

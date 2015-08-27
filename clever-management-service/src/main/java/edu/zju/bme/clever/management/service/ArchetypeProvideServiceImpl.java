@@ -1,10 +1,17 @@
 package edu.zju.bme.clever.management.service;
 
+import java.io.BufferedInputStream;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 import org.openehr.am.archetype.Archetype;
 import org.openehr.am.serialize.ADLSerializer;
@@ -21,6 +28,7 @@ import edu.zju.bme.clever.management.service.entity.ArchetypeRevisionFile;
 import edu.zju.bme.clever.management.service.entity.ArchetypeVersionMaster;
 import edu.zju.bme.clever.management.service.entity.LifecycleState;
 import edu.zju.bme.clever.management.service.entity.User;
+import edu.zju.bme.clever.management.service.exception.ResourceExportException;
 import edu.zju.bme.clever.management.service.repository.ArchetypeActionLogRepository;
 import edu.zju.bme.clever.management.service.repository.ArchetypeMasterRepository;
 import edu.zju.bme.clever.management.service.repository.ArchetypeRevisionFileRepository;
@@ -31,6 +39,8 @@ import edu.zju.bme.clever.management.service.repository.ArchetypeVersionMasterRe
 public class ArchetypeProvideServiceImpl implements ArchetypeProvideService {
 
 	protected final Logger logger = LoggerFactory.getLogger(this.getClass());
+	
+	private static final int BUFFER = 2048;
 
 	@Autowired
 	private ArchetypeRevisionFileRepository revisionFileRepo;
@@ -43,6 +53,31 @@ public class ArchetypeProvideServiceImpl implements ArchetypeProvideService {
 
 	private XMLSerializer xmlSerializer = new XMLSerializer();
 	private ADLSerializer adlSerializer = new ADLSerializer();
+	
+	@Override
+	public void exportArchetypes(final OutputStream out)
+			throws ResourceExportException {
+		try {
+			ZipOutputStream zipOut = new ZipOutputStream(out);
+			BufferedInputStream origin = null;
+			byte data[] = new byte[BUFFER];
+			for (ArchetypeRevisionFile file : this.revisionFileRepo.findAll()) {
+				InputStream in = new ByteArrayInputStream(file.getAdl()
+						.getBytes(StandardCharsets.UTF_8));
+				origin = new BufferedInputStream(in, BUFFER);
+				ZipEntry entry = new ZipEntry(file.getName() + ".adl");
+				zipOut.putNextEntry(entry);
+				int count;
+				while ((count = origin.read(data, 0, BUFFER)) != -1) {
+					zipOut.write(data, 0, count);
+				}
+				origin.close();
+			}
+			zipOut.close();
+		} catch (Exception ex) {
+			throw new ResourceExportException("Export archetypes failed.", ex);
+		}
+	}
 
 	@Override
 	public List<ArchetypeMaster> getAllArchetypeMasters() {

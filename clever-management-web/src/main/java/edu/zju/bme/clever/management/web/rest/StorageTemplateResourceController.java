@@ -1,6 +1,7 @@
 package edu.zju.bme.clever.management.web.rest;
 
 import java.io.IOException;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -31,6 +32,7 @@ import edu.zju.bme.clever.management.service.entity.TemplateMaster;
 import edu.zju.bme.clever.management.service.entity.TemplatePropertyType;
 import edu.zju.bme.clever.management.service.entity.TemplateRevisionFile;
 import edu.zju.bme.clever.management.service.entity.User;
+import edu.zju.bme.clever.management.service.exception.ResourceExportException;
 import edu.zju.bme.clever.management.service.exception.VersionControlException;
 import edu.zju.bme.clever.management.web.entity.ActionLogInfo;
 import edu.zju.bme.clever.management.web.entity.ArchetypeInfo;
@@ -47,7 +49,7 @@ import edu.zju.bme.clever.management.web.entity.UploadedStorageTemplate;
 public class StorageTemplateResourceController extends
 		AbstractResourceController {
 	@Autowired
-	private StorageTemplateProvideService providerService;
+	private StorageTemplateProvideService provideService;
 	@Autowired
 	private StorageTemplateVersionControlService versionControlService;
 	@Autowired
@@ -57,9 +59,15 @@ public class StorageTemplateResourceController extends
 	@Autowired
 	private RestClient restClient;
 
+	@RequestMapping(value = "/export", method = RequestMethod.GET)
+	public void exportStorageTemplates(OutputStream out)
+			throws ResourceExportException {
+		this.provideService.exportStorageTemplates(out);
+	}
+
 	@RequestMapping(value = "/list", method = RequestMethod.GET)
 	public List<StorageTemplateMasterInfo> getStorageTemplateMasterList() {
-		return this.providerService
+		return this.provideService
 				.getAllStorageTemplateMasters()
 				.stream()
 				.map(master -> {
@@ -78,7 +86,7 @@ public class StorageTemplateResourceController extends
 	@RequestMapping(value = "/master/id/{id}", method = RequestMethod.GET)
 	public StorageTemplateMasterInfo getStorageTemplateMasterById(
 			@PathVariable int id) {
-		TemplateMaster master = this.providerService.getTemplateMasterById(id);
+		TemplateMaster master = this.provideService.getTemplateMasterById(id);
 		this.isResourcesNull(master);
 		return this.constructStorageTemplateMasterInfo(master);
 	}
@@ -86,7 +94,7 @@ public class StorageTemplateResourceController extends
 	@RequestMapping(value = "/master/name/{name}", method = RequestMethod.GET)
 	public StorageTemplateMasterInfo getStorageTemplateMasterByName(
 			@PathVariable String name) {
-		TemplateMaster master = this.providerService
+		TemplateMaster master = this.provideService
 				.getTemplateMasterByName(name);
 		this.isResourcesNull(master);
 		return this.constructStorageTemplateMasterInfo(master);
@@ -94,7 +102,7 @@ public class StorageTemplateResourceController extends
 
 	@RequestMapping(value = "/id/{id}", method = RequestMethod.GET)
 	public StorageTemplateInfo getTemplateById(@PathVariable int id) {
-		TemplateRevisionFile templateFile = this.providerService
+		TemplateRevisionFile templateFile = this.provideService
 				.getTemplateFileById(id);
 		this.isResourcesNull(templateFile);
 		return this.constructStorageTemplateInfo(templateFile);
@@ -102,7 +110,7 @@ public class StorageTemplateResourceController extends
 
 	@RequestMapping(value = "/name/{name}", method = RequestMethod.GET)
 	public StorageTemplateInfo getTemplateByName(@PathVariable String name) {
-		TemplateRevisionFile templateFile = this.providerService
+		TemplateRevisionFile templateFile = this.provideService
 				.getTemplateFileByName(name);
 		this.isResourcesNull(templateFile);
 		return this.constructStorageTemplateInfo(templateFile);
@@ -114,7 +122,7 @@ public class StorageTemplateResourceController extends
 		String userName = ((UserDetails) authentication.getPrincipal())
 				.getUsername();
 		User user = userService.getUserByName(userName);
-		List<TemplateRevisionFile> templateFiles = this.providerService
+		List<TemplateRevisionFile> templateFiles = this.provideService
 				.getDraftTemplateFilesToEdit(user);
 		this.isResourcesNull(templateFiles);
 		return templateFiles.stream()
@@ -124,7 +132,7 @@ public class StorageTemplateResourceController extends
 
 	@RequestMapping(value = "/list/edit/published", method = RequestMethod.GET)
 	public List<StorageTemplateInfo> getTemplateListToEdit() {
-		List<TemplateRevisionFile> templateFiles = this.providerService
+		List<TemplateRevisionFile> templateFiles = this.provideService
 				.getLatestPublishedTemplateFilesToEdit();
 		this.isResourcesNull(templateFiles);
 		return templateFiles.stream()
@@ -137,7 +145,7 @@ public class StorageTemplateResourceController extends
 			Authentication authentication) {
 		// Validate user authority
 
-		List<TemplateRevisionFile> TemplateFiles = this.providerService
+		List<TemplateRevisionFile> TemplateFiles = this.provideService
 				.getTemplateFilesToVerify();
 		this.isResourcesNull(TemplateFiles);
 		return TemplateFiles.stream()
@@ -150,7 +158,7 @@ public class StorageTemplateResourceController extends
 			Authentication authentication) {
 		// Validate user authority
 
-		List<TemplateMaster> masters = this.providerService
+		List<TemplateMaster> masters = this.provideService
 				.getAllStorageTemplateMasters();
 		return masters
 				.stream()
@@ -302,28 +310,28 @@ public class StorageTemplateResourceController extends
 
 	@RequestMapping(value = "/id/{id}/oet", method = RequestMethod.GET)
 	public String getTemplateOetById(@PathVariable int id) {
-		String oet = this.providerService.getTemplateOetById(id);
+		String oet = this.provideService.getTemplateOetById(id);
 		this.isResourcesNull(oet);
 		return oet;
 	}
 
 	@RequestMapping(value = "/id/{id}/arm", method = RequestMethod.GET)
 	public String getTemplateArmById(@PathVariable int id) {
-		String arm = this.providerService.getTemplateArmById(id);
+		String arm = this.provideService.getTemplateArmById(id);
 		this.isResourcesNull(arm);
 		return arm;
 	}
 
 	@RequestMapping(value = "/name/{name}/oet", method = RequestMethod.GET)
 	public String getTemplateOetByName(@PathVariable String name) {
-		String oet = this.providerService.getTemplateOetByName(name);
+		String oet = this.provideService.getTemplateOetByName(name);
 		this.isResourcesNull(oet);
 		return oet;
 	}
 
 	@RequestMapping(value = "/name/{name}/arm", method = RequestMethod.GET)
 	public String getTemplateArmByName(@PathVariable String name) {
-		String arm = this.providerService.getTemplateArmByName(name);
+		String arm = this.provideService.getTemplateArmByName(name);
 		this.isResourcesNull(arm);
 		return arm;
 	}
