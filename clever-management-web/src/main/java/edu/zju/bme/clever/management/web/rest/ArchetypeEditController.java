@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RestController;
 import edu.zju.bme.clever.management.web.entity.ArchetypeCreateInfo;
 
 @RestController
-@ManagedResource
 @RequestMapping("/archetypes/edit")
 public class ArchetypeEditController{
 	//@Autowired

@@ -39,15 +39,15 @@
 		<div class="row">
 			<div class="panel panel-default">
 				<div class="panel-heading">
-					<span><span><b>Expand All:&nbsp;&nbsp;&nbsp;</b></span><toggle-switch model="isExpandedAll" ng-disabled="selectedTemplate == undefined"></toggle-switch></span>
+					<span><span><b>{{'STORAGE_TEMPLATE_EDIT_EXPAND' | translate}}:&nbsp;&nbsp;&nbsp;</b></span><toggle-switch model="isExpandedAll" ng-disabled="selectedTemplate == undefined"></toggle-switch></span>
 					<button class="btn btn-primary pull-right" style="margin-left: 10px;" ng-disabled="selectedTemplate == undefined" ng-click="saveTemplateFile()">
-						Save
+						{{'STORAGE_TEMPLATE_EDIT_SAVE' | translate}}
 					</button>
 					<button class="btn btn-primary pull-right" style="margin-left: 10px;" ng-disabled="selectedTemplate == undefined" ng-click="submitTemplateFile()">
-						Submit
+						{{'STORAGE_TEMPLATE_EDIT_SUBMIT' | translate}}
 					</button>
 					<button class="btn btn-info pull-right" ng-disabled="selectedTemplate == undefined" ng-click="generateOetDiff()">
-						Open
+						{{'STORAGE_TEMPLATE_EDIT_DIFF' | translate}}
 					</button>
 				</div>
 				<div class="panel-body" ng-style="{height: containerHeight - 50}" style="overflow: auto;">

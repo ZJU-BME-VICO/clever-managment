@@ -16,7 +16,7 @@ function StorageTemplateEditCtrl($scope, resourceService, busyService, msgboxSer
 
 	$scope.isExpandedAll = false;
 	$scope.$watch('isExpandedAll', function(newValue, oldValue) {
-		
+
 		if ($scope.treeControl.value && newValue) {
 			$scope.treeControl.value.expandAll();
 		} else if ($scope.treeControl.value && !newValue) {
@@ -38,16 +38,16 @@ function StorageTemplateEditCtrl($scope, resourceService, busyService, msgboxSer
 		var bid = busyService.pushBusy('BUSY_LOADING');
 		$scope.selectedTemplate = template;
 		//console.log("this is selected template");
-	    //console.log($scope.selectedTemplate);
+		//console.log($scope.selectedTemplate);
 		$scope.selectedTemplate.oet = formatXml($scope.selectedTemplate.oet);
 		try {
 			$scope.oetObj = x2js.xml_str2json(template.oet);
-			
+
 			//console.log("this is the oet object---------------------------------------------------------");
-		    //console.log($scope.oetObj);
+			//console.log($scope.oetObj);
 			$scope.parsedTemplate = templateParseToEditService.parseTemplate($scope.oetObj.template);
-		    console.log("----------------------this is the parsedTemplate definition");
-		    console.log($scope.parsedTemplate.definition);
+			console.log("----------------------this is the parsedTemplate definition");
+			console.log($scope.parsedTemplate.definition);
 		} catch(ex) {
 			console.log(ex);
 		}
@@ -71,8 +71,7 @@ function StorageTemplateEditCtrl($scope, resourceService, busyService, msgboxSer
 
 	$scope.getTreeNodeLabel = function(node, aliasName) {
 		var label = '';
-		label += '<span class="clever-icon ' + node.label.picType.toLowerCase() + '" style="padding: 7px 10px; background-position-y: 10px;"></span>'+
-			'<span ng-class="{\'node-label-max\': ' + aliasName + '.label.occurrences.upper != 0}"';
+		label += '<span class="clever-icon ' + node.label.picType.toLowerCase() + '" style="padding: 7px 10px; background-position-y: 10px;"></span>' + '<span ng-class="{\'node-label-max\': ' + aliasName + '.label.occurrences.upper != 0}"';
 		if (node.label.text) {
 			label += '<span style="color: brown;">' + node.label.text;
 		}
@@ -84,8 +83,7 @@ function StorageTemplateEditCtrl($scope, resourceService, busyService, msgboxSer
 			}
 			label += getOntologyByNode(node);
 		}
-		label += '<span ng-if="' + aliasName + '.label.occurrences.upper != 0">&nbsp&nbsp[{{' + aliasName + '.label.occurrences.lower}}..{{' + aliasName + '.label.occurrences.upper}}]' + 
-			'<span ng-if="' + aliasName + '.label.occurrenceType == \'*\' && ' + aliasName + '.label.occurrences.upper == 1">&nbsp&nbsp&nbsp<em>[0..*] to [0..1]</em></span>' + '</span>' + '</span>' + '</span>';
+		label += '<span ng-if="' + aliasName + '.label.occurrences.upper != 0">&nbsp&nbsp[{{' + aliasName + '.label.occurrences.lower}}..{{' + aliasName + '.label.occurrences.upper}}]' + '<span ng-if="' + aliasName + '.label.occurrenceType == \'*\' && ' + aliasName + '.label.occurrences.upper == 1">&nbsp&nbsp&nbsp<em>[0..*] to [0..1]</em></span>' + '</span>' + '</span>' + '</span>';
 		return label;
 		// return label + '<span>[' + node.label.path + ']</span>'
 	};
@@ -111,33 +109,34 @@ function StorageTemplateEditCtrl($scope, resourceService, busyService, msgboxSer
 		return matchedOntology;
 	}
 
-	$scope.getTreeNodeMenu = function(node, aliasName) {
-	    var menuHtml = '<ul class="dropdown-menu" role="menu" ng-if="' + aliasName + '.parent.label.occurrences.upper != 0">';
-	    if (node.label.archetypeNode) {
-	        if (node.parent) {
-	            menuHtml += '<li><a class="pointer" role="menuitem" tabindex="1" ng-click="setNodeByContextMenu(' + aliasName + ', 3)">Delete archetype</a></li>';
-	        } else {
-	            menuHtml = '';
-	        }
-	    } else if (node.label.slot) {
-	        menuHtml += constructSlotMenu(node, aliasName);
-	    } else {
-	        if (node.label.occurrenceType) {
-	            if (node.label.occurrenceType == 1) {
-	                menuHtml += '<li><a class="pointer" role="menuitem" tabindex="1" ng-click="setNodeByContextMenu(' + aliasName + ', 1, 0)">Zero Occurrence</a></li>' + '<li><a class="pointer" role="menuitem" tabindex="2" ng-click="setNodeByContextMenu(' + aliasName + ', 1, 1)">Single Occurrence</a></li>';
-	            } else if (node.label.occurrenceType == '*') {
-	                menuHtml += '<li><a class="pointer" role="menuitem" tabindex="1" ng-click="setNodeByContextMenu(' + aliasName + ', 1, 0)">Zero Occurrence</a></li>' + '<li><a class="pointer" role="menuitem" tabindex="2" ng-click="setNodeByContextMenu(' + aliasName + ', 1, 1)">Single Occurrence</a></li>' + '<li><a class="pointer" role="menuitem" tabindex="3" ng-click="setNodeByContextMenu(' + aliasName + ', 1, \'*\')">Unlimited Occurrence</a></li>';
-	            }
-	        } else {
-	            menuHtml = '';
-	        }
-	    }
 
-	    if (menuHtml == '') {
-	        return menuHtml;
-	    } else {
-	        return menuHtml += '</ul>';
-	    }
+	$scope.getTreeNodeMenu = function(node, aliasName) {
+		var menuHtml = '<ul class="dropdown-menu" role="menu" ng-if="' + aliasName + '.parent.label.occurrences.upper != 0">';
+		if (node.label.archetypeNode) {
+			if (node.parent) {
+				menuHtml += '<li><a class="pointer" role="menuitem" tabindex="1" ng-click="setNodeByContextMenu(' + aliasName + ', 3)">Delete archetype</a></li>';
+			} else {
+				menuHtml = '';
+			}
+		} else if (node.label.slot) {
+			menuHtml += constructSlotMenu(node, aliasName);
+		} else {
+			if (node.label.occurrenceType) {
+				if (node.label.occurrenceType == 1) {
+					menuHtml += '<li><a class="pointer" role="menuitem" tabindex="1" ng-click="setNodeByContextMenu(' + aliasName + ', 1, 0)">Zero Occurrence</a></li>' + '<li><a class="pointer" role="menuitem" tabindex="2" ng-click="setNodeByContextMenu(' + aliasName + ', 1, 1)">Single Occurrence</a></li>';
+				} else if (node.label.occurrenceType == '*') {
+					menuHtml += '<li><a class="pointer" role="menuitem" tabindex="1" ng-click="setNodeByContextMenu(' + aliasName + ', 1, 0)">Zero Occurrence</a></li>' + '<li><a class="pointer" role="menuitem" tabindex="2" ng-click="setNodeByContextMenu(' + aliasName + ', 1, 1)">Single Occurrence</a></li>' + '<li><a class="pointer" role="menuitem" tabindex="3" ng-click="setNodeByContextMenu(' + aliasName + ', 1, \'*\')">Unlimited Occurrence</a></li>';
+				}
+			} else {
+				menuHtml = '';
+			}
+		}
+
+		if (menuHtml == '') {
+			return menuHtml;
+		} else {
+			return menuHtml += '</ul>';
+		}
 	};
 
 	function getRegExpsBySlotExpression(slotExpression) {
@@ -207,6 +206,7 @@ function StorageTemplateEditCtrl($scope, resourceService, busyService, msgboxSer
 		}
 		return slotMenu;
 	}
+
 
 	$scope.setNodeByContextMenu = function(node, type, value) {
 		switch (type) {
@@ -397,13 +397,15 @@ function StorageTemplateEditCtrl($scope, resourceService, busyService, msgboxSer
 	$scope.submitTemplateFile = function() {
 		resourceService.get(STORAGE_TEMPLATE_SUBMIT_BY_ID_URL + $scope.selectedTemplate.id).then(function(result) {
 			if (result.succeeded) {
-				msgboxService.createMessageBox("prompt", "Submit succeeded", {}, "success");
-				$scope.templateFiles.draft.splice($scope.templateFiles.draft.indexOf(templateFile), 1);
+				msgboxService.createMessageBox('STORAGE_TEMPLATE_SUCCEEDED', 'STORAGE_TEMPLATE_SUBMIT_SUCCEEDED_HINT', {}, 'success');
+				$scope.templateFiles.draft.splice($scope.templateFiles.draft.indexOf($scope.selectedTemplate), 1);
 				$scope.selectedTemplate = undefined;
 				$scope.oetObj = undefined;
 				$scope.parsedTemplate = undefined;
 			} else {
-				msgboxService.createMessageBox("prompt", result.message, {}, "error");
+				msgboxService.createMessageBox('STORAGE_TEMPLATE_FAILED', 'STORAGE_TEMPLATE_SUBMIT_FAILED_HINT', {
+					errorMsg : result.message
+				}, "error");
 			}
 		});
 	};
@@ -412,9 +414,11 @@ function StorageTemplateEditCtrl($scope, resourceService, busyService, msgboxSer
 		$scope.selectedTemplate.oet = x2js.json2xml_str($scope.oetObj);
 		resourceService.post(STORAGE_TEMPLATE_EDIT_BY_ID_URL + $scope.selectedTemplate.id, $scope.selectedTemplate).then(function(result) {
 			if (result.succeeded) {
-				msgboxService.createMessageBox("prompt", "Save succeeded", {}, "success");
+				msgboxService.createMessageBox('STORAGE_TEMPLATE_SUCCEEDED', 'STORAGE_TEMPLATE_EDIT_SUCCEEDED_HINT', {}, 'success');
 			} else {
-				msgboxService.createMessageBox("prompt", result.message, {}, "error");
+				msgboxService.createMessageBox('STORAGE_TEMPLATE_FAILED', 'STORAGE_TEMPLATE_EDIT_FAILED_HINT', {
+					errorMsg : result.message
+				}, "error");
 			}
 		});
 	};

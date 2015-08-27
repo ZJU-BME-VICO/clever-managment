@@ -59,7 +59,7 @@ angular.module('clever.management.i18n.zh', ['pascalprecht.translate']).config(f
 		ARCHETYPE_UPLOAD_SUCCEEDED_HINT : '原型上传成功。',
 		ARCHETYPE_UPLOAD_FAILED : '操作失败',
 		ARCHETYPE_UPLOAD_FAILED_HINT : '原型上传失败，错误：{{errorMsg}}',
-		
+
 		// Archetype edit
 		ARCHETYPE_EDIT_EDIT : '编辑',
 		ARCHETYPE_EDIT_SUBMIT : '提交',
@@ -71,7 +71,19 @@ angular.module('clever.management.i18n.zh', ['pascalprecht.translate']).config(f
 		ARCHETYPE_EDIT_EDIT_FAILED_HINT : '编辑原型失败,错误: {{errorMsg}}',
 		ARCHETYPE_EDIT_SUBMIT_SUCCEEDED_HINT : '成功提交原型',
 		ARCHETYPE_EDIT_SUBMIT_FAILED_HINT : '原型提交失败,错误: {{errorMsg}}',
-		
+
+		// Storage template edit
+		STORAGE_TEMPLATE_EDIT_SAVE : '保存',
+		STORAGE_TEMPLATE_EDIT_SUBMIT : '提交',
+		STORAGE_TEMPLATE_EDIT_DIFF : '对比',
+		STORAGE_TEMPLATE_EDIT_EXPAND : '全部展开',
+		STORAGE_TEMPLATE_SUCCEEDED : '操作成功',
+		STORAGE_TEMPLATE_FAILED : '操作失败',
+		STORAGE_TEMPLATE_EDIT_SUCCEEDED_HINT : '成功编辑模板。',
+		STORAGE_TEMPLATE_EDIT_FAILED_HINT : '编辑模板失败,错误: {{errorMsg}}',
+		STORAGE_TEMPLATE_SUBMIT_SUCCEEDED_HINT : '成功提交模板。',
+		STORAGE_TEMPLATE_SUBMIT_FAILED_HINT : '提交模板失败,错误: {{errorMsg}}',
+
 		// Archetype verify
 		ARCHETYPE_VERIFY : '所有待审核项',
 		ARCHETYPE_VERIFY_ADL_DIFF : 'ADL对比',
@@ -84,7 +96,7 @@ angular.module('clever.management.i18n.zh', ['pascalprecht.translate']).config(f
 		ARCHETYPE_VERIFY_APPROVE_HINT : '是否通过原型{{archetypeName}}?',
 		ARCHETYPE_VERIFY_APPROVE_SUCCEEDED_HINT : '原型通过审核',
 		ARCHETYPE_VERIFY_APPROVE_FAILED_HINT : '原型审核失败, 错误: {{errorMsg}}',
-		ARCHETYPE_VERIFY_REJECT_HINT : '是否否决原型{{archetypeName}}?',	
+		ARCHETYPE_VERIFY_REJECT_HINT : '是否否决原型{{archetypeName}}?',
 		ARCHETYPE_VERIFY_REJECT_FAILED_HINT : '否决原型失败, 错误: {{errorMsg}}',
 		ARCHETYPE_VERIFY_REMOVE_HINT : '是否否决并删除原型{{archetypeName}}?',
 		ARCHETYPE_VERIFY_REMOVE_FAILED_HINT : '否决并删除原型失败, 错误: {{errorMsg}}',
@@ -144,7 +156,7 @@ angular.module('clever.management.i18n.zh', ['pascalprecht.translate']).config(f
 		STORAGE_TEMPLATE_DEPLOY_MSG_HINI : '部署提示',
 		STORAGE_TEMPLATE_DEPLOY_SUCCEEDED_HINI : '部署成功',
 		STORAGE_TEMPLATE_DEPLOY_FAILED_HINI : '部署失败， 错误：{{errorMsg}}',
-		STORAGE_TEMPLATE_DEPLOY_SUCCEEDED: '成功',
+		STORAGE_TEMPLATE_DEPLOY_SUCCEEDED : '成功',
 		STORAGE_TEMPLATE_DEPLOY_FAILED : '失败',
 		STORAGE_TEMPLATE_DEPLOY_TIME : '部署时间',
 		STORAGE_TEMPLATE_DEPLOY_DEPLOYER : '部署者',
