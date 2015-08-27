@@ -1,10 +1,10 @@
-function ArchetypeEditCtrl($scope, $modal,$log,msgboxService,busyService,documentDiffModalService, resourceService,archetypeParseEditService, archetypeParseToEditService ,templateParseToEditService,archetypeSerializeService, archetypeParseService,ARCHETYPE_LIST_EDIT_DRAFT_URL, ARCHETYPE_LIST_EDIT_PUBLISHED_URL,ARCHETYPE_CREATE_URL, ARCHETYPE_EDIT_BY_ID_URL, ARCHETYPE_SUBMIT_BY_ID_URL) {
+function ArchetypeEditCtrl($scope, $modal,$log,msgboxService,busyService,archetypeEditService,documentDiffModalService, resourceService,archetypeParseEditService, archetypeParseToEditService ,templateParseToEditService,archetypeSerializeService, archetypeParseService,ARCHETYPE_LIST_EDIT_DRAFT_URL, ARCHETYPE_LIST_EDIT_PUBLISHED_URL,ARCHETYPE_CREATE_URL, ARCHETYPE_EDIT_BY_ID_URL, ARCHETYPE_SUBMIT_BY_ID_URL) {
 
 	
 	$scope.editId = 0;
 	$scope.focusTab = "ARCHETYPE_EDIT_SUBMIT";
-
-	
+    var editor = archetypeEditService;
+	$scope.isArchetypeListHidden = false;
 	
 	var busyId = busyService.pushBusy('BUSY_LOADING');
 	resourceService.get(ARCHETYPE_LIST_EDIT_DRAFT_URL).then(function(list) {
@@ -46,61 +46,49 @@ function ArchetypeEditCtrl($scope, $modal,$log,msgboxService,busyService,documen
 	});
     
      
-	//call to background
-	//create a new archetype test
-	$scope.createArchetypePost = function() {
-		resourceService.post(ARCHETYPE_CREATE_URL, {
-			orgnization : $scope.newArchetypeBaseInfo.orgnization,
-			type : $scope.newArchetypeBaseInfo.type,
-		}).then(function() {
-		});
-	}; 
 
 	$scope.generatorDiff = function(){
-		console.log($scope.originalAdl);
-		var editedArchetype = archetypeSerializeService.serializeArchetype($scope.oriArchetype);
-		console.log(editedArchetype);
-		documentDiffModalService.open('Modify records', $scope.originalAdl, editedArchetype);
+		var editedArchetype = archetypeSerializeService.serializeArchetype($scope.oriArchetype);		
+		console.log($scope.definition);
+		documentDiffModalService.open('Modify records',editedArchetype, $scope.originalAdl);
+		
 	};
 	
 	$scope.selectArchetype = function(archetype) {
-		
-		//object test
-	
-
-		
-		$scope.selectedArchetype = archetype;
-		
+				
+		$scope.selectedArchetype = archetype;		
 		$scope.originalAdl = archetype.adl;
-		console.log($scope.originalAdl);
 		
-		
-		
-		//var result = archetypeParseEditService.parseArchetypeXml($scope.selectedArchetype.xml);
-			
+		//-----get original archetype(json) and then parse it, a display object can be get			
 		var oriArchetype = archetypeParseEditService.getOriginalArchetype($scope.selectedArchetype.xml);
 		var result = archetypeParseEditService.parseArchetypeJson(oriArchetype);	
-		//var oriArchetype = archetypeParseService.getOriginalArchetype($scope.selectedArchetype.xml);
+		
 				
-		var archetype = archetypeParseService.parseArchetypeXml($scope.selectedArchetype.xml);
-		
-		//$scope.editableDefinition = archetypeParseToEditService.parseDefinitionToEdit(archetype);
-		
+		//var archetype = archetypeParseService.parseArchetypeXml($scope.selectedArchetype.xml);
+	
 		$scope.editableArchetype = result;
 		$scope.oriArchetype = oriArchetype;
+		
+	
 		$scope.ontology = result.terminologies;
 		
 		$scope.definition = result.definitions;
 
-		$scope.header = result.header;
+		//$scope.header = result.header;
 	
 		$scope.languages = result.languages;
 		$scope.languages.selectedLanguage = result.languages.originalLanguage;
 		
+		//---get the header from the original archetype directly---
+		$scope.header = {};
+		$scope.header.archetype_id = oriArchetype.archetype_id;
+		$scope.header.concept = oriArchetype.concept;
+		$scope.header.description = oriArchetype.description;
+		$scope.header.original_language = oriArchetype.original_language;
+		$scope.header.translations = oriArchetype.translations;
+		$scope.header.ontology = oriArchetype.ontology;
 		
-		
-		
-		
+		/*
 		console.log("==========this is oriArchetype===========");
 		console.log(oriArchetype);
 		console.log("==========this is parsedResult Archetype===========");
@@ -114,7 +102,7 @@ function ArchetypeEditCtrl($scope, $modal,$log,msgboxService,busyService,documen
 		console.log("==========this is languages===========");
 		console.log($scope.languages);
 		
-		
+		*/
 	};
 	  
 	$scope.getTreeElementMenu = function(node,aliasName){
@@ -131,21 +119,27 @@ function ArchetypeEditCtrl($scope, $modal,$log,msgboxService,busyService,documen
 	
 	
 	
-  
+	
+	//--------specialise logic---------------
+	
 	$scope.specialiseArchetype = function(value) {
 		console.log("specialise archetype in eidt pane");
-		//console.log(value);
-
+	
 		$scope.specialisingArchetype = {};
-		angular.copy(value, $scope.specialisingArchetype);
-		//console.log($scope.specialisingArchetype);
+		angular.copy(value, $scope.specialisingArchetype);// is the $$hash key is copied? 
+	    console.log(value);
+	    console.log($scope.specialisingArchetype);
+	    var archetypeListId =getArchetypeListId();
+	    $scope.specialisingArchetype.id = archetypeListId;
 		$scope.specialisingArchetype.specialiseArchetype = [];
 		$scope.specialisingArchetypeName = $scope.specialisingArchetype.name;
-		value.specialiseArchetype.push($scope.specialisingArchetype);
-		$scope.openSpecialise('lg');
-		//for first step parse to a js object then edit the firs
+		
+		$scope.openSpecialise("lg");
+		//parse to a js object then edit it 
 		var originalArchetype = archetypeParseEditService.getOriginalArchetype($scope.specialisingArchetype.xml);
-		// console.log(originalArchetype);
+		
+		
+		// code change logic
 		var oriCode = originalArchetype.concept;
 		var resultCode = oriCode + '.1';
 		originalArchetype.concept = resultCode;
@@ -169,19 +163,22 @@ function ArchetypeEditCtrl($scope, $modal,$log,msgboxService,busyService,documen
 				}
 			});
 		}
-
+       //logic end
+       
+       //---------serialise to adl and xml,and replace the original adl ang xml----------- 
 		var adl = archetypeSerializeService.serializeArchetype(originalArchetype);
 		var xml = archetypeSerializeService.serializeArchetypeToXml(originalArchetype);
-		console.log(xml);
-		$scope.specialisingArchetype.xml = xml;
+	//	console.log(xml);
+		$scope.specialisingArchetype.xml =  '<?xml version="1.0" encoding="UTF-8"?>' + '\n' + '<archetype xmlns="http://schemas.openehr.org/v1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">'
+                                            +formatXml(xml)+'</archetype>';
 		$scope.specialisingArchetype.adl = adl;
-		// console.log(serializedArchetype);
-		// console.log($scope.specialisingArchetype);
+		value.specialiseArchetype.push($scope.specialisingArchetype);
+		
+		return $scope.specialisingArchetype;
 	};
+	
 
 	$scope.deleteArchetype = function(value) {
-		//console.log("delete archetype in edit pane");
-		//console.log(value);
 		if (value.parent) {
 			value.parent.specialiseArchetype.splice(value.parent.specialiseArchetype.indexOf(value), 1);
 			$scope.draftArchetypeList.splice($scope.draftArchetypeList.indexOf(value), 1);
@@ -189,7 +186,10 @@ function ArchetypeEditCtrl($scope, $modal,$log,msgboxService,busyService,documen
 			$scope.draftArchetypeList.splice($scope.draftArchetypeList.indexOf(value), 1);
 		}
 	};
-
+	
+	
+	
+ 
 	$scope.saveSelectedArchetype = function() {
 
 	};
@@ -197,35 +197,312 @@ function ArchetypeEditCtrl($scope, $modal,$log,msgboxService,busyService,documen
 
 	};
 
-   
-   
-   
   
-	/*
-	$scope.$("#draft").hover(function() {
-		draft.style.borderBottom = "3px solid red";
-		published.style.borderBottom = "";
-		$scope.$apply(function() {
-			$scope.editId = 0;
-			$scope.focusTab = "ARCHETYPE_EDIT_SUBMIT";
-		});
-	});
+	 function createArchetype(info) {
+		if (info) {
+			
+			switch(info.type) {
+			case "INSTRUCTION":
+				createInstruction(info);
+				break;
+			case "OBSERVATION":
+				createObservation(info);
+				break;
+			case "EVALUATION":
+				createEvaluation(info);
+				break;
+			case "COMPOSITION":
+				createComposition(info);
+				break;
+			case "ADMIN_ENTRY":
+				createAdminEntry(info);
+				break;
+			case "ACTION":
+				createAction(info);
+				break;
+			case "SECTION":
+			    createSection(info);
+                break;
+            case "ITEM_TREE":
+                createItemTree(info);
+                break;
+            case "ITEM_LIST":
+                createItemList(info);
+                break;
+            case "ITEM_SINGLE":
+                createItemSingle(info);
+                break;
+            case "ITEM_TABLE":
+                createItemTable(info);
+                break;
+            case "CLUSTER":
+                createCluster(info);
+                break;
+            case "ELEMENT":
+                createElement(info);
+                break;
+			}
 
-	$("#published").hover(function() {
-		draft.style.borderBottom = "";
-		published.style.borderBottom = "3px solid red";
-		$scope.$apply(function() {
-			$scope.editId = 0;
-			$scope.focusTab = "ARCHETYPE_EDIT_EDIT";
-		});
-	}); 
-
-	 */
-
-	$scope.isArchetypeListHidden = false;
+		}
+    }
 	
-	$scope.archetypeInfo="asdfa";
-    $scope.orgnizationList =["CEN","Open_EHR","ZJU"];
+	
+
+   //-------------create action ---------------------
+   function createAction(info){
+   	  var jsonAction = createBaseArchetype(info);
+   	  pushToArchetypeList(jsonAction,info);
+   }
+   
+   //-----------create instruction-------------------
+    function createInstruction(info){
+   	 var jsonInstruction = createBaseArchetype(info);
+   	 //add default element here
+   	 addActivityToInstruction(jsonInstruction);
+   	 pushToArchetypeList(jsonInstruction,info);
+   }
+   
+   function addActivityToInstruction(instruction){
+   //	var editor = archetypeEditService;
+   	 var ItemTree = editor.getCComplexObject([],"at0002",editor.getDefaultOccurrences(1,1),"ITEM_TREE");
+   	 var description = editor.getCSingleAttribute(ItemTree,editor.getDefaultExistence(1,1),"description");
+   	 var activityObject = editor.getCComplexObject(description,"at0001",editor.getDefaultOccurrences(0,1),"ACTIVITY");
+   	 var activitiesAttribute = editor.getCMultipleAttribute(activityObject,editor.getDefaultCardinality(0),editor.getDefaultExistence(1,1),"activities");
+     instruction.definition.attributes.push(activitiesAttribute);
+     
+     editor.synchronizeOriOntology("at0002","Tree","@internal@",instruction.ontology);
+     editor.synchronizeOriOntology("at0001","Current Activity","Current Activity",instruction.ontology);
+   }
+   
+   //------------create observation-------------------
+   function createObservation(info){
+   	 var jsonObservation = createBaseArchetype(info);
+   	 //add default element here
+   	 addDataToObservation(jsonObservation);
+   	 pushToArchetypeList(jsonObservation,info);
+   }
+   
+   function getEvent(){
+   	  var ItemTree = editor.getCComplexObject([],"at0003",editor.getDefaultOccurrences(1,1),"ITEM_TREE");
+      var dataAttribute = editor.getCSingleAttribute(ItemTree,editor.getDefaultExistence(1,1),"data");
+      var eventObject = editor.getCComplexObject(dataAttribute,"at0002",editor.getDefaultOccurrences(0,1),"EVENT");
+      return eventObject;
+   }
+   function addDataToObservation(observation){
+   	  var eventObject = getEvent();
+   	  var eventsAttribute = editor.getCMultipleAttribute(eventObject,editor.getDefaultCardinality(1),editor.getDefaultExistence(1,1),"events");
+   	  var historyObject = editor.getCComplexObject(eventsAttribute,"at0001",editor.getDefaultOccurrences(1,1),"HISTORY");
+   	  var dataAttribute = editor.getCSingleAttribute(historyObject,editor.getDefaultExistence(1,1),"data");
+   	  observation.definition.attributes.push(dataAttribute);
+   	  
+   	  editor.synchronizeOriOntology("at0001","Event Series","@ internal @",observation.ontology);
+   	  editor.synchronizeOriOntology("at0002","Any event","*",observation.ontology);
+   	  editor.synchronizeOriOntology("at0003","Tree","@ internal @",observation.ontology);
+   }
+   //end
+   
+   //--------------create evaluation----------------------
+   function createEvaluation(info){
+   	var jsonEvaluation = createBaseArchetype(info);
+   	//add default element here
+   	var dataAttribute = editor.getCSingleAttribute([],editor.getDefaultExistence(1,1),"data");
+   	jsonEvaluation.definition.attributes.push(dataAttribute);
+   	pushToArchetypeList(jsonEvaluation,info);
+   }
+   
+   //----------create admin_entry------------------------
+   function createAdminEntry(info){
+   	var jsonAdminEntry = createBaseArchetype(info);
+   	//add default element here
+   	var ItemTree = editor.getCComplexObject([],"at0001",editor.getDefaultOccurrences(1,1),"ITEM_TREE");
+   	var dataAttribut = editor.getCSingleAttribute(ItemTree,editor.getDefaultExistence(1,1),"data");
+   	jsonAdminEntry.definition.attributes.push(dataAttribut);
+   	//synchronize the ontology
+   	editor.synchronizeOriOntology("at0001","Tree","@ internal @",jsonAdminEntry.ontology);
+   	pushToArchetypeList(jsonAdminEntry,info);
+   }
+   
+   //---------create section---------------------------
+   function createSection(info){
+   	var jsonSection = createBaseArchetype(info);
+   	pushToArchetypeList(jsonSection,info);
+   }
+   
+   //---------create conposition-----------------------
+   function createComposition(info){
+   	var jsonCompositon = createBaseArchetype(info);
+   	var codePhrase = editor.getCCodePhraseWithPara("openehr",['433'],undefined);
+   	var definingCode = editor.getCSingleAttribute(codePhrase,editor.getDefaultExistence(1,1),"defining_code");
+    var codeText =editor.getCComplexObject(definingCode,undefined,editor.getDefaultOccurrences(1,1),"DV_CODED_TEXT");
+    var category = editor.getCSingleAttribute(codeText,editor.getDefaultExistence(1,1),"category");
+     
+    jsonCompositon.definition.attributes.push(category);
+    
+    pushToArchetypeList(jsonCompositon,info);
+   }
+   
+   //-----create item tree---------------
+   function createItemTree(info){
+   	var jsonItemTree = createBaseArchetype(info);
+    pushToArchetypeList(jsonItemTree,info);
+   } 
+   
+   //------create item list-----
+   function createItemList(info){
+   	var jsonItemList = createBaseArchetype(info);
+   	pushToArchetypeList(jsonItemList,info);
+   }
+   
+   //----create item single----------
+   function createItemSingle(info){
+     var jsonItemSingle = createBaseArchetype(info);
+     pushToArchetypeList(jsonItemSingle,info);
+   }
+   
+   //-----create item table--------
+   function createItemTable(info){//not absolutely right
+   	var jsonItemTable = createBaseArchetype(info);
+   	
+   	var rotated = editor.getCSingleAttribute([],editor.getDefaultExistence(1,1),"rotated");
+   	var cluster = editor.getCComplexObject([],"at0002",editor.getDefaultOccurrences(0,1),"CLUSTER");
+   	var rows = editor.getCMultipleAttribute(cluster,editor.getDefaultCardinality(1),editor.getDefaultExistence(1,1),"rows");
+  
+    jsonItemTable.definition.attributes.push(rows);
+    jsonItemTable.definition.attributes.push(rotated);
+   
+    editor.synchronizeOriOntology("at0002","row","@interval@",jsonItemTable.ontology);
+    editor.synchronizeOriOntology("at0001","Table","@interval@",jsonItemTable.ontology);
+    pushToArchetypeList(jsonItemTable,info);
+   }
+   
+   //-----archetype create auxiliary function---------------
+   function createBaseArchetype(info){
+   	 console.log("create action archetype here");
+   	  var archetypeId = getArchetypeId(info);
+   	  info.archetypeId = archetypeId;
+   	  var jsonObj = {
+   	  	adl_version:"1.4",
+   	  	archetype_id:{value:archetypeId},
+   	  	concept:"at0000",
+   	  	definition:{
+   	  		attributes:[],
+   	  		node_id:"at0000",
+   	  		occurrences:editor.getDefaultOccurrences(0,1),
+   	  		rm_type_name:info.type,
+   	  	},
+   	  	description:getDefaultDescription(),
+   	  	ontology:getDefaultOntology(info),
+   	  	original_language:getLanguage("en","ISO_639_1"),
+   	  };
+   	  
+   	  return jsonObj;
+   	   	 
+   }
+  
+   
+   function pushToArchetypeList(jsonObj,info){
+   	  var adl = archetypeSerializeService.serializeArchetype(jsonObj);
+	  var xml = archetypeSerializeService.serializeArchetypeToXml(jsonObj);
+	  xml =  '<?xml version="1.0" encoding="UTF-8"?>' + '\n' + '<archetype xmlns="http://schemas.openehr.org/v1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">'
+                                            +formatXml(xml)+'</archetype>';
+	  var oriObj = getOriArchetype(adl,xml,info);
+	  console.log(oriObj);
+	  oriObj.selected="selected";
+	  $scope.draftArchetypeList.push(oriObj);
+   }
+  
+	function getArchetypeListId() {
+		var i, id = 0;
+
+		for ( i = 0; i < $scope.draftArchetypeList.length; i++) {
+			if ($scope.draftArchetypeList[i].id > id) {
+				id = $scope.draftArchetypeList[i].id;
+			}
+		}
+
+		for ( i = 0; i < $scope.publishedArchetypeList.length; i++) {
+			if ($scope.publishedArchetypeList[i].id > id) {
+				id = $scope.publishedArchetypeList[i].id;
+			}
+		}
+
+		return id;
+	}
+
+   function getOriArchetype(adl,xml,info){
+   	return {
+   		 adl:adl,
+	  	 collapsed:true,
+	  	 conceptName:info.concept,
+	  	 editorId:1,
+	  	 editorName:"admin",
+	  	 id:getArchetypeListId(),
+	  	 lastRevisionArchetype:null,
+	  	 lifecycleState:"Draft",
+	  	 name:info.archetypeId,
+	  	 rmEntity:info.type,
+	  	 rmName:"EHR",
+	  	 rmOriginator:info.organisation,
+	  	 serialVersion:1,
+	  	 show:true,
+	  	 specialiseArchetype:[],
+	  	 version:null,
+	  	 versionMasterName:info.archetypeId,
+	  	 xml:xml
+   	};
+   }
+   
+	function getArchetypeId(info){
+		return info.organisation+"-"+info.type+"."+info.concept+".v1";
+	}
+
+   function getLanguage(codeString,terminologyId){
+   	    return {
+   	    	code_string:codeString,
+   	    	terminology_id:{
+   	    		value:terminologyId,
+   	    	},
+   	    };
+   }
+   function getDefaultDescription(){
+   	return {
+   		original_author:{_id:"name"},
+   		lifecycle_state:"0",
+   		details:{
+   			copyright:"",
+   			missue:"",
+   			purpose:"",
+   			use:"",
+   			language:getLanguage("en","ISO_639_1"),  			
+   		},
+   		  
+   		other_details:{
+   			_id:"",
+   			__text:"",
+   		}
+   	};
+   }
+  
+   function getDefaultOntology(info){
+   	    return {
+   	    	term_definitions:[{
+   	    		_language:"en",
+   	    		items:[{
+   	    			_code:"at0000",
+   	    			items:[{_id:"text", __text:info.concept,},
+   	    			       {_id:"description",__text:"*"}]
+   	    		},]
+   	    	}]
+   	    };
+   }
+  
+  //-----------------auxiliary function end---------------------------
+	
+	
+	
+	
+
+    $scope.orgnizationList =["CEN","OpenEHR-EHR","ZJU"];
 	$scope.archetypeTypeList=[
 	    "OBSERVATION",
 	    "EVALUATION",
@@ -242,9 +519,7 @@ function ArchetypeEditCtrl($scope, $modal,$log,msgboxService,busyService,documen
 	    "DEMOGRAPHIC",
 	    "SECTION",
 	 ];
-	//for creat a new archetype ---use angular modals
-	
-
+    // archetype create modal-----------------
 	$scope.openCreate = function(size) {
 		var modalInstance = $modal.open({
 			animation : true, //animations on
@@ -255,11 +530,13 @@ function ArchetypeEditCtrl($scope, $modal,$log,msgboxService,busyService,documen
 				//$scope.archetypeInfo = archetypeInfo;
 				$scope.archetypeType = "";
 				$scope.archetypeOrgnization = "";
+				$scope.concept = "";
 
 				$scope.ok = function() {
 					$modalInstance.close({
-						orgnization : $scope.archetypeOrgnization,
-						type : $scope.archetypeType,
+						organisation : $scope.archetypeOrgnization,
+						type : $scope.archetypeType, 
+						concept : $scope.concept,
 					});
 				};
 				$scope.cancel = function() {
@@ -278,12 +555,11 @@ function ArchetypeEditCtrl($scope, $modal,$log,msgboxService,busyService,documen
 		});
 		modalInstance.result.then(function(message) {// modal message back
 			$scope.newArchetypeBaseInfo = message;
-			$scope.createArchetypePost();
-			//console.log($scope.newArcehtypeBaseInfo);
+			createArchetype(message);
 		});
 
 	};
-
+    // archetype specialize modal
 	$scope.openSpecialise = function(size) {
 		var modalInstance = $modal.open({
 			animation : true, //animations on
@@ -308,12 +584,45 @@ function ArchetypeEditCtrl($scope, $modal,$log,msgboxService,busyService,documen
 			}
 		});
 		modalInstance.result.then(function(message) {// modal message back
-			$scope.specialisingArchetype.name += "-";
-			$scope.specialisingArchetype.name += message.newConceptName;
+			 $scope.specialisingArchetype.name += "-";
+			 $scope.specialisingArchetype.name += message.newConceptName;
 		});
 
 	};
-	//---open end----
+	
+	function formatXml(xml) {
+		var formatted = '';
+		var reg = /(>)(<)(\/*)/g;
+		xml = xml.replace(reg, '$1\r\n$2$3');
+		var pad = 0;
+		jQuery.each(xml.split('\r\n'), function(index, node) {
+			var indent = 0;
+			if (node.match(/.+<\/\w[^>]*>$/)) {
+				indent = 0;
+			} else if (node.match(/^<\/\w/)) {
+				if (pad != 0) {
+					pad -= 1;
+				}
+			} else if (node.match(/^<\w[^>]*[^\/]>.*$/)) {
+				indent = 1;
+			} else {
+				indent = 0;
+			}
+
+			var padding = '';
+			for (var i = 0; i < pad; i++) {
+				padding += '  ';
+			}
+
+			formatted += padding + node + '\r\n';
+			pad += indent;
+		});
+		formatted = formatted.replace(/\n$/, '');
+
+		return formatted;
+	}
+
+
 
 	
 	

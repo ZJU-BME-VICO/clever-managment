@@ -171,6 +171,20 @@ angular.module('clever.management.service.archetypeSerialize', []).service('arch
 		this.writeIndent(1);
 		this.write(">");
 		this.newLine();
+    
+		if (description.other_contributors) {
+			this.writeIndent(1);
+			this.write("other_contributors = <");
+			var k;
+			for ( k = 0; k < description.other_contributors.length; k++) {
+				this.write("\"");
+				this.write(description.other_contributors[k]);
+				this.write("\",");
+			}
+			this.write(">");
+			this.newLine();
+		}
+
 
 		this.writeIndent(1);
 		this.write("other_details = <");

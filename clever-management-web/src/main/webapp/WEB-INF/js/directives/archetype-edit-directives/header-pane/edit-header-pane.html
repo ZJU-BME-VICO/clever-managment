@@ -5,30 +5,30 @@
 
 			<form>
 				<div class="form-group">
-					<label for="ArchetypeId"><strong>Archetype Id<strong></label>
-					<input type="text"  ng-model="archetypeId" class="form-control" id="ArchetypeId" placeholder="Archetype Id ..">
+					<label for="ArchetypeId">Archetype Id</label>
+					<input type="text"  ng-model="archetypeId.value" class="form-control" id="ArchetypeId" placeholder="Archetype Id ..">
 				</div>
 			</form>
 
 			<accordion close-others="oneAtATime">
 				<accordion-group heading="Concept" is-open="status.isConceptOpen" is-disabled="status.isConceptDisabled" >
-					<input class="form-control" ng-model="baseInfo.concept">
+					<input class="form-control" ng-model="baseInfo[0].__text">
 				</accordion-group>
 				<accordion-group heading="Description"  is-open="status.isDescriptionOpen" is-disabled="status.isDescriptionDisabled">
-					<textarea  rows="4" cols="70" ng-model="baseInfo.description"></textarea>
+					<textarea  rows="4" cols="70" ng-model="baseInfo[1].__text"></textarea>
 				</accordion-group>
 				<accordion-group heading="Comment" is-open="status.isCommentOpen" is-disabled="status.isCommentDisabled">
-					<textarea  rows="4" cols="70" ng-model="baseInfo.comment"></textarea>
+					<textarea  rows="4" cols="70" ng-model="baseInfo[2].__text"></textarea>
 				</accordion-group>
 			</accordion>
 			<div class="row">
 				<div class= "col-xs-6 col-md-6 col-lg-6">
 					<label>Language:</label>
-					<select  class ="form-control" ng-model="selectedLanguage" ng-options ="lan for lan in languageList"></select>
+					<select  class ="form-control" ng-model="selectedLanguage.code" ng-options ="lan for lan in languageList"></select>
 				</div>
 				<div class= "col-xs-6 col-md-6 col-lg-6">
 					<label>LifeCircle:</label>
-					<select  class ="form-control" ng-model="archetypeLifeCycle" ng-options ="lifeCycle for lifeCycle in archetypeLifeCycleList"></select>
+					<select  class ="form-control" ng-model="lifecycleState.state" ng-options ="lifeCycle for lifeCycle in archetypeLifeCycleList"></select>
 				</div>
 			</div>
 		</accordion-group>
@@ -41,15 +41,15 @@
 					<form>
 						<div class="form-group">
 							<label for="OriAuthorName">Name:</label>
-							<input type="text" class="form-control" id = "OriAuthorName" placeholder="Mecro" ng-model="originalAuthorInfo.name">
+							<input type="text" class="form-control" id = "OriAuthorName" placeholder="Mecro" ng-model="oriAuthorInfo.name">
 						</div>
 						<div class="form-group">
 							<label for="OriAuthorEmail">Email:</label>
-							<input type="text" class="form-control" id = "OriAuthorEmail" placeholder="example@xxx.com" ng-model="originalAuthorInfo.email">
+							<input type="text" class="form-control" id = "OriAuthorEmail" placeholder="example@xxx.com" ng-model="oriAuthorInfo.email">
 						</div>
 						<div class="form-group">
 							<label for="OriAuthorOrgnization">Orgnization:</label>
-							<input type="text" class="form-control" id = "OriAuthorOrgnization" placeholder="ZJU" ng-model="originalAuthorInfo.orgniaztion">
+							<input type="text" class="form-control" id = "OriAuthorOrgnization" placeholder="ZJU" ng-model="oriAuthorInfo.organisation">
 						</div>
 						<!--	<div class="form-group">
 						<label for="OriAuthorName">Date:</label>
@@ -57,17 +57,9 @@
 						</div>-->
 						<div class="form-group">
 							<label for="OriAuthorName">Date:</label>
-							<p class="input-group">
-								<input type="date" class="form-control" datepicker-popup="{{format}}" ng-model="dt" is-open="opened"  datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" />
-								<span class="input-group-btn">
-									<button type="button" class="btn btn-default" ng-click="open($event)">
-										<i class="glyphicon glyphicon-calendar"></i>
-									</button> </span>
-							</p>
+								<input type="text" class="form-control"  ng-model="oriAuthorInfo.date"  />						
 						</div>
-						<div style="display:inline-block; min-height:290px;" ng-show="datepickerOpened">
-							<datepicker ng-model="dt"  show-weeks="true" class="well well-sm" custom-class="getDayClass(date, mode)"></datepicker>
-						</div>
+						
 					</form>
 				</div>
 
@@ -75,6 +67,12 @@
 					<label>Other Contributors:</label>
 					<button class="btn btn-default" type="button" ng-click="addContributor()">
 						<span class="glyphicon glyphicon-plus"></span>
+					</button>
+					<button class="btn btn-default" type = "button" ng-click="deleteContributor()">
+						<span class="glyphicon glyphicon-minus"></span>
+					</button>
+					<button class="btn btn-default" type="button" ng-click="saveContributors()">
+						Save
 					</button>
 					<form>
 						<div class="form-group">
@@ -96,7 +94,6 @@
 			</div>
 		</accordion-group>
 		<accordion-group heading="Details"  is-open="status.isDetailsOpen"  is-disabled="status.isDetailsDisabled">
-			This is Detail!
 			<div class="form-group">
 				<label for="purpose"><strong>Purpose<strong></label>
 				<input type="text" class="form-control" id="purpose" placeholder="purpose..." ng-model="detail.purpose">
@@ -106,8 +103,8 @@
 				<input type="text" class="form-control" id="use" placeholder="use for ?..."  ng-model="detail.use">
 			</div>
 			<div class="form-group">
-				<label for="issue"><strong>Issue</strong></label>
-				<input type="text" class="form-control" id="issue"  placeholder="Issue..." ng-model="detail.issue">
+				<label for="issue"><strong>Missue</strong></label>
+				<input type="text" class="form-control" id="missue"  placeholder="Missue..." ng-model="detail.missue">
 			</div>
 			<div class="form-group">
 				<label for="copyright"><strong>Copyright</strong></label>

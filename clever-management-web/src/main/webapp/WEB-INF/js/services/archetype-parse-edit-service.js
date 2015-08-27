@@ -156,17 +156,39 @@ angular.module('clever.management.service.archetypeParseEdit', []).service('arch
 
 	this.parseTerminology = function(archetype) {
 		var termDefinitions = archetype.ontology.term_definitions;
-		var constrainDefinitions = archetype.ontology.constraint_definitions;
+		var constraintDefinitions = archetype.ontology.constraint_definitions;
 		var termBindings = archetype.ontology.term_bindingd;
 		var constraintBindings = archetype.ontology.constraint_bindings;
 		return {
 			oriNodeRef : archetype.terminology, //add a reference to ontology, because it is a editable array,
 			term_definitions : parseTermDefinition(termDefinitions),
-			constraint_definitions : parseConstrainDefinition(constrainDefinitions),
+			constraint_definitions : parseConstraintDefinition(constraintDefinitions),
 			term_bindings : parseTermBindings(termBindings),
 			constraintBindings : parseConstraintBindings(constraintBindings),
 		};
 	};
+
+	
+	function parseItem(item) {
+		var code, text, description, comment;
+		code = item._code;
+		angular.forEach(item.items, function(value) {
+			if (value._id == 'text') {
+				text = value.__text;
+			} else if (value._id == 'description') {
+				description = value.__text;
+			} else if (value._id == 'comment') {
+				comment = value.__text;
+			}
+		});
+
+		return {
+			code : code,
+			text : text,
+			description : description,
+			comment : comment,
+		};
+	}
 
 	function parseTermDefinition(termDefinitions) {
 		if (termDefinitions) {
@@ -178,26 +200,33 @@ angular.module('clever.management.service.archetypeParseEdit', []).service('arch
 						language : termDefinition._language,
 						items : []
 					};
-					angular.forEach(termDefinition.items, function(definition) {
-						var code, text, description, comment;
-						code = definition._code;
-						angular.forEach(definition.items, function(value) {
-							if (value._id == 'text') {
-								text = value.__text;
-							} else if (value._id == 'description') {
-								description = value.__text;
-							} else if (value._id == 'comment') {
-								comment = value.__text;
-							}
-						});
-						term.items.push({
-							code : code,
-							text : text,
-							description : description,
-							comment : comment,
-						});
+					var items = termDefinition.items;
+					if(angular.isArray(items)){
+					angular.forEach(items, function(definition) {
+						term.items.push(parseItem(definition));
+						// var code, text, description, comment;
+						// code = definition._code;
+						// angular.forEach(definition.items, function(value) {
+							// if (value._id == 'text') {
+								// text = value.__text;
+							// } else if (value._id == 'description') {
+								// description = value.__text;
+							// } else if (value._id == 'comment') {
+								// comment = value.__text;
+							// }
+						// });
+						// term.items.push({
+							// code : code,
+							// text : text,
+							// description : description,
+							// comment : comment,
+						// });
 
 					});
+					}else{
+						term.items.push(parseItem(items));
+					}
+					
 					term.items.oriNodeRef = termDefinition.items;
 					// here is termDefinition in termDefinitions
 					terms.push(term);
@@ -207,23 +236,15 @@ angular.module('clever.management.service.archetypeParseEdit', []).service('arch
 					language : termDefinitions._language,
 					items : []
 				};
-				angular.forEach(termDefinitions.items, function(definition) {
-					var code, text, description;
-					code = definition._code;
-					angular.forEach(definition.items, function(value) {
-						if (value._id == 'text') {
-							text = value.__text;
-						} else if (value._id == 'description') {
-							description = value.__text;
-						}
-					});
-					term.items.push({
-						code : code,
-						text : text,
-						description : description,
-					});
-
+				var items = termDefinitions.items;
+				if(angular.isArray(items)){
+				angular.forEach(items, function(item) {
+			        	term.items.push(parseItem(item));
 				});
+				}else{
+					term.items.push(parseItem(items));
+				}
+
 				term.oriNodeRef = termDefinitions.items;
 				//here is termDefinitions directly
 				terms.push(term);
@@ -233,7 +254,8 @@ angular.module('clever.management.service.archetypeParseEdit', []).service('arch
 		}
 	}
 
-	function parseConstrainDefinition(constraintDefinitions) {
+
+	function parseConstraintDefinition(constraintDefinitions) {
 		if (constraintDefinitions) {
 			var constraints = [];
 			if (angular.isArray(constraintDefinitions)) {
@@ -259,7 +281,7 @@ angular.module('clever.management.service.archetypeParseEdit', []).service('arch
 						});
 
 					});
-					constrain.items.oriNoderef = constraintDefintion.items;
+					constraint.items.oriNodeRef = constraintDefinition.items;
 					// editable array:constraint.items
 					constraints.push(constraint);
 				});
@@ -285,7 +307,7 @@ angular.module('clever.management.service.archetypeParseEdit', []).service('arch
 					});
 				});
 				constraints.push(constraint);
-				constrain.items.oriNoderef = constraintDefintions.items;
+				constraint.items.oriNodeRef = constraintDefinitions.items;
 				// editable array:constraint.items  ....here is constraintDefinitions
 
 			}
@@ -390,14 +412,16 @@ angular.module('clever.management.service.archetypeParseEdit', []).service('arch
 		// definitions.tableItems = [];
 		definitions.treeItems = [];
 		var terminologies = parseTermDefinition(archetype.ontology.term_definitions);
-		myProcessNode(archetype.definition, undefined, definitions.treeItems, definitions.tableItems, terminologies, undefined);
+		this.myProcessNode(archetype.definition, undefined, definitions.treeItems, terminologies, undefined);
 		return definitions;
 	};
 
 	function processNode(node, parent, treeItems, tableItems, terminologies) {
+		
 		if (angular.isArray(node)) {
 			angular.forEach(node, function(value) {
 				var extractedNode = extractNode(value, terminologies);
+				
 				extractedNode.oriNodeRef = value;
 				value.parent = parent;
 				if (value.attributes) {
@@ -414,6 +438,7 @@ angular.module('clever.management.service.archetypeParseEdit', []).service('arch
 			});
 		} else {
 			var extractedNode = extractNode(node, terminologies);
+			
 			node.parent = parent;
 			extractedNode.oriNodeRef = node;
 			if (node.attributes) {
@@ -428,16 +453,22 @@ angular.module('clever.management.service.archetypeParseEdit', []).service('arch
 
 			treeItems.push(extractedNode);
 		}
+		
+
 	}
 
-	function myProcessNode(typeNode, parent, treeItems, terminologies, parentAttribute) {
+	this.myProcessNode = function(typeNode, parent, treeItems, terminologies, parentAttribute) {
+		var nodeForReturn ;
+		var self = this;
 		if (angular.isArray(typeNode)) {
 			angular.forEach(typeNode, function(value) {
 				if (noTraverseTypeList.indexOf(value.rm_type_name) == -1) {
 					var extractedNode = extractNode(value, terminologies, parentAttribute);
+					nodeForReturn = extractedNode;
+					extractedNode.children = [];
 					if (value.attributes) {
-						extractedNode.children = [];
-						processAttribute(value.attributes, extractNode, extractedNode.children, terminologies);
+						
+						self.processAttribute(value.attributes, extractNode, extractedNode.children, terminologies);
 					}
 					if (parentAttribute) {
 						extractedNode.parentAttribute = parentAttribute;
@@ -450,9 +481,11 @@ angular.module('clever.management.service.archetypeParseEdit', []).service('arch
 		} else {
 			if (noTraverseTypeList.indexOf(typeNode.rm_type_name) == -1) {
 				var extractedNode = extractNode(typeNode, terminologies, parentAttribute);
+				nodeForReturn = extractedNode;
+				extractedNode.children = [];
 				if (typeNode.attributes) {
-					extractedNode.children = [];
-					processAttribute(typeNode.attributes, extractedNode, extractedNode.children, terminologies);
+					
+					self.processAttribute(typeNode.attributes, extractedNode, extractedNode.children, terminologies);
 				}
 				if (parentAttribute) {
 					extractedNode.parentAttribute = parentAttribute;
@@ -461,18 +494,23 @@ angular.module('clever.management.service.archetypeParseEdit', []).service('arch
 				treeItems.push(extractedNode);
 			}
 		}
-	}
+		
+		return nodeForReturn;
+	};
 
-	function processAttribute(attributes, parent, treeItems, terminologies) {
+	 this.processAttribute = function(attributes, parent, treeItems, terminologies) {
+	 	var nodeForReturn = "";
+	 	var self = this;
 		if (attributes) {
-
+            
 			if (angular.isArray(attributes)) {
 
 				angular.forEach(attributes, function(attribute) {
 					if (noTraverseAttributes.indexOf(attribute.rm_attribute_name) != -1 && attribute.children) {//if attribute type should be keep
 						var keepAttribute = extractNode(attribute, terminologies, undefined);
+						nodeForReturn = keepAttribute;
 						keepAttribute.children = [];
-						myProcessNode(attribute.children, keepAttribute, keepAttribute.children, terminologies, undefined);
+						self.myProcessNode(attribute.children, keepAttribute, keepAttribute.children, terminologies, undefined);
 						keepAttribute.oriNodeRef = attribute;
 						treeItems.push(keepAttribute);
 					} else {
@@ -480,7 +518,7 @@ angular.module('clever.management.service.archetypeParseEdit', []).service('arch
 						noKeepAttribute.oriNodeRef = attribute;
 						parent.childrenAttribute = noKeepAttribute;
 						if (attribute.children) {
-							myProcessNode(attribute.children, treeItems.parent, treeItems, terminologies, noKeepAttribute);
+						nodeForReturn = self.myProcessNode(attribute.children, treeItems.parent, treeItems, terminologies, noKeepAttribute);
 						}
 
 					}
@@ -488,24 +526,26 @@ angular.module('clever.management.service.archetypeParseEdit', []).service('arch
 			} else {
 				if (noTraverseAttributes.indexOf(attributes.rm_attribute_name) != -1 && attributes.children) {//if attribute type should be keep
 					var keepAttribute = extractNode(attributes, terminologies, undefined);
+					nodeForReturn = keepAttribute;
 					keepAttribute.children = [];
 					keepAttribute.oriNodeRef = attributes;
-					myProcessNode(attributes.children, keepAttribute, keepAttribute.children, terminologies, undefined);
+					self.myProcessNode(attributes.children, keepAttribute, keepAttribute.children, terminologies, undefined);
 					treeItems.push(keepAttribute);
 				} else {
 					var noKeepAttribute = extractNode(attributes, terminologies, undefined);
 					noKeepAttribute.oriNodeRef = attributes;
 					parent.childrenAttribute = noKeepAttribute;
 					if (attributes.children) {
-						myProcessNode(attributes.children, treeItems.parent, treeItems, terminologies, noKeepAttribute);
+					 nodeForReturn = self.myProcessNode(attributes.children, treeItems.parent, treeItems, terminologies, noKeepAttribute);
 					}
 				}
 
 			}
 		}
-	}
+		return nodeForReturn;
+	};
 
-	var noTraverseTypeList = ['DV_TEXT', 'DV_CODED_TEXT', 'DV_QUANTITY', 'DV_ORDINAL', 'DV_DATE_TIME', 'DV_DATE', 'DV_TIME', 'DV_BOOLEAN', 'DV_COUNT', 'DV_DURATION', 'DV_INTERVAL<DV_DATE>', 'DV_INTERVAl<DV_TIME>', 'DV_INTERVAL<DV_DATE_TIME>', 'DV_INTERVAL<COUNT>', 'DV_INTERVAL<QUANTITY>', 'DV_MULTIMEDIA', 'DV_URI', 'DV_EHR_URI', 'DV_PROPORTION', 'DV_IDENTIFIER', 'DV_PARSABLE', 'DV_BOOLEAN'];
+	var noTraverseTypeList = ['PARTY_REF','DV_TEXT', 'DV_CODED_TEXT', 'DV_QUANTITY', 'DV_ORDINAL', 'DV_DATE_TIME', 'DV_DATE', 'DV_TIME', 'DV_BOOLEAN', 'DV_COUNT', 'DV_DURATION', 'DV_INTERVAL<DV_DATE>', 'DV_INTERVAl<DV_TIME>', 'DV_INTERVAL<DV_DATE_TIME>', 'DV_INTERVAL<COUNT>', 'DV_INTERVAL<QUANTITY>', 'DV_MULTIMEDIA', 'DV_URI', 'DV_EHR_URI', 'DV_PROPORTION', 'DV_IDENTIFIER', 'DV_PARSABLE', 'DV_BOOLEAN'];
 	var noTraverseAttributes = ['subject', 'ism_transition', 'otherParticipations', 'links'];
 	var typeList = ['ITEM_LIST', 'ITEM_TREE', 'HISTORY'];
 	function extractNode(node, term_definitions, parentAttribute) {
@@ -618,7 +658,9 @@ angular.module('clever.management.service.archetypeParseEdit', []).service('arch
 		}
 
 		if (typeList.indexOf(type) != -1) {
-			label = parentAttribute.label.text;
+			if(parentAttribute){
+			 label = parentAttribute.label.text;
+			}
 		}
 		return {
 			label : {

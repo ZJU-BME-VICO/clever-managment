@@ -20,6 +20,7 @@
 				node-menu-generator = "getTreeElementMenu"
 				specialise-archetype-callback="specialiseArchetype(value)"
 				delete-archetype-callback="deleteArchetype(value)"
+				menu-prefix = "list"
 				tree-control="treeControl" node-alias-name="node"
 				search-key-mapper="searchKeyMapper">
 					<tree-expanded-icon>
@@ -43,19 +44,22 @@
 		</splitter>
 		<div class="col-xs-12 col-md-12 col-lg-12 flex-box">
 			<div class="panel panel-default">
-				
-				<div class="panel-heading" style="height: 50px">
-					<span style="font-size: large">{{selectedArchetype.name}}</span>
-					
-					<button class="btn btn-primary pull-right"   style="margin-left:20px; margin-right: 30px;" ng-disabled="selectedArchetype==undefined" ng-click="saveSelectedArchetype()">
-							Save
-						</button>
-						<button class="btn btn-primary pull-right"   style="margin-left:20px"; ng-disabled="selectedArchetype==undefined" ng-click="submitSelectedArchetype()">
-							Submit
+			<div class="panel-heading" style="height: 50px">
+
+					<span style="font-size: middle; color:#8A2BE2" ><strong>{{selectedArchetype.name}}</strong></span>
+
+					<button class="btn btn-small  btn-primary pull-right"   style="margin-left:20px; margin-right: 10px;" ng-disabled="selectedArchetype==undefined" ng-click="saveSelectedArchetype()">
+						Save
 					</button>
+
+					<button class="btn btn-primary pull-right"   style="margin-left:20px"; ng-disabled="selectedArchetype==undefined" ng-click="submitSelectedArchetype()">
+						Submit
+					</button>
+
 					<button class="btn btn-info pull-right" style="margin-left:20px";ng-disabled="selectedArchetype==undefined" ng-click="generatorDiff()">
-						   Diff
+						Diff
 					</button>
+
 				</div>
                 <div class="panel-body"ng-style="{height: containerHeight - 50}" style="overflow: auto;">
 				<div class="col-xs-12 col-md-12 col-lg-12 flex-box">
@@ -127,13 +131,17 @@
 		</div>
 		<div class="modal-body">
 		<div class="row">
-		<div class="col-xs-6 col-sm-6 col-lg-6 flex-box" >
+		<div class="col-xs-2 col-sm-2 col-lg-2 flex-box" >
 		<label>Orgnization:</label>
 		<select class="form-control" ng-model="archetypeOrgnization" ng-options="org for org in orgnizationList"></select>
 		</div>
-		<div class="col-xs-6 col-sm-6 col-lg-6 flex-box" >
+		<div class="col-xs-4 col-sm-4 col-lg-4 flex-box" >
 		<label>Type:</label>
 		<select class="form-control" ng-model="archetypeType" ng-options="type for type in archetypeTypeList"></select>
+		</div>
+		<div class="col-xs-6 col-sm-6 col-lg-6 flex-box">
+			<label>Concept:</label>
+			<input class="form-control" type="text" ng-model="concept">
 		</div>
 		</div>
 		</div>

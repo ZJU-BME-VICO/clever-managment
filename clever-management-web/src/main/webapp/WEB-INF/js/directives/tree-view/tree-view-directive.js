@@ -6,6 +6,7 @@ angular.module('clever.management.directives.treeView', []).directive('treeView'
 			treeData : '=',
 			treeControl : '=',
 			nodeId : '@',
+			menuPrefix:'@',
 			nodeChildren : '@',
 			nodeAliasName : '@',
 			nodeLabelClass : '@',
@@ -86,16 +87,20 @@ angular.module('clever.management.directives.treeView', []).directive('treeView'
 			
 			$scope.clickEditNodeMenu = function(node,type){
 				
-				$scope.clickEditMenuCallback({
+			var element =$scope.clickEditMenuCallback({
 					node:node,
 					type:type,
 				});
+				return element;
 			};
 			
 			$scope.specialiseArchetype = function(node){
-				$scope.specialiseArchetypeCallback({
+				
+				var specialisedArchetype = $scope.specialiseArchetypeCallback({
 					value:node,
 				});
+				return specialisedArchetype;
+				
 			};
 			$scope.deleteArchetype = function(node){
 				$scope.deleteArchetypeCallback({
@@ -148,6 +153,29 @@ angular.module('clever.management.directives.treeView', []).directive('treeView'
 				}	
 				
 			});
+			
+		// this function is not safe,may generate a bug sometimes
+			$scope.$watch('treeData.length', function(newValue, oldValue) {
+
+				if (newValue && oldValue) {
+					var node = $scope.treeData[$scope.treeData.length - 1];
+					//if(node.selected)
+					if ($scope.getCurrentNode() && $scope.getCurrentNode().selected) {
+						$scope.getCurrentNode().selected = undefined;
+					}
+
+					//set highlight to selected node
+					node.selected = 'selected';
+
+					//set currentNode
+					$scope.setCurrentNode(node);
+
+					$scope.clickNode(node);
+					$scope.doubleClickNode(node);
+
+				}
+			}); 
+
 			
 			$scope.treeControl = {
 				expandAll : function() {
@@ -241,10 +269,7 @@ angular.module('clever.management.directives.treeView', []).directive('treeView'
 			
 			scope.$watch('treeData', function(newValue, oldValue) {
 				if (newValue === oldValue){return;}
-				else if(newValue){
-					//scope.nodes=[];
-					console.log("this is tree data ====================================");
-					console.log(scope.treeData);
+				else if(newValue){				
 					elm.html('').append($compile( template )(scope));
 				}
 			}); 

@@ -12,176 +12,169 @@ angular.module('clever.management.directives.editHeaderPane', []).directive('edi
 
 		controller : function($scope) {
 
-			/*------edit information------------
-			* base information
-			*    ---concept
-			*    ---description
-			*    ---comment
-			*    ---languages(select a language for display)
-			* authorship
-			*    ---original author information
-			*    ---other contributors
-			* details
-			*    ---purpose
-			*    ---use
-			*    ---copyright
-			*    ---issue
-			*
-			*/
-
-			/*--------infomation getted------------
-			* header
-			*    ---
-			*
-			*
-			*
-			*/
-
-			// other_contributors
-			$scope.otherContributorList = [];
-			$scope.selectContributor = function(contributor) {
-				$scope.selectedContributor = contributor;
-			};
-			$scope.addContributor = function() {
-				$scope.selectedContributor = {
-					name : 'newContributors'
-				};
-				$scope.otherContributorList.push($scope.selectedContributor);
-				console.log($scope.otherContributorList);
-			};
-
-			//original_author_info
-			$scope.originalAuthorInfo = {
-				name : "*",
-				email : "*",
-				orgnization : "*",
-				date : "*",
-			};
-
-			//language
-			$scope.$watch('languages', function(newValue) {
+			$scope.$watch("header", function(newValue) {
 				if (newValue) {
-					$scope.languageList = [];
-					angular.forEach($scope.languages.languages, function(language) {
+					//console.log(newValue);
+					$scope.archetypeId = $scope.header.archetype_id;
+					// $scope.baseInfo =  getBaseInfo();
+					$scope.selectedLanguage = {
+						code : "en",
+					};
+					getBaseInfo();
+					//console.log("this is baseInfo");
+					//console.log($scope.baseInfo);
+
+					//$scope.concept = $scope.baseInfo[0].__text;
+					// console.log($scope.concept);
+					//console.log($scope.languages);
+					getLanguageList();
+
+					getOriAuthorInfo();
+					getContributorList();
+					$scope.lifecycleState = {
+						state : $scope.header.description.lifecycle_state,
+					};
+					getDetail();
+
+				}
+			});
+			$scope.$watch('lifecycleState.state', function(newValue, oldValue) {
+				if (newValue && oldValue) {
+					$scope.header.description.lifecycle_state = newValue;
+				}
+			});
+			$scope.archetypeLifeCycleList = ["AuthorDraft", "AuthorPublished"];
+			function getLanguageList() {
+				var languages = $scope.languages.languages;
+				$scope.languageList = [];
+				if (angular.isArray(languages)) {
+					angular.forEach(languages, function(language) {
 						$scope.languageList.push(language.code);
 					});
-
-					$scope.selectedLanguage = $scope.languages.selectedLanguage.code;
-
-					$scope.originalLanguage = $scope.originalLanguages;
+				} else {
+					$scope.languageList.push(languages.code);
 				}
 
-			});
+			}
 
-			$scope.$watch('selectedLanguage', function(newValue) {
-				if (newValue) {
-					initDetail();
-				}
-			});
 
-			//concept
-
-			$scope.$watch('header', function(newValue) {
-				if (newValue) {
-					console.log("this is the header");
-					console.log($scope.header);
-					$scope.conceptCode = $scope.header.concept;
-					$scope.baseInfo = getBaseInfoByCode();
-					var oriAuthorInfo = $scope.header.description.original_author;
-					initOriginalAuthorInfo();
-					initOtherContributorList();
-					initDetail();
-					console.log($scope.otherContributorList);
-					// $scope.otherContributorList = $scope.header.description.other_contributors;
-					$scope.originalAuthor = $scope.header.description.original_author;
-					//$scope.otherContributors = $scope.header.description.other_contributors;
-					$scope.archetypeId = $scope.header.id;
-
+			$scope.$watch('selectedLanguage.code', function(newValue, oldValue) {
+				if (newValue && oldValue) {
+					getBaseInfo();
+					getDetail();
 				}
 			});
-			initDetail = function() {
-				$scope.detail = {};
-				var details = $scope.header.description.details;
-				if (details != undefined) {
-					if (angular.isArray(details)) {
-						angular.forEach(details, function(detail) {
-							if (detail.language == $scope.selectedLanguage) {
-								$scope.detail = detail;
-								console.log("this is detail");
-								console.log($scope.detail);
-							}
-						});
-					};
-				}
-			};
 
-			initOtherContributorList = function() {
-				otherContributors = $scope.header.description.other_contributors;
-				$scope.otherContributorList = [];
-				if (otherContributors != undefined) {
-					if (angular.isArray(otherContributors)) {
-						angular.forEach(otherContributors, function(contributor) {
-							$scope.otherContributorList.push({
-								name : contributor
-							});
-						});
-					} else
-						$scope.otherContributorList.push({
-							name : otherContributors
-						});
-				}
-			};
-			initOriginalAuthorInfo = function() {
-
-				oriAuthorInfo = $scope.header.description.original_author;
-				console.log(oriAuthorInfo);
-				if (oriAuthorInfo != undefined) {
-
-					angular.forEach(oriAuthorInfo, function(item) {
-						if (item.id == "name") {
-							$scope.originalAuthorInfo.name = item.text;
-						}
-						if (item.id == "email") {
-							$scope.originalAuthorInfo.email = item.text;
-						}
-						if (item.id == "orgnization") {
-							$scope.originalAuthorInfo.orgization = item.text;
-						}
-						if (item.id == "date") {
-							$scope.originalAuthorInfo.date = item.text;
-						}
-					});
-
-				}
-			};
-			getBaseInfoByCode = function() {
-
-				baseInfo = {
-					concept : '',
-					description : '',
-					comment : '',
-				};
-				if ($scope.languages.selectedLanguage != undefined) {
-					angular.forEach($scope.ontology.terms, function(term) {
-						if (term.language == $scope.languages.selectedLanguage.code) {
-							angular.forEach(term.items, function(item) {
-								if (item.code == $scope.conceptCode) {
-									console.log(item);
-									baseInfo = {
-										concept : item.text,
-										description : item.description,
-										comment : item.comment,
-									};
+			function getBaseInfo() {
+				var termDefinitons = $scope.header.ontology.term_definitions;
+				if (angular.isArray(termDefinitons)) {
+					angular.forEach(termDefinitons, function(definition) {
+						if (definition._language == $scope.selectedLanguage.code) {
+							angular.forEach(definition.items, function(item) {
+								if (item._code == $scope.header.concept) {
+									$scope.baseInfo = item.items;
 								}
 							});
 						}
 					});
+				} else {
+					if (termDefinitons._language == $scope.selectedLanguage.code) {
+						angular.forEach(termDefinitons.items, function(item) {
+							if (item._code == $scope.header.concept) {
+								$scope.baseInfo = item.items;
+							}
+						});
+					}
 				}
-				return baseInfo;
+			}
 
+			function getOriAuthorInfo() {
+				var oriAuthorInfo = {};
+				angular.forEach($scope.header.description.original_author, function(authorInfo) {
+					if (authorInfo._id == 'date') {
+						oriAuthorInfo.date = authorInfo;
+					}
+					if (authorInfo._id == 'name') {
+						oriAuthorInfo.name = authorInfo;
+					}
+					if (authorInfo._id == 'organisation') {
+						oriAuthorInfo.organisation = authorInfo;
+					}
+					if (authorInfo._id == 'email') {
+						oriAuthorInfo.email = authorInfo;
+					}
+				});
+				$scope.oriAuthorInfo = oriAuthorInfo;
+			}
+
+
+			$scope.otherContributorList = [];
+			$scope.selectContributor = function(contributor) {
+				$scope.selectedContributor = contributor;
+			};
+		
+			function getContributorList() {
+				$scope.otherContributorList = [];
+				if ($scope.header.description.other_contributors) {
+					var contributors = $scope.header.description.other_contributors;
+					if (angular.isArray(contributors)) {
+						angular.forEach(contributors, function(contributor) {
+							var temp = {
+								name : contributor,
+							};
+							$scope.otherContributorList.push(temp);
+						});
+					}else{
+						$scope.otherContributorList.push({
+							name:contributors,
+						});
+					}
+					//console.log($scope.header.other_contributors);
+
+				}
+			}
+
+
+			$scope.deleteContributor = function() {
+				if ($scope.otherContributorList && $scope.selectContributor) {
+					var index = $scope.otherContributorList.indexOf($scope.selectedContributor);
+					$scope.otherContributorList.splice(index, 1);
+				};
 			};
 
-			$scope.concept = "sda";
+			$scope.addContributor = function() {
+				$scope.selectedContributor = {
+					name : "New Contributor",
+				};
+				$scope.otherContributorList.push($scope.selectedContributor);
+			};
+			$scope.saveContributors = function() {
+				$scope.header.description.other_contributors = [];
+				angular.forEach($scope.otherContributorList, function(contributor) {
+
+					$scope.header.description.other_contributors.push(contributor.name);
+
+				});
+			};
+
+			function getDetail() {
+				var details = $scope.header.description.details;
+				if (details) {
+					if (angular.isArray(details)) {
+						angular.forEach(details, function(detail) {
+							if (detail.language.code_string == $scope.selectedLanguage.code) {
+								$scope.detail = detail;
+							}
+						});
+					} else {
+						if (details.language.code_string == $scope.selectedLanguage.code) {
+							$scope.detail = details;
+						}
+					}
+				}
+			}
+
+			//$scope.concept = "sda";
 			$scope.oneAtATime = false;
 			$scope.status = {
 				isBaseInfoOpen : true,
