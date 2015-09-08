@@ -4,7 +4,7 @@ function ManagementCtrl($scope, $state, $timeout) {
 	$scope.$watch(function() {
 		return $scope.$parent.containerHeight;
 	}, function(newValue) {
-		$scope.containerHeight = newValue - 110;
+		$scope.containerHeight = newValue - 40;
 	});
 	
 	$scope.breadcrumbs = [];

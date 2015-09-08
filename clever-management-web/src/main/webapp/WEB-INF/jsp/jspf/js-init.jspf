@@ -8,9 +8,7 @@
 <script src="js/lib/angular-ui-router.js"></script>
 <script src="js/lib/ui-bootstrap-tpls-0.12.0.js"></script>
 <script src="js/lib/xml2json.js"></script>
-<script src="js/lib/fisheye-init.js"></script>
 <script src="js/lib/jquery.min.js"></script>
-<script src="js/lib/fisheye-run.js"></script>
 <script src="js/lib/jquery-transit.js"></script>
 <script src="js/lib/diffview.js"></script>
 <script src="js/lib/difflib.js"></script>
@@ -50,8 +48,6 @@
 <script src="js/directives/splitter/splitter-directive.js"></script>
 <script src="js/directives/application-template/template-list-tree/template-list-tree-directive.js"></script>
 <script src="js/directives/application-template/template-list-tree/template-list-tree-node-directive.js"></script>
-<script src="js/directives/unfold-menu/unfold-menu-directive.js"></script>
-<script src="js/directives/fisheye-menu/fisheye-menu-directive.js"></script>
 <script src="js/directives/archetype-master-pane/archetype-master-pane-directive.js"></script>
 <script src="js/directives/archetype-pane/archetype-pane-directive.js"></script>
 <script src="js/directives/header-pane/header-pane-directive.js"></script>
@@ -90,7 +86,7 @@
 
 <!-- controllers -->
 <script src="js/views/management/management-controller.js"></script>
-<script src="js/views/management/archetype/archetype-page-controller.js"></script>
+<script src="js/views/management/universal-management-list-controller.js"></script>
 <script src="js/views/management/archetype/upload/archetype-upload-controller.js"></script>
 <script src="js/views/management/archetype/view/archetype-view-controller.js"></script>
 <script src="js/views/management/archetype/edit/archetype-edit-controller.js"></script>
