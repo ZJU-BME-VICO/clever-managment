@@ -17,6 +17,7 @@ angular.module('clever.management.service.archetypeParseEdit', []).service('arch
 	this.parseArchetype = function(archetype) {
 		var header = this.parseHeader(archetype);
 		var terminologies = this.parseTerminology(archetype);
+		
 		var definitions = this.parseDefinition(archetype);
 		var languages = this.parseLanguage(archetype);
 		if (archetype.parent_archetype_id) {
@@ -24,6 +25,10 @@ angular.module('clever.management.service.archetypeParseEdit', []).service('arch
 		} else {
 			var parentArchetype = undefined;
 		}
+		console.log("this is terminologies");
+		console.log(definitions);
+		//console.log("this is definition");
+		//console.log()
 		return {
 			oriNodeRef : archetype, //---------for edit
 			header : header,
@@ -456,31 +461,123 @@ angular.module('clever.management.service.archetypeParseEdit', []).service('arch
 		
 
 	}
+  
+	function generatorNodePath(node, parentNode,termDefinitions) {
+		if (!parentNode) {
+			node.idPath = "";
+			node.textPath = "";
+		} else{
+			if (node.rm_attribute_name) {
+				node.idPath = parentNode.idPath + "/" + node.rm_attribute_name;
+				node.textPath = parentNode.textPath + "/" + node.rm_attribute_name;
+			} else if (node.rm_type_name) {
+				if (node.node_id) {
+					node.idPath = parentNode.idPath + "[" + node.node_id + "]";
+					node.textPath = parentNode.textPath + "[" + getOntologyByNodeId(node.node_id,"en",termDefinitions) + "]";
+				} else if (noTraverseTypeList.indexOf(node.rm_type_name) != -1) {
+					node.idPath = parentNode.idPath;
+					node.textPath = parentNode.textPath;
+				} else {
+					node.idPath = parentNode.idPath + "[" + node.rm_type_name + "]";
+					node.textPath = parentNode.textPath + "[" + node.rm_type_name + "]";
+				}
+			}
+		}
+		
 
+	};
+
+    function getOntologyByNodeId(nodeId,language,termDefinitions){
+    	var text;
+  	   if(angular.isArray(termDefinitions)){
+  	   	angular.forEach(termDefinitions,function(term){
+  	   		if (term.language == language) {
+			if (angular.isArray(term.items)) {
+				angular.forEach(term.items, function(item) {
+					if (item.code == nodeId) {
+						text =  item.text;
+					}
+				});
+			} else {
+				if (term.items.code == nodeId) {
+					text = term.items.text;
+				}
+			}
+		}
+  	   	});
+  	   }else{
+  	   	var term = termDefinitions;
+  	    if (term.language == language) {
+			if (angular.isArray(term.items)) {
+				angular.forEach(term.items, function(item) {
+					if (item.code == nodeId) {
+						text = item.text;
+					}
+				});
+			} else {
+				if (term.items.code == nodeId) {
+					text = term.items.text;
+				}
+			}
+		 }
+  	   }
+  	   
+  	  return text; 
+    } 
+    
+    
 	this.myProcessNode = function(typeNode, parent, treeItems, terminologies, parentAttribute) {
 		var nodeForReturn ;
 		var self = this;
+		
 		if (angular.isArray(typeNode)) {
+			
+			
 			angular.forEach(typeNode, function(value) {
+			
+				//generator node path
+				if(parentAttribute){
+					generatorNodePath(value,parentAttribute.oriNodeRef,terminologies);
+				}else if(parent) {
+					generatorNodePath(value,parent.oriNodeRef,terminologies);
+				}
+				else{
+					generatorNodePath(value,parent,terminologies);
+				}
+					
+		
+				//generator node path end
+
 				if (noTraverseTypeList.indexOf(value.rm_type_name) == -1) {
 					var extractedNode = extractNode(value, terminologies, parentAttribute);
+					extractedNode.oriNodeRef = value;
 					nodeForReturn = extractedNode;
 					extractedNode.children = [];
-					if (value.attributes) {
-						
-						self.processAttribute(value.attributes, extractNode, extractedNode.children, terminologies);
+					if (value.attributes) {					
+						self.processAttribute(value.attributes, extractedNode, extractedNode.children, terminologies);
 					}
 					if (parentAttribute) {
 						extractedNode.parentAttribute = parentAttribute;
 					}
-					extractedNode.oriNodeRef = value;
+					
 					treeItems.push(extractedNode);
 				}
 			});
 
 		} else {
+			//generator node path
+			if(parentAttribute){
+					generatorNodePath(typeNode,parentAttribute.oriNodeRef,terminologies);
+				}else if(parent) {
+					generatorNodePath(typeNode,parent.oriNodeRef,terminologies);
+				}
+				else{
+					generatorNodePath(typeNode,parent,terminologies);
+				}
+					
 			if (noTraverseTypeList.indexOf(typeNode.rm_type_name) == -1) {
 				var extractedNode = extractNode(typeNode, terminologies, parentAttribute);
+				extractedNode.oriNodeRef = typeNode;
 				nodeForReturn = extractedNode;
 				extractedNode.children = [];
 				if (typeNode.attributes) {
@@ -490,7 +587,7 @@ angular.module('clever.management.service.archetypeParseEdit', []).service('arch
 				if (parentAttribute) {
 					extractedNode.parentAttribute = parentAttribute;
 				}
-				extractedNode.oriNodeRef = typeNode;
+				
 				treeItems.push(extractedNode);
 			}
 		}
@@ -504,14 +601,17 @@ angular.module('clever.management.service.archetypeParseEdit', []).service('arch
 		if (attributes) {
             
 			if (angular.isArray(attributes)) {
-
+             //generator node path
+           
 				angular.forEach(attributes, function(attribute) {
+					 generatorNodePath(attribute,parent.oriNodeRef,terminologies);
 					if (noTraverseAttributes.indexOf(attribute.rm_attribute_name) != -1 && attribute.children) {//if attribute type should be keep
 						var keepAttribute = extractNode(attribute, terminologies, undefined);
 						nodeForReturn = keepAttribute;
+						keepAttribute.oriNodeRef = attribute;
 						keepAttribute.children = [];
 						self.myProcessNode(attribute.children, keepAttribute, keepAttribute.children, terminologies, undefined);
-						keepAttribute.oriNodeRef = attribute;
+						
 						treeItems.push(keepAttribute);
 					} else {
 						var noKeepAttribute = extractNode(attribute, terminologies, undefined);
@@ -524,6 +624,9 @@ angular.module('clever.management.service.archetypeParseEdit', []).service('arch
 					}
 				});
 			} else {
+				//generator node path
+				
+				  generatorNodePath(attributes,parent.oriNodeRef,terminologies);
 				if (noTraverseAttributes.indexOf(attributes.rm_attribute_name) != -1 && attributes.children) {//if attribute type should be keep
 					var keepAttribute = extractNode(attributes, terminologies, undefined);
 					nodeForReturn = keepAttribute;
@@ -545,8 +648,8 @@ angular.module('clever.management.service.archetypeParseEdit', []).service('arch
 		return nodeForReturn;
 	};
 
-	var noTraverseTypeList = ['PARTY_REF','DV_TEXT', 'DV_CODED_TEXT', 'DV_QUANTITY', 'DV_ORDINAL', 'DV_DATE_TIME', 'DV_DATE', 'DV_TIME', 'DV_BOOLEAN', 'DV_COUNT', 'DV_DURATION', 'DV_INTERVAL<DV_DATE>', 'DV_INTERVAl<DV_TIME>', 'DV_INTERVAL<DV_DATE_TIME>', 'DV_INTERVAL<COUNT>', 'DV_INTERVAL<QUANTITY>', 'DV_MULTIMEDIA', 'DV_URI', 'DV_EHR_URI', 'DV_PROPORTION', 'DV_IDENTIFIER', 'DV_PARSABLE', 'DV_BOOLEAN'];
-	var noTraverseAttributes = ['subject', 'ism_transition', 'otherParticipations', 'links'];
+	var noTraverseTypeList = ['PARTY_REF','DV_TEXT', 'DV_CODED_TEXT', 'DV_QUANTITY', 'DV_ORDINAL', 'DV_DATE_TIME', 'DV_DATE', 'DV_TIME', 'DV_BOOLEAN', 'DV_COUNT', 'DV_DURATION', 'DV_INTERVAL<DV_DATE>', 'DV_INTERVAl<DV_TIME>', 'DV_INTERVAL<DV_DATE_TIME>', 'DV_INTERVAL<DV_COUNT>', 'DV_INTERVAL<DV_QUANTITY>', 'DV_MULTIMEDIA', 'DV_URI', 'DV_EHR_URI', 'DV_PROPORTION', 'DV_IDENTIFIER', 'DV_PARSABLE', 'DV_BOOLEAN'];
+	var noTraverseAttributes = ['subject', 'ism_transition', 'otherParticipations', 'links','events','activities','context','content','category'];
 	var typeList = ['ITEM_LIST', 'ITEM_TREE', 'HISTORY'];
 	function extractNode(node, term_definitions, parentAttribute) {
 		var type, attribute, code, occurrences, existence, cardinality, cnname, enname, dataType, picType, tableName, targetPath, name;
@@ -662,6 +765,10 @@ angular.module('clever.management.service.archetypeParseEdit', []).service('arch
 			 label = parentAttribute.label.text;
 			}
 		}
+		
+		
+		
+		
 		return {
 			label : {
 				type : labelType,

@@ -61,7 +61,8 @@ angular.module('clever.management.service.archetypeEdit', []).service('archetype
 	this.getCDvOrdinal = function() {
 		return {
 			'_xsi:type' : "C_DV_ORDINAL",
-			list : [], //element is ordinal --- consist of value|symbol.defining_code.terminology_id.value&code_string
+			list : undefined, //element is ordinal --- consist of value|symbol.defining_code.terminology_id.value&code_string
+		    rm_type_name: 'DV_ORDINAL',
 		};
 	};
 
@@ -89,9 +90,9 @@ angular.module('clever.management.service.archetypeEdit', []).service('archetype
 		return {
 			'_xsi:type' : "C_DV_QUANTITY",
 			property : undefined, // terminology_id/value    code_string
-			list : [], //ervery element have:  units   magnitude  precision
+			list : null, //ervery element have:  units   magnitude  precision
 			assumed_value : undefined,
-
+            rm_type_name : "DV_QUANTITY",
 		};
 	};
 
@@ -111,16 +112,17 @@ angular.module('clever.management.service.archetypeEdit', []).service('archetype
 		};
 	};
 
-	this.getArchetypeSlot = function(rmTypeName, nodeId, occurrences) {
+	this.getArchetypeSlot = function(rmTypeName, nodeId, occurrences, includes, excludes) {
 		return {
 			'_xsi:type' : "ARCHETYPE_SLOT",
 			rm_type_name : rmTypeName,
 			node_id : nodeId,
 			occurrences : occurrences,
-			includes : undefined,
-			excludes : undefined,
+			includes :{string_expression:includes},
+			excludes :{string_expression:excludes},
 		};
 	};
+	this.defaultIncludes =  "archetype_id/value matches {/.*/}";
 
 	//constraint object get this.end
 
@@ -195,10 +197,10 @@ angular.module('clever.management.service.archetypeEdit', []).service('archetype
 	//function
 	this.getOccurrences = function(lower, lower_included, lower_unbounded, upper, upper_included, upper_unbounded) {
 		return {
-			lower : lower.toString(),
+			lower :(lower==undefined||lower==null)?  undefined : lower.toString() ,
 			lower_included : lower_included.toString(),
 			lower_unbounded : lower_unbounded.toString(),
-			upper : upper.toString(),
+			upper : (upper==undefined||upper==null)?   undefined : upper.toString() ,
 			upper_included : upper_included.toString(),
 			upper_unbounded : upper_unbounded.toString(),
 
@@ -206,6 +208,9 @@ angular.module('clever.management.service.archetypeEdit', []).service('archetype
 	};
 
 	this.getDefaultOccurrences = function(lower, upper) {
+		if(upper == '*'){
+			return  this.getOccurrences(lower,true,false,undefined,false,true);
+		}
 		return this.getOccurrences(lower, true, false, upper, true, false);
 	};
 
@@ -240,10 +245,10 @@ angular.module('clever.management.service.archetypeEdit', []).service('archetype
 
 	this.getExistence = function(lower, lower_included, lower_unbounded, upper, upper_included, upper_unbounded) {
 		return {
-			lower : lower.toString(),
+			lower : (lower==undefined||lower==null)?  undefined : lower.toString() ,
 			lower_included : lower_included.toString(),
 			lower_unbounded : lower_unbounded.toString(),
-			upper : upper.toString(),
+			upper :  (upper==undefined||upper==null)? undefined : upper.toString(),
 			upper_included : upper_included.toString(),
 			upper_unbounded : upper_unbounded.toString(),
 
@@ -297,7 +302,7 @@ angular.module('clever.management.service.archetypeEdit', []).service('archetype
 		if (code.lastIndexOf('.') != -1) {
 			lastString = code.slice(code.lastIndexOf('.') + 1, code.length);
 		} else {
-			lastString = code;
+			lastString = code.slice(2,code.length);
 		}
 		return parseInt(lastString);
 
@@ -530,7 +535,7 @@ angular.module('clever.management.service.archetypeEdit', []).service('archetype
 
 		if (node.oriNodeRef.attributes && node.childrenAttribute) {
 			return;
-		} else if (!node.oriNodeRef.attributes && !node.childrenAttribute) {
+		} else if ((!node.oriNodeRef.attributes||node.oriNodeRef.attributes.length == 0) && !node.childrenAttribute) {
 			var multiAttribute = this.getCMultipleAttribute([], this.getDefaultCardinality(1), this.getDefaultExistence(1, 1), "items");
 			node.oriNodeRef.attributes = multiAttribute;
 

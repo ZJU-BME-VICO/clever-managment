@@ -1,0 +1,285 @@
+/* Added to addapt for ehrscape */
+.btn-default.code-selected{
+	background-color:red;
+	color:blue;
+}
+
+
+.bordered {
+  border-right: 2px solid #eee;
+}
+
+.attribute{
+	color: #8cc152;
+}
+.ontology-item{
+	cursor: pointer;
+}
+ li .selected {
+	background-color: #aaddff;
+	font-weight: bold;
+}
+code {
+  padding: 2px 4px;
+  font-size: 90%;
+  color: #c7254e;
+  background-color: #f9f2f4;
+  border-radius: 4px;
+}
+
+/* Separator*/
+
+.hor-spacer {
+    margin: 50px;
+    margin-bottom: 30px;
+    position:relative;
+}
+
+.hor-spacer .mask {
+    overflow:hidden;
+    height:20px;
+}
+
+.hor-spacer .mask:after {
+    content:'';
+    display:block;
+    margin:-25px auto 0;
+    width:100%;
+    height:25px;
+    border-radius:125px / 12px;
+    box-shadow:0 0 8px #656D78;
+}
+
+.hor-spacer span {
+    width:50px;
+    height:50px;
+    position:absolute;
+    bottom:100%;
+    margin-bottom:-25px;
+    left:50%;
+    margin-left:-25px;
+    border-radius:100%;
+    box-shadow:0 2px 4px #999;
+    background:white;
+}
+
+.hor-spacer span i {
+    position:absolute;
+    top: 4px;
+    bottom: 4px;
+    left: 4px;
+    right: 4px;
+    border-radius:100%;
+    border:1px dashed #aaa;
+
+    text-align:center;
+    line-height:40px;
+    font-style:normal;
+    color:#999;
+}
+
+.ver-spacer {
+    position:absolute;
+    top: 5px;
+    left: -10px;
+}
+
+.ver-spacer .mask {
+    overflow:hidden;
+    width:20px;
+    height: 175px;
+}
+
+.left .mask:after {
+    content:'';
+    display:block;
+    margin-left:-20px;
+    width:20px;
+    height:100%;
+    border-radius:12px / 125px;
+    box-shadow:0 0 8px #656D78;
+}
+
+.right .mask:before {
+    content:'';
+    display:block;
+    margin-left:20px;
+    width:20px;
+    height:100%;
+    border-radius:12px / 125px;
+    box-shadow:0 0 8px #656D78;
+}
+
+/* Back to top */
+
+#smoothscroll {
+    height: 44px;
+    width: 44px;
+    position:fixed;
+    bottom:20px;
+    right:20px;
+    text-indent:-9999px;
+    display:none;
+    background: url("../img/back-to-top.png");
+    -webkit-transition-duration: 0.4s;
+    -moz-transition-duration: 0.4s;
+    transition-duration: 0.4s;
+}
+
+#smoothscroll:hover {
+    -webkit-transform: rotate(360deg);
+    background: url("../img/back-to-top.png") no-repeat;
+}
+
+/* Timeline */
+
+.timeline {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    position: relative;
+}
+
+/* The line */
+.timeline:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 10px;
+    background: #dcdfe3;
+    left: 25%;
+    margin-left: -10px;
+}
+
+/* The date/time */
+.timeline > li{
+    position: relative;
+}
+
+.timeline > li .timeline-date {
+    display: block;
+    width: 30%;
+    padding-right: 100px;
+    position: absolute;
+}
+
+.timeline > li .timeline-date span {
+    display: block;
+    text-align: right;
+}
+
+.timeline > li .timeline-date span:first-child {
+    font-size: 0.8em;
+    color: #BDC3C7;
+}
+
+.timeline > li .timeline-date span:last-child {
+    font-size: 1.2em;
+    color: #2980B9;
+    font-weight: 300;
+}
+
+.timeline > li:nth-child(odd) .timeline-date span:last-child {
+    xcolor: #6cbfee;
+}
+
+/* Right content */
+.timeline > li .timeline-label{
+    position: relative;
+    margin: 0 0 15px 30%;
+    border: none;
+    -webkit-border-radius: 2px;
+    -moz-border-radius: 2px;
+    border-radius: 2px;
+    -webkit-box-shadow: 0 1px 2px rgba(0,0,0,.2);
+    -moz-box-shadow: 0 1px 2px rgba(0,0,0,.2);
+    box-shadow: 0 1px 2px rgba(0,0,0,.2);
+}
+
+.timeline > li .timeline-label .timeline-title {
+    padding: 1em;
+    background: #dcdfe3;
+    color: #797979;
+    line-height: 1.4;
+    -webkit-border-radius: 2px 2px 0 0;
+    -moz-border-radius: 2px 2px 0 0;
+    border-radius: 2px 2px 0 0;
+
+    -webkit-transition: background 0.3s ease;
+    -moz-transition: background 0.3s ease;
+    -o-transition: background 0.3s ease;
+    transition: background 0.3s ease;
+}
+
+.timeline > li .timeline-label .timeline-title h3 {
+    margin: 0;
+    font-weight: 400;
+    font-size: 1.2em;
+}
+
+.timeline > li .timeline-label .timeline-title:hover{
+    cursor: pointer;
+}
+
+.timeline > li .timeline-label .timeline-title:hover, .timeline > li .timeline-label .timeline-title.expanded{
+    background: #3498DB;
+    color: #fff;
+    text-shadow: 0 1px 0 rgba(0,0,0,.1);
+}
+
+.timeline > li .timeline-label .timeline-content{
+    background: #f5f5f5;
+    padding: 1em 0;
+}
+
+/* The triangle */
+.timeline > li .timeline-label .timeline-title:before {
+    left: -20px;
+    border: solid transparent;
+    content: " ";
+    height: 0;
+    width: 0;
+    position: absolute;
+    pointer-events: none;
+    border-width: 10px;
+    top: 10px;
+    -webkit-transition: all 0.3s ease;
+    -moz-transition: all 0.3s ease;
+    -o-transition: all 0.3s ease;
+    transition: all 0.3s ease;
+}
+
+.timeline > li .timeline-label .timeline-title.collapsed:before {
+    border-right-color: #dcdfe3;
+}
+
+.timeline > li .timeline-label .timeline-title.expanded:before, .timeline > li .timeline-label .timeline-title:hover:before {
+    border-right-color: #3498DB;
+}
+
+
+/* The icons */
+.timeline > li .timeline-icon {
+    width: 40px;
+    height: 40px;
+    font-family: FontAwesome;
+    speak: none;
+    font-style: normal;
+    font-weight: normal;
+    font-variant: normal;
+    text-transform: none;
+    font-size: 1.4em;
+    line-height: 40px;
+    position: absolute;
+    color: #fff;
+    background: #3498DB;
+    border-radius: 50%;
+    box-shadow: 0 0 0 8px #dcdfe3;
+    text-align: center;
+    left: 25%;
+    top: 0;
+    margin: 0 0 0 -25px;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}

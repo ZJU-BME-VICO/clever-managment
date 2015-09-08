@@ -71,7 +71,15 @@ function StorageTemplateEditCtrl($scope, resourceService, busyService, msgboxSer
 
 	$scope.getTreeNodeLabel = function(node, aliasName) {
 		var label = '';
-		label += '<span class="clever-icon ' + node.label.picType.toLowerCase() + '" style="padding: 7px 10px; background-position-y: 10px;"></span>' + '<span ng-class="{\'node-label-max\': ' + aliasName + '.label.occurrences.upper != 0}"';
+		//label += '<span class="clever-icon ' + node.label.picType.toLowerCase() + '" style="padding: 7px 10px; background-position-y: 10px;"></span>' + '<span ng-class="{\'node-label-max\': ' + aliasName + '.label.occurrences.upper != 0}"';
+	
+		if (node.label.occurrences.upper != 0) {
+			label += '<span class="clever-icon ' + node.label.picType.toLowerCase() + '" style="padding: 7px 10px; background-position-y: 10px;"></span>' + '<span ng-class="{\'node-label-max\': true}"';
+		} else {
+			label += '<span class="clever-icon ' + node.label.picType.toLowerCase() + '" style="padding: 7px 10px; background-position-y: 10px;"></span>' + '<span ng-class="{\'node-label-max\': false}"';
+
+		}
+	
 		if (node.label.text) {
 			label += '<span style="color: brown;">' + node.label.text;
 		}
@@ -83,7 +91,15 @@ function StorageTemplateEditCtrl($scope, resourceService, busyService, msgboxSer
 			}
 			label += getOntologyByNode(node);
 		}
-		label += '<span ng-if="' + aliasName + '.label.occurrences.upper != 0">&nbsp&nbsp[{{' + aliasName + '.label.occurrences.lower}}..{{' + aliasName + '.label.occurrences.upper}}]' + '<span ng-if="' + aliasName + '.label.occurrenceType == \'*\' && ' + aliasName + '.label.occurrences.upper == 1">&nbsp&nbsp&nbsp<em>[0..*] to [0..1]</em></span>' + '</span>' + '</span>' + '</span>';
+		//label += '<span ng-if="' + aliasName + '.label.occurrences.upper != 0">&nbsp&nbsp[{{' + aliasName + '.label.occurrences.lower}}..{{' + aliasName + '.label.occurrences.upper}}]' + '<span ng-if="' + aliasName + '.label.occurrenceType == \'*\' && ' + aliasName + '.label.occurrences.upper == 1">&nbsp&nbsp&nbsp<em>[0..*] to [0..1]</em></span>' + '</span>' + '</span>' + '</span>';
+		
+		if (node.label.occurrences.upper != 0) {
+			label += '<span>&nbsp&nbsp[' + node.label.occurrences.lower + '..' + node.label.occurrences.upper + ']';
+			if (node.label.occurrenceType == "*" && node.label.occurrences.upper == 1) {
+				label += '<span>&nbsp&nbsp&nbsp<em>[0..*] to [0..1]</em></span>' + '</span>' + '</span>' + '</span>';
+			}
+		}
+
 		return label;
 		// return label + '<span>[' + node.label.path + ']</span>'
 	};

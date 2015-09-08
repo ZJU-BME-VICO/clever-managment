@@ -6,8 +6,8 @@ angular.module('clever.management.directives.editDisplayPane',[]).directive('edi
 			ArchetypeInfo:'=',
 		},
 		templateUrl:'js/directives/archetype-edit-directives/display-pane/edit-display-pane.html',
-		controller: function($scope,$element,$attr){
-			$scope.tabControl = {};
+		controller: function($scope,$element){
+			
 		},
 		links: function(scope,element,attr){
 			

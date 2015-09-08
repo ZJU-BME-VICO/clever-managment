@@ -14,3 +14,5 @@
 <link rel="stylesheet" href="css/diffview.css" />
 <link rel="stylesheet" href="css/archetype-edit-icon.css" />
 <link rel="stylesheet" href="css/angular-dnd.css" />
+<link rel="stylesheet" href="css/master.css" />
+<link rel="stylesheet" href="css/editor-style.css" />

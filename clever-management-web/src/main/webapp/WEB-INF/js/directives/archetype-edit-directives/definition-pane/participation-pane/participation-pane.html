@@ -1,0 +1,98 @@
+<div>
+	<label>Performer :</label>
+	<br>
+	<span ng-repeat="type in performerTypes"  style="margin-right:18px" for="{{type}}">
+		<input type="radio" ng-model="performerType.value" ng-value='type' id="{{type}}">
+		{{type}} </span>
+	<hr>
+
+	<div ng-if="performerType.value == 'PARTY_SELF'">
+		<span>Attributes :</span>
+		<br>
+		<div style="margin-left:20px">
+			<span class="attribute">externalRef</span>
+			<input type="checkbox" ng-model="hasExternalRef">
+			<div ng-if="hasExternalRef" style="margin-left:20px">
+				<h5>ID:</h5>
+				<input  class="form-control" type="text" ng-model="" />
+				<h5>Namespace:</h5>
+				<input class="form-control" type="text" />
+				<h5>Type:</h5>
+				<input class="form-control" type="text" />
+			</div>
+		</div>
+	</div>
+	
+	<div ng-if="performerType.value == 'PARTY_IDENTIFIED'">
+		<span>Attributes :</span>
+		<br>
+		<div style="margin-left:20px">
+			<span class="attribute">externalRef</span>
+			<input type="checkbox" ng-model="hasExternalRef">
+			<br>
+			<div ng-if="hasExternalRef" style="margin-left:20px">
+				<h5>ID:</h5>
+				<input  class="form-control" type="text" ng-model="" />
+				<h5>Namespace:</h5>
+				<input class="form-control" type="text" />
+				<h5>Type:</h5>
+				<input class="form-control" type="text" />
+			</div>
+			<span class="attribute">name:</span>
+			<input type="checkbox" ng-model="hasName" />
+			<br>
+			<div ng-if="hasName" style="margin-left:20px">
+				<span>String</span>
+				<input  class ="form-control" type="text" ng-model="" />
+			</div>
+			<span class="attribute">identifiers:</span>
+			<input type="checkbox" ng-model="hasIdentifier" />
+			<br>
+			<div ng-if="hasIdentifiers" style="margin-left:20px">
+				edit identifier here
+			</div>
+		</div>
+	</div>
+	
+	
+	<div ng-if="performerType.value=='PARTY_RELATED'">
+		<span><strong>Attributes :</strong></span>
+		<br>
+		<div style="margin-left:20px">
+			<span class="attribute">externalRef</span>
+			<input type="checkbox" ng-model="hasExternalRef">
+			<br>
+			<div ng-if="hasExternalRef" style="margin-left:20px">
+				<h5>ID:</h5>
+				<input  class="form-control" type="text" ng-model="" />
+				<h5>Namespace:</h5>
+				<input class="form-control" type="text" />
+				<h5>Type:</h5>
+				<input class="form-control" type="text" />
+			</div>
+			<span class="attribute">relationship</span>
+		</div>
+	</div>
+</div>
+
+<div>
+	<label>Mode:</label>
+	<input type="checkbox" ng-model="hasMode" tabindex="mode" />
+	<div ng-if="hasMode">
+		Edit mode contribute here
+	</div>
+</div>
+<div>
+	<label>Function:</label>
+	<input type="checkbox" ng-model="hasFunction" tabindex="function" />
+	<div ng-if="hasFunction">
+		Edit function contribute here
+	</div>
+</div>
+<div>
+	<label>Time:</label>
+	<input type="checkbox" ng-model="hasTime" tabindex="time" />
+	<div ng-if="hasTime">
+		Edit time contribute here
+	</div>
+</div>

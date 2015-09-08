@@ -385,7 +385,7 @@ angular.module('clever.management.service.archetypeSerialize', []).service('arch
 					self.printArchetypeTerm(archetypeTerm);
 				});
 			} else {//items is not an array, but an object
-				var archetypeTerm = definition.items;
+				var archetypeItem = definition.items;
 				self.printArchetypeTerm(archetypeItem);
 			}
 		}
@@ -1094,9 +1094,12 @@ angular.module('clever.management.service.archetypeSerialize', []).service('arch
 			}
 		}
 	};
+
 	this.printOccurrences = function(occurrences) {
 		if (occurrences) {
-			if (angular.equals(occurrences.lower, "1") && angular.equals(occurrences.upper, "1")) {
+			if (angular.equals(occurrences.upper_unbounded, "true")) {
+
+			} else if (angular.equals(occurrences.lower, "1") && angular.equals(occurrences.upper, "1")) {
 				return;
 			}
 
@@ -1107,14 +1110,17 @@ angular.module('clever.management.service.archetypeSerialize', []).service('arch
 				this.write("*");
 			}
 			this.write("..");
-			if (occurrences.upper) {
+			if (angular.equals(occurrences.upper_unbounded, "true")) {
+				this.write("*");
+			} else if (occurrences.upper) {
 				this.write(occurrences.upper);
 			} else {
 				this.write("*");
 			}
 			this.write("}");
 		}
-	};
+	}; 
+
 
 	this.printMapArray = function(array, number) {
 		var self = this;

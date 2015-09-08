@@ -1,0 +1,956 @@
+html, body{
+    height: 100%;
+}
+
+body{
+    color: #333;
+    xbackground-color: #EDEFF1;
+}
+
+ul {
+    margin: 0;
+    list-style: none;
+}
+
+h3{
+    font-weight: 300;
+    color: #2980B9;
+}
+
+a{
+    color: #2980B9;
+}
+
+#apiChic-defaultParameters h5 {
+	font-size: 16px;
+	margin-bottom: 8px;
+	margin-top: 8px;
+}
+
+#apiChic-defaultParameters h4 {
+	font-size: 20px;
+}
+
+#apiChic-defaultParameters td {
+	font-size: 15px;
+}
+
+#apiChic-defaultParameters .modal-footer {
+	padding: 10px 20px 10px;
+	margin-top: 0px;
+}
+
+a:hover{
+    cursor: pointer;
+    color: #3498DB;
+}
+
+.form-group.focus .form-control,
+.form-control:focus {
+    border-color: #3498DB;
+    outline: 0;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+}
+
+
+.breadcrumb {
+    background-color: transparent;
+    display: inline-block;
+    line-height: 24px;
+    margin: 0 22px 0 0;
+    padding: 0 3px;
+    font-size: 14px;
+    color: #333;
+    border-radius: 0;
+	padding-left: 10px !important;
+}
+
+.breadcrumb>li,.breadcrumb>li.active>a {
+    color: #555;
+}
+
+.breadcrumb>li>a {
+    display: inline-block;
+    padding: 0 4px;
+}
+
+.breadcrumb>li+li:before {
+    font-family:FontAwesome;
+    font-size: 14px;
+    content: "\f105";
+    color: #b2b6bf;
+    padding: 0 5px 0 2px;
+    position: relative;
+    top: 1px
+}
+
+.breadcrumb .fa-home {
+    margin-left: 4px;
+    margin-right: 2px;
+    font-size: 20px;
+    position: relative;
+    top: 2px;
+    color: #555;
+}
+
+.breadcrumbs {
+    position: relative;
+    border-bottom: 1px solid #BDC3C7;
+    background-color: #fff;
+    min-height: 41px;
+    line-height: 40px;
+    padding: 10px 12px 0 0;
+    display: block
+}
+
+/* 1st screen */
+
+ul.main{
+    padding: 0;
+}
+
+ul.main > li{
+    position: relative;
+    border-bottom: 1px dotted #CCC;
+    height: 170px;
+}
+
+ul.main > li:last-child{
+    border-bottom: none;
+}
+
+ul.main .title{
+    position: absolute;
+    left: 100px;
+    top: 15px;
+    font-size: 24px;
+    font-weight: 400;
+    color: #2980B9;
+    -webkit-transition: 0.25s;
+    transition: 0.25s;
+}
+
+ul.main .title:hover, ul.main .minimal-icon:hover + .title{
+    color: #3498DB;
+    cursor: pointer;
+}
+
+ul.main .description{
+    position: absolute;
+    left: 100px;
+    top: 55px;
+    font-weight: 300;
+	font-size: 18px;
+}
+
+ul.main a.details{
+    position: absolute;
+    left: 100px;
+    bottom: 30px;
+	font-size: 18px !important;
+	padding-right: 0px !important;
+    font-weight: 400;
+}
+
+ul.main a.details:after {
+    content: '>';
+    position: absolute;
+    top: 0;
+    right: -.8em;
+    bottom: 0;
+    display: block;
+    font: bold 1em/1.71 'Courier New', Courier, monospace;
+    -webkit-transform: scale(.55,1.11) translateY(3%);
+    -moz-transform: scale(.55,1.11) translateY(3%);
+    transform: scale(.55,1.11) translateY(3%);
+}
+
+ul.main .minimal-icon{
+    position: absolute;
+    left: 5px;
+    top: 20px;
+    border-radius: 100%;
+    border: 2px solid #2980B9;
+    color: #2980B9;
+    width: 70px;
+    height: 70px;
+    line-height: 65px;
+    text-align: center;
+    font-weight: 400;
+    font-size: 24px;
+    -webkit-transition: 0.25s;
+    transition: 0.25s;
+}
+
+ul.main .minimal-icon:before{
+    content: "</>";
+    position: absolute;
+    top: 0;
+    left: 15px;
+}
+
+ul.main .minimal-icon.hovered{
+    color: #EDEFF1;
+    background-color: #2980B9;
+    cursor: pointer;
+}
+
+
+/* 2nd screen (heading) */
+
+.apiVersion{
+    font-weight: 300;
+    color: #999;
+}
+
+div.heading {
+    border: 1px solid transparent;
+    float: none;
+    clear: both;
+    overflow: hidden;
+    display: block;
+	border-bottom: 1px solid #E4E4E4;
+	padding-left: 15px;
+	margin-bottom: 6px;
+}
+
+div.heading ul.options {
+    overflow: hidden;
+    padding: 0;
+    display: block;
+    clear: none;
+    float: right;
+    margin: 12px 10px 0 0;
+}
+
+
+div.heading ul.options li {
+    float: left;
+    clear: none;
+    margin: 0;
+    padding: 2px 10px;
+    border-right: 1px solid #dddddd;
+    font-size: 0.9em;
+    font-weight: 400;
+}
+
+div.heading ul.options li a {
+    overflow: hidden;
+    color: #999;
+    text-decoration: none;
+}
+
+div.heading ul.options li a:hover {
+    color: #333 !important;
+    text-decoration: underline;
+}
+
+div.heading ul.options li:first-child,
+div.heading ul.options li.first {
+    padding-left: 0;
+}
+
+div.heading ul.options li:last-child,
+div.heading ul.options li.last {
+    padding-right: 0;
+    border-right: none;
+}
+
+div.heading ul.options:first-child,
+div.heading ul.options.first {
+    padding-left: 0;
+}
+
+div.heading h6 {
+    color: #555;
+    padding-left: 0;
+    display: block;
+    clear: none;
+    float: left;
+    font-weight: 400;
+    font-size: 18px;
+}
+
+div.heading h6 a {
+    font-weight: 700;
+    color: #555;
+}
+
+div.heading:hover h6 a{
+    color: #333;
+}
+
+div.heading:hover ul.options li a{
+    color: #555;
+}
+
+/* 2nd Screen (content) */
+
+ul.endpoints {
+    display: none;
+}
+ul.endpoints li.endpoint ul.operations li.operation {
+    float: none;
+    clear: both;
+    overflow: hidden;
+    display: block;
+    margin: 0 0 15px;
+    padding: 0;
+}
+
+ul.endpoints li.endpoint ul.operations li.operation div.heading {
+    float: none;
+    clear: both;
+    overflow: hidden;
+    display: block;
+    margin: 0;
+    padding: 0;
+}
+
+ul.endpoints li.endpoint ul.operations li.operation div.heading h6 {
+    display: block;
+    clear: none;
+    float: left;
+    width: auto;
+    margin: 0;
+    padding: 0;
+    line-height: 1.1em;
+    color: black;
+}
+
+ul.endpoints li.endpoint ul.operations li.operation div.heading h6 span.path {
+    padding-left: 10px;
+}
+
+ul.endpoints li.endpoint ul.operations li.operation div.heading h6 span.path a {
+    font-weight: 400;
+    color: #555;
+    text-decoration: none;
+}
+
+ul.endpoints li.endpoint ul.operations li.operation div.heading h6 span.path a:hover {
+    color: #333;
+}
+
+ul.endpoints li.endpoint ul.operations li.operation div.heading h6 span.path a:hover {
+    xtext-decoration: underline;
+}
+
+ul.endpoints li.endpoint ul.operations li.operation div.heading h6 span.http_method a {
+    text-transform: uppercase;
+    text-decoration: none;
+    color: white;
+    display: inline-block;
+    width: 50px;
+    font-size: 0.6em;
+    text-align: center;
+    padding: 7px 0 4px;
+    x-moz-border-radius: 2px;
+    x-webkit-border-radius: 2px;
+    x-o-border-radius: 2px;
+    x-ms-border-radius: 2px;
+    x-khtml-border-radius: 2px;
+    xborder-radius: 2px;
+}
+
+ul.endpoints li.endpoint ul.operations li.operation div.heading h6 span {
+    margin: 0;
+    padding: 0;
+}
+
+ul.endpoints li.endpoint ul.operations li.operation div.heading ul.options {
+    overflow: hidden;
+    padding: 0;
+    display: block;
+    clear: none;
+    float: right;
+    margin: 2px 10px 0 0;
+}
+
+ul.endpoints li.endpoint ul.operations li.operation div.heading ul.options li {
+    float: left;
+    clear: none;
+    margin: 0;
+    padding: 2px 10px;
+    font-size: 0.9em;
+}
+
+ul.endpoints li.endpoint ul.operations li.operation div.heading ul.options li a {
+    text-decoration: none;
+}
+
+ul.endpoints li.endpoint ul.operations li.operation div.heading ul.options li a:hover {
+    color: inherit !important;
+    text-decoration: underline;
+}
+
+ul.endpoints li.endpoint ul.operations li.operation div.content {
+    border-top: none !important;
+    padding: 10px;
+    -moz-border-radius-bottomleft: 3px;
+    -webkit-border-bottom-left-radius: 3px;
+    -o-border-bottom-left-radius: 3px;
+    -ms-border-bottom-left-radius: 3px;
+    -khtml-border-bottom-left-radius: 3px;
+    border-bottom-left-radius: 3px;
+    -moz-border-radius-bottomright: 3px;
+    -webkit-border-bottom-right-radius: 3px;
+    -o-border-bottom-right-radius: 3px;
+    -ms-border-bottom-right-radius: 3px;
+    -khtml-border-bottom-right-radius: 3px;
+    border-bottom-right-radius: 3px;
+    margin: 0 0 20px;
+    background: #fff !important;
+}
+
+ul.endpoints li.endpoint ul.operations li.operation div.content h4 {
+    font-size: 1.1em;
+    margin: 0;
+    padding: 15px 0 5px;
+}
+
+ul.endpoints li.endpoint ul.operations li.operation div.content div.sandbox_header {
+    float: none;
+    clear: both;
+    overflow: hidden;
+    display: block;
+}
+
+ul.endpoints li.endpoint ul.operations li.operation div.content div.sandbox_header a {
+    padding: 4px 0 0 10px;
+    display: inline-block;
+    font-size: 0.9em;
+}
+
+ul.endpoints li.endpoint ul.operations li.operation div.content div.sandbox_header img {
+    display: block;
+    clear: none;
+    float: right;
+}
+
+ul.endpoints li.endpoint ul.operations li.operation div.content div.sandbox_header input.submit {
+    display: block;
+    clear: none;
+    float: left;
+    padding: 6px 8px;
+}
+
+ul.endpoints li.endpoint ul.operations li.operation div.content form input[type='text'].error {
+    outline: 2px solid black;
+    outline-color: #cc0000;
+}
+
+ul.endpoints li.endpoint ul.operations li.operation div.content div.response div.block pre {
+    font-family: "Anonymous Pro", "Menlo", "Consolas", "Bitstream Vera Sans Mono", "Courier New", monospace;
+    padding: 10px;
+    font-size: 0.9em;
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+ul.endpoints li.endpoint ul.operations li.operation.put div.heading {
+    background-color: #FCEFE4;
+    border: 1px solid #E67E22;
+}
+
+ul.endpoints li.endpoint ul.operations li.operation.put div.heading h6 span.http_method a {
+    background-color: #D35400;
+}
+
+ul.endpoints li.endpoint ul.operations li.operation.put div.heading ul.options li {
+    border-right: 1px solid #dddddd;
+    border-right-color: #E67E22;
+    color: #D35400;
+}
+
+ ul.endpoints li.endpoint ul.operations li.operation.put div.heading ul.options li a {
+    color: #D35400;
+}
+
+ ul.endpoints li.endpoint ul.operations li.operation.put div.content {
+    background-color: #FCEFE4;
+    border: 1px solid #E67E22;
+}
+
+ ul.endpoints li.endpoint ul.operations li.operation.put div.content h5 {
+    color: #D35400;
+}
+
+ ul.endpoints li.endpoint ul.operations li.operation.put div.content div.sandbox_header a {
+    color: #dcb67f;
+}
+
+ ul.endpoints li.endpoint ul.operations li.operation.head div.heading {
+    background-color: #fcffcd;
+    border: 1px solid black;
+    border-color: #ffd20f;
+}
+
+ ul.endpoints li.endpoint ul.operations li.operation.head div.heading h6 span.http_method a {
+    text-transform: uppercase;
+    background-color: #ffd20f;
+}
+
+ ul.endpoints li.endpoint ul.operations li.operation.head div.heading ul.options li {
+    border-right: 1px solid #dddddd;
+    border-right-color: #ffd20f;
+    color: #ffd20f;
+}
+
+ ul.endpoints li.endpoint ul.operations li.operation.head div.heading ul.options li a {
+    color: #ffd20f;
+}
+
+ ul.endpoints li.endpoint ul.operations li.operation.head div.content {
+    background-color: #fcffcd;
+    border: 1px solid black;
+    border-color: #ffd20f;
+}
+
+ ul.endpoints li.endpoint ul.operations li.operation.head div.content h4 {
+    color: #ffd20f;
+}
+
+ ul.endpoints li.endpoint ul.operations li.operation.head div.content div.sandbox_header a {
+    color: #6fc992;
+}
+
+ ul.endpoints li.endpoint ul.operations li.operation.delete div.heading {
+    background-color: #FCECEB;
+    border: 1px solid #E74C3C;
+}
+
+ ul.endpoints li.endpoint ul.operations li.operation.delete div.heading h6 span.http_method a {
+    text-transform: uppercase;
+    background-color: #C0392B;
+}
+
+ ul.endpoints li.endpoint ul.operations li.operation.delete div.heading ul.options li {
+    border-right: 1px solid #dddddd;
+    border-right-color: #E74C3C;
+    color: #C0392B;
+}
+
+ ul.endpoints li.endpoint ul.operations li.operation.delete div.heading ul.options li a {
+    color: #C0392B;
+}
+
+ ul.endpoints li.endpoint ul.operations li.operation.delete div.content {
+    background-color: #FCECEB;
+    border: 1px solid #E74C3C;
+}
+
+ ul.endpoints li.endpoint ul.operations li.operation.delete div.content h5 {
+    color: #C0392B;
+}
+
+ ul.endpoints li.endpoint ul.operations li.operation.delete div.content div.sandbox_header a {
+    color: #c8787a;
+}
+
+ ul.endpoints li.endpoint ul.operations li.operation.post div.heading {
+    background-color: #EBFAF2;
+    border: 1px solid #c3e8d1;
+}
+
+ ul.endpoints li.endpoint ul.operations li.operation.post div.heading h6 span.http_method a {
+    background-color: #2ECC71;
+}
+
+ ul.endpoints li.endpoint ul.operations li.operation.post div.heading ul.options li {
+    border-right: 1px solid #dddddd;
+    border-right-color: #2ECC71;
+    color: #27AE60;
+}
+
+ ul.endpoints li.endpoint ul.operations li.operation.post div.heading ul.options li a {
+    color: #27AE60;
+}
+
+ ul.endpoints li.endpoint ul.operations li.operation.post div.content {
+    background-color: #EBFAF2;
+    border: 1px solid #c3e8d1;
+}
+
+ ul.endpoints li.endpoint ul.operations li.operation.post div.content h5 {
+    color: #27AE60;
+}
+
+ ul.endpoints li.endpoint ul.operations li.operation.post div.content div.sandbox_header a {
+    color: #6fc992;
+}
+
+ ul.endpoints li.endpoint ul.operations li.operation.patch div.heading {
+    background-color: #FCE9E3;
+    border: 1px solid #F5D5C3;
+}
+
+ ul.endpoints li.endpoint ul.operations li.operation.patch div.heading h6 span.http_method a {
+    background-color: #D38042;
+}
+
+ ul.endpoints li.endpoint ul.operations li.operation.patch div.heading ul.options li {
+    border-right: 1px solid #dddddd;
+    border-right-color: #f0cecb;
+    color: #D38042;
+}
+
+ ul.endpoints li.endpoint ul.operations li.operation.patch div.heading ul.options li a {
+    color: #D38042;
+}
+
+ ul.endpoints li.endpoint ul.operations li.operation.patch div.content {
+    background-color: #FCE9E3;
+    border: 1px solid #F5D5C3;
+}
+
+ ul.endpoints li.endpoint ul.operations li.operation.patch div.content h5 {
+    color: #D38042;
+}
+
+ ul.endpoints li.endpoint ul.operations li.operation.patch div.content div.sandbox_header a {
+    color: #dcb67f;
+}
+
+ ul.endpoints li.endpoint ul.operations li.operation.get div.heading {
+    background-color: #EBF5FC;
+    border: 1px solid #3498DB;
+ }
+
+ ul.endpoints li.endpoint ul.operations li.operation.get div.heading h6 span.http_method a {
+    background-color: #2980B9;
+}
+
+ ul.endpoints li.endpoint ul.operations li.operation.get div.heading ul.options li {
+    border-right: 1px solid #dddddd;
+    border-right-color: #3498DB;
+    color: #2980B9;
+}
+
+ ul.endpoints li.endpoint ul.operations li.operation.get div.heading ul.options li a {
+    color: #2980B9;
+}
+
+ ul.endpoints li.endpoint ul.operations li.operation.get div.content {
+    background-color: #EBF5FC;
+    border: 1px solid #3498DB;
+}
+
+ ul.endpoints li.endpoint ul.operations li.operation.get div.content h5 {
+    color: #2980B9;
+}
+
+ ul.endpoints li.endpoint ul.operations li.operation.get div.content div.sandbox_header a {
+    color: #6fa5d2;
+}
+
+ul.endpoints li.endpoint ul.operations li.operation div.heading{
+    -moz-border-radius: 0px;
+    -webkit-border-radius: 3px 3px 0px 0px;
+    border-radius: 3px 3px 0px 0px;
+}
+
+ ul.endpoints li.endpoint ul.operations li.operation.get div.content,
+ ul.endpoints li.endpoint ul.operations li.operation.post div.content,
+ ul.endpoints li.endpoint ul.operations li.operation.head div.content,
+ ul.endpoints li.endpoint ul.operations li.operation.put div.content,
+ ul.endpoints li.endpoint ul.operations li.operation.patch div.content,
+ ul.endpoints li.endpoint ul.operations li.operation.delete div.content {
+    border-top: none;
+}
+
+ ul.endpoints li.endpoint ul.operations li.operation.get div.heading ul.options li:last-child,
+ ul.endpoints li.endpoint ul.operations li.operation.post div.heading ul.options li:last-child,
+ ul.endpoints li.endpoint ul.operations li.operation.head div.heading ul.options li:last-child,
+ ul.endpoints li.endpoint ul.operations li.operation.put div.heading ul.options li:last-child,
+ ul.endpoints li.endpoint ul.operations li.operation.patch div.heading ul.options li:last-child,
+ ul.endpoints li.endpoint ul.operations li.operation.delete div.heading ul.options li:last-child,
+ ul.endpoints li.endpoint ul.operations li.operation.get div.heading ul.options li.last,
+ ul.endpoints li.endpoint ul.operations li.operation.post div.heading ul.options li.last,
+ ul.endpoints li.endpoint ul.operations li.operation.head div.heading ul.options li.last,
+ ul.endpoints li.endpoint ul.operations li.operation.put div.heading ul.options li.last,
+ ul.endpoints li.endpoint ul.operations li.operation.patch div.heading ul.options li.last,
+ ul.endpoints li.endpoint ul.operations li.operation.delete div.heading ul.options li.last {
+    padding-right: 0;
+    border-right: none;
+}
+
+ul.endpoints li.endpoint ul.operations ul.options li a:hover,
+ul.endpoints li.endpoint ul.operations ul.options li a:active,
+ ul.endpoints li.endpoint ul.operations ul.options li a.active {
+    text-decoration: underline;
+}
+
+ul.endpoints li.endpoint ul.operations ul.options li:first-child,
+ul.endpoints li.endpoint ul.operations ul.options li.first {
+    padding-left: 0;
+}
+
+ul.endpoints li.endpoint ul.operations:first-child,
+ul.endpoints li.endpoint ul.operations.first {
+    padding-left: 0;
+}
+
+.content .lead{
+    font-size: 24px;
+}
+
+.content .main-title{
+    font-weight: 300;
+    font-size: 30px;
+}
+
+/* Third Screen */
+
+.operation-content {
+    padding: 5px;
+}
+
+.operation-content h5{
+    color: #16a085;
+    xborder-bottom: 1px solid #eee;
+    padding-bottom: 1px;
+    font-weight: 400;
+    margin-top: 10px;
+}
+
+.operation-content p{
+    font-weight: 300;
+}
+
+.operation-content .notes {
+    margin-bottom: 30px;
+    font-weight: 300;
+}
+
+.operation-content .parameters {
+}
+
+.operation-content .parameters tr {
+    border-bottom: 1px solid #d3d3d3;
+}
+
+.operation-content .parameters thead th {
+    font-weight: 400;
+    color: #555;
+}
+
+.operation-content .parameters td {
+    xpadding: 10px;
+    font-size: 14px;
+}
+
+.operation-content .parameters td .form-group {
+    margin-bottom: 0;
+}
+
+.operation-content .parameters .required,
+.operation-content .parameters .optional {
+    color: #999;
+}
+
+.parameter-input {
+
+}
+textarea.parameter-input {
+    min-height: 100px;
+}
+
+
+.response_panel {
+    display: none;
+    xbackground-color: #EBF3F9;
+    padding: 10px;
+    margin-top: 10px;
+    font-weight: 300;
+}
+
+.response_panel pre {
+    margin: 10px;
+    background-color: #fcf6db;
+}
+
+.hide_response {
+    display: none;
+    padding-left: 10px;
+}
+
+.tryItOut_panel {
+    width: 100%;
+}
+
+.json .string { color: green; }
+.json .number { color: darkorange; }
+.json .boolean { color: blue; }
+.json .null { color: magenta; }
+.json .key { color: red; }
+
+.fakelink-disabled {
+    color: #777;
+}
+
+.fakelink {
+    text-decoration: none;
+    color: #0080A6;
+}
+
+.fakelink:hover {
+    cursor:pointer;
+    text-decoration: underline;
+}
+
+.opts-config{
+    position: relative;
+    float: right;
+    width: 70px;
+    height: 30px;
+    margin-top: 10px;
+    padding: 0;
+}
+
+.url{
+    font-weight: 300;
+    color: #333;
+}
+
+.signature-nav {
+
+}
+
+ul.signature-nav {
+    padding-left: 0;
+    margin-left:  0;
+}
+
+.signature-nav li
+{
+    color: #999;
+    display: inline;
+    list-style-type: none;
+    left: 5px;
+    padding-left: 5px;
+    padding-right: 5px;
+    border-left: 1px solid #999;
+}
+
+.signature-nav .first {
+    border-left: none !important;
+}
+
+.signature-nav li:hover {
+    color: black;
+    cursor:pointer;
+    text-decoration: underline;
+}
+
+.signature-nav .selected {
+    color: black;
+}
+
+
+.model-type-target .schema {
+
+}
+.model-type-target .schema:hover {
+    cursor:pointer;
+    background-color: #FFD;
+}
+
+.model-type-head  {
+    font-size: small;
+}
+.model-type {
+    padding-top: 20px;
+    font-size: small;
+}
+
+.model-type-name {
+    font-weight: bold;
+}
+
+.model-type .property {
+    margin-left: 20px;
+}
+.model-type .property .name {
+    font-weight: bold;
+}
+
+.model-type .property .type {
+    color: #16a085;
+}
+
+.model-type .property .enum {
+    color: #999;
+}
+
+.model-type .property .description {
+    color: #999;
+}
+
+.btn_blue_api_chic {
+    font-size: 15px !important;
+    padding-top: 10px;
+    color: #FFF !important;
+    height: 40px;
+}
+
+#api-chic-container {
+    padding-bottom: 30px;
+    background-color: #F7F7F7;
+	min-height: 500px;
+}
+
+.loading {
+    display: none;
+    float: right
+}
+
+@media (max-width: 1024px) {
+    ul.endpoints li.endpoint ul.operations li.operation div.heading h6 span.path a{
+        font-size: 18px;
+    }
+
+}
+
+.collapsable{
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    -o-text-overflow: ellipsis;
+    width: 100%;
+}
+
+.collapsable a {
+    white-space: nowrap;
+}
+
+.demo-submenu {
+	background-color: rgba(0, 0, 0, 0);
+	display: inline-block;
+	line-height: 24px;
+	margin: 0 22px 5px 0;
+	padding: 4px 3px !important;
+	font-size: 14px;
+	color: #333;
+	border-radius: 0;
+	padding-left: 10px !important;
+	list-style: none;
+}
+
+.demo-submenu > li {
+	display: inline-block;
+}
+
+.demo-submenu > li  > a {
+	font-size: 18px;
+	font-weight: bold;
+	color: #44A0DE;
+	xborder-bottom: 2px solid #44A0DE;
+	padding: 0px 10px 5px;
+}
+
+.demo-submenu > li.active > a {
+	color: #44A0DE;
+	border-bottom: 2px solid #44A0DE;
+}

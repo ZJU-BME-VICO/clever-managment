@@ -24,9 +24,7 @@ angular.module('clever.management.directives.treeView', []).directive('treeView'
 		},
 		controller : function($scope, $transclude) {
 			
-			
-			
-			
+
 			var nodes = [];
 
 			$scope.getNodes = function(){
@@ -115,14 +113,20 @@ angular.module('clever.management.directives.treeView', []).directive('treeView'
 					value : node,
 				});
 			};
-			
-			
+	
 			$scope.getNodeLabel = function(node, aliasName) {
+				
 				if (treeNodeLabelElement) {
 					return '<span class="' + $scope.getNodeLabelClass() + '">' + $scope.getTreeNodeLabelElement() + '</span>';
 				}else if($scope.nodeLabelGenerator){
 					if ($scope.nodeMenuGenerator) {
-						return $scope.nodeLabelGenerator(node, aliasName);
+						
+					//	return $scope.nodeLabelGenerator(node, aliasName);
+						
+					
+					return '<span class="' + $scope.getNodeLabelClass() + 
+							'" ng-bind-html="nodeLabelGenerator(' + $scope.getNodeAliasName() + ',\''+ $scope.getNodeAliasName()  +'\') | unsafe"></span>';
+						
 					} else {
 						return '<span class="' + $scope.getNodeLabelClass() + 
 							'" ng-bind-html="nodeLabelGenerator(' + $scope.getNodeAliasName() + ') | unsafe"></span>';

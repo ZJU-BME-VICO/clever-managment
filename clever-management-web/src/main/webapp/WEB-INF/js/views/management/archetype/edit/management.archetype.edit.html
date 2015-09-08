@@ -8,7 +8,7 @@
 							New
 						</button>
 					</div>
-					<input type="text" class="form-control" placeholder="Search for...">
+					<input type="text" class="form-control" ng-model="archetypeListFilter" placeholder="Search for...">
 				</div>
 			</div>
 			<ul class="list-group" ng-style="{height:containerHeight-55}" style="overflow:auto;">
@@ -21,7 +21,7 @@
 				specialise-archetype-callback="specialiseArchetype(value)"
 				delete-archetype-callback="deleteArchetype(value)"
 				menu-prefix = "list"
-				tree-control="treeControl" node-alias-name="node"
+				tree-control="treeControl"  node-alias-name="archetype" 
 				search-key-mapper="searchKeyMapper">
 					<tree-expanded-icon>
 						<span class="clever-icon expanded" style="padding: 0 6px;height: 12px;background-position-y: 6px;"></span>
@@ -30,10 +30,10 @@
 						<span class="clever-icon collapsed" style="padding: 0 6px;height: 12px;background-position-y: 6px;"></span>
 					</tree-collapsed-icon>
 					<tree-node-label>
-						<img ng-class="node.lifecycleState | lowercase" class="clever-icon" style="padding: 0 10px;height: 16px;"></img>
-						<span ng-bind-html="node.conceptName | highlight:keyword | unsafe"></span>
+						<img ng-class="archetype.lifecycleState | lowercase" class="clever-icon" style="padding: 0 10px;height: 16px;"></img>
+						<span ng-bind-html="archetype.conceptName | highlight:keyword | unsafe"></span>
 						&nbsp;<span style="color:grey;font-size: 10pt;"></span>
-					</tree-node-label>
+				</tree-node-label>
 				</tree-view>
 			</ul>
 		</div>
@@ -78,7 +78,7 @@
 								Definition
 							</tab-heading>
 							<div class="col-xs-12 col-md-12 col-lg-12" style="overflow:auto;">
-								<edit-definition-pane style="margin-top:5px; margin-bottom:20px;" definition="definition"  ontology="ontology"  max-height="tabContainerHeight"  selectedLanguage="languages.selectedLanguage"></edit-definition-pane>
+								<edit-definition-pane style="margin-top:5px; margin-bottom:20px;" definition="definition"  ontology="ontology"  max-height="tabContainerHeight"   languages="languages"></edit-definition-pane>
 							</div>
 						</tab>
 
@@ -87,7 +87,7 @@
 								Ontology
 							</tab-heading>
 							<div class="col-xs-12 col-md-12 col-lg-12" style="overflow:auto;">
-								<edit-ontology-pane  max-height="paneHeight"  style="margin-top:5px; margin-bottom:20px;"></edit-ontology-pane>
+								<edit-ontology-pane   style="margin-top:5px; margin-bottom:20px;" ontology="ontology"   max-height="tabContainerHeight"  languages="languages"></edit-ontology-pane>
 							</div>
 						</tab>
 

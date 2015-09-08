@@ -55,7 +55,7 @@
 						<tab heading="Tree">
 							<div class="col-xs-12 col-md-12 col-lg-12">
 								<div class="row" ng-style="{height: containerHeight - 135}" style="overflow: auto;">
-									<tree-view tree-data="parsedTemplate.definition" tree-control="treeControl.value" node-label-generator="getTreeNodeLabel" click-node-menu-callback="setNodeByContextMenu(node, type, value)" node-menu-generator="getTreeNodeMenu">
+									<tree-view tree-data="parsedTemplate.definition" node-alias-name="template" tree-control="treeControl.value" node-label-generator="getTreeNodeLabel" click-node-menu-callback="setNodeByContextMenu(node, type, value)" node-menu-generator="getTreeNodeMenu">
 										<tree-expanded-icon>
 											<span class="clever-icon expanded" style="padding: 0 6px;height: 12px;background-position-y: 6px;"></span>
 										</tree-expanded-icon>

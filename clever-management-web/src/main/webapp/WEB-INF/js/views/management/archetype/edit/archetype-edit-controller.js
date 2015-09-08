@@ -7,6 +7,7 @@ function ArchetypeEditCtrl($scope, $modal,$log,msgboxService,busyService,archety
 	$scope.isArchetypeListHidden = false;
 	
 	var busyId = busyService.pushBusy('BUSY_LOADING');
+
 	resourceService.get(ARCHETYPE_LIST_EDIT_DRAFT_URL).then(function(list) {
 		$scope.draftArchetypeList = list;
 		$scope.draftArchetypeList[2].specialiseArchetype = [], $scope.draftArchetypeList[2].specialiseArchetype.push($scope.draftArchetypeList[4]);
@@ -46,8 +47,19 @@ function ArchetypeEditCtrl($scope, $modal,$log,msgboxService,busyService,archety
 	});
     
      
+     
+    $scope.searchKeyMapper = function(node) {
+		return node.conceptName + ' (' + node.latestArchetypeVersion + ')';
+	};
+
+	$scope.$watch('archetypeListFilter', function(newValue) {
+		if (newValue != undefined) {
+			$scope.treeControl.search(newValue);
+		}
+	});
 
 	$scope.generatorDiff = function(){
+	
 		var editedArchetype = archetypeSerializeService.serializeArchetype($scope.oriArchetype);		
 		console.log($scope.definition);
 		documentDiffModalService.open('Modify records',editedArchetype, $scope.originalAdl);
@@ -79,6 +91,7 @@ function ArchetypeEditCtrl($scope, $modal,$log,msgboxService,busyService,archety
 		$scope.languages = result.languages;
 		$scope.languages.selectedLanguage = result.languages.originalLanguage;
 		
+		
 		//---get the header from the original archetype directly---
 		$scope.header = {};
 		$scope.header.archetype_id = oriArchetype.archetype_id;
@@ -93,16 +106,16 @@ function ArchetypeEditCtrl($scope, $modal,$log,msgboxService,busyService,archety
 		console.log(oriArchetype);
 		console.log("==========this is parsedResult Archetype===========");
 		console.log(result);
-		console.log("==========this is ontology===========");
-		console.log($scope.ontology);
+	
 		console.log("==========this is definition===========");
 		console.log($scope.definition);
 		console.log("==========this is header===========");
-		console.log($scope.header);		
+		console.log($scope.header);		*/
 		console.log("==========this is languages===========");
 		console.log($scope.languages);
 		
-		*/
+		console.log("==========this is ontology===========");
+		console.log($scope.ontology);
 	};
 	  
 	$scope.getTreeElementMenu = function(node,aliasName){
@@ -305,7 +318,9 @@ function ArchetypeEditCtrl($scope, $modal,$log,msgboxService,busyService,archety
    function createEvaluation(info){
    	var jsonEvaluation = createBaseArchetype(info);
    	//add default element here
-   	var dataAttribute = editor.getCSingleAttribute([],editor.getDefaultExistence(1,1),"data");
+   	var itemTree = editor.getCComplexObject([],"at0001",editor.getDefaultOccurrences(1,1),"ITEM_TREE");
+    editor.synchronizeOriOntology("at0001","Tree","@ internal @",jsonEvaluation.ontology);
+   	var dataAttribute = editor.getCSingleAttribute(itemTree,editor.getDefaultExistence(1,1),"data");
    	jsonEvaluation.definition.attributes.push(dataAttribute);
    	pushToArchetypeList(jsonEvaluation,info);
    }
@@ -411,6 +426,7 @@ function ArchetypeEditCtrl($scope, $modal,$log,msgboxService,busyService,archety
 	  $scope.draftArchetypeList.push(oriObj);
    }
   
+	
 	function getArchetypeListId() {
 		var i, id = 0;
 
@@ -419,15 +435,16 @@ function ArchetypeEditCtrl($scope, $modal,$log,msgboxService,busyService,archety
 				id = $scope.draftArchetypeList[i].id;
 			}
 		}
-
-		for ( i = 0; i < $scope.publishedArchetypeList.length; i++) {
-			if ($scope.publishedArchetypeList[i].id > id) {
-				id = $scope.publishedArchetypeList[i].id;
+		if ($scope.publishedArchetypeList) {
+			for ( i = 0; i < $scope.publishedArchetypeList.length; i++) {
+				if ($scope.publishedArchetypeList[i].id > id) {
+					id = $scope.publishedArchetypeList[i].id;
+				}
 			}
 		}
-
 		return id;
 	}
+
 
    function getOriArchetype(adl,xml,info){
    	return {

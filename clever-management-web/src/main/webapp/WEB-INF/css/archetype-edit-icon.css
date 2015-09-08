@@ -96,7 +96,15 @@
 	background-image: url("../img/datatype/boolean.png");
 	background-repeat: no-repeat;
 }
-.archetype-edit-icon.dv_interval {
+.archetype-edit-icon.dv_interval__date_time {
+	background-image: url("../img/datatype/interval.png");
+	background-repeat: no-repeat;
+}
+.archetype-edit-icon.dv_interval__quantity {
+	background-image: url("../img/datatype/interval.png");
+	background-repeat: no-repeat;
+}
+.archetype-edit-icon.dv_interval__count {
 	background-image: url("../img/datatype/interval.png");
 	background-repeat: no-repeat;
 }
