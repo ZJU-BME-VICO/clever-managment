@@ -157,30 +157,7 @@ angular.module('clever.management.directives.treeView', []).directive('treeView'
 				}	
 				
 			});
-			
-		// this function is not safe,may generate a bug sometimes
-			$scope.$watch('treeData.length', function(newValue, oldValue) {
-
-				if (newValue && oldValue) {
-					var node = $scope.treeData[$scope.treeData.length - 1];
-					//if(node.selected)
-					if ($scope.getCurrentNode() && $scope.getCurrentNode().selected) {
-						$scope.getCurrentNode().selected = undefined;
-					}
-
-					//set highlight to selected node
-					node.selected = 'selected';
-
-					//set currentNode
-					$scope.setCurrentNode(node);
-
-					$scope.clickNode(node);
-					$scope.doubleClickNode(node);
-
-				}
-			}); 
-
-			
+					
 			$scope.treeControl = {
 				expandAll : function() {
 					angular.forEach(nodes, function(node) {
@@ -191,6 +168,15 @@ angular.module('clever.management.directives.treeView', []).directive('treeView'
 					angular.forEach(nodes, function(node) {
 						node.collapsed = true;
 					});
+				},
+				locateNode: function(node){
+				
+					node.selected = 'selected';
+					//set currentNode
+					$scope.setCurrentNode(node);
+
+					$scope.clickNode(node);
+					$scope.doubleClickNode(node);
 				},
 				search : function(keyword) {
 					$scope.keyword = keyword;
