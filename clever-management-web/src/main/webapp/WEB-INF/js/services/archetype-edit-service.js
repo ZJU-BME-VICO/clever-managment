@@ -223,6 +223,15 @@ angular.module('clever.management.service.archetypeEdit', []).service('archetype
 			rm_type_name : rmTypeName,
 		};
 	};
+	getCComplexObject = function(attributes, nodeId, occurrences, rmTypeName) {
+		return {
+			'_xsi:type' : "C_COMPLEX_OBJECT",
+			attributes : attributes,
+			node_id : nodeId,
+			occurrences : occurrences,
+			rm_type_name : rmTypeName,
+		};
+	};
 
 	this.getCPrimitiveObject = function(item, nodeId, occurrences, rmTypeName) {
 		return {
@@ -235,6 +244,14 @@ angular.module('clever.management.service.archetypeEdit', []).service('archetype
 	};
 
 	this.getCSingleAttribute = function(children, existence, rmAttributeName) {
+		return {
+			'_xsi:type' : "C_SINGLE_ATTRIBUTE",
+			children : children,
+			existence : existence,
+			rm_attribute_name : rmAttributeName,
+		};
+	};
+	getCSingleAttribute = function(children, existence, rmAttributeName) {
 		return {
 			'_xsi:type' : "C_SINGLE_ATTRIBUTE",
 			children : children,
@@ -521,7 +538,9 @@ angular.module('clever.management.service.archetypeEdit', []).service('archetype
 	this.getDefaultCardinality = function(lower) {
 		return this.getCardinality(lower, true, false, 1, false, true, false, false);
 	};
-
+    getDefaultCardinality = function(lower) {
+		return this.getCardinality(lower, true, false, 1, false, true, false, false);
+	};
 	//getNodeLabel(cardinality, code, dataType, dataValue, excludes, existence, includes, occurrences, picType, slot, text, type) {
 
 	this.getAttribute = function(cardinality, text, oriNodeRef) {
@@ -547,5 +566,77 @@ angular.module('clever.management.service.archetypeEdit', []).service('archetype
 		}
 
 	};
+	
+	
+	
+	//package the base function 
+	this.getSingleAttr = function(children, existence, attrName){
+		return getCSingleAttribute(children, this.getDefaultExistence(existence[0], existence[1]), attrName);
+	};
+	
+	this.getComplexObject = function(attributes, nodeId, occurrences, objectName){
+		return getCComplexObject(attributes, nodeId, this.getDefaultOccurrences(occurrences[0], occurrences[1]), objectName);
+	};
+	this.getMultyAttr = function(children, cardinality_lower, exixtence, attrName){
+		return  getCMultipleAttribute(children, this.getDefaultCardinality(1), getDefaultOccurrences(occurrences[0], occurrences[1]), attrName);
+	};
+	
+	
+	
+	
+	
+	
+	
+	this.getPARTY_SELF = function(){
+		//return this.getCComplexObject([], '', this.getDefaultOccurrences(1,1), "PARTY_SELF");
+		return this.getComplexObject([], '', [1,1], "PARTY_SELF");
+	};
+	
+	this.getPARTY_RELATED = function() {
+		// var definingCode = editor.getCSingleAttribute([], editor.getDefaultExistence(1, 1), "defining_code");
+		// var DV_CODED_TEXT = editor.getCComplexObject(definingCode, '', editor.getDefaultOccurrences(1, 1), "DV_CODED_TEXT");
+		// var relationship = editor.getCSingleAttribute(DV_CODED_TEXT, editor.getDefaultExistence(1, 1), "relationship");
+		// var PARTY_RELATED = editor.getCComplexObject([relationship], '', editor.getDefaultOccurrences(1, 1), "PARTY_RELATED");
+		var relationship = this.getSingleAttr([this.getDV_CODED_TEXT()], [1,1], "relationship");
+		var PARTY_RELATED = this.getComplexObject([relationship], '', [1,1], "PARTY_RELATED");
+		return PARTY_RELATED;
+	}; 
+
+	this.getPARTY_IDENTIFIED = function(){
+		//var externalRef = this.getCSingleAttribute([this.getPARTY_REF()], this.getDefaultExistence(1,1), "externalRef");
+		//var name = this.getCSingleAttribute([], this.getDefaultExistence(1,1),"name");
+		//var identifiers  = this.getCSingleAttribute([this.getDV_IDENTIFIER()], this.getDefaultExistence(1,1), "identifiers");
+		//return this.getCComplexObject([], '', this.getDefaultOccurrences(1,1), "PARTY_IDENTIFIED");
+		return this.getComplexObject([], '', [1,1], 'PARTY_IDENTIFIED');
+		
+	};
+	
+	this.getPARTY_REF = function(){
+		
+	 // var id = this.getCSingleAttribute([this.getGENERIC_ID()], this.getDefaultExistence(1,1), "id");
+	  var id = this.getSingleAttr([this.getGENERIC_ID()], [1,1], 'id');
+	  return this.getComplexObject([id], '', [1,1], "PARTY_REF");
+	};
+	
+	this.getGENERIC_ID = function(){
+		return this.getComplexObject([], '', [1,1], "GENERIC_ID" );
+	};
+
+	this.getDV_IDENTIFIER = function() {
+		var issuer = this.getSingleAttr(null, [1,1], "issuer");
+		var assigner = this.getSingleAttr(null, [1,1], "assigner");
+		var id = this.getSingleAttr(null, [1,1], "id");
+		var type = this.getSingleAttr(null, [1,1], "type");
+		var DV_IDENTIFIER =this.getComplexObject([issuer, assigner, id, type], "", [1,1], "DV_IDENTIFIER");
+		return DV_IDENTIFIER;
+	};
+    this.getDV_CODED_TEXT = function(){
+    	var definingCode = this.getSingleAttr([],[1,1],"defining_code");
+		var DV_CODED_TEXT = this.getComplexObject(definingCode, '', [1, 1], "DV_CODED_TEXT");
+		return DV_CODED_TEXT;
+    };
+    this.getDV_TEXT = function(){
+    	return this.getComplexObject([], '', [1,1], "DV_TEXT");
+    };
 
 });

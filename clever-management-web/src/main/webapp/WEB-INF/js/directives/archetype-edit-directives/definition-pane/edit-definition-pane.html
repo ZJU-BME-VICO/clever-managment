@@ -12,7 +12,7 @@
 		</div>
 		<div class="col-xs-5 col-md-5 col-lg-5"  ng-style="{height: contentHeight.value - 57}" style="overflow: auto; padding-left:0px; margin-left:0px;" >
 
-			<tree-view tree-data="definition.treeItems"  class="definition-tree" node-alias-name="archetype" tree-control="treeControl" click-node-callback="getNodeMessage(value)"   node-label-generator="getTreeNodeLabel" node-menu-generator="getTreeNodeMenu" menu-prefix = "definition" click-edit-menu-callback="editArchetype(node,type)">
+			<tree-view tree-data="definition.treeItems"  class="definition-tree" node-alias-name="archetype" tree-control="treeControl" click-node-callback="getNodeInfo(value)"   node-label-generator="getTreeNodeLabel" node-menu-generator="getTreeNodeMenu" menu-prefix = "definition" click-edit-menu-callback="editArchetype(node,type)">
 				<tree-expanded-icon>
 					<span class="clever-icon expanded" style="padding: 0 6px;height: 12px;background-position-y: 6px;"></span>
 				</tree-expanded-icon>
@@ -29,7 +29,9 @@
 				<div class="panel-heading" style="color: white;background-color: #8cc152;border-color: #8cc152;">
 					Subject
 				</div>
-				<div class="panel-body" style="border:1px solid #dddddd"></div>
+				<div class="panel-body" style="border:1px solid #dddddd">
+					<subject-pane subject="currentNode"></subject-pane>
+				</div>
 			</div>
 
 			 <div class="panel" ng-if="currentNode.oriNodeRef.rm_type_name == 'PARTICIPATION'">
@@ -145,8 +147,7 @@
 						<br><br>
 
 						<label>TEXT:</label>
-						<input class="form-control " type="text" ng-model="ontologyItem[0].__text"/ ><br>
-						<input class="form-control" type="text" ng-model="getOntologyByCode(currentNode.label.code).text" />
+						<input class="form-control " type="text" ng-model="ontologyItem[0].__text"/ ><br>						
 						<label>DESCRIPTION:</label>
 						<textarea class="form-control" id="textContent"  ng-model="ontologyItem[1].__text"  > </textarea>
 					</div>

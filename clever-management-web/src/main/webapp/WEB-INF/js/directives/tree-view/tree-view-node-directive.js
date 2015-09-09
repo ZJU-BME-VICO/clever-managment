@@ -38,38 +38,7 @@ angular.module('clever.management.directives.treeViewNode', []).directive('treeV
 					elm.html('').append($compile( template )(scope));
 				}
 			}
-
-			
-			scope.nodeMenu = {
-				ACTION : ["Ism_Transitions", "Protocol", "Subject", "otherParticipations", "Links"],
-				OBSERVATION : ["Data", "State", "Protocol", "Subject", "otherParticipations", "Links"],
-				EVALUATION : ["Protocol", "Subject", "otherParticipations", "Links"],
-				INSTRUCTION : ["Protocol (0-1)", "Subject", "otherParticipations", "Links"],
-				ADMIN_ENTRY : ["Data", "State", "Protocol", "Subject", "otherParticipations", "Links"],
-				SECTION : ['sub_Section'],
-				COMPOSITION : ["Content", "Context", "Protocol", "Composer", "Category", "Language", "Territory"],
-				ITEM_TREE : ["TEXT", "CODED_TEXT", "QUANTITY", "COUNT", "DATE_TIME", "DURATION", "ORDINAL", "BOOLEAN", "MULTIMEDIA", "URI", "IDENTIFIER", "PROPERTION", "CLUSTER"],
-				ITEM_LIST : ["TEXT", "CODED_TEXT", "QUANTITY", "COUNT", "DATE_TIME", "DURATION", "ORDINAL", "BOOLEAN", "MULTIMEDIA", "URI", "IDENTIFIER", "PROPERTION", "CLUSTER"],
-				CLUSTER : ["TEXT", "CODED_TEXT", "QUANTITY", "COUNT", "DATE_TIME", "DURATION", "ORDINAL", "BOOLEAN", "MULTIMEDIA", "URI", "IDENTIFIER", "PROPERTION", "CLUSTER"],
-
-				otherParticipations : ["Participation"],
-				subject : ['PARTY_SELF', 'PARTY_IDENTIFIED', 'PARTY_RELATED'],
-				links : ['LINK'],
-				ism_transition : ['ISM_TRANSITION'],
-				//data:['EVENT'],
-				EVENT : ['EVENT_STATE'],
-				events : ['EVENT'],
-				activities : ["ACTIVITY"],
-
-				sectionSlotType : ['ACTION', 'INSTRUCTION', 'EVALUATION', 'OBSERVATION', 'ADMIN_ENTRY', 'ENTRY', 'SECTION'],
-				baseSlotType : ['ITEM', 'CLUSTER', 'ELEMENT'],
-				intervalType : ['INTERVAL<DATE_TIME>', 'INTERVAL<QUANTITY>', 'INTERVAL<INTEGER>']
-
-			};
-			scope.BaseSlot = 'BS_';
-			scope.SectionSlot ='SS_';
-
-			
+	
 			scope.selectNodeHead = function(selectedNode) {
 				//Collapse or Expand
 				selectedNode.collapsed = !selectedNode.collapsed;

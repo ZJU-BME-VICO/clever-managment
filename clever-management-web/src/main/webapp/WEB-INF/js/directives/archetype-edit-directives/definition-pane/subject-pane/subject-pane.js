@@ -1,16 +1,21 @@
-angular.module('clever.management.directives.participationPane', []).directive('participationPane', function(archetypeEditService) {
+angular.module('clever.management.directives.subjectPane', []).directive('subjectPane', function(archetypeEditService) {
 	return {
 		restrict : 'E',
 		transclude : true,
 		scope : {
-			participation : "=",
+			subject : "=",
 
 		},
-		templateUrl : 'js/directives/archetype-edit-directives/definition-pane/participation-pane/participation-pane.html',
+		templateUrl : 'js/directives/archetype-edit-directives/definition-pane/subject-pane/subject-pane.html',
 
 		controller : function($scope, $element, $attrs) {
-			var editor = archetypeEditService;
-			$scope.performerTypes = ["PARTY_SELF", "PARTY_IDENTIFIED", "PARTY_RELATED"];
+		   var editor = archetypeEditService;
+		   $scope.$watch('subject', function(newValue){
+		   	console.log("thisi  is   subject");
+		   	console.log(newValue);
+		   });
+		   
+        	$scope.performerTypes = ["PARTY_SELF", "PARTY_IDENTIFIED", "PARTY_RELATED"];
 			$scope.performerType = {};
 			$scope.$watch('participation', function(newValue) {
 				console.log(newValue);
@@ -286,4 +291,4 @@ angular.module('clever.management.directives.participationPane', []).directive('
 
 		}
 	};
-}); 
+	});

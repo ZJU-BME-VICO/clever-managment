@@ -67,7 +67,7 @@ angular.module('clever.management.directives.editDefinitionPane', []).directive(
 			//------constraint logic start -------------
 			$scope.EXISTENCE = ["REQUIRED", "OPTIONAL", "NOT_ALLOWED"];
 
-			$scope.getNodeMessage = function(node) {
+			$scope.getNodeInfo = function(node) {
 				getLanguageList();
 				$scope.currentLanguage = $scope.languages.originalLanguage;
 				console.log($scope.currentLanguage);
@@ -246,19 +246,16 @@ angular.module('clever.management.directives.editDefinitionPane', []).directive(
          	
          }
          
-         $scope.$watch('ontologyItem[0].__text',function(newValue){
-         	if(newValue){
+         
+         // synchronize two section of ontology       
+         $scope.$watch('ontologyItem[0].__text',function(newValue, oldValue){
+         	if(newValue && oldValue){
          		setOntology(newValue);
          	}
          });
          function setOntology(value){
-          // var temp = getOntologyByCode($scope.currentNode.label.code, $scope.ontology);
-          // console.log(temp);
-          // temp.text=value;
-//           
-           // getOntologyByCode($scope.currentNode.label.code, $scope.ontology).text = value;
-           // console.log(getOntologyByCode($scope.currentNode.label.code, $scope.ontology).text);
-           // $scope.currentNode.oriNodeRef = "sadf";
+           var temp = $scope.getOntologyByCode($scope.currentNode.label.code);
+           temp.text=value;     
          }
          //ontology logic end 
         
@@ -284,63 +281,128 @@ angular.module('clever.management.directives.editDefinitionPane', []).directive(
 				$scope.treeControl.expandAll();
 				$scope.isCollapse = false;
 			};
-			//when display the type in this type list,we want it display the parentAttribue text
+			
 			
 
 			
 			
 		
-
+           //when display the type in this type list,we want it display the parentAttribue text
 			var typeWithSlot = ['ITEM_TREE', 'ITEM_LIST', 'CLUSTER'];
 			var typeWithInterval = ['ITEM_TREE', 'ITEM_LIST', 'CLUSTER'];
+// 
+			// $scope.getTreeNodeMenu = function(node, aliasName) {
+//       
+				// var menuHtml = '<ul class="dropdown-menu" role="menu" ng-if="true" >';
+				// if (node.label.slot) {
+				// } else {
+// 
+					// if (typeWithSlot.indexOf(node.label.picType) != -1) {
+						// menuHtml += '<li class="menu-item dropdown dropdown-submenu" ng-if="item==slot"><a class="dropdown-toogle" data-toogle="dropdown">Slot</a>' + '<ul class="dropdown-menu">' + '<li class="menu-item " ng-repeat = "value in nodeMenu.baseSlotType"><a class="pointer" role="menuitem"  ng-click="editNodeByMenu(' + aliasName + ', BaseSlot + value)">{{value}}</a></li>' + '</ul></li>';
+					// }
+                    // // if the pictype is 'section', the submenu should be section slot type 
+					// if (node.label.picType == 'SECTION') {
+						// menuHtml += '<li class="menu-item dropdown dropdown-submenu" ng-if="item==slot"><a class="dropdown-toogle" data-toogle="dropdown">Slot</a>' + '<ul class="dropdown-menu">' + '<li class="menu-item " ng-repeat = "value in nodeMenu.sectionSlotType"><a class="pointer" role="menuitem"  ng-click="editNodeByMenu(' + aliasName + ',SectionSlot + value)">{{value}}</a></li>' + '</ul></li>';
+					// }
+                    // // get submenu which interval type should have
+					// if (typeWithInterval.indexOf(node.label.picType) != -1) {
+						// menuHtml += '<li class="menu-item dropdown dropdown-submenu" ng-if="item==slot"><a class="dropdown-toogle" data-toogle="dropdown">INTERVAL</a>' + '<ul class="dropdown-menu">' + '<li class="menu-item " ng-repeat = "value in nodeMenu.intervalType"><a class="pointer" role="menuitem"  ng-click="editNodeByMenu(' + aliasName + ',value)">{{value}}</a></li>' + '</ul></li>';
+					// }
+					// if (node.label.picType.indexOf('<') == -1) {
+						// menuHtml += '<li  ng-repeat = "item in nodeMenu.' + node.label.picType + '"><a class="pointer" role="menuitem"  ng-click="editNodeByMenu(' + aliasName + ',item)">{{item}}</a></li>';
+					// }
+				// }
+// 
+				// menuHtml += '</ul>';
+// 
+				// return menuHtml;
+			// };
 
-			$scope.getTreeNodeMenu = function(node, aliasName) {
-      
+            $scope.getTreeNodeMenu = function(node, aliasName) {
+                var menuList;
 				var menuHtml = '<ul class="dropdown-menu" role="menu" ng-if="true" >';
 				if (node.label.slot) {
 				} else {
-
-					if (typeWithSlot.indexOf(node.label.picType) != -1) {
-						menuHtml += '<li class="menu-item dropdown dropdown-submenu" ng-if="item==slot"><a class="dropdown-toogle" data-toogle="dropdown">Slot</a>' + '<ul class="dropdown-menu">' + '<li class="menu-item " ng-repeat = "value in nodeMenu.baseSlotType"><a class="pointer" role="menuitem"  ng-click="editNodeByMenu(' + aliasName + ', BaseSlot + value)">{{value}}</a></li>' + '</ul></li>';
+					if (typeWithSlot.indexOf(node.label.picType) != -1) {				
+						menuHtml += '<li class="menu-item dropdown dropdown-submenu" ng-if="item==slot"><a class="dropdown-toogle" data-toogle="dropdown">Slot</a>' + 
+						'<ul class="dropdown-menu">' ;				
+						angular.forEach($scope.nodeMenu.baseSlotType, function(menuItem){
+							menuHtml += '<li class="menu-item ">' +
+						                '<a class="pointer" role="menuitem"  ng-click="editNodeByMenu(' + aliasName + ', '+ '\'' + 'BS_' + menuItem +'\')">' +menuItem + '</a></li>' ;
+						});					
+						menuHtml += '</ul></li>';
 					}
-
+                    // if the pictype is 'section', the submenu should be section slot type 
 					if (node.label.picType == 'SECTION') {
-						menuHtml += '<li class="menu-item dropdown dropdown-submenu" ng-if="item==slot"><a class="dropdown-toogle" data-toogle="dropdown">Slot</a>' + '<ul class="dropdown-menu">' + '<li class="menu-item " ng-repeat = "value in nodeMenu.sectionSlotType"><a class="pointer" role="menuitem"  ng-click="editNodeByMenu(' + aliasName + ',SectionSlot + value)">{{value}}</a></li>' + '</ul></li>';
+					    menuHtml += '<li class="menu-item dropdown dropdown-submenu" ng-if="item==slot"><a class="dropdown-toogle" data-toogle="dropdown">Slot</a>' + 
+						'<ul class="dropdown-menu">' ;
+						angular.forEach($scope.nodeMenu.sectionSlotType, function(menuItem){
+							menuHtml += '<li class="menu-item ">' +
+						                '<a class="pointer" role="menuitem"  ng-click="editNodeByMenu(' + aliasName + ', '+ '\'' + 'SS_' + menuItem +'\')">' +menuItem + '</a></li>' ;
+						});						
+						menuHtml += '</ul></li>';					
 					}
-
+                    // get submenu which interval type should have
 					if (typeWithInterval.indexOf(node.label.picType) != -1) {
-						menuHtml += '<li class="menu-item dropdown dropdown-submenu" ng-if="item==slot"><a class="dropdown-toogle" data-toogle="dropdown">INTERVAL</a>' + '<ul class="dropdown-menu">' + '<li class="menu-item " ng-repeat = "value in nodeMenu.intervalType"><a class="pointer" role="menuitem"  ng-click="editNodeByMenu(' + aliasName + ',value)">{{value}}</a></li>' + '</ul></li>';
+					    menuHtml += '<li class="menu-item dropdown dropdown-submenu" ng-if="item==slot"><a class="dropdown-toogle" data-toogle="dropdown">INTERVAL</a>' + '<ul class="dropdown-menu">';
+						angular.forEach($scope.nodeMenu.intervalType, function(menuItem){
+							menuHtml += '<li class="menu-item ">' +
+						                '<a class="pointer" role="menuitem"  ng-click="editNodeByMenu(' + aliasName + ', '+ '\'' + menuItem +'\')">' + menuItem +  '</a></li>' ;
+						});				
+						menuHtml += '</ul></li>';
 					}
 					if (node.label.picType.indexOf('<') == -1) {
-						menuHtml += '<li  ng-repeat = "item in nodeMenu.' + node.label.picType + '"><a class="pointer" role="menuitem"  ng-click="editNodeByMenu(' + aliasName + ',item)">{{item}}</a></li>';
+						angular.forEach($scope.nodeMenu[node.label.picType], function(menuItem){
+							menuHtml += '<li class="menu-item ">' +
+						                '<a class="pointer" role="menuitem"  ng-click="editNodeByMenu(' + aliasName + ', '+ '\'' + menuItem +'\')">' +menuItem + '</a></li>' ;
+						});
 					}
 				}
-
 				menuHtml += '</ul>';
-
 				return menuHtml;
+			};
+			
+            
+			$scope.nodeMenu = {
+				ACTION :         ["Ism_Transitions", "Protocol", "Subject", "otherParticipations", "Links"],
+				OBSERVATION :    ["Data", "State", "Protocol", "Subject", "otherParticipations", "Links"],
+				EVALUATION :     ["Protocol", "Subject", "otherParticipations", "Links"],
+				INSTRUCTION :    ["Protocol (0-1)", "Subject", "otherParticipations", "Links"],
+				ADMIN_ENTRY :    ["Data", "State", "Protocol", "Subject", "otherParticipations", "Links"],
+				SECTION :        ['sub_Section'],
+				COMPOSITION :    ["Content", "Context", "Protocol", "Composer", "Category", "Language", "Territory"],
+				ITEM_TREE :      ["TEXT", "CODED_TEXT", "QUANTITY", "COUNT", "DATE_TIME", "DURATION", "ORDINAL", "BOOLEAN", "MULTIMEDIA", "URI", "IDENTIFIER", "PROPERTION", "CLUSTER"],
+				ITEM_LIST :      ["TEXT", "CODED_TEXT", "QUANTITY", "COUNT", "DATE_TIME", "DURATION", "ORDINAL", "BOOLEAN", "MULTIMEDIA", "URI", "IDENTIFIER", "PROPERTION", "CLUSTER"],
+				CLUSTER :        ["TEXT", "CODED_TEXT", "QUANTITY", "COUNT", "DATE_TIME", "DURATION", "ORDINAL", "BOOLEAN", "MULTIMEDIA", "URI", "IDENTIFIER", "PROPERTION", "CLUSTER"],
+
+				otherParticipations : ["Participation"],
+				subject :        ['PARTY_SELF', 'PARTY_IDENTIFIED', 'PARTY_RELATED'],
+				links :          ['LINK'],
+				ism_transition : ['ISM_TRANSITION'],
+				//data:['EVENT'],
+				EVENT :          ['EVENT_STATE'],
+				events :         ['EVENT'],
+				activities :     ["ACTIVITY"],
+
+				sectionSlotType : ['ACTION', 'INSTRUCTION', 'EVALUATION', 'OBSERVATION', 'ADMIN_ENTRY', 'ENTRY', 'SECTION'],
+				baseSlotType :   ['ITEM', 'CLUSTER', 'ELEMENT'],
+				intervalType :   ['INTERVAL[DATE_TIME]', 'INTERVAL[QUANTITY]', 'INTERVAL[INTEGER]']
+
 			};
 
 
-
-
-			//$scope.testMenu = ["afd", "adsffas", "afsdaga"];
-			$scope.baseTypeList = ["TEXT", "CODED_TEXT", "QUANTITY", "COUNT", "DATE_TIME", "DURATION", "ORDINAL", "BOOLEAN", "INTERVAL", "MULTIMEDIA", "URI", "IDENTIFIER", "PROPERTION", "CLUSTER","BS_ITEM",'BS_ELEMENT','BS_CLUSTER'];
+			
+		
+			//there would not a items attributs behind this type, so when we add a type to this node , a items attribute should be added;
+			var needCheckedType = ['ITEM_TREE','ITEM_LIST','ITEM_TABLE','CLUSTER','SECTION'];
 			var checkList = ['SECTION'];
 			$scope.editArchetype = function(node, type) {
-				console.log("this is value pass to edit definition pane");
-				 if ($scope.baseTypeList.indexOf(type) != -1) {
+				if(needCheckedType.indexOf(node.label.picType) != -1){
 					 editor.attributeCheck(node);
-				 }
-				if(checkList.indexOf(node.label.picType) != -1){
-					editor.attributeCheck(node);
 				}
-				console.log(node);
-				console.log(type);
-				type = type.toLowerCase();
+				type = type.toLowerCase();//normalize the type
 
 				switch(type) {
-				//commen attributes
 				case "otherparticipations":
 					return addOtherParticipations(node);
 
@@ -368,17 +430,17 @@ angular.module('clever.management.directives.editDefinitionPane', []).directive(
 				case "protocol":
 					return addProtocol(node);
 
-				//--------action attributes--------
+				//--------action--------
 				case "ism_transitions":
 					return addIsmTransitions(node);
 				case "ism_transition":
 					return addIsmTransition(node);
 
-				//--------instruction attributes-----
+				//--------instruction-----
 				case "activity":
 					return addActivity(node);
 
-				//--------observation attributes--------
+				//--------observation--------
 				case "data":
 					return addData(node);
 				case "state":
@@ -387,16 +449,11 @@ angular.module('clever.management.directives.editDefinitionPane', []).directive(
 					return addStateToEvent(node);
 				case "event":
 					return addEvent(node);
-
-				//evaluation attributes
-				//null
-
-				//admin entry attributes
-				//null
-
+				
 				//---------section---------
 				case 'sub_section':
 					return addSubSection(node);
+			    //ss means section slot
 				case 'ss_action':
 				case 'ss_observation':
 				case 'ss_admin_entry':
@@ -462,6 +519,7 @@ angular.module('clever.management.directives.editDefinitionPane', []).directive(
 
 				case "cluster":
 					return addCluster(node);
+				//bs : base type slot
 				case "bs_element":
 				case "bs_cluster":
 				case "bs_item":
@@ -795,12 +853,7 @@ angular.module('clever.management.directives.editDefinitionPane', []).directive(
 				var baseObject = editor.getCComplexObject(undefined, "", editor.getDefaultOccurrences(1, 1), type);
 				var attribute = editor.getCSingleAttribute(baseObject, editor.getDefaultExistence(1, 1), "value");
 				var element = editor.getCComplexObject(attribute, nodeId, editor.getDefaultOccurrences(0, 1), "ELEMENT");
-				node.oriNodeRef.attributes.children = pushTo(element, node.oriNodeRef.attributes.children);
-
-				//var label = getBaseTypeDefaultLabel(nodeId, type);
-				//var textObject = editor.getBaseTypeObject([], nodeId, type, element, node, node.childrenAttribute, false);
-				//if(!node.children){node.children = [];}
-				//node.children.push(textObject);
+				node.oriNodeRef.attributes.children = pushTo(element, node.oriNodeRef.attributes.children);		
 
 				editor.synchronizeOntology($scope.ontology, nodeId, "New Element", "*");
 				
@@ -833,10 +886,6 @@ angular.module('clever.management.directives.editDefinitionPane', []).directive(
 				
 				node.oriNodeRef.attributes.children = pushTo(eleObject, node.oriNodeRef.attributes.children);
 
-				//add display object
-				// var disObject = editor.getBaseTypeObject([], nodeId, "DV_QUANTITY", eleObject, node, node.childrenAttribute, false);
-				// node.children.push(disObject);
-
 				//synchronize ontology
 				editor.synchronizeOntology($scope.ontology, nodeId, "New Element", "*");
 				//return disObject;
@@ -857,9 +906,6 @@ angular.module('clever.management.directives.editDefinitionPane', []).directive(
 				var eleObject = editor.getCComplexObject(topAttribute, nodeId, editor.getDefaultOccurrences(0, 1), "ELEMENT");
 				node.oriNodeRef.attributes.children = pushTo(eleObject, node.oriNodeRef.attributes.children);
 
-				//add to display object
-				// var disObject = editor.getBaseTypeObject([], nodeId, "DV_DATE_TIME", eleObject, node, node.childrenAttribute, false);
-				// node.children.push(disObject);
 				//synchronize ontology
 				editor.synchronizeOntology($scope.ontology, nodeId, "New Element", "*");
 				//return disObject;
@@ -874,11 +920,7 @@ angular.module('clever.management.directives.editDefinitionPane', []).directive(
 				var durationObject = editor.getCComplexObject(bottomAttribute, undefined, editor.getDefaultOccurrences(0, 1), "DV_DURATION");
 				var topAttribute = editor.getCSingleAttribute(durationObject, editor.getDefaultExistence(1, 1), "value");
 				var eleObject = editor.getCComplexObject(topAttribute, nodeId, editor.getDefaultOccurrences(0, 1), "ELEMENT");
-				node.oriNodeRef.attributes.children = pushTo(eleObject, node.oriNodeRef.attributes.children);
-
-				//add to display object
-				// var disObject = editor.getBaseTypeObject([], nodeId, "DV_DURATION", eleObject, node, node.childrenAttribute, false);
-				// node.children.push(disObject);
+				node.oriNodeRef.attributes.children = pushTo(eleObject, node.oriNodeRef.attributes.children);				
 
 				//synchronize ontology
 				editor.synchronizeOntology($scope.ontology, nodeId, "New Element", "*");
@@ -893,10 +935,7 @@ angular.module('clever.management.directives.editDefinitionPane', []).directive(
 				var nodeId = getNextNodeId();
 				var eleObject = editor.getCComplexObject(attribute, nodeId, editor.getDefaultOccurrences(0, 1), "ELEMENT");
 				node.oriNodeRef.attributes.children = pushTo(eleObject, node.oriNodeRef.attributes.children);
-
-				//add to display object
-				// var disObject = editor.getBaseTypeObject([], nodeId, "DV_ORDINAL", eleObject, node, node.childrenAttribute, false);
-				// node.children.push(disObject);
+							
 				//synchronize ontology
 				editor.synchronizeOntology($scope.ontology, nodeId, "New Element", "*");
 				// return disObject;
@@ -913,10 +952,7 @@ angular.module('clever.management.directives.editDefinitionPane', []).directive(
 				var topAttribute = editor.getCSingleAttribute(durationObject, editor.getDefaultExistence(1, 1), "value");
 				var eleObject = editor.getCComplexObject(topAttribute, nodeId, editor.getDefaultOccurrences(0, 1), "ELEMENT");
 				node.oriNodeRef.attributes.children = pushTo(eleObject, node.oriNodeRef.attributes.children);
-
-				//add display object
-				// var disObject = editor.getBaseTypeObject([], nodeId, "DV_BOOLEAN", eleObject, node, node.childrenAttribute, false);
-				// node.children.push(disObject);
+			
 				//synchronize ontology
 				editor.synchronizeOntology($scope.ontology, nodeId, "New Element", "*");
 				// return disObject;
@@ -930,11 +966,7 @@ angular.module('clever.management.directives.editDefinitionPane', []).directive(
 				var cDvQuantity_lower = editor.getCDvQuantity();
 				var eleObject = addInterval(cDvQuantity_upper, cDvQuantity_lower, "DV_QUANTITY", nodeId);
 				node.oriNodeRef.attributes.children = pushTo(eleObject, node.oriNodeRef.attributes.children);
-
-				//add display object
-				// var disObject = editor.getBaseTypeObject([], nodeId, "DV_INTERVAL<DV_QUANTITY>", eleObject, node, node.childrenAttribute, false);
-				// node.children.push(disObject);
-
+			
 				//synchronize ontology
 				editor.synchronizeOntology($scope.ontology, nodeId, "New Element", "*");
 				// return disObject;
@@ -950,10 +982,6 @@ angular.module('clever.management.directives.editDefinitionPane', []).directive(
 				var eleObject = addInterval(cDateTime_upper, cDateTime_lower, "DV_DATE_TIME", nodeId);
 				node.oriNodeRef.attributes.children = pushTo(eleObject, node.oriNodeRef.attributes.children);
 
-				//add display Object
-				// var disObject = editor.getBaseTypeObject([], nodeId, "DV_INTEVAL<DV_DATE_TIME>", eleObject, node, node.chidrenAttribute, false);
-				// node.children.push(disObject);
-
 				//synchronize ontology
 				editor.synchronizeOntology($scope.ontology, nodeId, "New Element", "*");
 				// return disObject;
@@ -968,10 +996,7 @@ angular.module('clever.management.directives.editDefinitionPane', []).directive(
 				var eleObject = addInterval(count_upper, count_lower, "DV_COUNT",nodeId);
 				node.oriNodeRef.attributes.children = pushTo(eleObject, node.oriNodeRef.attributes.children);
 
-				//add display object
-				// var disObject = editor.getBaseTypeObject([], nodeId, "DV_INTEVAL<DV_DATE_TIME>", eleObject, node, node.childrenAttribue, false);
-				// node.children.push(disObject);
-
+				
 				//synchronize ontology
 				editor.synchronizeOntology($scope.ontology, nodeId, "New Element", "*");
 				// return disObject;
@@ -1004,10 +1029,6 @@ angular.module('clever.management.directives.editDefinitionPane', []).directive(
 				var eleObject = editor.getCComplexObject(topAttribute, nodeId, editor.getDefaultOccurrences(0, 1), "ELEMENT");
 				node.oriNodeRef.attributes.children = pushTo(eleObject, node.oriNodeRef.attributes.children);
 
-				//add to display object
-				// var disObject = editor.getBaseTypeObject([], nodeId, "DV_MULTIMEDIA", eleObject, node, node.childrenAttribute, false);
-				// node.children.push(disObject);
-
 				//synchronize ontology
 				editor.synchronizeOntology($scope.ontology, nodeId, "New Element", "*");
 				// return disObject;
@@ -1031,16 +1052,8 @@ angular.module('clever.management.directives.editDefinitionPane', []).directive(
 				var nodeId = getNextNodeId();
 				var eleObject = editor.getCComplexObject("", nodeId, editor.getDefaultOccurrences(0, 1), "CLUSTER");
 				node.oriNodeRef.attributes.children = pushTo(eleObject, node.oriNodeRef.attributes.children);
-
-				//add to display object
-				// var disObjcet = editor.getBaseTypeObject([], nodeId, "CLUSTER", eleObject, node, node.childrenAttribute, false);
-				// node.children.push(disObjcet);
-
 				//shchronize ontology
-				editor.synchronizeOntology($scope.ontology, nodeId, "New Cluster", "*");
-
-				// console.log(node);
-				// return disObjcet;
+				editor.synchronizeOntology($scope.ontology, nodeId, "New Cluster", "*");			
 				return parser.myProcessNode(eleObject, node, node.children, $scope.ontology.term_definitions);
 
 			}
