@@ -75,6 +75,9 @@ public class StorageTemplateResourceController extends
 					info.setId(master.getId());
 					info.setConceptName(master.getConceptName());
 					info.setName(master.getName());
+					info.setRmOriginator(master.getRmOrginator());
+					info.setRmName(master.getRmName());
+					info.setRmEntity(master.getRmEntity());
 					info.setLatestTemplateVersion(master
 							.getLatestRevisionFileVersion());
 					info.setLifecycleState(master

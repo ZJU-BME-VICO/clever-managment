@@ -15,9 +15,12 @@ define(['lazyLoader'], function(lazyLoader) {
                     date.setTime(time);
                     return date.format('yyyy-MM-dd hh:mm:ss');
                 };
-                $scope.selectTemplate = function(archetype) {
+                $scope.selectTemplate = function(template) {
+                	template.rmOriginator = $scope.templateMasterInfo.rmOriginator;
+                	template.rmEntity = $scope.templateMasterInfo.rmEntity;
+                	template.rmName = $scope.templateMasterInfo.rmName;
                     $scope.selectTemplateCallback({
-                        value: archetype,
+                        value: template,
                     });
                 };
                 $scope.selectSpecialiseMaster = function(master) {
