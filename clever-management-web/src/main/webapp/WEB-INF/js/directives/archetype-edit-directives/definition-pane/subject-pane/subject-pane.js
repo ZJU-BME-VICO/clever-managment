@@ -15,22 +15,23 @@ angular.module('clever.management.directives.subjectPane', []).directive('subjec
 		   	console.log(newValue);
 		   });
 		   
-        	$scope.performerTypes = ["PARTY_SELF", "PARTY_IDENTIFIED", "PARTY_RELATED"];
-			$scope.performerType = {};
-			$scope.$watch('participation', function(newValue) {
+        	$scope.partyTypeList = ["PARTY_SELF", "PARTY_IDENTIFIED", "PARTY_RELATED"];
+			$scope.partyType = {};
+			$scope.$watch('subject', function(newValue) {
 				console.log(newValue);
-				processParticipation($scope.participation);
+				$scope.oriSubject = $scope.subject.oriNodeRef;
+				processSubject($scope.oriSubject);
 			});
-			$scope.$watch('performerType.value', function(newValue) {
-				if (newValue) {
-					changePerformerType(newValue);
+			$scope.$watch('partyType.value', function(newValue, oldValue) {
+				if ((newValue != undefined && newValue != oldValue) ) {
+					changePartyType(newValue);
 				}
 			});
 
 			//---------------------------Performer edit function ---------------------------------------------------------------------------------
-			function changePerformerType(type) {
-				if ($scope.performerType) {
-					switch($scope.performerType.value) {
+			function changePartyType(type) {
+				if ($scope.partyType) {
+					switch($scope.partyType.value) {
 					case 'PARTY_SELF':
 						addPartySelf();
 						break;
@@ -49,26 +50,26 @@ angular.module('clever.management.directives.subjectPane', []).directive('subjec
 			function addPartySelf() {
 				resetState();
 			    var partySelf = editor.getPARTY_SELF();
-				$scope.attributes.performer.children = partySelf;
+				$scope.oriSubject.children = partySelf;
 			}
 
 			function addPartyIdentified() {
 				resetState();
 			    var partyIdentified = editor.getPARTY_IDENTIFIED();
-				$scope.attributes.performer.children = partyIdentified;
+				$scope.oriSubject.children = partyIdentified;
 
 			}
 
 			function addPartyRelated() {
 				resetState();		
-				var PARTY_RELATED = editor.getPARTY_RELATED();		
-				$scope.attributes.performer.children = PARTY_RELATED;
+				var partyRelated = editor.getPARTY_RELATED();		
+				$scope.oriSubject.children = partyRelated;
 
 			}
 			
 			
 			function resetState() {
-				$scope.attributes.performer.children = undefined;
+				$scope.oriSubject.children = undefined;
 				if($scope.hasExternalRef.value){
 					$scope.hasExternalRef.value = undefined;
 				}
@@ -89,7 +90,7 @@ angular.module('clever.management.directives.subjectPane', []).directive('subjec
 						addExternalRef();
 					} else {
 						//deleteExternalRef();
-						deleteAttribute($scope.attributes.performer.children.attributes, 'externalRef');
+						deleteAttribute($scope.oriSubject.children.attributes, 'externalRef');
 					}
 				}
 			});
@@ -98,7 +99,7 @@ angular.module('clever.management.directives.subjectPane', []).directive('subjec
 				var PARTY_REF = editor.getPARTY_REF();
 			//	var externalRef = editor.getCSingleAttribute(PARTY_REF, editor.getDefaultExistence(1, 1), "externalRef");
 			    var externalRef = editor.getSingleAttr(PARTY_REF, [1,1], 'externalRef');
-				$scope.attributes.performer.children.attributes = pushTo(externalRef, $scope.attributes.performer.children.attributes);
+				$scope.oriSubject.children.attributes = pushTo(externalRef, $scope.oriSubject.children.attributes);
 
 			}
 
@@ -109,13 +110,13 @@ angular.module('clever.management.directives.subjectPane', []).directive('subjec
 						addName();
 					} else {
 						//deleteName();
-						deleteAttribute($scope.attributes.performer.children.attributes, 'name');
+						deleteAttribute($scope.oriSubject.children.attributes, 'name');
 					}
 				}
 			});
 			function addName() {				
 				var name = editor.getSingleAttr([], [1,1], "name");
-				$scope.attributes.performer.children.attributes = pushTo(name, $scope.attributes.performer.children.attributes);
+				$scope.oriSubject.children.attributes = pushTo(name, $scope.oriSubject.children.attributes);
 			}
 
 			function deleteName() {
@@ -130,7 +131,7 @@ angular.module('clever.management.directives.subjectPane', []).directive('subjec
 						addIdentifiers();
 					} else {
 						//deleteIdentifiers();
-						deleteAttribute($scope.attributes.performer.children.attributes, 'identifiers');
+						deleteAttribute($scope.oriSubject.children.attributes, 'identifiers');
 					}
 				}
 			});
@@ -138,7 +139,7 @@ angular.module('clever.management.directives.subjectPane', []).directive('subjec
 				var DV_IDENTIFIER = editor.getDV_IDENTIFIER();
 				
 				var identifiers = editor.getSingleAttr(DV_IDENTIFIER, [1,1],  "identifiers");
-				$scope.attributes.performer.children.attributes = pushTo(identifiers, $scope.attributes.performer.children.attributes);
+				$scope.oriSubject.children.attributes = pushTo(identifiers, $scope.oriSubject.children.attributes);
 			}
 
 			function deleteIdentifiers() {
@@ -148,56 +149,7 @@ angular.module('clever.management.directives.subjectPane', []).directive('subjec
 			//----------------------------------------performer edit function end-------------------------------------------------------
 
 			//----------------------------------------participation attribute edit function--------------------------------------------
-			$scope.$watch('hasMode.value', function(newValue, oldValue) {
-				if (newValue != undefined && newValue != oldValue) {
-					if (newValue == true) {
-						addMode();
-					} else {
-					
-						deleteAttribute($scope.participation.oriNodeRef.attributes, 'mode');
-					}
-				}
-			});
-
-			function addMode() {
-				var DV_CODED_TEXT = editor.getDV_CODED_TEXT();
-				var mode = editor.getSingleAttr(DV_CODED_TEXT, [1,1], "mode");
-				$scope.participation.oriNodeRef.attributes = pushTo(mode, $scope.participation.oriNodeRef.attributes);
-
-			}
-
-
-			$scope.$watch("hasFunction.value", function(newValue, oldValue) {
-				if (newValue != undefined && newValue != oldValue) {
-					if (newValue == true) {
-						addFunction();
-					} else {
-						
-						deleteAttribute($scope.participation.oriNodeRef.attributes, 'function');
-					}
-				}
-			});
-			function addFunction() {
-				var DV_TEXT = editor.getDV_TEXT();
-				var func = editor.getSingleAttr(DV_TEXT, [1,1], "function");
-				$scope.participation.oriNodeRef.attributes = pushTo(func, $scope.participation.oriNodeRef.attributes);
-			}
-          
-           $scope.$watch("hasTime.value", function(newValue, oldValue) {
-				if (newValue != undefined && newValue != oldValue) {
-					if (newValue == true) {
-						addTime();
-					} else {
-						
-						deleteAttribute($scope.participation.oriNodeRef.attributes, 'time');
-					}
-				}
-			});
-			
-			function addTime(){
-				var time = editor.getSingleAttr([], [1,1], "time");
-				$scope.participation.oriNodeRef.attributes = pushTo(time, $scope.participation.oriNodeRef.attributes);
-			}
+		
           
 			//---------------------------------------participation attribute edit function end-----------------------------------------
 
@@ -232,62 +184,52 @@ angular.module('clever.management.directives.subjectPane', []).directive('subjec
 				}
 			}
 
-			//------------------------------------participation process function--------------------------------------------------------------
-			$scope.attributes = {};
-			//process participation and initial the attributes object
-			function processParticipation(participation) {
-				var attributes = participation.oriNodeRef.attributes;
+			
+		
+			
+		
+			function processSubject(subject) {
+				if(angular.isArray(subject.children)){
+					$scope.subject.children = $scope.subject.children[0];
+				}
+				$scope.partyType.value = subject.children.rm_type_name;
+				var attributes = subject.children.attributes;
+
 				if (angular.isArray(attributes)) {
 					angular.forEach(attributes, function(attribute) {
-						if (attribute.rm_attribute_name == "performer") {
-							$scope.attributes.performer = attribute;
-
-							$scope.performerType.value = attribute.children.rm_type_name;
-							var tempAttributes = attribute.children.attributes;
-
-							if (tempAttributes) {
-								if (angular.isArray(tempAttributes)) {
-									angular.forEach(tempAttributes, function(value) {
-										if (value.rm_attribute_name == "externalRef") {
-											$scope.hasExternalRef = {
-												value : true
-											};
-										}
-										if (value.rm_attribute_name == "name") {
-											$scope.hasName = {
-												value : true
-											};
-										}
-										if (value.rm_attribute_name == "identifiers") {
-											$scope.hasIdentifiers = {
-												value : true
-											};
-										}
-									});
-								}
-							}
-						}
-						if (attribute.rm_attribute_name == "mode") {
-							$scope.hasMode = {
-								value : true
-							};
-							$scope.attributes.mode = attribute;
-						}
-						if (attribute.rm_attribute_name == "function") {
-							$scope.attributes.functioin = attribute;
-							$scope.hasFunction = {
-								value : true
-							};
-						}
-						if (attribute.rm_attribute_name == "time") {
-							$scope.hasTime = {
-								value : true
-							};
-							$scope.attributes.time = attribute;
-						}
+						processAttribute(attribute);
 					});
+				} else {
+					processAttribute(attributes);
 				}
 			}
+			
+			
+			function processAttribute(attribute) {
+
+				$scope.hasExternalRef = {};
+				$scope.hasName = {};
+
+				$scope.hasExternalRef = {};
+
+				$scope.hasIdentifiers = {
+					value : true
+				};
+				if (attribute.rm_attribute_name == "name") {
+					$scope.hasName = {
+						value : true
+					};
+				}
+				if (attribute.rm_attribute_name == "identifiers") {
+					$scope.hasIdentifiers = {
+						value : true
+					};
+				}
+			}
+
+
+			
+
 
 		}
 	};

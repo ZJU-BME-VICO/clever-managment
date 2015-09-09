@@ -46,7 +46,23 @@ function ArchetypeEditCtrl($scope, $modal,$log,msgboxService,busyService,archety
 		$scope.tabContainerHeight.value = newValue - 35;
 	});
     
-     
+	$scope.treeControl = {};
+	$scope.isCollapse = true;
+	$scope.collapse = function() {
+		$scope.treeControl.collapseAll();
+		$scope.isCollapse = true;
+
+	};
+
+	$scope.expand = function() {
+		$scope.treeControl.expandAll();
+		$scope.isCollapse = false;
+	};
+	
+	$scope.locatedArchetype = function(arc){
+		$scope.treeControl.locateNode(arc);
+	};
+
      
     $scope.searchKeyMapper = function(node) {
 		return node.conceptName + ' (' + node.latestArchetypeVersion + ')';
@@ -421,9 +437,9 @@ function ArchetypeEditCtrl($scope, $modal,$log,msgboxService,busyService,archety
 	  xml =  '<?xml version="1.0" encoding="UTF-8"?>' + '\n' + '<archetype xmlns="http://schemas.openehr.org/v1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">'
                                             +formatXml(xml)+'</archetype>';
 	  var oriObj = getOriArchetype(adl,xml,info);
-	  console.log(oriObj);
-	  oriObj.selected="selected";
 	  $scope.draftArchetypeList.push(oriObj);
+	  $scope.locatedArchetype(oriObj);
+	  
    }
   
 	

@@ -45,11 +45,11 @@ angular.module('clever.management.service.archetypeEdit', []).service('archetype
 		};
 	};
 
-	this.getCString = function() {
+	this.getCString = function(stringList) {
 		return {
 			'_xsi:type' : "C_STRING",
 			pattern : undefined,
-			list : [],
+			list : stringList,
 			default_value : undefined,
 			assumed_value : undefined,
 		};
@@ -622,6 +622,8 @@ angular.module('clever.management.service.archetypeEdit', []).service('archetype
 		return this.getComplexObject([], '', [1,1], "GENERIC_ID" );
 	};
 
+
+    // get base type
 	this.getDV_IDENTIFIER = function() {
 		var issuer = this.getSingleAttr(null, [1,1], "issuer");
 		var assigner = this.getSingleAttr(null, [1,1], "assigner");
@@ -637,6 +639,13 @@ angular.module('clever.management.service.archetypeEdit', []).service('archetype
     };
     this.getDV_TEXT = function(){
     	return this.getComplexObject([], '', [1,1], "DV_TEXT");
+    };
+    
+    //get primitive object
+    this.getPrimitiveString = function(string){
+    	var cstring = this.getCString(string);
+    	var primitive = this.getCPrimitiveObject(cstring, '', this.getDefaultOccurrences(1,1), "STRING");
+        return primitive;
     };
 
 });

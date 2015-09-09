@@ -151,7 +151,7 @@ angular.module('clever.management.directives.editDefinitionPane', []).directive(
 						break;
 					case "OPTIONAL":
 						$scope.existence.lower = "0";
-						$scope.existenc.upper = "1";
+						$scope.existence.upper = "1";
 						break;
 					case "NOT_ALLOWED":
 						$scope.existence.lower = "0";
@@ -646,9 +646,13 @@ angular.module('clever.management.directives.editDefinitionPane', []).directive(
 
 			function addLink(node) {
 				var nodeId = getNextNodeId();
-				var DV_TEXT = getDV_TEXT("value");
+				var meaningString = editor.getPrimitiveString();
+				var value = editor.getSingleAttr(meaningString, [1,1], 'value');
+				var DV_TEXT = getDV_TEXT(value);
 				var meaning = editor.getCSingleAttribute(DV_TEXT, editor.getDefaultExistence(1, 1), "meaning");
-				var DV_EHR_URI = getDV_EHR_URI("value");
+				var uriString = editor.getPrimitiveString();
+				var value = editor.getSingleAttr(uriString, [1,1], 'value');
+				var DV_EHR_URI = getDV_EHR_URI(value);
 				var target = editor.getCSingleAttribute(DV_EHR_URI, editor.getDefaultExistence(1, 1), "target");
 				var LINK = editor.getCComplexObject([meaning, target], nodeId, editor.getDefaultOccurrences(0, 1), "LINK");
 
@@ -1078,7 +1082,7 @@ angular.module('clever.management.directives.editDefinitionPane', []).directive(
  // 'DV_INTERVAL<COUNT>', 'DV_INTERVAL<QUANTITY>', 'DV_MULTIMEDIA', 'DV_URI', 'DV_EHR_URI', 
  // 'DV_PROPORTION', 'DV_IDENTIFIER', 'DV_PARSABLE', 'DV_BOOLEAN'];
 
-			function getDV_TEXT(){}
+			//function getDV_TEXT(){}
 			function getDV_CODED_TEXT(){}
 			function getDV_QUANTITY(){}
 			function getDV_ORDINAL(){}
@@ -1091,7 +1095,7 @@ angular.module('clever.management.directives.editDefinitionPane', []).directive(
 			function getDV_INTERVAL(type){}
 			function getDV_MULTIMEDIA(){}
 			function getDV_URI(){}
-			function getDV_EHR_URI(){}
+			//function getDV_EHR_URI(){}
 			function getDV_PROPORTION(){}
 			function getDV_IDENTIFIER(){}
 			function getDV_PARSABLE(){}
@@ -1124,27 +1128,45 @@ angular.module('clever.management.directives.editDefinitionPane', []).directive(
 				return DV_CODED_TEXT;
 			}
 
-			function getDV_TEXT(attribute) {
-				var attr;
-				if (attribute) {
-					attr = editor.getCSingleAttribute([], editor.getDefaultExistence(1, 1), attribute);
-					var DV_TEXT = editor.getCComplexObject(attribute, "", editor.getDefaultOccurrences(1, 1), "DV_TEXT");
+			
+		
+			function getDV_TEXT(value) {
+				//var attr;
+				//if (attribute) {
+				//	attr = editor.getCSingleAttribute([], editor.getDefaultExistence(1, 1), attribute);
+				//	var DV_TEXT = editor.getCComplexObject(attr, "", editor.getDefaultOccurrences(1, 1), "DV_TEXT");
 
+				//} else {
+				if (value) {
+					var DV_TEXT = editor.getCComplexObject(value, "", editor.getDefaultOccurrences(1, 1), "DV_TEXT");
+				} else {
+					var DV_TEXT = editor.getCComplexObject([], "", editor.getDefaultOccurrences(1, 1), "DV_TEXT");
 				}
-				var DV_TEXT = editor.getCComplexObject([], "", editor.getDefaultOccurrences(1, 1), "DV_TEXT");
+				//}
 				return DV_TEXT;
 
 			}
 
-			function getDV_EHR_URI(attribute) {
-				if (attribute) {
-					attr = editor.getCSingleAttribute([], editor.getDefaultExistence(1, 1), attribute);
-					var DV_EHR_URI = editor.getCComplexObject(attribute, "", editor.getDefaultOccurrences(1, 1), "DV_TEXT");
 
+
+			
+			function getDV_EHR_URI(value) {
+				//var attr;
+				//if (attribute) {
+				//	attr = editor.getCSingleAttribute([], editor.getDefaultExistence(1, 1), attribute);
+				//	var DV_EHR_URI = editor.getCComplexObject(attr, "", editor.getDefaultOccurrences(1, 1), "DV_EHR_URI");
+				//
+				//} else {
+				if (value) {
+					var DV_EHR_URI = editor.getCComplexObject(value, "", editor.getDefaultOccurrences(1, 1), "DV_EHR_URI");
+				} else {
+					var DV_EHR_URI = editor.getCComplexObject([], "", editor.getDefaultOccurrences(1, 1), "DV_EHR_URI");
 				}
-				var DV_EHR_URI = editor.getCComplexObject([], "", editor.getDefaultOccurrences(1, 1), "DV_EHR_URI");
+
+				//}
 				return DV_EHR_URI;
 			}
+
 
 
 

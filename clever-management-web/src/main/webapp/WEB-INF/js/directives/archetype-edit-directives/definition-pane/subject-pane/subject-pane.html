@@ -1,12 +1,10 @@
 <div>
-	<label>Performer :</label>
-	<br>
-	<span ng-repeat="type in performerTypes"  style="margin-right:18px" for="{{type}}">
-		<input type="radio" ng-model="performerType.value" ng-value='type' id="{{type}}">
+	<span ng-repeat="type in partyTypeList"  style="margin-right:18px" for="{{type}}">
+		<input type="radio" ng-model="partyType.value" ng-value='type' id="{{type}}">
 		{{type}} </span>
 	<hr>
 
-	<div ng-if="performerType.value == 'PARTY_SELF'">
+	<div ng-if="partyType.value == 'PARTY_SELF'">
 		<span>Attributes :</span>
 		<br>
 		<div style="margin-left:20px">
@@ -23,7 +21,7 @@
 		</div>
 	</div>
 
-	<div ng-if="performerType.value == 'PARTY_IDENTIFIED'">
+	<div ng-if="partyType.value == 'PARTY_IDENTIFIED'">
 		<span>Attributes :</span>
 		<br>
 		<div style="margin-left:20px">
@@ -54,7 +52,7 @@
 		</div>
 	</div>
 
-	<div ng-if="performerType.value=='PARTY_RELATED'">
+	<div ng-if="partyType.value=='PARTY_RELATED'">
 		<span><strong>Attributes :</strong></span>
 		<br>
 		<div style="margin-left:20px">
