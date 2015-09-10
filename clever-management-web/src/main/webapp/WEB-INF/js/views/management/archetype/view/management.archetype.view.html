@@ -3,7 +3,7 @@
 		<div class="panel panel-default" ng-show="!isArchetypeListHidden">
 			<div class="panel-heading">
 				<div class="input-group">
-					<input type="text" class="form-control" ng-model="archetypeListFilter">
+					<input type="text" class="form-control" ng-model="archetypeListFilter" placeholder="{{'SEARCH_HINT' | translate}}">
 					<span class="input-group-btn">
 						<button class="btn btn-default" type="button" ng-click="expand()">
 							<span class="glyphicon glyphicon-plus"></span>
@@ -28,7 +28,7 @@
 						<span ng-show="node.isDirectory" ng-bind="node.name"></span>
 						<img ng-show="!node.isDirectory" ng-class="node.lifecycleState | lowercase" class="clever-icon list" style="padding: 0 10px;height: 16px;"></img>
 						<span ng-show="!node.isDirectory" ng-bind-html="node.conceptName | highlight:keyword | unsafe"></span>
-						&nbsp;<span ng-show="!node.isDirectory" style="color: grey;font-size: 10pt;">(<span ng-bind="node.latestVersionMasterVersion"></span>)</span>
+						&nbsp;<span ng-show="!node.isDirectory" style="color: grey;font-size: 10pt;">(<span ng-bind="node.version"></span>)</span>
 					</tree-node-label>
 				</tree-view>
 			</div>

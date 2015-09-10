@@ -14,6 +14,8 @@ angular.module('clever.management.i18n.zh', ['pascalprecht.translate']).config(f
 		// Busy service
 		BUSY_LOADING : '加载中',
 		BUSY_UPLOADING : '上传中',
+		
+		SEARCH_HINT : '请输入关键字',
 
 		// Home
 		ARCHETYPE_MANAGEMENT : '原型管理',
@@ -167,6 +169,7 @@ angular.module('clever.management.i18n.zh', ['pascalprecht.translate']).config(f
 		MENU_RETURN : '返回上一级',
 		MENU_HOME : '首页',
 		MENU_MANAGEMENT : '管理功能',
+		MENU_MANAGEMENT_BRIEF : '简介',
 		MENU_MANAGEMENT_ARCHETYPE : '原型管理',
 		MENU_MANAGEMENT_ARCHETYPE_VIEW : '原型查看',
 		MENU_MANAGEMENT_ARCHETYPE_UPLOAD : '原型上传',

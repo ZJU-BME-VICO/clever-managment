@@ -467,7 +467,10 @@ public class StorageTemplateResourceController extends
 		StorageTemplateInfo info = new StorageTemplateInfo();
 		info.setId(templateFile.getId());
 		info.setName(templateFile.getName());
-		// info.setRmEntity(templateFile.getTemplateMaster().getRmEntity());
+		info.setRmOriginator(templateFile.getTemplateMaster().getRmOrginator());
+		info.setRmName(templateFile.getTemplateMaster().getRmName());
+		info.setRmEntity(templateFile.getTemplateMaster().getRmEntity());
+		info.setConceptName(templateFile.getTemplateMaster().getConceptName());
 		info.setVersion(templateFile.getVersion());
 		info.setSerialVersion(templateFile.getSerialVersion());
 		info.setOet(templateFile.getOet());

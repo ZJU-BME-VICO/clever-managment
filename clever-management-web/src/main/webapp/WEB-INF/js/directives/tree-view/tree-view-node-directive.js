@@ -5,7 +5,9 @@ angular.module('clever.management.directives.treeViewNode', []).directive('treeV
 
 			var nodeAliasName = scope.getNodeAliasName();
 			var nodeData = scope[nodeAliasName] = scope.$eval(attrs[nodeAliasName]);
-			nodeData.collapsed = true;
+			if (nodeData.collapsed == undefined) {
+				nodeData.collapsed = true;
+			}
 			nodeData.show = true;
 			scope.getNodes().push(nodeData);
 			scope.childNodes = nodeData[scope.getNodeChildren()];

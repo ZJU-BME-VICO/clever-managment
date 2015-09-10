@@ -20,9 +20,6 @@ angular.module('clever.management.controllers.app', []).controller('appCtrl', fu
 		}
 	};
 
-	// Breadcrumb tree initial
-	$scope.menus = [];
-	$scope.stateMenuMap = {};
 	// Archetype management
 	var archetype = {
 		title : 'MENU_MANAGEMENT_ARCHETYPE',
@@ -31,6 +28,11 @@ angular.module('clever.management.controllers.app', []).controller('appCtrl', fu
 		info : 'MENU_MANAGEMENT_ARCHETYPE_INFO',
 		isOpen : false,
 		subMenus : [
+			// Brief
+			{
+				title : 'MENU_MANAGEMENT_BRIEF',
+				info : 'MENU_MANAGEMENT_ARCHETYPE_VIEW_INFO',
+			},
 			// View
 			{
 				title : 'MENU_MANAGEMENT_ARCHETYPE_VIEW',
@@ -70,6 +72,11 @@ angular.module('clever.management.controllers.app', []).controller('appCtrl', fu
 		info : 'MENU_MANAGEMENT_STORAGE_INFO',
 		isOpen : false,
 		subMenus : [
+			// Brief
+			{
+				title : 'MENU_MANAGEMENT_BRIEF',
+				info : 'MENU_MANAGEMENT_ARCHETYPE_VIEW_INFO',
+			},
 			{
 				title : 'MENU_MANAGEMENT_STORAGE_VIEW',
 				state : 'management.storage.view',
@@ -106,6 +113,11 @@ angular.module('clever.management.controllers.app', []).controller('appCtrl', fu
 		info : 'MENU_MANAGEMENT_APPLICATION_INFO',
 		isOpen : false,
 		subMenus : [
+			// Brief
+			{
+				title : 'MENU_MANAGEMENT_BRIEF',
+				info : 'MENU_MANAGEMENT_ARCHETYPE_VIEW_INFO',
+			},
 			{
 				title : 'MENU_MANAGEMENT_APPLICATION_DESIGN',
 				state : 'management.application.design',
@@ -134,11 +146,18 @@ angular.module('clever.management.controllers.app', []).controller('appCtrl', fu
 		icon : 'icon-screenshot',
 		info : 'MENU_MANAGEMENT_INTEGRATION_INFO',
 		isOpen : false,
+		subMenus : [
+			// Brief
+			{
+				title : 'MENU_MANAGEMENT_BRIEF',
+				info : 'MENU_MANAGEMENT_ARCHETYPE_VIEW_INFO',
+			},
+		],
 	};
-	$scope.menus.push(archetype);
-	$scope.menus.push(storage);
-	$scope.menus.push(application);
-	$scope.menus.push(integration);
+	$scope.menus = [archetype,storage,application,integration];
+	
+	$scope.stateMenuMap = {};
+	
 
 	// Construct menu map
 	angular.forEach($scope.menus, function(menu, index) {

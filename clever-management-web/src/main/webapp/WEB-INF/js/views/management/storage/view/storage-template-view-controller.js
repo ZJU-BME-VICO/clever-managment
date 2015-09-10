@@ -57,6 +57,7 @@ define(['lazyLoader'], function(lazyLoader) {
 			isDirectory : true,
 			type : 'folder',
 			name : 'Entry',
+			collapsed : false,
 			children : [action, evaluation, observation, instruction, admin],
 		};
 		var section = {
@@ -81,6 +82,7 @@ define(['lazyLoader'], function(lazyLoader) {
 			isDirectory : true,
 			type : 'folder',
 			name : 'EHR Archetypes',
+			collapsed : false,
 			children : [cluster, composition, element, entry, section, stucture],
 		}, demographic];
 		var templateListMap = {
@@ -125,7 +127,6 @@ define(['lazyLoader'], function(lazyLoader) {
 			});
 			$scope.templateList = [];
 			$scope.templateList = templateList;
-			// Classify
 			busyService.popBusy(busyId);
 		});
 
@@ -169,8 +170,10 @@ define(['lazyLoader'], function(lazyLoader) {
 					$timeout(function() {
 						$scope.tabControl.selectTabById(tabId);
 					}, 0);
+					var busy = busyService.pushBusy('BUSY_LOADING');
 					resourceService.get(STORAGE_TEMPLATE_MASTER_BY_ID_URL + master.id).then(function(masterInfo) {
 						tab.content = masterInfo;
+						busyService.popBusy(busy);
 					});
 				} else {
 					$scope.tabControl.selectTabById(tabId);
@@ -191,11 +194,13 @@ define(['lazyLoader'], function(lazyLoader) {
 				$timeout(function() {
 					$scope.tabControl.selectTabById(tabId);
 				}, 0);
+				var busy = busyService.pushBusy('BUSY_LOADING');
 				resourceService.get(STORAGE_TEMPLATE_BY_ID_URL + template.id).then(function(templateInfo) {
 					templateInfo.rmOriginator = template.rmOriginator;
 					templateInfo.rmName = template.rmName;
 					templateInfo.rmEntity = template.rmEntity;
 					tab.content = templateInfo;
+					busyService.popBusy(busy);
 				});
 			} else {
 				$scope.tabControl.selectTabById(tabId);
@@ -215,8 +220,10 @@ define(['lazyLoader'], function(lazyLoader) {
 				$timeout(function() {
 					$scope.tabControl.selectTabById(tabId);
 				}, 0);
+				var busy = busyService.pushBusy('BUSY_LOADING');
 				resourceService.get(ARCHETYPE_MASTER_BY_ID_URL + master.id).then(function(masterInfo) {
 					tab.content = masterInfo;
+					busyService.popBusy(busy);
 				});
 			} else {
 				$scope.tabControl.selectTabById(tabId);
@@ -236,8 +243,10 @@ define(['lazyLoader'], function(lazyLoader) {
 				$timeout(function() {
 					$scope.tabControl.selectTabById(tabId);
 				}, 0);
+				var busy = busyService.pushBusy('BUSY_LOADING');
 				resourceService.get(ARCHETYPE_BY_ID_URL + archetype.id).then(function(archetypeInfo) {
 					tab.content = archetypeInfo;
+					busyService.popBusy(busy);
 				});
 			} else {
 				$scope.tabControl.selectTabById(tabId);

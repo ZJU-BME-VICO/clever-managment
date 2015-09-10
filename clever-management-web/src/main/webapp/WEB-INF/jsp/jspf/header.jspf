@@ -10,8 +10,8 @@
 			<ul class="nav navbar-nav navbar-left">
 				<li ng-repeat="menu in menus" dropdown is-open="menu.isOpen" ng-mouseenter="menu.isOpen = true" ng-mouseleave="menu.isOpen = false" class="text-center">
 					<a href class="dropdown-toggle" dropdown-toggle ng-click="selectMenu(menu)" style="font-size: 1.1em;"></span><span ng-class="menu.icon"></span> {{menu.title | translate}}</a>
-					<ul ng-if="menu.subMenus" class="dropdown-menu">
-						<li ng-repeat="sub in menu.subMenus">
+					<ul ng-if="menu.subMenus.length > 1" class="dropdown-menu">
+						<li ng-repeat="sub in menu.subMenus" ng-if="sub.state">
 							<a href ng-click="selectMenu(sub)" style="padding: 5px 10px;">{{sub.title | translate}}</a>
 						</li>
 					</ul>

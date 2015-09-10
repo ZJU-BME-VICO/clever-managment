@@ -56,6 +56,7 @@ function ArchetypeViewCtrl($scope, $timeout, busyService, resourceService, ARCHE
 		isDirectory : true,
 		type : 'folder',
 		name : 'Entry',
+		collapsed : false,
 		specialisedArchetypeMasters : [action, evaluation, observation, instruction, admin],
 	};
 	var section = {
@@ -80,6 +81,7 @@ function ArchetypeViewCtrl($scope, $timeout, busyService, resourceService, ARCHE
 		isDirectory : true,
 		type : 'folder',
 		name : 'EHR Archetypes',
+		collapsed : false,
 		specialisedArchetypeMasters : [cluster, composition, element, entry, section, stucture],
 	}, demographic];
 	var archetypeListMap = {
