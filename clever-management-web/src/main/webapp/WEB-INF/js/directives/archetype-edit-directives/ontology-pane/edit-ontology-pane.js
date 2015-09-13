@@ -13,6 +13,8 @@ angular.module('clever.management.directives.editOntologyPane', []).directive('e
             
 			$scope.$watch('ontology', function(newValue, oldValue) {
 				if (newValue) {
+					console.log("this is ontology  in ontology pane");
+					console.log(newValue);
 					$scope.ontologyList = ['Term definitions', 'Term bindings', 'Constraint definitions', 'Constraint bindings'];
 					$scope.currentOntology = {
 						value : 'Term definitions'
@@ -22,7 +24,14 @@ angular.module('clever.management.directives.editOntologyPane', []).directive('e
 						code : 'en'
 					};
 					getLanguageList();
-					$scope.ontologyContent = getOntologyContent();
+					var tempOntology = getOntologyContent();
+					if(angular.isArray(tempOntology)){
+						$scope.ontologyContent = tempOntology;
+					}else{
+						$scope.ontologyContent = [];
+						$scope.ontologyContent.push(tempOntology);
+					}
+					
                     
                     console.log("----this is $scope-=-----");
                     console.log($scope);
@@ -116,9 +125,15 @@ angular.module('clever.management.directives.editOntologyPane', []).directive('e
 						matchContent = oriContent.items;
 					}
 				}
-				angular.forEach(matchContent, function(value){
-					value.show = true;
-				});
+				
+				if (angular.isArray(matchContent)) {
+					angular.forEach(matchContent, function(value) {
+						value.show = true;
+					});
+				} else {
+					matchContent.show = true;
+				}
+
 				return matchContent;
 			}
 

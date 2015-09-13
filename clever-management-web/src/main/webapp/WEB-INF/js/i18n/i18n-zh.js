@@ -247,5 +247,11 @@ angular.module('clever.management.i18n.zh', ['pascalprecht.translate']).config(f
 		// Storage template pane
 		STORAGE_TEMPLATE_PANE_INFO : '基本信息',
 		STORAGE_TEMPLATE_PANE_DOWNLOAD : '下载',
+		
+		//archetype editor pane
+		ARCHETYPE_PANE_CREATE: '创建',
+		ARCHETYPE_PANE_SAVE: '保存',
+		ARCHETYPE_PANE_SUBMIT: '提交',
+		
 	});
 });

@@ -6,6 +6,7 @@ angular.module('clever.management.directives.editHeaderPane', []).directive('edi
 			header : '=',
 			languages : "=",
 			ontology : "=",
+			maxHeight: "=",
 
 		},
 		templateUrl : 'js/directives/archetype-edit-directives/header-pane/edit-header-pane.html',
@@ -249,8 +250,11 @@ angular.module('clever.management.directives.editHeaderPane', []).directive('edi
 			};
 
 		},
-		links : function(scope, elemetn, attr) {
-
+		link : function(scope, elemetn, attr) {
+			 console.log(attr.maxHeight);
+             scope.contentHeight = angular.isDefined(attr.maxHeight) ? scope.$parent.$eval(attr.maxHeight) : undefined;
+             console.log("height in header pane");
+			 console.log(scope.contentHeight);
 		}
 	};
 });

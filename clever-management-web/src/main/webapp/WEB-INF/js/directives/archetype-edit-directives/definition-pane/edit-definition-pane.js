@@ -180,7 +180,7 @@ angular.module('clever.management.directives.editDefinitionPane', []).directive(
          
         
          //ontology logic start
-        
+         //this  function return the  original ontology item 
          function getOntologyByNodeId(nodeId){
          	var termDefinitions = $scope.ontology.term_definitions;
          	var ontologyTerm;
@@ -322,12 +322,14 @@ angular.module('clever.management.directives.editDefinitionPane', []).directive(
                 var menuList;
 				var menuHtml = '<ul class="dropdown-menu" role="menu" ng-if="true" >';
 				if (node.label.slot) {
+					menuHtml += '<li class="menu-item ">' +
+						                '<a class="pointer" role="menuitem"  ng-click="editNodeByMenu(' + aliasName + ', '+ '\'delete\')" style="color:red;">Delete</a></li>' ;
 				} else {
 					if (typeWithSlot.indexOf(node.label.picType) != -1) {				
-						menuHtml += '<li class="menu-item dropdown dropdown-submenu" ng-if="item==slot"><a class="dropdown-toogle" data-toogle="dropdown">Slot</a>' + 
+						menuHtml += '<li class="menu-item dropdown dropdown-submenu" ng-if="item==slot"><span class="archetype-edit-icon ' + typeMap['slot'] + '" style="padding: 7px 10px; background-position-y: 10px;"></span><a class="dropdown-toogle" data-toogle="dropdown">Slot</a>' + 
 						'<ul class="dropdown-menu">' ;				
 						angular.forEach($scope.nodeMenu.baseSlotType, function(menuItem){
-							menuHtml += '<li class="menu-item ">' +
+							menuHtml += '<li class="menu-item ">' + 
 						                '<a class="pointer" role="menuitem"  ng-click="editNodeByMenu(' + aliasName + ', '+ '\'' + 'BS_' + menuItem +'\')">' +menuItem + '</a></li>' ;
 						});					
 						menuHtml += '</ul></li>';
@@ -344,7 +346,7 @@ angular.module('clever.management.directives.editDefinitionPane', []).directive(
 					}
                     // get submenu which interval type should have
 					if (typeWithInterval.indexOf(node.label.picType) != -1) {
-					    menuHtml += '<li class="menu-item dropdown dropdown-submenu" ng-if="item==slot"><a class="dropdown-toogle" data-toogle="dropdown">INTERVAL</a>' + '<ul class="dropdown-menu">';
+					    menuHtml += '<li class="menu-item dropdown dropdown-submenu" ng-if="item==slot"><span class="archetype-edit-icon ' + typeMap['interval'] + '" style="padding: 7px 10px; background-position-y: 10px;"></span><a class="dropdown-toogle" data-toogle="dropdown">Interval</a>' + '<ul class="dropdown-menu">';
 						angular.forEach($scope.nodeMenu.intervalType, function(menuItem){
 							menuHtml += '<li class="menu-item ">' +
 						                '<a class="pointer" role="menuitem"  ng-click="editNodeByMenu(' + aliasName + ', '+ '\'' + menuItem +'\')">' + menuItem +  '</a></li>' ;
@@ -353,13 +355,33 @@ angular.module('clever.management.directives.editDefinitionPane', []).directive(
 					}
 					if (node.label.picType.indexOf('<') == -1) {
 						angular.forEach($scope.nodeMenu[node.label.picType], function(menuItem){
-							menuHtml += '<li class="menu-item ">' +
+							menuHtml += '<li class="menu-item ">' +'<span class="archetype-edit-icon ' + typeMap[menuItem.toLowerCase()] + '" style="padding: 7px 10px; background-position-y: 10px;"></span>'+
 						                '<a class="pointer" role="menuitem"  ng-click="editNodeByMenu(' + aliasName + ', '+ '\'' + menuItem +'\')">' +menuItem + '</a></li>' ;
 						});
+						menuHtml += '<li class="menu-item ">' +
+						                '<a class="pointer" role="menuitem"  ng-click="editNodeByMenu(' + aliasName + ', '+ '\'delete\')" style="color:red;">Delete</a></li>' ;
 					}
 				}
 				menuHtml += '</ul>';
 				return menuHtml;
+			};
+			var typeMap = {
+				'text' :          'dv_text',
+				'coded text' :    'dv_text',
+				'quantity' :      'dv_quantity',
+				'count'    :      'dv_count',
+				'date time':      'dv_date_time',
+				'duration' :      'dv_duration',
+				'ordinal'  :      'dv_ordinal',
+				'boolean'  :      'dv_boolean',
+				'multimedia' :    'dv_multimedia',
+				'uri' :           'dv_uri',
+				'identifier' :    'dv_identifier',
+				'proportion' :    'dv_proportion',
+				'cluster'    :    'cluster',
+				'slot'       :    'slot',
+				'interval'   :    'dv_interval',
+			
 			};
 			
             
@@ -367,16 +389,16 @@ angular.module('clever.management.directives.editDefinitionPane', []).directive(
 				ACTION :         ["Ism_Transitions", "Protocol", "Subject", "otherParticipations", "Links"],
 				OBSERVATION :    ["Data", "State", "Protocol", "Subject", "otherParticipations", "Links"],
 				EVALUATION :     ["Protocol", "Subject", "otherParticipations", "Links"],
-				INSTRUCTION :    ["Protocol (0-1)", "Subject", "otherParticipations", "Links"],
+				INSTRUCTION :    ["Protocol", "Subject", "otherParticipations", "Links"],
 				ADMIN_ENTRY :    ["Data", "State", "Protocol", "Subject", "otherParticipations", "Links"],
 				SECTION :        ['sub_Section'],
 				COMPOSITION :    ["Content", "Context", "Protocol", "Composer", "Category", "Language", "Territory"],
-				ITEM_TREE :      ["TEXT", "CODED_TEXT", "QUANTITY", "COUNT", "DATE_TIME", "DURATION", "ORDINAL", "BOOLEAN", "MULTIMEDIA", "URI", "IDENTIFIER", "PROPERTION", "CLUSTER"],
-				ITEM_LIST :      ["TEXT", "CODED_TEXT", "QUANTITY", "COUNT", "DATE_TIME", "DURATION", "ORDINAL", "BOOLEAN", "MULTIMEDIA", "URI", "IDENTIFIER", "PROPERTION", "CLUSTER"],
-				CLUSTER :        ["TEXT", "CODED_TEXT", "QUANTITY", "COUNT", "DATE_TIME", "DURATION", "ORDINAL", "BOOLEAN", "MULTIMEDIA", "URI", "IDENTIFIER", "PROPERTION", "CLUSTER"],
+				ITEM_TREE :      ["Text", "Coded text", "Quantity", "Count", "Date time", "Duration", "Ordinal", "Boolean", "Multimedia", "Uri", "Identifier", "Proportion", "Cluster"],
+				ITEM_LIST :      ["Text", "Coded text", "Quantity", "Count", "Date time", "Duration", "Ordinal", "Boolean", "Multimedia", "Uri", "Identifier", "Proportion", "Cluster"],
+				CLUSTER :        ["Text", "Coded text", "Quantity", "Count", "Date time", "Duration", "Ordinal", "Boolean", "Multimedia", "Uri", "Identifier", "Proportion", "Cluster"],
 
 				otherParticipations : ["Participation"],
-				subject :        ['PARTY_SELF', 'PARTY_IDENTIFIED', 'PARTY_RELATED'],
+				//subject :        ['Party_self', 'PARTY_ID', 'PARTY_RELATED'],
 				links :          ['LINK'],
 				ism_transition : ['ISM_TRANSITION'],
 				//data:['EVENT'],
@@ -384,9 +406,9 @@ angular.module('clever.management.directives.editDefinitionPane', []).directive(
 				events :         ['EVENT'],
 				activities :     ["ACTIVITY"],
 
-				sectionSlotType : ['ACTION', 'INSTRUCTION', 'EVALUATION', 'OBSERVATION', 'ADMIN_ENTRY', 'ENTRY', 'SECTION'],
-				baseSlotType :   ['ITEM', 'CLUSTER', 'ELEMENT'],
-				intervalType :   ['INTERVAL[DATE_TIME]', 'INTERVAL[QUANTITY]', 'INTERVAL[INTEGER]']
+				sectionSlotType : ['Action', 'Instruction', 'Evaluation', 'Observation', 'Admin_entry', 'Entry', 'Section'],
+				baseSlotType :   ['Item', 'Cluster', 'Element'],
+				intervalType :   ['Date time[I]', 'Quantity[I]', 'Integer[I]']
 
 			};
 
@@ -397,9 +419,19 @@ angular.module('clever.management.directives.editDefinitionPane', []).directive(
 			var needCheckedType = ['ITEM_TREE','ITEM_LIST','ITEM_TABLE','CLUSTER','SECTION'];
 			var checkList = ['SECTION'];
 			$scope.editArchetype = function(node, type) {
-				if(needCheckedType.indexOf(node.label.picType) != -1){
-					 editor.attributeCheck(node);
+				
+				if (needCheckedType.indexOf(node.label.picType) != -1) {
+					if (node.oriNodeRef.attributes && node.childrenAttribute) {
+						//return;
+					} else if ((!node.oriNodeRef.attributes || node.oriNodeRef.attributes.length == 0) && !node.childrenAttribute) {
+						var multiAttribute = editor.getCMultipleAttribute(null, editor.getDefaultCardinality(1), editor.getDefaultExistence(1, 1), "items");
+						
+						parser.processAttribute(multiAttribute, node, node.children, $scope.ontology.term_definitions);
+						//node.children = [];
+
+					}
 				}
+
 				type = type.toLowerCase();//normalize the type
 
 				switch(type) {
@@ -475,7 +507,7 @@ angular.module('clever.management.directives.editDefinitionPane', []).directive(
 					var element = addText(node);
 					return element;
 
-				case "coded_text":
+				case "coded text":
 					return addCodedText(node);
 
 				case "quantity":
@@ -484,7 +516,7 @@ angular.module('clever.management.directives.editDefinitionPane', []).directive(
 				case"count":
 					return addCount(node);
 
-				case"date_time":
+				case"date time":
 					return addDateTime(node);
 
 				case "duration":
@@ -496,13 +528,13 @@ angular.module('clever.management.directives.editDefinitionPane', []).directive(
 				case "boolean":
 					return addBoolean(node);
 
-				case "interval<quantity>":
+				case "quantity[i]":
 					return addInterval_quantity(node);
 
-				case "interval<integer>":
+				case "integer[i]":
 					return addInterval_integer(node);
 
-				case "interval<date_time>":
+				case "date time[i]":
 					return addInterval_dateTime(node);
 
 				case "multimedia":
@@ -524,6 +556,8 @@ angular.module('clever.management.directives.editDefinitionPane', []).directive(
 				case "bs_cluster":
 				case "bs_item":
 				   return addBaseSlot(node,type.slice(3,type.length).toUpperCase());
+				case "delete":
+				  deleteNode(node);
 				//-----------base type end--------------
 
 				}
@@ -543,7 +577,7 @@ angular.module('clever.management.directives.editDefinitionPane', []).directive(
 			
 			function addSubSection(node){
 			  var nodeId = getNextNodeId();
-			  var subSection =editor.getCComplexObject([],nodeId,editor.getDefaultOccurrences(0,1),"SECTION");
+			  var subSection =editor.getCComplexObject(null,nodeId,editor.getDefaultOccurrences(0,1),"SECTION");
 			  node.oriNodeRef.attributes.children = pushTo(subSection, node.oriNodeRef.attributes.children);
 			  
 			  editor.synchronizeOntology($scope.ontology, nodeId, "sub_Section","*");
@@ -565,12 +599,12 @@ angular.module('clever.management.directives.editDefinitionPane', []).directive(
 			}
 
 			function getITEM_TREE(nodeId) {
-				return editor.getCComplexObject([], nodeId, editor.getDefaultOccurrences(1, 1), "ITEM_TREE");
+				return editor.getCComplexObject(null, nodeId, editor.getDefaultOccurrences(1, 1), "ITEM_TREE");
 			}
 
 			//subject function
 			function addSubject(node) {
-				var subjectAttribute = editor.getCSingleAttribute([], editor.getDefaultExistence(1, 1), "subject");
+				var subjectAttribute = editor.getCSingleAttribute(null, editor.getDefaultExistence(1, 1), "subject");
 				node.oriNodeRef.attributes = pushTo(subjectAttribute, node.oriNodeRef.attributes);
 
 				return parser.processAttribute(subjectAttribute, node, node.children, $scope.ontology.term_definitions);
@@ -581,7 +615,7 @@ angular.module('clever.management.directives.editDefinitionPane', []).directive(
 			// PARTY_SELF, PARTY_IDENTIFIED, PARTY_RELATED
 			function addPartySelf(node) {
 				var nodeId = getNextNodeId();
-				var genericId = editor.getCComplexObject([], "", editor.getDefaultOccurrences(1, 1), "GENERIC_ID");
+				var genericId = editor.getCComplexObject(null, "", editor.getDefaultOccurrences(1, 1), "GENERIC_ID");
 				var id = editor.getCSingleAttribute(genericId, editor.getDefaultExistence(1, 1), "id");
 				var PARTY_REF = editor.getCComplexObject(id, "", editor.getDefaultOccurrences(1, 1), "PARTY_REF");
 				var externalRef = editor.getCSingleAttribute(PARTY_REF, editor.getDefaultExistence(1, 1), "externalRef");
@@ -594,7 +628,7 @@ angular.module('clever.management.directives.editDefinitionPane', []).directive(
 			}
 
 			function addPartyIdentified(node) {
-				var PARTY_IDNENTIFIED = editor.getCComplexObject([], "", editor.getDefaultOccurrences(0, 1), "PARTY_IDENTIFIED");
+				var PARTY_IDNENTIFIED = editor.getCComplexObject(null, "", editor.getDefaultOccurrences(0, 1), "PARTY_IDENTIFIED");
 				node.oriNodeRef.children = pushTo(PARTY_IDNENTIFIED, node.oriNodeRef.children);
 
 				return parser.myProcessNode(PARTY_IDNENTIFIED, node, node.children, $scope.ontology.term_definitions, node.childrenAttribute);
@@ -616,7 +650,7 @@ angular.module('clever.management.directives.editDefinitionPane', []).directive(
 
 			function addOtherParticipations(node) {
 				var nodeId = getNextNodeId();
-				var parObject = editor.getCComplexObject([], nodeId, editor.getDefaultOccurrences(0, 1), "PARTICIPATION");
+				var parObject = editor.getCComplexObject(null, nodeId, editor.getDefaultOccurrences(0, 1), "PARTICIPATION");
 				var otherParAttribute = editor.getCMultipleAttribute(parObject, editor.getDefaultCardinality(1), editor.getDefaultExistence(1, 1), "otherParticipations");
 				
 				node.oriNodeRef.attributes = pushTo(otherParAttribute, node.oriNodeRef.attributes);
@@ -626,7 +660,8 @@ angular.module('clever.management.directives.editDefinitionPane', []).directive(
 
 			function addParticipation(node) {
 				var nodeId = getNextNodeId();
-				var participation = editor.getCComplexObject([], nodeId, editor.getDefaultOccurrences(0, 1), "PARTICIPATION");			
+				var performer = editor.getCSingleAttribute(null, editor.getDefaultExistence(1,1), "performer");
+				var participation = editor.getCComplexObject([performer], nodeId, editor.getDefaultOccurrences(0, 1), "PARTICIPATION");			
 				
 				node.oriNodeRef.children = pushTo(participation, node.oriNodeRef.children);
 				editor.synchronizeOntology($scope.ontology, nodeId, "New Participation", "*");
@@ -638,7 +673,7 @@ angular.module('clever.management.directives.editDefinitionPane', []).directive(
 
 			// links function
 			function addLinks(node) {
-				var links = editor.getCSingleAttribute([], editor.getDefaultExistence(0, 1), "links");
+				var links = editor.getCSingleAttribute(null, editor.getDefaultExistence(0, 1), "links");
 				
 				node.oriNodeRef.attributes = pushTo(links, node.oriNodeRef.attributes);
 				return parser.processAttribute(links, node, node.children, $scope.ontology.term_definitions);
@@ -679,7 +714,7 @@ angular.module('clever.management.directives.editDefinitionPane', []).directive(
 			}
 
 			function addContent(node) {
-				var content = editor.getCSingleAttribute([], editor.getDefaultExistence(1, 1), 'content');
+				var content = editor.getCSingleAttribute(null, editor.getDefaultExistence(1, 1), 'content');
 				node.oriNodeRef.attributes = pushTo(content, node.oriNodeRef.attributes);
 
 				return parser.processAttribute(content, node, node.children, $scope.ontology.term_definitions);
@@ -689,7 +724,7 @@ angular.module('clever.management.directives.editDefinitionPane', []).directive(
 			//------------attribute for action archetype--------------------
 
 			function addIsmTransitions(node) {
-				var ism_transition = editor.getCSingleAttribute([], editor.getDefaultExistence(1, 1), "ism_transition");
+				var ism_transition = editor.getCSingleAttribute(null, editor.getDefaultExistence(1, 1), "ism_transition");
 				
 				node.oriNodeRef.attributes = pushTo(ism_transition, node.oriNodeRef.attributes);
 				return parser.processAttribute(ism_transition, node, node.children, $scope.ontology.term_definitions);
@@ -770,7 +805,7 @@ angular.module('clever.management.directives.editDefinitionPane', []).directive(
 				path = getPath(aimEvent);
 
 				var nodeId = getNextNodeId();
-				var EVENT = editor.getCComplexObject([], nodeId, editor.getDefaultOccurrences(1, 1), "EVENT");
+				var EVENT = editor.getCComplexObject(null, nodeId, editor.getDefaultOccurrences(1, 1), "EVENT");
 				if (path.dataPath) {
 					var dataRef = editor.getArchetypeInternalRef('ITEM_TREE', editor.getDefaultOccurrences(1, 1), path.dataPath);
 					var dataAttr = editor.getCSingleAttribute(dataRef, editor.getDefaultExistence(1, 1), "data");
@@ -1140,7 +1175,7 @@ angular.module('clever.management.directives.editDefinitionPane', []).directive(
 				if (value) {
 					var DV_TEXT = editor.getCComplexObject(value, "", editor.getDefaultOccurrences(1, 1), "DV_TEXT");
 				} else {
-					var DV_TEXT = editor.getCComplexObject([], "", editor.getDefaultOccurrences(1, 1), "DV_TEXT");
+					var DV_TEXT = editor.getCComplexObject(null, "", editor.getDefaultOccurrences(1, 1), "DV_TEXT");
 				}
 				//}
 				return DV_TEXT;
@@ -1160,7 +1195,7 @@ angular.module('clever.management.directives.editDefinitionPane', []).directive(
 				if (value) {
 					var DV_EHR_URI = editor.getCComplexObject(value, "", editor.getDefaultOccurrences(1, 1), "DV_EHR_URI");
 				} else {
-					var DV_EHR_URI = editor.getCComplexObject([], "", editor.getDefaultOccurrences(1, 1), "DV_EHR_URI");
+					var DV_EHR_URI = editor.getCComplexObject(null, "", editor.getDefaultOccurrences(1, 1), "DV_EHR_URI");
 				}
 
 				//}
@@ -1171,43 +1206,84 @@ angular.module('clever.management.directives.editDefinitionPane', []).directive(
 
 
 			//---------delete Element-------------
-			$scope.deleteElement = function() {
+		
+			
+			function deleteNode(node) {
+				node.parent.children.splice(node.parent.children.indexOf(node), 1);
 				
+				if (node.label.type == "type") {
+					if (node.parentAttribute) {
+						if(angular.isArray(node.parentAttribute.oriNodeRef.children)){
+						node.parentAttribute.oriNodeRef.children.splice(node.parentAttribute.oriNodeRef.children.indexOf(node.oriNodeRef), 1);
+					}else{
+						node.parentAttribute.oriNodeRef.children = undefined;
+					}
+					
+					}else if(node.parent){
+						if(angular.isArray(node.parent.oriNodeRef.children)){
+						node.parent.oriNodeRef.children.splice(node.parent.oriNodeRef.children.indexOf(node.oriNodeRef), 1);
+						}else{
+							node.parent.oriNodeRef.children = undefined;
+						}
+					}
+					
+				}
+
+				if (node.label.type == "attribute") {
+					if(angular.isArray(node.parent.oriNodeRef.attributes)){
+					node.parent.oriNodeRef.attributes.splice(node.parent.oriNodeRef.attributes.indexOf(node.oriNodeRef), 1);
+					}else{
+						node.parent.oriNodeRef.attributes = undefined;
+					}
+				}
 			};
+
+
 		},
 		link : function($scope, element, attrs) {
-			var typeList = ["ITEM_TREE", "ITEM_LIST", "ITEM_TABLE", "HISTORY"];
-			$scope.getTreeNodeLabel = function(node,nodeAliasName) {
+			//var typeList = ["ITEM_TREE", "ITEM_LIST", "ITEM_TABLE", "HISTORY"];
+			
+			$scope.getTreeNodeLabel = function(node, nodeAliasName) {
 				var picType = node.label.picType.toLowerCase();
 				if (picType.indexOf('<') != -1) {
 					picType = picType.replace(/(<dv)/, '_');
 					picType = picType.replace(/>/g, "");
 				}
 				var label = '';
-				label += '<span class="archetype-edit-icon ' + picType + '" style="padding: 7px 10px; background-position-y: 10px;"></span>';
-				if (typeList.indexOf(node.label.picType) != -1) {
-					label += '<span style="color: brown;">&nbsp' + node.label.text + '</span>';
-				} else if (node.label.code) {
+
+				if (node.label.slot) {
+					label += '<span class="archetype-edit-icon slot" style="padding: 7px 10px; background-position-y: 10px;"></span>';
+				} else {
+					label += '<span class="archetype-edit-icon ' + picType + '" style="padding: 7px 10px; background-position-y: 10px;"></span>';
+				}
+
+				// if (typeList.indexOf(node.label.picType) != -1) {
+					// label += '<span style="color: brown;">&nbsp' + node.label.text + '</span>';
+				// } else 
+				if (node.label.code) {
 					if (node.label.archetypeNode) {
 						label += '<span style="color: black;font-weight: bold;">&nbsp';
 					} else {
 						label += '<span style="color: brown;">&nbsp';
 					}
-
-					label += getOntologyByCode(node.label.code, $scope.ontology).text;
+					var tempOntology = getOntologyByCode(node.label.code, $scope.ontology);
+					if (tempOntology) {
+						label += tempOntology.text;
+					}
 					label += '</span>';
 				} else if (node.label.text) {
 					label += '<span style="color: brown;">&nbsp' + node.label.text + '</span>';
 				}
 
 				return label;
-			}; 
+			};
+
 			
            	$scope.getOntologyByCode = function(code) {
 				return getOntologyByCode(code, $scope.ontology);
 			};
 			
-			
+			//this function return the ontology which  has parsed
 			function getOntologyByCode(code, ontology) {
 				if (ontology && code) {
 					var matchedOntology;

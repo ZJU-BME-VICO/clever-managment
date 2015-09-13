@@ -62,19 +62,23 @@ angular.module('clever.management.directives.participationPane', []).directive('
 			}
 			
 			
+			
 			function resetState() {
-				$scope.attributes.performer.children = undefined;
-				if($scope.hasExternalRef.value){
+				if ($scope.attributes.performer) {
+					$scope.attributes.performer.children = undefined;
+				}
+				if ($scope.hasExternalRef) {
 					$scope.hasExternalRef.value = undefined;
 				}
-				
-				if($scope.hasName.value){
+
+				if ($scope.hasName) {
 					$scope.hasName.value = undefined;
 				}
-				if($scope.hasIdentifiers.value){
+				if ($scope.hasIdentifiers) {
 					$scope.hasIdentifiers.value = undefined;
 				}
 			}
+
 
 			//externalRef edit function
 
@@ -234,34 +238,37 @@ angular.module('clever.management.directives.participationPane', []).directive('
 				var attributes = participation.oriNodeRef.attributes;
 				if (angular.isArray(attributes)) {
 					angular.forEach(attributes, function(attribute) {
+						
 						if (attribute.rm_attribute_name == "performer") {
 							$scope.attributes.performer = attribute;
+							if (attribute.children) {
+								$scope.performerType.value = attribute.children.rm_type_name;
+								var tempAttributes = attribute.children.attributes;
 
-							$scope.performerType.value = attribute.children.rm_type_name;
-							var tempAttributes = attribute.children.attributes;
-
-							if (tempAttributes) {
-								if (angular.isArray(tempAttributes)) {
-									angular.forEach(tempAttributes, function(value) {
-										if (value.rm_attribute_name == "externalRef") {
-											$scope.hasExternalRef = {
-												value : true
-											};
-										}
-										if (value.rm_attribute_name == "name") {
-											$scope.hasName = {
-												value : true
-											};
-										}
-										if (value.rm_attribute_name == "identifiers") {
-											$scope.hasIdentifiers = {
-												value : true
-											};
-										}
-									});
+								if (tempAttributes) {
+									if (angular.isArray(tempAttributes)) {
+										angular.forEach(tempAttributes, function(value) {
+											if (value.rm_attribute_name == "externalRef") {
+												$scope.hasExternalRef = {
+													value : true
+												};
+											}
+											if (value.rm_attribute_name == "name") {
+												$scope.hasName = {
+													value : true
+												};
+											}
+											if (value.rm_attribute_name == "identifiers") {
+												$scope.hasIdentifiers = {
+													value : true
+												};
+											}
+										});
+									}
 								}
 							}
 						}
+
 						if (attribute.rm_attribute_name == "mode") {
 							$scope.hasMode = {
 								value : true

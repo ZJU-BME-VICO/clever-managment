@@ -550,23 +550,7 @@ angular.module('clever.management.service.archetypeEdit', []).service('archetype
 		};
 	};
 
-	this.attributeCheck = function(node) {
 
-		if (node.oriNodeRef.attributes && node.childrenAttribute) {
-			return;
-		} else if ((!node.oriNodeRef.attributes||node.oriNodeRef.attributes.length == 0) && !node.childrenAttribute) {
-			var multiAttribute = this.getCMultipleAttribute([], this.getDefaultCardinality(1), this.getDefaultExistence(1, 1), "items");
-			node.oriNodeRef.attributes = multiAttribute;
-
-			var attribute = this.getAttribute(this.getDefaultCardinality(1), "items", multiAttribute);
-
-			node.childrenAttribute = attribute;
-			//node.children = [];
-
-		}
-
-	};
-	
 	
 	
 	//package the base function 
@@ -589,7 +573,7 @@ angular.module('clever.management.service.archetypeEdit', []).service('archetype
 	
 	this.getPARTY_SELF = function(){
 		//return this.getCComplexObject([], '', this.getDefaultOccurrences(1,1), "PARTY_SELF");
-		return this.getComplexObject([], '', [1,1], "PARTY_SELF");
+		return this.getComplexObject(null, '', [1,1], "PARTY_SELF");
 	};
 	
 	this.getPARTY_RELATED = function() {
@@ -607,7 +591,7 @@ angular.module('clever.management.service.archetypeEdit', []).service('archetype
 		//var name = this.getCSingleAttribute([], this.getDefaultExistence(1,1),"name");
 		//var identifiers  = this.getCSingleAttribute([this.getDV_IDENTIFIER()], this.getDefaultExistence(1,1), "identifiers");
 		//return this.getCComplexObject([], '', this.getDefaultOccurrences(1,1), "PARTY_IDENTIFIED");
-		return this.getComplexObject([], '', [1,1], 'PARTY_IDENTIFIED');
+		return this.getComplexObject(null, '', [1,1], 'PARTY_IDENTIFIED');
 		
 	};
 	
@@ -619,7 +603,7 @@ angular.module('clever.management.service.archetypeEdit', []).service('archetype
 	};
 	
 	this.getGENERIC_ID = function(){
-		return this.getComplexObject([], '', [1,1], "GENERIC_ID" );
+		return this.getComplexObject(null, '', [1,1], "GENERIC_ID" );
 	};
 
 
@@ -638,7 +622,7 @@ angular.module('clever.management.service.archetypeEdit', []).service('archetype
 		return DV_CODED_TEXT;
     };
     this.getDV_TEXT = function(){
-    	return this.getComplexObject([], '', [1,1], "DV_TEXT");
+    	return this.getComplexObject(null, '', [1,1], "DV_TEXT");
     };
     
     //get primitive object

@@ -169,15 +169,27 @@ angular.module('clever.management.directives.treeView', []).directive('treeView'
 						node.collapsed = true;
 					});
 				},
-				locateNode: function(node){
 				
-					node.selected = 'selected';
+				locateNode: function(node) {
+
+					//node.selected = 'selected';
 					//set currentNode
+					//$scope.setCurrentNode(node);
+
+					//$scope.clickNodeLabel(node);
+					if ($scope.getCurrentNode() && $scope.getCurrentNode().selected) {
+						$scope.getCurrentNode().selected = undefined;
+					}
+
+					node.selected = 'selected';
+
 					$scope.setCurrentNode(node);
 
 					$scope.clickNode(node);
+
 					$scope.doubleClickNode(node);
 				},
+
 				search : function(keyword) {
 					$scope.keyword = keyword;
 					if (keyword != '') {
