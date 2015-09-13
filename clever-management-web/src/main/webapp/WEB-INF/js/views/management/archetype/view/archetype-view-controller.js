@@ -4,6 +4,99 @@ function ArchetypeViewCtrl($scope, $timeout, busyService, resourceService, ARCHE
 	$scope.tabControl = {};
 	$scope.tabs = [];
 	$scope.isArchetypeListHidden = false;
+	var cluster = {
+		isDirectory : true,
+		type : 'cluster',
+		name : 'Cluster',
+		specialisedArchetypeMasters : [],
+	};
+	var composition = {
+		isDirectory : true,
+		type : 'composition',
+		name : 'Composition',
+		specialisedArchetypeMasters : [],
+	};
+	var element = {
+		isDirectory : true,
+		type : 'element',
+		name : 'Element',
+		specialisedArchetypeMasters : [],
+	};
+	var action = {
+		isDirectory : true,
+		type : 'action',
+		name : 'Action',
+		specialisedArchetypeMasters : [],
+	};
+	var evaluation = {
+		isDirectory : true,
+		type : 'evaluation',
+		name : 'Evaluation',
+		specialisedArchetypeMasters : [],
+	};
+	var observation = {
+		isDirectory : true,
+		type : 'observation',
+		name : 'Observation',
+		specialisedArchetypeMasters : [],
+	};
+	var instruction = {
+		isDirectory : true,
+		type : 'instruction',
+		name : 'Instruction',
+		specialisedArchetypeMasters : [],
+	};
+	var admin = {
+		isDirectory : true,
+		type : 'admin',
+		name : 'Admin',
+		specialisedArchetypeMasters : [],
+	};
+	var entry = {
+		isDirectory : true,
+		type : 'folder',
+		name : 'Entry',
+		collapsed : false,
+		specialisedArchetypeMasters : [action, evaluation, observation, instruction, admin],
+	};
+	var section = {
+		isDirectory : true,
+		type : 'section',
+		name : 'Section',
+		specialisedArchetypeMasters : [],
+	};
+	var stucture = {
+		isDirectory : true,
+		type : 'ehr-structure',
+		name : 'Stucture',
+		specialisedArchetypeMasters : [],
+	};
+	var demographic = {
+		isDirectory : true,
+		type : 'folder',
+		name : 'Demographic Model Archetypes',
+		specialisedArchetypeMasters : [],
+	};
+	var archetypeList = [{
+		isDirectory : true,
+		type : 'folder',
+		name : 'EHR Archetypes',
+		collapsed : false,
+		specialisedArchetypeMasters : [cluster, composition, element, entry, section, stucture],
+	}, demographic];
+	var archetypeListMap = {
+		cluster : cluster.specialisedArchetypeMasters,
+		composition : composition.specialisedArchetypeMasters,
+		element : composition.specialisedArchetypeMasters,
+		action : action.specialisedArchetypeMasters,
+		evaluation : evaluation.specialisedArchetypeMasters,
+		observation : observation.specialisedArchetypeMasters,
+		instruction : instruction.specialisedArchetypeMasters,
+		admin_entry : admin.specialisedArchetypeMasters,
+		section : section.specialisedArchetypeMasters,
+		stucture : stucture.specialisedArchetypeMasters,
+		demographic : demographic.specialisedArchetypeMasters,
+	};
 
 	$scope.tabContainerHeight = {
 		value : $scope.$parent.containerHeight - 35
@@ -16,7 +109,24 @@ function ArchetypeViewCtrl($scope, $timeout, busyService, resourceService, ARCHE
 
 	var busyId = busyService.pushBusy('BUSY_LOADING');
 	resourceService.get(ARCHETYPE_LIST_URL).then(function(list) {
-		$scope.archetypeList = list;
+		angular.forEach(archetypeListMap, function(value, key) {
+			value.length = 0;
+		});
+		angular.forEach(list, function(master, index) {
+			if (master.rmName == 'DEMOGRAPHIC') {
+				archetypeListMap['demographic'].push(master);
+			} else {
+				var masters = archetypeListMap[master.rmEntity.toLowerCase()];
+				if (master == undefined) {
+					console.log('Cannot classify archetype ' + master.name);
+				} else {
+					masters.push(master);
+				}
+			}
+		});
+		$scope.archetypeList = [];
+		$scope.archetypeList = archetypeList;
+		// Classify
 		busyService.popBusy(busyId);
 	});
 
@@ -38,23 +148,27 @@ function ArchetypeViewCtrl($scope, $timeout, busyService, resourceService, ARCHE
 	};
 
 	$scope.createNewMasterTab = function(master) {
-		var tabId = 'master_' + master.id;
-		if (containsTabId(tabId) < 0) {
-			var count = $scope.tabs.push({
-				id : tabId,
-				type : 'archetype master',
-				title : master.name,
-				content : undefined,
-			});
-			var tab = $scope.tabs[count - 1];
-			$timeout(function() {
+		if (!master.isDirectory) {
+			var tabId = 'master_' + master.id;
+			if (containsTabId(tabId) < 0) {
+				var count = $scope.tabs.push({
+					id : tabId,
+					type : 'archetype master',
+					title : master.name,
+					content : undefined,
+				});
+				var tab = $scope.tabs[count - 1];
+				$timeout(function() {
+					$scope.tabControl.selectTabById(tabId);
+				}, 0);
+				var busy = busyService.pushBusy('BUSY_LOADING');
+				resourceService.get(ARCHETYPE_MASTER_BY_ID_URL + master.id).then(function(masterInfo) {
+					tab.content = masterInfo;
+					busyService.popBusy(busy);
+				});
+			} else {
 				$scope.tabControl.selectTabById(tabId);
-			}, 0);
-			resourceService.get(ARCHETYPE_MASTER_BY_ID_URL + master.id).then(function(masterInfo) {
-				tab.content = masterInfo;
-			});
-		} else {
-			$scope.tabControl.selectTabById(tabId);
+			}
 		}
 	};
 
@@ -71,8 +185,10 @@ function ArchetypeViewCtrl($scope, $timeout, busyService, resourceService, ARCHE
 			$timeout(function() {
 				$scope.tabControl.selectTabById(tabId);
 			}, 0);
+			var busy = busyService.pushBusy('BUSY_LOADING');
 			resourceService.get(ARCHETYPE_BY_ID_URL + archetype.id).then(function(archetypeInfo) {
 				tab.content = archetypeInfo;
+				busyService.popBusy(busy);
 			});
 		} else {
 			$scope.tabControl.selectTabById(tabId);

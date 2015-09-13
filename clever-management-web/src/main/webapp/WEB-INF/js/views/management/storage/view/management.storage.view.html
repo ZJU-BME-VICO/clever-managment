@@ -3,7 +3,7 @@
 		<div class="panel panel-default" ng-show="!isTemplateListHidden">
 			<div class="panel-heading">
 				<div class="input-group">
-					<input type="text" class="form-control" ng-model="templateListFilter">
+					<input type="text" class="form-control" ng-model="templateListFilter" placeholder="{{'SEARCH_HINT' | translate}}">
 					<span class="input-group-btn">
 						<button class="btn btn-default" type="button" ng-click="expand()">
 							<span class="glyphicon glyphicon-plus"></span>
@@ -28,9 +28,11 @@
 						<span class="clever-icon collapsed" style="padding: 0 6px;height: 12px;background-position-y: 6px;"></span>
 					</tree-collapsed-icon>
 					<tree-node-label>
-						<img ng-class="node.lifecycleState | lowercase" class="clever-icon" style="padding: 0 10px;height: 16px;"></img>
-						<span ng-bind-html="node.conceptName | highlight:keyword | unsafe"></span>
-						&nbsp;<span style="color: grey;font-size: 10pt;">(<span ng-bind="node.latestTemplateVersion"></span>)</span>
+						<img ng-show="node.isDirectory" ng-class="node.type | lowercase" class="clever-icon list" style="padding: 0 10px;height: 16px;"></img>
+						<span ng-show="node.isDirectory" ng-bind="node.name"></span>
+						<img ng-show="!node.isDirectory" ng-class="node.lifecycleState | lowercase" class="clever-icon" style="padding: 0 10px;height: 16px;"></img>
+						<span ng-show="!node.isDirectory" ng-bind-html="node.conceptName | highlight:keyword | unsafe"></span>
+						&nbsp;<span ng-show="!node.isDirectory" style="color: grey;font-size: 10pt;">(<span ng-bind="node.latestTemplateVersion"></span>)</span>
 					</tree-node-label>
 				</tree-view>
 			</div>
@@ -41,23 +43,21 @@
 			<i style="cursor: pointer" ng-click="isTemplateListHidden = !isTemplateListHidden" ng-show="!isTemplateListHidden" tooltip-placement="right" tooltip="Collapse" tooltip-popup-delay="500"> <span class="glyphicon glyphicon-chevron-left" ng-style="{'margin-top': containerHeight/2}" ></span> </i>
 		</splitter>
 		<div class="col-xs-12 col-md-12 col-lg-12 flex-box">
-			<div class="col-xs-12 col-md-12 col-lg-12 flex-box">
-				<tabset class="row" tab-control="tabControl">
-					<tab ng-repeat="tab in tabs" closable="true" select="select(tab)" close="close(tab)" id="tab.id">
-						<tab-heading tooltip-placement="top" tooltip-popup-delay='500' tooltip='{{tab.title}}'>
-							<span class="clever-icon" ng-class="tab.type" style="padding: 0px 10px;background-size: 18px;"></span>
-							<sapn>
-								&nbsp;{{getFixedTitle(tab.title)}}</span>
-						</tab-heading>
-						<div class="col-xs-12 col-md-12 col-lg-12" ng-switch="tab.type">
-							<template-master-pane ng-switch-when="template master" template-master-info="tab.content" max-height="tabContainerHeight" select-template-callback="createNewTemplateTab(value)" select-archetype-callback="createNewArchetypeTab(value)" select-master-callback="createNewArchetypeMasterTab(value)"></template-master-pane>
-							<storage-template-pane ng-switch-when="template" template-info="tab.content" max-height="tabContainerHeight" select-archetype-callback="createNewArchetypeTab(value)" select-master-callback="createNewTemplateMasterTab(value)"></storage-template-pane>
-							<archetype-master-pane ng-switch-when="archetype master" archetype-master-info="tab.content" max-height="tabContainerHeight" select-archetype-callback="createNewArchetypeTab(value)" select-master-callback="createNewArchetypeMasterTab(value)"></archetype-master-pane>
-							<archetype-pane ng-switch-when="archetype" archetype-info="tab.content" max-height="tabContainerHeight" select-archetype-callback="createNewArchetypeTab(value)" select-master-callback="createNewArchetypeMasterTab(value)"></archetype-pane>
-						</div>
-					</tab>
-				</tabset>
-			</div>
+			<tabset class="row" tab-control="tabControl">
+				<tab ng-repeat="tab in tabs" closable="true" select="select(tab)" close="close(tab)" id="tab.id">
+					<tab-heading tooltip-placement="top" tooltip-popup-delay='500' tooltip='{{tab.title}}'>
+						<span class="clever-icon" ng-class="tab.type" style="padding: 0px 10px;background-size: 18px;"></span>
+						<sapn>
+							&nbsp;{{getFixedTitle(tab.title)}}</span>
+					</tab-heading>
+					<div class="col-xs-12 col-md-12 col-lg-12" ng-switch="tab.type">
+						<template-master-pane ng-switch-when="template master" template-master-info="tab.content" max-height="tabContainerHeight" select-template-callback="createNewTemplateTab(value)" select-archetype-callback="createNewArchetypeTab(value)" select-master-callback="createNewArchetypeMasterTab(value)"></template-master-pane>
+						<storage-template-pane ng-switch-when="template" template-info="tab.content" max-height="tabContainerHeight" select-archetype-callback="createNewArchetypeTab(value)" select-master-callback="createNewTemplateMasterTab(value)"></storage-template-pane>
+						<archetype-master-pane ng-switch-when="archetype master" archetype-master-info="tab.content" max-height="tabContainerHeight" select-archetype-callback="createNewArchetypeTab(value)" select-master-callback="createNewArchetypeMasterTab(value)"></archetype-master-pane>
+						<archetype-pane ng-switch-when="archetype" archetype-info="tab.content" max-height="tabContainerHeight" select-archetype-callback="createNewArchetypeTab(value)" select-master-callback="createNewArchetypeMasterTab(value)"></archetype-pane>
+					</div>
+				</tab>
+			</tabset>
 		</div>
 	</div>
 </div>

@@ -5,13 +5,14 @@
 	<div class="row">
 	    <ul class="list-group" ng-style="{height: containerHeight - 80}" style="overflow: auto;">
 	        <li class="list-group-item" ng-repeat="templateFile in templateFiles" style="overflow: hidden;">
-	            {{templateFile.name}}&nbsp;&nbsp;<span style="color: red;">{{'STORAGE_TEMPLATE_VERIFY_EDITOR' | translate}}: {{templateFile.editorName}}</span>
+	            {{templateFile.name}}
 	            <div class="btn-group pull-right btn-group-sm" role="group">
 	                <button type="button" class="btn btn-default" ng-click="oetTemplateFile(templateFile)">{{'STORAGE_TEMPLATE_VERIFY_OET_DIFF' | translate}}</button>
 	                <button type="button" class="btn btn-default" ng-click="approveTemplateFile(templateFile)">{{'STORAGE_TEMPLATE_VERIFY_APPROVE' | translate}}</button>
 	                <button type="button" class="btn btn-default" ng-click="rejectTemplateFile(templateFile)">{{'STORAGE_TEMPLATE_VERIFY_REJECT' | translate}}</button>
 	                <button type="button" class="btn btn-default" ng-click="removeTemplateFile(templateFile)">{{'STORAGE_TEMPLATE_VERIFY_REMOVE' | translate}}</button>
 	            </div>
+	            <span style="color: red;">{{'STORAGE_TEMPLATE_VERIFY_EDITOR' | translate}}: {{templateFile.editorName}}</span>&nbsp;&nbsp;&nbsp;&nbsp;
 	        </li>
 	    </ul>
    </div>

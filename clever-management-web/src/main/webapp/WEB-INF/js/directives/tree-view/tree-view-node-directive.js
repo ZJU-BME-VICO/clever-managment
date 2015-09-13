@@ -5,14 +5,16 @@ angular.module('clever.management.directives.treeViewNode', []).directive('treeV
 
 			var nodeAliasName = scope.getNodeAliasName();
 			var nodeData = scope[nodeAliasName] = scope.$eval(attrs[nodeAliasName]);
-			nodeData.collapsed = true;
+			if (nodeData.collapsed == undefined) {
+				nodeData.collapsed = true;
+			}
 			nodeData.show = true;
 			scope.getNodes().push(nodeData);
 			scope.childNodes = nodeData[scope.getNodeChildren()];
 			var parentIndex = attrs.nodeIndex || '';
 			var prefix = scope.menuPrefix || '';
 			var template = '<ul>' + 
-								'<li>' + 
+								'<li ng-class="' + nodeAliasName + '.collapsed ? \'collapsed\' : \'expanded\'">' + 
 									'<span ng-if="childNodes.length" ng-show="!' + nodeAliasName + '.collapsed" ng-click="selectNodeHead(' + nodeAliasName + ')">' + 
 										scope.getExpandedIconElement() + '</span>' + 
 									'<span ng-if="childNodes.length" ng-show="' + nodeAliasName + '.collapsed" ng-click="selectNodeHead(' + nodeAliasName + ')">' + scope.getCollapsedIconElement() + '</span>' + 

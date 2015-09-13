@@ -44,32 +44,52 @@
 
  
 /* Reference model type */
-.clever-icon.action {
+.clever-icon.list.action {
 	background-image: url("../img/archetype/action.png");
 	background-repeat: no-repeat;
 }
-.clever-icon.evaluation {
+.clever-icon.list.evaluation {
 	background-image: url("../img/archetype/evaluation.png");
 	background-repeat: no-repeat;
 }
-.clever-icon.observation {
+.clever-icon.list.observation {
 	background-image: url("../img/archetype/observation.png");
 	background-repeat: no-repeat;
 }
-.clever-icon.instruction {
+.clever-icon.list.instruction {
 	background-image: url("../img/archetype/instruction.png");
 	background-repeat: no-repeat;
 }
-.clever-icon.admin {
+.clever-icon.list.admin {
 	background-image: url("../img/archetype/admin.png");
 	background-repeat: no-repeat;
 }
-.clever-icon.cluster {
+.clever-icon.list.cluster {
 	background-image: url("../img/archetype/cluster.png");
 	background-repeat: no-repeat;
 }
-.clever-icon.section {
+.clever-icon.list.section {
 	background-image: url("../img/archetype/section.png");
+	background-repeat: no-repeat;
+}
+.clever-icon.list.element {
+	background-image: url("../img/archetype/element.png");
+	background-repeat: no-repeat;
+}
+.clever-icon.list.composition {
+	background-image: url("../img/archetype/composition.png");
+	background-repeat: no-repeat;
+}
+.collapsed > span > span > .clever-icon.list.folder {
+	background-image: url("../img/archetype/folder.gif");
+	background-repeat: no-repeat;
+}
+.expanded > span > span > .clever-icon.list.folder {
+	background-image: url("../img/archetype/folder-open.gif");
+	background-repeat: no-repeat;
+}
+.clever-icon.list.ehr-structure {
+	background-image: url("../img/archetype/structure.png");
 	background-repeat: no-repeat;
 }
 
