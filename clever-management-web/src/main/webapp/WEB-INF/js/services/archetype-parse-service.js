@@ -265,27 +265,22 @@ angular.module('clever.management.services.archetypeParse', []).service('archety
 		definitions.tableItems = [];
 		definitions.treeItems = [];
 		var terminologies = parseTermDefinition(archetype.ontology.term_definitions);
-		processNode(archetype.definition, undefined, definitions.treeItems, definitions.tableItems, terminologies);
+		processNode(archetype.definition, undefined,undefined, definitions.treeItems, definitions.tableItems, terminologies);
 		return definitions;
 	};
 
-	function processNode(node, parent, treeItems, tableItems, terminologies) {
+	function processNode(node, parent,parsedParent, treeItems, tableItems, terminologies) {
 		if (angular.isArray(node)) {
 			angular.forEach(node, function(value) {
-				var extractedNode = extractNode(value, terminologies);
-				value.parent = parent;
+			    value.parent = parent;
+				var extractedNode = extractNode(value,parsedParent,terminologies);				
 				if (value.attributes) {
 					extractedNode.children = [];
-					processNode(value.attributes, value, extractedNode.children, tableItems, terminologies);
+					processNode(value.attributes, value, extractedNode,extractedNode.children, tableItems, terminologies);
 				} else if (value.children) {
 					extractedNode.children = [];
-					processNode(value.children, value, extractedNode.children, tableItems, terminologies);
-				} else {
-					/*var leafNode = extractLeafNode(value);
-					 if (leafNode) {
-					 tableItems.push(leafNode);
-					 }*/
-				}
+					processNode(value.children, value,extractedNode, extractedNode.children, tableItems, terminologies);
+				} 
 				if (value.parent && value.parent.parent && value.parent.parent.rm_type_name == 'ELEMENT') {
 					var leafNode = extractLeafNode(value);
 					if (leafNode) {
@@ -295,19 +290,14 @@ angular.module('clever.management.services.archetypeParse', []).service('archety
 				treeItems.push(extractedNode);
 			});
 		} else {
-			var extractedNode = extractNode(node, terminologies);
-			node.parent = parent;
+		    node.parent = parent;
+			var extractedNode = extractNode(node,parsedParent,terminologies);			
 			if (node.attributes) {
 				extractedNode.children = [];
-				processNode(node.attributes, node, extractedNode.children, tableItems, terminologies);
+				processNode(node.attributes, node, extractedNode,extractedNode.children, tableItems, terminologies);
 			} else if (node.children) {
 				extractedNode.children = [];
-				processNode(node.children, node, extractedNode.children, tableItems, terminologies);
-			} else {
-				/*var leafNode = extractLeafNode(value);
-				 if (leafNode) {
-				 tableItems.push(leafNode);
-				 }*/
+				processNode(node.children, node,extractedNode,extractedNode.children, tableItems, terminologies);
 			}
 			if (node.parent && node.parent.parent && node.parent.parent.rm_type_name == 'ELEMENT') {
 				var leafNode = extractLeafNode(node);
@@ -319,8 +309,8 @@ angular.module('clever.management.services.archetypeParse', []).service('archety
 		}
 	}
 
-	function extractNode(node, term_definitions) {
-		var type, attribute, code, occurrences, existence, cardinality, cnname, enname, dataType, picType, tableName, targetPath, name;
+	function extractNode(node,parsedParent,term_definitions) {
+		var type, attribute, code, occurrences, existence, cardinality, path,cnname, enname, dataType, picType, tableName, targetPath, name;
 		var dataValue = [];
 		var dataInfo = [];
 
@@ -397,28 +387,6 @@ angular.module('clever.management.services.archetypeParse', []).service('archety
 						setDataInfo(nodeAttributes.children, dataInfo);
 					}
 				}
-				// if (node.attributes.length == undefined) {
-				//     dType = node.attributes.children.rm_type_name;
-				//     dIndex = node.attributes.children;
-				//     dataInfo.push({
-				//         dataType: dType,
-				//         dataValue: dIndex
-				//     });
-				// } else {
-				//     var i = 0; //heart failure   typical smoke amount
-				//     while (node.attributes[i]) {
-				//         if (node.attributes[i].children) {
-				//             dType = node.attributes[i].children.rm_type_name;
-				//             dIndex = node.attributes[i].children;
-				//             dataInfo.push({
-				//                 dataType: dType,
-				//                 dataValue: dIndex
-				//             });
-				//         }
-				//         i++;
-				//     }
-				//     //dataType=node.attributes[0].children.rm_type_name;
-				// }
 
 			} else {
 				dataType = 'ANY';
@@ -436,33 +404,14 @@ angular.module('clever.management.services.archetypeParse', []).service('archety
 			}
 		}
 		//real name of items
-		// if (node.attributes) {
-		//     if (node.attributes.length > 1) {
-		//         var count;
-		//         for (var i = 0; i < node.attributes.length - 1; i++) {
-		//             if (node.attributes[i].rm_attribute_name == "name") {
-		//                 count = i;
-		//             }
-		//         }
-		//         if (count != undefined) {
-		//             if (node.attributes[count].children.attributes) {
-		//                 if (node.attributes[count].children.attributes.rm_attribute_name == "value") {
-		//                     if (node.attributes[count].children.attributes.children.item) {
-		//                         name = node.attributes[count].children.attributes.children.item.list;
-		//                     }
-		//                 }
-		//             }
-		//         }
-		//     }
-		// }
-
 		if (!name) {
 			if (term_definitions && code) {
-				name = getDefinition(code, term_definitions, "zh-cn");
+				cnname = getDefinition(code, term_definitions, "zh-cn");
 				enname = getDefinition(code, term_definitions, "en");
 				tableName = term_definitions[0].items[0].text;
 			} else {
-				name = label;
+				cnname = label;
+				enname=label;
 			}
 		}
 
@@ -471,6 +420,25 @@ angular.module('clever.management.services.archetypeParse', []).service('archety
 		} else {
 			picType = label;
 		}
+		if(parsedParent){
+		    if(parsedParent.label.path){
+		        if(labelType=='type'){
+		            if(code){
+                          path =parsedParent.label.path+"[" + code + "]";        
+                        } 
+                    else{
+                        path=parsedParent.label.path;
+                    }
+		        }
+		        else if(labelType='attribute'){
+                        path =parsedParent.label.path+"/" + label;
+		        }
+        	}else{
+        	    if(labelType='attribute'){
+                        path ="/" + label;
+                }
+        	}        	
+		  }
 		return {
 			label : {
 				type : labelType,
@@ -478,23 +446,24 @@ angular.module('clever.management.services.archetypeParse', []).service('archety
 				code : code,
 				occurrences : occurrences,
 				existence : existence,
-				cardinality : cardinality,
-				labelContent : name,
-				enText : enname,
+				cardinality : cardinality,				
+				labelContent : cnname,//display content
+				enText : enname,//useless if path is ok
 				dataType : dataType,
 				picType : picType,
-				dataValue : dataValue,
+				dataValue : dataValue,//for default values
 				dataInfo : dataInfo,
 				tableName : tableName,
+				path : path,//for element id
+				
 				targetPath : targetPath,
-
 				slot : archetypeSlot,
 				includes : includes,
 				excludes : excludes
 			}
 		};
 	}
-
+//reach for default values 
 	function setDataValue(dataInfo, dataValue, term_definitions) {
 		if (dataInfo.dataType == "DV_ORDINAL") {
 			var valueList = dataInfo.dataValue.list;
@@ -548,7 +517,7 @@ angular.module('clever.management.services.archetypeParse', []).service('archety
 			});
 		}
 	}
-
+//get different ontology
 	function getDefinition(code, terminologies, language) {
 		var name = "";
 		var term_definitions;
