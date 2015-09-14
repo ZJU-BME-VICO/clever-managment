@@ -167,6 +167,7 @@ angular.module('clever.management.i18n.zh', ['pascalprecht.translate']).config(f
 
 		// Menu
 		MENU_RETURN : '返回上一级',
+		MENU_ENTER : '进入>>',
 		MENU_HOME : '首页',
 		MENU_MANAGEMENT : '管理功能',
 		MENU_MANAGEMENT_BRIEF : '简介',

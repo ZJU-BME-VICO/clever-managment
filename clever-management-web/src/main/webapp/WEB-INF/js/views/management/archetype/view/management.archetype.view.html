@@ -28,7 +28,7 @@
 						<span ng-show="node.isDirectory" ng-bind="node.name"></span>
 						<img ng-show="!node.isDirectory" ng-class="node.lifecycleState | lowercase" class="clever-icon list" style="padding: 0 10px;height: 16px;"></img>
 						<span ng-show="!node.isDirectory" ng-bind-html="node.conceptName | highlight:keyword | unsafe"></span>
-						&nbsp;<span ng-show="!node.isDirectory" style="color: grey;font-size: 10pt;">(<span ng-bind="node.version"></span>)</span>
+						&nbsp;<span ng-show="!node.isDirectory" style="color: grey;font-size: 10pt;">(<span ng-bind="node.latestVersionMasterVersion"></span>)</span>
 					</tree-node-label>
 				</tree-view>
 			</div>
