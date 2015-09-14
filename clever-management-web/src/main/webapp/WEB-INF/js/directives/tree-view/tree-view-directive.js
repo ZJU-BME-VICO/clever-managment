@@ -24,9 +24,7 @@ angular.module('clever.management.directives.treeView', []).directive('treeView'
 		},
 		controller : function($scope, $transclude) {
 			
-			
-			
-			
+
 			var nodes = [];
 
 			$scope.getNodes = function(){
@@ -115,14 +113,20 @@ angular.module('clever.management.directives.treeView', []).directive('treeView'
 					value : node,
 				});
 			};
-			
-			
+	
 			$scope.getNodeLabel = function(node, aliasName) {
+				
 				if (treeNodeLabelElement) {
 					return '<span class="' + $scope.getNodeLabelClass() + '">' + $scope.getTreeNodeLabelElement() + '</span>';
 				}else if($scope.nodeLabelGenerator){
 					if ($scope.nodeMenuGenerator) {
-						return $scope.nodeLabelGenerator(node, aliasName);
+						
+					//	return $scope.nodeLabelGenerator(node, aliasName);
+						
+					
+					return '<span class="' + $scope.getNodeLabelClass() + 
+							'" ng-bind-html="nodeLabelGenerator(' + $scope.getNodeAliasName() + ',\''+ $scope.getNodeAliasName()  +'\') | unsafe"></span>';
+						
 					} else {
 						return '<span class="' + $scope.getNodeLabelClass() + 
 							'" ng-bind-html="nodeLabelGenerator(' + $scope.getNodeAliasName() + ') | unsafe"></span>';
@@ -153,30 +157,7 @@ angular.module('clever.management.directives.treeView', []).directive('treeView'
 				}	
 				
 			});
-			
-		// this function is not safe,may generate a bug sometimes
-			$scope.$watch('treeData.length', function(newValue, oldValue) {
-
-				if (newValue && oldValue) {
-					var node = $scope.treeData[$scope.treeData.length - 1];
-					//if(node.selected)
-					if ($scope.getCurrentNode() && $scope.getCurrentNode().selected) {
-						$scope.getCurrentNode().selected = undefined;
-					}
-
-					//set highlight to selected node
-					node.selected = 'selected';
-
-					//set currentNode
-					$scope.setCurrentNode(node);
-
-					$scope.clickNode(node);
-					$scope.doubleClickNode(node);
-
-				}
-			}); 
-
-			
+					
 			$scope.treeControl = {
 				expandAll : function() {
 					angular.forEach(nodes, function(node) {
@@ -188,6 +169,27 @@ angular.module('clever.management.directives.treeView', []).directive('treeView'
 						node.collapsed = true;
 					});
 				},
+				
+				locateNode: function(node) {
+
+					//node.selected = 'selected';
+					//set currentNode
+					//$scope.setCurrentNode(node);
+
+					//$scope.clickNodeLabel(node);
+					if ($scope.getCurrentNode() && $scope.getCurrentNode().selected) {
+						$scope.getCurrentNode().selected = undefined;
+					}
+
+					node.selected = 'selected';
+
+					$scope.setCurrentNode(node);
+
+					$scope.clickNode(node);
+
+					$scope.doubleClickNode(node);
+				},
+
 				search : function(keyword) {
 					$scope.keyword = keyword;
 					if (keyword != '') {

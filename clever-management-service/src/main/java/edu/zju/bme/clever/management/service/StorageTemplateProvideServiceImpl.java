@@ -44,37 +44,35 @@ public class StorageTemplateProvideServiceImpl implements
 	@Override
 	public void exportStorageTemplates(OutputStream out)
 			throws ResourceExportException {
-		try {
-			ZipOutputStream zipOut = new ZipOutputStream(out);
-			BufferedInputStream origin = null;
-			InputStream in = null;
+		try (ZipOutputStream zipOut = new ZipOutputStream(out)) {
 			ZipEntry entry = null;
 			byte data[] = new byte[BUFFER];
 			int count;
 			for (TemplateRevisionFile file : this.templateFileRepo
 					.findByTemplateTypeAndLifecycleStateFetchAll(
 							TemplateType.STORAGE, LifecycleState.PUBLISHED)) {
-				in = new ByteArrayInputStream(file.getOet().getBytes(
-						StandardCharsets.UTF_8));
-				origin = new BufferedInputStream(in, BUFFER);
-				entry = new ZipEntry(file.getName() + ".oet");
-				zipOut.putNextEntry(entry);
-				while ((count = origin.read(data, 0, BUFFER)) != -1) {
-					zipOut.write(data, 0, count);
+				try (InputStream in = new ByteArrayInputStream(file.getOet()
+						.getBytes(StandardCharsets.UTF_8));
+						BufferedInputStream origin = new BufferedInputStream(
+								in, BUFFER)) {
+					entry = new ZipEntry(file.getName() + ".oet");
+					zipOut.putNextEntry(entry);
+					while ((count = origin.read(data, 0, BUFFER)) != -1) {
+						zipOut.write(data, 0, count);
+					}
 				}
-				origin.close();
-				in = new ByteArrayInputStream(file.getPropertyValue(
-						TemplatePropertyType.ARM).getBytes(
-						StandardCharsets.UTF_8));
-				origin = new BufferedInputStream(in, BUFFER);
-				entry = new ZipEntry(file.getName() + ".arm");
-				zipOut.putNextEntry(entry);
-				while ((count = origin.read(data, 0, BUFFER)) != -1) {
-					zipOut.write(data, 0, count);
+				try (InputStream in = new ByteArrayInputStream(file
+						.getPropertyValue(TemplatePropertyType.ARM).getBytes(
+								StandardCharsets.UTF_8));
+						BufferedInputStream origin = new BufferedInputStream(
+								in, BUFFER)) {
+					entry = new ZipEntry(file.getName() + ".arm");
+					zipOut.putNextEntry(entry);
+					while ((count = origin.read(data, 0, BUFFER)) != -1) {
+						zipOut.write(data, 0, count);
+					}
 				}
-				origin.close();
 			}
-			zipOut.close();
 		} catch (Exception ex) {
 			throw new ResourceExportException(
 					"Export storage templates failed.", ex);

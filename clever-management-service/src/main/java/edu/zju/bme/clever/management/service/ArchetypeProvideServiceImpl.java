@@ -39,7 +39,7 @@ import edu.zju.bme.clever.management.service.repository.ArchetypeVersionMasterRe
 public class ArchetypeProvideServiceImpl implements ArchetypeProvideService {
 
 	protected final Logger logger = LoggerFactory.getLogger(this.getClass());
-	
+
 	private static final int BUFFER = 2048;
 
 	@Autowired
@@ -53,27 +53,25 @@ public class ArchetypeProvideServiceImpl implements ArchetypeProvideService {
 
 	private XMLSerializer xmlSerializer = new XMLSerializer();
 	private ADLSerializer adlSerializer = new ADLSerializer();
-	
+
 	@Override
 	public void exportArchetypes(final OutputStream out)
 			throws ResourceExportException {
-		try {
-			ZipOutputStream zipOut = new ZipOutputStream(out);
-			BufferedInputStream origin = null;
+		try (ZipOutputStream zipOut = new ZipOutputStream(out)) {
 			byte data[] = new byte[BUFFER];
 			for (ArchetypeRevisionFile file : this.revisionFileRepo.findAll()) {
-				InputStream in = new ByteArrayInputStream(file.getAdl()
+				try (InputStream in = new ByteArrayInputStream(file.getAdl()
 						.getBytes(StandardCharsets.UTF_8));
-				origin = new BufferedInputStream(in, BUFFER);
-				ZipEntry entry = new ZipEntry(file.getName() + ".adl");
-				zipOut.putNextEntry(entry);
-				int count;
-				while ((count = origin.read(data, 0, BUFFER)) != -1) {
-					zipOut.write(data, 0, count);
+						BufferedInputStream origin = new BufferedInputStream(
+								in, BUFFER)) {
+					ZipEntry entry = new ZipEntry(file.getName() + ".adl");
+					zipOut.putNextEntry(entry);
+					int count;
+					while ((count = origin.read(data, 0, BUFFER)) != -1) {
+						zipOut.write(data, 0, count);
+					}
 				}
-				origin.close();
 			}
-			zipOut.close();
 		} catch (Exception ex) {
 			throw new ResourceExportException("Export archetypes failed.", ex);
 		}
@@ -81,7 +79,8 @@ public class ArchetypeProvideServiceImpl implements ArchetypeProvideService {
 
 	@Override
 	public List<ArchetypeMaster> getAllArchetypeMasters() {
-		List<ArchetypeMaster> masters = this.masterRepo.findAllFetchLatestVersionMaster();
+		List<ArchetypeMaster> masters = this.masterRepo
+				.findAllFetchLatestVersionMaster();
 		masters.forEach(master -> master.getLatestVersionMaster());
 		return masters;
 	}

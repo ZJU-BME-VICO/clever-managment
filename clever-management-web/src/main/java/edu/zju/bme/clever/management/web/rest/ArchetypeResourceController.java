@@ -115,6 +115,9 @@ public class ArchetypeResourceController extends AbstractResourceController {
 									info.setId(master.getId());
 									info.setConceptName(master.getConceptName());
 									info.setName(master.getName());
+									info.setRmOriginator(master.getRmOrginator());
+									info.setRmEntity(master.getRmEntity());
+									info.setRmName(master.getRmName());
 									info.setLatestVersionMasterVersion(master
 											.getLatestVersionMasterVersion());
 									info.setLifecycleState(master

@@ -3,106 +3,137 @@
  *
  * @author Ian Kennington Walter (http://ianvonwalter.com)
  */
-angular
-  .module('ng-context-menu', [])
-  .factory('ContextMenuService', function() {
-    return {
-      element: null,
-      menuElement: null
-    };
-  })
-  .directive('contextMenu', ['$document', 'ContextMenuService', function($document, ContextMenuService) {
-    return {
-      restrict: 'A',
-      scope: {
-        'callback': '&contextMenu',
-        'disabled': '&contextMenuDisabled'
-      },
-      link: function($scope, $element, $attrs) {
-        var opened = false;
+angular.module('ng-context-menu', []).factory('ContextMenuService', function() {
+	return {
+		element : null,
+		menuElement : null
+	};
+}).directive('contextMenu', ['$document', 'ContextMenuService',
+function($document, ContextMenuService) {
+	return {
+		restrict : 'A',
+		scope : {
+			'callback' : '&contextMenu',
+			'disabled' : '&contextMenuDisabled'
+		},
+		link : function($scope, $element, $attrs) {
+			var opened = false;
 
-        function open(event, menuElement) {
-          menuElement.addClass('open');
+			function open(event, menuElement) {
+				menuElement.addClass('open');
 
-          var doc = $document[0].documentElement;
-          var docLeft = (window.pageXOffset || doc.scrollLeft) - (doc.clientLeft || 0),
-            docTop = (window.pageYOffset || doc.scrollTop)  - (doc.clientTop || 0),
-            elementWidth = menuElement[0].scrollWidth,
-            elementHeight = menuElement[0].scrollHeight;
-          var docWidth = doc.clientWidth + docLeft,
-            docHeight = doc.clientHeight + docTop,
-            totalWidth = elementWidth + event.pageX,
-            totalHeight = elementHeight + event.pageY,
-            left = Math.max(event.pageX - docLeft, 0),
-            top = Math.max(event.pageY - docTop, 0);
+				var doc = $document[0].documentElement;
+				var docLeft = (window.pageXOffset || doc.scrollLeft) - (doc.clientLeft || 0), docTop = (window.pageYOffset || doc.scrollTop) - (doc.clientTop || 0), elementWidth = menuElement[0].scrollWidth, elementHeight = menuElement[0].scrollHeight;
+				var docWidth = doc.clientWidth + docLeft, docHeight = doc.clientHeight + docTop, totalWidth = elementWidth + event.pageX, totalHeight = elementHeight + event.pageY, left = Math.max(event.pageX - docLeft, 0), top = Math.max(event.pageY - docTop, 0);
 
-          if (totalWidth > docWidth) {
-            left = left - (totalWidth - docWidth);
-          }
+				if (totalWidth > docWidth) {
+					left = left - (totalWidth - docWidth);
+				}
 
-          if (totalHeight > docHeight) {
-            top = top - (totalHeight - docHeight);
-          }
+				if (totalHeight > docHeight) {
+					top = top - (totalHeight - docHeight);
+				}
 
-          menuElement.css('top', top + 'px');
-          menuElement.css('left', left + 'px');
-          opened = true;
-        }
+				menuElement.css('top', top + 'px');
+				menuElement.css('left', left + 'px');
+				opened = true;
 
-        function close(menuElement) {
-          menuElement.removeClass('open');
-          opened = false;
-        }
+			}
 
-        $element.bind('contextmenu', function(event) {
-          if (!$scope.disabled()) {
-            if (ContextMenuService.menuElement !== null) {
-              close(ContextMenuService.menuElement);
-            }
-            ContextMenuService.menuElement = angular.element(document.getElementById($attrs.target));
-            ContextMenuService.element = event.target;
-            //console.log('set', ContextMenuService.element);
+			function close(menuElement) {
+				menuElement.removeClass('open');
+				opened = false;
+			}
 
-            event.preventDefault();
-            event.stopPropagation();
-            $scope.$apply(function() {
-              $scope.callback({ $event: event });
-              open(event, ContextMenuService.menuElement);
-            });
-          }
-        });
 
-        function handleKeyUpEvent(event) {
-          //console.log('keyup');
-          if (!$scope.disabled() && opened && event.keyCode === 27) {
-            $scope.$apply(function() {
-              close(ContextMenuService.menuElement);
-            });
-          }
-        }
+			$element.bind('contextmenu', function(event) {
+				if (!$scope.disabled()) {
+					if (ContextMenuService.menuElement !== null) {
+						close(ContextMenuService.menuElement);
+					}
+					ContextMenuService.menuElement = angular.element(document.getElementById($attrs.target));
+					ContextMenuService.element = event.target;
+					//console.log('set', ContextMenuService.element);
 
-        function handleClickEvent(event) {
-          if (!$scope.disabled() &&
-            opened &&
-            (event.button !== 2 || event.target !== ContextMenuService.element)) {
-            $scope.$apply(function() {
-              close(ContextMenuService.menuElement);
-            });
-          }
-        }
+					event.preventDefault();
+					event.stopPropagation();
+					$scope.$apply(function() {
+						$scope.callback({
+							$event : event
+						});
+						open(event, ContextMenuService.menuElement);
+					});
+				}
+			});
 
-        $document.bind('keyup', handleKeyUpEvent);
-        // Firefox treats a right-click as a click and a contextmenu event while other browsers
-        // just treat it as a contextmenu event
-        $document.bind('click', handleClickEvent);
-        $document.bind('contextmenu', handleClickEvent);
+			function handleKeyUpEvent(event) {
+				//console.log('keyup');
+				if (!$scope.disabled() && opened && event.keyCode === 27) {
+					$scope.$apply(function() {
+						close(ContextMenuService.menuElement);
+					});
+				}
+			}
 
-        $scope.$on('$destroy', function() {
-          //console.log('destroy');
-          $document.unbind('keyup', handleKeyUpEvent);
-          $document.unbind('click', handleClickEvent);
-          $document.unbind('contextmenu', handleClickEvent);
-        });
-      }
-    };
-  }]);
+			function handleClickEvent(event) {
+				if (!$scope.disabled() && opened && (event.button !== 2 || event.target !== ContextMenuService.element)) {
+					$scope.$apply(function() {
+						close(ContextMenuService.menuElement);
+					});
+				}
+			}
+
+
+			$document.bind('keyup', handleKeyUpEvent);
+			// Firefox treats a right-click as a click and a contextmenu event while other browsers
+			// just treat it as a contextmenu event
+			$document.bind('click', handleClickEvent);
+			$document.bind('contextmenu', handleClickEvent);
+
+			$scope.$on('$destroy', function() {
+				//console.log('destroy');
+				$document.unbind('keyup', handleKeyUpEvent);
+				$document.unbind('click', handleClickEvent);
+				$document.unbind('contextmenu', handleClickEvent);
+			});
+
+			$element.find('ul.dropdown-menu [data-toggle=dropdown]').on('mouseenter', function(event) {
+				// Avoid following the href location when clicking
+				event.preventDefault();
+				// Avoid having the menu to close when clicking
+				event.stopPropagation();
+				// If a menu is already open we close it
+				//$('ul.dropdown-menu [data-toggle=dropdown]').parent().removeClass('open');
+				// opening the one you clicked on
+				$(this).parent().addClass('open');
+
+				var menu = $(this).parent().find("ul");
+				var menupos = menu.offset();
+
+				if ((menupos.left + menu.width()) + 30 > $(window).width()) {
+					var newpos = -menu.width();
+				} else {
+					var newpos = $(this).parent().width();
+				}
+
+				menu.css({
+					left : newpos
+				});
+
+			});
+			
+			$element.find('ul.dropdown-menu [data-toggle=dropdown]').on('mouseleave', function(event) {
+				// Avoid following the href location when clicking
+				event.preventDefault();
+				// Avoid having the menu to close when clicking
+				event.stopPropagation();
+				// If a menu is already open we close it
+				//$('ul.dropdown-menu [data-toggle=dropdown]').parent().removeClass('open');
+				// opening the one you clicked on
+				$(this).parent().removeClass('open');
+
+			});
+
+		}
+	};
+}]);

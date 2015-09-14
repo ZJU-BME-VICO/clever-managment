@@ -6,7 +6,7 @@
  * License: MIT
  */
 angular.module("ui.bootstrap", ["ui.bootstrap.tpls", "ui.bootstrap.transition","ui.bootstrap.collapse","ui.bootstrap.accordion","ui.bootstrap.alert","ui.bootstrap.bindHtml","ui.bootstrap.buttons","ui.bootstrap.carousel","ui.bootstrap.dateparser","ui.bootstrap.position","ui.bootstrap.datepicker","ui.bootstrap.dropdown","ui.bootstrap.modal","ui.bootstrap.pagination","ui.bootstrap.tooltip","ui.bootstrap.popover","ui.bootstrap.progressbar","ui.bootstrap.rating","ui.bootstrap.tabs","ui.bootstrap.timepicker","ui.bootstrap.typeahead"]);
-angular.module("ui.bootstrap.tpls", ["template/accordion/accordion-group.html","template/accordion/accordion.html","template/alert/alert.html","template/carousel/carousel.html","template/carousel/slide.html","template/datepicker/datepicker.html","template/datepicker/day.html","template/datepicker/month.html","template/datepicker/popup.html","template/datepicker/year.html","template/modal/backdrop.html","template/modal/window.html","template/pagination/pager.html","template/pagination/pagination.html","template/tooltip/tooltip-html-unsafe-popup.html","template/tooltip/tooltip-popup.html","template/popover/popover.html","template/progressbar/bar.html","template/progressbar/progress.html","template/progressbar/progressbar.html","template/rating/rating.html","template/tabs/tab.html","template/tabs/tabset.html","template/timepicker/timepicker.html","template/typeahead/typeahead-match.html","template/typeahead/typeahead-popup.html"]);
+angular.module("ui.bootstrap.tpls", ["template/accordion/accordion-group.html","template/accordion/accordion.html","template/alert/alert.html","template/carousel/carousel.html","template/carousel/slide.html","template/datepicker/datepicker.html","template/datepicker/day.html","template/datepicker/month.html","template/datepicker/popup.html","template/datepicker/year.html","template/modal/backdrop.html","template/modal/window.html","template/pagination/pager.html","template/pagination/pagination.html","template/tooltip/tooltip-html-unsafe-popup.html","template/tooltip/tooltip-popup.html","template/popover/popover-html.html","template/popover/popover-template.html","template/popover/popover.html","template/progressbar/bar.html","template/progressbar/progress.html","template/progressbar/progressbar.html","template/rating/rating.html","template/tabs/tab.html","template/tabs/tabset.html","template/timepicker/timepicker.html","template/typeahead/typeahead-match.html","template/typeahead/typeahead-popup.html"]);
 angular.module('ui.bootstrap.transition', [])
 
 /**
@@ -2400,6 +2400,7 @@ angular.module('ui.bootstrap.pagination', [])
     var totalPages = this.itemsPerPage < 1 ? 1 : Math.ceil($scope.totalItems / this.itemsPerPage);
     return Math.max(totalPages || 0, 1);
   };
+  
 
   this.render = function() {
     $scope.page = parseInt(ngModelCtrl.$viewValue, 10) || 1;
@@ -2411,7 +2412,7 @@ angular.module('ui.bootstrap.pagination', [])
       ngModelCtrl.$render();
     }
   };
-
+   
   $scope.getText = function( key ) {
     return $scope[key + 'Text'] || self.config[key + 'Text'];
   };
@@ -2498,6 +2499,7 @@ angular.module('ui.bootstrap.pagination', [])
 
         // Default page limits
         var startPage = 1, endPage = totalPages;
+       
         var isMaxSized = ( angular.isDefined(maxSize) && maxSize < totalPages );
 
         // recompute if maxSize
@@ -2953,21 +2955,51 @@ angular.module( 'ui.bootstrap.tooltip', [ 'ui.bootstrap.position', 'ui.bootstrap
  * function, placement as a function, inside, support for more triggers than
  * just mouse enter/leave, html popovers, and selector delegatation.
  */
-angular.module( 'ui.bootstrap.popover', [ 'ui.bootstrap.tooltip' ] )
+angular.module( 'ui.bootstrap.popover', ['ui.bootstrap.tooltip'])
 
-.directive( 'popoverPopup', function () {
+.directive('popoverTemplatePopup', function() {
   return {
     restrict: 'EA',
     replace: true,
-    scope: { title: '@', content: '@', placement: '@', animation: '&', isOpen: '&' },
+    scope: { title: '@', contentExp: '&', placement: '@', popupClass: '@', animation: '&', isOpen: '&',
+      originScope: '&' },
+    templateUrl: 'template/popover/popover-template.html'
+  };
+})
+
+.directive('popoverTemplate', ['$tooltip', function($tooltip) {
+  return $tooltip('popoverTemplate', 'popover', 'click', {
+    useContentExp: true
+  });
+}])
+
+.directive('popoverHtmlPopup', function() {
+  return {
+    restrict: 'EA',
+    replace: true,
+    scope: { contentExp: '&', title: '@', placement: '@', popupClass: '@', animation: '&', isOpen: '&' },
+    templateUrl: 'template/popover/popover-html.html'
+  };
+})
+
+.directive('popoverHtml', ['$tooltip', function($tooltip) {
+  return $tooltip( 'popoverHtml', 'popover', 'click', {
+    useContentExp: true
+  });
+}])
+
+.directive('popoverPopup', function() {
+  return {
+    restrict: 'EA',
+    replace: true,
+    scope: { title: '@', content: '@', placement: '@', popupClass: '@', animation: '&', isOpen: '&' },
     templateUrl: 'template/popover/popover.html'
   };
 })
 
-.directive( 'popover', [ '$tooltip', function ( $tooltip ) {
+.directive('popover', ['$tooltip', function($tooltip) {
   return $tooltip( 'popover', 'popover', 'click' );
 }]);
-
 angular.module('ui.bootstrap.progressbar', [])
 
 .constant('progressConfig', {
@@ -4289,19 +4321,21 @@ angular.module("template/tooltip/tooltip-popup.html", []).run(["$templateCache",
     "</div>\n" +
     "");
 }]);
-
-angular.module("template/popover/popover.html", []).run(["$templateCache", function($templateCache) {
-  $templateCache.put("template/popover/popover.html",
-    "<div class=\"popover {{placement}}\" ng-class=\"{ in: isOpen(), fade: animation() }\">\n" +
-    "  <div class=\"arrow\"></div>\n" +
-    "\n" +
-    "  <div class=\"popover-inner\">\n" +
-    "      <h3 class=\"popover-title\" ng-bind=\"title\" ng-show=\"title\"></h3>\n" +
-    "      <div class=\"popover-content\" style=\"word-wrap: break-word;\" ng-bind=\"content\"></div>\n" +
-    "  </div>\n" +
-    "</div>\n" +
-    "");
-}]);
+angular.module("template/popover/popover-html.html",[]).run(["$templateCache",function(a){a.put("template/popover/popover-html.html",'<div class="popover"\n  tooltip-animation-class="fade"\n  tooltip-classes\n  ng-class="{ in: isOpen() }">\n  <div class="arrow"></div>\n\n  <div class="popover-inner">\n      <h3 class="popover-title" ng-bind="title" ng-if="title"></h3>\n      <div class="popover-content" ng-bind-html="contentExp()"></div>\n  </div>\n</div>\n')}]),
+angular.module("template/popover/popover-template.html",[]).run(["$templateCache",function(a){a.put("template/popover/popover-template.html",'<div class="popover"\n  tooltip-animation-class="fade"\n  tooltip-classes\n  ng-class="{ in: isOpen() }">\n  <div class="arrow"></div>\n\n  <div class="popover-inner">\n      <h3 class="popover-title" ng-bind="title" ng-if="title"></h3>\n      <div class="popover-content"\n        tooltip-template-transclude="contentExp()"\n        tooltip-template-transclude-scope="originScope()"></div>\n  </div>\n</div>\n')}]),
+angular.module("template/popover/popover.html",[]).run(["$templateCache",function(a){a.put("template/popover/popover.html",'<div class="popover"\n  tooltip-animation-class="fade"\n  tooltip-classes\n  ng-class="{ in: isOpen() }">\n  <div class="arrow"></div>\n\n  <div class="popover-inner">\n      <h3 class="popover-title" ng-bind="title" ng-if="title"></h3>\n      <div class="popover-content" ng-bind="content"></div>\n  </div>\n</div>\n')}]),
+// angular.module("template/popover/popover.html", []).run(["$templateCache", function($templateCache) {
+  // $templateCache.put("template/popover/popover.html",
+    // "<div class=\"popover {{placement}}\" ng-class=\"{ in: isOpen(), fade: animation() }\">\n" +
+    // "  <div class=\"arrow\"></div>\n" +
+    // "\n" +
+    // "  <div class=\"popover-inner\">\n" +
+    // "      <h3 class=\"popover-title\" ng-bind=\"title\" ng-show=\"title\"></h3>\n" +
+    // "      <div class=\"popover-content\" style=\"word-wrap: break-word;\" ng-bind=\"content\"></div>\n" +
+    // "  </div>\n" +
+    // "</div>\n" +
+    // "");
+// }]);
 
 angular.module("template/progressbar/bar.html", []).run(["$templateCache", function($templateCache) {
   $templateCache.put("template/progressbar/bar.html",

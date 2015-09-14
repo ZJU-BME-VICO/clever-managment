@@ -1,6 +1,4 @@
-<div style="border-bottom: 1px solid #e5e5e5; margin-bottom: 20px;"></div>
-<div class="content-container" ng-style="{height: containerHeight - 100}">
-    <div class='row'>
+    <div class='row' ng-style="{height: containerHeight - 20}">
         <div class="col-md-3">
             <div class="panel panel-default">
                 <div class="panel-heading">
@@ -12,7 +10,7 @@
                     <input type="text" placeholder="{{'APPLICATION_EDIT_FIND_HINT' | translate}}" 
                         class="form-control" style="width: 75%;" ng-model="search.name">
                 </div>
-                <div class="list-group" ng-style="{height: containerHeight - 180}" style="overflow: auto;">
+                <div class="list-group" ng-style="{height: containerHeight - 70}" style="overflow: auto;">
                     <a class="list-group-item" ng-class="{'active': application.id == obj.selectedAppId}" 
                         ng-repeat="application in obj.applications | filter:search" 
                         ng-click="selectApp(application)">{{application.name}}
@@ -23,4 +21,3 @@
         <div ui-view class="col-md-9"></div>
     </div>
 </div>
-<div style="border-bottom: 1px solid #e5e5e5;"></div>

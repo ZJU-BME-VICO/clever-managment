@@ -1,25 +1,550 @@
 <div class="row">
-  <div class="row">
-  	<div class="col-xs-1 col-md-1 col-sm-1" style="margin-right:0px;padding-right: 0px" ng-show="definition">
-	<span class="input-group-btn">
-		<button class="btn btn-default" type="button" ng-click="expand()" ng-show="isCollapse">
-			<span class="glyphicon glyphicon-plus"></span>
-		</button> </span>
-	<span class="input-group-btn">
-		<button class="btn btn-default" type="button" ng-click="collapse()" ng-show="!isCollapse">
-			<span class="glyphicon glyphicon-minus"></span>
-		</button> </span>
-	</div>
-	<div class="col-xs-5 col-md-5 col-lg-5"  ng-style="{height: contentHeight.value - 57}" style="overflow: auto; padding-left:0px; margin-left:0px;" >
+	<div class="row">
+		<div class="col-xs-1 col-md-1 col-sm-1" style="margin-right:0px;padding-right: 0px" >
+			<span class="input-group-btn">
+				<button class="btn btn-default" type="button" ng-click="expand()" ng-show="isCollapse">
+					<span class="glyphicon glyphicon-plus"></span>
+				</button> </span>
+			<span class="input-group-btn">
+				<button class="btn btn-default" type="button" ng-click="collapse()" ng-show="!isCollapse">
+					<span class="glyphicon glyphicon-minus"></span>
+				</button> </span>
+		</div>
+		<div class="col-xs-5 col-md-5 col-lg-5"  ng-style="{height: contentHeight.value - 85}" style="overflow: auto; padding-left:0px; margin-left:0px;" >
 
-		<tree-view tree-data="definition.treeItems"  class="definition-tree" tree-control="treeControl" node-label-generator="getEditableTreeNodeLabel" node-menu-generator="getTreeNodeMenu" menu-prefix = "definition" click-edit-menu-callback="editArchetype(node,type)">
-			<tree-expanded-icon>
-				<span class="clever-icon expanded" style="padding: 0 6px;height: 12px;background-position-y: 6px;"></span>
-			</tree-expanded-icon>
-			<tree-collapsed-icon>
-				<span class="clever-icon collapsed" style="padding: 0 6px;height: 12px;background-position-y: 6px;"></span>
-			</tree-collapsed-icon>
-		</tree-view>
+			<tree-view tree-data="definition.treeItems"  class="definition-tree"  node-alias-name="archetype" tree-control="treeControl" click-node-callback="getNodeInfo(value)"   node-label-generator="getTreeNodeLabel" node-menu-generator="getTreeNodeMenu" menu-prefix = "definition" click-edit-menu-callback="editArchetype(node,type)">
+				<tree-expanded-icon>
+					<span class="clever-icon expanded" style="padding: 0 6px;height: 12px;background-position-y: 6px;"></span>
+				</tree-expanded-icon>
+				<tree-collapsed-icon>
+					<span class="clever-icon collapsed" style="padding: 0 6px;height: 12px;background-position-y: 6px;"></span>
+				</tree-collapsed-icon>
+			</tree-view>
+		</div>
+		<!-- constraint edit pane -->
+		<div class = "col-lg-6 col-md-6 col-sm-6"  ng-style="{height: contentHeight.value - 85}" style="overflow: auto; padding-left:0px; margin-left:0px; padding-top: 10px">
+			
+				 
+			<div class="panel" ng-if="currentNode.oriNodeRef.rm_attribute_name == 'subject'">
+				<div class="panel-heading" style="color: white;background-color: #8cc152;border-color: #8cc152;">
+					Subject
+				</div>
+				<div class="panel-body" style="border:1px solid #dddddd">
+					<subject-pane subject="currentNode"></subject-pane>
+				</div>
+			</div>
+
+			 <div class="panel" ng-if="currentNode.oriNodeRef.rm_type_name == 'PARTICIPATION'">
+				<div class="panel-heading" style="color: white;background-color: #8cc152;border-color: #8cc152;">
+					Participation
+				</div>
+				
+				<div class="panel-body" style="border:1px solid #dddddd">
+				<participation-pane participation="currentNode"></participation-pane>
+				</div>
+			</div>
+			
+			<div class="panel" ng-if="currentNode.oriNodeRef.rm_type_name == 'LINK'">
+				<div class="panel-heading" style="color: white;background-color: #8cc152;border-color: #8cc152;">
+					Links
+				</div>
+				<div class="panel-body" style="border:1px solid #dddddd">
+					<links-pane link="currentNode"></links-pane>
+				</div>
+			</div>
+			
+			
+			<div class="panel" ng-if="currentNode">
+				<div class="panel-heading" style="color: white;background-color: #FF7F00;border-color: #FF7F00;">
+					Constraint
+				</div>
+				<div class="panel-body" style="border:1px solid #dddddd">
+
+					<div ng-if="currentNode.oriNodeRef.occurrences">
+						<label>OCCURRENCES:</label>
+						<table style="border-collapse: separate; border-spacing: 5px;">
+							<tbody >
+								<tr>
+									<td style="width:35px">Min:</td>
+									<td style="width:50px">
+									<input type="number" ng-model="simpleOccurrences.lower" style="width: 100%;" />
+									</td>
+									<td style="width:20px">
+									<input type="checkbox" ng-model="occurrences.lower_included"  ng-true-value="'true'" ng-false-value="'false'" />
+									</td>
+									<td ng-if="occurrences.upper_unbounded == 'false'" style="width:35px;">Max:</td>
+									<td style="width:50px">
+									<input ng-if="occurrences.upper_unbounded == 'false'" type="number" ng-model="simpleOccurrences.upper" style="width: 100%;" />
+									</td>
+									<td style="width:20px">
+									<input ng-if="occurrences.upper_unbounded == 'false'" type="checkbox"  ng-model="occurrences.upper_included"  ng-true-value="'true'" ng-false-value="'false'" />
+									</td>
+									<td>Unbounded:</td>
+									<td>
+									<input type="checkbox" ng-model="occurrences.upper_unbounded" ng-true-value="'true'" ng-false-value="'false'"/>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div><br>
+					<div ng-if="currentNode.oriNodeRef.existence">
+						<label>EXISTENCE:</label>
+						<table style="border-collapse: separate; border-spacing: 5px;">
+							<tbody >
+								<tr>
+									<td ng-repeat="item in EXISTENCE" for="{{item}}" >
+									<input style="margin-left:10px" type="radio" ng-model="simpleExistence.value" ng-value="item"  id="{{item}}"  />
+									 {{item}}</td>
+								</tr>
+							</tbody>
+						</table>
+					</div><br>
+					<div ng-if="currentNode.oriNodeRef.cardinality">
+						<label>CARDINALITY:</label>
+						<table style="border-collapse: separate; border-spacing: 5px;">
+							<tbody >
+								<tr>
+									<td style="width:35px">Min:</td>
+									<td style="width:50px">
+									<input type="number"  ng-model="simpleCardinality.lower"  style="width: 100%;"/>
+									</td>
+									<td style="width:20px">
+									<input type="checkbox"  ng-model="cardinality.lower_included" ng-true-value="'true'" ng-false-value="'false'"/>
+									</td>
+									<td style="width:35px;" ng-if="cardinality.interval.upper_unbounded == 'false'">Max:</td>
+									<td style="width:50px" ng-if="cardinality.interval.upper_unbounded == 'false'">
+									<input type="number" style="width: 100%;" ng-model="simpleCardinality.upper"/>
+									</td>
+									<td style="width:20px" ng-if="cardinality.interval.upper_unbounded == 'false'">
+									<input type="checkbox" ng-model="cardinality.upper_included" ng-true-value="'true'" ng-false-value="'false'"/>
+									</td>
+									<td>Unbounded:</td>
+									<td>
+									<input type="checkbox" ng-model="cardinality.interval.upper_unbounded" ng-true-value="'true'" ng-false-value="'false'"/>
+									</td>
+
+								</tr>
+								<tr>
+									<td style="width:35px">Unique:</td>
+									<td style="width:50px">
+									<input type="checkbox" ng-model="cardinality.is_unique" ng-true-value="'true'" ng-false-value="'false'" />
+									</td>
+									<td style="width:20px"></td>
+									<td style="width:35px;" ng-if="cardinality.interval.upper_unbounded == 'false'"></td>
+									<td style="width:50px" ng-if="cardinality.interval.upper_unbounded == 'false'"></td>
+									<td style="width:20px" ng-if="cardinality.interval.upper_unbounded == 'false'"></td>
+									<td>Ordered:</td>
+									<td>
+									<input type="checkbox" ng-model="cardinality.is_ordered" ng-true-value="'true'" ng-false-value="'false'" />
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div><br>
+				</div>
+			</div>
+
+			<div class="panel" ng-if="currentNode.oriNodeRef.node_id">
+				<div class="panel-heading" style="color: white;background-color: #f6bb42;border-color: #f6bb42;">
+					Ontology
+				</div>
+				<div class="panel-body" style="border:1px solid #dddddd">
+
+					<div ng-if="true">
+						<label>LANGUAGE:</label>
+						<select style="width:100px"  ng-model="currentLanguage.code" ng-options="lan for lan in languageList" ></select>
+						<br><br>
+
+						<label>TEXT:</label>
+						<input class="form-control " type="text" ng-model="ontologyItem[0].__text"/ ><br>						
+						<label>DESCRIPTION:</label>
+						<textarea class="form-control" id="textContent"  ng-model="ontologyItem[1].__text"  > </textarea>
+					</div>
+				</div>
+			</div>
+             <div class="panel" ng-if="currentNode.oriNodeRef.node_id">
+				<div class="panel-heading" style="color: white;background-color: #8cc152;border-color: #8cc152;">
+					Node term bind
+				</div>
+				<div class="panel-body" style="border:1px solid #dddddd">
+					<div class="row">
+						<div class="col-lg-4 col-md-4 col-sm-4">
+							<label>Terminology set :</label>
+						</div>
+						<div class="col-lg-8 col-md-8 col-sm-8">
+							<select style="width:100%" ng-model="selectedTerminology" ng-options="code for code in terminologyList"></select>
+
+						</div>
+					</div>
+                   <div class="row">
+						<div class="col-lg-7 col-md-7 col-sm-7">
+							
+						</div>
+						<div class="col-lg-2 col-md-2 col-sm-2">
+							<div style="margin-bottom:3px">
+								<span class="input-group-btn">
+									<button class="btn btn-default" type="button" tabindex="termBind" ng-click="add2AvailableList()" tooltip-placement="right" tooltip="Add this terminology to aviliable terminology list" tooltip-popup-delay="500">
+										<span class="glyphicon glyphicon-arrow-down"></span>
+									</button> </span>
+							</div>
+						</div>
+						<div class="col-lg-3 col-md-3 col-sm-3">
+						
+
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-lg-4 col-md-4 col-sm-4">
+							<label>Available :</label>
+						</div>
+						<div class="col-lg-8 col-md-8 col-sm-8">
+							<select style="width:100%" ng-model="currentTerminology" ng-options="code for code in avaiTerminologyList"></select>
+						</div>
+					</div><br>
+					<div>
+						<form class="form-group">
+							<label style="width:100px">Code:</label>
+							<code>
+								#{{currentNode.oriNodeRef.node_id}}</code><br>
+							<label>Path[text] :</label>
+							<span class="form-control"  style="border:hidden">{{currentNode.oriNodeRef.textPath}}</span><br>
+							<label>Path[id] :</label>
+							<span class="form-control"  style="border:hidden">{{currentNode.oriNodeRef.idPath}}</span>
+						    <br><label>Bind code :</label>
+						    <input type="text" ng-model="bindCode" class="form-control" />
+						    <label>Release :</label>
+						    <input type="text" ng-model="release" class="form-control" /><br>
+						    <button class="btn btn-success pull-right" style="position: center">Add Term Bind to This Node</button>
+						</form>
+					</div>
+				</div>
+			 </div>
+			 
+		
+			<!-- node value-->
+			<div class="panel" ng-if="false">
+				<div class="panel-heading" style="color: white;background-color: #8cc152;border-color: #8cc152;">
+					Node Value
+				</div>
+				<div class="panel-body" style="border:1px solid #dddddd">
+					<!-- DV_CODED_TEXT -->
+					<div ng-if="false"  style="margin-top: 1px">
+						<div class="row">
+							<div class="col-lg-2 col-md-2 col-sm-2">
+								<div style="margin-left:10px">
+									<div class="col">
+										<div>
+											<span class="input-group-btn">
+												<button class="btn btn-default" type="button" tabindex="coded_text"  tooltip-placement="right" tooltip="Add a constraint bind to this node" tooltip-popup-delay="500">
+													<span class="glyphicon glyphicon-plus"></span>
+												</button> </span>
+										</div>
+										<div>
+											<span class="input-group-btn" >
+												<button class="btn btn-default" type="button" tabindex="coded_text" tooltip-placement="right" tooltip="Delete this constraint bind " tooltip-popup-delay="500">
+													<span class="glyphicon glyphicon-minus"></span>
+												</button> </span>
+										</div>
+										<div>
+											<span class="input-group-btn">
+												<button class="btn btn-default" type="button"   popover-template = "nodeBindUrl"  popover-title="select one"  popover-placement="right"  tabindex="coded_text"  tooltip-placement="right" tooltip="Use internal node bind" tooltip-popup-delay="500">
+													<span class="glyphicon glyphicon-book"></span>
+												</button> </span>
+
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-lg-10 col-md-10 col-sm-10" border="1" >
+
+								<ul style="padding-left:15px; ">
+									<li>
+										<span class="glyphicon glyphicon-star"></span>
+										<a href="#" ng-click="$event.preventDefault();" >codeText1</a>
+									</li>
+									<li>
+										<span class="glyphicon glyphicon-star"></span>
+										<a href="#" ng-click="$event.preventDefault();" >codeText1</a>
+									</li>
+								</ul>
+
+							</div>
+						</div>
+						<div>
+							<form style="margin-left:15px">
+								<h5>code : <span style="color:black">#at0012<span></h5>
+
+								<h5>text :</h5>
+								<input type="text" class="form-control"  id="formGroupInputSmall" />
+								<h5>description :</h5>
+								<input type="text" class="form-control"  id="formGroupInputSmall" />
+								<h5>Assumed value :</h5>
+								<select ng-options = "code for code in codeList" class="form-control"></select>
+							</form>
+						</div>
+					</div>
+
+					<!-- DV_QUANTITY -->
+					<div ng-if="false" >
+						<div>
+							<h5>Property : </h5>
+							<select ng-options ="pro for pro in propertyList" class="form-control"></select>
+						</div>
+
+						<hr style="margin-bottom: 1px">
+						<div class="row">
+							<div class="col-lg-2 col-md-2 col-sm-2 bordered">
+								<h5>Unit:</h5>
+							</div>
+							<div class="col-lg-5 col-md-5 col-sm-5 bordered">
+
+								<label style="padding-left:15px; ">Original</label>
+							</div>
+							<div class="col-lg-5 col-md-5 col-sm-5 bordered">
+								<label style="padding-left:15px; ">Selected</label>
+							</div>
+						</div>
+						<hr style="margin-top:1px; margin-bottom: 1px">
+						<div class="row" style="margin-top:10px">
+							<div class="col-lg-2 col-md-2 col-sm-2 bordered">
+
+							</div>
+							<div class="col-lg-5 col-md-5 col-sm-5 bordered">
+								<ul style="padding-left:15px; ">
+									<li>
+										<span class="glyphicon glyphicon-star"></span>
+										<a href="#" ng-click="$event.preventDefault();" >codeText1</a>
+									</li>
+									<li>
+										<span class="glyphicon glyphicon-star"></span>
+										<a href="#" ng-click="$event.preventDefault();" >codeText1</a>
+									</li>
+									<li>
+										<span class="glyphicon glyphicon-star"></span>
+										<a href="#" ng-click="$event.preventDefault();" >codeText1</a>
+									</li>
+								</ul>
+							</div>
+							<div class="col-lg-5 col-md-5 col-sm-5 bordered">
+
+								<ul style="padding-left:15px; ">
+									<li>
+										<span class="glyphicon glyphicon-star"></span>
+										<a href="#" ng-click="$event.preventDefault();" >codeText1</a>
+									</li>
+									<li>
+										<span class="glyphicon glyphicon-star"></span>
+										<a href="#" ng-click="$event.preventDefault();" >codeText1</a>
+									</li>
+								</ul>
+
+							</div>
+
+						</div>
+						<hr>
+						<div>
+							<table style="border-collapse: separate; border-spacing: 5px;">
+								<tbody >
+									<tr>
+										<td style="width: 150px" >
+										<input type="checkbox"  ng-model="pre"/>
+										Precision:</td>
+										<td style="width: 50px">
+										<input ng-show="pre" type="number" style="width: 100%" />
+										</select></td>
+
+									</tr>
+									<tr>
+										<td>
+										<input type="checkbox"  ng-model="min"/>
+										Set Min:</td>
+										<td><select ng-show="min" ng-options="" style="width: 100%" ></select></td>
+										<td>
+										<input ng-show="min" type="number" style="width: 100%" />
+										</td>
+									</tr>
+									<tr>
+										<td>
+										<input type="checkbox" ng-model="max" />
+										Set Max:</td>
+										<td><select ng-show="max" ng-options="" style="width: 100%" ></select></td>
+										<td>
+										<input ng-show="max" type="number" style="width: 100%" />
+										</td>
+									</tr>
+									<tr>
+										<td>
+										<input type="checkbox" ng-model="assumed" />
+										Set Ass.:</td>
+										<td><select  ng-show="assumed" ng-options="" style="width: 100%" ></select></td>
+										<td>
+										<input ng-show="assumed" type="number" style="width: 100%" />
+										</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+
+					</div>
+					<!-- DV_COUNT -->
+					<div ng-if="false" >
+						<div>
+							<table style="border-collapse: separate; border-spacing: 5px;">
+								<tbody >
+
+									<tr>
+										<td>
+										<input type="checkbox"  ng-model="min"/>
+										Set Min:</td>
+										<td><select ng-show="min" ng-options="" style="width: 100%" ></select></td>
+										<td>
+										<input ng-show="min" type="number" style="width: 100%" />
+										</td>
+									</tr>
+									<tr>
+										<td>
+										<input type="checkbox" ng-model="max" />
+										Set Max:</td>
+										<td><select ng-show="max" ng-options="" style="width: 100%" ></select></td>
+										<td>
+										<input ng-show="max" type="number" style="width: 100%" />
+										</td>
+									</tr>
+									<tr>
+										<td>
+										<input type="checkbox" ng-model="assumed" />
+										Set Ass.:</td>
+										<td><select  ng-show="assumed" ng-options="" style="width: 100%" ></select></td>
+										<td>
+										<input ng-show="assumed" type="number" style="width: 100%" />
+										</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+					<!-- DV_DATE_TIME -->
+					<div ng-if="false" >
+						<!--	drop down example----------------
+						<div class="row">
+						<div class="clo-lg-4 col-md-4 col-sm-4">
+						<h5>Select Parttern :</h5>
+						</div>
+						<div class="clo-lg-8 col-md-8 col-sm-8"></div>
+						<div class="btn-group" dropdown is-open="true">
+						<a  dropdown-toggle data-toggle="dropdown" style="color:red">Allow All<span class="caret"></span></a>
+						<ul class="dropdown-menu" role="menu">
+						<li class="menu-item dropdown dropdown-submenu">
+						<a class="dropdown-toggle" data-toggle="dropdown">Date-Time</a>
+						<ul class="dropdown-menu">
+						<li>
+						<a>Date and partial time</a>
+						</li>
+
+						</ul>
+						</li>
+						<li class="menu-item dropdown dropdown-submenu">
+						<a class="dropdown-toggle" data-toggle="dropdown">Date</a>
+						<ul class="dropdown-menu">
+						<li>
+						<a>Full Date</a>
+						</li>
+						<li class="menu-item dropdown dropdown-submenu">
+						<a class="dropdown-toggle" data-toggle="dropdown">Partial Date</a>
+						<ul class="dropdown-menu">
+						<li>
+						<a>With month</a>
+						</li>
+
+						</ul>
+						</li>
+						</ul>
+						</li>
+						<li class="menu-item dropdown dropdown-submenu">
+						<a class="dropdown-toggle" data-toggle="dropdown">Time</a>
+						<ul class="dropdown-menu">
+						<li>
+						<a>Full time</a>
+						</li>
+						<li class="menu-item dropdown dropdown-submenu">
+						<a class="dropdown-toggle" data-toggle="dropdown">Partial time</a>
+						<ul class="dropdown-menu">
+						<li>
+						<a>With minutes</a>
+						</li>
+
+						</ul>
+						</li>
+						</ul>
+						</li>
+
+						</ul>
+						</div>
+						</div>
+
+						</div>
+						-->
+						<form class="form-group">
+							<h5>Your Date-Time Parttern :</h5>
+							<select class="form-control" ng-options="par.name for par in dateTimePartterList" ng-model="asdf"></select>
+						</form>
+					</div>
+					<!-- DV_ORDINAL -->
+					<div ng-if="false">
+						<div class="row">
+							<div class="col-lg-2 col-md-2 col-sm-2"  style="margin-left:2px; padding-left: 0">
+
+								<span class="input-group-btn">
+									<button class="btn btn-default" type="button" tabindex="ordinal"  tooltip-placement="right" tooltip="Add a ordinal" tooltip-popup-delay="500">
+										<span class="glyphicon glyphicon-plus"></span>
+									</button> </span>
+
+								<span class="input-group-btn" >
+									<button class="btn btn-default" type="button" tabindex="ordinal" tooltip-placement="right" tooltip="Delete this Ordinal " tooltip-popup-delay="500">
+										<span class="glyphicon glyphicon-minus"></span>
+									</button> </span>
+							</div>
+							<div class="col-lg-8 col-ms-8 col-sm-8" style="margin-left:10px">
+								<span class="btn-group"> <span>Code :</span>
+									<button class="btn-default {{code.selected}}"  ng-click="setValue(code)" ng-repeat="code in ordinalCodes">
+										{{code.number}}
+									</button> </span>
+							</div>
+						</div>
+						<form>
+							<h5>text :</h5>
+							<input type="text" class="form-control" />
+							<h5>description :</h5>
+							<input type="text" class="form-control"  />
+
+							<input type="checkbox" ng-model="assumed" />
+							<span>Assumed value :</span>
+							<select class="form-control" ng-show="assumed" ng-options="" style="width: 100%" ></select>
+						</form>
+					</div>
+					<!-- DV_BOOLEAN -->
+					<div ng-if="false" >
+						<form class="form-group">
+							<h5>Allow value :</h5>
+							<span>True
+								<input type="checkbox" />
+							</span>
+							<span>False
+								<input type="checkbox" />
+							</span>
+							<h5>Assumed value :</h5>
+							<select class="form-control" ng-options="var for var in allowValues"></select>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
 	</div>
+
+	<script type="text/ng-template" id="nodeBind.html">
+		<div>
+		sdfasdfgfdagasdfgadfg
+		</div>
+	</script>
 </div>
-</div>
+

@@ -60,6 +60,10 @@
 	background-image: url("../img/datatype/text.png");
 	background-repeat: no-repeat;
 }
+.archetype-edit-icon.text {
+	background-image: url("../img/datatype/text.png");
+	background-repeat: no-repeat;
+}
 .archetype-edit-icon.dv_coded_text {
 	background-image: url("../img/datatype/text.png");
 	background-repeat: no-repeat;
@@ -94,6 +98,18 @@
 }
 .archetype-edit-icon.dv_boolean {
 	background-image: url("../img/datatype/boolean.png");
+	background-repeat: no-repeat;
+}
+.archetype-edit-icon.dv_interval__date_time {
+	background-image: url("../img/datatype/interval.png");
+	background-repeat: no-repeat;
+}
+.archetype-edit-icon.dv_interval__quantity {
+	background-image: url("../img/datatype/interval.png");
+	background-repeat: no-repeat;
+}
+.archetype-edit-icon.dv_interval__count {
+	background-image: url("../img/datatype/interval.png");
 	background-repeat: no-repeat;
 }
 .archetype-edit-icon.dv_interval {
@@ -135,13 +151,26 @@
 	background-image: url("../img/datatype/choice.png");
 	background-repeat: no-repeat;
 }
-.archetype-edit-icon.id {
+.archetype-edit-icon.dv_identifier {
 	background-image: url("../img/datatype/id.png");
 	background-repeat: no-repeat;
 }
-
-
-
+.archetype-edit-icon.slot {
+	background-image: url("../img/datatype/slot.png");
+	background-repeat: no-repeat;
+}
+.archetype-edit-icon.baseslot_item {
+	background-image: url("../img/datatype/slot.png");
+	background-repeat: no-repeat;
+}
+.archetype-edit-icon.baseslot_element {
+	background-image: url("../img/datatype/slot.png");
+	background-repeat: no-repeat;
+}
+.archetype-edit-icon.baseslot_cluster {
+	background-image: url("../img/datatype/slot.png");
+	background-repeat: no-repeat;
+}
 /*do not know whether we need these image*/
 .archetype-edit-icon.pointintime {
 	background-image: url("../img/datatype/pointintime.png");

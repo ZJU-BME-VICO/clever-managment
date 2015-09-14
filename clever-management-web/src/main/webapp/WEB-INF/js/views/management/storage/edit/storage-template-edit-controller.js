@@ -1,12 +1,155 @@
 function StorageTemplateEditCtrl($scope, resourceService, busyService, msgboxService, templateParseToEditService, archetypeParseService, documentDiffModalService, STORAGE_TEMPLATE_LIST_EDIT_DRAFT_URL, STORAGE_TEMPLATE_LIST_EDIT_PUBLISHED_URL, STORAGE_TEMPLATE_SUBMIT_BY_ID_URL, STORAGE_TEMPLATE_EDIT_BY_ID_URL, ARCHETYPE_LIST_REFERENCE_URL) {
 
 	$scope.treeControl = {};
+	$scope.listTreeControl = {};
 	$scope.templateFiles = {
 		draft : [],
 		published : []
 	};
 
 	$scope.selectedLifecycle = 'Draft';
+
+	$scope.isTemplateListHidden = false;
+
+	var cluster = {
+		isDirectory : true,
+		type : 'cluster',
+		name : 'Cluster',
+		children : [],
+	};
+	var composition = {
+		isDirectory : true,
+		type : 'composition',
+		name : 'Composition',
+		children : [],
+	};
+	var element = {
+		isDirectory : true,
+		type : 'element',
+		name : 'Element',
+		children : [],
+	};
+	var action = {
+		isDirectory : true,
+		type : 'action',
+		name : 'Action',
+		children : [],
+	};
+	var evaluation = {
+		isDirectory : true,
+		type : 'evaluation',
+		name : 'Evaluation',
+		children : [],
+	};
+	var observation = {
+		isDirectory : true,
+		type : 'observation',
+		name : 'Observation',
+		children : [],
+	};
+	var instruction = {
+		isDirectory : true,
+		type : 'instruction',
+		name : 'Instruction',
+		children : [],
+	};
+	var admin = {
+		isDirectory : true,
+		type : 'admin',
+		name : 'Admin',
+		children : [],
+	};
+	var entry = {
+		isDirectory : true,
+		type : 'folder',
+		name : 'Entry',
+		collapsed : false,
+		children : [action, evaluation, observation, instruction, admin],
+	};
+	var section = {
+		isDirectory : true,
+		type : 'section',
+		name : 'Section',
+		children : [],
+	};
+	var stucture = {
+		isDirectory : true,
+		type : 'ehr-structure',
+		name : 'Stucture',
+		children : [],
+	};
+	var demographic = {
+		isDirectory : true,
+		type : 'folder',
+		name : 'Demographic Model Archetypes',
+		children : [],
+	};
+	var templateList = [{
+		isDirectory : true,
+		type : 'folder',
+		name : 'EHR Archetypes',
+		collapsed : false,
+		children : [cluster, composition, element, entry, section, stucture],
+	}, demographic];
+	var templateListMap = {
+		cluster : cluster.children,
+		composition : composition.children,
+		element : composition.children,
+		action : action.children,
+		evaluation : evaluation.children,
+		observation : observation.children,
+		instruction : instruction.children,
+		admin_entry : admin.children,
+		section : section.children,
+		stucture : stucture.children,
+		demographic : demographic.children,
+	};
+
+	var busyDraft = busyService.pushBusy('BUSY_LOADING');
+	resourceService.get(STORAGE_TEMPLATE_LIST_EDIT_DRAFT_URL).then(function(list) {
+		$scope.templateFiles.draft = list;
+		// console.log(list);
+		$scope.refreshTemplateList($scope.templateFiles.draft);
+		busyService.popBusy(busyDraft);
+	});
+
+	var busyPublished = busyService.pushBusy('BUSY_LOADING');
+	resourceService.get(STORAGE_TEMPLATE_LIST_EDIT_PUBLISHED_URL).then(function(list) {
+		$scope.templateFiles.published = list;
+		// console.log(list);
+		busyService.popBusy(busyPublished);
+	});
+
+	$scope.searchKeyMapper = function(node) {
+		return node.conceptName + ' (' + node.version + ')';
+	};
+
+	$scope.$watch('templateListFilter', function(newValue) {
+		if (newValue != undefined) {
+			$scope.listTreeControl.search(newValue);
+		}
+
+	});
+
+	$scope.refreshTemplateList = function(list) {
+		angular.forEach(templateListMap, function(value, key) {
+			value.length = 0;
+		});
+		angular.forEach(list, function(template, index) {
+			if (template.rmName == 'DEMOGRAPHIC') {
+				templateListMap['demographic'].push(template);
+			} else {
+				var templates = templateListMap[template.rmEntity.toLowerCase()];
+				if (template == undefined) {
+					console.log('Cannot classify template ' + template.name);
+				} else {
+					templates.push(template);
+				}
+			}
+		});
+		$scope.templateList = [];
+		$scope.templateList = templateList;
+	};
 
 	var x2js = new X2JS({
 		escapeMode : false,
@@ -35,26 +178,28 @@ function StorageTemplateEditCtrl($scope, resourceService, busyService, msgboxSer
 	});
 
 	$scope.selectTemplate = function(template) {
-		var bid = busyService.pushBusy('BUSY_LOADING');
-		$scope.selectedTemplate = template;
-		//console.log("this is selected template");
-		//console.log($scope.selectedTemplate);
-		$scope.selectedTemplate.oet = formatXml($scope.selectedTemplate.oet);
-		try {
-			$scope.oetObj = x2js.xml_str2json(template.oet);
+		if (!template.isDirectory) {
+			var bid = busyService.pushBusy('BUSY_LOADING');
+			$scope.selectedTemplate = template;
+			//console.log("this is selected template");
+			//console.log($scope.selectedTemplate);
+			$scope.selectedTemplate.oet = formatXml($scope.selectedTemplate.oet);
+			try {
+				$scope.oetObj = x2js.xml_str2json(template.oet);
 
-			//console.log("this is the oet object---------------------------------------------------------");
-			//console.log($scope.oetObj);
-			$scope.parsedTemplate = templateParseToEditService.parseTemplate($scope.oetObj.template);
-			console.log("----------------------this is the parsedTemplate definition");
-			console.log($scope.parsedTemplate.definition);
-		} catch(ex) {
-			console.log(ex);
+				//console.log("this is the oet object---------------------------------------------------------");
+				//console.log($scope.oetObj);
+				$scope.parsedTemplate = templateParseToEditService.parseTemplate($scope.oetObj.template);
+				console.log("----------------------this is the parsedTemplate definition");
+				console.log($scope.parsedTemplate.definition);
+			} catch(ex) {
+				console.log(ex);
+			}
+			console.log($scope.oetObj);
+			console.log($scope.parsedTemplate);
+			$scope.isExpandedAll = false;
+			busyService.popBusy(bid);
 		}
-		console.log($scope.oetObj);
-		console.log($scope.parsedTemplate);
-		$scope.isExpandedAll = false;
-		busyService.popBusy(bid);
 	};
 
 	$scope.generateOetDiff = function() {
@@ -71,7 +216,15 @@ function StorageTemplateEditCtrl($scope, resourceService, busyService, msgboxSer
 
 	$scope.getTreeNodeLabel = function(node, aliasName) {
 		var label = '';
-		label += '<span class="clever-icon ' + node.label.picType.toLowerCase() + '" style="padding: 7px 10px; background-position-y: 10px;"></span>' + '<span ng-class="{\'node-label-max\': ' + aliasName + '.label.occurrences.upper != 0}"';
+		//label += '<span class="clever-icon ' + node.label.picType.toLowerCase() + '" style="padding: 7px 10px; background-position-y: 10px;"></span>' + '<span ng-class="{\'node-label-max\': ' + aliasName + '.label.occurrences.upper != 0}"';
+
+		if (node.label.occurrences.upper != 0) {
+			label += '<span class="clever-icon ' + node.label.picType.toLowerCase() + '" style="padding: 7px 10px; background-position-y: 10px;"></span>' + '<span ng-class="{\'node-label-max\': true}"';
+		} else {
+			label += '<span class="clever-icon ' + node.label.picType.toLowerCase() + '" style="padding: 7px 10px; background-position-y: 10px;"></span>' + '<span ng-class="{\'node-label-max\': false}"';
+
+		}
+
 		if (node.label.text) {
 			label += '<span style="color: brown;">' + node.label.text;
 		}
@@ -83,7 +236,15 @@ function StorageTemplateEditCtrl($scope, resourceService, busyService, msgboxSer
 			}
 			label += getOntologyByNode(node);
 		}
-		label += '<span ng-if="' + aliasName + '.label.occurrences.upper != 0">&nbsp&nbsp[{{' + aliasName + '.label.occurrences.lower}}..{{' + aliasName + '.label.occurrences.upper}}]' + '<span ng-if="' + aliasName + '.label.occurrenceType == \'*\' && ' + aliasName + '.label.occurrences.upper == 1">&nbsp&nbsp&nbsp<em>[0..*] to [0..1]</em></span>' + '</span>' + '</span>' + '</span>';
+		//label += '<span ng-if="' + aliasName + '.label.occurrences.upper != 0">&nbsp&nbsp[{{' + aliasName + '.label.occurrences.lower}}..{{' + aliasName + '.label.occurrences.upper}}]' + '<span ng-if="' + aliasName + '.label.occurrenceType == \'*\' && ' + aliasName + '.label.occurrences.upper == 1">&nbsp&nbsp&nbsp<em>[0..*] to [0..1]</em></span>' + '</span>' + '</span>' + '</span>';
+
+		if (node.label.occurrences.upper != 0) {
+			label += '<span>&nbsp&nbsp[' + node.label.occurrences.lower + '..' + node.label.occurrences.upper + ']';
+			if (node.label.occurrenceType == "*" && node.label.occurrences.upper == 1) {
+				label += '<span>&nbsp&nbsp&nbsp<em>[0..*] to [0..1]</em></span>' + '</span>' + '</span>' + '</span>';
+			}
+		}
+
 		return label;
 		// return label + '<span>[' + node.label.path + ']</span>'
 	};
@@ -391,8 +552,6 @@ function StorageTemplateEditCtrl($scope, resourceService, busyService, msgboxSer
 		}
 	}
 
-	refreshDraftTemplateData();
-	refreshPublishedTemplateData();
 
 	$scope.submitTemplateFile = function() {
 		resourceService.get(STORAGE_TEMPLATE_SUBMIT_BY_ID_URL + $scope.selectedTemplate.id).then(function(result) {
@@ -422,20 +581,6 @@ function StorageTemplateEditCtrl($scope, resourceService, busyService, msgboxSer
 			}
 		});
 	};
-
-	function refreshDraftTemplateData() {
-		resourceService.get(STORAGE_TEMPLATE_LIST_EDIT_DRAFT_URL).then(function(list) {
-			$scope.templateFiles.draft = list;
-			// console.log(list);
-		});
-	}
-
-	function refreshPublishedTemplateData() {
-		resourceService.get(STORAGE_TEMPLATE_LIST_EDIT_PUBLISHED_URL).then(function(list) {
-			$scope.templateFiles.published = list;
-			// console.log(list);
-		});
-	}
 
 	function formatXml(xml) {
 		var formatted = '';

@@ -1,7 +1,6 @@
-<div class= "col-xs-12 col-md-12 col-lg-12 flex-box">
+<!-- 
 <div style="overflow: auto">
-	<accordion close-others="oneAtATime">
-		<accordion-group heading="Base information" is-open="status.isBaseInfoOpen" is-disabled="status.isBaseInfoDisabled" style="blue">
+	
 
 			<form>
 				<div class="form-group">
@@ -31,8 +30,8 @@
 					<select  class ="form-control" ng-model="lifecycleState.state" ng-options ="lifeCycle for lifeCycle in archetypeLifeCycleList"></select>
 				</div>
 			</div>
-		</accordion-group>
-		<accordion-group heading="Author Ship" is-open="status.isAuthorShipOpen" is-disabled="status.isAuthorShipDisabled">
+		
+		
 
 			<div class="row">
 
@@ -51,10 +50,7 @@
 							<label for="OriAuthorOrgnization">Orgnization:</label>
 							<input type="text" class="form-control" id = "OriAuthorOrgnization" placeholder="ZJU" ng-model="oriAuthorInfo.organisation">
 						</div>
-						<!--	<div class="form-group">
-						<label for="OriAuthorName">Date:</label>
-						<input type="text" class="form-control" id = "OriAuthorName" placeholder="Mecro" ng-model="originalAuthorInfo.date">
-						</div>-->
+						
 						<div class="form-group">
 							<label for="OriAuthorName">Date:</label>
 								<input type="text" class="form-control"  ng-model="oriAuthorInfo.date"  />						
@@ -92,8 +88,8 @@
 
 				</div>
 			</div>
-		</accordion-group>
-		<accordion-group heading="Details"  is-open="status.isDetailsOpen"  is-disabled="status.isDetailsDisabled">
+		
+		
 			<div class="form-group">
 				<label for="purpose"><strong>Purpose<strong></label>
 				<input type="text" class="form-control" id="purpose" placeholder="purpose..." ng-model="detail.purpose">
@@ -110,7 +106,133 @@
 				<label for="copyright"><strong>Copyright</strong></label>
 				<input type="text" class="form-control" id="copyright"  placeholder="Copyright..." ng-model="detail.copyright">
 			</div>
-		</accordion-group>
-	</accordion>
-</div>
-</div>
+
+	
+</div> -->
+
+<tabset class="row" tab-control="tabControl">
+	<tab>
+		<tab-heading style="color:#11AAA2;">
+			BaseInfo
+		</tab-heading>
+		<div  class="header-info" ng-style="{height: contentHeight.value - 175}">
+			<form>
+				<div class="form-group">
+					<label for="ArchetypeId">Archetype Id</label>
+					<input type="text"  ng-model="archetypeId.value" class="form-control" id="ArchetypeId" placeholder="Archetype Id ..">
+				</div>
+			</form>
+
+			
+				<label>Concept :</label>
+					<input class="form-control" ng-model="baseInfo[0].__text">
+				
+				
+				<label>Description :</label>
+					<textarea  class="form-control" ng-model="baseInfo[1].__text"></textarea>
+			
+			
+				<label>Comment :</label>
+					<textarea  class="form-control" ng-model="baseInfo[2].__text"></textarea>
+				
+			<div class="row">
+				<div class= "col-xs-6 col-md-6 col-lg-6">
+					<label>Language:</label>
+					<select  class ="form-control" ng-model="selectedLanguage.code" ng-options ="lan for lan in languageList"></select>
+				</div>
+				<div class= "col-xs-6 col-md-6 col-lg-6">
+					<label>LifeCycle:</label>
+					<select  class ="form-control" ng-model="lifecycleState.state" ng-options ="lifeCycle for lifeCycle in archetypeLifeCycleList"></select>
+				</div>
+			</div>
+		</div>
+	</tab>
+
+	<tab>
+		<tab-heading style="color:#11AAA2;">
+			Authorship
+		</tab-heading>
+
+		<div class="row header-info" style="margin-top:20px" ng-style="{height: contentHeight.value - 175}">
+
+			<div class="col-xs-6 col-md-6 col-lg-6">
+				<label>Original Author:</label>
+				<form>
+					<div class="form-group">
+						<label for="OriAuthorName">Name:</label>
+						<input type="text" class="form-control" id = "OriAuthorName" placeholder="Mecro" ng-model="oriAuthorInfo.name">
+					</div>
+					<div class="form-group">
+						<label for="OriAuthorEmail">Email:</label>
+						<input type="text" class="form-control" id = "OriAuthorEmail" placeholder="example@xxx.com" ng-model="oriAuthorInfo.email">
+					</div>
+					<div class="form-group">
+						<label for="OriAuthorOrgnization">Orgnization:</label>
+						<input type="text" class="form-control" id = "OriAuthorOrgnization" placeholder="ZJU" ng-model="oriAuthorInfo.organisation">
+					</div>
+
+					<div class="form-group">
+						<label for="OriAuthorName">Date:</label>
+						<input type="text" class="form-control"  ng-model="oriAuthorInfo.date"  />
+					</div>
+
+				</form>
+			</div>
+
+			<div class="col-xs-6 col-md-6 col-lg-6">
+				<label>Other Contributors:</label>
+				<button class="btn btn-default" type="button" ng-click="addContributor()">
+					<span class="glyphicon glyphicon-plus"></span>
+				</button>
+				<button class="btn btn-default" type = "button" ng-click="deleteContributor()">
+					<span class="glyphicon glyphicon-minus"></span>
+				</button>
+				<button class="btn btn-default" type="button" ng-click="saveContributors()">
+					Save
+				</button>
+				<form>
+					<div class="form-group">
+						<label>Selected:</label>
+						<input type="text"  class="form-control" ng-model="selectedContributor.name" placeholder="name,orgnization,country">
+					</div>
+					<div class="form-group">
+						<ul>
+							<li ng-repeat="contributor in otherContributorList track by $index">
+								<span class="glyphicon glyphicon-chevron-right"></span>
+								<a href="#" ng-click="$event.preventDefault(); selectContributor(contributor)">{{contributor.name}}</a>
+							</li>
+						</ul>
+					</div>
+				</form>
+				</form>
+
+			</div>
+		</div>
+	</tab>
+
+	<tab>
+		<tab-heading style="color:#11AAA2;" ng-style="{height: contentHeight.value - 175}">
+			Details
+		</tab-heading>
+
+		<div class="header-info">
+			<div class="form-group">
+				<label for="purpose"><strong>Purpose<strong></label>
+				<input type="text" class="form-control" id="purpose" placeholder="purpose..." ng-model="detail.purpose">
+			</div>
+			<div class="form-group">
+				<label for="use"><strong>Use</strong></label>
+				<input type="text" class="form-control" id="use" placeholder="use for ?..."  ng-model="detail.use">
+			</div>
+			<div class="form-group">
+				<label for="issue"><strong>Missue</strong></label>
+				<input type="text" class="form-control" id="missue"  placeholder="Missue..." ng-model="detail.missue">
+			</div>
+			<div class="form-group">
+				<label for="copyright"><strong>Copyright</strong></label>
+				<input type="text" class="form-control" id="copyright"  placeholder="Copyright..." ng-model="detail.copyright">
+			</div>
+		</div>
+	</tab>
+</tabset>
+

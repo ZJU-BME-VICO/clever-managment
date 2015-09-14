@@ -1,53 +1,48 @@
-<div style="border-bottom: 1px solid #e5e5e5;"></div>
-<div class="modal-body">
-	<div class="content-container" ng-style="{height: containerHeight - 120}">
-		<div class='row'>
-			<div class="col-md-3">
-				<div class="panel panel-default">
-					<div class="panel-heading">
-						<input type="text" placeholder="{{'APPLICATION_VIEW_FIND_HINT' | translate}}"
-						class="form-control" style="width: 100%;" ng-model="search.name">
-					</div>
-					<div class="list-group" ng-style="{height: containerHeight - 177}" style="overflow: auto;">
-						<a ng-href="{{currentUrl}}#{{application.id}}" style="cursor: default;"
-						class="list-group-item" ng-class="{active: application.id == selectedAppId}"
-						ng-repeat="application in applications | filter:search"
-						ng-click="selectApp(application.id)">{{application.name}}</a>
-					</div>
-				</div>
+<div class='row' ng-style="{height: containerHeight - 20}">
+	<div class="col-md-3">
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<input type="text" placeholder="{{'APPLICATION_VIEW_FIND_HINT' | translate}}"
+				class="form-control" style="width: 100%;" ng-model="search.name">
 			</div>
-			<div class="col-md-9">
-				<div ng-style="{height: containerHeight - 120}" style="overflow: auto;">
-					<div ng-repeat="application in applications | filter:search">
-						<section id="{{application.id}}">
-							<div class="panel panel-default" style="margin-right: 10px;"
-							ng-mouseenter="editShow = true" ng-mouseleave="editShow = false" >
-								<div class="panel-body">
-									<div class="row">
-										<div class="col-md-3">
-											<div class="thumbnail" style="margin-bottom: 0px;">
-												<img ng-src="{{websiteDomain + application.imgPath}}"
-												style="width: 150px;height: 150px;">
-											</div>
-										</div>
-										<div class="col-md-9">
-											<button type="button" class="btn btn-default pull-right"
-											ng-show="editShow" ng-click="gotoEditPage(application)">
-												<span class="glyphicon glyphicon-edit"></span> {{'APPLICATION_VIEW_EDIT' | translate}}
-											</button>
-											<a href="{{application.url}}" style="font-size: 20px;">{{application.name}}</a>
-											<br/>
-											<br/>
-											{{application.description}}
-										</div>
+			<div class="list-group" ng-style="{height: containerHeight - 70}" style="overflow: auto;">
+				<a ng-href="{{currentUrl}}#{{application.id}}" style="cursor: default;"
+				class="list-group-item" ng-class="{active: application.id == selectedAppId}"
+				ng-repeat="application in applications | filter:search"
+				ng-click="selectApp(application.id)">{{application.name}}</a>
+			</div>
+		</div>
+	</div>
+	<div class="col-md-9">
+		<div ng-style="{height: containerHeight - 10}" style="overflow: auto;">
+			<div ng-repeat="application in applications | filter:search">
+				<section id="{{application.id}}">
+					<div class="panel panel-default" style="margin-right: 10px;"
+					ng-mouseenter="editShow = true" ng-mouseleave="editShow = false" >
+						<div class="panel-body">
+							<div class="row">
+								<div class="col-md-3">
+									<div class="thumbnail" style="margin-bottom: 0px;">
+										<img ng-src="{{websiteDomain + application.imgPath}}"
+										style="width: 150px;height: 150px;">
 									</div>
 								</div>
+								<div class="col-md-9">
+									<button type="button" class="btn btn-default pull-right"
+									ng-show="editShow" ng-click="gotoEditPage(application)">
+										<span class="glyphicon glyphicon-edit"></span> {{'APPLICATION_VIEW_EDIT' | translate}}
+									</button>
+									<a href="{{application.url}}" style="font-size: 20px;">{{application.name}}</a>
+									<br/>
+									<br/>
+									{{application.description}}
+								</div>
 							</div>
-						</section>
+						</div>
 					</div>
-				</div>
+				</section>
 			</div>
 		</div>
 	</div>
 </div>
-<div style="border-bottom: 1px solid #e5e5e5;"></div>
+</div>
