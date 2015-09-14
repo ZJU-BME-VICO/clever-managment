@@ -9,6 +9,13 @@
   border-right: 2px solid #eee;
 }
 
+.header-info {
+	margin-left:50px;
+	margin-right:50px;
+	margin-top:20px; 
+	overflow-x: hidden;
+	overflow-y: auto; " 
+}
 .attribute{
 	color: #8cc152;
 }

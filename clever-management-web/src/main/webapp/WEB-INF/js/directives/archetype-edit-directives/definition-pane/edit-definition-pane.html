@@ -10,7 +10,7 @@
 					<span class="glyphicon glyphicon-minus"></span>
 				</button> </span>
 		</div>
-		<div class="col-xs-5 col-md-5 col-lg-5"  ng-style="{height: contentHeight.value - 57}" style="overflow: auto; padding-left:0px; margin-left:0px;" >
+		<div class="col-xs-5 col-md-5 col-lg-5"  ng-style="{height: contentHeight.value - 85}" style="overflow: auto; padding-left:0px; margin-left:0px;" >
 
 			<tree-view tree-data="definition.treeItems"  class="definition-tree"  node-alias-name="archetype" tree-control="treeControl" click-node-callback="getNodeInfo(value)"   node-label-generator="getTreeNodeLabel" node-menu-generator="getTreeNodeMenu" menu-prefix = "definition" click-edit-menu-callback="editArchetype(node,type)">
 				<tree-expanded-icon>
@@ -22,7 +22,7 @@
 			</tree-view>
 		</div>
 		<!-- constraint edit pane -->
-		<div class = "col-lg-6 col-md-6 col-sm-6"  ng-style="{height: contentHeight.value - 57}" style="overflow: auto; padding-left:0px; margin-left:0px; padding-top: 10px">
+		<div class = "col-lg-6 col-md-6 col-sm-6"  ng-style="{height: contentHeight.value - 85}" style="overflow: auto; padding-left:0px; margin-left:0px; padding-top: 10px">
 			
 				 
 			<div class="panel" ng-if="currentNode.oriNodeRef.rm_attribute_name == 'subject'">
@@ -54,7 +54,7 @@
 			</div>
 			
 			
-			<div class="panel">
+			<div class="panel" ng-if="currentNode">
 				<div class="panel-heading" style="color: white;background-color: #FF7F00;border-color: #FF7F00;">
 					Constraint
 				</div>
@@ -92,9 +92,9 @@
 						<table style="border-collapse: separate; border-spacing: 5px;">
 							<tbody >
 								<tr>
-									<td ng-repeat="item in EXISTENCE" for="{{item}}" > {{item}}
+									<td ng-repeat="item in EXISTENCE" for="{{item}}" >
 									<input style="margin-left:10px" type="radio" ng-model="simpleExistence.value" ng-value="item"  id="{{item}}"  />
-									</td>
+									 {{item}}</td>
 								</tr>
 							</tbody>
 						</table>

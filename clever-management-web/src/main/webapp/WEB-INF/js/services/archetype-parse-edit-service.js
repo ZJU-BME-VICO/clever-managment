@@ -649,7 +649,7 @@ angular.module('clever.management.service.archetypeParseEdit', []).service('arch
 	};
 
 	var noTraverseTypeList = ['PARTY_REF','DV_TEXT', 'DV_CODED_TEXT', 'DV_QUANTITY', 'DV_ORDINAL', 'DV_DATE_TIME', 'DV_DATE', 'DV_TIME', 'DV_BOOLEAN', 'DV_COUNT', 'DV_DURATION', 'DV_INTERVAL<DV_DATE>', 'DV_INTERVAl<DV_TIME>', 'DV_INTERVAL<DV_DATE_TIME>', 'DV_INTERVAL<DV_COUNT>', 'DV_INTERVAL<DV_QUANTITY>', 'DV_MULTIMEDIA', 'DV_URI', 'DV_EHR_URI', 'DV_PROPORTION', 'DV_IDENTIFIER', 'DV_PARSABLE', 'DV_BOOLEAN'];
-	var noTraverseAttributes = ['subject', 'ism_transition', 'otherParticipations', 'links','events','activities','context','content','category'];
+	var noTraverseAttributes = ['subject', 'ism_transition', 'otherParticipations', 'links','events','activities','context','content','category', 'protocol'];
 	var typeList = ['ITEM_LIST', 'ITEM_TREE', 'HISTORY'];
 	function extractNode(node, term_definitions, parentAttribute) {
 		var type, attribute, code, occurrences, existence, cardinality, cnname, enname, dataType, picType, tableName, targetPath, name;

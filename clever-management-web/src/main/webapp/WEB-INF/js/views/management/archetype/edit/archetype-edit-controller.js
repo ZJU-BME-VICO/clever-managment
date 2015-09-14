@@ -1,4 +1,4 @@
-function ArchetypeEditCtrl($scope, $modal,$log,msgboxService,busyService,archetypeEditService,documentDiffModalService, resourceService,archetypeParseEditService, archetypeParseToEditService ,templateParseToEditService,archetypeSerializeService, archetypeParseService,ARCHETYPE_LIST_EDIT_DRAFT_URL, ARCHETYPE_LIST_EDIT_PUBLISHED_URL,ARCHETYPE_CREATE_URL, ARCHETYPE_EDIT_BY_ID_URL, ARCHETYPE_SUBMIT_BY_ID_URL) {
+function ArchetypeEditCtrl($scope, $modal,$log,msgboxService,busyService,archetypeEditService,documentDiffModalService, resourceService,archetypeParseEditService, archetypeParseToEditService ,templateParseToEditService,archetypeSerializeService, archetypeParseService,ARCHETYPE_LIST_EDIT_DRAFT_URL, ARCHETYPE_LIST_EDIT_PUBLISHED_URL, ARCHETYPE_EDIT_BY_ID_URL, ARCHETYPE_SUBMIT_BY_ID_URL) {
 
 	
 	$scope.editId = 0;
@@ -45,6 +45,9 @@ function ArchetypeEditCtrl($scope, $modal,$log,msgboxService,busyService,archety
 	}, function(newValue) {
 		$scope.tabContainerHeight.value = newValue - 35;
 	});
+	$scope.createArchetype = "ARCHETYPE_PANE_CREATE";
+	$scope.saveArchetype = "ARCHETYPE_PANE_SAVE";
+	$scope.submitArchetype = "ARCHETYPE_PANE_SUBMIT";
     
 	$scope.treeControl = {};
 	$scope.isCollapse = true;
@@ -82,6 +85,38 @@ function ArchetypeEditCtrl($scope, $modal,$log,msgboxService,busyService,archety
 		
 	};
 	
+	
+	$scope.submitSelectedArchetype = function() {
+		console.log("submit archetype start");
+		//console.log($scope.oriArchetype);
+		var archetype = archetypeSerializeService.serializeArchetype($scope.oriArchetype);
+		resourceService.post( "/clever-management-web/archetypes/edit/submit/id/" + $scope.selectedArchetype.id, {
+			archetype : archetype
+		}).then(function() {
+		});
+	};
+
+	$scope.saveSelectedArchetype = function() {
+		console.log("save archetype start");
+		var archetype = archetypeSerializeService.serializeArchetype($scope.oriArchetype);
+		resourceService.post("/clever-management-web/archetypes/edit/save/id/" +  $scope.selectedArchetype.id, {
+			archetype : archetype,
+		}).then(function() {
+		});
+	};
+
+
+	
+	$scope.getFixedTitle = function(title, length) {
+		if (title) {
+			var titleLength = length || 40;
+			if (title.length > titleLength) {
+				return title.substring(0, titleLength / 2) + '...' + title.substring(title.length - titleLength / 2, title.length);
+			} else
+				return title;
+		}
+	}; 
+
 	$scope.selectArchetype = function(archetype) {
 				
 		$scope.selectedArchetype = archetype;		
@@ -219,13 +254,7 @@ function ArchetypeEditCtrl($scope, $modal,$log,msgboxService,busyService,archety
 	
 	
  
-	$scope.saveSelectedArchetype = function() {
-
-	};
-	$scope.submitSelectedAtrchetype = function() {
-
-	};
-
+	
   
 	 function createArchetype(info) {
 		if (info) {
@@ -276,172 +305,189 @@ function ArchetypeEditCtrl($scope, $modal,$log,msgboxService,busyService,archety
     }
 	
 	
+	//-------------create action ---------------------
+	function createAction(info) {
+		var jsonAction = createBaseArchetype(info);
+		pushToArchetypeList(jsonAction, info);
+	}
 
-   //-------------create action ---------------------
-   function createAction(info){
-   	  var jsonAction = createBaseArchetype(info);
-   	  pushToArchetypeList(jsonAction,info);
-   }
-   
-   //-----------create instruction-------------------
-    function createInstruction(info){
-   	 var jsonInstruction = createBaseArchetype(info);
-   	 //add default element here
-   	 addActivityToInstruction(jsonInstruction);
-   	 pushToArchetypeList(jsonInstruction,info);
-   }
-   
-   function addActivityToInstruction(instruction){
-   //	var editor = archetypeEditService;
-   	 var ItemTree = editor.getCComplexObject([],"at0002",editor.getDefaultOccurrences(1,1),"ITEM_TREE");
-   	 var description = editor.getCSingleAttribute(ItemTree,editor.getDefaultExistence(1,1),"description");
-   	 var activityObject = editor.getCComplexObject(description,"at0001",editor.getDefaultOccurrences(0,1),"ACTIVITY");
-   	 var activitiesAttribute = editor.getCMultipleAttribute(activityObject,editor.getDefaultCardinality(0),editor.getDefaultExistence(1,1),"activities");
-     instruction.definition.attributes.push(activitiesAttribute);
-     
-     editor.synchronizeOriOntology("at0002","Tree","@internal@",instruction.ontology);
-     editor.synchronizeOriOntology("at0001","Current Activity","Current Activity",instruction.ontology);
-   }
-   
-   //------------create observation-------------------
-   function createObservation(info){
-   	 var jsonObservation = createBaseArchetype(info);
-   	 //add default element here
-   	 addDataToObservation(jsonObservation);
-   	 pushToArchetypeList(jsonObservation,info);
-   }
-   
-   function getEvent(){
-   	  var ItemTree = editor.getCComplexObject([],"at0003",editor.getDefaultOccurrences(1,1),"ITEM_TREE");
-      var dataAttribute = editor.getCSingleAttribute(ItemTree,editor.getDefaultExistence(1,1),"data");
-      var eventObject = editor.getCComplexObject(dataAttribute,"at0002",editor.getDefaultOccurrences(0,1),"EVENT");
-      return eventObject;
-   }
-   function addDataToObservation(observation){
-   	  var eventObject = getEvent();
-   	  var eventsAttribute = editor.getCMultipleAttribute(eventObject,editor.getDefaultCardinality(1),editor.getDefaultExistence(1,1),"events");
-   	  var historyObject = editor.getCComplexObject(eventsAttribute,"at0001",editor.getDefaultOccurrences(1,1),"HISTORY");
-   	  var dataAttribute = editor.getCSingleAttribute(historyObject,editor.getDefaultExistence(1,1),"data");
-   	  observation.definition.attributes.push(dataAttribute);
-   	  
-   	  editor.synchronizeOriOntology("at0001","Event Series","@ internal @",observation.ontology);
-   	  editor.synchronizeOriOntology("at0002","Any event","*",observation.ontology);
-   	  editor.synchronizeOriOntology("at0003","Tree","@ internal @",observation.ontology);
-   }
-   //end
-   
-   //--------------create evaluation----------------------
-   function createEvaluation(info){
-   	var jsonEvaluation = createBaseArchetype(info);
-   	//add default element here
-   	var itemTree = editor.getCComplexObject([],"at0001",editor.getDefaultOccurrences(1,1),"ITEM_TREE");
-    editor.synchronizeOriOntology("at0001","Tree","@ internal @",jsonEvaluation.ontology);
-   	var dataAttribute = editor.getCSingleAttribute(itemTree,editor.getDefaultExistence(1,1),"data");
-   	jsonEvaluation.definition.attributes.push(dataAttribute);
-   	pushToArchetypeList(jsonEvaluation,info);
-   }
-   
-   //----------create admin_entry------------------------
-   function createAdminEntry(info){
-   	var jsonAdminEntry = createBaseArchetype(info);
-   	//add default element here
-   	var ItemTree = editor.getCComplexObject([],"at0001",editor.getDefaultOccurrences(1,1),"ITEM_TREE");
-   	var dataAttribut = editor.getCSingleAttribute(ItemTree,editor.getDefaultExistence(1,1),"data");
-   	jsonAdminEntry.definition.attributes.push(dataAttribut);
-   	//synchronize the ontology
-   	editor.synchronizeOriOntology("at0001","Tree","@ internal @",jsonAdminEntry.ontology);
-   	pushToArchetypeList(jsonAdminEntry,info);
-   }
-   
-   //---------create section---------------------------
-   function createSection(info){
-   	var jsonSection = createBaseArchetype(info);
-   	pushToArchetypeList(jsonSection,info);
-   }
-   
-   //---------create conposition-----------------------
-   function createComposition(info){
-   	var jsonCompositon = createBaseArchetype(info);
-   	var codePhrase = editor.getCCodePhraseWithPara("openehr",['433'],undefined);
-   	var definingCode = editor.getCSingleAttribute(codePhrase,editor.getDefaultExistence(1,1),"defining_code");
-    var codeText =editor.getCComplexObject(definingCode,undefined,editor.getDefaultOccurrences(1,1),"DV_CODED_TEXT");
-    var category = editor.getCSingleAttribute(codeText,editor.getDefaultExistence(1,1),"category");
-     
-    jsonCompositon.definition.attributes.push(category);
-    
-    pushToArchetypeList(jsonCompositon,info);
-   }
-   
-   //-----create item tree---------------
-   function createItemTree(info){
-   	var jsonItemTree = createBaseArchetype(info);
-    pushToArchetypeList(jsonItemTree,info);
-   } 
-   
-   //------create item list-----
-   function createItemList(info){
-   	var jsonItemList = createBaseArchetype(info);
-   	pushToArchetypeList(jsonItemList,info);
-   }
-   
-   //----create item single----------
-   function createItemSingle(info){
-     var jsonItemSingle = createBaseArchetype(info);
-     pushToArchetypeList(jsonItemSingle,info);
-   }
-   
-   //-----create item table--------
-   function createItemTable(info){//not absolutely right
-   	var jsonItemTable = createBaseArchetype(info);
-   	
-   	var rotated = editor.getCSingleAttribute([],editor.getDefaultExistence(1,1),"rotated");
-   	var cluster = editor.getCComplexObject([],"at0002",editor.getDefaultOccurrences(0,1),"CLUSTER");
-   	var rows = editor.getCMultipleAttribute(cluster,editor.getDefaultCardinality(1),editor.getDefaultExistence(1,1),"rows");
+	//-----------create instruction-------------------
+	function createInstruction(info) {
+		var jsonInstruction = createBaseArchetype(info);
+		//add default element here
+		addActivityToInstruction(jsonInstruction);
+		pushToArchetypeList(jsonInstruction, info);
+	}
+
+	function addActivityToInstruction(instruction) {
+		//	var editor = archetypeEditService;
+		var ItemTree = editor.getCComplexObject([], "at0002", editor.getDefaultOccurrences(1, 1), "ITEM_TREE");
+		var description = editor.getCSingleAttribute(ItemTree, editor.getDefaultExistence(1, 1), "description");
+		var activityObject = editor.getCComplexObject(description, "at0001", editor.getDefaultOccurrences(0, 1), "ACTIVITY");
+		var activitiesAttribute = editor.getCMultipleAttribute(activityObject, editor.getDefaultCardinality(0), editor.getDefaultExistence(1, 1), "activities");
+		instruction.definition.attributes.push(activitiesAttribute);
+
+		editor.synchronizeOriOntology("at0002", "Tree", "@internal@", instruction.ontology);
+		editor.synchronizeOriOntology("at0001", "Current Activity", "Current Activity", instruction.ontology);
+	}
+
+	//------------create observation-------------------
+	function createObservation(info) {
+		var jsonObservation = createBaseArchetype(info);
+		//add default element here
+		addDataToObservation(jsonObservation);
+		pushToArchetypeList(jsonObservation, info);
+	}
+
+	function getEvent() {
+		var ItemTree = editor.getCComplexObject([], "at0003", editor.getDefaultOccurrences(1, 1), "ITEM_TREE");
+		var dataAttribute = editor.getCSingleAttribute(ItemTree, editor.getDefaultExistence(1, 1), "data");
+		var eventObject = editor.getCComplexObject(dataAttribute, "at0002", editor.getDefaultOccurrences(0, 1), "EVENT");
+		return eventObject;
+	}
+
+	function addDataToObservation(observation) {
+		var eventObject = getEvent();
+		var eventsAttribute = editor.getCMultipleAttribute(eventObject, editor.getDefaultCardinality(1), editor.getDefaultExistence(1, 1), "events");
+		var historyObject = editor.getCComplexObject(eventsAttribute, "at0001", editor.getDefaultOccurrences(1, 1), "HISTORY");
+		var dataAttribute = editor.getCSingleAttribute(historyObject, editor.getDefaultExistence(1, 1), "data");
+		observation.definition.attributes.push(dataAttribute);
+
+		editor.synchronizeOriOntology("at0001", "Event Series", "@ internal @", observation.ontology);
+		editor.synchronizeOriOntology("at0002", "Any event", "*", observation.ontology);
+		editor.synchronizeOriOntology("at0003", "Tree", "@ internal @", observation.ontology);
+	}
+
+	//end
+
+	//--------------create evaluation----------------------
+	function createEvaluation(info) {
+		var jsonEvaluation = createBaseArchetype(info);
+		//add default element here
+		var itemTree = editor.getCComplexObject([], "at0001", editor.getDefaultOccurrences(1, 1), "ITEM_TREE");
+		editor.synchronizeOriOntology("at0001", "Tree", "@ internal @", jsonEvaluation.ontology);
+		var dataAttribute = editor.getCSingleAttribute(itemTree, editor.getDefaultExistence(1, 1), "data");
+		jsonEvaluation.definition.attributes.push(dataAttribute);
+		pushToArchetypeList(jsonEvaluation, info);
+	}
+
+	//----------create admin_entry------------------------
+	function createAdminEntry(info) {
+		var jsonAdminEntry = createBaseArchetype(info);
+		//add default element here
+		var ItemTree = editor.getCComplexObject([], "at0001", editor.getDefaultOccurrences(1, 1), "ITEM_TREE");
+		var dataAttribut = editor.getCSingleAttribute(ItemTree, editor.getDefaultExistence(1, 1), "data");
+		jsonAdminEntry.definition.attributes.push(dataAttribut);
+		//synchronize the ontology
+		editor.synchronizeOriOntology("at0001", "Tree", "@ internal @", jsonAdminEntry.ontology);
+		pushToArchetypeList(jsonAdminEntry, info);
+	}
+
+	//---------create section---------------------------
+	function createSection(info) {
+		var jsonSection = createBaseArchetype(info);
+		//editor.synchronizeOriOntology("at0001","Tree","@ internal @",jsonAdminEntry.ontology);
+		pushToArchetypeList(jsonSection, info);
+	}
+
+	//---------create conposition-----------------------
+	function createComposition(info) {
+		var jsonCompositon = createBaseArchetype(info);
+		var codePhrase = editor.getCCodePhraseWithPara("openehr", ['433'], undefined);
+		var definingCode = editor.getCSingleAttribute(codePhrase, editor.getDefaultExistence(1, 1), "defining_code");
+		var codeText = editor.getCComplexObject(definingCode, undefined, editor.getDefaultOccurrences(1, 1), "DV_CODED_TEXT");
+		var category = editor.getCSingleAttribute(codeText, editor.getDefaultExistence(1, 1), "category");
+
+		jsonCompositon.definition.attributes.push(category);
+
+		pushToArchetypeList(jsonCompositon, info);
+	}
+
+	//-----create item tree---------------
+	function createItemTree(info) {
+		var jsonItemTree = createBaseArchetype(info);
+		pushToArchetypeList(jsonItemTree, info);
+	}
+
+	//------create item list-----
+	function createItemList(info) {
+		var jsonItemList = createBaseArchetype(info);
+		pushToArchetypeList(jsonItemList, info);
+	}
+
+	//----create item single----------
+	function createItemSingle(info) {
+		var jsonItemSingle = createBaseArchetype(info);
+		pushToArchetypeList(jsonItemSingle, info);
+	}
+
+	//-----create item table--------
+	function createItemTable(info) {//not absolutely right
+		var jsonItemTable = createBaseArchetype(info);
+
+		var rotated = editor.getCSingleAttribute([], editor.getDefaultExistence(1, 1), "rotated");
+		var cluster = editor.getCComplexObject([], "at0002", editor.getDefaultOccurrences(0, 1), "CLUSTER");
+		var rows = editor.getCMultipleAttribute(cluster, editor.getDefaultCardinality(1), editor.getDefaultExistence(1, 1), "rows");
+
+		jsonItemTable.definition.attributes.push(rows);
+		jsonItemTable.definition.attributes.push(rotated);
+
+		editor.synchronizeOriOntology("at0002", "row", "@interval@", jsonItemTable.ontology);
+		editor.synchronizeOriOntology("at0001", "Table", "@interval@", jsonItemTable.ontology);
+		pushToArchetypeList(jsonItemTable, info);
+	}
+
+	function createCluster(info) {
+		var jsonCluster = createBaseArchetype(info);
+		pushToArchetypeList(jsonCluster, info);
+	}
+
   
-    jsonItemTable.definition.attributes.push(rows);
-    jsonItemTable.definition.attributes.push(rotated);
-   
-    editor.synchronizeOriOntology("at0002","row","@interval@",jsonItemTable.ontology);
-    editor.synchronizeOriOntology("at0001","Table","@interval@",jsonItemTable.ontology);
-    pushToArchetypeList(jsonItemTable,info);
-   }
-   
+	function createElement(info) {
+		var jsonElement = createBaseArchetype(info);
+		pushToArchetypeList(jsonElement, info);
+	}
+
    //-----archetype create auxiliary function---------------
-   function createBaseArchetype(info){
-   	 console.log("create action archetype here");
-   	  var archetypeId = getArchetypeId(info);
-   	  info.archetypeId = archetypeId;
-   	  var jsonObj = {
-   	  	adl_version:"1.4",
-   	  	archetype_id:{value:archetypeId},
-   	  	concept:"at0000",
-   	  	definition:{
-   	  		attributes:[],
-   	  		node_id:"at0000",
-   	  		occurrences:editor.getDefaultOccurrences(0,1),
-   	  		rm_type_name:info.type,
-   	  	},
-   	  	description:getDefaultDescription(),
-   	  	ontology:getDefaultOntology(info),
-   	  	original_language:getLanguage("en","ISO_639_1"),
-   	  };
-   	  
-   	  return jsonObj;
-   	   	 
-   }
+  
+	function createBaseArchetype(info) {
+		console.log("create action archetype here");
+		var archetypeId = getArchetypeId(info);
+		info.archetypeId = archetypeId;
+		var jsonObj = {
+			adl_version : "1.4",
+			archetype_id : {
+				value : archetypeId
+			},
+			concept : "at0000",
+			definition : {
+				attributes : [],
+				node_id : "at0000",
+				occurrences : editor.getDefaultOccurrences(0, 1),
+				rm_type_name : info.type,
+			},
+			description : getDefaultDescription(),
+			ontology : getDefaultOntology(info),
+			original_language : getLanguage("en", "ISO_639-1"),
+		};
+
+		return jsonObj;
+
+	}
+
   
    
-   function pushToArchetypeList(jsonObj,info){
-   	  var adl = archetypeSerializeService.serializeArchetype(jsonObj);
-	  var xml = archetypeSerializeService.serializeArchetypeToXml(jsonObj);
-	  xml =  '<?xml version="1.0" encoding="UTF-8"?>' + '\n' + '<archetype xmlns="http://schemas.openehr.org/v1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">'
-                                            +formatXml(xml)+'</archetype>';
-	  var oriObj = getOriArchetype(adl,xml,info);
-	  $scope.draftArchetypeList.push(oriObj);
-	  $scope.locatedArchetype(oriObj);
-	  
-   }
   
+	function pushToArchetypeList(jsonObj, info) {
+		var adl = archetypeSerializeService.serializeArchetype(jsonObj);
+		var xml = archetypeSerializeService.serializeArchetypeToXml(jsonObj);
+		xml = '<?xml version="1.0" encoding="UTF-8"?>' + '\n' + '<archetype xmlns="http://schemas.openehr.org/v1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">' + formatXml(xml) + '</archetype>';
+		var oriObj = getOriArchetype(adl, xml, info);
+		$scope.draftArchetypeList.push(oriObj);
+		$scope.locatedArchetype(oriObj);
+
+	}
+
 	
 	function getArchetypeListId() {
 		var i, id = 0;
@@ -462,28 +508,29 @@ function ArchetypeEditCtrl($scope, $modal,$log,msgboxService,busyService,archety
 	}
 
 
-   function getOriArchetype(adl,xml,info){
-   	return {
-   		 adl:adl,
-	  	 collapsed:true,
-	  	 conceptName:info.concept,
-	  	 editorId:1,
-	  	 editorName:"admin",
-	  	 id:getArchetypeListId(),
-	  	 lastRevisionArchetype:null,
-	  	 lifecycleState:"Draft",
-	  	 name:info.archetypeId,
-	  	 rmEntity:info.type,
-	  	 rmName:"EHR",
-	  	 rmOriginator:info.organisation,
-	  	 serialVersion:1,
-	  	 show:true,
-	  	 specialiseArchetype:[],
-	  	 version:null,
-	  	 versionMasterName:info.archetypeId,
-	  	 xml:xml
-   	};
-   }
+	function getOriArchetype(adl, xml, info) {
+		return {
+			adl : adl,
+			collapsed : true,
+			conceptName : info.concept,
+			editorId : 1,
+			editorName : "admin",
+			id : getArchetypeListId(),
+			lastRevisionArchetype : null,
+			lifecycleState : "Draft",
+			name : info.archetypeId,
+			rmEntity : info.type,
+			rmName : "EHR",
+			rmOriginator : info.organisation,
+			serialVersion : 1,
+			show : true,
+			specialiseArchetype : [],
+			version : null,
+			versionMasterName : info.archetypeId,
+			xml : xml
+		};
+	}
+
    
 	function getArchetypeId(info){
 		return info.organisation+"-"+info.type+"."+info.concept+".v1";
@@ -506,7 +553,7 @@ function ArchetypeEditCtrl($scope, $modal,$log,msgboxService,busyService,archety
    			missue:"",
    			purpose:"",
    			use:"",
-   			language:getLanguage("en","ISO_639_1"),  			
+   			language:getLanguage("en","ISO_639-1"),  			
    		},
    		  
    		other_details:{
