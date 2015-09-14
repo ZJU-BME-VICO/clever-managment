@@ -1,4 +1,4 @@
-angular.module('clever.management.services.msgbox', []).service('msgboxService', ['$modal', function($modal) {
+angular.module('clever.management.services.msgbox', []).service('msgboxService', function($modal, $window) {
 
         var icons = {
             question: {
@@ -35,7 +35,7 @@ angular.module('clever.management.services.msgbox', []).service('msgboxService',
             }
         };
 
-    this.createMessageBox = function(title, content, values, icon, button) {
+    this.createMessageBox = function(title, content, values, icon, button, size) {
 
         return msgInstance = $modal.open({
             template: '<div class="modal-header">' + 
@@ -49,7 +49,7 @@ angular.module('clever.management.services.msgbox', []).service('msgboxService',
                             '</h3>' +
                         '</div>' +
                         '<div class="modal-body">' +
-                            '<p style="word-wrap:break-word;">{{content | translate:values}}</p>' +
+                            '<p style="word-wrap:break-word;max-height: ' + ($window.innerHeight * 0.7) + 'px;overflow: auto;">{{content | translate:values}}</p>' +
                         '</div>' +
                         '<div class="modal-footer">' +
                             '<button ng-if="button" class="btn btn-primary" ng-click="ok()">' +
@@ -88,7 +88,7 @@ angular.module('clever.management.services.msgbox', []).service('msgboxService',
                 $scope.button = buttons[button];
             },
             backdrop: 'static',
-            size: 'sm',
+            size: size | 'sm',
         });
     };
-}]);
+});

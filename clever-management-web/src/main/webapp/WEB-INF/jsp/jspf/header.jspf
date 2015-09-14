@@ -12,7 +12,7 @@
 					<a href class="dropdown-toggle" dropdown-toggle ng-click="selectMenu(menu)" style="font-size: 1.1em;"></span><span ng-class="menu.icon"></span> {{menu.title | translate}}</a>
 					<ul ng-if="menu.subMenus.length > 1" class="dropdown-menu">
 						<li ng-repeat="sub in menu.subMenus" ng-if="sub.state">
-							<a href ng-click="selectMenu(sub)" style="padding: 5px 10px;">{{sub.title | translate}}</a>
+							<a href ng-click="selectMenu(sub)" style="padding: 5px 10px;width: 100%;display: block;">{{sub.title | translate}}</a>
 						</li>
 					</ul>
 				</li>
@@ -43,7 +43,7 @@
 					dropdown-toggle>${userName} <b class="caret"></b></a>
 					<ul class="dropdown-menu">
 						<li>
-							<a ng-href="{{WEBSITE_DOMAIN}}/logout" style="padding-left: 10px;"><span class="glyphicon glyphicon-log-in"></span> {{'HEADER_LOGOUT' | translate}}</a>
+							<a ng-href="{{WEBSITE_DOMAIN}}/logout" style="padding-left: 10px;display: block;"><span class="glyphicon glyphicon-log-in"></span> {{'HEADER_LOGOUT' | translate}}</a>
 						</li>
 					</ul>
 				</li>

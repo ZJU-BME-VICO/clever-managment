@@ -16,10 +16,22 @@ angular.module('clever.management.directives.treeViewNode', []).directive('treeV
 			var template = '<ul>' + 
 								'<li ng-class="' + nodeAliasName + '.collapsed ? \'collapsed\' : \'expanded\'">' + 
 									'<span ng-if="childNodes.length" ng-show="!' + nodeAliasName + '.collapsed" ng-click="selectNodeHead(' + nodeAliasName + ')">' + 
-										scope.getExpandedIconElement() + '</span>' + 
-									'<span ng-if="childNodes.length" ng-show="' + nodeAliasName + '.collapsed" ng-click="selectNodeHead(' + nodeAliasName + ')">' + scope.getCollapsedIconElement() + '</span>' + 
-									'<span ng-class="' + nodeAliasName + '.selected" ng-click="clickNodeLabel(' + nodeAliasName + ')" ng-dblclick="doubleClickNodeLabel(' + nodeAliasName + ')">' + 
-									'<span ng-if="!childNodes.length" style="visibility: hidden;">' + scope.getExpandedIconElement() + '</span>' + scope.getNodeLabel(nodeData) + '</span>' + '<tree-view-node ' + 'ng-repeat="_node in childNodes" ' + 'ng-hide="_node.parent.collapsed || !_node.show" ' + 'ng-init="_node.parent = ' + nodeAliasName + '" ' + nodeAliasName.replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase() + '="_node">' + '</tree-view-node>' + '</li>' + '</ul>';
+										scope.getExpandedIconElement() + 
+									'</span>' + 
+									'<span ng-if="childNodes.length" ng-show="' + nodeAliasName + '.collapsed" ng-click="selectNodeHead(' + nodeAliasName + ')">' + 
+										scope.getCollapsedIconElement() + 
+									'</span>' + 
+									'<span ng-click="clickNodeLabel(' + nodeAliasName + ')" ng-dblclick="doubleClickNodeLabel(' + nodeAliasName + ')">' + 
+										'<span ng-if="!childNodes.length" style="visibility: hidden;">' + scope.getExpandedIconElement() + '</span>' + 
+										'<span ng-class="' + nodeAliasName + '.selected">' + scope.getNodeLabel(nodeData) + '</span>' + 
+									'</span>' + 
+									'<tree-view-node ' + 
+										'ng-repeat="_node in childNodes" ' + 
+										'ng-hide="_node.parent.collapsed || !_node.show" ' + 
+										'ng-init="_node.parent = ' + nodeAliasName + '" ' + nodeAliasName.replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase() + '="_node">' + 
+									'</tree-view-node>' + 
+								'</li>' + 
+							'</ul>';
 
 			var templateWithMenu = '<ul>' + 
 			                           '<li role="context-menu">' + 

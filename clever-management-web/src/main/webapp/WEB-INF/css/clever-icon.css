@@ -80,11 +80,11 @@
 	background-image: url("../img/archetype/composition.png");
 	background-repeat: no-repeat;
 }
-.collapsed > span > span > .clever-icon.list.folder {
+.collapsed > span > span > span > .clever-icon.list.folder {
 	background-image: url("../img/archetype/folder.gif");
 	background-repeat: no-repeat;
 }
-.expanded > span > span > .clever-icon.list.folder {
+.expanded > span > span > span > .clever-icon.list.folder {
 	background-image: url("../img/archetype/folder-open.gif");
 	background-repeat: no-repeat;
 }

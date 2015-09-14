@@ -99,12 +99,12 @@ function ArchetypeViewCtrl($scope, $timeout, busyService, resourceService, ARCHE
 	};
 
 	$scope.tabContainerHeight = {
-		value : $scope.$parent.containerHeight - 35
+		value : $scope.$parent.containerHeight - 40
 	};
 	$scope.$watch(function() {
 		return $scope.$parent.containerHeight;
 	}, function(newValue) {
-		$scope.tabContainerHeight.value = newValue - 35;
+		$scope.tabContainerHeight.value = newValue - 40;
 	});
 
 	var busyId = busyService.pushBusy('BUSY_LOADING');

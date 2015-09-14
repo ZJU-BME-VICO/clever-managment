@@ -208,7 +208,7 @@ angular.module('cleverManagementApp', ['ngAnimate', 'ui.bootstrap.typeahead', 'n
 	$rootScope.$state = $state;
 	$rootScope.$stateParams = $stateParams;
 
-	var authenticateWhiteList = ['home', 'login', 'management.archetype.list', 'management.storage.list', 'management.application.list', 'managment.integration.list'];
+	var authenticateWhiteList = ['home', 'login', 'management.archetype.list', 'management.storage.list', 'management.application.list', 'management.integration.list'];
 
 	var id;
 

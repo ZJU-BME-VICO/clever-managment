@@ -164,6 +164,7 @@ angular.module('clever.management.i18n.zh', ['pascalprecht.translate']).config(f
 		STORAGE_TEMPLATE_DEPLOY_IS_SUCCEEDED : '结果',
 		STORAGE_TEMPLATE_DEPLOY_COMMENT : '备注',
 		STORAGE_TEMPLATE_DEPLOY_DETAILS : '详细信息',
+		STORAGE_TEMPLATE_DEPLOY_ERROR_MSG : '错误信息',
 
 		// Menu
 		MENU_RETURN : '返回上一级',

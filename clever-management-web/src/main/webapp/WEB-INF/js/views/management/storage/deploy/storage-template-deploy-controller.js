@@ -19,7 +19,7 @@ function StorageTemplateDeployCtrl($scope, authenticationService, resourceServic
 			busyService.popBusy(busyId);
 		});
 	}
-	
+
 	refreshTemplateList();
 
 	function refreshDeployRecords() {
@@ -84,6 +84,10 @@ function StorageTemplateDeployCtrl($scope, authenticationService, resourceServic
 		} else {
 			$scope.selectIndeterminate = true;
 		}
+	};
+
+	$scope.showErrorMessage = function(record) {
+		msgboxService.createMessageBox('STORAGE_TEMPLATE_DEPLOY_ERROR_MSG', record.message, {}, 'error', undefined, 'lg');
 	};
 
 	$scope.deployTemplates = function() {
