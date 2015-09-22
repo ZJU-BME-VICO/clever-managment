@@ -33,8 +33,8 @@ angular.module('clever.management.service.archetypeSerialize', []).service('arch
 			this.write("adl_version=");
 			this.write(archetype.adl_version);
 		}
-		if (archetype.uid && uid.length != 0) {
-			this.write("uid=");
+		if ( archetype.uid && archetype.uid.length != 0) {
+			this.write("; uid=");
 			this.write(archetype.uid);
 		}
 		if (archetype.adl_version || (archetype.uid && archetype.uid.length != 0)) {
@@ -80,6 +80,10 @@ angular.module('clever.management.service.archetypeSerialize', []).service('arch
 			this.writeIndent(1);
 			this.write("translations = <");
 			this.newLine();
+			if(!angular.isArray(archetype.translations)){
+				var temp = archetype.translations;
+				archetype.translations = [temp];
+			}
 			for (var i = 0, len = archetype.translations.length; i < len; i++) {
 				var tr = archetype.translations[i];
 				this.writeIndent(2);
@@ -173,19 +177,27 @@ angular.module('clever.management.service.archetypeSerialize', []).service('arch
 		this.newLine();
     
 		
+		
 		if (description.other_contributors) {
 			this.writeIndent(1);
 			this.write("other_contributors = <");
 			var k;
-			for ( k = 0; k < description.other_contributors.length; k++) {
-				this.write("\"");
-				this.write(description.other_contributors[k]);
-				
-				if (k != description.other_contributors.length - 1) {
-					this.write("\",");
-				}else{
+			if (angular.isArray(description.other_contributors)) {
+				for ( k = 0; k < description.other_contributors.length; k++) {
 					this.write("\"");
+					this.write(description.other_contributors[k]);
+
+					if (k != description.other_contributors.length - 1) {
+						this.write("\",");
+					} else {
+						this.write("\"");
+					}
 				}
+			} else {
+				this.write("\"");
+				this.write(description.other_contributors);
+				this.write("\",");
+				this.write("...");
 			}
 			this.write(">");
 			this.newLine();
@@ -229,7 +241,7 @@ angular.module('clever.management.service.archetypeSerialize', []).service('arch
 		//**constraint defintion section
 		if (ontology.constraint_definitions) {
 			self.writeIndent(1);
-			self.wriet("constraint_definitions = <");
+			self.write("constraint_definitions = <");
 			self.newLine();
 			self.printDefinitionList(ontology.constraint_definitions);
 			self.writeIndent(1);
@@ -247,10 +259,10 @@ angular.module('clever.management.service.archetypeSerialize', []).service('arch
 			if (angular.isArray(term_bindingList)) {
 				var i;
 				for ( i = 0; i < term_bindingList.length; i++) {
-					this.printTermBinding(termBindingList[i]);
+					this.printTermBinding(term_bindingList[i]);
 				}
 			} else {//term binding is not a array
-				this.printTermBinding(termBindingList);
+				this.printTermBinding(term_bindingList);
 			}
 			self.write(1);
 			self.write(">");
@@ -334,7 +346,7 @@ angular.module('clever.management.service.archetypeSerialize', []).service('arch
 		}
 		var n;
 		for ( n = 3; n > 1; n--) {
-			self.writeIndent(l);
+			self.writeIndent(1);
 			self.write(">");
 			self.newLine();
 		}
@@ -711,7 +723,7 @@ angular.module('clever.management.service.archetypeSerialize', []).service('arch
 		if (creal.list) {
 			this.printList(creal.list);
 		} else if (creal.range) {
-			this.printInterval(creal.rang);
+			this.printInterval(creal.range);
 		}
 
 		if (creal.assumed_value) {
@@ -789,7 +801,7 @@ angular.module('clever.management.service.archetypeSerialize', []).service('arch
 							} else {
 								if (cobject.assumed_value) {
 									self.write(";");
-									self.printCommnet(list[i], ontology);
+									self.printComment(list[i], ontology);
 									self.newLine();
 									self.write(cobject.assumed_value.code_string);
 									self.write("]");
@@ -825,6 +837,9 @@ angular.module('clever.management.service.archetypeSerialize', []).service('arch
 					self.write("]");
 					self.newLine();
 				}
+			}else{
+				self.write("]");
+				self.newLine();
 			}
 
 		} else {
@@ -1173,13 +1188,12 @@ angular.module('clever.management.service.archetypeSerialize', []).service('arch
 		this.printNonEmptyStringList("keywords", item.keywords, number + 1);
 		this.printNonEmptyString("copyright", item.copyright, number + 1);
 		this.printNonEmptyString("use", item.use, number + 1);
-		this.printNonEmptyString("missue", item.missue, number + 1);
+		this.printNonEmptyString("misuse", item.misuse, number + 1);
 		this.printNonEmptyString("original_resource_uri", item.original_resource_uri);
 
 		this.writeIndent(number);
 		this.write(">");
 		this.newLine();
-
 	};
 	this.printNonEmptyString = function(label, value, number) {
 		var self = this;

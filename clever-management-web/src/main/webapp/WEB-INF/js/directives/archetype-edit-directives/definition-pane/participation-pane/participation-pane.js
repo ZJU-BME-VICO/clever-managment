@@ -11,7 +11,18 @@ angular.module('clever.management.directives.participationPane', []).directive('
 		controller : function($scope, $element, $attrs) {
 			var editor = archetypeEditService;
 			$scope.performerTypes = ["PARTY_SELF", "PARTY_IDENTIFIED", "PARTY_RELATED"];
+		
 			$scope.performerType = {};
+
+			$scope.hasExternalRef = {};
+			$scope.hasName = {};
+			$scope.hasIdentifiers = {};
+			$scope.hasMode = {};
+			$scope.hasFunction = {};
+			$scope.hasTime = {}; 
+
+				
+
 			$scope.$watch('participation', function(newValue) {
 				console.log(newValue);
 				processParticipation($scope.participation);
@@ -64,6 +75,7 @@ angular.module('clever.management.directives.participationPane', []).directive('
 			
 			
 			function resetState() {
+				
 				if ($scope.attributes.performer) {
 					$scope.attributes.performer.children = undefined;
 				}
@@ -78,7 +90,7 @@ angular.module('clever.management.directives.participationPane', []).directive('
 					$scope.hasIdentifiers.value = undefined;
 				}
 			}
-
+         
 
 			//externalRef edit function
 
@@ -233,61 +245,70 @@ angular.module('clever.management.directives.participationPane', []).directive('
 
 			//------------------------------------participation process function--------------------------------------------------------------
 			$scope.attributes = {};
+			
+			function processAttribute(attribute) {
+				if (attribute.rm_attribute_name == "performer") {
+					$scope.attributes.performer = attribute;
+					if (attribute.children) {
+						$scope.performerType.value = attribute.children.rm_type_name;
+						var tempAttributes = attribute.children.attributes;
+
+						if (tempAttributes) {
+							if (angular.isArray(tempAttributes)) {
+								angular.forEach(tempAttributes, function(value) {
+									if (value.rm_attribute_name == "externalRef") {
+										$scope.hasExternalRef = {
+											value : true
+										};
+									}
+									if (value.rm_attribute_name == "name") {
+										$scope.hasName = {
+											value : true
+										};
+									}
+									if (value.rm_attribute_name == "identifiers") {
+										$scope.hasIdentifiers = {
+											value : true
+										};
+									}
+								});
+							}
+						}
+					}
+				}
+
+				if (attribute.rm_attribute_name == "mode") {
+					$scope.hasMode = {
+						value : true
+					};
+					$scope.attributes.mode = attribute;
+				}
+				if (attribute.rm_attribute_name == "function") {
+					$scope.attributes.functioin = attribute;
+					$scope.hasFunction = {
+						value : true
+					};
+				}
+				if (attribute.rm_attribute_name == "time") {
+					$scope.hasTime = {
+						value : true
+					};
+					$scope.attributes.time = attribute;
+				}
+			}
+
 			//process participation and initial the attributes object
+		
 			function processParticipation(participation) {
+	
 				var attributes = participation.oriNodeRef.attributes;
 				if (angular.isArray(attributes)) {
 					angular.forEach(attributes, function(attribute) {
-						
-						if (attribute.rm_attribute_name == "performer") {
-							$scope.attributes.performer = attribute;
-							if (attribute.children) {
-								$scope.performerType.value = attribute.children.rm_type_name;
-								var tempAttributes = attribute.children.attributes;
+						processAttribute(attribute);
 
-								if (tempAttributes) {
-									if (angular.isArray(tempAttributes)) {
-										angular.forEach(tempAttributes, function(value) {
-											if (value.rm_attribute_name == "externalRef") {
-												$scope.hasExternalRef = {
-													value : true
-												};
-											}
-											if (value.rm_attribute_name == "name") {
-												$scope.hasName = {
-													value : true
-												};
-											}
-											if (value.rm_attribute_name == "identifiers") {
-												$scope.hasIdentifiers = {
-													value : true
-												};
-											}
-										});
-									}
-								}
-							}
-						}
-
-						if (attribute.rm_attribute_name == "mode") {
-							$scope.hasMode = {
-								value : true
-							};
-							$scope.attributes.mode = attribute;
-						}
-						if (attribute.rm_attribute_name == "function") {
-							$scope.attributes.functioin = attribute;
-							$scope.hasFunction = {
-								value : true
-							};
-						}
-						if (attribute.rm_attribute_name == "time") {
-							$scope.hasTime = {
-								value : true
-							};
-							$scope.attributes.time = attribute;
-						}
 					});
+				} else {
+					processAttribute(attributes);
 				}
 			}
 

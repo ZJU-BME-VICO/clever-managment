@@ -36,7 +36,7 @@
 					</div>
 				</tab>
 				<tab heading="{{'STORAGE_TEMPLATE_DEPLOY_RECORD'|translate}}">
-					<div class="col-xs-12 col-md-12 col-lg-12" ng-style="{height: containerHeight - 130}" style="overflow: auto; margin-top: 5px;">
+					<div class="col-xs-12 col-md-12 col-lg-12" ng-style="{height: containerHeight - 85}" style="overflow: auto; margin-top: 5px;">
 						<table class="table table-hover" style="padding-top: 5px;">
 							<thead>
 								<tr>
@@ -54,7 +54,7 @@
 									<td>{{$index + 1}}</td>
 									<td>{{getFormatedTime(record.deployTime)}}</td>
 									<td>{{record.deployerName}}</td>
-									<td>{{record.succeeded ? 'STORAGE_TEMPLATE_DEPLOY_SUCCEEDED' : 'STORAGE_TEMPLATE_DEPLOY_FAILED' | translate}}</td>
+									<td class="{{record.succeeded? 'succeeded' : 'failure'}}">{{record.succeeded ? 'STORAGE_TEMPLATE_DEPLOY_SUCCEEDED' : 'STORAGE_TEMPLATE_DEPLOY_FAILED' | translate}}</td>
 									<td>{{record.comment}}</td>
 									<td>
 										<a ng-if="!record.succeeded" style="cursor: pointer;" ng-click="showErrorMessage(record)"> 

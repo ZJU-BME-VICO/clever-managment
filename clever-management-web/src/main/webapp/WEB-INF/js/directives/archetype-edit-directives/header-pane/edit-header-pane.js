@@ -12,22 +12,16 @@ angular.module('clever.management.directives.editHeaderPane', []).directive('edi
 		templateUrl : 'js/directives/archetype-edit-directives/header-pane/edit-header-pane.html',
 
 		controller : function($scope) {
+       
+		
 
 			$scope.$watch("header", function(newValue) {
 				if (newValue) {
-					//console.log(newValue);
 					$scope.archetypeId = $scope.header.archetype_id;
-					// $scope.baseInfo =  getBaseInfo();
 					$scope.selectedLanguage = {
 						code : "en",
 					};
 					getBaseInfo();
-					//console.log("this is baseInfo");
-					//console.log($scope.baseInfo);
-
-					//$scope.concept = $scope.baseInfo[0].__text;
-					// console.log($scope.concept);
-					//console.log($scope.languages);
 					getLanguageList();
 
 					getOriAuthorInfo();
@@ -57,7 +51,7 @@ angular.module('clever.management.directives.editHeaderPane', []).directive('edi
 				}
 
 			}
-
+            
 
 			$scope.$watch('selectedLanguage.code', function(newValue, oldValue) {
 				if (newValue && oldValue) {
@@ -174,79 +168,10 @@ angular.module('clever.management.directives.editHeaderPane', []).directive('edi
 					}
 				}
 			}
-
-			//$scope.concept = "sda";
-			$scope.oneAtATime = false;
-			$scope.status = {
-				isBaseInfoOpen : true,
-				isBaseInfoDisabled : false,
-
-				isAuthorShipOpen : true,
-				isAuthorShipDisabled : false,
-
-				isDetailsOpen : true,
-				isDetailsDisabled : false,
-			};
-
-			//datepicker logic
-			$scope.today = function() {
-				$scope.dt = new Date();
-			};
-			$scope.today();
-
-			$scope.clear = function() {
-				$scope.dt = null;
-			};
-
-			// Disable weekend selection
-			$scope.disabled = function(date, mode) {
-				return (mode === 'day' && (date.getDay() === 0 || date.getDay() === 6 ) );
-			};
-
-			$scope.toggleMin = function() {
-				$scope.minDate = $scope.minDate ? null : new Date();
-			};
-			$scope.toggleMin();
-
-			$scope.open = function($event) {
-				$scope.opened = true;
-			};
-
-			$scope.dateOptions = {
-				formatYear : 'yy',
-				startingDay : 1
-			};
-
-			$scope.formats = ['-MM-dd', 'dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
-			$scope.format = $scope.formats[0];
-
-			var tomorrow = new Date();
-			tomorrow.setDate(tomorrow.getDate() + 1);
-			var afterTomorrow = new Date();
-			afterTomorrow.setDate(tomorrow.getDate() + 2);
-			$scope.events = [{
-				date : tomorrow,
-				status : 'full'
-			}, {
-				date : afterTomorrow,
-				status : 'partially'
-			}];
-
-			$scope.getDayClass = function(date, mode) {
-				if (mode === 'day') {
-					var dayToCheck = new Date(date).setHours(0, 0, 0, 0);
-
-					for (var i = 0; i < $scope.events.length; i++) {
-						var currentDay = new Date($scope.events[i].date).setHours(0, 0, 0, 0);
-
-						if (dayToCheck === currentDay) {
-							return $scope.events[i].status;
-						}
-					}
-				}
-
-				return '';
-
+			
+			$scope.selectedPane = 'base information';
+			$scope.selectPane = function(type){
+				$scope.selectedPane = type;
 			};
 
 		},

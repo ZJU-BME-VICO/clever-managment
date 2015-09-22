@@ -86,15 +86,7 @@ angular.module('clever.management.directives.treeViewNode', []).directive('treeV
 			};
 
 			scope.editNodeByMenu = function(node, type) {
-				var element = scope.clickEditNodeMenu(node, type);
-
-				//element.selected = true;
-				node.collapsed = false;
-				if (element) {
-					scope.clickNodeLabel(element);
-					scope.doubleClickNode(element);
-				}
-
+				scope.clickEditNodeMenu(node, type);
 			};
 			scope.specialiseNodeByMenu = function(node) {
 				var specialisedArchetype = scope.specialiseArchetype(node);

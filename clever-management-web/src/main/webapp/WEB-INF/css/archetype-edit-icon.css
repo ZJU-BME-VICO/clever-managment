@@ -101,15 +101,15 @@
 	background-repeat: no-repeat;
 }
 .archetype-edit-icon.dv_interval__date_time {
-	background-image: url("../img/datatype/interval.png");
+	background-image: url("../img/datatype/interval_datetime.png");
 	background-repeat: no-repeat;
 }
 .archetype-edit-icon.dv_interval__quantity {
-	background-image: url("../img/datatype/interval.png");
+	background-image: url("../img/datatype/interval_quantity.png");
 	background-repeat: no-repeat;
 }
 .archetype-edit-icon.dv_interval__count {
-	background-image: url("../img/datatype/interval.png");
+	background-image: url("../img/datatype/interval_count.png");
 	background-repeat: no-repeat;
 }
 .archetype-edit-icon.dv_interval {
@@ -253,7 +253,22 @@
 	background-repeat: no-repeat;
 }
 
-
+.archetype-edit-icon.item_tree {
+	background-image: url("../img/datatype/item_tree.png");
+	background-repeat: no-repeat;
+}
+.archetype-edit-icon.attribute {
+	background-image: url("../img/datatype/attribute1.png");
+	background-repeat: no-repeat;
+}
+.archetype-edit-icon.activity {
+	background-image: url("../img/datatype/activity.png");
+	background-repeat: no-repeat;
+}
+.archetype-edit-icon.link {
+	background-image: url("../img/datatype/link.png");
+	background-repeat: no-repeat;
+}
 
 
 

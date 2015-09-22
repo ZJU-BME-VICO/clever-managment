@@ -29,7 +29,7 @@
 					<input type="text" class="form-control" ng-model="templateListFilter" placeholder="{{'SEARCH_HINT' | translate}}">
 				</div>
 			</div>
-			<div class="list-group" ng-style="{height: containerHeight - 55}" style="overflow: auto;margin-left: -5px;white-space: nowrap;">
+			<div class="list-group" ng-style="{height: containerHeight - 40}" style="overflow: auto;margin-left: -5px;white-space: nowrap;">
 				<tree-view tree-data="templateList" node-id="id"
 				double-click-node-callback="selectTemplate(value)"
 				node-children="children"
@@ -61,20 +61,32 @@
 			<div class="row" ng-show="selectedTemplate">
 				<div class="panel panel-default">
 					<div class="panel-heading">
-						<span><span><b>{{'STORAGE_TEMPLATE_EDIT_EXPAND' | translate}}:&nbsp;&nbsp;&nbsp;</b></span><toggle-switch model="isExpandedAll" ng-disabled="selectedTemplate == undefined"></toggle-switch></span>
-						<button class="btn btn-primary pull-right" style="margin-left: 10px;" ng-disabled="selectedTemplate == undefined" ng-click="saveTemplateFile()">
-							{{'STORAGE_TEMPLATE_EDIT_SAVE' | translate}}
-						</button>
-						<button class="btn btn-primary pull-right" style="margin-left: 10px;" ng-disabled="selectedTemplate == undefined" ng-click="submitTemplateFile()">
-							{{'STORAGE_TEMPLATE_EDIT_SUBMIT' | translate}}
-						</button>
-						<button class="btn btn-info pull-right" ng-disabled="selectedTemplate == undefined" ng-click="generateOetDiff()">
-							{{'STORAGE_TEMPLATE_EDIT_DIFF' | translate}}
-						</button>
+						<div class="row">
+							<div class="col-xs-8 col-md-8 col-lg-8">
+								<!-- <span class="archetype-title">{{selectedTemplate.name}}</span> -->
+								<span class="archetype-title" ng-if="!isTemplateListHidden">{{getFixedTitle(selectedTemplate.name, 40)}}</span>
+					            <span class="archetype-title" ng-if="isTemplateListHidden">{{getFixedTitle(selectedTemplate.name, 70)}}</span>
+							</div>
+							<div class="col-xs-4 col-md-4 col-lg-4">
+								<!-- <span><span><b>{{'STORAGE_TEMPLATE_EDIT_EXPAND' | translate}}:&nbsp;&nbsp;&nbsp;</b></span><toggle-switch model="isExpandedAll" ng-disabled="selectedTemplate == undefined"></toggle-switch></span> -->
+								<button class="btn btn-primary pull-right" style="margin-left: 10px;" ng-disabled="selectedTemplate == undefined" ng-click="saveTemplateFile()">
+									{{'STORAGE_TEMPLATE_EDIT_SAVE' | translate}}
+								</button>
+								<button class="btn btn-primary pull-right" style="margin-left: 10px;" ng-disabled="selectedTemplate == undefined" ng-click="submitTemplateFile()">
+									{{'STORAGE_TEMPLATE_EDIT_SUBMIT' | translate}}
+								</button>
+								<button class="btn btn-info pull-right" ng-disabled="selectedTemplate == undefined" ng-click="generateOetDiff()">
+									{{'STORAGE_TEMPLATE_EDIT_DIFF' | translate}}
+								</button>
+							</div>
+						</div>
 					</div>
 					<div class="panel-body" style="overflow: auto;">
 						<tabset tab-control="tabControl" ng-style="{height: containerHeight - 75}">
 							<tab heading="Tree">
+                               
+								<span><span><b>{{'STORAGE_TEMPLATE_EDIT_EXPAND' | translate}}:&nbsp;&nbsp;&nbsp;</b></span><toggle-switch  model="isExpandedAll" ng-disabled="selectedTemplate == undefined"></toggle-switch></span>
+
 								<div class="col-xs-12 col-md-12 col-lg-12">
 									<div class="row" ng-style="{height: containerHeight - 135}" style="overflow: auto;">
 										<tree-view tree-data="parsedTemplate.definition" node-alias-name="template" tree-control="treeControl.value" node-label-generator="getTreeNodeLabel" click-node-menu-callback="setNodeByContextMenu(node, type, value)" node-menu-generator="getTreeNodeMenu">

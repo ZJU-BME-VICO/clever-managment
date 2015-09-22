@@ -4,16 +4,45 @@
 	</div>
 	<div class="row">
 	    <ul class="list-group" ng-style="{height: containerHeight - 80}" style="overflow: auto;">
-	        <li class="list-group-item" ng-repeat="templateFile in templateFiles" style="overflow: hidden;">
-	            {{templateFile.name}}
-	            <div class="btn-group pull-right btn-group-sm" role="group">
-	                <button type="button" class="btn btn-default" ng-click="oetTemplateFile(templateFile)">{{'STORAGE_TEMPLATE_VERIFY_OET_DIFF' | translate}}</button>
-	                <button type="button" class="btn btn-default" ng-click="approveTemplateFile(templateFile)">{{'STORAGE_TEMPLATE_VERIFY_APPROVE' | translate}}</button>
-	                <button type="button" class="btn btn-default" ng-click="rejectTemplateFile(templateFile)">{{'STORAGE_TEMPLATE_VERIFY_REJECT' | translate}}</button>
-	                <button type="button" class="btn btn-default" ng-click="removeTemplateFile(templateFile)">{{'STORAGE_TEMPLATE_VERIFY_REMOVE' | translate}}</button>
-	            </div>
-	            <span style="color: red;">{{'STORAGE_TEMPLATE_VERIFY_EDITOR' | translate}}: {{templateFile.editorName}}</span>&nbsp;&nbsp;&nbsp;&nbsp;
-	        </li>
-	    </ul>
+	    <li class="list-group-item" ng-repeat="templateFile in templateFiles" style="overflow: hidden;">
+				{{templateFile.name}}
+				<div class="btn-group pull-right btn-group-sm" role="group">
+					<button type="button" class="btn btn-primary" ng-click="oetTemplateFile(templateFile)">
+						{{'STORAGE_TEMPLATE_VERIFY_OET_DIFF' | translate}}
+					</button>
+					<button type="button" class="btn btn-success" ng-click="approveTemplateFile(templateFile)">
+						{{'STORAGE_TEMPLATE_VERIFY_APPROVE' | translate}}
+					</button>
+					<button type="button" class="btn btn-warning" ng-click="rejectTemplateFile(templateFile)">
+						{{'STORAGE_TEMPLATE_VERIFY_REJECT' | translate}}
+					</button>
+					<button type="button" class="btn btn-danger" ng-click="removeTemplateFile(templateFile)">
+						{{'STORAGE_TEMPLATE_VERIFY_REMOVE' | translate}}
+					</button>
+				</div>
+				<div style="margin-top:15px">
+					<table>
+						<tr style="color:brown;">
+							<td>{{"TEMPLATE_TYPE" | translate}} :&nbsp;&nbsp; </td>
+							<td><img  ng-class="templateFile.rmEntity | lowercase" class="clever-icon list" style="padding: 0 10px;height: 16px;"></img><span >{{templateFile.rmEntity}}</span></td>
+						</tr>
+						<tr style="color:#5cb85c">
+							<td>{{'STORAGE_TEMPLATE_VERIFY_EDITOR' | translate}} : </td>
+							<td >{{templateFile.editorName}}</td>
+						</tr>
+						<tr style="color: #3bafda">
+							<td>{{'STORAGE_TEMPLATE_SUBMIT_TIME' | translate}} : </td>
+							<td>{{getFormatedTime(templateFile.lastModifyTime)}}</td>
+						</tr>
+					</table>
+					<!-- <label>{{"TEMPLATE_TYPE" | translate}} : </label>
+					
+					<span> <img  ng-class="templateFile.rmEntity | lowercase" class="clever-icon list" style="padding: 0 10px;height: 16px;"></img>{{templateFile.rmEntity}}</span></br>
+					<span style="color: red;">{{'STORAGE_TEMPLATE_VERIFY_EDITOR' | translate}}: {{templateFile.editorName}}</span>&nbsp;&nbsp;&nbsp;&nbsp;</br>
+					<label>{{'STORAGE_TEMPLATE_SUBMIT_TIME' | translate}} : </label>
+					<span>{{getFormatedTime(templateFile.lastModifyTime)}}</span> -->
+				</div>
+			</li>
+			</ul>
    </div>
 </div>

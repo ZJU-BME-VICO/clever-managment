@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import se.acode.openehr.parser.ADLParser;
-import edu.zju.bme.clever.management.service.entity.ArchetypeInfo;
+import edu.zju.bme.clever.management.service.entity.AdlInfo;
 
 @Service
 public class ArchetypeEditServiceImpl implements ArchetypeEditService{
@@ -14,9 +14,9 @@ public class ArchetypeEditServiceImpl implements ArchetypeEditService{
 	
     
 	@Override
-	public void saveArchetype(Integer id, ArchetypeInfo info){
+	public void saveArchetype(Integer id, AdlInfo info){
 		System.out.println("come to service successfully");
-		ADLParser parser = new ADLParser(info.getArchetype());
+		ADLParser parser = new ADLParser(info.getAdl());
 		try {
 			Archetype archetype = parser.parse();
 		} catch (Exception e) {
@@ -29,7 +29,7 @@ public class ArchetypeEditServiceImpl implements ArchetypeEditService{
 		
 	}
     @Override
-	public void submitArchetype(Integer id, ArchetypeInfo archetype){
+	public void submitArchetype(Integer id, AdlInfo archetype){
 		System.out.println("submit Archetype sucessfully");
 		
 	}

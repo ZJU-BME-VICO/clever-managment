@@ -84,7 +84,15 @@
 	background-image: url("../img/archetype/folder.gif");
 	background-repeat: no-repeat;
 }
+.clever-icon.list.folder {
+	background-image: url("../img/archetype/folder.gif");
+	background-repeat: no-repeat;
+}
 .expanded > span > span > span > .clever-icon.list.folder {
+	background-image: url("../img/archetype/folder-open.gif");
+	background-repeat: no-repeat;
+}
+.clever-icon.list.folder {
 	background-image: url("../img/archetype/folder-open.gif");
 	background-repeat: no-repeat;
 }

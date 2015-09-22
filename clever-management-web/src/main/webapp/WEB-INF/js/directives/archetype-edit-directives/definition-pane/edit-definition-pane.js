@@ -282,6 +282,16 @@ angular.module('clever.management.directives.editDefinitionPane', []).directive(
 				$scope.isCollapse = false;
 			};
 			
+			$scope.stateTransition = function(){
+				if($scope.isCollapse){
+					$scope.treeControl.expandAll();
+				    $scope.isCollapse = false;
+				}else{
+					$scope.treeControl.collapseAll();
+				$scope.isCollapse = true;
+				}
+			};
+			
 			
 
 			
@@ -355,7 +365,8 @@ angular.module('clever.management.directives.editDefinitionPane', []).directive(
 					}
 					if (node.label.picType.indexOf('<') == -1) {
 						angular.forEach($scope.nodeMenu[node.label.picType], function(menuItem){
-							menuHtml += '<li class="menu-item ">' +'<span class="archetype-edit-icon ' + typeMap[menuItem.toLowerCase()] + '" style="padding: 7px 10px; background-position-y: 10px;"></span>'+
+							var iconType = typeMap[menuItem.toLowerCase()] ? typeMap[menuItem.toLowerCase()] : menuItem.toLowerCase();
+							menuHtml += '<li class="menu-item ">' +'<span class="archetype-edit-icon ' + iconType  + '" style="padding: 7px 10px; background-position-y: 10px;"></span>'+
 						                '<a class="pointer" role="menuitem"  ng-click="editNodeByMenu(' + aliasName + ', '+ '\'' + menuItem +'\')">' +menuItem + '</a></li>' ;
 						});
 						menuHtml += '<li class="menu-item ">' +
@@ -381,7 +392,7 @@ angular.module('clever.management.directives.editDefinitionPane', []).directive(
 				'cluster'    :    'cluster',
 				'slot'       :    'slot',
 				'interval'   :    'dv_interval',
-			
+			     
 			};
 			
             
@@ -418,6 +429,151 @@ angular.module('clever.management.directives.editDefinitionPane', []).directive(
 			//there would not a items attributs behind this type, so when we add a type to this node , a items attribute should be added;
 			var needCheckedType = ['ITEM_TREE','ITEM_LIST','ITEM_TABLE','CLUSTER','SECTION'];
 			var checkList = ['SECTION'];
+			// $scope.editArchetype = function(node, type) {
+// 				
+				// if (needCheckedType.indexOf(node.label.picType) != -1) {
+					// if (node.oriNodeRef.attributes && node.childrenAttribute) {
+						// //return;
+					// } else if ((!node.oriNodeRef.attributes || node.oriNodeRef.attributes.length == 0) && !node.childrenAttribute) {
+						// var multiAttribute = editor.getCMultipleAttribute(null, editor.getDefaultCardinality(1), editor.getDefaultExistence(1, 1), "items");
+						// node.oriNodeRef.attributes = multiAttribute;
+						// parser.processAttribute(multiAttribute, node, node.children, $scope.ontology.term_definitions);
+						// //node.children = [];
+// 
+					// }
+				// }
+// 
+				// type = type.toLowerCase();//normalize the type
+// 
+				// switch(type) {
+				// case "otherparticipations":
+					// return addOtherParticipations(node);
+// 
+				// case "participation":
+					// return addParticipation(node);
+// 
+				// case "subject":
+					// return addSubject(node);
+// 
+				// //  subject:['PARTY_SELF','PARTY_IDENTIFIED','PARTY_RELATED'],
+				// case"party_self":
+					// return addPartySelf(node);
+// 
+				// case"party_identified":
+					// return addPartyIdentified(node);
+// 
+				// case"party_related":
+					// return addPartyRelated(node);
+// 
+				// case "links":
+					// return addLinks(node);
+// 
+				// case "link":
+					// return addLink(node);
+				// case "protocol":
+					// return addProtocol(node);
+// 
+				// //--------action--------
+				// case "ism_transitions":
+					// return addIsmTransitions(node);
+				// case "ism_transition":
+					// return addIsmTransition(node);
+// 
+				// //--------instruction-----
+				// case "activity":
+					// return addActivity(node);
+// 
+				// //--------observation--------
+				// case "data":
+					// return addData(node);
+				// case "state":
+					// return addState(node);
+				// case "event_state":
+					// return addStateToEvent(node);
+				// case "event":
+					// return addEvent(node);
+// 				
+				// //---------section---------
+				// case 'sub_section':
+					// return addSubSection(node);
+			    // //ss means section slot
+				// case 'ss_action':
+				// case 'ss_observation':
+				// case 'ss_admin_entry':
+				// case 'ss_instruction':
+				// case 'ss_evaluation':
+				// case 'ss_entry':
+				// case 'ss_section':
+					// return addSectionSlot(node,type.slice(3,type.length).toUpperCase());
+// 				
+// 
+				// //---------composition--------
+				// case 'context':
+					// return addContext(node);
+				// case 'content':
+					// return addContent(node);
+// 
+				// //------------base type--------
+				// case "text":
+					// var element = addText(node);
+					// return element;
+// 
+				// case "coded text":
+					// return addCodedText(node);
+// 
+				// case "quantity":
+					// return addQuantity(node);
+// 
+				// case"count":
+					// return addCount(node);
+// 
+				// case"date time":
+					// return addDateTime(node);
+// 
+				// case "duration":
+					// return addDuration(node);
+// 
+				// case "ordinal":
+					// return addOrdinal(node);
+// 
+				// case "boolean":
+					// return addBoolean(node);
+// 
+				// case "quantity[i]":
+					// return addInterval_quantity(node);
+// 
+				// case "integer[i]":
+					// return addInterval_integer(node);
+// 
+				// case "date time[i]":
+					// return addInterval_dateTime(node);
+// 
+				// case "multimedia":
+					// return addMultimedia(node);
+// 
+				// case "uri":
+					// return addUri(node);
+// 
+				// case "identifier":
+					// return addIdentifier(node);
+// 
+				// case"proportion":
+					// return addProportion(node);
+// 
+				// case "cluster":
+					// return addCluster(node);
+				// //bs : base type slot
+				// case "bs_element":
+				// case "bs_cluster":
+				// case "bs_item":
+				   // return addBaseSlot(node,type.slice(3,type.length).toUpperCase());
+				// case "delete":
+				  // deleteNode(node);
+				// //-----------base type end--------------
+// 
+				// }
+			// };
+// 			
 			$scope.editArchetype = function(node, type) {
 				
 				if (needCheckedType.indexOf(node.label.picType) != -1) {
@@ -425,7 +581,7 @@ angular.module('clever.management.directives.editDefinitionPane', []).directive(
 						//return;
 					} else if ((!node.oriNodeRef.attributes || node.oriNodeRef.attributes.length == 0) && !node.childrenAttribute) {
 						var multiAttribute = editor.getCMultipleAttribute(null, editor.getDefaultCardinality(1), editor.getDefaultExistence(1, 1), "items");
-						
+						node.oriNodeRef.attributes = multiAttribute;
 						parser.processAttribute(multiAttribute, node, node.children, $scope.ontology.term_definitions);
 						//node.children = [];
 
@@ -433,58 +589,68 @@ angular.module('clever.management.directives.editDefinitionPane', []).directive(
 				}
 
 				type = type.toLowerCase();//normalize the type
-
+                var resultNode;
 				switch(type) {
 				case "otherparticipations":
-					return addOtherParticipations(node);
-
+					resultNode = addOtherParticipations(node);
+                    break;
 				case "participation":
-					return addParticipation(node);
-
+					resultNode = addParticipation(node);
+ break;
 				case "subject":
-					return addSubject(node);
-
+					resultNode = addSubject(node);
+break;
 				//  subject:['PARTY_SELF','PARTY_IDENTIFIED','PARTY_RELATED'],
 				case"party_self":
-					return addPartySelf(node);
-
+					resultNode = addPartySelf(node);
+break;
 				case"party_identified":
-					return addPartyIdentified(node);
-
+					resultNode = addPartyIdentified(node);
+break;
 				case"party_related":
-					return addPartyRelated(node);
-
+					resultNode = addPartyRelated(node);
+break;
 				case "links":
-					return addLinks(node);
-
+					resultNode = addLinks(node);
+break;
 				case "link":
-					return addLink(node);
+					resultNode = addLink(node);
+					break;
 				case "protocol":
-					return addProtocol(node);
+					resultNode = addProtocol(node);
+					break;
 
 				//--------action--------
 				case "ism_transitions":
-					return addIsmTransitions(node);
+					resultNode = addIsmTransitions(node);
+					break;
 				case "ism_transition":
-					return addIsmTransition(node);
+					resultNode = addIsmTransition(node);
+					break;
 
 				//--------instruction-----
 				case "activity":
-					return addActivity(node);
+					resultNode = addActivity(node);
+					break;
 
 				//--------observation--------
 				case "data":
-					return addData(node);
+					resultNode = addData(node);
+					break;
 				case "state":
-					return addState(node);
+					resultNode = addState(node);
+					break;
 				case "event_state":
-					return addStateToEvent(node);
+					resultNode = addStateToEvent(node);
+					break;
 				case "event":
-					return addEvent(node);
+					resultNode = addEvent(node);
+					break;
 				
 				//---------section---------
 				case 'sub_section':
-					return addSubSection(node);
+					resultNode = addSubSection(node);
+					break;
 			    //ss means section slot
 				case 'ss_action':
 				case 'ss_observation':
@@ -493,74 +659,100 @@ angular.module('clever.management.directives.editDefinitionPane', []).directive(
 				case 'ss_evaluation':
 				case 'ss_entry':
 				case 'ss_section':
-					return addSectionSlot(node,type.slice(3,type.length).toUpperCase());
+					resultNode = addSectionSlot(node,type.slice(3,type.length).toUpperCase());
+					break;
 				
 
 				//---------composition--------
 				case 'context':
-					return addContext(node);
+					resultNode = addContext(node);
+					break;
 				case 'content':
-					return addContent(node);
+					resultNode = addContent(node);
+					break;
 
 				//------------base type--------
 				case "text":
 					var element = addText(node);
-					return element;
+					resultNode = element;
+					break;
 
 				case "coded text":
-					return addCodedText(node);
+					resultNode = addCodedText(node);
+					break;
 
 				case "quantity":
-					return addQuantity(node);
+					resultNode = addQuantity(node);
+					break;
 
 				case"count":
-					return addCount(node);
+					resultNode = addCount(node);
+					break;
 
 				case"date time":
-					return addDateTime(node);
+					resultNode = addDateTime(node);
+					break;
 
 				case "duration":
-					return addDuration(node);
+					resultNode = addDuration(node);
+					break;
 
 				case "ordinal":
-					return addOrdinal(node);
+					resultNode = addOrdinal(node);
+					break;
 
 				case "boolean":
-					return addBoolean(node);
+					resultNode = addBoolean(node);
+					break;
 
 				case "quantity[i]":
-					return addInterval_quantity(node);
+					resultNode = addInterval_quantity(node);
+					break;
 
 				case "integer[i]":
-					return addInterval_integer(node);
+					resultNode = addInterval_integer(node);
+					break;
 
 				case "date time[i]":
-					return addInterval_dateTime(node);
+					resultNode = addInterval_dateTime(node);
+					break;
 
 				case "multimedia":
-					return addMultimedia(node);
+					resultNode = addMultimedia(node);
+					break;
 
 				case "uri":
-					return addUri(node);
+					resultNode = addUri(node);
+					break;
 
 				case "identifier":
-					return addIdentifier(node);
+					resultNode = addIdentifier(node);
+					break;
 
-				case"propertion":
-					return addProportion(node);
+				case"proportion":
+					resultNode = addProportion(node);
+					break;
 
 				case "cluster":
-					return addCluster(node);
+					resultNode = addCluster(node);
+					break;
 				//bs : base type slot
 				case "bs_element":
 				case "bs_cluster":
 				case "bs_item":
-				   return addBaseSlot(node,type.slice(3,type.length).toUpperCase());
+				   resultNode = addBaseSlot(node,type.slice(3,type.length).toUpperCase());
+				   break;
 				case "delete":
 				  deleteNode(node);
+				  break;
 				//-----------base type end--------------
 
 				}
+				
+				if (resultNode) {
+					$scope.treeControl.locateNode(resultNode);
+				}
+
 			};
 
 			function addSectionSlot(node, type) {
@@ -673,8 +865,8 @@ angular.module('clever.management.directives.editDefinitionPane', []).directive(
 
 			// links function
 			function addLinks(node) {
-				var links = editor.getCSingleAttribute(null, editor.getDefaultExistence(0, 1), "links");
-				
+				//var links = editor.getCSingleAttribute(null, editor.getDefaultExistence(0, 1), "links");
+				var links = editor.getMultyAttr(null, 0, [0,1], "links");
 				node.oriNodeRef.attributes = pushTo(links, node.oriNodeRef.attributes);
 				return parser.processAttribute(links, node, node.children, $scope.ontology.term_definitions);
 			}
@@ -688,8 +880,8 @@ angular.module('clever.management.directives.editDefinitionPane', []).directive(
 				var uriString = editor.getPrimitiveString();
 				var value = editor.getSingleAttr(uriString, [1,1], 'value');
 				var DV_EHR_URI = getDV_EHR_URI(value);
-				var target = editor.getCSingleAttribute(DV_EHR_URI, editor.getDefaultExistence(1, 1), "target");
-				var LINK = editor.getCComplexObject([meaning, target], nodeId, editor.getDefaultOccurrences(0, 1), "LINK");
+				var target = editor.getCSingleAttribute(DV_EHR_URI, editor.getDefaultExistence(0, 1), "target");
+				var LINK = editor.getCComplexObject([meaning, target], nodeId, editor.getDefaultOccurrences(0,"*"), "LINK");
 
 				node.oriNodeRef.children = pushTo(LINK, node.oriNodeRef.children);
 				editor.synchronizeOntology($scope.ontology, nodeId, "New Link", "*");
@@ -809,12 +1001,14 @@ angular.module('clever.management.directives.editDefinitionPane', []).directive(
 				if (path.dataPath) {
 					var dataRef = editor.getArchetypeInternalRef('ITEM_TREE', editor.getDefaultOccurrences(1, 1), path.dataPath);
 					var dataAttr = editor.getCSingleAttribute(dataRef, editor.getDefaultExistence(1, 1), "data");
-					EVENT.attributes.push(dataAttr);
+					//EVENT.attributes.push(dataAttr);
+					EVENT.attributes = pushTo(dataAttr, EVENT.attributes);
 				}
 				if (path.statePath) {
 					var stateRef = editor.getArchetypeInternalRef('ITEM_TREE', editor.getDefaultOccurrences(1, 1), path.statePath);
 					var stateAttr = editor.getCSingleAttribute(stateRef, editor.getDefaultExistence(1, 1), "state");
-					EVENT.attributes.push(stateAttr);
+					//EVENT.attributes.push(stateAttr);
+					EVENT.attributes = pushTo(dataAttr, EVENT.attributes);
 				}
 				
 				editor.synchronizeOntology($scope.ontology, nodeId, "Any Events", "*");
@@ -842,7 +1036,8 @@ angular.module('clever.management.directives.editDefinitionPane', []).directive(
 						if (path.statePath) {
 							var stateRef = editor.getArchetypeInternalRef('ITEM_TREE', editor.getDefaultOccurrences(1, 1), path.statePath);
 							var stateAttr = editor.getCSingleAttribute(stateRef, editor.getDefaultExistence(1, 1), "state");
-							oriEvents[i].attributes.push(stateAttr);
+							//oriEvents[i].attributes.push(stateAttr);
+							oriEvents[i].attributes = pushTo(stateAttr, oriEvents[i].attributes);
 							parser.processAttribute(stateAttr, disEvents[1], disEvents[i].children, $scope.ontology.term_definitions);
 						}
 					};
@@ -1118,7 +1313,7 @@ angular.module('clever.management.directives.editDefinitionPane', []).directive(
  // 'DV_PROPORTION', 'DV_IDENTIFIER', 'DV_PARSABLE', 'DV_BOOLEAN'];
 
 			//function getDV_TEXT(){}
-			function getDV_CODED_TEXT(){}
+			//function getDV_CODED_TEXT(){}
 			function getDV_QUANTITY(){}
 			function getDV_ORDINAL(){}
 			function getDV_DATE_TIME(){}
@@ -1157,9 +1352,9 @@ angular.module('clever.management.directives.editDefinitionPane', []).directive(
 			}
 
 			function getDV_CODED_TEXT() {
-				var CodePhrase = editor.getCCodePhrase();
-				var defining_code = editor.getCSingleAttribute(CodePhrase, editor.getDefaultExistence(1, 1), "defining_code");
-				var DV_CODED_TEXT = editor.getCComplexObject(defining_code, "", editor.getDefaultOccurrences(1, 1), "DV_CODED_TEXT");
+				//var CodePhrase = editor.getCCodePhrase();
+				//var defining_code = editor.getCSingleAttribute(CodePhrase, editor.getDefaultExistence(1, 1), "defining_code");
+				var DV_CODED_TEXT = editor.getCComplexObject(null, "", editor.getDefaultOccurrences(1, 1), "DV_CODED_TEXT");
 				return DV_CODED_TEXT;
 			}
 
@@ -1208,35 +1403,106 @@ angular.module('clever.management.directives.editDefinitionPane', []).directive(
 			//---------delete Element-------------
 		
 			
+	
 			function deleteNode(node) {
 				node.parent.children.splice(node.parent.children.indexOf(node), 1);
-				
+
 				if (node.label.type == "type") {
 					if (node.parentAttribute) {
-						if(angular.isArray(node.parentAttribute.oriNodeRef.children)){
-						node.parentAttribute.oriNodeRef.children.splice(node.parentAttribute.oriNodeRef.children.indexOf(node.oriNodeRef), 1);
-					}else{
-						node.parentAttribute.oriNodeRef.children = undefined;
-					}
-					
-					}else if(node.parent){
-						if(angular.isArray(node.parent.oriNodeRef.children)){
-						node.parent.oriNodeRef.children.splice(node.parent.oriNodeRef.children.indexOf(node.oriNodeRef), 1);
-						}else{
+						if (angular.isArray(node.parentAttribute.oriNodeRef.children)) {
+							node.parentAttribute.oriNodeRef.children.splice(node.parentAttribute.oriNodeRef.children.indexOf(node.oriNodeRef), 1);
+						} else {
+							node.parentAttribute.oriNodeRef.children = undefined;
+						}
+
+					} else if (node.parent) {
+						if (angular.isArray(node.parent.oriNodeRef.children)) {
+							node.parent.oriNodeRef.children.splice(node.parent.oriNodeRef.children.indexOf(node.oriNodeRef), 1);
+						} else {
 							node.parent.oriNodeRef.children = undefined;
 						}
 					}
 					
+					if(node.label.code){
+						deleteOntology(node.label.code);
+					}
+
 				}
 
 				if (node.label.type == "attribute") {
-					if(angular.isArray(node.parent.oriNodeRef.attributes)){
-					node.parent.oriNodeRef.attributes.splice(node.parent.oriNodeRef.attributes.indexOf(node.oriNodeRef), 1);
-					}else{
+					if (angular.isArray(node.parent.oriNodeRef.attributes)) {
+						node.parent.oriNodeRef.attributes.splice(node.parent.oriNodeRef.attributes.indexOf(node.oriNodeRef), 1);
+					} else {
 						node.parent.oriNodeRef.attributes = undefined;
 					}
 				}
+
 			};
+        function deleteOntology(code){
+        	var termDefinitions = $scope.ontology.term_definitions;
+        	if(angular.isArray(termDefinitions)){
+        		angular.forEach(termDefinitions, function(termDefinition){
+        			deleteDefinition(termDefinition, code);
+        		});
+        	}else{
+        		deleteDefinition(termDefinitions, code);
+        	}
+        	var originalTermDefinitions = $scope.ontology.term_definitions.oriNodeRef;
+        	if(angular.isArray(originalTermDefinitions)){
+        		angular.forEach(originalTermDefinitions, function(originalTermDefinition){
+        			deleteOriDefinition(originalTermDefinition, code);
+        		});
+        	}else{
+        		deleteOriDefinition(originalTermDefinitions);
+        	}
+        	
+        	console.log($scope.ontology);
+        }
+        
+      
+			function deleteDefinition(termDefinition, code) {
+				var items = termDefinition.items;
+				var matchItem;
+				if (items) {
+					if (angular.isArray(items)) {
+						angular.forEach(items, function(item) {
+							if (item.code == code) {
+								matchItem = item;
+							}
+						});
+					} else {
+						if (items.code == code) {
+							matchItem = items;
+						}
+					}
+					if (matchItem) {
+						var index = items.indexOf(matchItem);
+						items.splice(items.indexOf(matchItem), 1);
+					}
+				}
+
+			}
+			
+			function deleteOriDefinition(termDefinition, code){
+				var items = termDefinition.items;
+				var matchItem;
+				if (items) {
+					if (angular.isArray(items)) {
+						angular.forEach(items, function(item) {
+							if (item._code == code) {
+								matchItem = item;
+							}
+						});
+					} else {
+						if (items._code == code) {
+							matchItem = items;
+						}
+					}
+					if (matchItem) {
+						items.splice(items.indexOf(matchItem), 1);
+					}
+				}
+			}
 
 
 		},
@@ -1253,7 +1519,10 @@ angular.module('clever.management.directives.editDefinitionPane', []).directive(
 
 				if (node.label.slot) {
 					label += '<span class="archetype-edit-icon slot" style="padding: 7px 10px; background-position-y: 10px;"></span>';
-				} else {
+				} else if(node.label.type == "attribute"){
+				    label += '<span class="archetype-edit-icon attribute' + '" style="padding: 7px 10px; background-position-y: 10px;"></span>';
+
+				}else {
 					label += '<span class="archetype-edit-icon ' + picType + '" style="padding: 7px 10px; background-position-y: 10px;"></span>';
 				}
 

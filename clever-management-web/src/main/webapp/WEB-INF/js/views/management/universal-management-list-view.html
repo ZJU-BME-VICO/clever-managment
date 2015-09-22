@@ -14,7 +14,7 @@
 		<h2>{{selectedSubMenu.title | translate}}</h2>
 	</div>
 	<div class="row">
-		<div disabled ng-style="{height: containerHeight - 40}">{{selectedSubMenu.info | translate}}</div>
+		<div disabled >{{selectedSubMenu.info | translate}}</div>
 		<h4 class="pull-right"><a href ng-show="selectedSubMenu.state" ng-click="$state.go(selectedSubMenu.state)">{{'MENU_ENTER' | translate}}</a></h4>
 	</div>
 </div>

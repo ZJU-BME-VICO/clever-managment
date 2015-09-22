@@ -10,12 +10,10 @@ angular.module('clever.management.directives.editOntologyPane', []).directive('e
 		templateUrl : 'js/directives/archetype-edit-directives/ontology-pane/edit-ontology-pane.html',
 		controller : function($scope, $element,$filter) {
 			
-            
+		//	$scope.ontologyList = ['Term definitions', 'Term bindings', 'Constraint definitions', 'Constraint bindings'];
+            $scope.ontologyList = ['Term definitions'];
 			$scope.$watch('ontology', function(newValue, oldValue) {
 				if (newValue) {
-					console.log("this is ontology  in ontology pane");
-					console.log(newValue);
-					$scope.ontologyList = ['Term definitions', 'Term bindings', 'Constraint definitions', 'Constraint bindings'];
 					$scope.currentOntology = {
 						value : 'Term definitions'
 					};
@@ -25,21 +23,16 @@ angular.module('clever.management.directives.editOntologyPane', []).directive('e
 					};
 					getLanguageList();
 					var tempOntology = getOntologyContent();
-					if(angular.isArray(tempOntology)){
+					if (angular.isArray(tempOntology)) {
 						$scope.ontologyContent = tempOntology;
-					}else{
+					} else {
 						$scope.ontologyContent = [];
 						$scope.ontologyContent.push(tempOntology);
 					}
-					
-                    
-                    console.log("----this is $scope-=-----");
-                    console.log($scope);
-                    
-                    console.log("----this is element");
-                    console.log($element);
 				}
-			});
+			}); 
+			
+
 			
 		
 			$scope.$watch('searchValue', function(newValue) {
@@ -126,12 +119,15 @@ angular.module('clever.management.directives.editOntologyPane', []).directive('e
 					}
 				}
 				
-				if (angular.isArray(matchContent)) {
-					angular.forEach(matchContent, function(value) {
-						value.show = true;
-					});
-				} else {
-					matchContent.show = true;
+				if (matchContent) {
+
+					if (angular.isArray(matchContent)) {
+						angular.forEach(matchContent, function(value) {
+							value.show = true;
+						});
+					} else {
+						matchContent.show = true;
+					}
 				}
 
 				return matchContent;
@@ -152,13 +148,16 @@ angular.module('clever.management.directives.editOntologyPane', []).directive('e
 			}
 
 
-			$scope.$watch('currentOntology.value', function(newValue, oldValue) {
-				if ((newValue && oldValue) && (newValue != oldValue)) {
-
+		
+			
+			$scope.$watch(function() {
+				if ($scope.ontology) {
 					$scope.ontologyContent = getOntologyContent();
-					console.log($scope.ontologyContent);
 				}
+				//console.log($scope.ontologyContent);
 			});
+
+
 			$scope.$watch('currentLanguage.code', function(newValue, oldValue) {
 				if (newValue && oldValue) {
 					$scope.ontologyContent = getOntologyContent();

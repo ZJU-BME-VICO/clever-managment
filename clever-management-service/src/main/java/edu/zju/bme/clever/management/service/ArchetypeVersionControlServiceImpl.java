@@ -348,6 +348,7 @@ public class ArchetypeVersionControlServiceImpl implements
 							+ " instead of Draft.");
 		}
 		// Save archetype file
+		archetypeFile.setLastModifyTime(Calendar.getInstance());
 		archetypeFile.setAdl(this.serializeArchetype(archetype));
 		this.revisionFileRepo.save(archetypeFile);
 	}
@@ -399,6 +400,7 @@ public class ArchetypeVersionControlServiceImpl implements
 							+ archetypeFile.getLifecycleState()
 							+ " instead of Draft.");
 		}
+		archetypeFile.setLastModifyTime(Calendar.getInstance());
 		archetypeFile.setLifecycleState(LifecycleState.TEAMREVIEW);
 		// Save archetype file and master
 		this.revisionFileRepo.save(archetypeFile);
@@ -450,6 +452,7 @@ public class ArchetypeVersionControlServiceImpl implements
 							+ archetypeFile.getLifecycleState()
 							+ " instead of Teamreview.");
 		}
+		archetypeFile.setLastModifyTime(Calendar.getInstance());
 		archetypeFile.setLifecycleState(LifecycleState.PUBLISHED);
 		// Save archetype file
 		this.revisionFileRepo.save(archetypeFile);
@@ -504,6 +507,7 @@ public class ArchetypeVersionControlServiceImpl implements
 							+ archetypeFile.getLifecycleState()
 							+ " instead of Teamreview.");
 		}
+		archetypeFile.setLastModifyTime(Calendar.getInstance());
 		archetypeFile.setLifecycleState(LifecycleState.DRAFT);
 		// Save archetype file
 		this.revisionFileRepo.save(archetypeFile);

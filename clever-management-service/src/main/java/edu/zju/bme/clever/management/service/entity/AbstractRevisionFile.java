@@ -1,5 +1,7 @@
 package edu.zju.bme.clever.management.service.entity;
 
+import java.util.Calendar;
+
 import javax.persistence.Column;
 import javax.persistence.FetchType;
 import javax.persistence.Inheritance;
@@ -33,6 +35,16 @@ public abstract class AbstractRevisionFile<T extends AbstractRevisionFile<?>>
 	private Integer specialiseArchetypeRevisionFileSerialVersion;
 	@Column(name = "specialise_archetype_revision_file_id", insertable = false, updatable = false)
 	private Integer specialiseArchetypeRevisionFileId;
+	@Column
+	private Calendar lastModifyTime;
+	public Calendar getLastModifyTime() {
+		return lastModifyTime;
+	}
+
+	public void setLastModifyTime(Calendar lastModifyTime) {
+		this.lastModifyTime = lastModifyTime;
+	}
+
 	@ManyToOne(fetch = FetchType.LAZY)
 	private T lastRevisionFile;
 

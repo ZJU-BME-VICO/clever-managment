@@ -130,7 +130,19 @@ function StorageTemplateEditCtrl($scope, resourceService, busyService, msgboxSer
 		}
 
 	});
+ 
 
+	$scope.getFixedTitle = function(title, length) {
+		if (title) {
+			var titleLength = length || 40;
+			if (title.length > titleLength) {
+				return title.substring(0, titleLength / 2) + '...' + title.substring(title.length - titleLength / 2, title.length);
+			} else
+				return title;
+		}
+	}; 
+
+ 
 	$scope.refreshTemplateList = function(list) {
 		angular.forEach(templateListMap, function(value, key) {
 			value.length = 0;

@@ -5,15 +5,15 @@
 				<div class="input-group">
 					<div class="btn-group input-group-btn" dropdown>
 						<button class="btn btn-primary"  ng-click="openCreate('lg')">
-							{{createArchetype|translate}}
+							{{"ARCHETYPE_PANE_CREATE"|translate}}
 						</button>
 					</div>
-					<input type="text" class="form-control" ng-model="archetypeListFilter" placeholder="Search for...">
+					<input type="text" class="form-control" ng-model="archetypeListFilter" placeholder="{{'SEARCH_HINT' | translate}}">
 				</div>
 			</div>
 			<ul class="list-group" ng-style="{height:containerHeight-55}" style="overflow:auto;">
 				<!--<a href=""  ng-class="{active:selectedArchetype.id == archetype.id}" class="list-group-item" ng-repeat="archetype in draftArchetypeList"  ng-click="selectArchetype(archetype)">{{archetype.name}}</a>-->
-				<tree-view tree-data="draftArchetypeList"
+				<tree-view tree-data="archetypeList"
 				class="archetype-tree"
 				double-click-node-callback="selectArchetype(value)"
 				node-id="id" node-children="specialiseArchetype"
@@ -21,7 +21,7 @@
 				specialise-archetype-callback="specialiseArchetype(value)"
 				delete-archetype-callback="deleteArchetype(value)"
 				menu-prefix = "list"
-				tree-control="treeControl"  node-alias-name="archetype" 
+				tree-control="treeControl"  node-alias-name="node" 
 				search-key-mapper="searchKeyMapper">
 					<tree-expanded-icon>
 						<span class="clever-icon expanded" style="padding: 0 6px;height: 12px;background-position-y: 6px;"></span>
@@ -30,9 +30,17 @@
 						<span class="clever-icon collapsed" style="padding: 0 6px;height: 12px;background-position-y: 6px;"></span>
 					</tree-collapsed-icon>
 					<tree-node-label>
+					
+						<img ng-show="node.isDirectory" ng-class="node.type | lowercase" class="clever-icon list" style="padding: 0 10px;height: 16px;margin-left: 3px;"></img>
+						<span ng-show="node.isDirectory" ng-bind="node.name"></span>
+						<img ng-show="!node.isDirectory" ng-class="node.lifecycleState | lowercase" class="clever-icon list" style="padding: 0 10px;height: 16px;margin-left: 3px;"></img>
+						<span ng-show="!node.isDirectory" ng-bind-html="node.conceptName | highlight:keyword | unsafe"></span>
+						<!-- &nbsp;<span ng-show="!node.isDirectory" style="color: grey;font-size: 10pt;">(<span ng-bind="node.latestVersionMasterVersion"></span>)</span> -->
+					
+					<!-- 
 						<img ng-class="archetype.lifecycleState | lowercase" class="clever-icon" style="padding: 0 10px;height: 16px;"></img>
 						<span ng-bind-html="archetype.conceptName | highlight:keyword | unsafe"></span>
-						&nbsp;<span style="color:grey;font-size: 10pt;"></span>
+						&nbsp;<span style="color:grey;font-size: 10pt;"></span> -->
 				</tree-node-label>
 				</tree-view>
 			</ul>
@@ -46,19 +54,19 @@
 			<div class="panel panel-default">
 			<div class="panel-heading" style="height: 50px">
 
-					<span style="font-size: large;" ng-if="!isArchetypeListHidden"><strong>{{getFixedTitle(selectedArchetype.name, 40)}}</strong></span>
-					<span style="font-size: large;" ng-if="isArchetypeListHidden"><strong>{{getFixedTitle(selectedArchetype.name, 70)}}</strong></span>
+					<span class="archetype-title" ng-if="!isArchetypeListHidden">{{getFixedTitle(selectedArchetype.name, 40)}}</span>
+					<span class="archetype-title" ng-if="isArchetypeListHidden">{{getFixedTitle(selectedArchetype.name, 70)}}</span>
 
 					<button class="btn btn-small  btn-primary pull-right"   style="margin-left:20px; margin-right: 10px;" ng-disabled="selectedArchetype==undefined" ng-click="saveSelectedArchetype()">
-						{{saveArchetype | translate}}
+						{{"ARCHETYPE_PANE_SAVE" | translate}}
 					</button>
 
 					<button class="btn btn-primary pull-right"   style="margin-left:20px"; ng-disabled="selectedArchetype==undefined" ng-click="submitSelectedArchetype()">
-						{{submitArchetype | translate}}
+						{{"ARCHETYPE_PANE_SUBMIT" | translate}}
 					</button>
 
 					<button class="btn btn-info pull-right" style="margin-left:20px";ng-disabled="selectedArchetype==undefined" ng-click="generatorDiff()">
-						Diff
+						{{"ARCHETYPE_PANE_DIFF" | translate}}
 					</button>
 
 				</div>
@@ -135,15 +143,19 @@
 		<div class="modal-body">
 		<div class="row">
 		<div class="col-xs-2 col-sm-2 col-lg-2 flex-box" >
-		<label>Orgnization:</label>
-		<select class="form-control" ng-model="archetypeOrgnization" ng-options="org for org in orgnizationList"></select>
+		<label>Orgnization :</label>
+		<select class="form-control" ng-model="organization" ng-options="org for org in organizations"></select>
 		</div>
-		<div class="col-xs-4 col-sm-4 col-lg-4 flex-box" >
-		<label>Type:</label>
-		<select class="form-control" ng-model="archetypeType" ng-options="type for type in archetypeTypeList"></select>
+		<div class="col-xs-3 col-sm-3 col-lg-3 flex-box" >
+		<label>Reference Model:</label>
+		<select class="form-control" ng-model="referenceModel" ng-options="ref for ref in referenceModels"></select>
 		</div>
-		<div class="col-xs-6 col-sm-6 col-lg-6 flex-box">
-			<label>Concept:</label>
+		<div class="col-xs-2 col-sm-2 col-lg-2 flex-box" >
+		<label>Entity Type :</label>
+		<select class="form-control" ng-model="entityType" ng-options="type for type in entityTypes"></select>
+		</div>
+		<div class="col-xs-5 col-sm-5 col-lg-5 flex-box">
+			<label>Concept :</label>
 			<input class="form-control" type="text" ng-model="concept">
 		</div>
 		</div>

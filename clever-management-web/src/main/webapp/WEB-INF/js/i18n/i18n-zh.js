@@ -123,7 +123,9 @@ angular.module('clever.management.i18n.zh', ['pascalprecht.translate']).config(f
 		STORAGE_TEMPLATE_UPLOAD_FAILED_HINT : '存储模板上传失败，错误：{{errorMsg}}',
 
 		// Storage template edit
-
+		STORAGE_TEMPLATE_SUBMIT_TIME: '提交时间',
+		
+		
 		// Storage template verify
 		STORAGE_TEMPLATE_VERIFY_OET_DIFF : 'OET对比',
 		STORAGE_TEMPLATE_VERIFY_APPROVE : '通过',
@@ -257,6 +259,16 @@ angular.module('clever.management.i18n.zh', ['pascalprecht.translate']).config(f
 		ARCHETYPE_PANE_CREATE: '创建',
 		ARCHETYPE_PANE_SAVE: '保存',
 		ARCHETYPE_PANE_SUBMIT: '提交',
+		ARCHETYPE_PANE_DIFF: '对比',
 		
+		
+		//template & archetype type
+		ARCHETYPE_TYPE : '原型类型',
+		TEMPLATE_TYPE : '模板类型',
+		
+		//header pane
+		BASE_INFORMATION : '基本信息' ,
+		AUTHORSHIP : '作者信息',
+		OTHER_DETAILS: '其他信息',
 	});
 });
