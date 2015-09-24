@@ -53,7 +53,7 @@ angular.module('cleverManagementApp', ['ngAnimate', 'ui.bootstrap.typeahead', 'n
 		templateUrl : 'js/views/universal-ui-view.html',
 	}).state('management.archetype.list', {
 		url : '',
-		templateUrl : 'js/views/management/universal-management-list-view.html',
+		templateUrl : 'js/views/management/archetype/management.archetype.list.html',
 		controller : UniversalManagementListCtrl,
 		data : {
 			title : 'MENU_MANAGEMENT_ARCHETYPE',
