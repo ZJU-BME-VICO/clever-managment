@@ -26,6 +26,7 @@ function StorageTemplateDeployCtrl($scope, authenticationService, resourceServic
 		var busyId = busyService.pushBusy('BUSY_LOADING');
 		resourceService.get(DEPLOY_RECORDS_LIST_URL).then(function(list) {
 			$scope.deployRecords = list;
+			console.log(list);
 			busyService.popBusy(busyId);
 		});
 	}
@@ -106,6 +107,7 @@ function StorageTemplateDeployCtrl($scope, authenticationService, resourceServic
 			if (result.succeeded) {
 				msgboxService.createMessageBox('STORAGE_TEMPLATE_DEPLOY_MSG_HINI', 'STORAGE_TEMPLATE_DEPLOY_SUCCEEDED_HINI', {}, 'success').result.then(function() {
 					$scope.deployedTemplateList = deployConfig.templateNames;
+					
 					refreshDeployRecords();
 				});
 			} else {
@@ -114,5 +116,7 @@ function StorageTemplateDeployCtrl($scope, authenticationService, resourceServic
 				}, 'error');
 			}
 		});
+		
+		//console.log(deployConfig);
 	};
 }

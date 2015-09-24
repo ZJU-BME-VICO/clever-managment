@@ -36,7 +36,6 @@
 <!--<script src="js/services/template-retrieve-service.js"></script>-->
 <script src="js/services/document-diff-service.js"></script>
 <script src="js/services/archetype-serialize-service.js"></script>
-<script src="js/services/archetype-parse-to-edit-service.js"></script>
 <script src="js/services/archetype-parse-edit-service.js"></script>
 <script src="js/services/archetype-edit-service.js"></script>
 
@@ -77,7 +76,6 @@
 <script src="js/directives/document-diff/document-diff-directive.js"></script>
 
 <script src="js/directives/archetype-edit-directives/definition-pane/edit-definition-pane.js"></script>
-<script src="js/directives/archetype-edit-directives/display-pane/edit-display-pane.js"></script>
 <script src="js/directives/archetype-edit-directives/header-pane/edit-header-pane.js"></script>
 <script src="js/directives/archetype-edit-directives/ontology-pane/edit-ontology-pane.js"></script>
 <script src="js/directives/archetype-edit-directives/definition-pane/participation-pane/participation-pane.js"></script>

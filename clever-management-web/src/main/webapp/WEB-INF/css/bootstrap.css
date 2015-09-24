@@ -6373,3 +6373,14 @@ button.close {
     -moz-border-radius:6px 0 6px 6px;
     border-radius:6px 0 6px 6px;
 }
+.archetype-title {
+	font-size: 18px; 
+	color: #2980B9;
+}
+
+.succeeded {
+	color:green;
+}
+.failure {
+	color:red;
+}

@@ -83,14 +83,16 @@ angular.module('clever.management.directives.treeView', []).directive('treeView'
 			};
 			
 			
-			$scope.clickEditNodeMenu = function(node,type){
-				
-			var element =$scope.clickEditMenuCallback({
-					node:node,
-					type:type,
+		
+			$scope.clickEditNodeMenu = function(node, type) {
+
+				$scope.clickEditMenuCallback({
+					node : node,
+					type : type,
 				});
-				return element;
-			};
+
+			}; 
+
 			
 			$scope.specialiseArchetype = function(node){
 				
@@ -180,9 +182,14 @@ angular.module('clever.management.directives.treeView', []).directive('treeView'
 					if ($scope.getCurrentNode() && $scope.getCurrentNode().selected) {
 						$scope.getCurrentNode().selected = undefined;
 					}
-
+					console.log("this archetype content");
+					console.log(node);
+                    if(node.parent){
+                    	
+                    	node.parent.collapsed = false;
+                    }
 					node.selected = 'selected';
-
+                    
 					$scope.setCurrentNode(node);
 
 					$scope.clickNode(node);

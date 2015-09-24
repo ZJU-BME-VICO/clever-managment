@@ -2,7 +2,9 @@ package edu.zju.bme.clever.management.web.rest;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -249,6 +251,7 @@ public class StorageTemplateResourceController extends
 		User user = this.userService.getUserByName(userName);
 		FileUploadResult result = new FileUploadResult();
 		result.setSucceeded(true);
+		
 		try {
 			this.versionControlService.editTemplate(templateInfo.getId(),
 					templateInfo.getOet(), templateInfo.getArm(), user);
@@ -259,7 +262,7 @@ public class StorageTemplateResourceController extends
 		}
 		return result;
 	}
-
+   
 	@RequestMapping(value = "/action/approve/id/{id}", method = RequestMethod.GET)
 	public FileUploadResult approveTemplateFile(@PathVariable int id,
 			Authentication authentication) {
@@ -481,6 +484,7 @@ public class StorageTemplateResourceController extends
 		info.setEditorId(templateFile.getEditor().getId());
 		info.setEditorName(templateFile.getEditor().getName());
 		info.setLifecycleState(templateFile.getLifecycleState().getValue());
+		info.setLastModifyTime(templateFile.getLastModifyTime());
 		// Set last template file
 		Optional.ofNullable(templateFile.getLastRevisionFile()).ifPresent(
 				lastTemplate -> {
@@ -511,6 +515,11 @@ public class StorageTemplateResourceController extends
 		info.setPackageName(entityClass.getPackageName());
 		info.setContent(entityClass.getContent());
 		return info;
+	}
+	
+	private String GetTime(){
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		return dateFormat.format(new Date());
 	}
 
 }

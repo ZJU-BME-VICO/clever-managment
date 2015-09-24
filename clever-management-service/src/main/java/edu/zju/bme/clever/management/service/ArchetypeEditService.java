@@ -1,9 +1,9 @@
 package edu.zju.bme.clever.management.service;
 
-import edu.zju.bme.clever.management.service.entity.ArchetypeInfo;
+import edu.zju.bme.clever.management.service.entity.AdlInfo;
 
 public interface ArchetypeEditService {
-  public void saveArchetype(Integer id, ArchetypeInfo archetype);
+  public void saveArchetype(Integer id, AdlInfo archetype);
   
-  public void submitArchetype(Integer id, ArchetypeInfo archetype);
+  public void submitArchetype(Integer id, AdlInfo archetype);
 }

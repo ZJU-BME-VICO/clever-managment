@@ -1,8 +1,15 @@
 package edu.zju.bme.clever.management.web.rest;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.Writer;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,6 +26,7 @@ import org.springframework.jmx.export.annotation.ManagedResource;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -31,6 +39,7 @@ import edu.zju.bme.clever.management.service.ArchetypeProvideService;
 import edu.zju.bme.clever.management.service.ArchetypeValidateService;
 import edu.zju.bme.clever.management.service.ArchetypeVersionControlService;
 import edu.zju.bme.clever.management.service.UserService;
+import edu.zju.bme.clever.management.service.entity.AdlInfo;
 import edu.zju.bme.clever.management.service.entity.ArchetypeMaster;
 import edu.zju.bme.clever.management.service.entity.ArchetypeRevisionFile;
 import edu.zju.bme.clever.management.service.entity.ArchetypeVersionMaster;
@@ -115,7 +124,8 @@ public class ArchetypeResourceController extends AbstractResourceController {
 									info.setId(master.getId());
 									info.setConceptName(master.getConceptName());
 									info.setName(master.getName());
-									info.setRmOriginator(master.getRmOrginator());
+									info.setRmOriginator(master
+											.getRmOrginator());
 									info.setRmEntity(master.getRmEntity());
 									info.setRmName(master.getRmName());
 									info.setLatestVersionMasterVersion(master
@@ -160,16 +170,77 @@ public class ArchetypeResourceController extends AbstractResourceController {
 		}).collect(Collectors.toList());
 	}
 
-	@RequestMapping(value = "/list/edit/draft", method = RequestMethod.GET)
-	public List<ArchetypeInfo> getArchtypeListToEdit(
-			Authentication authentication) {
-		String userName = ((UserDetails) authentication.getPrincipal())
-				.getUsername();
-		User user = this.userService.getUserByName(userName);
-		List<ArchetypeRevisionFile> files = this.archetypeProvideService
-				.getDraftArchetypeRevisionFileToEdit(user);
-		return constructArchetypeInfoList(files);
-	}
+	 @RequestMapping(value = "/list/edit/draft", method = RequestMethod.GET)
+	 public List<ArchetypeInfo> getArchtypeListToEdit(
+	 Authentication authentication) {
+	 String userName = ((UserDetails) authentication.getPrincipal())
+	 .getUsername();
+	 User user = this.userService.getUserByName(userName);
+	 List<ArchetypeRevisionFile> files = this.archetypeProvideService
+	 .getDraftArchetypeRevisionFileToEdit(user);
+	 return constructArchetypeInfoList(files);
+	 }
+
+//	@RequestMapping(value = "/list/edit/draft", method = RequestMethod.GET)
+//	public List<ArchetypeInfo> getArchtypeListToEdit(
+//			Authentication authentication) {
+//		Integer number = 1;
+//		String fileName = "src/test/resources/";
+//		List<ArchetypeInfo> archetypeInfoList = new ArrayList<ArchetypeInfo>();
+//	    List<File> fileList = new ArrayList<File>();
+//		File archetypeFile = new File(fileName + number + ".adl");
+//		while(archetypeFile.isFile()){
+//			System.out.println("open File successfully");
+//			fileList.add(archetypeFile);
+//			number++;
+//			archetypeFile = new File(fileName + number + ".adl");
+//		}
+//		BufferedReader reader = null;
+//		int line = 1;
+//	//	try{
+//		for (File file : fileList) {
+//			try {
+//				reader = new BufferedReader(new FileReader(file));
+//
+//				String tempString = "";
+//				
+//                String adl = "";
+//				while ((tempString = reader.readLine()) != null) {
+//					adl += tempString;
+//					adl += "\r\n";
+//					line++;
+//				}
+//				line = 1;
+//
+//				ArchetypeInfo info = new ArchetypeInfo();
+//				
+//				info.setAdl(adl);
+//				ADLParser parser;
+//
+//				parser = new ADLParser(file);
+//
+//				Archetype arc;
+//
+//				arc = parser.parse();
+//
+//				info.setXml(this.xmlSerializer.output(arc));
+//
+//				archetypeInfoList.add(info);
+//
+//			} catch (FileNotFoundException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			} catch (IOException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			} catch (Exception e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
+//		}
+//		System.out.println(archetypeInfoList.size());
+//	    return archetypeInfoList;
+//	}
 
 	@RequestMapping(value = "/list/edit/published", method = RequestMethod.GET)
 	public List<ArchetypeInfo> getArchtypeListToEdit() {
@@ -321,15 +392,18 @@ public class ArchetypeResourceController extends AbstractResourceController {
 		return result;
 	}
 
-	@RequestMapping(value = "/action/edit/id/{id}", method = RequestMethod.GET)
+	@RequestMapping(value = "/action/edit/id/{id}", method = RequestMethod.POST)
 	public FileUploadResult editFile(@PathVariable int id,
+			@RequestBody AdlInfo info,
 			Authentication authentication) {
+		System.out.println(info.getAdl());
 		FileUploadResult result = new FileUploadResult();
 		result.setSucceeded(true);
 		String userName = ((UserDetails) authentication.getPrincipal())
 				.getUsername();
 		User user = this.userService.getUserByName(userName);
-		String fileAdl = this.archetypeProvideService.getArchetypeAdlById(id);
+		//String fileAdl = this.archetypeProvideService.getArchetypeAdlById(id);
+		String fileAdl = info.getAdl();
 		try {
 			this.archetypeVersionControlService
 					.editArchetype(id, fileAdl, user);
