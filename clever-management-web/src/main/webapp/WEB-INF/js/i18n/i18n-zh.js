@@ -195,7 +195,7 @@ angular.module('clever.management.i18n.zh', ['pascalprecht.translate']).config(f
 		MENU_INFO : '概要信息',
 		MENU_MANAGEMENT_INFO : 'CLEVER管理平台，功能模块管理',
 		MENU_MANAGEMENT_ARCHETYPE_INFO : 'Archetype是CLEVER™的核心，它基于openEHR规范实现，是一套从临床基本概念出发的信息模型，而且与软件系统开发独立，因而可由临床人员直接管理和维护，具备较高灵活性。',
-		MENU_MANAGEMENT_ARCHETYPE_VIEW_INFO : 'Archetype是CLEVER™的核心，它基于openEHR规范实现，是一套从临床基本概念出发的信息模型，而且与软件系统开发独立，因而可由临床人员直接管理和维护，具备较高灵活性。',
+		MENU_MANAGEMENT_ARCHETYPE_VIEW_INFO : 'Archetype是CLEVER™的核心，它基于openEHR规范实现，是一套从临床基本概念出发的信息模型，而且与软件系统开发独立，因而可由临床人员直接管理和维护，具备较高灵活性。Archetype是CLEVER™的核心，它基于openEHR规范实现，是一套从临床基本概念出发的信息模型，而且与软件系统开发独立，因而可由临床人员直接管理和维护，具备较高灵活性。Archetype是CLEVER™的核心，它基于openEHR规范实现，是一套从临床基本概念出发的信息模型，而且与软件系统开发独立，因而可由临床人员直接管理和维护，具备较高灵活性。',
 		MENU_MANAGEMENT_ARCHETYPE_UPLOAD_INFO : 'Archetype是CLEVER™的核心，它基于openEHR规范实现，是一套从临床基本概念出发的信息模型，而且与软件系统开发独立，因而可由临床人员直接管理和维护，具备较高灵活性。',
 		MENU_MANAGEMENT_ARCHETYPE_VERIFY_INFO : 'Archetype是CLEVER™的核心，它基于openEHR规范实现，是一套从临床基本概念出发的信息模型，而且与软件系统开发独立，因而可由临床人员直接管理和维护，具备较高灵活性。',
 		MENU_MANAGEMENT_ARCHETYPE_EDIT_INFO : 'Archetype是CLEVER™的核心，它基于openEHR规范实现，是一套从临床基本概念出发的信息模型，而且与软件系统开发独立，因而可由临床人员直接管理和维护，具备较高灵活性。',
