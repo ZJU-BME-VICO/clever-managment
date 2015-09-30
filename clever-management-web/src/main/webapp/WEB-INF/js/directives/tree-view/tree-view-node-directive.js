@@ -14,21 +14,23 @@ angular.module('clever.management.directives.treeViewNode', []).directive('treeV
 			var parentIndex = attrs.nodeIndex || '';
 			var prefix = scope.menuPrefix || '';
 			var template = '<ul>' + 
-								'<li ng-class="' + nodeAliasName + '.collapsed ? \'collapsed\' : \'expanded\'">' + 
+								'<li role="context-menu" ng-class="' + nodeAliasName + '.collapsed ? \'collapsed\' : \'expanded\'">' + 
 									'<span ng-if="childNodes.length" ng-show="!' + nodeAliasName + '.collapsed" ng-click="selectNodeHead(' + nodeAliasName + ')">' + 
 										scope.getExpandedIconElement() + 
 									'</span>' + 
 									'<span ng-if="childNodes.length" ng-show="' + nodeAliasName + '.collapsed" ng-click="selectNodeHead(' + nodeAliasName + ')">' + 
 										scope.getCollapsedIconElement() + 
 									'</span>' + 
-									'<span ng-click="clickNodeLabel(' + nodeAliasName + ')" ng-dblclick="doubleClickNodeLabel(' + nodeAliasName + ')">' + 
+									'<span context-menu="onShow(node)" data-target="' + prefix + parentIndex + '.{{$index}}"' + 'ng-class="' + nodeAliasName + '.selected"' + ' ng-click="clickNodeLabel(' + nodeAliasName + ')" ng-dblclick="doubleClickNodeLabel(' + nodeAliasName + ')">' + 
 										'<span ng-if="!childNodes.length" style="visibility: hidden;">' + scope.getExpandedIconElement() + '</span>' + 
 										'<span ng-class="' + nodeAliasName + '.selected">' + scope.getNodeLabel(nodeData) + '</span>' + 
 									'</span>' + 
+									'<span class="dropdown position-fixed" id="' + prefix + parentIndex + '.{{$index}}">' + scope.getNodeMenu1(nodeData, nodeAliasName) +
+								    '</span>'+
 									'<tree-view-node ' + 
 										'ng-repeat="_node in childNodes" ' + 
 										'ng-hide="_node.parent.collapsed || !_node.show" ' + 
-										'ng-init="_node.parent = ' + nodeAliasName + '" ' + nodeAliasName.replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase() + '="_node">' + 
+										'ng-init="_node.parent = ' + nodeAliasName + '" ' + 'node-index="' + parentIndex + '.{{$index}}"' +  nodeAliasName.replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase() + '="_node">' + 
 									'</tree-view-node>' + 
 								'</li>' + 
 							'</ul>';

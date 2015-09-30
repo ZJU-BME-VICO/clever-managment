@@ -1,8 +1,8 @@
 function ArchetypeEditCtrl($scope, $modal,$log,msgboxService,busyService,archetypeEditService,documentDiffModalService, resourceService,archetypeParseEditService,templateParseToEditService,archetypeSerializeService, archetypeParseService,ARCHETYPE_LIST_EDIT_DRAFT_URL, ARCHETYPE_LIST_EDIT_PUBLISHED_URL, ARCHETYPE_EDIT_BY_ID_URL, ARCHETYPE_SUBMIT_BY_ID_URL,ARCHETYPE_REMOVE_BY_ID_URL) {
-
-	
-	
-	$scope.isArchetypeListHidden = false;
+    
+    $scope.treeControl = {};
+	$scope.isCollapse = true;
+    $scope.isArchetypeListHidden = false;
 	var editor = archetypeEditService;
 
 	$scope.tabContainerHeight = {
@@ -14,15 +14,66 @@ function ArchetypeEditCtrl($scope, $modal,$log,msgboxService,busyService,archety
 		$scope.tabContainerHeight.value = newValue - 35;
 	});
 
-	$scope.treeControl = {};
-	$scope.isCollapse = true;
+	var busyId = busyService.pushBusy('BUSY_LOADING'); 
+	resourceService.get(ARCHETYPE_LIST_EDIT_DRAFT_URL).then(function(list) {
+		$scope.draftArchetypeList = list;	
+		initArchetypeSpecialise(list);
+		refreshArchetypeList(list);
+		$scope.archetypeList = archetypeList;
+		busyService.popBusy(busyId);
+	}); 
+	resourceService.get(ARCHETYPE_LIST_EDIT_PUBLISHED_URL).then(function(list) {
+		$scope.publishedArchetypeList = list;
+	});
+	
+   
+	function initArchetypeSpecialise(list) {
+		if (angular.isArray(list)) {
+			angular.forEach(list, function(archetype) {
+				if (angular.isArray(archetype.specialiseArchetype)) {
+				} else if ((!archetype.specialiseArchetype) || (!archetype.specialiseArchetype.adl)) {
+					archetype.specialiseArchetype = [];
+				}
+			});
+		} else {
+			var archetype = list;
+			if (angular.isArray(archetype.specialiseArchetype)) {
+			} else if ((!archetype.specialiseArchetype) || (!archetype.specialiseArchetype.adl)) {
+				archetype.specialiseArchetype = [];
+			}
+		}
+	}
+
+	function refreshArchetypeList(list) {
+		angular.forEach(archetypeListMap, function(value, key) {
+			value.length = 0;
+		});
+		angular.forEach(list, function(archetype, index) {
+			if (archetype.rmName == 'DEMOGRAPHIC') {
+				archetypeListMap['demographic'].push(archetype);
+			} else {
+				var archetypes = archetypeListMap[archetype.rmEntity.toLowerCase()];
+				if (archetype == undefined) {
+					console.log('Cannot classify archetype ' + archetype.name);
+				} else {
+					archetypes.push(archetype);
+				}
+			}
+		});
+	}
 
 	$scope.locateArchetype = function(arc) {
 		$scope.treeControl.locateNode(arc);
 	};
+	
 	$scope.searchKeyMapper = function(node) {
-		return node.conceptName + ' (' + node.latestArchetypeVersion + ')';
-	};
+		if (node.isDirectory) {
+			return node.name;
+		} else {
+			return node.conceptName + ' (' + node.latestArchetypeVersion + ')';
+		}
+	}; 
+
 	$scope.$watch('archetypeListFilter', function(newValue) {
 		if (newValue != undefined) {
 			$scope.treeControl.search(newValue);
@@ -154,48 +205,6 @@ function ArchetypeEditCtrl($scope, $modal,$log,msgboxService,busyService,archety
 	}; 
 
 
-	var busyId = busyService.pushBusy('BUSY_LOADING');
-    
-	resourceService.get(ARCHETYPE_LIST_EDIT_DRAFT_URL).then(function(list) {
-		$scope.draftArchetypeList = list;
-		if (angular.isArray($scope.draftArchetypeList)) {
-			angular.forEach($scope.draftArchetypeList, function(archetype) {
-				if (angular.isArray(archetype.specialiseArchetype)) {
-				} else if ((!archetype.specialiseArchetype) || (!archetype.specialiseArchetype.adl)) {
-					archetype.specialiseArchetype = [];
-				}
-			});
-		} else {
-			var archetype = $scope.draftArchetypeList;
-			if (angular.isArray(archetype.specialiseArchetype)) {
-			} else if ((!archetype.specialiseArchetype) || (!archetype.specialiseArchetype.adl)) {
-				archetype.specialiseArchetype = [];
-			}
-		}
-		
-		angular.forEach(archetypeListMap, function(value, key) {
-			value.length = 0;
-		});
-		angular.forEach(list, function(master, index) {
-			if (master.rmName == 'DEMOGRAPHIC') {
-				archetypeListMap['demographic'].push(master);
-			} else {
-				var masters = archetypeListMap[master.rmEntity.toLowerCase()];
-				if (master == undefined) {
-					console.log('Cannot classify archetype ' + master.name);
-				} else {
-					masters.push(master);
-				}
-			}
-		});
-		$scope.archetypeList = [];
-		$scope.archetypeList = archetypeList;
-		busyService.popBusy(busyId);
-		console.log($scope.draftArchetypeList);
-	}); 
-	resourceService.get(ARCHETYPE_LIST_EDIT_PUBLISHED_URL).then(function(list) {
-		$scope.publishedArchetypeList = list;
-	});
    
  
 	//for test
@@ -208,8 +217,6 @@ function ArchetypeEditCtrl($scope, $modal,$log,msgboxService,busyService,archety
 		// $scope.number++;
 		// console.log($scope.number);
 	// };
-	
-	
 	
 	
 	$scope.submitSelectedArchetype = function() {

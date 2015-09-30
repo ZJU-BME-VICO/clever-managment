@@ -123,7 +123,7 @@ angular.module('clever.management.i18n.zh', ['pascalprecht.translate']).config(f
 		STORAGE_TEMPLATE_UPLOAD_FAILED_HINT : '存储模板上传失败，错误：{{errorMsg}}',
 
 		// Storage template edit
-		STORAGE_TEMPLATE_SUBMIT_TIME: '提交时间',
+		
 		
 		
 		// Storage template verify
@@ -262,9 +262,12 @@ angular.module('clever.management.i18n.zh', ['pascalprecht.translate']).config(f
 		ARCHETYPE_PANE_DIFF: '对比',
 		
 		
-		//template & archetype type
+		//verify pane
+		SUBMIT_TIME: '提交时间',
+		EDITOR : '编辑者',
 		ARCHETYPE_TYPE : '原型类型',
 		TEMPLATE_TYPE : '模板类型',
+		CONCEPT_NAME : '概念名称',
 		
 		//header pane
 		BASE_INFORMATION : '基本信息' ,

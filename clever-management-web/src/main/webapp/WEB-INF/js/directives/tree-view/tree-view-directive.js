@@ -68,6 +68,10 @@ angular.module('clever.management.directives.treeView', []).directive('treeView'
 			$scope.getTreeNodeLabelElement = function() {
 				return treeNodeLabelElement.innerHTML;
 			}; 
+			var treeNodeMenuElement;
+			$scope.getTreeNodeMenuElement = function(){
+				return treeNodeMenuElement.innerHTML;
+			};
 			$scope.clickNode = function(node) {
 				$scope.clickNodeCallback({
 					value : node,
@@ -133,6 +137,14 @@ angular.module('clever.management.directives.treeView', []).directive('treeView'
 						return '<span class="' + $scope.getNodeLabelClass() + 
 							'" ng-bind-html="nodeLabelGenerator(' + $scope.getNodeAliasName() + ') | unsafe"></span>';
 					}
+				}
+			};
+			
+			$scope.getNodeMenu1 = function(node, aliasName) {
+				if(treeNodeMenuElement){
+					return  $scope.getTreeNodeMenuElement();
+				}else{
+					return '';
 				}
 			};
 
@@ -204,25 +216,27 @@ angular.module('clever.management.directives.treeView', []).directive('treeView'
 						angular.forEach(nodes, function(node) {
 							node.containsTargetChild = undefined;
 						});
-						angular.forEach(nodes, function(node) {
-							if ($scope.searchKeyMapper(node).toLowerCase().indexOf(keyword.toLowerCase()) < 0) {
-								if (!node.containsTargetChild) {
-									node.show = false;
-								}
-							} else {
-								node.show = true;
-								var tempNode = node;
-								while (tempNode.parent) {
-									tempNode = tempNode.parent;
-									if (tempNode.orginalCollapased == undefined) {
-										tempNode.orginalCollapased = tempNode.collapsed;
+						
+						angular.forEach(nodes, function(node) {	
+								if ($scope.searchKeyMapper(node).toLowerCase().indexOf(keyword.toLowerCase()) < 0) {
+									if (!node.containsTargetChild) {
+										node.show = false;
 									}
-									tempNode.show = true;
-									tempNode.collapsed = false;
-									tempNode.containsTargetChild = true;
+								} else {
+									node.show = true;
+									var tempNode = node;
+									while (tempNode.parent) {
+										tempNode = tempNode.parent;
+										if (tempNode.orginalCollapased == undefined) {
+											tempNode.orginalCollapased = tempNode.collapsed;
+										}
+										tempNode.show = true;
+										tempNode.collapsed = false;
+										tempNode.containsTargetChild = true;
+									}
 								}
-							}
-						});
+						}); 
+
 					} else {
 						angular.forEach(nodes, function(node) {
 							node.show = true;
@@ -243,7 +257,8 @@ angular.module('clever.management.directives.treeView', []).directive('treeView'
 						collapsedIconElement = node;
 					} else if (isTreeNodeLabel(node)) {
 						treeNodeLabelElement = node;
-					}  else {
+					}  else if(isTreeNodeMenu(node)){
+						treeNodeMenuElement = node;
 					}
 				});
             });
@@ -267,6 +282,12 @@ angular.module('clever.management.directives.treeView', []).directive('treeView'
 				       node.hasAttribute('tree-node-label') ||
 				       node.tagName.toLowerCase() === 'tree-node-label'
 				);
+			}
+			function isTreeNodeMenu(node){
+				return node.tagName &&  (
+				       node.hasAttribute('tree-node-menu') ||
+				       node.tagName.toLowerCase() === 'tree-node-menu'
+				     );
 			}
 		},
 		link : function(scope, elm, attrs){

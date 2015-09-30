@@ -1,4 +1,4 @@
-function StorageTemplateEditCtrl($scope, resourceService, busyService, msgboxService, templateParseToEditService, archetypeParseService, documentDiffModalService, STORAGE_TEMPLATE_LIST_EDIT_DRAFT_URL, STORAGE_TEMPLATE_LIST_EDIT_PUBLISHED_URL, STORAGE_TEMPLATE_SUBMIT_BY_ID_URL, STORAGE_TEMPLATE_EDIT_BY_ID_URL, ARCHETYPE_LIST_REFERENCE_URL) {
+function StorageTemplateEditCtrl($scope,$modal, resourceService, busyService, msgboxService, templateParseToEditService, archetypeParseService, documentDiffModalService, STORAGE_TEMPLATE_LIST_EDIT_DRAFT_URL, STORAGE_TEMPLATE_LIST_EDIT_PUBLISHED_URL, STORAGE_TEMPLATE_SUBMIT_BY_ID_URL, STORAGE_TEMPLATE_EDIT_BY_ID_URL, ARCHETYPE_LIST_REFERENCE_URL) {
 
 	$scope.treeControl = {};
 	$scope.listTreeControl = {};
@@ -119,7 +119,37 @@ function StorageTemplateEditCtrl($scope, resourceService, busyService, msgboxSer
 		// console.log(list);
 		busyService.popBusy(busyPublished);
 	});
-
+    
+  	var busyId = busyService.pushBusy('BUSY_LOADING');
+	resourceService.get(ARCHETYPE_LIST_REFERENCE_URL).then(function(list) {
+		console.log(list);
+		$scope.templateFiles.archetype = list;
+     //	$scope.refreshArchetypeList(list);
+		busyService.popBusy(busyId);
+	});
+	
+    $scope.refreshArchetypeList = function(list){
+    	angular.forEach(templateListMap, function(value, key) {
+			value.length = 0;
+		});
+		angular.forEach(list, function(archetype, index) {
+			if (archetype.rmName == 'DEMOGRAPHIC') {
+				templateListMap['demographic'].push(archetype);
+			} else {
+				var archetypes = templateListMap[archetype.rmEntity.toLowerCase()];
+				if (archetype == undefined) {
+					console.log('Cannot classify archetype ' + archetype.name);
+				} else {
+					archetypes.push(archetype);
+				}
+			}
+		});
+		//$scope.archetypeList = [];
+		//$scope.archetypeList = templateList;
+		$scope.treeData = templateList;
+    };
+    
+   
 	$scope.searchKeyMapper = function(node) {
 		return node.conceptName + ' (' + node.version + ')';
 	};
@@ -225,21 +255,22 @@ function StorageTemplateEditCtrl($scope, resourceService, busyService, msgboxSer
 	$scope.getOet = function() {
 		return formatXml(x2js.json2xml_str($scope.oetObj));
 	};
-
+  
 	$scope.getTreeNodeLabel = function(node, aliasName) {
 		var label = '';
 		//label += '<span class="clever-icon ' + node.label.picType.toLowerCase() + '" style="padding: 7px 10px; background-position-y: 10px;"></span>' + '<span ng-class="{\'node-label-max\': ' + aliasName + '.label.occurrences.upper != 0}"';
 
 		if (node.label.occurrences.upper != 0) {
-			label += '<span class="clever-icon ' + node.label.picType.toLowerCase() + '" style="padding: 7px 10px; background-position-y: 10px;"></span>' + '<span ng-class="{\'node-label-max\': true}"';
+			label += '<span class="clever-icon list ' + node.label.picType.toLowerCase() + '" style="padding: 7px 10px; background-position-y: 10px;"></span>' + '<span class="node-label-max">';
 		} else {
-			label += '<span class="clever-icon ' + node.label.picType.toLowerCase() + '" style="padding: 7px 10px; background-position-y: 10px;"></span>' + '<span ng-class="{\'node-label-max\': false}"';
+			label += '<span class="clever-icon list ' + node.label.picType.toLowerCase() + '" style="padding: 7px 10px; background-position-y: 10px;"></span>' + '<span>';
 
 		}
 
 		if (node.label.text) {
-			label += '<span style="color: brown;">' + node.label.text;
+			label += '<span style="color: brown;">' + node.label.text ;
 		}
+		
 		if (node.label.code) {
 			if (node.label.archetypeNode) {
 				label += '<span style="color: black;font-weight: bold;">';
@@ -251,12 +282,12 @@ function StorageTemplateEditCtrl($scope, resourceService, busyService, msgboxSer
 		//label += '<span ng-if="' + aliasName + '.label.occurrences.upper != 0">&nbsp&nbsp[{{' + aliasName + '.label.occurrences.lower}}..{{' + aliasName + '.label.occurrences.upper}}]' + '<span ng-if="' + aliasName + '.label.occurrenceType == \'*\' && ' + aliasName + '.label.occurrences.upper == 1">&nbsp&nbsp&nbsp<em>[0..*] to [0..1]</em></span>' + '</span>' + '</span>' + '</span>';
 
 		if (node.label.occurrences.upper != 0) {
-			label += '<span>&nbsp&nbsp[' + node.label.occurrences.lower + '..' + node.label.occurrences.upper + ']';
+			label += '<span>&nbsp&nbsp[' + node.label.occurrences.lower + '..' + node.label.occurrences.upper + ']</span>';
 			if (node.label.occurrenceType == "*" && node.label.occurrences.upper == 1) {
-				label += '<span>&nbsp&nbsp&nbsp<em>[0..*] to [0..1]</em></span>' + '</span>' + '</span>' + '</span>';
+				label += '<span>&nbsp&nbsp&nbsp<em>[0..*] to [0..1]</em></span>';
 			}
 		}
-
+        label += '</span>' + '</span>';
 		return label;
 		// return label + '<span>[' + node.label.path + ']</span>'
 	};
@@ -282,8 +313,14 @@ function StorageTemplateEditCtrl($scope, resourceService, busyService, msgboxSer
 		return matchedOntology;
 	}
 
-
+    // $scope.getArchetypeNodeMenu = function(node){
+    	// var menu = '<ul class="dropdown-menu" role="menu">';
+    	// menu += '<li><a class="pointer" role= "menuitem" ng-click="createTemplate(node)" >Create Template</a></li>';
+    	// menu += '</ul>';	
+    	// return menu;
+    // };
 	$scope.getTreeNodeMenu = function(node, aliasName) {
+		//console.log(node)
 		var menuHtml = '<ul class="dropdown-menu" role="menu" ng-if="' + aliasName + '.parent.label.occurrences.upper != 0">';
 		if (node.label.archetypeNode) {
 			if (node.parent) {
@@ -564,6 +601,35 @@ function StorageTemplateEditCtrl($scope, resourceService, busyService, msgboxSer
 		}
 	}
 
+	$scope.openCreate = function(size) {
+		var modalInstance = $modal.open({
+			animation : true,
+			templateUrl : 'templateCreate.html',
+			controller : function templateCreateCtr($scope, $modalInstance, archetypeList) {
+				$scope.archetypeList = archetypeList;
+
+				$scope.archetypeId = '';
+				$scope.ok = function() {
+					$modalInstance.close({
+						archetypeId : $scope.archetypeId,
+					});
+				};
+				$scope.cancel = function() {
+					$modal.dismiss('cancel');
+				};
+
+			},
+			size : size,
+			resolve : {
+				archetypeList : function() {
+					return $scope.archetypeList;
+				}
+			},
+		});
+		modalInstance.result.then(function(message){
+			 createTemplate(message.archetypeId);
+		});
+	}; 
 
 	$scope.submitTemplateFile = function() {
 		resourceService.get(STORAGE_TEMPLATE_SUBMIT_BY_ID_URL + $scope.selectedTemplate.id).then(function(result) {

@@ -163,6 +163,12 @@ public class ArchetypeResourceController extends AbstractResourceController {
 			try {
 				archetype = parser.parse();
 				info.setXml(this.xmlSerializer.output(archetype));
+				info.setRmEntity(archetype.getArchetypeId().rmEntity());
+				info.setRmName(archetype.getArchetypeId().rmName());
+				info.setRmOriginator(archetype.getArchetypeId().rmOriginator());
+				info.setConceptName(archetype.getConceptName(archetype
+						.getOriginalLanguage().getCodeString()));
+				info.setLifecycleState(file.getLifecycleState().getValue());
 			} catch (Exception e) {
 				return null;
 			}
@@ -509,6 +515,7 @@ public class ArchetypeResourceController extends AbstractResourceController {
 		info.setVersionMasterName(archetypeId.substring(0,
 				archetypeId.lastIndexOf(".")));
 		info.setVersionMasterId(file.getVersionMasterId());
+		info.setLastModifyTime(file.getLastModifyTime());
 		// Set specialise archetype info
 		if (file.getSpecialiseArchetypeRevisionFileId() != null) {
 			ArchetypeInfo specialiseInfo = new ArchetypeInfo();

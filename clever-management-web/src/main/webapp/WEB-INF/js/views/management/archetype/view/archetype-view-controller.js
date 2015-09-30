@@ -131,8 +131,13 @@ function ArchetypeViewCtrl($scope, $timeout, busyService, resourceService, ARCHE
 	});
 
 	$scope.searchKeyMapper = function(node) {
-		return node.conceptName + ' (' + node.latestArchetypeVersion + ')';
+		if (node.isDirectory) {
+			return node.name;
+		} else {
+			return node.conceptName + ' (' + node.latestArchetypeVersion + ')';
+		}
 	};
+
 
 	$scope.$watch('archetypeListFilter', function(newValue) {
 		if (newValue != undefined) {

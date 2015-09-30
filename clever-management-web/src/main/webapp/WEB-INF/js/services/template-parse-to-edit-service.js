@@ -243,7 +243,7 @@ angular.module('clever.management.services.templateParseToEdit', []).service('te
 
 		var text, code, max, path, picType, occurrenceType, occurrences;
 		var attributeText = attributeNode.label.text;
-		var typeText = typeNode.label.text
+		var typeText = typeNode.label.text;
 		var rules = oet.Rule;
 
 		if (typeList.indexOf(typeText) != -1) {
@@ -276,7 +276,7 @@ angular.module('clever.management.services.templateParseToEdit', []).service('te
 		//     occurrenceType = undefined;
 		// }
 		else if (occurrences.lower == 1) {
-			occurrenceType = undefined;
+		    occurrenceType = occurrences.upper;
 			if (!occurrences.upper) {
 				occurrences.upper = "*";
 			}

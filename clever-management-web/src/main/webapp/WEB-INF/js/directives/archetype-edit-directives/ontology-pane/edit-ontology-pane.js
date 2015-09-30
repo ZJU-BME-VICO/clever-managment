@@ -123,12 +123,17 @@ angular.module('clever.management.directives.editOntologyPane', []).directive('e
 
 					if (angular.isArray(matchContent)) {
 						angular.forEach(matchContent, function(value) {
-							value.show = true;
+							if (value.show == undefined) {
+								value.show = true;
+							}
 						});
 					} else {
-						matchContent.show = true;
+						if (matchContent.show == undefined) {
+							matchContent.show = true;
+						}
 					}
 				}
+
 
 				return matchContent;
 			}
