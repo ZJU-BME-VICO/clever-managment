@@ -185,21 +185,14 @@ angular.module('clever.management.directives.treeView', []).directive('treeView'
 				},
 				
 				locateNode: function(node) {
-
-					//node.selected = 'selected';
-					//set currentNode
-					//$scope.setCurrentNode(node);
-
-					//$scope.clickNodeLabel(node);
 					if ($scope.getCurrentNode() && $scope.getCurrentNode().selected) {
 						$scope.getCurrentNode().selected = undefined;
 					}
-					console.log("this archetype content");
-					console.log(node);
-                    if(node.parent){
-                    	
-                    	node.parent.collapsed = false;
-                    }
+					var parent = node.parent;
+					while(parent){
+						parent.collapsed = false;
+						parent = parent.parent;
+					}              
 					node.selected = 'selected';
                     
 					$scope.setCurrentNode(node);
@@ -297,10 +290,18 @@ angular.module('clever.management.directives.treeView', []).directive('treeView'
 								scope.getNodeAliasName().replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase() + '="_node">' +
 							'</tree-view-node>';
 			
+			var hasRendered = false;
 			scope.$watch('treeData', function(newValue, oldValue) {
-				if (newValue === oldValue){return;}
-				else if(newValue){				
+				if (newValue == oldValue) {
+					if (hasRendered) {
+						return;
+					} else {
+						elm.html('').append($compile( template )(scope));
+						hasRendered = true;
+					}
+				} else if (newValue) {
 					elm.html('').append($compile( template )(scope));
+					hasRendered = true;
 				}
 			}); 
 

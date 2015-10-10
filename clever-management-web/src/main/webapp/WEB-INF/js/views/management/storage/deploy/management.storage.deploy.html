@@ -50,7 +50,7 @@
 							</thead>
 							<tbody>
 
-								<tr ng-repeat="record in deployRecords">
+								<tr ng-repeat="record in deployRecords" class="{{record.succeeded? 'succeeded' : 'failure'}}">
 									<td>{{$index + 1}}</td>
 									<td>{{getFormatedTime(record.deployTime)}}</td>
 									<td>{{record.deployerName}}</td>
@@ -77,7 +77,7 @@
 			<!-- <div class="panel-body" ng-style="{height: containerHeight - 80}" style="overflow: auto"> -->
 			<ul class="list-group" ng-style="{height: containerHeight - 40}" style="overflow: auto">
 				<li class="list-group-item" ng-repeat="template in deployedTemplateList">
-					{{template}}
+					<a href="" ng-click="goToView(template)">{{template}}</a>
 				</li>
 			</ul>
 		</div>

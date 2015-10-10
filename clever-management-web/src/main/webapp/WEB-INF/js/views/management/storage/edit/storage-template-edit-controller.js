@@ -1,166 +1,67 @@
-function StorageTemplateEditCtrl($scope,$modal, resourceService, busyService, msgboxService, templateParseToEditService, archetypeParseService, documentDiffModalService, STORAGE_TEMPLATE_LIST_EDIT_DRAFT_URL, STORAGE_TEMPLATE_LIST_EDIT_PUBLISHED_URL, STORAGE_TEMPLATE_SUBMIT_BY_ID_URL, STORAGE_TEMPLATE_EDIT_BY_ID_URL, ARCHETYPE_LIST_REFERENCE_URL) {
+function StorageTemplateEditCtrl($scope, $modal, $stateParams, treeDataFormatService, resourceService, busyService, msgboxService, treeDataFormatService, templateCreateService, templateParseToEditService, archetypeParseService, documentDiffModalService, STORAGE_TEMPLATE_LIST_EDIT_DRAFT_URL, STORAGE_TEMPLATE_LIST_EDIT_PUBLISHED_URL, STORAGE_TEMPLATE_SUBMIT_BY_ID_URL, STORAGE_TEMPLATE_EDIT_BY_ID_URL, ARCHETYPE_LIST_REFERENCE_URL) {
 
 	$scope.treeControl = {};
-	$scope.listTreeControl = {};
 	$scope.templateFiles = {
 		draft : [],
 		published : []
 	};
+	$scope.tabControl = {};
 
-	$scope.selectedLifecycle = 'Draft';
+	$scope.locateTemplate = function(tem) {
+		$scope.treeControl.locateNode(tem);
+	};
 
 	$scope.isTemplateListHidden = false;
-
-	var cluster = {
-		isDirectory : true,
-		type : 'cluster',
-		name : 'Cluster',
-		children : [],
-	};
-	var composition = {
-		isDirectory : true,
-		type : 'composition',
-		name : 'Composition',
-		children : [],
-	};
-	var element = {
-		isDirectory : true,
-		type : 'element',
-		name : 'Element',
-		children : [],
-	};
-	var action = {
-		isDirectory : true,
-		type : 'action',
-		name : 'Action',
-		children : [],
-	};
-	var evaluation = {
-		isDirectory : true,
-		type : 'evaluation',
-		name : 'Evaluation',
-		children : [],
-	};
-	var observation = {
-		isDirectory : true,
-		type : 'observation',
-		name : 'Observation',
-		children : [],
-	};
-	var instruction = {
-		isDirectory : true,
-		type : 'instruction',
-		name : 'Instruction',
-		children : [],
-	};
-	var admin = {
-		isDirectory : true,
-		type : 'admin',
-		name : 'Admin',
-		children : [],
-	};
-	var entry = {
-		isDirectory : true,
-		type : 'folder',
-		name : 'Entry',
-		collapsed : false,
-		children : [action, evaluation, observation, instruction, admin],
-	};
-	var section = {
-		isDirectory : true,
-		type : 'section',
-		name : 'Section',
-		children : [],
-	};
-	var stucture = {
-		isDirectory : true,
-		type : 'ehr-structure',
-		name : 'Stucture',
-		children : [],
-	};
-	var demographic = {
-		isDirectory : true,
-		type : 'folder',
-		name : 'Demographic Model Archetypes',
-		children : [],
-	};
-	var templateList = [{
-		isDirectory : true,
-		type : 'folder',
-		name : 'EHR Archetypes',
-		collapsed : false,
-		children : [cluster, composition, element, entry, section, stucture],
-	}, demographic];
-	var templateListMap = {
-		cluster : cluster.children,
-		composition : composition.children,
-		element : composition.children,
-		action : action.children,
-		evaluation : evaluation.children,
-		observation : observation.children,
-		instruction : instruction.children,
-		admin_entry : admin.children,
-		section : section.children,
-		stucture : stucture.children,
-		demographic : demographic.children,
-	};
 
 	var busyDraft = busyService.pushBusy('BUSY_LOADING');
 	resourceService.get(STORAGE_TEMPLATE_LIST_EDIT_DRAFT_URL).then(function(list) {
 		$scope.templateFiles.draft = list;
-		// console.log(list);
-		$scope.refreshTemplateList($scope.templateFiles.draft);
+		$scope.templateFiles.draftReady = true;
+		generateTreeData();
 		busyService.popBusy(busyDraft);
 	});
 
 	var busyPublished = busyService.pushBusy('BUSY_LOADING');
 	resourceService.get(STORAGE_TEMPLATE_LIST_EDIT_PUBLISHED_URL).then(function(list) {
 		$scope.templateFiles.published = list;
-		// console.log(list);
+		$scope.templateFiles.publishedReady = true;
+		generateTreeData();
 		busyService.popBusy(busyPublished);
 	});
-    
-  	var busyId = busyService.pushBusy('BUSY_LOADING');
+
+	function generateTreeData() {
+		if ($scope.templateFiles.draftReady && $scope.templateFiles.publishedReady) {
+			var list = $scope.templateFiles.draft.concat($scope.templateFiles.published);
+			$scope.formatedObject = treeDataFormatService.formatTreeData(list, 'children');
+			$scope.templateList = $scope.formatedObject.formatedList;
+		}
+	}
+
+	var busyId = busyService.pushBusy('BUSY_LOADING');
+	$scope.archetypeList = [];
 	resourceService.get(ARCHETYPE_LIST_REFERENCE_URL).then(function(list) {
-		console.log(list);
-		$scope.templateFiles.archetype = list;
-     //	$scope.refreshArchetypeList(list);
-		busyService.popBusy(busyId);
-	});
-	
-    $scope.refreshArchetypeList = function(list){
-    	angular.forEach(templateListMap, function(value, key) {
-			value.length = 0;
-		});
-		angular.forEach(list, function(archetype, index) {
-			if (archetype.rmName == 'DEMOGRAPHIC') {
-				templateListMap['demographic'].push(archetype);
-			} else {
-				var archetypes = templateListMap[archetype.rmEntity.toLowerCase()];
-				if (archetype == undefined) {
-					console.log('Cannot classify archetype ' + archetype.name);
-				} else {
-					archetypes.push(archetype);
-				}
+		angular.forEach(list, function(value) {
+			if (value) {
+				$scope.archetypeList.push(value);
 			}
 		});
-		//$scope.archetypeList = [];
-		//$scope.archetypeList = templateList;
-		$scope.treeData = templateList;
-    };
-    
-   
+		busyService.popBusy(busyId);
+	});
+
 	$scope.searchKeyMapper = function(node) {
-		return node.conceptName + ' (' + node.version + ')';
+		if (node.isDirectory) {
+			return node.name;
+		} else {
+			return node.conceptName + ' (' + node.version + ')';
+		}
 	};
 
 	$scope.$watch('templateListFilter', function(newValue) {
 		if (newValue != undefined) {
-			$scope.listTreeControl.search(newValue);
+			$scope.treeControl.search(newValue);
 		}
 
 	});
- 
 
 	$scope.getFixedTitle = function(title, length) {
 		if (title) {
@@ -170,27 +71,6 @@ function StorageTemplateEditCtrl($scope,$modal, resourceService, busyService, ms
 			} else
 				return title;
 		}
-	}; 
-
- 
-	$scope.refreshTemplateList = function(list) {
-		angular.forEach(templateListMap, function(value, key) {
-			value.length = 0;
-		});
-		angular.forEach(list, function(template, index) {
-			if (template.rmName == 'DEMOGRAPHIC') {
-				templateListMap['demographic'].push(template);
-			} else {
-				var templates = templateListMap[template.rmEntity.toLowerCase()];
-				if (template == undefined) {
-					console.log('Cannot classify template ' + template.name);
-				} else {
-					templates.push(template);
-				}
-			}
-		});
-		$scope.templateList = [];
-		$scope.templateList = templateList;
 	};
 
 	var x2js = new X2JS({
@@ -209,56 +89,35 @@ function StorageTemplateEditCtrl($scope,$modal, resourceService, busyService, ms
 		}
 	});
 
-	$scope.archetypeList = [];
-	resourceService.get(ARCHETYPE_LIST_REFERENCE_URL).then(function(list) {
-		angular.forEach(list, function(value) {
-			if (value) {
-				$scope.archetypeList.push(value);
-			}
-		});
-		console.log($scope.archetypeList);
-	});
-
 	$scope.selectTemplate = function(template) {
+		var bid = busyService.pushBusy('BUSY_LOADING');
 		if (!template.isDirectory) {
-			var bid = busyService.pushBusy('BUSY_LOADING');
+
 			$scope.selectedTemplate = template;
-			//console.log("this is selected template");
-			//console.log($scope.selectedTemplate);
 			$scope.selectedTemplate.oet = formatXml($scope.selectedTemplate.oet);
 			try {
 				$scope.oetObj = x2js.xml_str2json(template.oet);
-
-				//console.log("this is the oet object---------------------------------------------------------");
-				//console.log($scope.oetObj);
 				$scope.parsedTemplate = templateParseToEditService.parseTemplate($scope.oetObj.template);
-				console.log("----------------------this is the parsedTemplate definition");
-				console.log($scope.parsedTemplate.definition);
 			} catch(ex) {
 				console.log(ex);
 			}
-			console.log($scope.oetObj);
-			console.log($scope.parsedTemplate);
 			$scope.isExpandedAll = false;
-			busyService.popBusy(bid);
+
 		}
+		busyService.popBusy(bid);
 	};
 
 	$scope.generateOetDiff = function() {
-		// console.log(definition);
 		var xmlDocStr = x2js.json2xml_str($scope.oetObj);
-		// console.log($scope.selectedTemplate.oet);
-		// console.log(formatXml(xmlDocStr));
 		documentDiffModalService.open('Modify records', $scope.selectedTemplate.oet, formatXml(xmlDocStr));
 	};
 
 	$scope.getOet = function() {
 		return formatXml(x2js.json2xml_str($scope.oetObj));
 	};
-  
+
 	$scope.getTreeNodeLabel = function(node, aliasName) {
 		var label = '';
-		//label += '<span class="clever-icon ' + node.label.picType.toLowerCase() + '" style="padding: 7px 10px; background-position-y: 10px;"></span>' + '<span ng-class="{\'node-label-max\': ' + aliasName + '.label.occurrences.upper != 0}"';
 
 		if (node.label.occurrences.upper != 0) {
 			label += '<span class="clever-icon list ' + node.label.picType.toLowerCase() + '" style="padding: 7px 10px; background-position-y: 10px;"></span>' + '<span class="node-label-max">';
@@ -268,9 +127,9 @@ function StorageTemplateEditCtrl($scope,$modal, resourceService, busyService, ms
 		}
 
 		if (node.label.text) {
-			label += '<span style="color: brown;">' + node.label.text ;
+			label += '<span style="color: brown;">' + node.label.text;
 		}
-		
+
 		if (node.label.code) {
 			if (node.label.archetypeNode) {
 				label += '<span style="color: black;font-weight: bold;">';
@@ -279,7 +138,6 @@ function StorageTemplateEditCtrl($scope,$modal, resourceService, busyService, ms
 			}
 			label += getOntologyByNode(node);
 		}
-		//label += '<span ng-if="' + aliasName + '.label.occurrences.upper != 0">&nbsp&nbsp[{{' + aliasName + '.label.occurrences.lower}}..{{' + aliasName + '.label.occurrences.upper}}]' + '<span ng-if="' + aliasName + '.label.occurrenceType == \'*\' && ' + aliasName + '.label.occurrences.upper == 1">&nbsp&nbsp&nbsp<em>[0..*] to [0..1]</em></span>' + '</span>' + '</span>' + '</span>';
 
 		if (node.label.occurrences.upper != 0) {
 			label += '<span>&nbsp&nbsp[' + node.label.occurrences.lower + '..' + node.label.occurrences.upper + ']</span>';
@@ -287,9 +145,8 @@ function StorageTemplateEditCtrl($scope,$modal, resourceService, busyService, ms
 				label += '<span>&nbsp&nbsp&nbsp<em>[0..*] to [0..1]</em></span>';
 			}
 		}
-        label += '</span>' + '</span>';
+		label += '</span>' + '</span>';
 		return label;
-		// return label + '<span>[' + node.label.path + ']</span>'
 	};
 
 	function getOntologyByNode(node) {
@@ -313,12 +170,6 @@ function StorageTemplateEditCtrl($scope,$modal, resourceService, busyService, ms
 		return matchedOntology;
 	}
 
-    // $scope.getArchetypeNodeMenu = function(node){
-    	// var menu = '<ul class="dropdown-menu" role="menu">';
-    	// menu += '<li><a class="pointer" role= "menuitem" ng-click="createTemplate(node)" >Create Template</a></li>';
-    	// menu += '</ul>';	
-    	// return menu;
-    // };
 	$scope.getTreeNodeMenu = function(node, aliasName) {
 		//console.log(node)
 		var menuHtml = '<ul class="dropdown-menu" role="menu" ng-if="' + aliasName + '.parent.label.occurrences.upper != 0">';
@@ -601,35 +452,256 @@ function StorageTemplateEditCtrl($scope,$modal, resourceService, busyService, ms
 		}
 	}
 
-	$scope.openCreate = function(size) {
-		var modalInstance = $modal.open({
-			animation : true,
-			templateUrl : 'templateCreate.html',
-			controller : function templateCreateCtr($scope, $modalInstance, archetypeList) {
-				$scope.archetypeList = archetypeList;
 
-				$scope.archetypeId = '';
-				$scope.ok = function() {
-					$modalInstance.close({
-						archetypeId : $scope.archetypeId,
-					});
-				};
-				$scope.cancel = function() {
-					$modal.dismiss('cancel');
-				};
+	$scope.createTemplate = function() {
+		//var archetypeList = "haha";
 
-			},
-			size : size,
-			resolve : {
-				archetypeList : function() {
-					return $scope.archetypeList;
+		$scope.createdTemplate = templateCreateService.openCreate($scope.archetypeList, $scope);
+		$scope.createdTemplate.then(function(message) {
+			var template = new Template(message.archetype);
+			pushToTemplateList(template);
+		});
+		//console.log("template created in storage pane");
+		// console.log(template);
+	};
+
+	function Template(archetype) {
+		this.arm = getArm(archetype);
+		this.conceptName = archetype.conceptName;
+		this.editorId = archetype.editorId;
+		this.editorName = archetype.editorName;
+		this.entityClasses = null;
+		this.lastModifyTime = null;
+		this.lastRevisionArchetype = null;
+		this.lastTemplateFile = null;
+		this.lifecycleState = "Draft";
+		this.name = archetype.name;
+		this.oet = getOet(archetype);
+		this.rmEntity = archetype.rmEntity;
+		this.rmName = archetype.rmName;
+		this.rmOriginator = archetype.rmOriginator;
+		this.show = true;
+		this.specialiseArchetype = archetype.specialiseArchetype;
+		this.version = "v1.1";
+		this.versionMasterId = archetype.versionMasterId;
+		this.versionMasterName = archetype.versionMasterName;
+	}
+
+	function createTemplate(archetype) {
+		console.log(archetype);
+		return new Template(archetype);
+	}
+
+	function getArm(archetype) {
+		var arm = {
+			'archetype-relationship-mapping' : {
+				_xmlns : "http://schemas.clever.bme.zju.edu",
+				template : {
+					'_template-id' : archetype.name,
 				}
+			}
+		};
+
+		console.log(arm);
+		var x2js = new X2JS();
+		var xml = formatXml(x2js.json2xml_str(arm));
+		console.log(xml);
+		return xml;
+	}
+
+	function getOet(archetype) {
+		console.log(archetype);
+		var oet;
+		oet = {
+			template : {
+				'_xmlns:xsi' : "http://www/w3.org/2001/XMLSchema-instance",
+				'_xmlns:xsd' : "http://www.w3.org/2001/XMLSchema",
+				'_xmlns' : "openEHR/v1/Template",
+				id : "48d3ea45-b2b5-42aa-8031-b18f68203d97",
+				name : archetype.name,
+				description : getDescription(archetype),
+				definition : getDefinition(archetype),
+			}
+		};
+
+		console.log(oet);
+		var x2js = new X2JS();
+		var xml = formatXml(x2js.json2xml_str(oet));
+		return xml;
+
+	}
+
+	function getDefinition(archetype) {
+		return {
+			'_xsi:type' : archetype.rmEntity,
+			_archetype_id : archetype.name,
+			_concept_name : archetype.conceptName,
+		};
+	}
+
+	function getDescription(archetype) {
+
+		var archetypeDesc = archetype.parsedResult.header.description;
+		var details = getDetailsInEn(archetypeDesc);
+
+		var otherDetails = getOtherDetails(archetypeDesc);
+		var description = {
+			details : {
+				misuse : details.misuse,
+				purpose : details.purpose,
+				use : details.use ? details.use : undefined,
 			},
-		});
-		modalInstance.result.then(function(message){
-			 createTemplate(message.archetypeId);
-		});
-	}; 
+			lifecycle_state : "Initial",
+			other_details : otherDetails,
+		};
+		return description;
+	}
+
+	function getOtherDetails(description) {
+
+		var otherDetails = {
+			item : [{
+				key : "MetaDataSet:Sample Set",
+				value : {}
+			}, {
+				key : "Acknowledgements",
+				value : {}
+			}, {
+				key : "Business Process Level",
+				value : {}
+			}, {
+				key : "Care setting",
+				value : {}
+			}, {
+				key : "Client group",
+				value : {}
+			}, {
+				key : "Clinical Record Element",
+				value : {}
+			}, {
+				key : "Copyright",
+				value : {}
+			}, {
+				key : "Issues",
+				value : {}
+			}, {
+				key : "Owner",
+				value : {}
+			}, {
+				key : "Sign off",
+				value : {}
+			}, {
+				key : "Speciality",
+				value : {}
+			}, {
+				key : "User roles",
+				value : {}
+			}],
+		};
+		return otherDetails;
+	}
+
+	function getDetailsInEn(description) {
+		var details = getDetails(description, 'en');
+		if (details) {
+			return details;
+		} else {
+			return getFirstDetails(description);
+		}
+	}
+
+	function getFirstDetails(description) {
+		var details = description.details;
+		if (details) {
+			if (angular.isArray(details)) {
+				return details[0];
+			} else {
+				return details;
+			}
+		}
+
+	}
+
+	function getDetails(description, language) {
+		var returnDet;
+		var arcDetails = description.details;
+		if (arcDetails) {
+			try {
+				if (angular.isArray(description.detials)) {
+
+					angular.forEach(arcDetails, function(detail) {
+						if (detail.language == language) {
+							returnDet = detail;
+						}
+					});
+					if (!returnDet) {
+						//	throw new Error('Can not find the details in ' + language);
+					}
+
+				} else {
+
+					if (arcDetails.language == language) {
+						returnDet = arcDetails;
+					} else {
+						//	throw new Error('Can not find the details in ' + language);
+					}
+
+				}
+			} catch(e) {
+				alert(e.message);
+			}
+
+		}
+		return returnDet;
+	}
+
+	// $scope.$watch('createdTemplate', function(newValue, oldValue){
+	// if(newValue){
+	// pushToTemplateList(newValue);
+	// };
+	// });
+
+	function pushToTemplateList(template) {
+		var id = getTemplateId();
+		console.log(id);
+		template.id = id;
+		$scope.templateFiles.draft.push(template);
+		$scope.refreshTemplateList($scope.templateFiles.draft);
+		template.parent = templateListTypeMap[template.rmEntity.toLowerCase()];
+		//templateListChildrenMap[template.rmEntity.toLowerCase()].push(template);
+		$scope.locateTemplate(template);
+	}
+
+	function getTemplateId() {
+		var drafMax = getMaxId($scope.templateFiles.draft);
+		var publishedMax = getMaxId($scope.templateFiles.published);
+		return drafMax > publishedMax ? drafMax : publishedMax;
+
+	}
+
+	function getMaxId(list) {
+		var max = -1;
+		if (list) {
+			if (angular.isArray(list)) {
+				angular.forEach(list, function(item) {
+					if (item.id > max) {
+						max = item.id;
+					}
+				});
+			} else {
+				max = list.id;
+			}
+
+			if (max) {
+				return max + 1;
+			} else {
+				return 0;
+			}
+		} else {
+			return 0;
+		}
+	}
+
 
 	$scope.submitTemplateFile = function() {
 		resourceService.get(STORAGE_TEMPLATE_SUBMIT_BY_ID_URL + $scope.selectedTemplate.id).then(function(result) {

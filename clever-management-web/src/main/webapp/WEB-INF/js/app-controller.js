@@ -118,12 +118,7 @@ angular.module('clever.management.controllers.app', []).controller('appCtrl', fu
 				title : 'MENU_MANAGEMENT_BRIEF',
 				info : 'MENU_MANAGEMENT_ARCHETYPE_VIEW_INFO',
 			},
-			{
-				title : 'MENU_MANAGEMENT_APPLICATION_DESIGN',
-				state : 'management.application.design',
-				icon : ' icon-magic',
-				info : 'MENU_MANAGEMENT_APPLICATION_DESIGN_INFO',
-			},
+			
 			{
 				title : 'MENU_MANAGEMENT_APPLICATION_VIEW',
 				state : 'management.application.view',
@@ -154,7 +149,40 @@ angular.module('clever.management.controllers.app', []).controller('appCtrl', fu
 			},
 		],
 	};
-	$scope.menus = [archetype,storage,application,integration];
+	
+	var development = {
+		title : 'MENU_MANAGEMENT_DEVELOPMENT',
+		state : 'management.development.list',
+		icon : 'icon-screenshot',
+		info : 'MENU_MANAGEMENT_DEVELOPMENT_INFO',
+		isOpen : false,
+		subMenus : [
+			// Brief
+			{
+				title : 'MENU_MANAGEMENT_BRIEF',
+				info : 'MENU_MANAGEMENT_DEVELOPMENT_INFO',
+			},
+			{
+				title : 'MENU_MANAGEMENT_DEVELOPMENT_DESIGN',
+				state : 'management.development.design',
+				icon :  'icon-magic',
+				info : 'MENU_MANAGEMENT_DEVELOPMENT_DESIGN_INFO',
+			},
+			{
+				title : 'MENU_MANAGEMENT_DEVELOPMENT_API_DISPLAY',				   
+				state : 'management.development.api',
+				icon : 'icon-magic',
+				info : 'MENU_MANAGEMENT_DEVELOPMENT_API_INFO',
+			},
+			{
+				title : 'MENU_MANAGEMENT_DEVELOPMENT_CDR',
+				state : 'management.development.cdr',
+				icon : 'icon.magic',
+				info : 'MENU_MANAGEMENT_DEVELOPMENT_CDR_INFO',
+			}
+		],
+	};
+	$scope.menus = [archetype,storage,application,integration,development];
 	
 	$scope.stateMenuMap = {};
 	

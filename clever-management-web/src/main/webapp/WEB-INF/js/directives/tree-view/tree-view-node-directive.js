@@ -66,9 +66,12 @@ angular.module('clever.management.directives.treeViewNode', []).directive('treeV
 
 				// call back
 				scope.doubleClickNode(selectedNode);
+				
+			  //  scope.clickNoeLabel(selectedNode);
 			};
 
 			scope.clickNodeLabel = function(selectedNode) {
+				var node = scope.getCurrentNode();
 				//remove highlight from previous node
 				if (scope.getCurrentNode() && scope.getCurrentNode().selected) {
 					scope.getCurrentNode().selected = undefined;
@@ -90,14 +93,13 @@ angular.module('clever.management.directives.treeViewNode', []).directive('treeV
 			scope.editNodeByMenu = function(node, type) {
 				scope.clickEditNodeMenu(node, type);
 			};
+			
 			scope.specialiseNodeByMenu = function(node) {
 				var specialisedArchetype = scope.specialiseArchetype(node);
 				node.collapsed = false;
 				scope.clickNodeLabel(specialisedArchetype);
 
 				scope.doubleClickNode(specialisedArchetype);
-				//scope.doubleClickNodeLabel(specialisedArchetype);
-
 			};
 			scope.deleteNodeByMenu = function(node) {
 				console.log("delete archetype here");

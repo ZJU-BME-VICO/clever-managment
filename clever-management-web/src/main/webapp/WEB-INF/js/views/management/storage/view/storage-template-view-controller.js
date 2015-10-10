@@ -1,6 +1,7 @@
 define(['lazyLoader'], function(lazyLoader) {
-	lazyLoader.controller('StorageTemplateViewCtrl', function($scope, $timeout, resourceService, busyService, STORAGE_TEMPLATE_LIST_URL, STORAGE_TEMPLATE_MASTER_BY_ID_URL, ARCHETYPE_MASTER_BY_ID_URL, STORAGE_TEMPLATE_BY_ID_URL, ARCHETYPE_BY_ID_URL) {
+	lazyLoader.controller('StorageTemplateViewCtrl', function($scope, $timeout, $stateParams, resourceService, busyService, STORAGE_TEMPLATE_LIST_URL, STORAGE_TEMPLATE_MASTER_BY_ID_URL, ARCHETYPE_MASTER_BY_ID_URL, STORAGE_TEMPLATE_BY_ID_URL, ARCHETYPE_BY_ID_URL) {
 
+ //function StorageTemplateViewCtrl($scope, $timeout, resourceService, busyService, STORAGE_TEMPLATE_LIST_URL, STORAGE_TEMPLATE_MASTER_BY_ID_URL, ARCHETYPE_MASTER_BY_ID_URL, STORAGE_TEMPLATE_BY_ID_URL, ARCHETYPE_BY_ID_URL) {
 		$scope.treeControl = {};
 		$scope.tabControl = {};
 		$scope.tabs = [];
@@ -108,28 +109,8 @@ define(['lazyLoader'], function(lazyLoader) {
 			$scope.tabContainerHeight.value = newValue - 35;
 		});
 
-		var busyId = busyService.pushBusy('BUSY_LOADING');
-		resourceService.get(STORAGE_TEMPLATE_LIST_URL).then(function(list) {
-			angular.forEach(templateListMap, function(value, key) {
-				value.length = 0;
-			});
-			angular.forEach(list, function(template, index) {
-				if (template.rmName == 'DEMOGRAPHIC') {
-					templateListMap['demographic'].push(template);
-				} else {
-					var templates = templateListMap[template.rmEntity.toLowerCase()];
-					if (template == undefined) {
-						console.log('Cannot classify template ' + template.name);
-					} else {
-						templates.push(template);
-					}
-				}
-			});
-			$scope.templateList = [];
-			$scope.templateList = templateList;
-			busyService.popBusy(busyId);
-		});
-
+		
+  
 		$scope.collapse = function() {
 			$scope.treeControl.collapseAll();
 		};
@@ -137,7 +118,9 @@ define(['lazyLoader'], function(lazyLoader) {
 		$scope.expand = function() {
 			$scope.treeControl.expandAll();
 		};
-
+        $scope.locateTemplate = function(template){
+        	$scope.treeControl.locateNode(template);
+        };
 		$scope.searchKeyMapper = function(node) {
 			return node.conceptName + ' (' + node.latestArchetypeVersion + ')';
 		};
@@ -273,6 +256,52 @@ define(['lazyLoader'], function(lazyLoader) {
 			});
 			return result;
 		}
-
+		
+		//$scope.param = $stateParams;
+		 // $scope.$evalAsync(function($scope){
+		 	// console.log($scope.oriTemplateList);
+		 // });
+		 
+		// angular.element(document).readey
+       
+		$scope.$on('$stateChangeSuccess', function(event) {
+			var busyId = busyService.pushBusy('BUSY_LOADING');
+			resourceService.get(STORAGE_TEMPLATE_LIST_URL).then(function(list) {
+				$scope.oriTemplateList = list;
+				angular.forEach(templateListMap, function(value, key) {
+					value.length = 0;
+				});
+				angular.forEach(list, function(template, index) {
+					if (template.rmName == 'DEMOGRAPHIC') {
+						templateListMap['demographic'].push(template);
+					} else {
+						var templates = templateListMap[template.rmEntity.toLowerCase()];
+						if (template == undefined) {
+							console.log('Cannot classify template ' + template.name);
+						} else {
+							templates.push(template);
+						}
+					}
+				});
+				$scope.templateList = [];
+				$scope.templateList = templateList;
+				
+				$timeout(function() {
+					busyService.popBusy(busyId);
+					console.log(event);
+					if ($stateParams.template) {
+						console.log($stateParams);
+						angular.forEach($scope.oriTemplateList, function(template, index) {
+							var name = template.name.slice(0, template.name.indexOf('v1'));
+							var param = $stateParams.template.slice(0, $stateParams.template.indexOf('v1'));
+							if (name == param) {
+								$scope.locateTemplate(template);
+							}
+						});
+					}
+				}, 0); 
+				
+			});
+		}); 
 	});
 });

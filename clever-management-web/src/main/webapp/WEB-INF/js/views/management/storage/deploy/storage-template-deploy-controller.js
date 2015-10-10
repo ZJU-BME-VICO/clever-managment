@@ -1,4 +1,4 @@
-function StorageTemplateDeployCtrl($scope, authenticationService, resourceService, busyService, msgboxService, STORAGE_TEMPLATE_LIST_DEPLOY_URL, STORAGE_TEMPLATE_LIST_DEPLOYED_URL, STORAGE_TEMPLATE_DEPLOY_URL, DEPLOY_RECORDS_LIST_URL) {
+function StorageTemplateDeployCtrl($scope, $state, authenticationService, resourceService, busyService, msgboxService, STORAGE_TEMPLATE_LIST_DEPLOY_URL, STORAGE_TEMPLATE_LIST_DEPLOYED_URL, STORAGE_TEMPLATE_DEPLOY_URL, DEPLOY_RECORDS_LIST_URL) {
 	$scope.templateMasterList = [];
 	$scope.deployedTemplateList = [];
 	$scope.selectedCount = 0;
@@ -116,7 +116,10 @@ function StorageTemplateDeployCtrl($scope, authenticationService, resourceServic
 				}, 'error');
 			}
 		});
-		
+	$scope.goToView = function(template){
+		var state = 'management.storage.view';
+		$state.go(state, {template:template});
+	};
 		//console.log(deployConfig);
 	};
 }

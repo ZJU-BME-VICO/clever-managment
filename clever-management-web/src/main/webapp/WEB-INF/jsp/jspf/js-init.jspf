@@ -38,6 +38,8 @@
 <script src="js/services/archetype-serialize-service.js"></script>
 <script src="js/services/archetype-parse-edit-service.js"></script>
 <script src="js/services/archetype-edit-service.js"></script>
+<script src="js/services/template-create-service/template-create-service.js"></script>
+<script src="js/services/tree-data-format-service.js"></script>
 
 <!-- directives -->
 <script src="js/directives/files-model/files-model-directive.js"></script>
@@ -94,10 +96,13 @@
 <script src="js/views/management/storage/verify/storage-template-verify-controller.js"></script>
 <script src="js/views/management/storage/deploy/storage-template-deploy-controller.js"></script>
 <script src="js/views/management/storage/upload/storage-template-upload-controller.js"></script>
-<script src="js/views/management/application/designer/application-designer-controller.js"></script>
+
 <script src="js/views/management/application/view/application-view-controller.js"></script>
 <script src="js/views/management/application/edit/application-edit-list-controller.js"></script>
 <script src="js/views/management/application/edit/detail/application-edit-detail-controller.js"></script>
+<script src="js/views/management/development/designer/development-designer-controller.js"></script>
+<script src="js/views/management/development/cdr/development-cdr-controller.js"></script>
+<script src="js/views/management/development/api/development-api-controller.js"></script>
 
 
 <!-- filters -->

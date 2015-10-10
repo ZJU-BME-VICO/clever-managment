@@ -2,29 +2,12 @@
 	<div class="col-xs-12 col-md-12 col-lg-12 hbox">
 		<div class="panel panel-default" ng-show="!isTemplateListHidden">
 			<div class="panel-heading">
-				<div class="input-group">
+				
+				<div class="input-group" style="margin-top:0">
 					<div class="btn-group input-group-btn" dropdown>
-						<button class="btn btn-default dropdown-toggle" dropdown-toggle style="width: 110px;">
-							{{selectedLifecycle}} <span class="glyphicon glyphicon-chevron-down pull-right" style="margin-top: 2px;"></span>
-						</button>
-						<ul class="dropdown-menu" style="min-width: 110px;">
-							<li>
-								<a href class="text-center" ng-click="selectedLifecycle = 'Draft'; refreshTemplateList(templateFiles.draft)" style="display: block;">Draft</a>
-							</li>
-							<li>
-								<a href class="text-center" ng-click="selectedLifecycle = 'Published'; refreshTemplateList(templateFiles.published)" style="display: block;">Published</a>
-							</li>
-							<!-- <li>
-							<a href="" ng-click="selectedLifecycle = 'Draft';">
-							<img ng-class="{draft: true}" class="clever-icon" style="padding: 0 10px;height: 16px;">Draft</img>
-							</a>
-							</li>
-							<li>
-							<a href="" ng-click="selectedLifecycle = 'Published';">
-							<img ng-class="{published: true}" class="clever-icon" style="padding: 0 10px;height: 16px;">Published</img>
-							</a>
-							</li> -->
-						</ul>
+						<button class="btn btn-info" style="width:100%" ng-click="createTemplate()">
+						Create
+					   </button>
 					</div>
 					<input type="text" class="form-control" ng-model="templateListFilter" placeholder="{{'SEARCH_HINT' | translate}}">
 				</div>
@@ -33,7 +16,7 @@
 				<tree-view tree-data="templateList" node-id="id"
 				double-click-node-callback="selectTemplate(value)"
 				node-children="children"
-				tree-control="listTreeControl"
+				tree-control="treeControl"
 				node-alias-name="node"
 				search-key-mapper="searchKeyMapper">
 					<tree-expanded-icon>
@@ -67,6 +50,7 @@
 								<span class="archetype-title" ng-if="!isTemplateListHidden">{{getFixedTitle(selectedTemplate.name, 40)}}</span>
 					            <span class="archetype-title" ng-if="isTemplateListHidden">{{getFixedTitle(selectedTemplate.name, 70)}}</span>
 							</div>
+
 							<div class="col-xs-4 col-md-4 col-lg-4">
 								<!-- <span><span><b>{{'STORAGE_TEMPLATE_EDIT_EXPAND' | translate}}:&nbsp;&nbsp;&nbsp;</b></span><toggle-switch model="isExpandedAll" ng-disabled="selectedTemplate == undefined"></toggle-switch></span> -->
 								<button class="btn btn-primary pull-right" style="margin-left: 10px;" ng-disabled="selectedTemplate == undefined" ng-click="saveTemplateFile()">
@@ -80,16 +64,26 @@
 								</button>
 							</div>
 						</div>
-					</div>
+					</div><toggle-switch model="isExpandedAll"></toggle-switch>
 					<div class="panel-body" style="overflow: auto;">
 						<tabset tab-control="tabControl" ng-style="{height: containerHeight - 75}">
-							<tab heading="Tree">
-                               
-								<span><span><b>{{'STORAGE_TEMPLATE_EDIT_EXPAND' | translate}}:&nbsp;&nbsp;&nbsp;</b></span><toggle-switch  model="isExpandedAll" ng-disabled="selectedTemplate == undefined"></toggle-switch></span>
-
+							<tab heading="Tree">  
+								<div class="col-xs-12 col-md-12 col-lg-12" style="margin-top: 10px">
+									<span><b>Expand All:&nbsp;&nbsp;&nbsp;</b></span>
+									<toggle-switch model="isExpandedAll"></toggle-switch>
+								</div> 
+								<div class="col-xs-12 col-md-12 col-lg-12">
+									<hr>
+								</div>
+								                
 								<div class="col-xs-12 col-md-12 col-lg-12">
 									<div class="row" ng-style="{height: containerHeight - 135}" style="overflow: auto;">
-										<tree-view tree-data="parsedTemplate.definition" node-alias-name="template" tree-control="treeControl.value" node-label-generator="getTreeNodeLabel" click-node-menu-callback="setNodeByContextMenu(node, type, value)" node-menu-generator="getTreeNodeMenu">
+										<tree-view tree-data="parsedTemplate.definition"
+										 node-alias-name="template" 
+										 tree-control="treeControl.value" 
+										 node-label-generator="getTreeNodeLabel" 
+										 click-node-menu-callback="setNodeByContextMenu(node, type, value)" 
+										 node-menu-generator="getTreeNodeMenu">
 											<tree-expanded-icon>
 												<span class="clever-icon expanded" style="padding: 0 6px;height: 12px;background-position-y: 6px;"></span>
 											</tree-expanded-icon>
@@ -111,35 +105,7 @@
 					</div>
 				</div>
 			</div>
-
-			<!-- 	<tabset tab-control="tabControl">
-			<tab heading="Edit">
-			<div class="col-md-12" ng-style="{height: containerHeight - 55}" style="overflow: auto;">
-			<tree-view tree-data="selectedDefinitions.definitions" tree-control="treeControl" node-label-generator="getTreeNodeLabel" node-label-class="definition-tree-label" click-node-callback="selectDefinitionItem(value)">
-			<tree-expanded-icon>
-			<span class="clever-icon expanded" style="padding: 0 6px;height: 12px;background-position-y: 6px;"></span>
-			</tree-expanded-icon>
-			<tree-collapsed-icon>
-			<span class="clever-icon collapsed" style="padding: 0 6px;height: 12px;background-position-y: 6px;"></span>
-			</tree-collapsed-icon>
-			</tree-view>
-			</div>
-			</tab>
-			<tab heading="View">
-			<pre ng-style="{height: containerHeight - 51}" style="overflow: auto; margin-top: 10px;">{{selectedTemplateOet}}</pre>
-			</tab>
-			</tabset> -->
-
-			<!--  <h4 class="text-center">Draft</h4>
-			<ul class="list-group" ng-style="{height: containerHeight - 80}" style="overflow: auto;">
-			<li class="list-group-item list-group-item-success" ng-repeat="templateFile in templateFiles.draft">
-			{{templateFile.name}}
-			<button type="button" class="btn btn-default pull-right" style="padding: 0px 8px;" ng-click="submitTemplateFile(templateFile)">Submit</button>
-			</li>
-			</ul> -->
 		</div>
 	</div>
-	<script type="text/ng-template" id="templateCreate.html">
-		asdfasfd
-	</script>
+	
 </div>
