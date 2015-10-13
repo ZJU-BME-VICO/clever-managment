@@ -110,7 +110,7 @@
 	
 </div> -->
 
-<tabset class="row" tab-control="tabControl">
+<!-- <tabset class="row" tab-control="tabControl">
 	<tab>
 		<tab-heading style="color:#11AAA2;">
 			BaseInfo
@@ -217,16 +217,16 @@
 
 		<div class="header-info">
 			<div class="form-group">
-				<label for="purpose"><strong>Purpose<strong></label>
-				<input type="text" class="form-control" id="purpose" placeholder="purpose..." ng-model="detail.purpose">
+				<label for="purpose">Purpose</label>
+				<textarea class="form-control" id="purpose" placeholder="purpose..." ng-model="detail.purpose"></textarea>
 			</div>
 			<div class="form-group">
 				<label for="use"><strong>Use</strong></label>
-				<input type="text" class="form-control" id="use" placeholder="use for ?..."  ng-model="detail.use">
+				<textarea type="text" class="form-control" id="use" placeholder="use for ?..."  ng-model="detail.use"></textarea>
 			</div>
 			<div class="form-group">
 				<label for="issue"><strong>Missue</strong></label>
-				<input type="text" class="form-control" id="missue"  placeholder="Missue..." ng-model="detail.missue">
+				<textarea type="text" class="form-control" id="missue"  placeholder="Missue..." ng-model="detail.missue"></textarea>
 			</div>
 			<div class="form-group">
 				<label for="copyright"><strong>Copyright</strong></label>
@@ -234,5 +234,136 @@
 			</div>
 		</div>
 	</tab>
-</tabset>
+</tabset> -->
+<div class="row">
+	<div class="col-xs-2 col-sm-2 col-lg-2">
 
+	</div>
+	<div class="col-xs-3 col-sm-3 col-lg-3">
+		<span><a class="btn_base_info"  ng-click="selectPane('base information')">{{'BASE_INFORMATION' | translate}}</a>
+			<br>
+			&nbsp;&nbsp;&nbsp;&nbsp;<span ng-show="selectedPane == 'base information'" class="triangle-top"></span></span>
+	</div>
+	<div class="col-xs-3 col-sm-3 col-lg-3">
+		<span><a class="btn_authorship"  ng-click="selectPane('authorship')">{{'AUTHORSHIP' | translate}}</a>
+			<br>
+			&nbsp;&nbsp;&nbsp;&nbsp; <span ng-show="selectedPane == 'authorship'" class="triangle-top"></span></span>
+	</div>
+	<div class="col-xs-3 col-sm-3 col-lg-3">
+		<span><a class="btn_details" ng-click="selectPane('details')">{{'OTHER_DETAILS' | translate}}</a>
+			<br>
+			&nbsp;&nbsp;&nbsp;<span ng-show="selectedPane == 'details'" class="triangle-top" ></span></span>
+	</div>
+	<div class="col-xs-1 col-sm-1 col-lg-1">
+
+	</div>
+</div>
+<div class="div-info"  style="background-color:#DCEAF0" ng-if="selectedPane == 'base information'" ng-style="{height: contentHeight.value - 175}">
+	<div  class="header-info">
+		<form>
+			<div class="form-group">
+				<label for="ArchetypeId">Archetype Id</label>
+				<input type="text"  ng-model="archetypeId.value" class="form-control" id="ArchetypeId" placeholder="Archetype Id ..">
+			</div>
+		</form>
+
+		<label>Concept :</label>
+		<input class="form-control" ng-model="baseInfo[0].__text">
+
+		<label>Description :</label>
+		<textarea  class="form-control" ng-model="baseInfo[1].__text"></textarea>		
+			
+			
+ <label>Comment :</label>
+		<textarea  class="form-control" ng-model="baseInfo[2].__text"></textarea>		
+				
+
+		<div class="row">
+			<div class= "col-xs-6 col-md-6 col-lg-6">
+				<label>Language:</label>
+				<select  class ="form-control" ng-model="selectedLanguage.code" ng-options ="lan for lan in languageList"></select>
+			</div>
+			<div class= "col-xs-6 col-md-6 col-lg-6">
+				<label>LifeCycle:</label>
+				<select  class ="form-control" ng-model="lifecycleState.state" ng-options ="lifeCycle for lifeCycle in archetypeLifeCycleList"></select>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="div-info"  style="background-color: #EEF6F4" ng-if="selectedPane == 'authorship'"  ng-style="{height: contentHeight.value - 175}">
+	<div class="row header-info" >
+		<div class="col-xs-6 col-md-6 col-lg-6">
+			<h3>Original Author</h3><br>
+			<form>
+				<div class="form-group">
+					<label for="OriAuthorName">Name:</label>
+					<input type="text" class="form-control" id = "OriAuthorName" placeholder="Mecro" ng-model="oriAuthorInfo.name">
+				</div>
+				<div class="form-group">
+					<label for="OriAuthorEmail">Email:</label>
+					<input type="text" class="form-control" id = "OriAuthorEmail" placeholder="example@xxx.com" ng-model="oriAuthorInfo.email">
+				</div>
+				<div class="form-group">
+					<label for="OriAuthorOrgnization">Orgnization:</label>
+					<input type="text" class="form-control" id = "OriAuthorOrgnization" placeholder="ZJU" ng-model="oriAuthorInfo.organisation">
+				</div>
+
+				<div class="form-group">
+					<label for="OriAuthorName">Date:</label>
+					<input type="text" class="form-control"  ng-model="oriAuthorInfo.date"  />
+				</div>
+
+			</form>
+		</div>
+
+		<div class="col-xs-6 col-md-6 col-lg-6">
+			<h3>Other Contributors</h3><br>
+			<button class="btn btn-default" type="button" ng-click="addContributor()">
+				<span class="glyphicon glyphicon-plus"></span>
+			</button>
+			<button class="btn btn-default" type = "button" ng-click="deleteContributor()">
+				<span class="glyphicon glyphicon-minus"></span>
+			</button>
+			<button class="btn btn-default" type="button" ng-click="saveContributors()">
+				Save
+			</button>
+			<form>
+				<div class="form-group">
+					<label>Selected:</label>
+					<input type="text"  class="form-control" ng-model="selectedContributor.name" placeholder="name,orgnization,country">
+				</div>
+				<div class="form-group">
+					<ul>
+						<li ng-repeat="contributor in otherContributorList track by $index">
+							<span class="glyphicon glyphicon-chevron-right"></span>
+							<a href="#" ng-click="$event.preventDefault(); selectContributor(contributor)">{{contributor.name}}</a>
+						</li>
+					</ul>
+				</div>
+			</form>
+			</form>
+
+		</div>
+	</div>
+</div>
+<div class="div-info"  style="background-color:#F1E5ED" ng-if="selectedPane == 'details'" ng-style="{height: contentHeight.value - 175}">
+
+	<div class="header-info">
+		<div class="form-group">
+			<label for="purpose">Purpose</label>
+			<textarea class="form-control" id="purpose" placeholder="purpose..." ng-model="detail.purpose"></textarea>
+		</div>
+		<div class="form-group">
+			<label for="use"><strong>Use</strong></label>
+			<textarea type="text" class="form-control" id="use" placeholder="use for ?..."  ng-model="detail.use"></textarea>
+		</div>
+		<div class="form-group">
+			<label for="misuse"><strong>Misuse</strong></label>
+			<textarea type="text" class="form-control" id="misuse"  placeholder="Missue..." ng-model="detail.misuse"></textarea>
+		</div>
+		<div class="form-group">
+			<label for="copyright"><strong>Copyright</strong></label>
+			<input type="text" class="form-control" id="copyright"  placeholder="Copyright..." ng-model="detail.copyright">
+		</div>
+	</div>
+</div>

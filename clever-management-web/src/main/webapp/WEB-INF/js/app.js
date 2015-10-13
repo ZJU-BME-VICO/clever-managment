@@ -2,8 +2,8 @@ angular.module('clever.management.directives', ['clever.management.directives.co
 angular.module('clever.management.directives.commons', ['ui.bootstrap.accordion','toggle-switch', 'clever.management.directives.filesModel', 'clever.management.directives.busyModel', 'clever.management.directives.splitter', 'clever.management.drectives.documentDiff']);
 angular.module('clever.management.directives.templateDesign', ['clever.management.directives.templateListTree','clever.management.directives.storagetemplateListTree', 'clever.management.directives.templateListTreeNode','clever.management.directives.storagetemplateListTreeNode', 'clever.management.directives.DVTEXT', 'clever.management.directives.longPress', 'clever.management.directives.DVQUANTITY', 
                 'clever.management.directives.dragable', 'clever.management.directives.DVORDINAL', 'clever.management.directives.DVBOOLEAN', 'clever.management.directives.DVCOUNT', 'clever.management.directives.DVDATETIME','clever.management.directives.groupNodeView','clever.management.directives.controlBox','clever.management.directives.templateDesigner','clever.management.directives.cluster','clever.management.directives.rightClick','clever.management.directives.ngContextMenu','clever.management.directives.dvbutton','clever.management.directives.dvLabel']);
-angular.module('clever.management.directives.editor', ['clever.management.directives.subjectPane', 'clever.management.directives.linksPane', 'clever.management.directives.editDefinitionPane','clever.management.directives.editDisplayPane','clever.management.directives.editHeaderPane','clever.management.directives.editOntologyPane']);
-angular.module('clever.management.services', ['clever.management.services.resource','clever.management.service.archetypeEdit','clever.management.service.archetypeParseEdit','clever.management.service.archetypeSerialize', 'clever.management.services.authentication', 'clever.management.services.busy', 'clever.management.services.msgbox', 'clever.management.services.templateParse', 'clever.management.services.templateParseToEdit', 'clever.management.service.archetypeParseToEdit','clever.management.services.archetypeParse', 'clever.management.services.documentDiffModal']);
+angular.module('clever.management.directives.editor', ['clever.management.directives.subjectPane', 'clever.management.directives.linksPane', 'clever.management.directives.editDefinitionPane','clever.management.directives.editHeaderPane','clever.management.directives.editOntologyPane']);
+angular.module('clever.management.services', ['clever.management.services.treeDataFormat','clever.management.services.templateCreate','clever.management.services.resource','clever.management.service.archetypeEdit','clever.management.service.archetypeParseEdit','clever.management.service.archetypeSerialize', 'clever.management.services.authentication', 'clever.management.services.busy', 'clever.management.services.msgbox', 'clever.management.services.templateParse', 'clever.management.services.templateParseToEdit', 'clever.management.services.archetypeParse', 'clever.management.services.documentDiffModal']);
 angular.module('clever.management.filters', ['clever.management.filters.unsafe']);
 angular.module('clever.management.controllers', ['clever.management.controllers.app']);
 angular.module('clever.management.i18n', ['clever.management.i18n.zh']);
@@ -53,7 +53,7 @@ angular.module('cleverManagementApp', ['ngAnimate', 'ui.bootstrap.typeahead', 'n
 		templateUrl : 'js/views/universal-ui-view.html',
 	}).state('management.archetype.list', {
 		url : '',
-		templateUrl : 'js/views/management/universal-management-list-view.html',
+		templateUrl : 'js/views/management/archetype/management.archetype.list.html',
 		controller : UniversalManagementListCtrl,
 		data : {
 			title : 'MENU_MANAGEMENT_ARCHETYPE',
@@ -108,6 +108,8 @@ angular.module('cleverManagementApp', ['ngAnimate', 'ui.bootstrap.typeahead', 'n
 		controller : 'StorageTemplateViewCtrl',
 		data : {
 			title : 'MENU_MANAGEMENT_STORAGE_VIEW',
+		},	
+		params : { template:null,
 		},
 		resolve : {
 			load : function(resourceService) {
@@ -156,13 +158,6 @@ angular.module('cleverManagementApp', ['ngAnimate', 'ui.bootstrap.typeahead', 'n
 		data : {
 			title : 'MENU_MANAGEMENT_APPLICATION',
 		}
-	}).state('management.application.design', {
-		url : '/design',
-		data : {
-			title : 'MENU_MANAGEMENT_APPLICATION_DESIGN',
-		},
-		templateUrl : 'js/views/management/application/designer/management.application.designer.html',
-		controller : DesignerCtrl,
 	}).state('management.application.view', {
 		url : '/view',
 		data : {
@@ -197,8 +192,43 @@ angular.module('cleverManagementApp', ['ngAnimate', 'ui.bootstrap.typeahead', 'n
 		data : {
 			title : 'MENU_MANAGEMENT_INTEGRATION',
 		}
+	})
+	.state('management.development', {
+		abstract : true,
+		url : '/development',
+		templateUrl : 'js/views/universal-ui-view.html',
+	})
+	.state('management.development.list', {
+		url : '',
+		templateUrl : 'js/views/management/universal-management-list-view.html',
+		controller : UniversalManagementListCtrl,
+		data : {
+			title : 'MENU_MANAGEMENT_DEVELOPMENT',
+		}
+	})
+	.state('management.development.design', {
+		url : '/design',
+		data : {
+			title : 'MENU_MANAGEMENT_DEVELOPMENT_DESIGN',
+		},
+		templateUrl : 'js/views/management/development/designer/management.development.designer.html',
+		controller : DesignerCtrl,
+	}).state('management.development.api', {
+		url : '/api',
+		data : {
+			title : 'MENU_MANAGEMENT_DEVELOPMENT_API_DISPLAY',
+		},
+		templateUrl : 'js/views/management/development/api/management.development.api.html',
+		controller : ApiCtr,
+	}).state('management.development.cdr', {
+		url : '/cdr',
+		data : {
+			title : 'MENU_MANAGEMENT_DEVELOPMENT_CDR',
+		},
+		templateUrl : 'js/views/management/development/cdr/management.development.cdr.html',
+		controller : CdrCtr,
 	});
-
+     
 	// Translate config
 	$translateProvider.preferredLanguage('zh');
 
@@ -208,7 +238,7 @@ angular.module('cleverManagementApp', ['ngAnimate', 'ui.bootstrap.typeahead', 'n
 	$rootScope.$state = $state;
 	$rootScope.$stateParams = $stateParams;
 
-	var authenticateWhiteList = ['home', 'login', 'management.archetype.list', 'management.storage.list', 'management.application.list', 'managment.integration.list'];
+	var authenticateWhiteList = ['home', 'login', 'management.archetype.list', 'management.storage.list', 'management.application.list', 'management.integration.list'];
 
 	var id;
 

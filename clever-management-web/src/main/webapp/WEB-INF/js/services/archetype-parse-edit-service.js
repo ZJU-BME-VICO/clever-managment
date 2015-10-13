@@ -108,21 +108,25 @@ angular.module('clever.management.service.archetypeParseEdit', []).service('arch
 		//------parse other_details-------------
 		var other_details = archetype.description.other_details;
 		var description_otherDetails = [];
-		if (angular.isArray(other_details)) {
-			angular.forEach(other_details, function(other_detail) {
+	
+		if (other_details) {
+			if (angular.isArray(other_details)) {
+				angular.forEach(other_details, function(other_detail) {
+					var detail = {
+						text : other_detail.text,
+						id : other_detail.id,
+					};
+					description_otherDetails.push(detail);
+				});
+			} else {
 				var detail = {
-					text : other_detail.text,
-					id : other_detail.id,
+					text : other_details.text,
+					id : other_details.id,
 				};
 				description_otherDetails.push(detail);
-			});
-		} else {
-			var detail = {
-				text : other_details.text,
-				id : other_details.id,
-			};
-			description_otherDetails.push(detail);
+			}
 		}
+
 		header.description.other_details = description_otherDetails;
 		header.description.other_details.oriNodeRef = other_details;
 		//other_details  : editable array save the reference
@@ -526,74 +530,72 @@ angular.module('clever.management.service.archetypeParseEdit', []).service('arch
     } 
     
     
-	this.myProcessNode = function(typeNode, parent, treeItems, terminologies, parentAttribute) {
-		var nodeForReturn ;
-		var self = this;
-		
-		if (angular.isArray(typeNode)) {
-			
-			
-			angular.forEach(typeNode, function(value) {
-			
-				//generator node path
-				if(parentAttribute){
-					generatorNodePath(value,parentAttribute.oriNodeRef,terminologies);
-				}else if(parent) {
-					generatorNodePath(value,parent.oriNodeRef,terminologies);
-				}
-				else{
-					generatorNodePath(value,parent,terminologies);
-				}
-					
-		
-				//generator node path end
 
-				if (noTraverseTypeList.indexOf(value.rm_type_name) == -1) {
-					var extractedNode = extractNode(value, terminologies, parentAttribute);
-					extractedNode.oriNodeRef = value;
+	this.myProcessNode = function(typeNode, parent, treeItems, terminologies, parentAttribute) {
+		var nodeForReturn;
+		var self = this;
+		if (typeNode) {
+			if (angular.isArray(typeNode)) {
+
+				angular.forEach(typeNode, function(value) {
+
+					//generator node path
+					if (parentAttribute) {
+						generatorNodePath(value, parentAttribute.oriNodeRef, terminologies);
+					} else if (parent) {
+						generatorNodePath(value, parent.oriNodeRef, terminologies);
+					} else {
+						generatorNodePath(value, parent, terminologies);
+					}
+
+					//generator node path end
+
+					if (noTraverseTypeList.indexOf(value.rm_type_name) == -1) {
+						var extractedNode = extractNode(value, terminologies, parentAttribute);
+						extractedNode.oriNodeRef = value;
+						nodeForReturn = extractedNode;
+						extractedNode.children = [];
+						if (value.attributes) {
+							self.processAttribute(value.attributes, extractedNode, extractedNode.children, terminologies);
+						}
+						if (parentAttribute) {
+							extractedNode.parentAttribute = parentAttribute;
+						}
+
+						treeItems.push(extractedNode);
+					}
+				});
+
+			} else {
+				//generator node path
+				if (parentAttribute) {
+					generatorNodePath(typeNode, parentAttribute.oriNodeRef, terminologies);
+				} else if (parent) {
+					generatorNodePath(typeNode, parent.oriNodeRef, terminologies);
+				} else {
+					generatorNodePath(typeNode, parent, terminologies);
+				}
+
+				if (noTraverseTypeList.indexOf(typeNode.rm_type_name) == -1) {
+					var extractedNode = extractNode(typeNode, terminologies, parentAttribute);
+					extractedNode.oriNodeRef = typeNode;
 					nodeForReturn = extractedNode;
 					extractedNode.children = [];
-					if (value.attributes) {					
-						self.processAttribute(value.attributes, extractedNode, extractedNode.children, terminologies);
+					if (typeNode.attributes) {
+
+						self.processAttribute(typeNode.attributes, extractedNode, extractedNode.children, terminologies);
 					}
 					if (parentAttribute) {
 						extractedNode.parentAttribute = parentAttribute;
 					}
-					
+
 					treeItems.push(extractedNode);
 				}
-			});
-
-		} else {
-			//generator node path
-			if(parentAttribute){
-					generatorNodePath(typeNode,parentAttribute.oriNodeRef,terminologies);
-				}else if(parent) {
-					generatorNodePath(typeNode,parent.oriNodeRef,terminologies);
-				}
-				else{
-					generatorNodePath(typeNode,parent,terminologies);
-				}
-					
-			if (noTraverseTypeList.indexOf(typeNode.rm_type_name) == -1) {
-				var extractedNode = extractNode(typeNode, terminologies, parentAttribute);
-				extractedNode.oriNodeRef = typeNode;
-				nodeForReturn = extractedNode;
-				extractedNode.children = [];
-				if (typeNode.attributes) {
-					
-					self.processAttribute(typeNode.attributes, extractedNode, extractedNode.children, terminologies);
-				}
-				if (parentAttribute) {
-					extractedNode.parentAttribute = parentAttribute;
-				}
-				
-				treeItems.push(extractedNode);
 			}
+
+			return nodeForReturn;
 		}
-		
-		return nodeForReturn;
-	};
+	}; 
 
 	 this.processAttribute = function(attributes, parent, treeItems, terminologies) {
 	 	var nodeForReturn = "";
@@ -605,7 +607,7 @@ angular.module('clever.management.service.archetypeParseEdit', []).service('arch
            
 				angular.forEach(attributes, function(attribute) {
 					 generatorNodePath(attribute,parent.oriNodeRef,terminologies);
-					if (noTraverseAttributes.indexOf(attribute.rm_attribute_name) != -1 && attribute.children) {//if attribute type should be keep
+					if (noTraverseAttributes.indexOf(attribute.rm_attribute_name) != -1) {//if attribute type should be keep
 						var keepAttribute = extractNode(attribute, terminologies, undefined);
 						nodeForReturn = keepAttribute;
 						keepAttribute.oriNodeRef = attribute;
@@ -627,7 +629,7 @@ angular.module('clever.management.service.archetypeParseEdit', []).service('arch
 				//generator node path
 				
 				  generatorNodePath(attributes,parent.oriNodeRef,terminologies);
-				if (noTraverseAttributes.indexOf(attributes.rm_attribute_name) != -1 && attributes.children) {//if attribute type should be keep
+				if (noTraverseAttributes.indexOf(attributes.rm_attribute_name) != -1) {//if attribute type should be keep
 					var keepAttribute = extractNode(attributes, terminologies, undefined);
 					nodeForReturn = keepAttribute;
 					keepAttribute.children = [];

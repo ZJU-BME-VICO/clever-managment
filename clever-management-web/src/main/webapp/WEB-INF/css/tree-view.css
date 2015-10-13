@@ -51,5 +51,6 @@ tree-view-node li[role="context-menu"] .selected {
 
 tree-view-node li[role="context-menu"] .node-label-max {
 	font-weight: bold;
-	/* color: gray; */
+	color: gray; 
 }
+

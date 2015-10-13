@@ -1,0 +1,138 @@
+<div class="container" style="width: 90%">
+			<div class="row">
+				<h4 class="text-center">AQL Query</h4>
+			</div>
+			<div class="row">
+				<div class="col-md-6">
+					<h5>AQL</h5>
+					<select class="form-control" ng-options="type as type.name for type in aqlTypes" ng-model="aqlType">
+					</select>
+					<div class="row">
+						<div class="col-md-12">
+							<span>from</span>
+							<br />
+							<select class="form-control" ng-options="template as template for template in availableTemplates" ng-model="from"></select>
+							<hr >
+						</div>
+					</div>
+					<div class="row" ng-show="from != ''">
+						<div class="col-md-12">
+							<span>select</span>
+							<button type="button" class="btn btn-default" ng-click="addSelect()">
+								+
+							</button>
+							<br />
+							<br />
+							<div class="row" ng-repeat="select in selects">
+								<div class="col-md-12">
+									<span ng-if="$index > 0">,</span>
+									<div class="input-group">
+										<textarea class="form-control" rows=3 tabindex="{{100 + $index}}" focus="$last" typeahead="nodePath for nodePath in nodePaths | filter:$viewValue:startsWith | orderBy: nodePath" ng-model="select.value" ng-keydown="selectKeyDown($event, select)"></textarea>
+										<span class="input-group-btn">
+											<button class="btn btn-default" type="button" ng-click="deleteSelect(select)">
+												-
+											</button> </span>
+									</div>
+								</div>
+							</div>
+							<hr >
+						</div>
+					</div>
+					<div class="row" ng-show="from != ''">
+						<div class="col-md-12">
+							<div class="row">
+								<div class="col-md-12">
+									<span>where</span>
+									<button type="button" class="btn btn-default" ng-click="addWhere()">
+										+
+									</button>
+									<span class="pull-right checkbox"><input type="checkbox" ng-model="customWhere">custom</span>
+								</div>
+							</div>
+							<br />
+							<div ng-show="!customWhere" class="row" ng-repeat="where in wheres">
+								<div class="col-md-12">
+									<span ng-if="$index > 0">and</span>
+									<div class="input-group">
+										<textarea class="form-control" rows=3 tabindex="{{200 + $index}}" focus="$last" typeahead="nodePath for nodePath in nodePaths | filter:$viewValue:startsWith | orderBy: nodePath" ng-model="where.value" ng-keydown="whereKeyDown($event, select)"></textarea>
+										<span class="input-group-btn">
+											<button class="btn btn-default" type="button" ng-click="deleteWhere(where)">
+												-
+											</button> </span>
+									</div>
+								</div>
+							</div>
+							<div ng-show="customWhere" class="row">
+								<div class="col-md-12">
+									<textarea class="form-control" rows=3 tabindex="50" typeahead="nodePath for nodePath in nodePaths | filter:$viewValue:startsWith | orderBy: nodePath" ng-model="whereSegment" ng-keydown="whereExprKeyDown()"></textarea>
+									<textarea class="form-control" rows=8 tabindex="51" ng-model="whereExpr"></textarea>
+								</div>
+							</div>
+							<hr >
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-12">
+							<pre type="text" style="min-height: 50px;">{{getAql()}}</pre>
+							<button type="button" class="btn btn-default" ng-click="query()" ng-disabled="!queryable">
+								query
+							</button>
+							<span>Last query time: {{lastQueryTime}}</span>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-6">
+					<h5>Result</h5>
+					<select class="form-control" ng-options="result.uid for result in results track by result.uid" ng-model="selectedResult"></select>
+					<span>Total: {{results.length}}</span>
+					<pre ng-if="selectedResult.uid == 'error'" style="min-height: 300px;max-height: 700px;overflow: auto;" ng-bind-html="selectedResult.value | unsafe"></pre>
+					<pre ng-if="selectedResult.uid != 'error'" style="min-height: 300px;max-height: 700px;overflow: auto;" ng-bind="selectedResult.value"></pre>
+				</div>
+			</div>
+			
+			<hr >
+			
+			<div class="row">
+				<h4 class="text-center">Column node mapping browse:</h4>
+				<div class="row">
+					<div class="col-md-12">
+						Table:
+						<select class="form-control" ng-options="table for table in availableTables | orderBy: table" ng-model="targetTable"></select>
+						<hr >
+					</div>
+				</div>
+				<div class="row" ng-show="targetTable != ''">
+					<div class="col-md-6" ng-show="targetTable != ''">
+						Node:
+						<select class="form-control" ng-options="column for column in targetTableColumns | orderBy: column" ng-model="column1"></select>
+					</div>
+					<div class="col-md-6">
+						Column:
+						<pre type="text" style="min-height: 34px;">{{node1}}</pre>
+					</div>
+				</div>
+			</div>
+			
+			<hr >
+
+			<div class="row">
+				<h4 class="text-center">Node column mapping browse:</h4>
+				<div class="row">
+					<div class="col-md-12">
+						Template:
+						<select class="form-control" ng-options="template for template in availableTemplates | orderBy: template" ng-model="targetTemplate"></select>
+						<hr >
+					</div>
+				</div>
+				<div class="row" ng-show="targetTemplate != ''">
+					<div class="col-md-6" ng-show="targetTemplate != ''">
+						Node:
+						<select class="form-control" ng-options="nodePath for nodePath in targetTemplateNodePaths | orderBy: nodePath" ng-model="node"></select>
+					</div>
+					<div class="col-md-6">
+						Column:
+						<pre type="text" style="min-height: 34px;">{{column}}</pre>
+					</div>
+				</div>
+			</div>
+		</div>

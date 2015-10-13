@@ -60,7 +60,7 @@
 	background-image: url("../img/archetype/instruction.png");
 	background-repeat: no-repeat;
 }
-.clever-icon.list.admin {
+.clever-icon.list.admin_entry {
 	background-image: url("../img/archetype/admin.png");
 	background-repeat: no-repeat;
 }
@@ -80,11 +80,19 @@
 	background-image: url("../img/archetype/composition.png");
 	background-repeat: no-repeat;
 }
-.collapsed > span > span > .clever-icon.list.folder {
+.collapsed > span > span > span > .clever-icon.list.folder {
 	background-image: url("../img/archetype/folder.gif");
 	background-repeat: no-repeat;
 }
-.expanded > span > span > .clever-icon.list.folder {
+.clever-icon.list.folder {
+	background-image: url("../img/archetype/folder.gif");
+	background-repeat: no-repeat;
+}
+.expanded > span > span > span > .clever-icon.list.folder {
+	background-image: url("../img/archetype/folder-open.gif");
+	background-repeat: no-repeat;
+}
+.clever-icon.list.folder {
 	background-image: url("../img/archetype/folder-open.gif");
 	background-repeat: no-repeat;
 }

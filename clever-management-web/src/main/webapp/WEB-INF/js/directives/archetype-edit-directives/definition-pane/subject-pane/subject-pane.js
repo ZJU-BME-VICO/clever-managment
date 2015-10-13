@@ -16,7 +16,12 @@ angular.module('clever.management.directives.subjectPane', []).directive('subjec
 		   });
 		   
         	$scope.partyTypeList = ["PARTY_SELF", "PARTY_IDENTIFIED", "PARTY_RELATED"];
+			
 			$scope.partyType = {};
+			$scope.hasExternalRef = {};
+			$scope.hasName = {};
+			$scope.hasIdentifiers = {}; 
+
 			$scope.$watch('subject', function(newValue) {
 				console.log(newValue);
 				$scope.oriSubject = $scope.subject.oriNodeRef;
@@ -70,14 +75,14 @@ angular.module('clever.management.directives.subjectPane', []).directive('subjec
 			
 			function resetState() {
 				$scope.oriSubject.children = undefined;
-				if($scope.hasExternalRef.value){
+				if($scope.hasExternalRef){
 					$scope.hasExternalRef.value = undefined;
 				}
 				
-				if($scope.hasName.value){
+				if($scope.hasName){
 					$scope.hasName.value = undefined;
 				}
-				if($scope.hasIdentifiers.value){
+				if($scope.hasIdentifiers){
 					$scope.hasIdentifiers.value = undefined;
 				}
 			}
@@ -90,7 +95,7 @@ angular.module('clever.management.directives.subjectPane', []).directive('subjec
 						addExternalRef();
 					} else {
 						//deleteExternalRef();
-						deleteAttribute($scope.oriSubject.children.attributes, 'externalRef');
+						deleteAttribute($scope.oriSubject.children, 'externalRef');
 					}
 				}
 			});
@@ -110,7 +115,7 @@ angular.module('clever.management.directives.subjectPane', []).directive('subjec
 						addName();
 					} else {
 						//deleteName();
-						deleteAttribute($scope.oriSubject.children.attributes, 'name');
+						deleteAttribute($scope.oriSubject.children, 'name');
 					}
 				}
 			});
@@ -131,7 +136,7 @@ angular.module('clever.management.directives.subjectPane', []).directive('subjec
 						addIdentifiers();
 					} else {
 						//deleteIdentifiers();
-						deleteAttribute($scope.oriSubject.children.attributes, 'identifiers');
+						deleteAttribute($scope.oriSubject.children, 'identifiers');
 					}
 				}
 			});
@@ -170,7 +175,9 @@ angular.module('clever.management.directives.subjectPane', []).directive('subjec
 
 			};
 		
-			function deleteAttribute(attributeArray, attributeName) {
+			function deleteAttribute(children, attributeName) {
+				var attributeArray = children.attributes;
+				
 				if (angular.isArray(attributeArray)) {
 					angular.forEach(attributeArray, function(attribute) {
 						if (attribute.rm_attribute_name == attributeName) {
@@ -179,7 +186,7 @@ angular.module('clever.management.directives.subjectPane', []).directive('subjec
 					});
 				} else {
 					if (attributeArray.rm_attribute_name == attributeName) {
-						attributeArray = undefined;
+						children.attributes = undefined;
 					}
 				}
 			}
@@ -188,33 +195,32 @@ angular.module('clever.management.directives.subjectPane', []).directive('subjec
 		
 			
 		
+			
 			function processSubject(subject) {
-				if(angular.isArray(subject.children)){
-					$scope.subject.children = $scope.subject.children[0];
-				}
-				$scope.partyType.value = subject.children.rm_type_name;
-				var attributes = subject.children.attributes;
 
-				if (angular.isArray(attributes)) {
-					angular.forEach(attributes, function(attribute) {
-						processAttribute(attribute);
-					});
-				} else {
-					processAttribute(attributes);
+				if (subject.children) {
+					if (angular.isArray(subject.children)) {
+						subject.children = scope.subject.children[0];
+					}
+					$scope.partyType.value = subject.children.rm_type_name;
+
+					var attributes = subject.children.attributes;
+
+					if (angular.isArray(attributes)) {
+						angular.forEach(attributes, function(attribute) {
+							processAttribute(attribute);
+						});
+					} else {
+						processAttribute(attributes);
+					}
 				}
 			}
+
 			
 			
 			function processAttribute(attribute) {
 
-				$scope.hasExternalRef = {};
-				$scope.hasName = {};
-
-				$scope.hasExternalRef = {};
-
-				$scope.hasIdentifiers = {
-					value : true
-				};
+				
 				if (attribute.rm_attribute_name == "name") {
 					$scope.hasName = {
 						value : true
@@ -222,6 +228,11 @@ angular.module('clever.management.directives.subjectPane', []).directive('subjec
 				}
 				if (attribute.rm_attribute_name == "identifiers") {
 					$scope.hasIdentifiers = {
+						value : true
+					};
+				}
+				if(attribute.rm_attribute_name == 'externalRef'){
+					$scope.hasExternalRef = {
 						value : true
 					};
 				}

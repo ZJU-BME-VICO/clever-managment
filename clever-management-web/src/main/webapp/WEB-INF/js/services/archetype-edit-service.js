@@ -425,16 +425,16 @@ angular.module('clever.management.service.archetypeEdit', []).service('archetype
 		if (angular.isArray(terms)) {
 			angular.forEach(terms, function(term) {
 				if (term.language == "en") {
-					pushToDisOntologyTerm(term.items, nodeId, text, description);
+					term.items = pushToDisOntologyTerm(term.items, nodeId, text, description);
 				} else {
-					pushToDisOntologyTerm(term.items, nodeId, "*", "*");
+					term.items = pushToDisOntologyTerm(term.items, nodeId, "*", "*");
 				}
 			});
 		} else {
 			if (terms.language == "en") {
-				pushToDisOntologyTerm(terms.items, nodeId, text, description);
+				term.items = pushToDisOntologyTerm(terms.items, nodeId, text, description);
 			} else {
-				pushToDisOntologyTerm(terms.items, nodeId, "*", "*");
+				term.items = pushToDisOntologyTerm(terms.items, nodeId, "*", "*");
 			}
 		}
 
@@ -442,40 +442,42 @@ angular.module('clever.management.service.archetypeEdit', []).service('archetype
 		if (angular.isArray(terms.oriNodeRef)) {
 			angular.forEach(terms.oriNodeRef, function(term) {
 				if (term._language == "en") {
-					pushToOriOntoltogyTerm(term.items, nodeId, text, description);
+					term.items = pushToOriOntoltogyTerm(term.items, nodeId, text, description);
 				} else {
-					pushToOriOntoltogyTerm(term.items, nodeId, "*", "*");
+					term.items = pushToOriOntoltogyTerm(term.items, nodeId, "*", "*");
 				}
 			});
 		} else {
 			term = terms.oriNodeRef;
 			if (term._language == "en") {
-				pushToOriOntoltogyTerm(term.items, nodeId, text, description);
+				term.items = pushToOriOntoltogyTerm(term.items, nodeId, text, description);
 			} else {
-				pushToOriOntoltogyTerm(term.items, nodeId, "*", "*");
+				term.items = pushToOriOntoltogyTerm(term.items, nodeId, "*", "*");
 			}
 		}
 	};
 
 	function pushToOriOntoltogyTerm(items, nodeId, text, description) {
 		if (angular.isArray(items)) {
-			items.push(getOriOntologyItem(nodeId, text, description));
+			 items.push(getOriOntologyItem(nodeId, text, description));
+			 return items;
 		} else {
 			var tempItems = [];
-			tempItems.push(getOriOntologyItem(nodeId), text, description);
+			tempItems.push(getOriOntologyItem(nodeId, text, description));
 			tempItems.push(items);
-			items = tempItems;
+		  	return  tempItems;
 		}
 	}
 
 	function pushToDisOntologyTerm(items, nodeId, text, description) {
 		if (angular.isArray(items)) {
-			items.push(getDisOntologyItem(nodeId, text, description));
+			 items.push(getDisOntologyItem(nodeId, text, description));
+			 return items;
 		} else {
 			var tempItems = [];
 			tempItems.push(getDisOntologyItem(nodeId, text, description));
 			tempItems.push(items);
-			items = tempItems;
+			return  tempItems;
 		}
 	}
 
@@ -561,8 +563,8 @@ angular.module('clever.management.service.archetypeEdit', []).service('archetype
 	this.getComplexObject = function(attributes, nodeId, occurrences, objectName){
 		return getCComplexObject(attributes, nodeId, this.getDefaultOccurrences(occurrences[0], occurrences[1]), objectName);
 	};
-	this.getMultyAttr = function(children, cardinality_lower, exixtence, attrName){
-		return  getCMultipleAttribute(children, this.getDefaultCardinality(1), getDefaultOccurrences(occurrences[0], occurrences[1]), attrName);
+	this.getMultyAttr = function(children, cardinality_lower, existence, attrName){
+		return  this.getCMultipleAttribute(children, this.getDefaultCardinality(1), this.getDefaultExistence(existence[0], existence[1]), attrName);
 	};
 	
 	
@@ -617,7 +619,7 @@ angular.module('clever.management.service.archetypeEdit', []).service('archetype
 		return DV_IDENTIFIER;
 	};
     this.getDV_CODED_TEXT = function(){
-    	var definingCode = this.getSingleAttr([],[1,1],"defining_code");
+    	var definingCode = this.getSingleAttr(null,[1,1],"defining_code");
 		var DV_CODED_TEXT = this.getComplexObject(definingCode, '', [1, 1], "DV_CODED_TEXT");
 		return DV_CODED_TEXT;
     };
@@ -627,7 +629,7 @@ angular.module('clever.management.service.archetypeEdit', []).service('archetype
     
     //get primitive object
     this.getPrimitiveString = function(string){
-    	var cstring = this.getCString(string);
+    	var cstring = this.getCString(string||"*");
     	var primitive = this.getCPrimitiveObject(cstring, '', this.getDefaultOccurrences(1,1), "STRING");
         return primitive;
     };

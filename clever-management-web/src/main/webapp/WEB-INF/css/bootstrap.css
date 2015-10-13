@@ -921,7 +921,7 @@ a {
 a:hover,
 a:focus {
   color: #23527c;
-  text-decoration: underline;
+  text-decoration: none;
 }
 a:focus {
   outline: thin dotted;
@@ -6373,3 +6373,40 @@ button.close {
     -moz-border-radius:6px 0 6px 6px;
     border-radius:6px 0 6px 6px;
 }
+.archetype-title {
+	font-size: 18px; 
+	color: #2980B9;
+}
+
+
+tr.failure {
+	background-color:#C0392B;
+}
+tr.succeeded {
+	background-color:#11AAA2;
+}
+.search-icon-template {
+  position: absolute;
+  top: 15px;
+  left: 35px;
+  z-index: 20;
+  width: 30px;
+  font-size: 17px;
+  line-height: 30px;
+  color: #e6e9ed;
+  text-align: center;
+}
+
+.search-icon-ontology {
+	position: absolute;
+	top: 2px;
+	left: 8px;
+	z-index: 20;
+	width: 30px;
+	font-size: 17px;
+	line-height: 30px;
+	color: #e6e9ed;
+	text-align: center;
+}
+
+

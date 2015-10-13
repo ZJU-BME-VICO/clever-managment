@@ -5,14 +5,32 @@
 	<div class="row">
 	    <ul class="list-group" ng-style="{height: containerHeight - 80}" style="overflow: auto;">
 	        <li class="list-group-item" ng-repeat="archetypeFile in archetypeFiles" style="overflow: hidden;">
-	            {{archetypeFile.name}}
-	            <div class="btn-group pull-right btn-group-sm" role="group">
-	                <button type="button" class="btn btn-default" ng-click="adlArchetypeFile(archetypeFile)">{{'ARCHETYPE_VERIFY_ADL_DIFF'|translate}}</button>
-	                <button type="button" class="btn btn-default" ng-click="approveArchetypeFile(archetypeFile)">{{'ARCHETYPE_VERIFY_APPROVE'|translate}}</button>
-	                <button type="button" class="btn btn-default" ng-click="rejectArchetypeFile(archetypeFile)">{{'ARCHETYPE_VERIFY_REJECT'|translate}}</button>
-	                <button type="button" class="btn btn-default" ng-click="removeArchetypeFile(archetypeFile)">{{'ARCHETYPE_VERIFY_REMOVE'|translate}}</button>
-	            </div>
-	            <span class="pull-right" style="color: red;">{{'ARCHETYPE_VERIFY_EDITOR' | translate}}: {{archetypeFile.editorName}}&nbsp;&nbsp;&nbsp;&nbsp;</span>
+	            <a  ng-click="adlArchetypeFile(archetypeFile)" tooltip-placement="right" tooltip="Click me to view the modification" tooltip-popup-delay="200" >{{archetypeFile.name}}</a>
+	            <div class="btn-group pull-right btn-group-sm" role="group">          
+	                <button type="button" class="btn btn-success"  ng-click="approveArchetypeFile(archetypeFile)">{{'ARCHETYPE_VERIFY_APPROVE'|translate}}</button>
+	                <button type="button" class="btn btn-warning" ng-click="rejectArchetypeFile(archetypeFile)">{{'ARCHETYPE_VERIFY_REJECT'|translate}}</button>
+	                <button type="button" class="btn btn-danger" ng-click="removeArchetypeFile(archetypeFile)">{{'ARCHETYPE_VERIFY_REMOVE'|translate}}</button>
+	            </div> 
+	            <div style="margin-top:15px">
+					<table>
+						<tr style="color:#5cb85c">
+							<td>{{'EDITOR' | translate}} : </td>
+							<td >{{archetypeFile.editorName}}</td>
+						</tr>
+						<tr style="color:#2E2AD0;">
+							<td>{{"ARCHETYPE_TYPE" | translate}} :&nbsp;&nbsp; </td>
+							<td><img  ng-class="archetypeFile.rmEntity | lowercase" class="clever-icon list" style="padding: 0 10px;height: 16px;"></img><span >{{archetypeFile.rmEntity}}</span></td>
+						</tr>
+						<tr style="color:brown">
+							<td>{{'CONCEPT_NAME' | translate}} : </td>
+							<td >{{archetypeFile.conceptName}}</td>
+						</tr>
+						<tr style="color: #3bafda">
+							<td>{{'SUBMIT_TIME' | translate}} : </td>
+							<td>{{getFormatedTime(archetypeFile.lastModifyTime)}}</td>
+						</tr>
+					</table>
+				</div>
 	        </li>
 	    </ul>
     </div>

@@ -3,7 +3,110 @@
 	background-color:red;
 	color:blue;
 }
+.div-info{
+	border:1px solid #dddddd;
+	margin-top:5px;
+    border-top-left-radius: 10px;
+	border-top-right-radius: 10px;
+	border-bottom-right-radius : 10px;
+	border-bottom-left-radius: 10px;
+}
 
+
+
+.triangle-left {
+	background-image: url("../img/triangle-left.png");
+	background-repeat: no-repeat;
+	padding: 6px 16px;
+	height: 10px;
+	margin-left: 5px;
+}
+
+.triangle-top {
+	background-image: url("../img/triangle-top.png");
+	background-repeat: no-repeat;
+	padding: 6px 34px;
+	height: 10px;
+	margin-left: 5px;
+}
+.btn_authorship {
+    height: 51px;
+    line-height: 51px;
+    display: inline-block;
+    border: 1px solid #1A966D;
+    padding: 0 18px;
+    xmargin-right: 20px;
+    font-size: 18px;
+    color: #fff;
+    background-color: #25C591;
+ 
+    text-decoration: none;
+    border-radius: 2px;
+    box-shadow: 0 1px 3px #42A0B4;
+    -webkit-box-shadow: 0 1px 3px #42A0B4;
+    margin-top: 25px;
+    position: relative;
+   
+}
+
+.btn_authorship:hover {
+	background-color: #11AAA2; 
+    text-decoration: none;
+    color: #FFF
+}
+
+
+.btn_base_info {
+    height: 51px;
+    line-height: 51px;
+    display: inline-block;
+    border: 1px solid #1581AF;
+    padding: 0 18px;
+    xmargin-right: 20px;
+    font-size: 18px;
+    color: #fff;
+    background-color: #1BA3DD;
+ 
+    text-decoration: none;
+    border-radius: 2px;
+    box-shadow: 0 1px 3px #42A0B4;
+    -webkit-box-shadow: 0 1px 3px #42A0B4;
+    margin-top: 25px;
+    position: relative;
+   
+}
+
+.btn_base_info:hover {
+	background-color: #1389BB; 
+    text-decoration: none;
+    color: #FFF
+}
+
+.btn_details {
+    height: 51px;
+    line-height: 51px;
+    display: inline-block;
+    border: 1px solid #F575C9;
+    padding: 0 18px;
+    xmargin-right: 20px;
+    font-size: 18px;
+    color: #fff;
+    background-color: #F575C9;
+ 
+    text-decoration: none;
+    border-radius: 2px;
+    box-shadow: 0 1px 3px #42A0B4;
+    -webkit-box-shadow: 0 1px 3px #42A0B4;
+    margin-top: 25px;
+    position: relative;
+   
+}
+
+.btn_details:hover {
+	background-color: #F851BF; 
+    text-decoration: none;
+    color: #FFF
+}
 
 .bordered {
   border-right: 2px solid #eee;
@@ -20,6 +123,9 @@
 	color: #8cc152;
 }
 .ontology-item{
+	cursor: pointer;
+}
+.archetype-item{
 	cursor: pointer;
 }
  li .selected {

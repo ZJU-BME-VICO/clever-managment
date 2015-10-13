@@ -325,10 +325,13 @@ public class StorageTemplateVersionControlServiceImpl implements
 							+ templateFile.getLifecycleState()
 							+ " instead of Draft.");
 		}
+		templateFile.setLastModifyTime(Calendar.getInstance());
+
 		// Save template file
 		templateFile.setOet(oet.toString());
 		templateFile.getPropertyMap().put(TemplatePropertyType.ARM,
 				arm.toString());
+		
 		this.templateFileRepo.save(templateFile);
 		// Log action
 		this.logTemplateAction(templateFile, ActionType.EDIT, user);
@@ -379,6 +382,8 @@ public class StorageTemplateVersionControlServiceImpl implements
 							+ templateFile.getLifecycleState()
 							+ " instead of Draft.");
 		}
+		
+		templateFile.setLastModifyTime(Calendar.getInstance());
 		templateFile.setLifecycleState(LifecycleState.TEAMREVIEW);
 		// Save archetype file and master
 		this.templateFileRepo.save(templateFile);
@@ -451,6 +456,8 @@ public class StorageTemplateVersionControlServiceImpl implements
 		// templateFile, oet, arm);
 		// Save entity classes
 		// entityClasses.forEach(cls -> this.entityClassRepo.save(cls));
+		
+		templateFile.setLastModifyTime(Calendar.getInstance());
 
 		// Save template file
 		this.templateFileRepo.save(templateFile);
@@ -501,6 +508,8 @@ public class StorageTemplateVersionControlServiceImpl implements
 							+ templateFile.getLifecycleState()
 							+ " instead of Teamreview.");
 		}
+		
+		templateFile.setLastModifyTime(Calendar.getInstance());
 		templateFile.setLifecycleState(LifecycleState.DRAFT);
 		// Save archetype file and master
 		this.templateFileRepo.save(templateFile);

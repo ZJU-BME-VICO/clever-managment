@@ -1,0 +1,58 @@
+<div class="row">
+	<div class="col-xs-6 col-lg-6 col-sm-6">
+		<div class="panel panel-default" ng-show="!isTemplateListHidden">
+			<div class="panel-heading">
+				<!-- <div class="input-group" style="margin-top:0">
+					<input type="text" class="form-control" ng-model="templateListFilter" placeholder="{{'SEARCH_HINT' | translate}}">	
+				</div> -->
+
+				<i class="search-icon glyphicon glyphicon-search search-icon-template" ></i>				
+				<input  type="text" style="border-radius: 17px; padding-left: 40px" ng-model = "archetypeListFilter" class="form-control" />
+			</div>
+			<div class="list-group" style="height:550px; overflow: auto;margin-left: 5px; white-space: nowrap;">
+				<tree-view tree-data="archetypeList"  
+				node-children="specialiseArchetype" 
+				double-click-node-callback="selectArchetype(value)"
+				search-key-mapper="searchKeyMapper" 
+				tree-control="treeControl" node-alias-name="node" >
+					<tree-expanded-icon>
+						<span class="clever-icon expanded" style="padding: 0 6px;height: 12px;background-position-y: 6px;"></span>
+					</tree-expanded-icon>
+					<tree-collapsed-icon>
+						<span class="clever-icon collapsed" style="padding: 0 6px;height: 12px;background-position-y: 6px;"></span>
+					</tree-collapsed-icon>
+					<tree-node-label>
+						<img ng-show="node.isDirectory" ng-class="node.type | lowercase" class="clever-icon list" style="padding: 0 10px;height: 16px;margin-left: 3px;"></img>
+						<span ng-show="node.isDirectory" ng-bind="node.name"></span>
+						<img ng-show="!node.isDirectory" ng-class="node.lifecycleState | lowercase" class="clever-icon list" style="padding: 0 10px;height: 16px;margin-left: 3px;"></img>
+						<span ng-show="!node.isDirectory" ng-bind-html="node.conceptName | highlight:keyword | unsafe"></span>
+						
+					</tree-node-label>
+				</tree-view>			
+				<!-- <ul>
+					<li ng-if="archetype.show" ng-repeat="archetype in archetypeList"  >
+						
+						<img ng-class="archetype.rmEntity | lowercase" class="clever-icon list" style="padding: 0 10px;height: 16px;margin-left: 3px;"> 
+						<span style="color:brown"  class="archetype-item" ng-class="archetype.state" ng-click="selectArchetype(archetype)" >{{archetype.conceptName}}</span>
+				        
+					</li>
+				</ul> -->
+			</div>
+		</div>
+	</div>
+	<div class="col-xs-6 col-lg-6 col-sm-6">
+		<div ng-show="currentArchetype" style="height: 500px; margin-top:50px; margin-right: 20px">
+			<label>Concept :</label>
+			<pre>{{currentArchetype.conceptName}}</pre>
+			<label>Archetype Id :</label>
+			<pre>{{currentArchetype.name}}</pre>
+			<label>Purpose :</label>
+			<pre style="color:brown">{{currentArchetype.purpose}}</pre>
+		</div>
+		<div ng-show="currentArchetype" class="modal-footer">
+		<button class="btn btn-success" ng-click="ok()">CREATE</button>
+		<button class="btn btn-warning" ng-click="cancel()">CANCEL</button>
+		</div>
+	</div>
+</div>
+

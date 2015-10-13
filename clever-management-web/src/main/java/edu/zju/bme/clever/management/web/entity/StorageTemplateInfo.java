@@ -1,11 +1,13 @@
 package edu.zju.bme.clever.management.web.entity;
 
+import java.util.Calendar;
 import java.util.Set;
 
 public class StorageTemplateInfo extends TemplateInfo {
 	private String arm;
 	private Set<EntityClassInfo> entityClasses;
 	private StorageTemplateInfo lastTemplateFile;
+	private Calendar lastModifyTime;
 	
 	public Set<EntityClassInfo> getEntityClasses() {
 		return entityClasses;
@@ -30,5 +32,14 @@ public class StorageTemplateInfo extends TemplateInfo {
 	public void setLastTemplateFile(StorageTemplateInfo lastTemplateFile) {
 		this.lastTemplateFile = lastTemplateFile;
 	}
+
+	public Calendar getLastModifyTime() {
+		return lastModifyTime;
+	}
+
+	public void setLastModifyTime(Calendar lastModifyTime) {
+		this.lastModifyTime = lastModifyTime;
+	}
+	
 
 }

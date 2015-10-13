@@ -8,7 +8,7 @@ var config = {
 	'ARCHETYPE_LIST_REFERENCE_URL' : prefix + '/archetypes/list/reference',
 	'ARCHETYPE_LIST_EDIT_DRAFT_URL' : prefix + '/archetypes/list/edit/draft',
 	'ARCHETYPE_LIST_EDIT_PUBLISHED_URL' : prefix + '/archetypes/list/edit/published',
-	'ARCHETYPE_EDIT_BY_ID_URL' : prefix + '/archetypes/action/save/id/',
+	'ARCHETYPE_EDIT_BY_ID_URL' : prefix + '/archetypes/action/edit/id/',
 	'ARCHETYPE_SUBMIT_BY_ID_URL' : prefix + '/archetypes/action/submit/id/',
 	'ARCHETYPE_LIST_VERIFY_URL' : prefix + '/archetypes/list/verify',
 	'ARCHETYPE_APPROVE_BY_ID_URL' : prefix + '/archetypes/action/approve/id/',

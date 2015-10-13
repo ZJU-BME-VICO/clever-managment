@@ -1,4 +1,4 @@
-function ArchetypeViewCtrl($scope, $timeout, busyService, resourceService, ARCHETYPE_LIST_URL, ARCHETYPE_MASTER_BY_ID_URL, ARCHETYPE_BY_ID_URL) {
+function ArchetypeViewCtrl($scope, $timeout, busyService, resourceService, treeDataFormatService, ARCHETYPE_LIST_URL, ARCHETYPE_MASTER_BY_ID_URL, ARCHETYPE_BY_ID_URL) {
 
 	$scope.treeControl = {};
 	$scope.tabControl = {};
@@ -97,42 +97,36 @@ function ArchetypeViewCtrl($scope, $timeout, busyService, resourceService, ARCHE
 		stucture : stucture.specialisedArchetypeMasters,
 		demographic : demographic.specialisedArchetypeMasters,
 	};
+	
+	
+	
 
 	$scope.tabContainerHeight = {
-		value : $scope.$parent.containerHeight - 35
+		value : $scope.$parent.containerHeight - 40
 	};
 	$scope.$watch(function() {
 		return $scope.$parent.containerHeight;
 	}, function(newValue) {
-		$scope.tabContainerHeight.value = newValue - 35;
+		$scope.tabContainerHeight.value = newValue - 40;
 	});
 
 	var busyId = busyService.pushBusy('BUSY_LOADING');
-	resourceService.get(ARCHETYPE_LIST_URL).then(function(list) {
-		angular.forEach(archetypeListMap, function(value, key) {
-			value.length = 0;
-		});
-		angular.forEach(list, function(master, index) {
-			if (master.rmName == 'DEMOGRAPHIC') {
-				archetypeListMap['demographic'].push(master);
-			} else {
-				var masters = archetypeListMap[master.rmEntity.toLowerCase()];
-				if (master == undefined) {
-					console.log('Cannot classify archetype ' + master.name);
-				} else {
-					masters.push(master);
-				}
-			}
-		});
+	resourceService.get(ARCHETYPE_LIST_URL).then(function(list) {		
+		$scope.formatedObject = treeDataFormatService.formatTreeData(list, 'specialisedArchetypeMasters');
 		$scope.archetypeList = [];
-		$scope.archetypeList = archetypeList;
+		$scope.archetypeList = $scope.formatedObject.formatedList;
 		// Classify
 		busyService.popBusy(busyId);
 	});
 
 	$scope.searchKeyMapper = function(node) {
-		return node.conceptName + ' (' + node.latestArchetypeVersion + ')';
+		if (node.isDirectory) {
+			return node.name;
+		} else {
+			return node.conceptName + ' (' + node.latestArchetypeVersion + ')';
+		}
 	};
+
 
 	$scope.$watch('archetypeListFilter', function(newValue) {
 		if (newValue != undefined) {

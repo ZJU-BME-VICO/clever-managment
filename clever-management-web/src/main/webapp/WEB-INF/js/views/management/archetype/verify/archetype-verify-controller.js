@@ -86,4 +86,10 @@ function ArchetypeVerifyCtrl($scope, busyService, msgboxService, resourceService
 			documentDiffModalService.open("ARCHETYPE_VERIFY_ADL_DIFF", archetypeFile.lastRevisionArchetype.adl, archetypeFile.adl, $scope.modalContainerHeight);
 		}
 	};
+	
+	$scope.getFormatedTime = function(time){
+		var date = new Date();
+		date.setTime(time);
+		return date.format('yyyy-MM-dd hh:mm:ss');
+	};
 }

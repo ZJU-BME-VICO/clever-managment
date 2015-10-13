@@ -16,7 +16,7 @@ function StorageTemplateVerifyCtrl($scope, $modal, resourceService, msgboxServic
 		$scope.templateFiles = list;
 		console.log(list);
 	});
-
+   
 	$scope.approveTemplateFile = function(templateFile) {
 		msgboxService.createMessageBox("STORAGE_TEMPLATE_VERIFY_MSG_HINT", "STORAGE_TEMPLATE_VERIFY_APPROVE_HINT", {
 			templateName : templateFile.name
@@ -79,5 +79,11 @@ function StorageTemplateVerifyCtrl($scope, $modal, resourceService, msgboxServic
 		} else {
 			documentDiffModalService.open("STORAGE_TEMPLATE_VERIFY_OET_DIFF", templateFile.lastTemplateFile.oet, templateFile.oet, $scope.modalContainerHeight);
 		}
+	};
+	
+	$scope.getFormatedTime = function(time){
+		var date = new Date();
+		date.setTime(time);
+		return date.format('yyyy-MM-dd hh:mm:ss');
 	};
 }

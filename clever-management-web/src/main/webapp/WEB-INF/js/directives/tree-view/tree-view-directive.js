@@ -68,6 +68,10 @@ angular.module('clever.management.directives.treeView', []).directive('treeView'
 			$scope.getTreeNodeLabelElement = function() {
 				return treeNodeLabelElement.innerHTML;
 			}; 
+			var treeNodeMenuElement;
+			$scope.getTreeNodeMenuElement = function(){
+				return treeNodeMenuElement.innerHTML;
+			};
 			$scope.clickNode = function(node) {
 				$scope.clickNodeCallback({
 					value : node,
@@ -83,14 +87,16 @@ angular.module('clever.management.directives.treeView', []).directive('treeView'
 			};
 			
 			
-			$scope.clickEditNodeMenu = function(node,type){
-				
-			var element =$scope.clickEditMenuCallback({
-					node:node,
-					type:type,
+		
+			$scope.clickEditNodeMenu = function(node, type) {
+
+				$scope.clickEditMenuCallback({
+					node : node,
+					type : type,
 				});
-				return element;
-			};
+
+			}; 
+
 			
 			$scope.specialiseArchetype = function(node){
 				
@@ -133,6 +139,14 @@ angular.module('clever.management.directives.treeView', []).directive('treeView'
 					}
 				}
 			};
+			
+			$scope.getNodeMenu1 = function(node, aliasName) {
+				if(treeNodeMenuElement){
+					return  $scope.getTreeNodeMenuElement();
+				}else{
+					return '';
+				}
+			};
 
 			$scope.isContextMenu = function() {
 				if ($scope.nodeMenuGenerator) {
@@ -171,18 +185,16 @@ angular.module('clever.management.directives.treeView', []).directive('treeView'
 				},
 				
 				locateNode: function(node) {
-
-					//node.selected = 'selected';
-					//set currentNode
-					//$scope.setCurrentNode(node);
-
-					//$scope.clickNodeLabel(node);
 					if ($scope.getCurrentNode() && $scope.getCurrentNode().selected) {
 						$scope.getCurrentNode().selected = undefined;
 					}
-
+					var parent = node.parent;
+					while(parent){
+						parent.collapsed = false;
+						parent = parent.parent;
+					}              
 					node.selected = 'selected';
-
+                    
 					$scope.setCurrentNode(node);
 
 					$scope.clickNode(node);
@@ -197,25 +209,27 @@ angular.module('clever.management.directives.treeView', []).directive('treeView'
 						angular.forEach(nodes, function(node) {
 							node.containsTargetChild = undefined;
 						});
-						angular.forEach(nodes, function(node) {
-							if ($scope.searchKeyMapper(node).toLowerCase().indexOf(keyword.toLowerCase()) < 0) {
-								if (!node.containsTargetChild) {
-									node.show = false;
-								}
-							} else {
-								node.show = true;
-								var tempNode = node;
-								while (tempNode.parent) {
-									tempNode = tempNode.parent;
-									if (tempNode.orginalCollapased == undefined) {
-										tempNode.orginalCollapased = tempNode.collapsed;
+						
+						angular.forEach(nodes, function(node) {	
+								if ($scope.searchKeyMapper(node).toLowerCase().indexOf(keyword.toLowerCase()) < 0) {
+									if (!node.containsTargetChild) {
+										node.show = false;
 									}
-									tempNode.show = true;
-									tempNode.collapsed = false;
-									tempNode.containsTargetChild = true;
+								} else {
+									node.show = true;
+									var tempNode = node;
+									while (tempNode.parent) {
+										tempNode = tempNode.parent;
+										if (tempNode.orginalCollapased == undefined) {
+											tempNode.orginalCollapased = tempNode.collapsed;
+										}
+										tempNode.show = true;
+										tempNode.collapsed = false;
+										tempNode.containsTargetChild = true;
+									}
 								}
-							}
-						});
+						}); 
+
 					} else {
 						angular.forEach(nodes, function(node) {
 							node.show = true;
@@ -236,7 +250,8 @@ angular.module('clever.management.directives.treeView', []).directive('treeView'
 						collapsedIconElement = node;
 					} else if (isTreeNodeLabel(node)) {
 						treeNodeLabelElement = node;
-					}  else {
+					}  else if(isTreeNodeMenu(node)){
+						treeNodeMenuElement = node;
 					}
 				});
             });
@@ -261,6 +276,12 @@ angular.module('clever.management.directives.treeView', []).directive('treeView'
 				       node.tagName.toLowerCase() === 'tree-node-label'
 				);
 			}
+			function isTreeNodeMenu(node){
+				return node.tagName &&  (
+				       node.hasAttribute('tree-node-menu') ||
+				       node.tagName.toLowerCase() === 'tree-node-menu'
+				     );
+			}
 		},
 		link : function(scope, elm, attrs){
 			var template = '<tree-view-node ' +
@@ -269,10 +290,18 @@ angular.module('clever.management.directives.treeView', []).directive('treeView'
 								scope.getNodeAliasName().replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase() + '="_node">' +
 							'</tree-view-node>';
 			
+			var hasRendered = false;
 			scope.$watch('treeData', function(newValue, oldValue) {
-				if (newValue === oldValue){return;}
-				else if(newValue){				
+				if (newValue == oldValue) {
+					if (hasRendered) {
+						return;
+					} else {
+						elm.html('').append($compile( template )(scope));
+						hasRendered = true;
+					}
+				} else if (newValue) {
 					elm.html('').append($compile( template )(scope));
+					hasRendered = true;
 				}
 			}); 
 

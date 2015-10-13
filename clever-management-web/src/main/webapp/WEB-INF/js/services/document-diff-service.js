@@ -27,12 +27,12 @@ angular.module('clever.management.services.documentDiffModal', []).service('docu
                 };
                 $scope.ok = function() {
                     $modalInstance.close();
-                }
+                };
             },
             windowClass: 'app-modal-window', //this CSS class is in the diffview.css file
             // size: 'lg',
      });
 
-     }
+    };
 
 });

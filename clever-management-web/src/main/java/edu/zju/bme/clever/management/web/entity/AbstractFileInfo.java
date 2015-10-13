@@ -1,5 +1,7 @@
 package edu.zju.bme.clever.management.web.entity;
 
+import java.util.Calendar;
+
 public abstract class AbstractFileInfo {
 	private int id;
 	private String name;
@@ -16,6 +18,15 @@ public abstract class AbstractFileInfo {
 	private String editorName;
 	private ArchetypeInfo specialiseArchetype;
 	private ArchetypeInfo lastRevisionArchetype;
+	private Calendar lastModifyTime;
+	
+	public Calendar getLastModifyTime() {
+		return lastModifyTime;
+	}
+
+	public void setLastModifyTime(Calendar lastModifyTime) {
+		this.lastModifyTime = lastModifyTime;
+	}
 
 	public int getId() {
 		return id;

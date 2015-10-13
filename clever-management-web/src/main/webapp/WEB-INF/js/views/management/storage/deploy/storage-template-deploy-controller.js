@@ -1,4 +1,4 @@
-function StorageTemplateDeployCtrl($scope, authenticationService, resourceService, busyService, msgboxService, STORAGE_TEMPLATE_LIST_DEPLOY_URL, STORAGE_TEMPLATE_LIST_DEPLOYED_URL, STORAGE_TEMPLATE_DEPLOY_URL, DEPLOY_RECORDS_LIST_URL) {
+function StorageTemplateDeployCtrl($scope, $state, authenticationService, resourceService, busyService, msgboxService, STORAGE_TEMPLATE_LIST_DEPLOY_URL, STORAGE_TEMPLATE_LIST_DEPLOYED_URL, STORAGE_TEMPLATE_DEPLOY_URL, DEPLOY_RECORDS_LIST_URL) {
 	$scope.templateMasterList = [];
 	$scope.deployedTemplateList = [];
 	$scope.selectedCount = 0;
@@ -19,13 +19,14 @@ function StorageTemplateDeployCtrl($scope, authenticationService, resourceServic
 			busyService.popBusy(busyId);
 		});
 	}
-	
+
 	refreshTemplateList();
 
 	function refreshDeployRecords() {
 		var busyId = busyService.pushBusy('BUSY_LOADING');
 		resourceService.get(DEPLOY_RECORDS_LIST_URL).then(function(list) {
 			$scope.deployRecords = list;
+			console.log(list);
 			busyService.popBusy(busyId);
 		});
 	}
@@ -86,6 +87,10 @@ function StorageTemplateDeployCtrl($scope, authenticationService, resourceServic
 		}
 	};
 
+	$scope.showErrorMessage = function(record) {
+		msgboxService.createMessageBox('STORAGE_TEMPLATE_DEPLOY_ERROR_MSG', record.message, {}, 'error', undefined, 'lg');
+	};
+
 	$scope.deployTemplates = function() {
 		var busyId = busyService.pushBusy('STORAGE_TEMPLATE_DEPLOY_FILE_DEPLOYING');
 		var deployConfig = {};
@@ -102,6 +107,7 @@ function StorageTemplateDeployCtrl($scope, authenticationService, resourceServic
 			if (result.succeeded) {
 				msgboxService.createMessageBox('STORAGE_TEMPLATE_DEPLOY_MSG_HINI', 'STORAGE_TEMPLATE_DEPLOY_SUCCEEDED_HINI', {}, 'success').result.then(function() {
 					$scope.deployedTemplateList = deployConfig.templateNames;
+					
 					refreshDeployRecords();
 				});
 			} else {
@@ -110,5 +116,10 @@ function StorageTemplateDeployCtrl($scope, authenticationService, resourceServic
 				}, 'error');
 			}
 		});
+	$scope.goToView = function(template){
+		var state = 'management.storage.view';
+		$state.go(state, {template:template});
+	};
+		//console.log(deployConfig);
 	};
 }
