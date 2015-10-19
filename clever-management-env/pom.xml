@@ -23,7 +23,7 @@
 			<id>local-dev</id>
 			<properties>
 				<env>local-dev</env>
-				<database.url>jdbc:sqlserver://localhost:1433;databaseName=clever-management-temp</database.url>
+				<database.url>jdbc:sqlserver://localhost:1433;databaseName=clever-management</database.url>
 				<database.username>sa</database.username>
 				<database.password>root</database.password>
 			</properties>
@@ -31,7 +31,7 @@
 		<profile>
 			<id>remote-dev</id>
 			<properties>
-				<database.url>jdbc:sqlserver://172.16.100.33;instanceName=CDR;databaseName=clever-management-temp</database.url>
+				<database.url>jdbc:sqlserver://172.16.100.33;instanceName=CDR;databaseName=clever-management</database.url>
 				<database.username>sa</database.username>
 				<database.password>@Sxdyy0808</database.password>
 			</properties>
