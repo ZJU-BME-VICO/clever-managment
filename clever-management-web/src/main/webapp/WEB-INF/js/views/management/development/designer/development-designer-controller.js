@@ -7,7 +7,25 @@ function DesignerCtrl($scope,resourceService,$q,templateParseService,archetypePa
 	$scope.controlList=['btnFn','labelFn'];
 	$scope.selectedElement="初始化";
 	$scope.tempControl={};
-
+	//test contextmenu
+    $scope.player = {
+            gold: 100
+        };
+        $scope.items = [
+            { name: 'Small Health Potion', cost: 4 },
+            { name: 'Small Mana Potion', cost: 5 },
+            { name: 'Iron Short Sword', cost: 12 }
+        ];
+        $scope.menuOptions = [
+            ['Buy', function ($itemScope) {
+                $scope.player.gold -= $itemScope.item.cost;
+            }],
+            null,
+            ['Sell', function ($itemScope) {
+                $scope.player.gold += $itemScope.item.cost;
+            }]
+        ];
+        
      //for template display don't delete!!
      resourceService.get(STORAGE_TEMPLATE_LIST_URL).then(function(list) {            
             $scope.templateList = list;

@@ -35,13 +35,21 @@
 			<i style="cursor: pointer" ng-click="isTemolateListHidden = !isTemolateListHidden" ng-show="isTemolateListHidden" tooltip-placement="right" tooltip="Expand" tooltip-popup-delay="500"> <span class="glyphicon glyphicon-chevron-right" ng-style="{'margin-top': containerHeight/2}" ></span> </i>
 			<i style="cursor: pointer" ng-click="isTemolateListHidden = !isTemolateListHidden" ng-show="!isTemolateListHidden" tooltip-placement="right" tooltip="Collapse" tooltip-popup-delay="500"> <span class="glyphicon glyphicon-chevron-left" ng-style="{'margin-top': containerHeight/2}" ></span> </i>
 		</splitter>
+		
     <div class="col-xs-12 col-md-12 col-lg-12 edit-box" style="height:2800px">
         <div id="editArea"> 
-            <!--<ul id="menu" menu-controller="">
-                <li ng-click="deleteElement()"><em class="cut"></em><a href="javascript:;">删除</a></li>
-                <li><em class="copy"></em><a href="javascript:;">复制</a></li>
-                <li><em class="paste"></em><a href="javascript:;">粘贴</a></li>
-            </ul>-->
+             <div>
+        <strong>Gold: </strong>
+        {{player.gold}}
+        </div>
+        <div class="list-group">
+             <a class="list-group-item"
+                ng-repeat="item in items"
+                ng-context-menu="menuOptions">
+                 <span class="badge">{{item.cost}}</span>
+                 {{item.name}}
+            </a>
+        </div>
         </div>
 	</div>
 	<!--<div class="col-xs-12 col-md-12 col-lg-12 function-Box" > 
@@ -49,8 +57,7 @@
          <a>样式区</a>     
     </div>
     <control-box></control-box>
- </div>    -->
-
+ </div>   
     </div>  
 </div>
 
