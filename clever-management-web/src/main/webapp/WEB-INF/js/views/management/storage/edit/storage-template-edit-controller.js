@@ -1,61 +1,41 @@
-function StorageTemplateEditCtrl($scope, $modal, $stateParams, $timeout, treeDataFormatService, resourceService, busyService, msgboxService, treeDataFormatService, templateCreateService, templateParseToEditService, archetypeParseService, documentDiffModalService, STORAGE_TEMPLATE_LIST_EDIT_DRAFT_URL, STORAGE_TEMPLATE_LIST_EDIT_PUBLISHED_URL, STORAGE_TEMPLATE_SUBMIT_BY_ID_URL, STORAGE_TEMPLATE_EDIT_BY_ID_URL, ARCHETYPE_LIST_REFERENCE_URL, STORAGE_TEMPLATE_BY_ID_URL, STORAGE_TEMPLATE_CREATE_URL) {
+function StorageTemplateEditCtrl($scope, $modal, $stateParams, treeDataFormatService, resourceService, busyService, msgboxService, treeDataFormatService, templateCreateService, templateParseToEditService, archetypeParseService, documentDiffModalService, STORAGE_TEMPLATE_LIST_EDIT_DRAFT_URL, STORAGE_TEMPLATE_LIST_EDIT_PUBLISHED_URL, STORAGE_TEMPLATE_SUBMIT_BY_ID_URL, STORAGE_TEMPLATE_EDIT_BY_ID_URL, ARCHETYPE_LIST_REFERENCE_URL) {
 
 	$scope.treeControl = {};
-//	$scope.arcTreeControl = {};
 	$scope.templateFiles = {
 		draft : [],
 		published : []
 	};
 	$scope.tabControl = {};
-    $scope.arcTreeControl= {
-    	value : {},
-    };
+
 	$scope.locateTemplate = function(tem) {
 		$scope.treeControl.locateNode(tem);
 	};
 
 	$scope.isTemplateListHidden = false;
 
-	$scope.initData = function() {
-		var busyDraft = busyService.pushBusy('BUSY_LOADING');
-		resourceService.get(STORAGE_TEMPLATE_LIST_EDIT_DRAFT_URL).then(function(list) {
-			$scope.templateFiles.draft = list;
-			$scope.templateFiles.draftReady = true;
-			generateTreeData();
-			busyService.popBusy(busyDraft);
-		});
+	var busyDraft = busyService.pushBusy('BUSY_LOADING');
+	resourceService.get(STORAGE_TEMPLATE_LIST_EDIT_DRAFT_URL).then(function(list) {
+		$scope.templateFiles.draft = list;
+		$scope.templateFiles.draftReady = true;
+		generateTreeData();
+		busyService.popBusy(busyDraft);
+	});
 
-		var busyPublished = busyService.pushBusy('BUSY_LOADING');
-		resourceService.get(STORAGE_TEMPLATE_LIST_EDIT_PUBLISHED_URL).then(function(list) {
-			$scope.templateFiles.published = list;
-			$scope.templateFiles.publishedReady = true;
-			generateTreeData();
-			busyService.popBusy(busyPublished);
-		});
-	};
+	var busyPublished = busyService.pushBusy('BUSY_LOADING');
+	resourceService.get(STORAGE_TEMPLATE_LIST_EDIT_PUBLISHED_URL).then(function(list) {
+		$scope.templateFiles.published = list;
+		$scope.templateFiles.publishedReady = true;
+		generateTreeData();
+		busyService.popBusy(busyPublished);
+	});
 
 	function generateTreeData() {
 		if ($scope.templateFiles.draftReady && $scope.templateFiles.publishedReady) {
-			$scope.templateFiles.draftReady = false;
-			$scope.templateFiles.publishedReady = false;
 			var list = $scope.templateFiles.draft.concat($scope.templateFiles.published);
-			$scope.originalTemplateList = list;
 			$scope.formatedObject = treeDataFormatService.formatTreeData(list, 'children');
 			$scope.templateList = $scope.formatedObject.formatedList;
-			//console.log($scope.templateList);
-			if ($scope.needLocatedObjectName) {
-
-				$timeout(function() {
-					$scope.locateTemplate(findTemplateByName($scope.needLocatedObjectName));
-					$scope.needLocatedObjectName = undefined;
-				}, 0);
-			}
 		}
-
 	}
-
-
-	$scope.initData();
 
 	var busyId = busyService.pushBusy('BUSY_LOADING');
 	$scope.archetypeList = [];
@@ -99,23 +79,16 @@ function StorageTemplateEditCtrl($scope, $modal, $stateParams, $timeout, treeDat
 	});
 	$scope.oetObj = {};
 
-	$scope.isCollapse = true;
-	
-	$scope.isExpandedAll = {
-		value: false,
-	};
+	$scope.isExpandedAll = false;
+	$scope.$watch('isExpandedAll', function(newValue, oldValue) {
 
-	$scope.$watch('isExpandedAll.value', function(newValue, oldValue) {
-		if ($scope.arcTreeControl && newValue) {
-			$scope.arcTreeControl.value.expandAll();
-		} else if ($scope.arcTreeControl && !newValue) {
-			$scope.arcTreeControl.value.collapseAll();
+		if ($scope.treeControl.value && newValue) {
+			$scope.treeControl.value.expandAll();
+		} else if ($scope.treeControl.value && !newValue) {
+			$scope.treeControl.value.collapseAll();
 		}
+	});
 
-	}); 
-
-	
-	
 	$scope.selectTemplate = function(template) {
 		var bid = busyService.pushBusy('BUSY_LOADING');
 		if (!template.isDirectory) {
@@ -124,54 +97,16 @@ function StorageTemplateEditCtrl($scope, $modal, $stateParams, $timeout, treeDat
 			$scope.selectedTemplate.oet = formatXml($scope.selectedTemplate.oet);
 			try {
 				$scope.oetObj = x2js.xml_str2json(template.oet);
-				console.log($scope.oetObj);
 				$scope.parsedTemplate = templateParseToEditService.parseTemplate($scope.oetObj.template);
 			} catch(ex) {
 				console.log(ex);
 			}
-			$scope.isExpandedAll.value = false;
+			$scope.isExpandedAll = false;
 
 		}
 		busyService.popBusy(bid);
 	};
-	$scope.selectNode = function(node) {
-		$scope.selectedNode = node;
-		//var path;
-		var path = constructNodePath(node);
-		console.log(path);
-		console.log("this is the node you just choose");
-		console.log(node);
-		$scope.path = path;
-	};
-    
-    function constructNodePath(node){
-    	var resultNode;
-    	var parent = node.parent;
-    	while(parent){
-    		if(parent.label.archetypeNode){
-    			resultNode = parent;
-    			break;
-    		}else{
-    			parent = parent.parent;
-    		}
-    	}
-  
-		if (resultNode) {
-			if (resultNode.parent) {
-				var topPath = constructNodePath(resultNode.parent);
-				var lowPath = node.path;
-				var archetypeId = resultNode.label.path.slice(0, resultNode.label.path.lastIndexOf('v') + 2);
-				var resultPath = topPath.slice(0, topPath.lastIndexOf(']')) + ' and archetype_id/value='+archetypeId + ']' + node.label.path;
-				return resultPath;
-			} else {
-				return node.label.path;
-			}
 
-		} else {
-			return '';
-		}    	    	
-    }
-    
 	$scope.generateOetDiff = function() {
 		var xmlDocStr = x2js.json2xml_str($scope.oetObj);
 		documentDiffModalService.open('Modify records', $scope.selectedTemplate.oet, formatXml(xmlDocStr));
@@ -180,46 +115,7 @@ function StorageTemplateEditCtrl($scope, $modal, $stateParams, $timeout, treeDat
 	$scope.getOet = function() {
 		return formatXml(x2js.json2xml_str($scope.oetObj));
 	};
-	
 
-	$scope.clickListNodeMenu = function(node, type) {
-		//console.log(node);
-		//console.log(type);
-		switch(type) {
-		case 'newVersion':
-			createNewVersionTemplate(node);
-			break;
-		default :
-			break;
-		}
-	}; 
-
-  
-	function createNewVersionTemplate(node) {
-		console.log(node);
-		var template = {
-			name : '',
-			oet : '',
-			arm : '',
-		};
-		var oetObj = x2js.xml_str2json(node.oet);
-		var armObj = x2js.xml_str2json(node.arm);
-		console.log(oetObj);
-		console.log(armObj);
-		var name = oetObj.template.name;
-		var frontString = name.slice(0, name.lastIndexOf('v1') + 3);
-		var lastString = name.slice(name.lastIndexOf('v1') + 3, name.length);
-		var newVersion = parseInt(lastString) + 1;
-		oetObj.template.name = frontString + newVersion;
-		armObj['archetype-relationship-mapping'].template['_template-id'] = oetObj.template.name;
-		template.oet = x2js.json2xml_str(oetObj);
-		template.arm = x2js.json2xml_str(armObj);
-		template.name = oetObj.template.name;
-
-		$scope.createTemplateFile(template);
-	}
-
- 
 	$scope.getTreeNodeLabel = function(node, aliasName) {
 		var label = '';
 
@@ -274,12 +170,12 @@ function StorageTemplateEditCtrl($scope, $modal, $stateParams, $timeout, treeDat
 		return matchedOntology;
 	}
 
-
 	$scope.getTreeNodeMenu = function(node, aliasName) {
+		//console.log(node)
 		var menuHtml = '<ul class="dropdown-menu" role="menu" ng-if="' + aliasName + '.parent.label.occurrences.upper != 0">';
 		if (node.label.archetypeNode) {
 			if (node.parent) {
-				menuHtml += '<li><a class="pointer" role="menuitem" tabindex="1" ng-click="operateNodeByContextMenu(' + aliasName + ', 3)">Delete archetype</a></li>';
+				menuHtml += '<li><a class="pointer" role="menuitem" tabindex="1" ng-click="setNodeByContextMenu(' + aliasName + ', 3)">Delete archetype</a></li>';
 			} else {
 				menuHtml = '';
 			}
@@ -288,9 +184,9 @@ function StorageTemplateEditCtrl($scope, $modal, $stateParams, $timeout, treeDat
 		} else {
 			if (node.label.occurrenceType) {
 				if (node.label.occurrenceType == 1) {
-					menuHtml += '<li><a class="pointer" role="menuitem" tabindex="1" ng-click="operateNodeByContextMenu(' + aliasName + ', 1, 0)">Zero Occurrence</a></li>' + '<li><a class="pointer" role="menuitem" tabindex="2" ng-click="operateNodeByContextMenu(' + aliasName + ', 1, 1)">Single Occurrence</a></li>';
+					menuHtml += '<li><a class="pointer" role="menuitem" tabindex="1" ng-click="setNodeByContextMenu(' + aliasName + ', 1, 0)">Zero Occurrence</a></li>' + '<li><a class="pointer" role="menuitem" tabindex="2" ng-click="setNodeByContextMenu(' + aliasName + ', 1, 1)">Single Occurrence</a></li>';
 				} else if (node.label.occurrenceType == '*') {
-					menuHtml += '<li><a class="pointer" role="menuitem" tabindex="3" ng-click="operateNodeByContextMenu(' + aliasName + ', 1, 0)">Zero Occurrence</a></li>' + '<li><a class="pointer" role="menuitem" tabindex="4" ng-click="operateNodeByContextMenu(' + aliasName + ', 1, 1)">Single Occurrence</a></li>' + '<li><a class="pointer" role="menuitem" tabindex="5" ng-click="setNodeByContextMenu(' + aliasName + ', 1, \'*\')">Unlimited Occurrence</a></li>';
+					menuHtml += '<li><a class="pointer" role="menuitem" tabindex="1" ng-click="setNodeByContextMenu(' + aliasName + ', 1, 0)">Zero Occurrence</a></li>' + '<li><a class="pointer" role="menuitem" tabindex="2" ng-click="setNodeByContextMenu(' + aliasName + ', 1, 1)">Single Occurrence</a></li>' + '<li><a class="pointer" role="menuitem" tabindex="3" ng-click="setNodeByContextMenu(' + aliasName + ', 1, \'*\')">Unlimited Occurrence</a></li>';
 				}
 			} else {
 				menuHtml = '';
@@ -303,7 +199,7 @@ function StorageTemplateEditCtrl($scope, $modal, $stateParams, $timeout, treeDat
 			return menuHtml += '</ul>';
 		}
 	};
-   
+
 	function getRegExpsBySlotExpression(slotExpression) {
 		var regExps = [];
 		var expression;
@@ -364,7 +260,7 @@ function StorageTemplateEditCtrl($scope, $modal, $stateParams, $timeout, treeDat
 		}
 		if (matchedArchetypes.length > 0) {
 			angular.forEach(matchedArchetypes, function(value, index) {
-				slotMenu += '<li><a class="pointer" role="menuitem" tabindex="' + (index + 1) + '" ng-click="operateNodeByContextMenu(' + aliasName + ', 2, \'' + value.name + '\')">' + value.name + '</a></li>';
+				slotMenu += '<li><a class="pointer" role="menuitem" tabindex="' + (index + 1) + '" ng-click="setNodeByContextMenu(' + aliasName + ', 2, \'' + value.name + '\')">' + value.name + '</a></li>';
 			});
 		} else {
 			slotMenu += '<li><a class="pointer" role="menuitem" tabindex="1" ng-click="">No archetypes match the slot constraint</a></li>';
@@ -385,7 +281,6 @@ function StorageTemplateEditCtrl($scope, $modal, $stateParams, $timeout, treeDat
 			setDefinitionItemOnSlitArchetype(node, value);
 			break;
 		}
-		$scope.selectedTemplate.oet = $scope.getOet();
 	};
 
 	function setNodeMax(nodeTree, value) {
@@ -559,18 +454,37 @@ function StorageTemplateEditCtrl($scope, $modal, $stateParams, $timeout, treeDat
 
 
 	$scope.createTemplate = function() {
+		//var archetypeList = "haha";
+
 		$scope.createdTemplate = templateCreateService.openCreate($scope.archetypeList, $scope);
 		$scope.createdTemplate.then(function(message) {
 			var template = new Template(message.archetype);
-			//pushToTemplateList(template);
-			$scope.createTemplateFile(template);
+			pushToTemplateList(template);
 		});
+		//console.log("template created in storage pane");
+		// console.log(template);
 	};
 
 	function Template(archetype) {
 		this.arm = getArm(archetype);
+		this.conceptName = archetype.conceptName;
+		this.editorId = archetype.editorId;
+		this.editorName = archetype.editorName;
+		this.entityClasses = null;
+		this.lastModifyTime = null;
+		this.lastRevisionArchetype = null;
+		this.lastTemplateFile = null;
+		this.lifecycleState = "Draft";
 		this.name = archetype.name;
 		this.oet = getOet(archetype);
+		this.rmEntity = archetype.rmEntity;
+		this.rmName = archetype.rmName;
+		this.rmOriginator = archetype.rmOriginator;
+		this.show = true;
+		this.specialiseArchetype = archetype.specialiseArchetype;
+		this.version = "v1.1";
+		this.versionMasterId = archetype.versionMasterId;
+		this.versionMasterName = archetype.versionMasterName;
 	}
 
 	function createTemplate(archetype) {
@@ -741,9 +655,20 @@ function StorageTemplateEditCtrl($scope, $modal, $stateParams, $timeout, treeDat
 		return returnDet;
 	}
 
+	// $scope.$watch('createdTemplate', function(newValue, oldValue){
+	// if(newValue){
+	// pushToTemplateList(newValue);
+	// };
+	// });
+
 	function pushToTemplateList(template) {
-		$scope.originalTemplateList.push(template);
-		$scope.formatObject.refreshFormatList($scope.originalTemplateList);
+		var id = getTemplateId();
+		console.log(id);
+		template.id = id;
+		$scope.templateFiles.draft.push(template);
+		$scope.refreshTemplateList($scope.templateFiles.draft);
+		template.parent = templateListTypeMap[template.rmEntity.toLowerCase()];
+		//templateListChildrenMap[template.rmEntity.toLowerCase()].push(template);
 		$scope.locateTemplate(template);
 	}
 
@@ -766,41 +691,15 @@ function StorageTemplateEditCtrl($scope, $modal, $stateParams, $timeout, treeDat
 			} else {
 				max = list.id;
 			}
-		}
-		return max + 1;
-	}
 
-
-	$scope.createTemplateFile = function(template) {
-		resourceService.post(STORAGE_TEMPLATE_CREATE_URL, {
-			oet : template.oet,
-			arm : template.arm,
-			name : template.name,
-		}).then(function(result) {
-			$scope.needLocatedObjectName = template.name;
-			$scope.initData();
-		});
-	};
-
-	function findTemplateByName(name) {
-		var list = $scope.originalTemplateList;
-		var matchTemplate;
-		if (list) {
-			if (angular.isArray(list)) {
-				angular.forEach(list, function(template) {
-					if (template.name == name) {
-						matchTemplate = template;
-					}
-				});
+			if (max) {
+				return max + 1;
+			} else {
+				return 0;
 			}
+		} else {
+			return 0;
 		}
-		return matchTemplate;
-	}
-
-	function getTemplateById(id) {
-		resourceService.get(STORAGE_TEMPLATE_BY_ID_URL + id).then(function(template) {
-			pushToTemplateList(template);
-		});
 	}
 
 
@@ -822,11 +721,7 @@ function StorageTemplateEditCtrl($scope, $modal, $stateParams, $timeout, treeDat
 
 	$scope.saveTemplateFile = function() {
 		$scope.selectedTemplate.oet = x2js.json2xml_str($scope.oetObj);
-		resourceService.post(STORAGE_TEMPLATE_EDIT_BY_ID_URL + $scope.selectedTemplate.id, {
-			name : $scope.selectedTemplate.name,
-			oet : $scope.selectedTemplate.oet,
-			arm : $scope.selectedTemplate.arm,
-		}).then(function(result) {
+		resourceService.post(STORAGE_TEMPLATE_EDIT_BY_ID_URL + $scope.selectedTemplate.id, $scope.selectedTemplate).then(function(result) {
 			if (result.succeeded) {
 				msgboxService.createMessageBox('STORAGE_TEMPLATE_SUCCEEDED', 'STORAGE_TEMPLATE_EDIT_SUCCEEDED_HINT', {}, 'success');
 			} else {
