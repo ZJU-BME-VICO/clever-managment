@@ -91,22 +91,26 @@ angular.module('clever.management.services.archetypeParse', []).service('archety
 
 		//------parse other_details-------------
 		var other_details = archetype.description.other_details;
+	
 		var description_otherDetails = [];
-		if (angular.isArray(other_details)) {
-			angular.forEach(other_details, function(other_detail) {
+		if (other_details) {
+			if (angular.isArray(other_details)) {
+				angular.forEach(other_details, function(other_detail) {
+					var detail = {
+						text : other_detail.text,
+						id : other_detail.id,
+					};
+					description_otherDetails.push(detail);
+				});
+			} else {
 				var detail = {
-					text : other_detail.text,
-					id : other_detail.id,
+					text : other_details.text,
+					id : other_details.id,
 				};
 				description_otherDetails.push(detail);
-			});
-		} else {
-			var detail = {
-				text : other_details.text,
-				id : other_details.id,
-			};
-			description_otherDetails.push(detail);
+			}
 		}
+		
 		header.description.other_details = description_otherDetails;
 		console.log("this is the header");
 		console.log(header);
