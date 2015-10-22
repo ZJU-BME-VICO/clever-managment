@@ -2,26 +2,27 @@
 	<div class="col-xs-12 col-md-12 col-lg-12 hbox">
 		<div class="panel panel-default" ng-show="!isArchetypeListHidden" >
 			<div class="panel-heading">
-				<div class="input-group">
-					<div class="btn-group input-group-btn" dropdown>
-						<button class="btn btn-primary"  ng-click="openCreate('lg')">
-							{{"ARCHETYPE_PANE_CREATE"|translate}}
-						</button>
-					</div>
-					<input type="text" class="form-control" ng-model="archetypeListFilter" placeholder="{{'SEARCH_HINT' | translate}}">
-				</div>
+			
+
+					<i class="search-icon glyphicon glyphicon-search search-icon-list" ></i>
+					<input  type="text" style="border-radius: 17px; padding-left: 40px" ng-model = "archetypeListFilter" class="form-control" placeholder="{{'SEARCH_HINT' | translate}}" />
+					<!-- <input type="text" class="form-control" ng-model="archetypeListFilter" placeholder="{{'SEARCH_HINT' | translate}}"> -->
+				
 			</div>
-			<ul class="list-group" ng-style="{height:containerHeight-55}" style="overflow:auto;">
-				<!--<a href=""  ng-class="{active:selectedArchetype.id == archetype.id}" class="list-group-item" ng-repeat="archetype in draftArchetypeList"  ng-click="selectArchetype(archetype)">{{archetype.name}}</a>-->
+			<div class="list-group" ng-style="{height:containerHeight-55}" style="overflow: auto;margin-left: -5px;white-space: nowrap;">
+				<!--node-menu-generator = "getTreeElementMenu"
+				    specialise-archetype-callback="specialiseArchetype(value)"
+				    <a href=""  ng-class="{active:selectedArchetype.id == archetype.id}" class="list-group-item" ng-repeat="archetype in draftArchetypeList"  ng-click="selectArchetype(archetype)">{{archetype.name}}</a>-->
 				<tree-view tree-data="archetypeList"
 				class="archetype-tree"
 				double-click-node-callback="selectArchetype(value)"
 				node-id="id" node-children="specialiseArchetype"
-				node-menu-generator = "getTreeElementMenu"
-				specialise-archetype-callback="specialiseArchetype(value)"
+				
+			
 				delete-archetype-callback="deleteArchetype(value)"
+				click-node-menu-callback="clickNodeMenu(node, type)"
 				menu-prefix = "list"
-				tree-control="treeControl"  node-alias-name="node" 
+				tree-control="treeControl"  node-alias-name="node"
 				search-key-mapper="searchKeyMapper">
 					<tree-expanded-icon>
 						<span class="clever-icon expanded" style="padding: 0 6px;height: 12px;background-position-y: 6px;"></span>
@@ -30,109 +31,133 @@
 						<span class="clever-icon collapsed" style="padding: 0 6px;height: 12px;background-position-y: 6px;"></span>
 					</tree-collapsed-icon>
 					<tree-node-label>
-					
+
 						<img ng-show="node.isDirectory" ng-class="node.type | lowercase" class="clever-icon list" style="padding: 0 10px;height: 16px;margin-left: 3px;"></img>
 						<span ng-show="node.isDirectory" ng-bind="node.name"></span>
 						<img ng-show="!node.isDirectory" ng-class="node.lifecycleState | lowercase" class="clever-icon list" style="padding: 0 10px;height: 16px;margin-left: 3px;"></img>
 						<span ng-show="!node.isDirectory" ng-bind-html="node.conceptName | highlight:keyword | unsafe"></span>
-						<!-- &nbsp;<span ng-show="!node.isDirectory" style="color: grey;font-size: 10pt;">(<span ng-bind="node.latestVersionMasterVersion"></span>)</span> -->
-					
-					<!-- 
+						&nbsp;<span ng-show="!node.isDirectory" style="color: grey;font-size: 10pt;">(<span ng-bind="node.version"></span>)</span>
+
+						<!--
 						<img ng-class="archetype.lifecycleState | lowercase" class="clever-icon" style="padding: 0 10px;height: 16px;"></img>
 						<span ng-bind-html="archetype.conceptName | highlight:keyword | unsafe"></span>
 						&nbsp;<span style="color:grey;font-size: 10pt;"></span> -->
-				</tree-node-label>
+					</tree-node-label>
 				</tree-view>
-			</ul>
+			</div>
 		</div>
 
 		<splitter is-adjust-enabled="!isArchetypeListHidden"  style="min-height: 100%;" >
 			<i style="cursor: pointer" ng-click="isArchetypeListHidden = !isArchetypeListHidden" ng-show="isArchetypeListHidden"   tooltip-placement="right" tooltip="Expand" tooltip-popup-delay="500"> <span class="glyphicon glyphicon-chevron-right" ng-style="{'margin-top': containerHeight/2}" ></span> </i>
 			<i style="cursor: pointer" ng-click="isArchetypeListHidden = !isArchetypeListHidden" ng-show="!isArchetypeListHidden"  tooltip-placement="right" tooltip="Collapse" tooltip-popup-delay="500"> <span class="glyphicon glyphicon-chevron-left" ng-style="{'margin-top': containerHeight/2}" ></span> </i>
 		</splitter>
-		<div class="col-xs-12 col-md-12 col-lg-12 flex-box" ng-show="selectedArchetype">
-			<div class="panel panel-default">
-			<div class="panel-heading" style="height: 50px">
+		<div class="col-xs-12 col-md-12 col-lg-12 flex-box" ng-if="selectedArchetype" >
+			<div class="row" >
+				<div class="panel panel-default">
+					<div class="panel-heading" style="height: 50px">
 
-					<span class="archetype-title" ng-if="!isArchetypeListHidden">{{getFixedTitle(selectedArchetype.name, 40)}}</span>
-					<span class="archetype-title" ng-if="isArchetypeListHidden">{{getFixedTitle(selectedArchetype.name, 70)}}</span>
-
-					<button class="btn btn-small  btn-primary pull-right"   style="margin-left:20px; margin-right: 10px;" ng-disabled="selectedArchetype==undefined" ng-click="saveSelectedArchetype()">
+						<span class="archetype-title" ng-if="!isArchetypeListHidden">{{getFixedTitle(selectedArchetype.name, 40)}}</span>
+						<span class="archetype-title" ng-if="isArchetypeListHidden">{{getFixedTitle(selectedArchetype.name, 70)}}</span>
+                        <span style="color:red" ng-if="selectedArchetype.lifecycleState != 'Draft'">(Not Editable)</span>
+						<!-- <button class="btn btn-small  btn-primary pull-right"   style="margin-left:20px; margin-right: 10px;" ng-disabled="selectedArchetype==undefined" ng-click="saveSelectedArchetype()">
 						{{"ARCHETYPE_PANE_SAVE" | translate}}
-					</button>
+						</button>
 
-					<button class="btn btn-primary pull-right"   style="margin-left:20px"; ng-disabled="selectedArchetype==undefined" ng-click="submitSelectedArchetype()">
+						<button class="btn btn-primary pull-right"   style="margin-left:20px"; ng-disabled="selectedArchetype==undefined" ng-click="submitSelectedArchetype()">
 						{{"ARCHETYPE_PANE_SUBMIT" | translate}}
-					</button>
+						</button>
 
-					<button class="btn btn-info pull-right" style="margin-left:20px";ng-disabled="selectedArchetype==undefined" ng-click="generatorDiff()">
+						<button class="btn btn-info pull-right" style="margin-left:20px";ng-disabled="selectedArchetype==undefined" ng-click="generateDiff()">
 						{{"ARCHETYPE_PANE_DIFF" | translate}}
-					</button>
+						</button> -->
 
-				</div>
-                <div class="panel-body"ng-style="{height: containerHeight - 50}">
-				<div class="col-xs-12 col-md-12 col-lg-12 flex-box">
-					<tabset class="row" tab-control="tabControl">
-						<tab>
-							<tab-heading>
-								Hedear
-							</tab-heading>
-							<div class="col-xs-12 col-md-12 col-lg-12">
-								<edit-header-pane   header="header"  languages="languages" ontology="ontology"  max-height="tabContainerHeight" style="margin-top:5px; margin-bottom:20px;"></edit-header-pane>
-							</div>
-						</tab>
+					</div>
+					<div class="panel-body" ng-style="{height: containerHeight - 50}">
+						<div class="col-xs-12 col-md-12 col-lg-12 flex-box">
+							<tabset class="row" tab-control="tabControl">
+								<tab>
+									<tab-heading>
+										Hedear
+									</tab-heading>
+									<div class="col-xs-12 col-md-12 col-lg-12">
+										<edit-header-pane   header="header"  languages="languages" ontology="ontology"  max-height="tabContainerHeight" style="margin-top:5px; margin-bottom:20px;"></edit-header-pane>
+									</div>
+								</tab>
 
-						<tab>
-							<tab-heading>
-								Definition
-							</tab-heading>
-							<div class="col-xs-12 col-md-12 col-lg-12">
-								<edit-definition-pane style="margin-top:5px; margin-bottom:20px;" definition="definition"  ontology="ontology"  max-height="tabContainerHeight"   languages="languages"></edit-definition-pane>
-							</div>
-						</tab>
+								<tab>
+									<tab-heading>
+										Definition
+									</tab-heading>
+									<div class="col-xs-12 col-md-12 col-lg-12">
+										<edit-definition-pane style="margin-top:5px; margin-bottom:20px;" definition="definition"  ontology="ontology"  max-height="tabContainerHeight"   languages="languages"></edit-definition-pane>
+									</div>
+								</tab>
 
-						<tab>
-							<tab-heading>
-								Ontology
-							</tab-heading>
-							<div class="col-xs-12 col-md-12 col-lg-12">
-								<edit-ontology-pane   style="margin-top:5px; margin-bottom:20px;" ontology="ontology"   max-height="tabContainerHeight"  languages="languages"></edit-ontology-pane>
-							</div>
-						</tab>
+								<tab>
+									<tab-heading>
+										Ontology
+									</tab-heading>
+									<div class="col-xs-12 col-md-12 col-lg-12">
+										<edit-ontology-pane   style="margin-top:5px; margin-bottom:20px;" ontology="ontology"   max-height="tabContainerHeight"  languages="languages"></edit-ontology-pane>
+									</div>
+								</tab>
 
-						<tab>
-							<tab-heading>
-								Display
-							</tab-heading>
-							<div class="col-xs-12 col-md-12 col-lg-12" style="overflow:auto;">
-								<tabset class="row" style= "margin-top:5px;margin-bottom: 10px;" tab-control = "tabControl">
-									<tab>
-										<tab-heading>
-											ADL
-										</tab-heading>
-										<!-- <textarea ng-style="{height: containerHeight - 135}" style="overflow: auto; width: 100%; height: 803px;"readonly="true" ng-model="selectedArchetype.adl" class="ng-pristine ng-untouched ng-valid ng-scope">	                    	
-		                    </textarea> -->
-		                                 <pre ng-style="{height: containerHeight - 165}" style="overflow: auto; ">{{selectedArchetype.adl}}</pre>
-									</tab>
-									<tab>
-										<tab-heading>
-											XML
-										</tab-heading>
-										<!-- <textarea ng-style="{height: containerHeight - 135}" style="overflow: auto; width: 100%; height: 803px;"readonly="true" ng-model="selectedArchetype.xml" class="ng-pristine ng-untouched ng-valid ng-scope">	                    	
-                           </textarea> -->
-                                        <pre ng-style="{height: containerHeight - 165}" style="overflow: auto; ">{{selectedArchetype.xml}}</pre>
-									</tab>
-								</tabset>
+								<tab>
+									<tab-heading>
+										Display
+									</tab-heading>
+									<div class="col-xs-12 col-md-12 col-lg-12" style="overflow:auto;">
+										<tabset class="row" style= "margin-top:5px;margin-bottom: 10px;" tab-control = "tabControl">
+											<tab>
+												<tab-heading>
+													ADL
+												</tab-heading>
+												<!-- <textarea ng-style="{height: containerHeight - 135}" style="overflow: auto; width: 100%; height: 803px;"readonly="true" ng-model="selectedArchetype.adl" class="ng-pristine ng-untouched ng-valid ng-scope">
+												</textarea> -->
+												<pre ng-style="{height: containerHeight - 165}" style="overflow: auto; ">{{selectedArchetype.adl}}</pre>
+											</tab>
+											<tab>
+												<tab-heading>
+													XML
+												</tab-heading>
+												<!-- <textarea ng-style="{height: containerHeight - 135}" style="overflow: auto; width: 100%; height: 803px;"readonly="true" ng-model="selectedArchetype.xml" class="ng-pristine ng-untouched ng-valid ng-scope">
+												</textarea> -->
+												<pre ng-style="{height: containerHeight - 165}" style="overflow: auto; ">{{selectedArchetype.xml}}</pre>
+											</tab>
+										</tabset>
 
-								<!--	<edit-display-pane  max-height="paneHeight"  style="magin-top:5px; margin-bottom:20px;" ArchetypeInfo = "selectedArchetype"></edit-display-pane>-->
-							</div>
-						</tab>
+										<!--	<edit-display-pane  max-height="paneHeight"  style="magin-top:5px; margin-bottom:20px;" ArchetypeInfo = "selectedArchetype"></edit-display-pane>-->
+									</div>
+								</tab>
 
-						
-
-					</tabset>
+							</tabset>
+						</div>
 					</div>
 				</div>
+			</div>
+		</div>
+		<div class="col-xs-1 col-md-1 col-lg-1" >
+			<div class="sidebar">
+				<ul class="side-menu-group">
+					<li class="side-menu-item" ng-click="openCreate('lg')" tooltip-placement="right" tooltip="create archetype" tooltip-popup-delay="500">
+						<a href="" class="menu-item-content"> <span class="icon-plus-sign tool-menu" style="color: #777;"></span></a>
+					</li >
+					<li ng-if="selectedArchetype.lifecycleState=='Draft'"  class="side-menu-item" ng-click="saveSelectedArchetype()" tooltip-placement="right" tooltip="save archetype" tooltip-popup-delay="500">
+						<a href="" class="menu-item-content"><span class="icon-save tool-menu"  > </span></a>
+					</li>
+					<li ng-if="selectedArchetype.lifecycleState=='Draft'" class="side-menu-item"  ng-click="submitSelectedArchetype()" tooltip-placement="right" tooltip="submit archetype" tooltip-popup-delay="500">
+						<a href="" class="menu-item-content"><span class="icon-circle-arrow-up tool-menu" style="color: #777;"> </span></a>
+					</li>
+					<li ng-if="selectedArchetype" class="side-menu-item"  ng-click="generateDiff()" tooltip-placement="right" tooltip="contrast adl" tooltip-popup-delay="500">
+						<a href="" class="menu-item-content"><span class="icon-columns tool-menu" style="color: #777;"> </span></a>
+					</li>
+					<li ng-if="selectedArchetype.lifecycleState=='Published'" class="side-menu-item"  ng-click="createNewVersionArchetype()" tooltip-placement="right" tooltip="new version" tooltip-popup-delay="500">
+						<a href="" class="menu-item-content"><span class="icon-level-up tool-menu" style="color: #777;"> </span></a>
+					</li>
+				    <li ng-if="selectedArchetype" class="side-menu-item"  ng-click="specialiseArchetype()" tooltip-placement="right" tooltip="specialise this archetype" tooltip-popup-delay="500">
+						<a href="" class="menu-item-content"><span class="icon-puzzle-piece tool-menu" style="color: #777;"> </span></a>
+					</li>
+				</ul>
 			</div>
 		</div>
 	</div>
@@ -155,8 +180,8 @@
 		<select class="form-control" ng-model="entityType" ng-options="type for type in entityTypes"></select>
 		</div>
 		<div class="col-xs-5 col-sm-5 col-lg-5 flex-box">
-			<label>Concept :</label>
-			<input class="form-control" type="text" ng-model="concept">
+		<label>Concept :</label>
+		<input class="form-control" type="text" ng-model="concept">
 		</div>
 		</div>
 		</div>

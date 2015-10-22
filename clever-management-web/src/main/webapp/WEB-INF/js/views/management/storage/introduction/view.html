@@ -1,0 +1,13 @@
+<div class="row">
+	<h2>{{selectedSubMenu.title | translate}}</h2>
+</div>
+<div class="row">
+	<div>
+		<p class="introduction-font">
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{selectedSubMenu.info | translate}}
+		</p>
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="{{WEBSITE_DOMAIN}}/img/template-view.png" style="width:641px;margin-bottom: 0px;"/>
+
+	</div>
+	<h4 class="pull-right"><a href ng-show="selectedSubMenu.state" ng-click="$state.go(selectedSubMenu.state)">{{'MENU_ENTER' | translate}}</a></h4>
+</div>

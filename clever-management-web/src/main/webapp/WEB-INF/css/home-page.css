@@ -4,7 +4,9 @@
 .item-title {
 	font-size: 2.4em;
 }
+
 .item-content {
 	font-size: 1.2em;
+	color: #8a8a8a;
 	padding-top: 10px;
 }

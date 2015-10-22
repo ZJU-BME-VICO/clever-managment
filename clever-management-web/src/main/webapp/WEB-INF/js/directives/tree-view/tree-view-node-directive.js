@@ -25,7 +25,7 @@ angular.module('clever.management.directives.treeViewNode', []).directive('treeV
 										'<span ng-if="!childNodes.length" style="visibility: hidden;">' + scope.getExpandedIconElement() + '</span>' + 
 										'<span ng-class="' + nodeAliasName + '.selected">' + scope.getNodeLabel(nodeData) + '</span>' + 
 									'</span>' + 
-									'<span class="dropdown position-fixed" id="' + prefix + parentIndex + '.{{$index}}">' + scope.getNodeMenu1(nodeData, nodeAliasName) +
+									'<span class="dropdown position-fixed" id="' + prefix + parentIndex + '.{{$index}}">' + scope.getNodeMenu1() +
 								    '</span>'+
 									'<tree-view-node ' + 
 										'ng-repeat="_node in childNodes" ' + 
@@ -86,13 +86,13 @@ angular.module('clever.management.directives.treeViewNode', []).directive('treeV
 				scope.clickNode(selectedNode);
 			};
 
-			scope.setNodeByContextMenu = function(node, type, value) {
+			scope.operateNodeByContextMenu = function(node, type, value) {
 				scope.clickNodeMenu(node, type, value);
 			};
 
-			scope.editNodeByMenu = function(node, type) {
-				scope.clickEditNodeMenu(node, type);
-			};
+			// scope.editNodeByMenu = function(node, type) {
+				// scope.clickEditNodeMenu(node, type);
+			// };
 			
 			scope.specialiseNodeByMenu = function(node) {
 				var specialisedArchetype = scope.specialiseArchetype(node);
@@ -106,6 +106,11 @@ angular.module('clever.management.directives.treeViewNode', []).directive('treeV
 				console.log(node);
 				scope.deleteArchetype(node);
 			};
+			// scope.clickNodeMenu = function(operateType, node){
+				// console.log(operateType);
+				// console.log(node);
+				// scope.clickMenu(operateType, node);
+			// };
 			scope.onShow = function(node) {
 				scope.clickNodeLabel(node);
 			};

@@ -1,7 +1,11 @@
 package edu.zju.bme.clever.management.web.rest;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.StringBufferInputStream;
+import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -42,6 +46,7 @@ import edu.zju.bme.clever.management.web.entity.ArchetypeVersionMasterInfo;
 import edu.zju.bme.clever.management.web.entity.DeployConfiguration;
 import edu.zju.bme.clever.management.web.entity.EntityClassInfo;
 import edu.zju.bme.clever.management.web.entity.FileUploadResult;
+import edu.zju.bme.clever.management.web.entity.OetInfo;
 import edu.zju.bme.clever.management.web.entity.StorageTemplateInfo;
 import edu.zju.bme.clever.management.web.entity.StorageTemplateMasterInfo;
 import edu.zju.bme.clever.management.web.entity.UploadedStorageTemplate;
@@ -242,9 +247,30 @@ public class StorageTemplateResourceController extends
 		return result;
 	}
 
+	@RequestMapping(value = "action/create", method = RequestMethod.POST)
+	public FileUploadResult createTemplateFile(@RequestBody OetInfo oetInfo,
+			Authentication authentication) {
+		String userName = ((UserDetails) authentication.getPrincipal())
+				.getUsername();
+		User user = this.userService.getUserByName(userName);
+		FileUploadResult result = new FileUploadResult();
+		result.setSucceeded(true);
+		try {
+			this.versionControlService.acceptNewTemplate(
+					new ByteArrayInputStream(oetInfo.getOet().getBytes(
+							StandardCharsets.UTF_8)), new ByteArrayInputStream(
+							oetInfo.getArm().getBytes(StandardCharsets.UTF_8)),
+					user);
+		} catch (VersionControlException e) {
+			result.setMessage(e.getMessage());
+			result.setSucceeded(false);
+		}
+		return result;
+	}
+	
 	@RequestMapping(value = "/action/edit/id/{id}", method = RequestMethod.POST)
 	public FileUploadResult editTemplateFile(@PathVariable int id,
-			@RequestBody StorageTemplateInfo templateInfo,
+			@RequestBody OetInfo oetInfo,
 			Authentication authentication) {
 		String userName = ((UserDetails) authentication.getPrincipal())
 				.getUsername();
@@ -253,11 +279,11 @@ public class StorageTemplateResourceController extends
 		result.setSucceeded(true);
 		
 		try {
-			this.versionControlService.editTemplate(templateInfo.getId(),
-					templateInfo.getOet(), templateInfo.getArm(), user);
+			this.versionControlService.editTemplate(id,
+					oetInfo.getOet(), oetInfo.getArm(), user);
 		} catch (VersionControlException ex) {
 			result.setSucceeded(false);
-			result.setMessage("Edit template " + templateInfo.getName()
+			result.setMessage("Edit template " +oetInfo.getName()
 					+ " failed, error: " + ex.getMessage());
 		}
 		return result;

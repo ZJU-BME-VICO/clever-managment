@@ -1,4 +1,4 @@
-package edu.zju.bme.clever.management.service.entity;
+package edu.zju.bme.clever.management.web.entity;
 
 public class AdlInfo {
 	private String adl;

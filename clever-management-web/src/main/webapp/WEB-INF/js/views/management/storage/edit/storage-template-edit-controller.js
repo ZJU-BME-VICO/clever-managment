@@ -105,35 +105,48 @@ function StorageTemplateEditCtrl($scope, $modal, $stateParams, $timeout, treeDat
 		value: false,
 	};
 
+
 	$scope.$watch('isExpandedAll.value', function(newValue, oldValue) {
-		if ($scope.arcTreeControl && newValue) {
-			$scope.arcTreeControl.value.expandAll();
-		} else if ($scope.arcTreeControl && !newValue) {
-			$scope.arcTreeControl.value.collapseAll();
+		if ($scope.arcTreeControl.value.expandAll) {
+			if (newValue) {
+				$scope.arcTreeControl.value.expandAll();
+			} else {
+				$scope.arcTreeControl.value.collapseAll();
+			}
 		}
 
 	}); 
 
+
 	
 	
+
 	$scope.selectTemplate = function(template) {
 		var bid = busyService.pushBusy('BUSY_LOADING');
+		console.log(template);
+		//template.lifecycleState = true;
 		if (!template.isDirectory) {
-
-			$scope.selectedTemplate = template;
-			$scope.selectedTemplate.oet = formatXml($scope.selectedTemplate.oet);
-			try {
+			//if (template.lifecycleState != 'Draft') {
+           //     msgboxService.createMessageBox('STORAGE_TEMPLATE_FAILED', 'STORAGE_TEMPLATE_NEW_VERSION_INSTRUCTION', {}, 'error');
+			//    $scope.selectedTemplate = undefined;
+			//} else {
+				$scope.selectedTemplate = template;
+				$scope.selectedTemplate.oet = formatXml($scope.selectedTemplate.oet);
+				//	try {
 				$scope.oetObj = x2js.xml_str2json(template.oet);
 				console.log($scope.oetObj);
 				$scope.parsedTemplate = templateParseToEditService.parseTemplate($scope.oetObj.template);
-			} catch(ex) {
-				console.log(ex);
-			}
-			$scope.isExpandedAll.value = false;
+				//} catch(ex) {
+				//	console.log(ex);
+				//}
+				$scope.isExpandedAll.value = false;
+
+			//}
 
 		}
 		busyService.popBusy(bid);
-	};
+	}; 
+
 	$scope.selectNode = function(node) {
 		$scope.selectedNode = node;
 		//var path;
@@ -192,6 +205,10 @@ function StorageTemplateEditCtrl($scope, $modal, $stateParams, $timeout, treeDat
 		default :
 			break;
 		}
+	}; 
+ 
+	$scope.createNewVersionTemplate = function() {
+		createNewVersionTemplate($scope.selectedTemplate);
 	}; 
 
   
@@ -777,8 +794,16 @@ function StorageTemplateEditCtrl($scope, $modal, $stateParams, $timeout, treeDat
 			arm : template.arm,
 			name : template.name,
 		}).then(function(result) {
-			$scope.needLocatedObjectName = template.name;
-			$scope.initData();
+			if (result.succeeded) {
+				$scope.needLocatedObjectName = template.name;
+			    $scope.initData();
+				msgboxService.createMessageBox('STORAGE_TEMPLATE_SUCCEEDED', 'STORAGE_TEMPLATE_ADD_SUCCEEDED_HINT', {}, 'success');
+			} else {
+				msgboxService.createMessageBox('STORAGE_TEMPLATE_FAILED', 'STORAGE_TEMPLATE_ADD_FAILED_HINT', {
+					errorMsg : result.message
+				}, "error");
+			}
+			
 		});
 	};
 
@@ -809,6 +834,7 @@ function StorageTemplateEditCtrl($scope, $modal, $stateParams, $timeout, treeDat
 			if (result.succeeded) {
 				msgboxService.createMessageBox('STORAGE_TEMPLATE_SUCCEEDED', 'STORAGE_TEMPLATE_SUBMIT_SUCCEEDED_HINT', {}, 'success');
 				$scope.templateFiles.draft.splice($scope.templateFiles.draft.indexOf($scope.selectedTemplate), 1);
+				$scope.selectedTemplate.lifecycleState = 'Teamreview';
 				$scope.selectedTemplate = undefined;
 				$scope.oetObj = undefined;
 				$scope.parsedTemplate = undefined;

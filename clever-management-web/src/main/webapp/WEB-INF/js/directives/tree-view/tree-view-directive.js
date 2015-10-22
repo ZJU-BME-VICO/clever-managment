@@ -21,6 +21,7 @@ angular.module('clever.management.directives.treeView', []).directive('treeView'
 			clickEditMenuCallback:'&',
 			specialiseArchetypeCallback:'&',
 			deleteArchetypeCallback:'&',
+			clickMenuCallback : '&',
 		},
 		controller : function($scope, $transclude) {
 			
@@ -78,25 +79,23 @@ angular.module('clever.management.directives.treeView', []).directive('treeView'
 				});
 				//$scope.nodeMessageGenerator(node);
 			};
-			$scope.clickNodeMenu = function(node, type, value) {//for template edit
+			$scope.clickNodeMenu = function(node, type, value) {
 				$scope.clickNodeMenuCallback({
 					node : node,
 					type : type,
 					value : value
 				});
 			};
+				
+			// $scope.clickEditNodeMenu = function(node, type) {
+// 
+				// $scope.clickEditMenuCallback({
+					// node : node,
+					// type : type,
+				// });
+// 
+			// }; 
 			
-			
-		
-			$scope.clickEditNodeMenu = function(node, type) {
-
-				$scope.clickEditMenuCallback({
-					node : node,
-					type : type,
-				});
-
-			}; 
-
 			
 			$scope.specialiseArchetype = function(node){
 				
@@ -119,7 +118,9 @@ angular.module('clever.management.directives.treeView', []).directive('treeView'
 					value : node,
 				});
 			};
-	
+	    
+			
+
 			$scope.getNodeLabel = function(node, aliasName) {
 				
 				if (treeNodeLabelElement) {
@@ -140,7 +141,7 @@ angular.module('clever.management.directives.treeView', []).directive('treeView'
 				}
 			};
 			
-			$scope.getNodeMenu1 = function(node, aliasName) {
+			$scope.getNodeMenu1 = function() {
 				if(treeNodeMenuElement){
 					return  $scope.getTreeNodeMenuElement();
 				}else{
@@ -183,7 +184,7 @@ angular.module('clever.management.directives.treeView', []).directive('treeView'
 						node.collapsed = true;
 					});
 				},
-				
+				defined :true,
 				locateNode: function(node) {
 					if ($scope.getCurrentNode() && $scope.getCurrentNode().selected) {
 						$scope.getCurrentNode().selected = undefined;

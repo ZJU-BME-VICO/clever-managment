@@ -61,7 +61,7 @@ function StorageTemplateDeployCtrl($scope, $state, authenticationService, resour
 	};
 
 	$scope.getFixedTitle = function(title, length) {
-		var titleLength = length || 35;
+		var titleLength = length || 33;
 		if (title.length > titleLength) {
 			return title.substring(0, titleLength / 2) + '....' + title.substring(title.length - titleLength / 2, title.length);
 		} else {

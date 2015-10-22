@@ -1,8 +1,9 @@
-angular.module('clever.management.directives', ['clever.management.directives.commons', 'clever.management.directives.templateDesign', 'clever.management.directives.editor','clever.management.directives.archetypeListTree', 'clever.management.directives.archetypeListTreeNode', 'clever.management.directives.archetypeMasterPane', 'clever.management.directives.archetypePane', 'clever.management.directives.headerPane', 'clever.management.directives.participationPane','clever.management.directives.definitionPane', 'clever.management.directives.terminologyPane', 'clever.management.directives.treeView', 'clever.management.directives.treeViewNode']);
+angular.module('clever.management.directives', ['clever.management.directives.commons', 'clever.management.directives.templateDesign', 'clever.management.directives.editor','clever.management.directives.archetypeListTree', 'clever.management.directives.archetypeListTreeNode', 'clever.management.directives.archetypeMasterPane', 'clever.management.directives.archetypePane', 'clever.management.directives.headerPane', 'clever.management.directives.participationPane','clever.management.directives.definitionPane', 'clever.management.directives.terminologyPane', 'clever.management.directives.treeView', 'clever.management.directives.treeViewNode', 'clever.management.directives.introduction']);
 angular.module('clever.management.directives.commons', ['ui.bootstrap.accordion','toggle-switch', 'clever.management.directives.filesModel', 'clever.management.directives.busyModel', 'clever.management.directives.splitter', 'clever.management.drectives.documentDiff']);
 angular.module('clever.management.directives.templateDesign', ['clever.management.directives.templateListTree','clever.management.directives.storagetemplateListTree', 'clever.management.directives.templateListTreeNode','clever.management.directives.storagetemplateListTreeNode', 'clever.management.directives.DVTEXT', 'clever.management.directives.longPress', 'clever.management.directives.DVQUANTITY', 
                 'clever.management.directives.dragable', 'clever.management.directives.DVORDINAL', 'clever.management.directives.DVBOOLEAN', 'clever.management.directives.DVCOUNT', 'clever.management.directives.DVDATETIME','clever.management.directives.groupNodeView','clever.management.directives.controlBox','clever.management.directives.templateDesigner','clever.management.directives.cluster','clever.management.directives.rightClick','clever.management.directives.ngContextMenu','clever.management.directives.dvbutton','clever.management.directives.dvLabel']);
 angular.module('clever.management.directives.editor', ['clever.management.directives.subjectPane', 'clever.management.directives.linksPane', 'clever.management.directives.editDefinitionPane','clever.management.directives.editHeaderPane','clever.management.directives.editOntologyPane']);
+angular.module('clever.management.directives.introduction', ['clever.management.directives.introductionPane']);
 angular.module('clever.management.services', ['clever.management.services.treeDataFormat','clever.management.services.templateCreate','clever.management.services.resource','clever.management.service.archetypeEdit','clever.management.service.archetypeParseEdit','clever.management.service.archetypeSerialize', 'clever.management.services.authentication', 'clever.management.services.busy', 'clever.management.services.msgbox', 'clever.management.services.templateParse', 'clever.management.services.templateParseToEdit', 'clever.management.services.archetypeParse', 'clever.management.services.documentDiffModal']);
 angular.module('clever.management.filters', ['clever.management.filters.unsafe']);
 angular.module('clever.management.controllers', ['clever.management.controllers.app']);
@@ -53,11 +54,37 @@ angular.module('cleverManagementApp', ['ngAnimate', 'ui.bootstrap.typeahead', 'n
 		templateUrl : 'js/views/universal-ui-view.html',
 	}).state('management.archetype.list', {
 		url : '',
-		templateUrl : 'js/views/management/archetype/management.archetype.list.html',
+		//templateUrl : 'js/views/management/archetype/management.archetype.list.html',
+		templateUrl : 'js/views/management/universal-management-list-view.html',
 		controller : UniversalManagementListCtrl,
 		data : {
 			title : 'MENU_MANAGEMENT_ARCHETYPE',
 		},
+		params : {
+			isHeader : true,
+		}
+	
+	}).state( 'management.archetype.list.breif', {
+		url: 'list/breif',
+		templateUrl : 'js/views/management/archetype/introduction/breif.html'
+		
+	}).state('management.archetype.list.view', {
+		url :'/list/view',
+		templateUrl : 'js/views/management/archetype/introduction/view.html',
+		//controller: viewCtr,
+	    
+	}).state('management.archetype.list.edit', {
+		url :'/list/edit',
+		templateUrl : 'js/views/management/archetype/introduction/edit.html',
+		
+	}).state('management.archetype.list.verify',{
+		url:'/list/verify',
+		templateUrl : 'js/views/management/archetype/introduction/verify.html'
+		
+	}).state('management.archetype.list.upload',{
+		url:'/list/upload',
+		templateUrl : 'js/views/management/archetype/introduction/upload.html'
+		
 	}).state('management.archetype.view', {
 		url : '/view',
 		data : {
@@ -102,8 +129,30 @@ angular.module('cleverManagementApp', ['ngAnimate', 'ui.bootstrap.typeahead', 'n
 		controller : UniversalManagementListCtrl,
 		data : {
 			title : 'MENU_MANAGEMENT_STORAGE',
-		}
-	}).state('management.storage.view', {
+		},
+		params : {
+			isHeader : true,
+		},
+	}).state('management.storage.list.breif', {
+		url: '/list/breif',
+		templateUrl : 'js/views/management/storage/introduction/breif.html',
+	}).state('management.storage.list.view', {
+		url: '/list/view',
+		templateUrl : 'js/views/management/storage/introduction/view.html',
+	}).state('management.storage.list.upload', {
+		url: '/list/upload',
+		templateUrl : 'js/views/management/storage/introduction/upload.html',
+	}).state('management.storage.list.edit', {
+		url: '/list/edit',
+		templateUrl : 'js/views/management/storage/introduction/edit.html',
+	}).state('management.storage.list.verify', {
+		url: '/list/verify',
+		templateUrl : 'js/views/management/storage/introduction/verify.html',
+	}).state('management.storage.list.deploy', {
+		url: '/list/deploy',
+		templateUrl : 'js/views/management/storage/introduction/deploy.html',
+	})
+	.state('management.storage.view', {
 		url : '/view',
 		controller : 'StorageTemplateViewCtrl',
 		data : {
@@ -157,7 +206,19 @@ angular.module('cleverManagementApp', ['ngAnimate', 'ui.bootstrap.typeahead', 'n
 		controller : UniversalManagementListCtrl,
 		data : {
 			title : 'MENU_MANAGEMENT_APPLICATION',
-		}
+		},
+		params : {
+			isHeader : true,
+		},
+	}).state('management.application.list.breif', {
+		url : '/list/breif',
+		templateUrl : 'js/views/management/application/introduction/breif.html',
+	}).state('management.application.list.view', {
+		url : '/list/view',
+		templateUrl : 'js/views/management/application/introduction/view.html',
+	}).state('management.application.list.edit', {
+		url : '/list/edit',
+		templateUrl : 'js/views/management/application/introduction/edit.html',
 	}).state('management.application.view', {
 		url : '/view',
 		data : {
@@ -191,7 +252,14 @@ angular.module('cleverManagementApp', ['ngAnimate', 'ui.bootstrap.typeahead', 'n
 		controller : UniversalManagementListCtrl,
 		data : {
 			title : 'MENU_MANAGEMENT_INTEGRATION',
-		}
+		},
+		params : {
+			isHeader : true,
+		},
+	}).state('management.integration.list.breif', {
+		url : '/list/breif',
+		templateUrl : 'js/views/management/integration/introduction/breif.html',
+		
 	})
 	.state('management.development', {
 		abstract : true,
@@ -204,7 +272,20 @@ angular.module('cleverManagementApp', ['ngAnimate', 'ui.bootstrap.typeahead', 'n
 		controller : UniversalManagementListCtrl,
 		data : {
 			title : 'MENU_MANAGEMENT_DEVELOPMENT',
-		}
+		},
+		params : {
+			isHeader : true,
+		},
+	}).state('management.development.list.breif', {
+		url : '/list/breif',
+		templateUrl : 'js/views/management/development/introduction/breif.html',
+	}).state('management.development.list.design', {
+		url : '/list/design',
+		templateUrl : 'js/views/management/development/introduction/design.html',
+		
+	}).state('management.development.list.api', {
+		url : '/list/api',
+		templateUrl : 'js/views/management/development/introduction/api.html',
 	})
 	.state('management.development.design', {
 		url : '/design',

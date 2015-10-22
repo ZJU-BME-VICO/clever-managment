@@ -39,14 +39,15 @@ import edu.zju.bme.clever.management.service.ArchetypeProvideService;
 import edu.zju.bme.clever.management.service.ArchetypeValidateService;
 import edu.zju.bme.clever.management.service.ArchetypeVersionControlService;
 import edu.zju.bme.clever.management.service.UserService;
-import edu.zju.bme.clever.management.service.entity.AdlInfo;
 import edu.zju.bme.clever.management.service.entity.ArchetypeMaster;
 import edu.zju.bme.clever.management.service.entity.ArchetypeRevisionFile;
 import edu.zju.bme.clever.management.service.entity.ArchetypeVersionMaster;
 import edu.zju.bme.clever.management.service.entity.FileProcessResult;
 import edu.zju.bme.clever.management.service.entity.User;
 import edu.zju.bme.clever.management.service.exception.ResourceExportException;
+import edu.zju.bme.clever.management.service.exception.VersionControlException;
 import edu.zju.bme.clever.management.web.entity.ActionLogInfo;
+import edu.zju.bme.clever.management.web.entity.AdlInfo;
 import edu.zju.bme.clever.management.web.entity.ArchetypeInfo;
 import edu.zju.bme.clever.management.web.entity.ArchetypeMasterInfo;
 import edu.zju.bme.clever.management.web.entity.ArchetypeVersionMasterInfo;
@@ -324,6 +325,34 @@ public class ArchetypeResourceController extends AbstractResourceController {
 		this.isResourcesNull(versionMaster);
 		return this.constructArchetypeVersionMasterInfo(versionMaster);
 	}
+	
+	@RequestMapping(value = "/action/create", method = RequestMethod.POST)
+	public FileUploadResult createArchetype(@RequestBody AdlInfo info,
+			Authentication authentication) {
+		ADLParser parser = new ADLParser(info.getAdl());
+		Archetype arc;
+		String userName = ((UserDetails) authentication.getPrincipal())
+				.getUsername();
+		User user = this.userService.getUserByName(userName);
+		FileUploadResult result = new FileUploadResult();
+		result.setSucceeded(true);
+		try {
+			arc = parser.parse();
+			this.archetypeVersionControlService.acceptNewArchetype(arc, user);
+		} catch (ParseException e1) {
+			// TODO Auto-generated catch block
+			result.setMessage("Archetype parse failed, error: "
+					+ e1.getMessage());
+			e1.printStackTrace();
+		} catch (Exception e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+			result.setSucceeded(false);
+			result.setMessage("Archetype create failed, error: "
+					+ e1.getMessage());
+		}
+		return result;
+	}
 
 	@RequestMapping(value = "/action/validate", method = RequestMethod.POST)
 	public FileProcessResult validateFiles(
@@ -500,6 +529,7 @@ public class ArchetypeResourceController extends AbstractResourceController {
 		info.setId(file.getId());
 		info.setName(file.getName());
 		info.setSerialVersion(file.getSerialVersion());
+		info.setVersion(file.getVersion());
 		info.setAdl(file.getAdl());
 		ADLParser parser = new ADLParser(file.getAdl());
 		Archetype archetype = parser.parse();

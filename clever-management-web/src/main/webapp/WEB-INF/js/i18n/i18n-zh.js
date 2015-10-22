@@ -69,10 +69,15 @@ angular.module('clever.management.i18n.zh', ['pascalprecht.translate']).config(f
 		ARCHETYPE_EDIT_SUCCEEDED : '操作成功',
 		ARCHETYPE_EDIT_FAILED : '操作失败',
 		ARCHETYPE_EDIT_EDIT_SUCCEEDED_HINT : '成功编辑原型',
+		ARCHETYPE_EDIT_SAVE_SUCCEEDED_HINT : '原型保存成功',
+		
+		//ARCHETYPE_EDIT_SUBMIT_SUCCEEDED_HINT : '原型提交成功',
 		ARCHETYPE_EDIT_EDIT_FAILED_HINT : '编辑原型失败,错误: {{errorMsg}}',
-		ARCHETYPE_EDIT_SUBMIT_SUCCEEDED_HINT : '成功提交原型',
+		ARCHETYPE_EDIT_SUBMIT_SUCCEEDED_HINT : '原型提交成功',
 		ARCHETYPE_EDIT_SUBMIT_FAILED_HINT : '原型提交失败,错误: {{errorMsg}}',
-
+		ARCHETYPE_NEW_VERSION_INSTRUCTION : '不能编辑已提交或已发布的原型，请通过右键菜单创建新版本原型', 
+        ARCHETYPE_EDIT_ADD_FAILED_HINT : '编辑原型失败,错误: {{errorMsg}}',
+        ARCHETYPE_EDIT_ADD_SUCCEEDED_HINT : '添加原型成功',
 		// Storage template edit
 		STORAGE_TEMPLATE_EDIT_SAVE : '保存',
 		STORAGE_TEMPLATE_EDIT_SUBMIT : '提交',
@@ -84,7 +89,10 @@ angular.module('clever.management.i18n.zh', ['pascalprecht.translate']).config(f
 		STORAGE_TEMPLATE_EDIT_FAILED_HINT : '编辑模板失败,错误: {{errorMsg}}',
 		STORAGE_TEMPLATE_SUBMIT_SUCCEEDED_HINT : '成功提交模板。',
 		STORAGE_TEMPLATE_SUBMIT_FAILED_HINT : '提交模板失败,错误: {{errorMsg}}',
-
+		STORAGE_TEMPLATE_NEW_VERSION_INSTRUCTION : '不能编辑已提交或已发布的模板，请通过右键菜单创建新版本模板',
+		STORAGE_TEMPLATE_ADD_SUCCEEDED_HINT : '添加模板成功',
+		STORAGE_TEMPLATE_ADD_FAILED_HINT : '添加模板失败，错误： {{errorMsg}}',
+ 
 		// Archetype verify
 		ARCHETYPE_VERIFY : '所有待审核项',
 		ARCHETYPE_VERIFY_ADL_DIFF : 'ADL对比',
@@ -193,19 +201,26 @@ angular.module('clever.management.i18n.zh', ['pascalprecht.translate']).config(f
 		MENU_MANAGEMENT_DEVELOPMENT_DESIGN : '设计器',
 		MENU_MANAGEMENT_DEVELOPMENT_API_DISPLAY : 'API显示',
 		MENU_MANAGEMENT_DEVELOPMENT_CDR : '数据库服务',
+		
+		//MENU_MANAGEMENT_ARCHETYPE_VIEW_INFO : 'Archetype是CLEVER™的核心，它基于openEHR规范实现，是一套从临床基本概念出发的信息模型，而且与软件系统开发独立，因而可由临床人员直接管理和维护，具备较高灵活性。Archetype是CLEVER™的核心，它基于openEHR规范实现，是一套从临床基本概念出发的信息模型，而且与软件系统开发独立，因而可由临床人员直接管理和维护，具备较高灵活性。',//'原型查看简介',
 
 		//Menu-infomation
 		MENU_INFO : '概要信息',
 		MENU_MANAGEMENT_INFO : 'CLEVER管理平台，功能模块管理',
 		MENU_MANAGEMENT_ARCHETYPE_INFO : 'Archetype是CLEVER™的核心，它基于openEHR规范实现，是一套从临床基本概念出发的信息模型，而且与软件系统开发独立，因而可由临床人员直接管理和维护，具备较高灵活性。',
-		MENU_MANAGEMENT_ARCHETYPE_VIEW_INFO : 'Archetype是CLEVER™的核心，它基于openEHR规范实现，是一套从临床基本概念出发的信息模型，而且与软件系统开发独立，因而可由临床人员直接管理和维护，具备较高灵活性。Archetype是CLEVER™的核心，它基于openEHR规范实现，是一套从临床基本概念出发的信息模型，而且与软件系统开发独立，因而可由临床人员直接管理和维护，具备较高灵活性。Archetype是CLEVER™的核心，它基于openEHR规范实现，是一套从临床基本概念出发的信息模型，而且与软件系统开发独立，因而可由临床人员直接管理和维护，具备较高灵活性。',
-		MENU_MANAGEMENT_ARCHETYPE_UPLOAD_INFO : 'Archetype是CLEVER™的核心，它基于openEHR规范实现，是一套从临床基本概念出发的信息模型，而且与软件系统开发独立，因而可由临床人员直接管理和维护，具备较高灵活性。',
-		MENU_MANAGEMENT_ARCHETYPE_VERIFY_INFO : 'Archetype是CLEVER™的核心，它基于openEHR规范实现，是一套从临床基本概念出发的信息模型，而且与软件系统开发独立，因而可由临床人员直接管理和维护，具备较高灵活性。',
-		MENU_MANAGEMENT_ARCHETYPE_EDIT_INFO : 'Archetype是CLEVER™的核心，它基于openEHR规范实现，是一套从临床基本概念出发的信息模型，而且与软件系统开发独立，因而可由临床人员直接管理和维护，具备较高灵活性。',
+		MENU_MANAGEMENT_ARCHETYPE_VIEW_INFO : '在这里你可以查看数据库中所有的原型，包括所有状态和所有版本。',//'原型查看简介',
+		MENU_MANAGEMENT_ARCHETYPE_UPLOAD_INFO : '在这里你可以上传原型文件到数据库中，原型文件应为adl文件，上传的原型将以草稿状态保存在数据库中。',//'原型上传简介',
+		MENU_MANAGEMENT_ARCHETYPE_VERIFY_INFO : '在这里你可以对提交的原型进行审核，通过原型 ：原型状态转变为已发布状态；否决原型 ： 原型状态还原到草稿状态； 删除原型 ：将原型删除。',//'原型审核简介',
+		MENU_MANAGEMENT_ARCHETYPE_EDIT_INFO : '在这里你可以创建原型，编辑原型。编辑原型主要包括： 原型基本信息的编辑，原型定义部分节点的增删改，ontology部分编辑',//'原型编辑简介',
 		MENU_MANAGEMENT_STORAGE_INFO : 'DataManager负责CLEVER™平台中的数据管理，所有数据均按Archeype进行分类，临床人员可方便地直接进行数据的查询、增加、修改和删除，所有操作都将安全地映射到具体物理存储。',
+		MENU_MANAGEMENT_STORAGE_VIEW_INFO : '在这里你可以查看数据库中的模板，包括所有的状态以及所有的版本',
+		MENU_MANAGEMENT_STORAGE_UPLOAD_INFO : '在这里你可以上传模板到数据库中，这里模板应包括oet文件和arm文件',
+		MENU_MANAGEMENT_STORAGE_EDIT_INFO : '在这里你可以为特定的原型创建模板，编辑各个节点的occurrences属性，以及进行slot操作',
+		MENU_MANAGEMENT_STORAGE_VERIFY_INFO : '在这里你可以对提交的模板进行审核， 通过模板： 可以将提交的模板状态变为published用以部署， 否决模板： 可以将提交的模板状态变为draft，以便进一步的编辑， 删除模板： 直接将数据库中的模板删除',
+		MENU_MANAGEMENT_STORAGE_DEPLOY_INFO : '在这里你可以将published状态的模板部署到数据库中，部署操作会根据据模板生成数据库表', 
 		MENU_MANAGEMENT_APPLICATION_INFO : 'CLEVER™提供了一整套标准接口和原型数据访问语言，以及基于Archetype自动生成应用软件模块的方法，可在此基础上快速构建各类数据应用软件，有效促进了数据的开发与利用。',
-		MENU_MANAGEMENT_APPLICATION_VIEW_INFO : 'Archetype是CLEVER™的核心，它基于openEHR规范实现，是一套从临床基本概念出发的信息模型，而且与软件系统开发独立，因而可由临床人员直接管理和维护，具备较高灵活性。',
-		MENU_MANAGEMENT_APPLICATION_EDIT_INFO : 'Archetype是CLEVER™的核心，它基于openEHR规范实现，是一套从临床基本概念出发的信息模型，而且与软件系统开发独立，因而可由临床人员直接管理和维护，具备较高灵活性。',
+		MENU_MANAGEMENT_APPLICATION_VIEW_INFO : '应用查看简介',
+		MENU_MANAGEMENT_APPLICATION_EDIT_INFO : '应用编辑简介',
 		MENU_MANAGEMENT_INTEGRATION_INFO : 'SHINE™为医疗信息集成引擎，它负责从现有各类异构系统中集成数据到CLEVER™平台，SHINE™提供了基于Archetype的语义集成方法，可方便快速地进行集成配置。',
 		MENU_MANAGEMENT_DEVELOPMENT_DESIGN_INFO : '设计器简介',
         MENU_MANAGEMENT_DEVELOPMENT_INFO : '开发平台简介',

@@ -31,12 +31,14 @@ angular.module('clever.management.controllers.app', []).controller('appCtrl', fu
 			// Brief
 			{
 				title : 'MENU_MANAGEMENT_BRIEF',
-				info : 'MENU_MANAGEMENT_ARCHETYPE_VIEW_INFO',
+				info : 'MENU_MANAGEMENT_ARCHETYPE_INFO',
+				introductionState : 'management.archetype.list.breif',
 			},
 			// View
 			{
 				title : 'MENU_MANAGEMENT_ARCHETYPE_VIEW',
 				state : 'management.archetype.view',
+				introductionState : 'management.archetype.list.view',
 				icon : 'icon-film',
 				info : 'MENU_MANAGEMENT_ARCHETYPE_VIEW_INFO',
 			},
@@ -44,6 +46,7 @@ angular.module('clever.management.controllers.app', []).controller('appCtrl', fu
 			{
 				title : 'MENU_MANAGEMENT_ARCHETYPE_UPLOAD',
 				state : 'management.archetype.upload',
+				introductionState : 'management.archetype.list.upload',
 				icon : 'icon-upload-alt',
 				info : 'MENU_MANAGEMENT_ARCHETYPE_UPLOAD_INFO',
 			},
@@ -51,13 +54,16 @@ angular.module('clever.management.controllers.app', []).controller('appCtrl', fu
 			{
 				title : 'MENU_MANAGEMENT_ARCHETYPE_EDIT',
 				state : 'management.archetype.edit',
+				introductionState : 'management.archetype.list.edit',
 				icon : 'icon-edit',
 				info : 'MENU_MANAGEMENT_ARCHETYPE_EDIT_INFO',
+				pane : 'archetype-edit-introduction',
 			},
 			// Verify
 			{
 				title : 'MENU_MANAGEMENT_ARCHETYPE_VERIFY',
 				state : 'management.archetype.verify',
+				introductionState : 'management.archetype.list.verify',
 				icon : 'icon-tags',
 				info : 'MENU_MANAGEMENT_ARCHETYPE_VERIFY_INFO',
 			},
@@ -75,32 +81,44 @@ angular.module('clever.management.controllers.app', []).controller('appCtrl', fu
 			// Brief
 			{
 				title : 'MENU_MANAGEMENT_BRIEF',
-				info : 'MENU_MANAGEMENT_ARCHETYPE_VIEW_INFO',
+				info : 'MENU_MANAGEMENT_STORAGE_INFO',
+				pane : 'archetype-edit-introduction',
+				introductionState : 'management.storage.list.breif',
 			},
 			{
 				title : 'MENU_MANAGEMENT_STORAGE_VIEW',
 				state : 'management.storage.view',
+				introductionState : 'management.storage.list.view',
 				icon : 'icon-cog',
+				info : 'MENU_MANAGEMENT_STORAGE_VIEW_INFO'
 			},
 			{
 				title : 'MENU_MANAGEMENT_STORAGE_UPLOAD',
 				state : 'management.storage.upload',
+				introductionState : 'management.storage.list.upload',
 				icon : 'icon-cog',
+				info : 'MENU_MANAGEMENT_STORAGE_UPLOAD_INFO'
 			},
 			{
 				title : 'MENU_MANAGEMENT_STORAGE_EDIT',
 				state : 'management.storage.edit',
+				introductionState : 'management.storage.list.edit',
 				icon : 'icon-cog',
+				info : 'MENU_MANAGEMENT_STORAGE_EDIT_INFO'
 			},
 			{
 				title : 'MENU_MANAGEMENT_STORAGE_VERIFY',
 				state : 'management.storage.verify',
+					introductionState : 'management.storage.list.verify',
 				icon : 'icon-cog',
+				info : 'MENU_MANAGEMENT_STORAGE_VERIFY_INFO'
 			},
 			{
 				title : 'MENU_MANAGEMENT_STORAGE_DEPLOY',
 				state : 'management.storage.deploy',
+				introductionState : 'management.storage.list.deploy',
 				icon : 'icon-cog',
+				info : 'MENU_MANAGEMENT_STORAGE_DEPLOY_INFO'
 			},
 		],
 	};
@@ -116,18 +134,21 @@ angular.module('clever.management.controllers.app', []).controller('appCtrl', fu
 			// Brief
 			{
 				title : 'MENU_MANAGEMENT_BRIEF',
-				info : 'MENU_MANAGEMENT_ARCHETYPE_VIEW_INFO',
+				info : 'MENU_MANAGEMENT_APPLICATION_INFO',
+				introductionState : 'management.application.list.breif',
 			},
 			
 			{
 				title : 'MENU_MANAGEMENT_APPLICATION_VIEW',
 				state : 'management.application.view',
+				introductionState : 'management.application.list.view',
 				icon : 'icon-picture',
 				info : 'MENU_MANAGEMENT_APPLICATION_VIEW_INFO',
 			},
 			{
 				title : 'MENU_MANAGEMENT_APPLICATION_EDIT',
 				state : 'management.application.edit',
+				introductionState : 'management.application.list.edit',
 				icon : 'icon-wrench',
 				info : 'MENU_MANAGEMENT_APPLICATION_EDIT_INFO',
 			},
@@ -145,7 +166,8 @@ angular.module('clever.management.controllers.app', []).controller('appCtrl', fu
 			// Brief
 			{
 				title : 'MENU_MANAGEMENT_BRIEF',
-				info : 'MENU_MANAGEMENT_ARCHETYPE_VIEW_INFO',
+				info : 'MENU_MANAGEMENT_INTEGRATION_INFO',
+				introductionState : 'management.integration.list.breif',
 			},
 		],
 	};
@@ -153,7 +175,7 @@ angular.module('clever.management.controllers.app', []).controller('appCtrl', fu
 	var development = {
 		title : 'MENU_MANAGEMENT_DEVELOPMENT',
 		state : 'management.development.list',
-		icon : 'icon-screenshot',
+		icon : 'icon-asterisk',
 		info : 'MENU_MANAGEMENT_DEVELOPMENT_INFO',
 		isOpen : false,
 		subMenus : [
@@ -161,28 +183,32 @@ angular.module('clever.management.controllers.app', []).controller('appCtrl', fu
 			{
 				title : 'MENU_MANAGEMENT_BRIEF',
 				info : 'MENU_MANAGEMENT_DEVELOPMENT_INFO',
+				introductionState : 'management.development.list.breif',
 			},
 			{
 				title : 'MENU_MANAGEMENT_DEVELOPMENT_DESIGN',
 				state : 'management.development.design',
+				introductionState : 'management.development.list.design',
 				icon :  'icon-magic',
 				info : 'MENU_MANAGEMENT_DEVELOPMENT_DESIGN_INFO',
 			},
 			{
 				title : 'MENU_MANAGEMENT_DEVELOPMENT_API_DISPLAY',				   
 				state : 'management.development.api',
+				introductionState : 'management.development.list.api',
 				icon : 'icon-magic',
 				info : 'MENU_MANAGEMENT_DEVELOPMENT_API_INFO',
 			},
-			{
-				title : 'MENU_MANAGEMENT_DEVELOPMENT_CDR',
-				state : 'management.development.cdr',
-				icon : 'icon.magic',
-				info : 'MENU_MANAGEMENT_DEVELOPMENT_CDR_INFO',
-			}
+			// {
+				// title : 'MENU_MANAGEMENT_DEVELOPMENT_CDR',
+				// state : 'management.development.cdr',
+				// introductionState : 'management.development.list.cdr',
+				// icon : 'icon.magic',
+				// info : 'MENU_MANAGEMENT_DEVELOPMENT_CDR_INFO',
+			// }
 		],
 	};
-	$scope.menus = [archetype,storage,application,integration,development];
+	$scope.menus = [archetype,storage,application,integration];
 	
 	$scope.stateMenuMap = {};
 	
@@ -191,6 +217,9 @@ angular.module('clever.management.controllers.app', []).controller('appCtrl', fu
 	angular.forEach($scope.menus, function(menu, index) {
 		$scope.stateMenuMap[menu.state] = menu;
 		angular.forEach(menu.subMenus, function(subMenu, key) {
+			if(subMenu.introductionState){
+				$scope.stateMenuMap[subMenu.introductionState] = menu;	
+			}
 			$scope.stateMenuMap[subMenu.state] = subMenu;
 		});
 	});

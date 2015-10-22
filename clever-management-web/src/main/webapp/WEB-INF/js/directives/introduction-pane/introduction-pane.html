@@ -1,0 +1,11 @@
+
+<div class="row">
+	<h2>{{menuContent.title | translate}}</h2>
+</div>
+<div class="row">
+   
+	<div disabled >
+		{{menuContent.info | translate}}
+	</div>
+	<h4 class="pull-right"><a href ng-show="menuContent.state" ng-click="$state.go(menuContent.state)">{{'MENU_ENTER' | translate}}</a></h4>
+</div>

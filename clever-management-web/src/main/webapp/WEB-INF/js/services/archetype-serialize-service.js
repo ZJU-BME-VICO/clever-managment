@@ -1201,7 +1201,9 @@ angular.module('clever.management.service.archetypeSerialize', []).service('arch
 			this.writeIndent(number);
 			this.write(label);
 			this.write(" = <\"");
-			this.write(value.replace("\"", "\\\""));
+			var temp = value.replace(/"/g, "\\\"");
+			//this.write(value.replace("\"", "\\\""));
+			this.write(temp);
 			this.write("\">");
 			this.newLine();
 		}

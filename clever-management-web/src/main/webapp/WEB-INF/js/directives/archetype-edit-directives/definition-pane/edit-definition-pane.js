@@ -271,28 +271,29 @@ angular.module('clever.management.directives.editDefinitionPane', []).directive(
 
 			$scope.treeControl = {};
 			$scope.isCollapse = true;
-			$scope.collapse = function() {
-				$scope.treeControl.collapseAll();
-				$scope.isCollapse = true;
-
+	
+			$scope.isExpandedAll = {
+				value : false,
 			};
 
-			$scope.expand = function() {
-				$scope.treeControl.expandAll();
-				$scope.isCollapse = false;
-			};
-			
-			$scope.stateTransition = function(){
-				if($scope.isCollapse){
-					$scope.treeControl.expandAll();
-				    $scope.isCollapse = false;
-				}else{
-					$scope.treeControl.collapseAll();
-				$scope.isCollapse = true;
+		
+			$scope.$watch('isExpandedAll.value', function(newValue, oldValue) {
+				// if ($scope.treeControl && newValue) {
+				// $scope.treeControl.expandAll();
+				// } else if ($scope.treeControl && !newValue) {
+				// $scope.treeControl.collapseAll();
+				// }
+
+				if ($scope.treeControl.expandAll) {
+					if (newValue) {
+						$scope.treeControl.expandAll();
+					} else {
+						$scope.treeControl.collapseAll();
+					}
 				}
-			};
-			
-			
+
+			}); 
+
 
 			
 			
@@ -333,14 +334,14 @@ angular.module('clever.management.directives.editDefinitionPane', []).directive(
 				var menuHtml = '<ul class="dropdown-menu" role="menu" ng-if="true" >';
 				if (node.label.slot) {
 					menuHtml += '<li class="menu-item ">' +
-						                '<a class="pointer" role="menuitem"  ng-click="editNodeByMenu(' + aliasName + ', '+ '\'delete\')" style="color:red;">Delete</a></li>' ;
+						                '<a class="pointer" role="menuitem"  ng-click="operateNodeByContextMenu(' + aliasName + ', '+ '\'delete\')" style="color:red;">Delete</a></li>' ;
 				} else {
 					if (typeWithSlot.indexOf(node.label.picType) != -1) {				
 						menuHtml += '<li class="menu-item dropdown dropdown-submenu" ng-if="item==slot"><span class="archetype-edit-icon ' + typeMap['slot'] + '" style="padding: 7px 10px; background-position-y: 10px;"></span><a class="dropdown-toogle" data-toogle="dropdown">Slot</a>' + 
 						'<ul class="dropdown-menu">' ;				
 						angular.forEach($scope.nodeMenu.baseSlotType, function(menuItem){
 							menuHtml += '<li class="menu-item ">' + 
-						                '<a class="pointer" role="menuitem"  ng-click="editNodeByMenu(' + aliasName + ', '+ '\'' + 'BS_' + menuItem +'\')">' +menuItem + '</a></li>' ;
+						                '<a class="pointer" role="menuitem"  ng-click="operateNodeByContextMenu(' + aliasName + ', '+ '\'' + 'BS_' + menuItem +'\')">' +menuItem + '</a></li>' ;
 						});					
 						menuHtml += '</ul></li>';
 					}
@@ -350,7 +351,7 @@ angular.module('clever.management.directives.editDefinitionPane', []).directive(
 						'<ul class="dropdown-menu">' ;
 						angular.forEach($scope.nodeMenu.sectionSlotType, function(menuItem){
 							menuHtml += '<li class="menu-item ">' +
-						                '<a class="pointer" role="menuitem"  ng-click="editNodeByMenu(' + aliasName + ', '+ '\'' + 'SS_' + menuItem +'\')">' +menuItem + '</a></li>' ;
+						                '<a class="pointer" role="menuitem"  ng-click="operateNodeByContextMenu(' + aliasName + ', '+ '\'' + 'SS_' + menuItem +'\')">' +menuItem + '</a></li>' ;
 						});						
 						menuHtml += '</ul></li>';					
 					}
@@ -359,7 +360,7 @@ angular.module('clever.management.directives.editDefinitionPane', []).directive(
 					    menuHtml += '<li class="menu-item dropdown dropdown-submenu" ng-if="item==slot"><span class="archetype-edit-icon ' + typeMap['interval'] + '" style="padding: 7px 10px; background-position-y: 10px;"></span><a class="dropdown-toogle" data-toogle="dropdown">Interval</a>' + '<ul class="dropdown-menu">';
 						angular.forEach($scope.nodeMenu.intervalType, function(menuItem){
 							menuHtml += '<li class="menu-item ">' +
-						                '<a class="pointer" role="menuitem"  ng-click="editNodeByMenu(' + aliasName + ', '+ '\'' + menuItem +'\')">' + menuItem +  '</a></li>' ;
+						                '<a class="pointer" role="menuitem"  ng-click="operateNodeByContextMenu(' + aliasName + ', '+ '\'' + menuItem +'\')">' + menuItem +  '</a></li>' ;
 						});				
 						menuHtml += '</ul></li>';
 					}
@@ -367,10 +368,10 @@ angular.module('clever.management.directives.editDefinitionPane', []).directive(
 						angular.forEach($scope.nodeMenu[node.label.picType], function(menuItem){
 							var iconType = typeMap[menuItem.toLowerCase()] ? typeMap[menuItem.toLowerCase()] : menuItem.toLowerCase();
 							menuHtml += '<li class="menu-item ">' +'<span class="archetype-edit-icon ' + iconType  + '" style="padding: 7px 10px; background-position-y: 10px;"></span>'+
-						                '<a class="pointer" role="menuitem"  ng-click="editNodeByMenu(' + aliasName + ', '+ '\'' + menuItem +'\')">' +menuItem + '</a></li>' ;
+						                '<a class="pointer" role="menuitem"  ng-click="operateNodeByContextMenu(' + aliasName + ', '+ '\'' + menuItem +'\')">' +menuItem + '</a></li>' ;
 						});
 						menuHtml += '<li class="menu-item ">' +
-						                '<a class="pointer" role="menuitem"  ng-click="editNodeByMenu(' + aliasName + ', '+ '\'delete\')" style="color:red;">Delete</a></li>' ;
+						                '<a class="pointer" role="menuitem"  ng-click="operateNodeByContextMenu(' + aliasName + ', '+ '\'delete\')" style="color:red;">Delete</a></li>' ;
 					}
 				}
 				menuHtml += '</ul>';

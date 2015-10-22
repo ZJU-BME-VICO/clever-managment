@@ -83,7 +83,7 @@
 <script src="js/directives/archetype-edit-directives/definition-pane/participation-pane/participation-pane.js"></script>
 <script src="js/directives/archetype-edit-directives/definition-pane/subject-pane/subject-pane.js"></script>
 <script src="js/directives/archetype-edit-directives/definition-pane/links-pane/links-pane.js"></script>
-
+<script src="js/directives/introduction-pane/introduction-pane.js"></script>
 
 <!-- controllers -->
 <script src="js/views/management/management-controller.js"></script>

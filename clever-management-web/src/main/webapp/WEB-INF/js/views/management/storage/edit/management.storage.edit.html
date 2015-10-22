@@ -3,11 +3,11 @@
 		<div class="panel panel-default" ng-show="!isTemplateListHidden">
 			<div class="panel-heading">
 				
-				<div class="input-group" style="margin-top:0">
+				<!-- <div class="input-group" style="margin-top:0"> -->
 					<i class="search-icon glyphicon glyphicon-search search-icon-list" ></i>
 					<input  type="text" style="border-radius: 17px; padding-left: 40px" ng-model = "templateListFilter" class="form-control" placeholder="{{'SEARCH_HINT' | translate}}" />
 					<!-- <input type="text" class="form-control" ng-model="templateListFilter" placeholder="{{'SEARCH_HINT' | translate}}"> -->
-				</div>
+				<!-- </div> -->
 			</div>
 			<div class="list-group" ng-style="{height: containerHeight - 55}" style="overflow: auto;margin-left: -5px;white-space: nowrap;">
 				<tree-view tree-data="templateList" node-id="id"
@@ -30,13 +30,13 @@
 						<span ng-show="!node.isDirectory" ng-bind-html="node.conceptName | highlight:keyword | unsafe"></span>
 						&nbsp;<span ng-show="!node.isDirectory" style="color: grey;font-size: 10pt;">(<span ng-bind="node.version"></span>)</span>
 					</tree-node-label>
-					<tree-node-menu>
-						<ul class="dropdown-menu" role="menu" ng-if="true">
+					<!-- <tree-node-menu >
+						<ul class="dropdown-menu" role="menu" ng-show="!node.isDirectory && node.lifecycleState=='Published' ">
 							<li>
 								<a class="pointer" role="menuitem" ng-click="operateNodeByContextMenu(node, 'newVersion')" tabindex="1" >New Version</a>
 							</li>
 						</ul>
-					</tree-node-menu>
+					</tree-node-menu> -->
 				</tree-view>
 			</div>
 		</div>
@@ -49,57 +49,58 @@
 			<div class="row" >
 				<div class="panel panel-default">
 					<div class="panel-heading" style="height: 50px">
-						
-								<!-- <span class="archetype-title">{{selectedTemplate.name}}</span> -->
-								<span class="archetype-title" ng-if="!isTemplateListHidden">{{getFixedTitle(selectedTemplate.name, 40)}}</span>
-					            <span class="archetype-title" ng-if="isTemplateListHidden">{{getFixedTitle(selectedTemplate.name, 70)}}</span>
-						
+
+						<!-- <span class="archetype-title">{{selectedTemplate.name}}</span> -->
+						<span class="archetype-title" ng-if="!isTemplateListHidden">{{getFixedTitle(selectedTemplate.name, 40)}}</span>
+						<span class="archetype-title" ng-if="isTemplateListHidden">{{getFixedTitle(selectedTemplate.name, 70)}}</span>
+                        <span style="color:red" ng-if="selectedTemplate.lifecycleState != 'Draft'">(Not Editable)</span>
 					</div>
 					<!-- <toggle-switch model="isExpandedAll"></toggle-switch> -->
 					<div class="panel-body" ng-style="{height: containerHeight - 50}">
-						
-						<tabset tab-control="tabControl">
-							<tab heading="Tree">
-								<div class="col-xs-12 col-md-12 col-lg-12" style="margin-top: 10px">
-									<span><b>Expand All:&nbsp;&nbsp;&nbsp;</b></span>
-									<toggle-switch model="isExpandedAll.value"></toggle-switch>
-								</div>			
-								<!-- click-node-menu-callback="setNodeByContextMenu(node, type, value)"    node-menu-generator="getTreeNodeMenu"   -->
-								<div class="col-xs-12 col-md-12 col-lg-12">
-									<div class="row" ng-style="{height: containerHeight - 235}" style="overflow: auto;">
-										<tree-view tree-data="parsedTemplate.definition"
-										node-alias-name="template"
-										tree-control="arcTreeControl.value"
-										node-label-generator="getTreeNodeLabel"
-										double-click-node-callback="selectNode(value)"
-										node-menu-generator="getTreeNodeMenu"
-										menu-prefix="template"
-										click-node-menu-callback="setNodeByContextMenu(node, type, value)"
-										>
-											<tree-expanded-icon>
-												<span class="clever-icon expanded" style="padding: 0 6px;height: 12px;background-position-y: 6px;"></span>
-											</tree-expanded-icon>
-											<tree-collapsed-icon>
-												<span class="clever-icon collapsed" style="padding: 0 6px;height: 12px;background-position-y: 6px;"></span>
-											</tree-collapsed-icon>
-										</tree-view>
+						<div class="col-xs-12 col-md-12 col-lg-12 flex-box">
+							<tabset tab-control="tabControl">
+								<tab heading="Tree">
+									<div class="col-xs-12 col-md-12 col-lg-12" style="margin-top: 10px">
+										<span><b>Expand All:&nbsp;&nbsp;&nbsp;</b></span>
+										<toggle-switch model="isExpandedAll.value"></toggle-switch>
 									</div>
-								</div>
-								
-								<div class="col-xs-12 col-md-12 col-lg-12">
-									<label>Node Path: </label>
-									<textarea class="form-control" ng-model="path"></textarea>
-								</div>
+									<!-- click-node-menu-callback="setNodeByContextMenu(node, type, value)"    node-menu-generator="getTreeNodeMenu"   -->
+									<div class="col-xs-12 col-md-12 col-lg-12">
+										<div class="row" ng-style="{height: containerHeight - 165}" style="overflow: auto;">
+											<tree-view tree-data="parsedTemplate.definition"
+											node-alias-name="template"
+											tree-control="arcTreeControl.value"
+											node-label-generator="getTreeNodeLabel"
+											double-click-node-callback="selectNode(value)"
+											node-menu-generator="getTreeNodeMenu"
+											menu-prefix="template"
+											click-node-menu-callback="setNodeByContextMenu(node, type, value)"
+											>
+												<tree-expanded-icon>
+													<span class="clever-icon expanded" style="padding: 0 6px;height: 12px;background-position-y: 6px;"></span>
+												</tree-expanded-icon>
+												<tree-collapsed-icon>
+													<span class="clever-icon collapsed" style="padding: 0 6px;height: 12px;background-position-y: 6px;"></span>
+												</tree-collapsed-icon>
+											</tree-view>
+										</div>
+									</div>
 
-							</tab>
-							<tab heading="OET" >
-								<!--<pre ng-style="{height: containerHeight - 135}" style="overflow: auto;">{{getOet()}}</pre>-->
-								<pre ng-style="{height: containerHeight - 135}" style="overflow: auto;width: 100%;">{{selectedTemplate.oet}}</pre>
-							</tab>
-							<tab heading="ARM">
-								<textarea ng-style="{height: containerHeight - 135}" style="overflow: auto;width: 100%;" ng-model="selectedTemplate.arm"></textarea>
-							</tab>
-						</tabset>
+									<!-- <div class="col-xs-12 col-md-12 col-lg-12">
+										<label>Node Path: </label>
+										<textarea class="form-control" ng-model="path"></textarea>
+									</div> -->
+
+								</tab>
+								<tab heading="OET" >
+									<!--<pre ng-style="{height: containerHeight - 135}" style="overflow: auto;">{{getOet()}}</pre>-->
+									<pre  ng-style="{height: containerHeight - 135}" style="overflow: auto;width: 100%; margin-top:10px">{{selectedTemplate.oet}}</pre>
+								</tab>
+								<tab heading="ARM">
+									<textarea ng-style="{height: containerHeight - 135}" style="overflow: auto;width: 100%; margin-top:10px" ng-model="selectedTemplate.arm"></textarea>
+								</tab>
+							</tabset>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -108,16 +109,19 @@
 			<div class="sidebar">
 				<ul class="side-menu-group">
 					<li  class="side-menu-item" ng-click="createTemplate()" tooltip-placement="right" tooltip="Create template" tooltip-popup-delay="500">
-						<a href="" > <span class="icon-pencil tool-menu" style="color: #777;"></span></a>
+						<a href="" > <span class="icon-plus-sign tool-menu" style="color: #777;"></span></a>
 					</li >
-					<li ng-if="selectedTemplate" class="side-menu-item " ng-click="saveTemplateFile()" tooltip-placement="right" tooltip="save template" tooltip-popup-delay="500">
+					<li ng-if="selectedTemplate.lifecycleState=='Draft'" class="side-menu-item " ng-click="saveTemplateFile()" tooltip-placement="right" tooltip="save template" tooltip-popup-delay="500">
 						<a href="" ><span class="icon-save tool-menu" style="color: #777;"> </span></a>
 					</li>
-					<li ng-if="selectedTemplate" class="side-menu-item"  ng-click="submitTemplateFile()" tooltip-placement="right" tooltip="submit template" tooltip-popup-delay="500">
-						<a href=""><span class="icon-arrow-up tool-menu" style="color: #777;"> </span></a>
+					<li ng-if="selectedTemplate.lifecycleState=='Draft'" class="side-menu-item"  ng-click="submitTemplateFile()" tooltip-placement="right" tooltip="submit template" tooltip-popup-delay="500">
+						<a href=""><span class="icon-circle-arrow-up tool-menu" style="color: #777;"> </span></a>
 					</li>
 					<li ng-if="selectedTemplate" class="side-menu-item"  ng-click="generateOetDiff()" tooltip-placement="right" tooltip="constrast oet content" tooltip-popup-delay="500">
-						<a href=""><span class="icon-book tool-menu" style="color: #777;"> </span></a>
+						<a href=""><span class="icon-columns tool-menu" style="color: #777;"> </span></a>
+					</li>
+					<li ng-if="selectedTemplate.lifecycleState=='Published'" class="side-menu-item"  ng-click="createNewVersionTemplate()" tooltip-placement="right" tooltip="New version" tooltip-popup-delay="500">
+						<a href=""><span class="icon-level-up tool-menu" style="color: #777;"> </span></a>
 					</li>
 				</ul>
 			</div>
