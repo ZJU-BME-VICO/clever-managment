@@ -208,7 +208,7 @@ angular.module('clever.management.controllers.app', []).controller('appCtrl', fu
 			// }
 		],
 	};
-	$scope.menus = [archetype,storage,application,integration];
+	$scope.menus = [archetype,storage,application,integration, development];
 	
 	$scope.stateMenuMap = {};
 	
