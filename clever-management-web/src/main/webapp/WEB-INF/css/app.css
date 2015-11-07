@@ -72,3 +72,29 @@
 .ui-match {
 	background-color: yellow;
 }
+
+/*
+.label {
+    display: inline-block;
+    max-width: 100%;
+    margin-bottom: 5px;
+    font-weight: bold;
+    margin: 0;
+    color: #999;
+}*/
+
+
+p.tag {
+    padding-top: 10px;
+    font-size: medium;
+    margin: 0;
+    color: #7A1C1C;
+}
+h3.tag {
+    padding-top: 10px;
+    font-size: large;
+    margin: 0;
+    color: #43787C;
+}
+
+

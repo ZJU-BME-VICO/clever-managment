@@ -19,13 +19,14 @@
 				<span><b>Expand All:&nbsp;&nbsp;&nbsp;</b></span>
 				<toggle-switch model="isExpandedAll.value"></toggle-switch>
 			</div>
+			
 			<tree-view tree-data="definition.treeItems" 
 			 class="definition-tree"  
-			 node-alias-name="archetype" 
+			 node-alias-name="node" 
 			 tree-control="treeControl" 
 			 click-node-callback="getNodeInfo(value)" 
-			 node-label-generator="getTreeNodeLabel"
-			 node-menu-generator="getTreeNodeMenu" 
+			 node-label-generator="getLabelContent"
+			  node-menu-generator="getTreeNodeMenu" 
 			 menu-prefix = "definition" 
 			 click-node-menu-callback="editArchetype(node,type)">
 				<tree-expanded-icon>
@@ -34,6 +35,22 @@
 				<tree-collapsed-icon>
 					<span class="clever-icon collapsed" style="padding: 0 6px;height: 12px;background-position-y: 6px;"></span>
 				</tree-collapsed-icon>
+				<tree-node-label>
+				  <span ng-show="node.label.slot" class="clever-icon slot" style="padding: 7px 10px; background-position-y: 10px;"></span>		
+				  <span ng-show="!node.label.slot" class="clever-icon list" ng-class="node.label.picType | typemap | lowercase  " style="padding: 7px 10px; background-position-y: 10px;"></span>
+				  <span ng-show="node.label.code">
+				      <span ng-show="node.label.archetypeNode" style="color: black;font-weight: bold;"> <span ng-bind-html="getLabelContent(node) | unsafe"></span> </span>
+                      <span ng-show="!node.label.archetyeNode" style="color: brown;"><span ng-bind-html="getLabelContent(node) | unsafe"></span> </span>
+				  </span>				  
+				 
+				  <span ng-show="(!node.label.code)&&node.label.text" style="color: brown;" > <span ng-bind-html="node.label.text | unsafe"></span></span>
+				</tree-node-label>
+				<!-- <tree-node-menu>
+				   <ul class="dropdown-menu" role="menu" ng-if="true">
+				        <li ng-show="node.label.slot" class="menu-item"><a class="pointer" role="menuitem"></a></li> 
+				       <li ng-show="['ITEM_TREE', 'ITEM_LIST', 'CLUSTER'].indexOf(node.label.picType) != -1" class="menu-item"><a class="pointer" role="menuitem"></a></li> 
+				   </ul>
+				</tree-node-menu> -->
 			</tree-view>
 		</div>
 		<!-- constraint edit pane -->
@@ -84,24 +101,25 @@
 									<td style="width:50px">
 									<input type="number" ng-model="simpleOccurrences.lower" style="width: 100%;" />
 									</td>
-									<td style="width:20px">
+									<!-- <td style="width:20px">
 									<input type="checkbox" ng-model="occurrences.lower_included"  ng-true-value="'true'" ng-false-value="'false'" />
-									</td>
+									</td> -->			
 									<td ng-if="occurrences.upper_unbounded == 'false'" style="width:35px;">Max:</td>
 									<td style="width:50px">
 									<input ng-if="occurrences.upper_unbounded == 'false'" type="number" ng-model="simpleOccurrences.upper" style="width: 100%;" />
 									</td>
-									<td style="width:20px">
+									<!-- <td style="width:20px">
 									<input ng-if="occurrences.upper_unbounded == 'false'" type="checkbox"  ng-model="occurrences.upper_included"  ng-true-value="'true'" ng-false-value="'false'" />
-									</td>
-									<td>Unbounded:</td>
+									</td> -->
+									
 									<td>
 									<input type="checkbox" ng-model="occurrences.upper_unbounded" ng-true-value="'true'" ng-false-value="'false'"/>
 									</td>
+									<td>Unbounded:</td>
 								</tr>
 							</tbody>
-						</table>
-					</div><br>
+						</table><br>
+					</div>
 					<div ng-if="currentNode.oriNodeRef.existence">
 						<label>EXISTENCE:</label>
 						<table style="border-collapse: separate; border-spacing: 5px;">
@@ -112,8 +130,8 @@
 									 {{item}}</td>
 								</tr>
 							</tbody>
-						</table>
-					</div><br>
+						</table><br>
+					</div>
 					<div ng-if="currentNode.oriNodeRef.cardinality">
 						<label>CARDINALITY:</label>
 						<table style="border-collapse: separate; border-spacing: 5px;">
@@ -123,39 +141,41 @@
 									<td style="width:50px">
 									<input type="number"  ng-model="simpleCardinality.lower"  style="width: 100%;"/>
 									</td>
-									<td style="width:20px">
+									<!-- <td style="width:20px">
 									<input type="checkbox"  ng-model="cardinality.lower_included" ng-true-value="'true'" ng-false-value="'false'"/>
-									</td>
+									</td> -->
 									<td style="width:35px;" ng-if="cardinality.interval.upper_unbounded == 'false'">Max:</td>
 									<td style="width:50px" ng-if="cardinality.interval.upper_unbounded == 'false'">
 									<input type="number" style="width: 100%;" ng-model="simpleCardinality.upper"/>
 									</td>
-									<td style="width:20px" ng-if="cardinality.interval.upper_unbounded == 'false'">
+									<!-- <td style="width:20px" ng-if="cardinality.interval.upper_unbounded == 'false'">
 									<input type="checkbox" ng-model="cardinality.upper_included" ng-true-value="'true'" ng-false-value="'false'"/>
-									</td>
-									<td>Unbounded:</td>
+									</td> -->
+								
 									<td>
 									<input type="checkbox" ng-model="cardinality.interval.upper_unbounded" ng-true-value="'true'" ng-false-value="'false'"/>
 									</td>
-
+                                    <td>Unbounded</td>
 								</tr>
 								<tr>
-									<td style="width:35px">Unique:</td>
-									<td style="width:50px">
+									
+									<td style="width:35px">
 									<input type="checkbox" ng-model="cardinality.is_unique" ng-true-value="'true'" ng-false-value="'false'" />
 									</td>
-									<td style="width:20px"></td>
+									<td style="width:50px">Unique:</td>
+									<!-- <td style="width:20px"></td> -->
 									<td style="width:35px;" ng-if="cardinality.interval.upper_unbounded == 'false'"></td>
 									<td style="width:50px" ng-if="cardinality.interval.upper_unbounded == 'false'"></td>
-									<td style="width:20px" ng-if="cardinality.interval.upper_unbounded == 'false'"></td>
-									<td>Ordered:</td>
+									<!-- <td style="width:20px" ng-if="cardinality.interval.upper_unbounded == 'false'"></td> -->
+									
 									<td>
 									<input type="checkbox" ng-model="cardinality.is_ordered" ng-true-value="'true'" ng-false-value="'false'" />
 									</td>
+									<td>Ordered:</td>
 								</tr>
 							</tbody>
-						</table>
-					</div><br>
+						</table><br>
+					</div>
 				</div>
 			</div>
 
@@ -166,18 +186,18 @@
 				<div class="panel-body" style="border:1px solid #dddddd">
 
 					<div ng-if="true">
-						<label>LANGUAGE:</label>
+						<!-- <label>LANGUAGE:</label>
 						<select style="width:100px"  ng-model="currentLanguage.code" ng-options="lan for lan in languageList" ></select>
-						<br><br>
-
+						<br><br> -->
 						<label>TEXT:</label>
 						<input class="form-control " type="text" ng-model="ontologyItem[0].__text"/ ><br>						
 						<label>DESCRIPTION:</label>
-						<textarea class="form-control" id="textContent"  ng-model="ontologyItem[1].__text"  > </textarea>
+						<textarea elastic class="form-control" id="textContent"  ng-model="ontologyItem[1].__text"  > </textarea>
 					</div>
 				</div>
 			</div>
-             <div class="panel" ng-if="currentNode.oriNodeRef.node_id">
+             <!-- <div class="panel" ng-if="currentNode.oriNodeRef.node_id"> -->
+                 <div class="panel" ng-if="false"> 
 				<div class="panel-heading" style="color: white;background-color: #8cc152;border-color: #8cc152;">
 					Node term bind
 				</div>

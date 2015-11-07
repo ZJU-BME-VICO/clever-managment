@@ -140,7 +140,7 @@ angular.module('clever.management.services.treeDataFormat', []).service('treeDat
 		return archetypeList;
 	}
 
-	function FormatObject(childrenName) {
+	function FormatObject(childrenName) {// format the data by the children name 
 		this.cluster = Cluster(childrenName);
 		this.composition = Composition(childrenName);
 		this.element = Element(childrenName);
@@ -161,7 +161,7 @@ angular.module('clever.management.services.treeDataFormat', []).service('treeDat
 		with (self) {
 			this.listMap = {
 				cluster : cluster[childrenName],
-				composition : composition[childrenName],
+				composition : element[childrenName],
 				element : composition[childrenName],
 				action : action[childrenName],
 				evaluation : evaluation[childrenName],
@@ -169,7 +169,10 @@ angular.module('clever.management.services.treeDataFormat', []).service('treeDat
 				instruction : instruction[childrenName],
 				admin_entry : admin_entry[childrenName],
 				section : section[childrenName],
-				stucture : stucture[childrenName],
+				item_list : stucture[childrenName],
+				item_tree : stucture[childrenName],
+				item_table : stucture[childrenName],
+				item_single : stucture[childrenName],
 				demographic : demographic[childrenName],
 			};
 			
@@ -181,10 +184,13 @@ angular.module('clever.management.services.treeDataFormat', []).service('treeDat
 					if (item) {
 						if (item.rmName == 'DEMOGRAPHIC') {
 							listMap['demographic'].push(item);
-						} else {
+						} else  {
+						   
 							var array = listMap[item.rmEntity.toLowerCase()];
 							if (array == undefined) {
 								console.log('Cannot classify archetype ' + item.name);
+								console.log("Archetype informationi is here:" );
+								console.log(item);
 							} else {
 								array.push(item);
 							}

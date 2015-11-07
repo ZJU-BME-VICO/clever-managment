@@ -141,6 +141,13 @@ angular.module('clever.management.directives.treeView', []).directive('treeView'
 				}
 			};
 			
+			// used by archetype editor now , get tree node label should be abandoned
+		
+            $scope.getLabelContent = function(node) {
+                return $scope.nodeLabelGenerator(node);
+
+            };
+
 			$scope.getNodeMenu1 = function() {
 				if(treeNodeMenuElement){
 					return  $scope.getTreeNodeMenuElement();

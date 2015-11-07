@@ -76,6 +76,7 @@
 <script src="js/directives/application-template/control-box/button-directive.js"></script>
 <script src="js/directives/application-template/DV/DV-LABEL-directive.js"></script>
 <script src="js/directives/document-diff/document-diff-directive.js"></script>
+<script src="js/directives/elastic/elastic-directive.js"></script>
 
 <script src="js/directives/archetype-edit-directives/definition-pane/edit-definition-pane.js"></script>
 <script src="js/directives/archetype-edit-directives/header-pane/edit-header-pane.js"></script>
@@ -107,6 +108,7 @@
 
 <!-- filters -->
 <script src="js/filters/unsafe-filter.js"></script>
+<script src="js/filters/typemap-filter.js"></script>
 
 <!-- util -->
 <script src="js/util/date-format-extension.js"></script>

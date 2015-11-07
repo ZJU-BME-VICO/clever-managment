@@ -1,4 +1,4 @@
-angular.module('clever.management.directives.editDefinitionPane', []).directive('editDefinitionPane', function(archetypeSerializeService, archetypeEditService, archetypeParseEditService) {
+angular.module('clever.management.directives.editDefinitionPane', []).directive('editDefinitionPane', function(archetypeSerializeService, archetypeEditService, archetypeParseEditService, $timeout) {
 	return {
 		restrict : 'E',
 		transclude : true,
@@ -7,6 +7,8 @@ angular.module('clever.management.directives.editDefinitionPane', []).directive(
 			ontology : '=',
 			languages : '=',
 			maxHeight : '=',
+			isExpandedAll : '=',
+			
 		},
 		templateUrl : 'js/directives/archetype-edit-directives/definition-pane/edit-definition-pane.html',
 
@@ -52,10 +54,7 @@ angular.module('clever.management.directives.editDefinitionPane', []).directive(
 	         	}
            	$scope.avaiTerminologyList.push(terminology);
            	$scope.currentTerminology = terminology;
-	         };
-	         //
-			
-            
+	         };   
           $scope.$watch('languages',function(newValue){
           	if(newValue){
           		$scope.definitionLanguage = $scope.languages.originalLanguage;
@@ -181,109 +180,92 @@ angular.module('clever.management.directives.editDefinitionPane', []).directive(
         
          //ontology logic start
          //this  function return the  original ontology item 
-         function getOntologyByNodeId(nodeId){
-         	var termDefinitions = $scope.ontology.term_definitions;
-         	var ontologyTerm;
-         	if(termDefinitions){
-         		termDefinitions = termDefinitions.oriNodeRef;
-         		if(angular.isArray(termDefinitions)){
-         			angular.forEach(termDefinitions,function(termDefinition){
-         				if(termDefinition._language == $scope.currentLanguage.code){
-         					ontologyTerm =  getTerm(termDefinition.items,nodeId);
-         					}
-         			});
-         		}
-         		else {
-         			if(termDefinitions._language == $scope.currentLanguage.code){
-         				ontologyTerm = getTerm(termDefinitions.items,nodeId);
-         			}
-         		}
-         	}
-         	return ontologyTerm;
-         }
-       
-			function getTerm(items, nodeId) {
-				var ite;
-				if (angular.isArray(items)) {
-					angular.forEach(items, function(item) {
-						if (item._code == nodeId) {
-							amendItem(item.items);
-							ite = item.items;
-						}
-					});
-				} else {
-					if (items._code == nodeId) {
-						amendItem(items.items);
-						ite = items.items;
-					}
-				}
-				return ite;
-			}
+        
+            function getOntologyByNodeId(nodeId) {
+                var termDefinitions = $scope.ontology.term_definitions;
+                var ontologyTerm;
+                if (termDefinitions) {
+                    termDefinitions = termDefinitions.oriNodeRef;
+                    if (angular.isArray(termDefinitions)) {
+                        angular.forEach(termDefinitions, function(termDefinition) {
+                            if (termDefinition._language == $scope.currentLanguage.code) {
+                                ontologyTerm = getTerm(termDefinition.items, nodeId);
+                            }
+                        });
+                    } else {
+                        if (termDefinitions._language == $scope.currentLanguage.code) {
+                            ontologyTerm = getTerm(termDefinitions.items, nodeId);
+                        }
+                    }
+                }
+                return ontologyTerm;
+            }
 
-         function amendItem(items){
-         	if(items[0]._id != "text"){     		
-         
-         		angular.forEach(items,function(item){
-         			if(item._id == "text"){
-         				var temp;
-         				temp = items[0];
-         				items[0] = item;
-         				item = temp;
-         			}
-         		});
-         	}
-         	
-         	if(items[1]._id != "description" ){
-         		angular.forEach(items,function(item){
-         			if(item._id == "description"){
-         				var temp;
-         				temp = items[1];
-         				items[1] = item;
-         				item = temp;
-         			}
-         		});
-         	}
-         	
-         }
-         
-         
-         // synchronize two section of ontology       
-         $scope.$watch('ontologyItem[0].__text',function(newValue, oldValue){
-         	if(newValue && oldValue){
-         		setOntology(newValue);
-         	}
-         });
-         function setOntology(value){
-           var temp = $scope.getOntologyByCode($scope.currentNode.label.code);
-           temp.text=value;     
-         }
+            function getTerm(items, nodeId) {
+                var ite;
+                if (angular.isArray(items)) {
+                    angular.forEach(items, function(item) {
+                        if (item._code == nodeId) {
+                            amendItem(item.items);
+                            ite = item.items;
+                        }
+                    });
+                } else {
+                    if (items._code == nodeId) {
+                        amendItem(items.items);
+                        ite = items.items;
+                    }
+                }
+                return ite;
+            }
+
+            function amendItem(items) {
+                if (items[0]._id != "text") {
+
+                    angular.forEach(items, function(item) {
+                        if (item._id == "text") {
+                            var temp;
+                            temp = items[0];
+                            items[0] = item;
+                            item = temp;
+                        }
+                    });
+                }
+
+                if (items[1]._id != "description") {
+                    angular.forEach(items, function(item) {
+                        if (item._id == "description") {
+                            var temp;
+                            temp = items[1];
+                            items[1] = item;
+                            item = temp;
+                        }
+                    });
+                }
+
+            }
+
+            // synchronize two section of ontology
+            $scope.$watch('ontologyItem[0].__text', function(newValue, oldValue) {
+                if (newValue && oldValue) {
+                    setOntology(newValue);
+                }
+            });
+            function setOntology(value) {
+                var temp = $scope.getOntologyByCode($scope.currentNode.label.code);
+                temp.text = value;
+            }
+
          //ontology logic end 
-        
-        
-	
-			//------------------------------------------------------------------------------------------
-			
-			
+         
+         
+			//------------------------------------------------------------------------------------------		
 			var editor = archetypeEditService;
-			//get the editor
 			var parser = archetypeParseEditService;
-			//get the parser
-
 			$scope.treeControl = {};
 			$scope.isCollapse = true;
-	
-			$scope.isExpandedAll = {
-				value : false,
-			};
-
 		
-			$scope.$watch('isExpandedAll.value', function(newValue, oldValue) {
-				// if ($scope.treeControl && newValue) {
-				// $scope.treeControl.expandAll();
-				// } else if ($scope.treeControl && !newValue) {
-				// $scope.treeControl.collapseAll();
-				// }
-
+			$scope.$watch('isExpandedAll.value', function(newValue, oldValue) {		
 				if ($scope.treeControl.expandAll) {
 					if (newValue) {
 						$scope.treeControl.expandAll();
@@ -292,135 +274,87 @@ angular.module('clever.management.directives.editDefinitionPane', []).directive(
 					}
 				}
 
-			}); 
-
-
-			
-			
-		
+			}); 			
            //when display the type in this type list,we want it display the parentAttribue text
 			var typeWithSlot = ['ITEM_TREE', 'ITEM_LIST', 'CLUSTER'];
-			var typeWithInterval = ['ITEM_TREE', 'ITEM_LIST', 'CLUSTER'];
-// 
-			// $scope.getTreeNodeMenu = function(node, aliasName) {
-//       
-				// var menuHtml = '<ul class="dropdown-menu" role="menu" ng-if="true" >';
-				// if (node.label.slot) {
-				// } else {
-// 
-					// if (typeWithSlot.indexOf(node.label.picType) != -1) {
-						// menuHtml += '<li class="menu-item dropdown dropdown-submenu" ng-if="item==slot"><a class="dropdown-toogle" data-toogle="dropdown">Slot</a>' + '<ul class="dropdown-menu">' + '<li class="menu-item " ng-repeat = "value in nodeMenu.baseSlotType"><a class="pointer" role="menuitem"  ng-click="editNodeByMenu(' + aliasName + ', BaseSlot + value)">{{value}}</a></li>' + '</ul></li>';
-					// }
-                    // // if the pictype is 'section', the submenu should be section slot type 
-					// if (node.label.picType == 'SECTION') {
-						// menuHtml += '<li class="menu-item dropdown dropdown-submenu" ng-if="item==slot"><a class="dropdown-toogle" data-toogle="dropdown">Slot</a>' + '<ul class="dropdown-menu">' + '<li class="menu-item " ng-repeat = "value in nodeMenu.sectionSlotType"><a class="pointer" role="menuitem"  ng-click="editNodeByMenu(' + aliasName + ',SectionSlot + value)">{{value}}</a></li>' + '</ul></li>';
-					// }
-                    // // get submenu which interval type should have
-					// if (typeWithInterval.indexOf(node.label.picType) != -1) {
-						// menuHtml += '<li class="menu-item dropdown dropdown-submenu" ng-if="item==slot"><a class="dropdown-toogle" data-toogle="dropdown">INTERVAL</a>' + '<ul class="dropdown-menu">' + '<li class="menu-item " ng-repeat = "value in nodeMenu.intervalType"><a class="pointer" role="menuitem"  ng-click="editNodeByMenu(' + aliasName + ',value)">{{value}}</a></li>' + '</ul></li>';
-					// }
-					// if (node.label.picType.indexOf('<') == -1) {
-						// menuHtml += '<li  ng-repeat = "item in nodeMenu.' + node.label.picType + '"><a class="pointer" role="menuitem"  ng-click="editNodeByMenu(' + aliasName + ',item)">{{item}}</a></li>';
-					// }
-				// }
-// 
-				// menuHtml += '</ul>';
-// 
-				// return menuHtml;
-			// };
-
+			var typeWithInterval = ['ITEM_TREE', 'ITEM_LIST', 'CLUSTER'];   
+			
+			    
+         
             $scope.getTreeNodeMenu = function(node, aliasName) {
                 var menuList;
-				var menuHtml = '<ul class="dropdown-menu" role="menu" ng-if="true" >';
-				if (node.label.slot) {
-					menuHtml += '<li class="menu-item ">' +
-						                '<a class="pointer" role="menuitem"  ng-click="operateNodeByContextMenu(' + aliasName + ', '+ '\'delete\')" style="color:red;">Delete</a></li>' ;
-				} else {
-					if (typeWithSlot.indexOf(node.label.picType) != -1) {				
-						menuHtml += '<li class="menu-item dropdown dropdown-submenu" ng-if="item==slot"><span class="archetype-edit-icon ' + typeMap['slot'] + '" style="padding: 7px 10px; background-position-y: 10px;"></span><a class="dropdown-toogle" data-toogle="dropdown">Slot</a>' + 
-						'<ul class="dropdown-menu">' ;				
-						angular.forEach($scope.nodeMenu.baseSlotType, function(menuItem){
-							menuHtml += '<li class="menu-item ">' + 
-						                '<a class="pointer" role="menuitem"  ng-click="operateNodeByContextMenu(' + aliasName + ', '+ '\'' + 'BS_' + menuItem +'\')">' +menuItem + '</a></li>' ;
-						});					
-						menuHtml += '</ul></li>';
-					}
-                    // if the pictype is 'section', the submenu should be section slot type 
-					if (node.label.picType == 'SECTION') {
-					    menuHtml += '<li class="menu-item dropdown dropdown-submenu" ng-if="item==slot"><a class="dropdown-toogle" data-toogle="dropdown">Slot</a>' + 
-						'<ul class="dropdown-menu">' ;
-						angular.forEach($scope.nodeMenu.sectionSlotType, function(menuItem){
-							menuHtml += '<li class="menu-item ">' +
-						                '<a class="pointer" role="menuitem"  ng-click="operateNodeByContextMenu(' + aliasName + ', '+ '\'' + 'SS_' + menuItem +'\')">' +menuItem + '</a></li>' ;
-						});						
-						menuHtml += '</ul></li>';					
-					}
-                    // get submenu which interval type should have
-					if (typeWithInterval.indexOf(node.label.picType) != -1) {
-					    menuHtml += '<li class="menu-item dropdown dropdown-submenu" ng-if="item==slot"><span class="archetype-edit-icon ' + typeMap['interval'] + '" style="padding: 7px 10px; background-position-y: 10px;"></span><a class="dropdown-toogle" data-toogle="dropdown">Interval</a>' + '<ul class="dropdown-menu">';
-						angular.forEach($scope.nodeMenu.intervalType, function(menuItem){
-							menuHtml += '<li class="menu-item ">' +
-						                '<a class="pointer" role="menuitem"  ng-click="operateNodeByContextMenu(' + aliasName + ', '+ '\'' + menuItem +'\')">' + menuItem +  '</a></li>' ;
-						});				
-						menuHtml += '</ul></li>';
-					}
-					if (node.label.picType.indexOf('<') == -1) {
-						angular.forEach($scope.nodeMenu[node.label.picType], function(menuItem){
-							var iconType = typeMap[menuItem.toLowerCase()] ? typeMap[menuItem.toLowerCase()] : menuItem.toLowerCase();
-							menuHtml += '<li class="menu-item ">' +'<span class="archetype-edit-icon ' + iconType  + '" style="padding: 7px 10px; background-position-y: 10px;"></span>'+
-						                '<a class="pointer" role="menuitem"  ng-click="operateNodeByContextMenu(' + aliasName + ', '+ '\'' + menuItem +'\')">' +menuItem + '</a></li>' ;
-						});
-						menuHtml += '<li class="menu-item ">' +
-						                '<a class="pointer" role="menuitem"  ng-click="operateNodeByContextMenu(' + aliasName + ', '+ '\'delete\')" style="color:red;">Delete</a></li>' ;
-					}
-				}
-				menuHtml += '</ul>';
-				return menuHtml;
-			};
-			var typeMap = {
-				'text' :          'dv_text',
-				'coded text' :    'dv_text',
-				'quantity' :      'dv_quantity',
-				'count'    :      'dv_count',
-				'date time':      'dv_date_time',
-				'duration' :      'dv_duration',
-				'ordinal'  :      'dv_ordinal',
-				'boolean'  :      'dv_boolean',
-				'multimedia' :    'dv_multimedia',
-				'uri' :           'dv_uri',
-				'identifier' :    'dv_identifier',
-				'proportion' :    'dv_proportion',
-				'cluster'    :    'cluster',
-				'slot'       :    'slot',
-				'interval'   :    'dv_interval',
-			     
-			};
-			
-            
+                var menuHtml = '<ul class="dropdown-menu" role="menu" ng-if="true" >';
+                
+                if (node.label.slot) {//if the node type is slot, it's pictype will be ITEM,CLUSTER...,so we should distinguish it with other CLUSTER and so on..
+                    menuHtml += '<li class="menu-item ">' +  '<span class="clever-icon list delete" style="padding: 7px 10px; background-position-y: 10px;"></span>' + '<a class="pointer" role="menuitem"  ng-click="operateNodeByContextMenu(' + aliasName + ', ' + '\'delete\')" >Delete</a></li>';
+                } else {
+                    if (typeWithSlot.indexOf(node.label.picType) != -1) {//add the slot sub menu  
+                        menuHtml += '<li class="menu-item dropdown dropdown-submenu"  style="margin-right:18px" ng-if="item==slot"><span class="clever-icon list slot" style="padding: 7px 10px; background-position-y: 10px;"></span><a class="dropdown-toogle" data-toogle="dropdown">Slot</a>' + '<ul class="dropdown-menu">';
+                        angular.forEach($scope.nodeMenu.baseSlotType, function(menuItem) {
+                            menuHtml += '<li class="menu-item ">' + '<span class="clever-icon list" ng-class="\'' + menuItem.toLowerCase() + '\'| typemap" style="padding: 7px 10px; background-position-y: 10px;"></span>' + '<a class="pointer" role="menuitem"  ng-click="operateNodeByContextMenu(' + aliasName + ', ' + '\'' + 'BS_' + menuItem + '\')">' + menuItem + '</a></li>';
+                        });
+                        menuHtml += '</ul></li>';
+                    }        
+                    if (node.label.picType == 'SECTION') { // if the pictype is 'section', the sub menu should be section slot type
+                        menuHtml += '<li class="menu-item dropdown dropdown-submenu" ng-if="item==slot"><a class="dropdown-toogle" data-toogle="dropdown">Slot</a>' + '<ul class="dropdown-menu">';
+                        angular.forEach($scope.nodeMenu.sectionSlotType, function(menuItem) {
+                            menuHtml += '<li class="menu-item ">' + '<span class="clever-icon list" ng-class="\'' + menuItem.toLowerCase() + '\'| typemap" style="padding: 7px 10px; background-position-y: 10px;"></span>' + '<a class="pointer" role="menuitem"  ng-click="operateNodeByContextMenu(' + aliasName + ', ' + '\'' + 'SS_' + menuItem + '\')">' + menuItem + '</a></li>';
+                        });
+                        menuHtml += '</ul></li>';
+                    }                
+                    if (typeWithInterval.indexOf(node.label.picType) != -1) { // add the  interval sub menu
+                        menuHtml += '<li class="menu-item dropdown dropdown-submenu"  style="margin-right:18px"  ng-if="item==slot"><span class="clever-icon list interval" style="padding: 7px 10px; background-position-y: 10px;"></span><a class="dropdown-toogle" data-toogle="dropdown">Interval</a>' + '<ul class="dropdown-menu">';
+                        angular.forEach($scope.nodeMenu.intervalType, function(menuItem) {
+                            menuHtml += '<li class="menu-item ">' + '<span class="clever-icon list" ng-class="\'' + menuItem.toLowerCase() + '\'| typemap" style="padding: 7px 10px; background-position-y: 10px;"></span>' + '<a class="pointer" role="menuitem"  ng-click="operateNodeByContextMenu(' + aliasName + ', ' + '\'' + intervalTypeMap[menuItem] + '\')">' + menuItem + '</a></li>';
+                        });              
+                        menuHtml += '</ul></li>';
+                    }
+                    //add normal menu 
+                    angular.forEach($scope.nodeMenu[node.label.picType], function(menuItem) {
+                        menuHtml += '<li class="menu-item ">' + '<span class="clever-icon list" ng-class="\'' + menuItem.toLowerCase() + '\'| typemap" style="padding: 7px 10px; background-position-y: 10px;"></span>' + '<a class="pointer" role="menuitem"  ng-click="operateNodeByContextMenu(' + aliasName + ', ' + '\'' + menuItem + '\')">' + menuItem + '</a></li>';
+                    });
+                  
+                    if (node.parent) {//if the node parent does not exist,so the node should be root node of the archetype, it can not be delete
+                        menuHtml += '<li class="menu-item ">' + '<span class="clever-icon list delete" style="padding: 7px 10px; background-position-y: 10px;"></span>' + '<a class="pointer" role="menuitem"  ng-click="operateNodeByContextMenu(' + aliasName + ', ' + '\'delete\')" >Delete</a></li>';
+
+                    }
+
+                }
+                menuHtml += '</ul>';
+                return menuHtml;
+            };
+
+         
+            var intervalTypeMap = {
+                'Date time' : 'interval_datetime',
+                'Quantity' : 'interval_quantity',
+                'Integer' : 'interval_count',
+            }; 
+ 
 			$scope.nodeMenu = {
 				ACTION :         ["Ism_Transitions", "Protocol", "Subject", "otherParticipations", "Links"],
-				OBSERVATION :    ["Data", "State", "Protocol", "Subject", "otherParticipations", "Links"],
+				OBSERVATION :    ["State", "Protocol", "Subject", "otherParticipations", "Links"],
 				EVALUATION :     ["Protocol", "Subject", "otherParticipations", "Links"],
 				INSTRUCTION :    ["Protocol", "Subject", "otherParticipations", "Links"],
 				ADMIN_ENTRY :    ["Data", "State", "Protocol", "Subject", "otherParticipations", "Links"],
 				SECTION :        ['sub_Section'],
 				COMPOSITION :    ["Content", "Context", "Protocol", "Composer", "Category", "Language", "Territory"],
-				ITEM_TREE :      ["Text", "Coded text", "Quantity", "Count", "Date time", "Duration", "Ordinal", "Boolean", "Multimedia", "Uri", "Identifier", "Proportion", "Cluster"],
-				ITEM_LIST :      ["Text", "Coded text", "Quantity", "Count", "Date time", "Duration", "Ordinal", "Boolean", "Multimedia", "Uri", "Identifier", "Proportion", "Cluster"],
-				CLUSTER :        ["Text", "Coded text", "Quantity", "Count", "Date time", "Duration", "Ordinal", "Boolean", "Multimedia", "Uri", "Identifier", "Proportion", "Cluster"],
+				ITEM_TREE :      ["Text", "Coded text", "Quantity", "Count", "Date time", "Duration", "Ordinal", "Boolean", "Multimedia", "Uri", "Identifier", "Proportion","Parseable", "Cluster"],
+				ITEM_LIST :      ["Text", "Coded text", "Quantity", "Count", "Date time", "Duration", "Ordinal", "Boolean", "Multimedia", "Uri", "Identifier", "Proportion","Parseable", "Cluster"],
+				CLUSTER :        ["Text", "Coded text", "Quantity", "Count", "Date time", "Duration", "Ordinal", "Boolean", "Multimedia", "Uri", "Identifier", "Proportion", "Parseable","Cluster"],
 
 				otherParticipations : ["Participation"],
 				//subject :        ['Party_self', 'PARTY_ID', 'PARTY_RELATED'],
-				links :          ['LINK'],
-				ism_transition : ['ISM_TRANSITION'],
+				links :          ['Link'],
+				ism_transition : ['ISM_Transition'],
 				//data:['EVENT'],
-				EVENT :          ['EVENT_STATE'],
-				events :         ['EVENT'],
-				activities :     ["ACTIVITY"],
+				EVENT :          ['Event_State'],
+				events :         ['Event'],
+				activities :     ["Activity"],
 
 				sectionSlotType : ['Action', 'Instruction', 'Evaluation', 'Observation', 'Admin_entry', 'Entry', 'Section'],
 				baseSlotType :   ['Item', 'Cluster', 'Element'],
-				intervalType :   ['Date time[I]', 'Quantity[I]', 'Integer[I]']
+				intervalType :   ['Date time', 'Quantity', 'Integer']
 
 			};
 
@@ -429,332 +363,191 @@ angular.module('clever.management.directives.editDefinitionPane', []).directive(
 		
 			//there would not a items attributs behind this type, so when we add a type to this node , a items attribute should be added;
 			var needCheckedType = ['ITEM_TREE','ITEM_LIST','ITEM_TABLE','CLUSTER','SECTION'];
-			var checkList = ['SECTION'];
-			// $scope.editArchetype = function(node, type) {
-// 				
-				// if (needCheckedType.indexOf(node.label.picType) != -1) {
-					// if (node.oriNodeRef.attributes && node.childrenAttribute) {
-						// //return;
-					// } else if ((!node.oriNodeRef.attributes || node.oriNodeRef.attributes.length == 0) && !node.childrenAttribute) {
-						// var multiAttribute = editor.getCMultipleAttribute(null, editor.getDefaultCardinality(1), editor.getDefaultExistence(1, 1), "items");
-						// node.oriNodeRef.attributes = multiAttribute;
-						// parser.processAttribute(multiAttribute, node, node.children, $scope.ontology.term_definitions);
-						// //node.children = [];
-// 
-					// }
-				// }
-// 
-				// type = type.toLowerCase();//normalize the type
-// 
-				// switch(type) {
-				// case "otherparticipations":
-					// return addOtherParticipations(node);
-// 
-				// case "participation":
-					// return addParticipation(node);
-// 
-				// case "subject":
-					// return addSubject(node);
-// 
-				// //  subject:['PARTY_SELF','PARTY_IDENTIFIED','PARTY_RELATED'],
-				// case"party_self":
-					// return addPartySelf(node);
-// 
-				// case"party_identified":
-					// return addPartyIdentified(node);
-// 
-				// case"party_related":
-					// return addPartyRelated(node);
-// 
-				// case "links":
-					// return addLinks(node);
-// 
-				// case "link":
-					// return addLink(node);
-				// case "protocol":
-					// return addProtocol(node);
-// 
-				// //--------action--------
-				// case "ism_transitions":
-					// return addIsmTransitions(node);
-				// case "ism_transition":
-					// return addIsmTransition(node);
-// 
-				// //--------instruction-----
-				// case "activity":
-					// return addActivity(node);
-// 
-				// //--------observation--------
-				// case "data":
-					// return addData(node);
-				// case "state":
-					// return addState(node);
-				// case "event_state":
-					// return addStateToEvent(node);
-				// case "event":
-					// return addEvent(node);
-// 				
-				// //---------section---------
-				// case 'sub_section':
-					// return addSubSection(node);
-			    // //ss means section slot
-				// case 'ss_action':
-				// case 'ss_observation':
-				// case 'ss_admin_entry':
-				// case 'ss_instruction':
-				// case 'ss_evaluation':
-				// case 'ss_entry':
-				// case 'ss_section':
-					// return addSectionSlot(node,type.slice(3,type.length).toUpperCase());
-// 				
-// 
-				// //---------composition--------
-				// case 'context':
-					// return addContext(node);
-				// case 'content':
-					// return addContent(node);
-// 
-				// //------------base type--------
-				// case "text":
-					// var element = addText(node);
-					// return element;
-// 
-				// case "coded text":
-					// return addCodedText(node);
-// 
-				// case "quantity":
-					// return addQuantity(node);
-// 
-				// case"count":
-					// return addCount(node);
-// 
-				// case"date time":
-					// return addDateTime(node);
-// 
-				// case "duration":
-					// return addDuration(node);
-// 
-				// case "ordinal":
-					// return addOrdinal(node);
-// 
-				// case "boolean":
-					// return addBoolean(node);
-// 
-				// case "quantity[i]":
-					// return addInterval_quantity(node);
-// 
-				// case "integer[i]":
-					// return addInterval_integer(node);
-// 
-				// case "date time[i]":
-					// return addInterval_dateTime(node);
-// 
-				// case "multimedia":
-					// return addMultimedia(node);
-// 
-				// case "uri":
-					// return addUri(node);
-// 
-				// case "identifier":
-					// return addIdentifier(node);
-// 
-				// case"proportion":
-					// return addProportion(node);
-// 
-				// case "cluster":
-					// return addCluster(node);
-				// //bs : base type slot
-				// case "bs_element":
-				// case "bs_cluster":
-				// case "bs_item":
-				   // return addBaseSlot(node,type.slice(3,type.length).toUpperCase());
-				// case "delete":
-				  // deleteNode(node);
-				// //-----------base type end--------------
-// 
-				// }
-			// };
-// 			
-			$scope.editArchetype = function(node, type) {
-				
-				if (needCheckedType.indexOf(node.label.picType) != -1) {
-					if (node.oriNodeRef.attributes && node.childrenAttribute) {
-						//return;
-					} else if ((!node.oriNodeRef.attributes || node.oriNodeRef.attributes.length == 0) && !node.childrenAttribute) {
-						var multiAttribute = editor.getCMultipleAttribute(null, editor.getDefaultCardinality(1), editor.getDefaultExistence(1, 1), "items");
-						node.oriNodeRef.attributes = multiAttribute;
-						parser.processAttribute(multiAttribute, node, node.children, $scope.ontology.term_definitions);
-						//node.children = [];
+			var checkList = ['SECTION'];	
+            $scope.editArchetype = function(node, type) {
 
-					}
-				}
+                if (needCheckedType.indexOf(node.label.picType) != -1) {
+                    if (node.oriNodeRef.attributes && node.childrenAttribute) {
+                        //return;
+                    } else if ((!node.oriNodeRef.attributes || node.oriNodeRef.attributes.length == 0) && !node.childrenAttribute) {
+                        var multiAttribute = editor.getCMultipleAttribute(null, editor.getDefaultCardinality(1), editor.getDefaultExistence(1, 1), "items");
+                        node.oriNodeRef.attributes = multiAttribute;
+                        parser.processAttribute(multiAttribute, node, node.children, $scope.ontology.term_definitions);
+                        //node.children = [];
 
-				type = type.toLowerCase();//normalize the type
+                    }
+                }
+
+                type = type.toLowerCase();
+                //normalize the type
                 var resultNode;
-				switch(type) {
-				case "otherparticipations":
-					resultNode = addOtherParticipations(node);
+                switch(type) {
+                case "otherparticipations":
+                    resultNode = addOtherParticipations(node);
                     break;
-				case "participation":
-					resultNode = addParticipation(node);
- break;
-				case "subject":
-					resultNode = addSubject(node);
-break;
-				//  subject:['PARTY_SELF','PARTY_IDENTIFIED','PARTY_RELATED'],
-				case"party_self":
-					resultNode = addPartySelf(node);
-break;
-				case"party_identified":
-					resultNode = addPartyIdentified(node);
-break;
-				case"party_related":
-					resultNode = addPartyRelated(node);
-break;
-				case "links":
-					resultNode = addLinks(node);
-break;
-				case "link":
-					resultNode = addLink(node);
-					break;
-				case "protocol":
-					resultNode = addProtocol(node);
-					break;
+                case "participation":
+                    resultNode = addParticipation(node);
+                    break;
+                case "subject":
+                    resultNode = addSubject(node);
+                    break;
+                //  subject:['PARTY_SELF','PARTY_IDENTIFIED','PARTY_RELATED'],
+                case"party_self":
+                    resultNode = addPartySelf(node);
+                    break;
+                case"party_identified":
+                    resultNode = addPartyIdentified(node);
+                    break;
+                case"party_related":
+                    resultNode = addPartyRelated(node);
+                    break;
+                case "links":
+                    resultNode = addLinks(node);
+                    break;
+                case "link":
+                    resultNode = addLink(node);
+                    break;
+                case "protocol":
+                    resultNode = addProtocol(node);
+                    break;
 
-				//--------action--------
-				case "ism_transitions":
-					resultNode = addIsmTransitions(node);
-					break;
-				case "ism_transition":
-					resultNode = addIsmTransition(node);
-					break;
+                //--------action--------
+                case "ism_transitions":
+                    resultNode = addIsmTransitions(node);
+                    break;
+                case "ism_transition":
+                    resultNode = addIsmTransition(node);
+                    break;
 
-				//--------instruction-----
-				case "activity":
-					resultNode = addActivity(node);
-					break;
+                //--------instruction-----
+                case "activity":
+                    resultNode = addActivity(node);
+                    break;
 
-				//--------observation--------
-				case "data":
-					resultNode = addData(node);
-					break;
-				case "state":
-					resultNode = addState(node);
-					break;
-				case "event_state":
-					resultNode = addStateToEvent(node);
-					break;
-				case "event":
-					resultNode = addEvent(node);
-					break;
-				
-				//---------section---------
-				case 'sub_section':
-					resultNode = addSubSection(node);
-					break;
-			    //ss means section slot
-				case 'ss_action':
-				case 'ss_observation':
-				case 'ss_admin_entry':
-				case 'ss_instruction':
-				case 'ss_evaluation':
-				case 'ss_entry':
-				case 'ss_section':
-					resultNode = addSectionSlot(node,type.slice(3,type.length).toUpperCase());
-					break;
-				
+                //--------observation--------
+                case "data":
+                    resultNode = addData(node);
+                    break;
+                case "state":
+                    resultNode = addState(node);
+                    break;
+                case "event_state":
+                    resultNode = addStateToEvent(node);
+                    break;
+                case "event":
+                    resultNode = addEvent(node);
+                    break;
 
-				//---------composition--------
-				case 'context':
-					resultNode = addContext(node);
-					break;
-				case 'content':
-					resultNode = addContent(node);
-					break;
+                //---------section---------
+                case 'sub_section':
+                    resultNode = addSubSection(node);
+                    break;
+                //ss means section slot
+                case 'ss_action':
+                case 'ss_observation':
+                case 'ss_admin_entry':
+                case 'ss_instruction':
+                case 'ss_evaluation':
+                case 'ss_entry':
+                case 'ss_section':
+                    resultNode = addSectionSlot(node, type.slice(3, type.length).toUpperCase());
+                    break;
 
-				//------------base type--------
-				case "text":
-					var element = addText(node);
-					resultNode = element;
-					break;
+                //---------composition--------
+                case 'context':
+                    resultNode = addContext(node);
+                    break;
+                case 'content':
+                    resultNode = addContent(node);
+                    break;
 
-				case "coded text":
-					resultNode = addCodedText(node);
-					break;
+                //------------base type--------
+                case "text":
+                    var element = addText(node);
+                    resultNode = element;
+                    break;
 
-				case "quantity":
-					resultNode = addQuantity(node);
-					break;
+                case "coded text":
+                    resultNode = addCodedText(node);
+                    break;
 
-				case"count":
-					resultNode = addCount(node);
-					break;
+                case "quantity":
+                    resultNode = addQuantity(node);
+                    break;
 
-				case"date time":
-					resultNode = addDateTime(node);
-					break;
+                case"count":
+                    resultNode = addCount(node);
+                    break;
 
-				case "duration":
-					resultNode = addDuration(node);
-					break;
+                case"date time":
+                    resultNode = addDateTime(node);
+                    break;
 
-				case "ordinal":
-					resultNode = addOrdinal(node);
-					break;
+                case "duration":
+                    resultNode = addDuration(node);
+                    break;
 
-				case "boolean":
-					resultNode = addBoolean(node);
-					break;
+                case "ordinal":
+                    resultNode = addOrdinal(node);
+                    break;
 
-				case "quantity[i]":
-					resultNode = addInterval_quantity(node);
-					break;
+                case "boolean":
+                    resultNode = addBoolean(node);
+                    break;
 
-				case "integer[i]":
-					resultNode = addInterval_integer(node);
-					break;
+                case "interval_quantity":
+                    resultNode = addInterval_quantity(node);
+                    break;
 
-				case "date time[i]":
-					resultNode = addInterval_dateTime(node);
-					break;
+                case "interval_count":
+                    resultNode = addInterval_integer(node);
+                    break;
 
-				case "multimedia":
-					resultNode = addMultimedia(node);
-					break;
+                case "interval_datetime":
+                    resultNode = addInterval_dateTime(node);
+                    break;
 
-				case "uri":
-					resultNode = addUri(node);
-					break;
+                case "multimedia":
+                    resultNode = addMultimedia(node);
+                    break;
 
-				case "identifier":
-					resultNode = addIdentifier(node);
-					break;
+                case "uri":
+                    resultNode = addUri(node);
+                    break;
 
-				case"proportion":
-					resultNode = addProportion(node);
-					break;
+                case "identifier":
+                    resultNode = addIdentifier(node);
+                    break;
 
-				case "cluster":
-					resultNode = addCluster(node);
-					break;
-				//bs : base type slot
-				case "bs_element":
-				case "bs_cluster":
-				case "bs_item":
-				   resultNode = addBaseSlot(node,type.slice(3,type.length).toUpperCase());
-				   break;
-				case "delete":
-				  deleteNode(node);
-				  break;
-				//-----------base type end--------------
+                case"proportion":
+                    resultNode = addProportion(node);
+                    break;
 
-				}
-				
-				if (resultNode) {
-					$scope.treeControl.locateNode(resultNode);
-				}
+                case "cluster":
+                    resultNode = addCluster(node);
+                    break;
+                //bs : base type slot
+                case "bs_element":
+                case "bs_cluster":
+                case "bs_item":
+                    resultNode = addBaseSlot(node, type.slice(3, type.length).toUpperCase());
+                    break;
+                case "delete":
+                    deleteNode(node);
+                    break;
+                //-----------base type end--------------
 
-			};
+                }
+
+                if (resultNode) {
+                    setTimeout(function(){
+                          $scope.treeControl.locateNode(resultNode);
+                          $scope.$digest();
+                    }, 0);        
+                }
+
+            }; 
+
 
 			function addSectionSlot(node, type) {
 				console.log("before add");
@@ -1439,116 +1232,126 @@ break;
 				}
 
 			};
-        function deleteOntology(code){
-        	var termDefinitions = $scope.ontology.term_definitions;
-        	if(angular.isArray(termDefinitions)){
-        		angular.forEach(termDefinitions, function(termDefinition){
-        			deleteDefinition(termDefinition, code);
-        		});
-        	}else{
-        		deleteDefinition(termDefinitions, code);
-        	}
-        	var originalTermDefinitions = $scope.ontology.term_definitions.oriNodeRef;
-        	if(angular.isArray(originalTermDefinitions)){
-        		angular.forEach(originalTermDefinitions, function(originalTermDefinition){
-        			deleteOriDefinition(originalTermDefinition, code);
-        		});
-        	}else{
-        		deleteOriDefinition(originalTermDefinitions);
-        	}
-        	
-        	console.log($scope.ontology);
-        }
-        
       
-			function deleteDefinition(termDefinition, code) {
-				var items = termDefinition.items;
-				var matchItem;
-				if (items) {
-					if (angular.isArray(items)) {
-						angular.forEach(items, function(item) {
-							if (item.code == code) {
-								matchItem = item;
-							}
-						});
-					} else {
-						if (items.code == code) {
-							matchItem = items;
-						}
-					}
-					if (matchItem) {
-						var index = items.indexOf(matchItem);
-						items.splice(items.indexOf(matchItem), 1);
-					}
-				}
+            function deleteOntology(code) {
+                var termDefinitions = $scope.ontology.term_definitions;
+                if (angular.isArray(termDefinitions)) {
+                    angular.forEach(termDefinitions, function(termDefinition) {
+                        deleteDefinition(termDefinition, code);
+                    });
+                } else {
+                    deleteDefinition(termDefinitions, code);
+                }
+                var originalTermDefinitions = $scope.ontology.term_definitions.oriNodeRef;
+                if (angular.isArray(originalTermDefinitions)) {
+                    angular.forEach(originalTermDefinitions, function(originalTermDefinition) {
+                        deleteOriDefinition(originalTermDefinition, code);
+                    });
+                } else {
+                    deleteOriDefinition(originalTermDefinitions);
+                }
 
-			}
-			
-			function deleteOriDefinition(termDefinition, code){
-				var items = termDefinition.items;
-				var matchItem;
-				if (items) {
-					if (angular.isArray(items)) {
-						angular.forEach(items, function(item) {
-							if (item._code == code) {
-								matchItem = item;
-							}
-						});
-					} else {
-						if (items._code == code) {
-							matchItem = items;
-						}
-					}
-					if (matchItem) {
-						items.splice(items.indexOf(matchItem), 1);
-					}
-				}
-			}
+                console.log($scope.ontology);
+            }
 
+            function deleteDefinition(termDefinition, code) {
+                var items = termDefinition.items;
+                var matchItem;
+                if (items) {
+                    if (angular.isArray(items)) {
+                        angular.forEach(items, function(item) {
+                            if (item.code == code) {
+                                matchItem = item;
+                            }
+                        });
+                    } else {
+                        if (items.code == code) {
+                            matchItem = items;
+                        }
+                    }
+                    if (matchItem) {
+                        var index = items.indexOf(matchItem);
+                        items.splice(items.indexOf(matchItem), 1);
+                    }
+                }
 
+            }
+
+            function deleteOriDefinition(termDefinition, code) {
+                var items = termDefinition.items;
+                var matchItem;
+                if (items) {
+                    if (angular.isArray(items)) {
+                        angular.forEach(items, function(item) {
+                            if (item._code == code) {
+                                matchItem = item;
+                            }
+                        });
+                    } else {
+                        if (items._code == code) {
+                            matchItem = items;
+                        }
+                    }
+                    if (matchItem) {
+                        items.splice(items.indexOf(matchItem), 1);
+                    }
+                }
+            }
+   
+             $scope.getLabelContent = function(node){
+               if(node){
+                   var temp = $scope.getOntologyByCode(node.label.code, $scope.ontology);
+                   if(temp){
+                       return temp.text;
+                   }              
+               }     
+           };
+           
 		},
 		link : function($scope, element, attrs) {
-			//var typeList = ["ITEM_TREE", "ITEM_LIST", "ITEM_TABLE", "HISTORY"];
-			
-			$scope.getTreeNodeLabel = function(node, nodeAliasName) {
-				var picType = node.label.picType.toLowerCase();
-				if (picType.indexOf('<') != -1) {
-					picType = picType.replace(/(<dv)/, '_');
-					picType = picType.replace(/>/g, "");
-				}
-				var label = '';
-
-				if (node.label.slot) {
-					label += '<span class="archetype-edit-icon slot" style="padding: 7px 10px; background-position-y: 10px;"></span>';
-				} else if(node.label.type == "attribute"){
-				    label += '<span class="archetype-edit-icon attribute' + '" style="padding: 7px 10px; background-position-y: 10px;"></span>';
-
-				}else {
-					label += '<span class="archetype-edit-icon ' + picType + '" style="padding: 7px 10px; background-position-y: 10px;"></span>';
-				}
-
-				// if (typeList.indexOf(node.label.picType) != -1) {
+			// //var typeList = ["ITEM_TREE", "ITEM_LIST", "ITEM_TABLE", "HISTORY"];
+// 			
+			// $scope.getTreeNodeLabel = function(node, nodeAliasName) {
+				// var picType = node.label.picType.toLowerCase();
+				// if (picType.indexOf('<') != -1) {
+				    // //dv_interval<dv_date_time> to dv_interval__dv_date_time
+					// picType = picType.replace(/(<dv)/, '_');
+					// picType = picType.replace(/>/g, "");
+				// }
+				// var label = '';
+// 
+				// if (node.label.slot) {
+					// label += '<span class="clever-icon list slot" style="padding: 7px 10px; background-position-y: 10px;"></span>';
+				// } else if(node.label.type == "attribute"){
+				    // label += '<span class="clever-icon list attribute' + '" style="padding: 7px 10px; background-position-y: 10px;"></span>';
+// 
+				// }else {
+					// label += '<span class="clever-icon list ' + picType + '" style="padding: 7px 10px; background-position-y: 10px;"></span>';
+				// }
+// 
+				// // if (typeList.indexOf(node.label.picType) != -1) {
+					// // label += '<span style="color: brown;">&nbsp' + node.label.text + '</span>';
+				// // } else 
+				// if (node.label.code) {
+					// if (node.label.archetypeNode) {
+						// label += '<span style="color: black;font-weight: bold;">&nbsp';
+					// } else {
+						// label += '<span style="color: brown;">&nbsp';
+					// }
+					// var tempOntology = getOntologyByCode(node.label.code, $scope.ontology);
+					// if (tempOntology) {
+						// label += tempOntology.text;
+					// }
+					// label += '</span>';
+				// } else if (node.label.text) {
 					// label += '<span style="color: brown;">&nbsp' + node.label.text + '</span>';
-				// } else 
-				if (node.label.code) {
-					if (node.label.archetypeNode) {
-						label += '<span style="color: black;font-weight: bold;">&nbsp';
-					} else {
-						label += '<span style="color: brown;">&nbsp';
-					}
-					var tempOntology = getOntologyByCode(node.label.code, $scope.ontology);
-					if (tempOntology) {
-						label += tempOntology.text;
-					}
-					label += '</span>';
-				} else if (node.label.text) {
-					label += '<span style="color: brown;">&nbsp' + node.label.text + '</span>';
-				}
-
-				return label;
-			};
+				// }
+// 
+				// return label;
+			// };
 
 			
+         
            	$scope.getOntologyByCode = function(code) {
 				return getOntologyByCode(code, $scope.ontology);
 			};

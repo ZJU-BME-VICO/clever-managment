@@ -118,9 +118,6 @@ function StorageTemplateEditCtrl($scope, $modal, $stateParams, $timeout, treeDat
 	}); 
 
 
-	
-	
-
 	$scope.selectTemplate = function(template) {
 		var bid = busyService.pushBusy('BUSY_LOADING');
 		console.log(template);
