@@ -71,12 +71,13 @@ public class ArchetypeVersionControlServiceImpl implements
 		// Example openEHR-EHR-CLUSTER.organisation.v1.1
 		String versionMasterName = WordUtils
 				.extractVersionMasterName(archetypeId);
-		if (archetypeId == null) {
+		if (versionMasterName == null) {//can not extract a version master name，archetype name must be
 			throw new VersionControlException("Archetype name is unqualified.");
 		}
 		ArchetypeVersionMaster versionMaster = this.versionMasterRepo
 				.findByName(versionMasterName);
-		if (versionMaster == null) {
+		
+		if (versionMaster == null) {// if there is not a version master,create one
 			versionMaster = this.newVersionMaster(master, archetype);
 		}
 		ArchetypeRevisionFile revisionFile = this.revisionFileRepo
@@ -85,6 +86,8 @@ public class ArchetypeVersionControlServiceImpl implements
 			throw new VersionControlException("Archetype " + archetypeId
 					+ " alread exist");
 		}
+		System.out.println(master.getConceptName());
+		System.out.println(versionMaster.getArchetypeMasterName());
 		revisionFile = this.newRevisionFile(versionMaster, archetype, user);
 	}
 

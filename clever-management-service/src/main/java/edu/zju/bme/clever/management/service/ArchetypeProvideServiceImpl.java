@@ -94,7 +94,7 @@ public class ArchetypeProvideServiceImpl implements ArchetypeProvideService {
 	@Override
 	public List<ArchetypeRevisionFile> getDraftArchetypeRevisionFileToEdit(
 			User user) {
-		return this.revisionFileRepo.findByEditorAndLifecycleState(user,
+		return this.revisionFileRepo.findByEditorAndLifecycleStateFetchAll(user,
 				LifecycleState.DRAFT);
 	}
 

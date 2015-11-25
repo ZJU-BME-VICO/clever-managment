@@ -1,0 +1,29 @@
+package edu.zju.bme.clever.management.service.entity;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
+
+import org.hibernate.annotations.DynamicUpdate;
+
+@Entity
+@Table
+@DynamicUpdate(true)
+public class RequestParam extends AbstractParam{
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 7694873032536694345L;
+
+	@Column 
+	private Boolean required;
+
+	public Boolean getRequired() {
+		return required;
+	}
+
+	public void setRequired(Boolean required) {
+		this.required = required;
+	}
+}
