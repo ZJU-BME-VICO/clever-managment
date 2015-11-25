@@ -7,11 +7,10 @@ import java.util.Set;
 
 public class ApiVersionMasterInfo {
 	private Integer Id;
-	private Integer apiVersion;
-	private List<ApiRootUrlMasterInfo> apiRootUrlMasters = new ArrayList<ApiRootUrlMasterInfo>();
+	private Integer version;
+	private List<ApiRootUrlMasterInfo> rootUrlMastersInfos = new ArrayList<ApiRootUrlMasterInfo>();
 	
 
-	private String apiMasterName;
 
 
 
@@ -23,29 +22,25 @@ public class ApiVersionMasterInfo {
 		Id = id;
 	}
 
-
-	public Integer getApiVersion() {
-		return apiVersion;
+	public Integer getVersion() {
+		return version;
 	}
 
-	public void setApiVersion(Integer apiVersion) {
-		this.apiVersion = apiVersion;
+	public void setVersion(Integer version) {
+		this.version = version;
 	}
 
-
-	public String getApiMasterName() {
-		return apiMasterName;
+	public List<ApiRootUrlMasterInfo> getRootUrlMastersInfos() {
+		return rootUrlMastersInfos;
 	}
 
-	public void setApiMasterName(String apiMasterName) {
-		this.apiMasterName = apiMasterName;
-	}
-	public List<ApiRootUrlMasterInfo> getApiRootUrlMasters() {
-		return apiRootUrlMasters;
+	public void setRootUrlMastersInfos(
+			List<ApiRootUrlMasterInfo> rootUrlMastersInfos) {
+		this.rootUrlMastersInfos = rootUrlMastersInfos;
 	}
 
-	public void setApiRootUrlMasters(List<ApiRootUrlMasterInfo> apiRootUrlMasters) {
-		this.apiRootUrlMasters = apiRootUrlMasters;
-	}
+	
+
+	
 
 }

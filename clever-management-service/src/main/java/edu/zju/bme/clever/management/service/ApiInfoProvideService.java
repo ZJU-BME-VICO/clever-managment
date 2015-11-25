@@ -17,6 +17,8 @@ public interface ApiInfoProvideService {
 	public List<ApiVersionMaster> getAllApiVersionMasters();
 	
 	public ApiVersionMaster getApiVersionMasterById(Integer Id);
+	
+	public ApiVersionMaster getApiVersionMasterByVersionAndApiMasterId(Integer version, Integer apiMasterId);
 
 //	public List<ApiRootUrlMaster> getAllRootUrlMasters();
 

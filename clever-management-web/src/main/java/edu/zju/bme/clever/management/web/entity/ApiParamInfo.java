@@ -1,10 +1,19 @@
 package edu.zju.bme.clever.management.web.entity;
 
 public class ApiParamInfo {
+	private Integer Id;
 	private String type;
 	private String name;
 	private Boolean required;
 	private String description;
+
+	public Integer getId() {
+		return Id;
+	}
+
+	public void setId(Integer id) {
+		Id = id;
+	}
 
 	public String getType() {
 		return type;

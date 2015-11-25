@@ -6,8 +6,8 @@ import java.util.List;
 
 
 public class ApiInfo {
-	private String apiVersion;
-	private String apiRootUrlName;
+	private Integer Id;
+
 	private List<ApiParamInfo> requestParams = new ArrayList<ApiParamInfo>();
 	private List<ApiParamInfo> returnParams = new ArrayList<ApiParamInfo>();
 	private String apiName;
@@ -16,20 +16,13 @@ public class ApiInfo {
 	private String Description;
 	private List<String> mediaTypes = new ArrayList<String>();
 
-	public String getApiVersion() {
-		return apiVersion;
+	
+	public Integer getId() {
+		return Id;
 	}
 
-	public void setApiVersion(String apiVersion) {
-		this.apiVersion = apiVersion;
-	}
-
-	public String getApiRootUrlName() {
-		return apiRootUrlName;
-	}
-
-	public void setApiRootUrlName(String apiRootUrlName) {
-		this.apiRootUrlName = apiRootUrlName;
+	public void setId(Integer id) {
+		Id = id;
 	}
 
 	public List<ApiParamInfo> getRequestParams() {

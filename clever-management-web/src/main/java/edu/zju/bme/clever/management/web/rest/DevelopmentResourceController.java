@@ -37,40 +37,42 @@ public class DevelopmentResourceController extends AbstractResourceController {
 
 	@RequestMapping(value = "/api/display", method = RequestMethod.GET)
 	public List<ApiMasterInfo> getApiList() {
+
 		List<ApiMaster> masters = apiInfoProvideService.getAllApiMasters();
+		ApiVersionMaster versionMaste = apiInfoProvideService
+				.getApiVersionMasterByVersionAndApiMasterId(1, 1);
 		List<ApiMasterInfo> infos = masters
 				.stream()
 				.map(master -> {
+
 					ApiMasterInfo info = new ApiMasterInfo();
 					info.setApiMasterName(master.getName());
-					List<ApiVersionMasterInfo> versionMasterList = master
-							.getVersionMasterList()
-							.stream()
-							.map(versionMaster -> {
-								ApiVersionMasterInfo versionMasterInfo = new ApiVersionMasterInfo();
-								versionMasterInfo
-										.setApiMasterName(versionMaster
-												.getApiMaster().getName());
-								versionMasterInfo.setApiVersion(versionMaster
-										.getVersion());
-								versionMasterInfo.setId(versionMaster.getId());
-								return versionMasterInfo;
+					info.setId(master.getId());					
+					info.setLatestVersion(master.getLatestVersionMaster()
+							.getVersion());
 
-							}).collect(Collectors.toList());
-					info.setApiVersionMasterList(versionMasterList);
-					ApiVersionMasterInfo latestApiVersionMasterInfo = constructApiVersionMasterInfo(master
-							.getLatestVersionMaster());
-					info.setLatestApiVersionMasterInfo(latestApiVersionMasterInfo);
+					info.setApiVersionList(master.getVersionMasterList()
+							.stream().map(versionMaster -> {
+								return versionMaster.getVersion();
+							}).collect(Collectors.toList()));
+
 					return info;
 				}).collect(Collectors.toList());
 		return infos;
 	}
 
+	@RequestMapping(value = "/api/display/{masterId}/{versionId}", method = RequestMethod.GET)
+	public ApiVersionMasterInfo getApiVersionMasterInfo(
+			@PathVariable Integer versionId, @PathVariable Integer masterId) {
+		ApiVersionMaster master = this.apiInfoProvideService
+				.getApiVersionMasterByVersionAndApiMasterId(versionId, masterId);
+		return constructApiVersionMasterInfo(master);
+	}
+
 	private ApiVersionMasterInfo constructApiVersionMasterInfo(
 			ApiVersionMaster master) {
 		ApiVersionMasterInfo info = new ApiVersionMasterInfo();
-		info.setApiMasterName(master.getApiMaster().getName());
-		info.setApiVersion(master.getVersion());
+		info.setVersion(master.getVersion());
 		info.setId(master.getId());
 		List<ApiRootUrlMaster> rootUrlMasters = master
 				.getApiRootUrlMasterList();
@@ -78,7 +80,7 @@ public class DevelopmentResourceController extends AbstractResourceController {
 				.stream().map(rootMaster -> {
 					return constructApiRootUrlMasterInfo(rootMaster);
 				}).collect(Collectors.toList());
-		info.setApiRootUrlMasters(rootUrlMasterInfoList);
+		info.setRootUrlMastersInfos(rootUrlMasterInfoList);
 		return info;
 	}
 
@@ -86,15 +88,15 @@ public class DevelopmentResourceController extends AbstractResourceController {
 			ApiRootUrlMaster master) {
 		ApiRootUrlMasterInfo info = new ApiRootUrlMasterInfo();
 		// info.setApiVersion(master.getApiVersionMaster().getVersion());
+		info.setRootUrlName(master.getName());
 		info.setId(master.getId());
 		info.setApiList(master
 				.getApiInformationList()
 				.stream()
 				.map(api -> {
 					ApiInfo apiInfo = new ApiInfo();
+					apiInfo.setId(api.getId());
 					apiInfo.setApiName(api.getName());
-					apiInfo.setApiRootUrlName(api.getApiRootUrlMaster()
-							.getName());
 					apiInfo.setApiUrl(api.getUrl());
 					apiInfo.setReuqestMethod(api.getRequestMethod());
 					apiInfo.setDescription(api.getApiDescription());
@@ -115,7 +117,7 @@ public class DevelopmentResourceController extends AbstractResourceController {
 					}
 
 					return apiInfo;
-				}).collect(Collectors.toSet()));
+				}).collect(Collectors.toList()));
 		return info;
 
 	}
@@ -136,6 +138,7 @@ public class DevelopmentResourceController extends AbstractResourceController {
 
 	private ApiParamInfo constructApiParamInfo(AbstractParam param) {
 		ApiParamInfo info = new ApiParamInfo();
+		info.setId(param.getId());	
 		info.setDescription(param.getDescription());
 		info.setName(param.getName());
 		info.setType(param.getType());
@@ -144,15 +147,5 @@ public class DevelopmentResourceController extends AbstractResourceController {
 		}
 		return info;
 	}
-
-	@RequestMapping(value = "/api/display/{versionId}", method = RequestMethod.GET)
-	public ApiVersionMasterInfo getApiVersionMasterInfo(
-			@PathVariable Integer versionId) {
-		ApiVersionMaster master = this.apiInfoProvideService
-				.getApiVersionMasterById(versionId);
-		return constructApiVersionMasterInfo(master);
-	}
-	
-	
 
 }

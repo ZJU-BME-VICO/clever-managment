@@ -24,7 +24,7 @@ public class ApiInfoProvideServiceImpl implements ApiInfoProvideService {
 	@Override
 	public List<ApiMaster> getAllApiMasters() {
 		return this.apiMasterRepo
-				.findAllFetchVersionMasterList();
+				.findAllFetchVersionMasterListAndLatestVersionMaster();
 	}
 	@Override
 	public ApiMaster getApiMasterByName(String name){
@@ -47,6 +47,10 @@ public class ApiInfoProvideServiceImpl implements ApiInfoProvideService {
 	public ApiVersionMaster getApiVersionMasterById(Integer Id){
 		return this.apiVersionMasterRepo
 				.findByIdFetchAll(Id);
+	}
+	@Override
+	public ApiVersionMaster getApiVersionMasterByVersionAndApiMasterId(Integer version, Integer apiMasterId){
+		return this.apiVersionMasterRepo.findByVersionAndApiMasterIdFetchAll(version, apiMasterId);
 	}
 	
 
