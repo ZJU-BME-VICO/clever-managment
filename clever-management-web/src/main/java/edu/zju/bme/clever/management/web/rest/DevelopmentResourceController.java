@@ -1,10 +1,14 @@
 package edu.zju.bme.clever.management.web.rest;
 
+import java.net.MalformedURLException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
+import org.dom4j.DocumentException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +17,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import edu.zju.bme.clever.management.service.ApiInfoMaintainService;
+import edu.zju.bme.clever.management.service.ApiInfoParseService;
 import edu.zju.bme.clever.management.service.ApiInfoProvideService;
 import edu.zju.bme.clever.management.service.entity.AbstractParam;
 import edu.zju.bme.clever.management.service.entity.ApiMaster;
@@ -20,6 +26,10 @@ import edu.zju.bme.clever.management.service.entity.ApiRootUrlMaster;
 import edu.zju.bme.clever.management.service.entity.ApiVersionMaster;
 import edu.zju.bme.clever.management.service.entity.RequestParam;
 import edu.zju.bme.clever.management.service.entity.ReturnParam;
+import edu.zju.bme.clever.management.service.exception.ApiParseException;
+import edu.zju.bme.clever.management.service.exception.ResourceExportException;
+import edu.zju.bme.clever.management.web.entity.ApiEditResult;
+import edu.zju.bme.clever.management.web.entity.ApiOriginInfo;
 import edu.zju.bme.clever.management.web.entity.ApiInfo;
 import edu.zju.bme.clever.management.web.entity.ApiMasterInfo;
 import edu.zju.bme.clever.management.web.entity.ApiParamInfo;
@@ -35,19 +45,23 @@ public class DevelopmentResourceController extends AbstractResourceController {
 	@Autowired
 	private ApiInfoProvideService apiInfoProvideService;
 
+	@Autowired
+	private ApiInfoParseService apiInfoParseService;
+
+	@Autowired
+	private ApiInfoMaintainService apiInfoMaintainService;
+
 	@RequestMapping(value = "/api/display", method = RequestMethod.GET)
 	public List<ApiMasterInfo> getApiList() {
 
 		List<ApiMaster> masters = apiInfoProvideService.getAllApiMasters();
-		ApiVersionMaster versionMaste = apiInfoProvideService
-				.getApiVersionMasterByVersionAndApiMasterId(1, 1);
 		List<ApiMasterInfo> infos = masters
 				.stream()
 				.map(master -> {
 
 					ApiMasterInfo info = new ApiMasterInfo();
 					info.setApiMasterName(master.getName());
-					info.setId(master.getId());					
+					info.setId(master.getId());
 					info.setLatestVersion(master.getLatestVersionMaster()
 							.getVersion());
 
@@ -67,6 +81,55 @@ public class DevelopmentResourceController extends AbstractResourceController {
 		ApiVersionMaster master = this.apiInfoProvideService
 				.getApiVersionMasterByVersionAndApiMasterId(versionId, masterId);
 		return constructApiVersionMasterInfo(master);
+	}
+
+	@RequestMapping(value = "/api/maintain/overall", method = RequestMethod.POST)
+	public ApiEditResult generateApi(ApiOriginInfo info) {
+		ApiEditResult result = new ApiEditResult();
+		result.setSucceeded(true);
+		try {
+			this.apiInfoParseService.parseWadl(info.getUrl(),
+					info.getMasterName());
+		} catch (MalformedURLException e) {
+			result.setSucceeded(false);
+			result.setMessage(e.getMessage());
+		} catch (ApiParseException e) {
+			result.setSucceeded(false);
+			result.setMessage(e.getMessage());
+		} catch (DocumentException e) {
+			result.setSucceeded(false);
+			result.setMessage(e.getMessage());
+		}
+		return result;
+	}
+
+	@RequestMapping(value = "/api/maintain/single", method = RequestMethod.POST)
+	public ApiEditResult editApiDetails(ApiInfo info) {
+		Map<Integer, String> requestParamDescMap = new HashMap<Integer, String>();
+		Map<Integer, String> returnParamDescMap = new HashMap<Integer, String>();
+		List<ApiParamInfo> requestParams = info.getRequestParams();
+		List<ApiParamInfo> returnParams = info.getReturnParams();
+		if (requestParams != null && !requestParams.isEmpty()) {
+			requestParams.forEach(param -> {
+				requestParamDescMap.put(param.getId(), param.getDescription());
+			});
+		}
+		if (returnParams != null && !returnParams.isEmpty()) {
+			returnParams.forEach(param -> {
+				returnParamDescMap.put(param.getId(), param.getDescription());
+			});
+		}
+		ApiEditResult result = new ApiEditResult();
+		result.setSucceeded(true);
+		try {
+			this.apiInfoMaintainService.editApiDesc(info.getId(),
+					info.getDescription(), requestParamDescMap,
+					returnParamDescMap);
+		} catch (ResourceExportException e) {
+			result.setSucceeded(false);
+			result.setMessage(e.getMessage());
+		}
+		return result;
 	}
 
 	private ApiVersionMasterInfo constructApiVersionMasterInfo(
@@ -138,7 +201,7 @@ public class DevelopmentResourceController extends AbstractResourceController {
 
 	private ApiParamInfo constructApiParamInfo(AbstractParam param) {
 		ApiParamInfo info = new ApiParamInfo();
-		info.setId(param.getId());	
+		info.setId(param.getId());
 		info.setDescription(param.getDescription());
 		info.setName(param.getName());
 		info.setType(param.getType());
