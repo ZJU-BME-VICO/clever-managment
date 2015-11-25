@@ -177,16 +177,16 @@ public class ArchetypeResourceController extends AbstractResourceController {
 		}).collect(Collectors.toList());
 	}
 
-	 @RequestMapping(value = "/list/edit/draft", method = RequestMethod.GET)
-	 public List<ArchetypeInfo> getArchtypeListToEdit(
-	 Authentication authentication) {
-	 String userName = ((UserDetails) authentication.getPrincipal())
-	 .getUsername();
-	 User user = this.userService.getUserByName(userName);
-	 List<ArchetypeRevisionFile> files = this.archetypeProvideService
-	 .getDraftArchetypeRevisionFileToEdit(user);
-	 return constructArchetypeInfoList(files);
-	 }
+	@RequestMapping(value = "/list/edit/draft", method = RequestMethod.GET)
+	public List<ArchetypeInfo> getArchtypeListToEdit(
+			Authentication authentication) {
+		String userName = ((UserDetails) authentication.getPrincipal())
+				.getUsername();
+		User user = this.userService.getUserByName(userName);
+		List<ArchetypeRevisionFile> files = this.archetypeProvideService
+				.getDraftArchetypeRevisionFileToEdit(user);
+		return constructArchetypeInfoList(files);
+	}
 
 //	@RequestMapping(value = "/list/edit/draft", method = RequestMethod.GET)
 //	public List<ArchetypeInfo> getArchtypeListToEdit(
@@ -325,7 +325,7 @@ public class ArchetypeResourceController extends AbstractResourceController {
 		this.isResourcesNull(versionMaster);
 		return this.constructArchetypeVersionMasterInfo(versionMaster);
 	}
-	
+
 	@RequestMapping(value = "/action/create", method = RequestMethod.POST)
 	public FileUploadResult createArchetype(@RequestBody AdlInfo info,
 			Authentication authentication) {
@@ -340,12 +340,11 @@ public class ArchetypeResourceController extends AbstractResourceController {
 			arc = parser.parse();
 			this.archetypeVersionControlService.acceptNewArchetype(arc, user);
 		} catch (ParseException e1) {
-			// TODO Auto-generated catch block
 			result.setMessage("Archetype parse failed, error: "
 					+ e1.getMessage());
+			result.setSucceeded(false);
 			e1.printStackTrace();
 		} catch (Exception e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 			result.setSucceeded(false);
 			result.setMessage("Archetype create failed, error: "

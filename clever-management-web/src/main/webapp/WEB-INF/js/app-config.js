@@ -41,7 +41,7 @@ var config = {
 	'APPLICATION_LIST_URL' : prefix + '/applications/list',
 	'APPLICATION_UPLOAD_URL' : prefix + '/applications/application',
 	'APPLICATION_BY_ID_URL' : prefix + '/applications/application/id/',
-	'TEMP_URL' : prefix + '/temp',
+	'DEVELOPMENT_API_URL' : prefix + '/development/api/display',
 };
 var configModel = angular.module('clever.management.config', []);
 angular.forEach(config, function(value, key) {
