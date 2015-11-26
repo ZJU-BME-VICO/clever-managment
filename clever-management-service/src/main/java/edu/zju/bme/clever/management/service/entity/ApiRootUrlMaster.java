@@ -1,8 +1,10 @@
 package edu.zju.bme.clever.management.service.entity;
 
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
+import javax.persistence.CollectionTable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -12,6 +14,9 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.DynamicUpdate;
+import org.hibernate.annotations.FetchMode;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 
 @Entity
 @Table
@@ -26,8 +31,11 @@ public class ApiRootUrlMaster extends AbstractIndentifiedEntity {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "api_version_master_id")
 	private ApiVersionMaster apiVersionMaster;
+	
+	@LazyCollection(LazyCollectionOption.FALSE)
+	@CollectionTable
 	@OneToMany(mappedBy = "apiRootUrlMaster", orphanRemoval = true, cascade = CascadeType.ALL)
-	private List<ApiInformation> apiInformationList;
+	private Set<ApiInformation> apiInformations;
 	@Column(nullable = false)
 	private String name;
 
@@ -49,12 +57,13 @@ public class ApiRootUrlMaster extends AbstractIndentifiedEntity {
 		this.apiVersionMaster = apiVersionMaster;
 	}
 
-	public List<ApiInformation> getApiInformationList() {
-		return apiInformationList;
+	public Set<ApiInformation> getApiInformations() {
+		return apiInformations;
 	}
 
-	public void setApiInformationList(List<ApiInformation> apiInformationList) {
-		this.apiInformationList = apiInformationList;
+	public void setApiInformations(Set<ApiInformation> apiInformations) {
+		this.apiInformations = apiInformations;
 	}
+
 
 }

@@ -1,7 +1,7 @@
 package edu.zju.bme.clever.management.web.entity;
 
 public class ApiOriginInfo {
-private String masterName;
+	private String masterName;
 	private String url;
 
 	public String getMasterName() {

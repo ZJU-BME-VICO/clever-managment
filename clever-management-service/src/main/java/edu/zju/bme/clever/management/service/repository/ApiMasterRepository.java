@@ -9,8 +9,8 @@ import edu.zju.bme.clever.management.service.entity.ApiMaster;
 
 public interface ApiMasterRepository extends 
          JpaRepository<ApiMaster, Integer> {
-	@Query("select master from ApiMaster master left join fetch master.versionMasterList left join fetch master.latestVersionMaster")
-	public List<ApiMaster> findAllFetchVersionMasterListAndLatestVersionMaster();
+	@Query("select master from ApiMaster master left join fetch master.versionMasters left join fetch master.latestVersionMaster")
+	public List<ApiMaster> findAllFetchVersionMastersAndLatestVersionMaster();
 
 	public ApiMaster findByName(String name);
 

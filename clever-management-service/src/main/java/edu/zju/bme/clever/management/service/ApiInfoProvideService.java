@@ -26,5 +26,5 @@ public interface ApiInfoProvideService {
 
 //	public List<ApiInformation> getAllApiInfomations();
 
-//	public ApiInformation getApiInformationById(Integer Id);
+	public ApiInformation getApiInformationById(Integer Id);
 }

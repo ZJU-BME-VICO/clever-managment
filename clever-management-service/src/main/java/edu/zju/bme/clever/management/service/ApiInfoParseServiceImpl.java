@@ -71,17 +71,11 @@ public class ApiInfoParseServiceImpl implements ApiInfoParseService {
 	private Map<String, String> entityTypeMap = new HashMap<String, String>();
 
 	@Override
-	public void parseWadl(String url, String apiMasterName)
-			throws ApiParseException, MalformedURLException, DocumentException {
+	public void parseWadl(String url, String apiMasterName) throws Exception {
 		InputStream in = getUrlContent(url);
 		ApplicationDocument applicationDoc = null;
-		try {
-			applicationDoc = wadlParser.parseWadl(in);
-		} catch (Exception e) {
-			this.logger.info("parse wadl failed, which is generated from url: "
-					+ url);
-			e.printStackTrace();
-		}
+
+		applicationDoc = wadlParser.parseWadl(in);
 
 		if (applicationDoc != null) {
 			parseParam(new URL(getParamUrl(applicationDoc, url)));
@@ -125,12 +119,11 @@ public class ApiInfoParseServiceImpl implements ApiInfoParseService {
 			apiMaster = createApiMaster(apiMasterName);
 		}
 
-		List<ApiVersionMaster> versionMasterList = apiMaster
-				.getVersionMasterList();
-		if (versionMasterList == null) {
-			versionMasterList = new ArrayList<ApiVersionMaster>();
+		Set<ApiVersionMaster> versionMasterSet = apiMaster.getVersionMasters();
+		if (versionMasterSet == null) {
+			versionMasterSet = new HashSet<ApiVersionMaster>();
 		}
-		if (!versionMasterList.isEmpty()) {
+		if (!versionMasterSet.isEmpty()) {
 			versionMaster.setVersion(versionControl(apiMaster
 					.getLatestVersionMaster().getVersion()));
 		} else {
@@ -140,24 +133,25 @@ public class ApiInfoParseServiceImpl implements ApiInfoParseService {
 		Application app = doc.getApplication();
 
 		List<Resources> resourcesList = Arrays.asList(app.getResourcesArray());
-		List<ApiRootUrlMaster> urlMasterList = new ArrayList<ApiRootUrlMaster>();
+		Set<ApiRootUrlMaster> urlMasterSet = new HashSet<ApiRootUrlMaster>();
 
 		if (resourcesList != null) {
 			for (Resources resources : resourcesList) {
-				urlMasterList
-						.addAll(processResources(resources, versionMaster));
+				urlMasterSet.addAll(processResources(resources, versionMaster));
 			}
 			;
 		}
-		if (!urlMasterList.isEmpty()) {
+		if (!urlMasterSet.isEmpty()) {
 			versionMaster.setApiMaster(apiMaster);
-			versionMaster.setApiRootUrlMasterList(urlMasterList);
+			versionMaster.setApiRootUrlMasters(urlMasterSet);
 			apiVersionMasterRepo.save(versionMaster);
 			apiMaster.setLatestVersionMaster(versionMaster);
-			if (apiMaster.getVersionMasterList() != null) {
-				apiMaster.getVersionMasterList().add(versionMaster);
+			if (apiMaster.getVersionMasters() != null) {
+				apiMaster.getVersionMasters().add(versionMaster);
 			} else {
-				apiMaster.setVersionMasterList(Arrays.asList(versionMaster));
+				Set<ApiVersionMaster> temp = new HashSet<ApiVersionMaster>();
+				temp.add(versionMaster);
+				apiMaster.setVersionMasters(temp);
 			}
 			this.apiMasterRepo.save(apiMaster);
 		} else {
@@ -174,14 +168,17 @@ public class ApiInfoParseServiceImpl implements ApiInfoParseService {
 				.getResourceArray());
 		List<ApiRootUrlMaster> urlMasterList = new ArrayList<ApiRootUrlMaster>();
 		if (resourceList != null) {
-			urlMasterList = resourceList
-					.stream()
-					.map(resource -> {
-						ApiRootUrlMaster urlMaster = processRootResource(
-								resource, baseUrl);
-						urlMaster.setApiVersionMaster(versionMaster);
-						return urlMaster;
-					}).collect(Collectors.toList());
+			urlMasterList = resourceList.stream().map(resource -> {
+				ApiRootUrlMaster urlMaster = null;
+				try {
+					urlMaster = processRootResource(resource, baseUrl);
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				urlMaster.setApiVersionMaster(versionMaster);
+				return urlMaster;
+			}).collect(Collectors.toList());
 		}
 
 		if (!urlMasterList.isEmpty()) {
@@ -192,59 +189,72 @@ public class ApiInfoParseServiceImpl implements ApiInfoParseService {
 	}
 
 	private ApiRootUrlMaster processRootResource(Resource resource,
-			String parentUrl) {
+			String parentUrl) throws ApiParseException {
 		ApiRootUrlMaster master = new ApiRootUrlMaster();
 		String name = resource.getPath();
 		master.setName(name);
 		List<Method> methodList = Arrays.asList(resource.getMethodArray());
-		List<ApiInformation> apiInfoList = processMethodList(methodList,
+		Set<ApiInformation> apiInfoSet = processMethodList(methodList,
 				parentUrl + resource.getPath(), master);
 
 		List<Resource> resourceList = Arrays
 				.asList(resource.getResourceArray());
 		if (resourceList != null && !resourceList.isEmpty()) {
 			resourceList.forEach(aresource -> {
-				apiInfoList.addAll(processResource(aresource, parentUrl
-						+ resource.getPath(), master));
+				try {
+					apiInfoSet.addAll(processResource(aresource, parentUrl
+							+ resource.getPath(), master));
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					this.logger.info("provess resource failed :"
+							+ e.getMessage());
+					e.printStackTrace();
+				}
 			});
 		}
-		master.setApiInformationList(apiInfoList);
+		master.setApiInformations(apiInfoSet);
 		return master;
 	}
 
-	private List<ApiInformation> processResource(Resource resource,
-			String parentUrl, ApiRootUrlMaster apiRootUrlMaster) {
+	private Set<ApiInformation> processResource(Resource resource,
+			String parentUrl, ApiRootUrlMaster apiRootUrlMaster)
+			throws ApiParseException {
 		List<Method> methodList = Arrays.asList(resource.getMethodArray());
-		List<ApiInformation> apiInfoList = processMethodList(methodList,
+		Set<ApiInformation> apiInfoSet = processMethodList(methodList,
 				parentUrl + resource.getPath(), apiRootUrlMaster);
 		List<Resource> resourceList = Arrays
 				.asList(resource.getResourceArray());
 		if (resourceList != null && !resourceList.isEmpty()) {
 			resourceList.forEach(aresource -> {
-				apiInfoList.addAll(processResource(aresource, parentUrl
-						+ resource.getPath(), apiRootUrlMaster));
+				try {
+					apiInfoSet.addAll(processResource(aresource, parentUrl
+							+ resource.getPath(), apiRootUrlMaster));
+				} catch (Exception e) {
+					this.logger.info("provess resource failed :"
+							+ e.getMessage());
+					e.printStackTrace();
+				}
 			});
 		}
-		return apiInfoList;
+		return apiInfoSet;
 	}
 
-	private List<ApiInformation> processMethodList(List<Method> methodList,
-			String parentUrl, ApiRootUrlMaster apiRootUrlMaster) {
-		List<ApiInformation> apiInfoList = new ArrayList<ApiInformation>();
+	private Set<ApiInformation> processMethodList(List<Method> methodList,
+			String parentUrl, ApiRootUrlMaster apiRootUrlMaster)
+			throws ApiParseException {
+		Set<ApiInformation> apiInfoSet = new HashSet<ApiInformation>();
 		if (methodList != null && !methodList.isEmpty()) {
-			apiInfoList.addAll(methodList
-					.stream()
-					.map(method -> {
-						ApiInformation info = processMethod(method, parentUrl,
-								apiRootUrlMaster);
-						return info;
-					}).collect(Collectors.toList()));
+			for (Method method : methodList) {
+				apiInfoSet.add(processMethod(method, parentUrl,
+						apiRootUrlMaster));
+			}
+
 		}
-		return apiInfoList;
+		return apiInfoSet;
 	}
 
 	private ApiInformation processMethod(Method method, String url,
-			ApiRootUrlMaster apiRootUrlMaster) {
+			ApiRootUrlMaster apiRootUrlMaster) throws ApiParseException {
 		ApiInformation info = new ApiInformation();
 		info.setName(method.getId());
 		info.setRequestMethod(method.getName());
@@ -260,17 +270,15 @@ public class ApiInfoParseServiceImpl implements ApiInfoParseService {
 		 */
 		Response response = method.getResponseArray(0);
 		List<Representation> representations = new ArrayList<Representation>();
-		List<RequestParam> requestParams = null;
+		Set<RequestParam> requestParams = null;
 		if (request != null) {
 			representations.addAll(Arrays.asList(request
 					.getRepresentationArray()));
-			try {
-				requestParams = processRequest(request, info);
-			} catch (ApiParseException e) {
-				e.printStackTrace();
-			}
+
+			requestParams = processRequest(request, info);
+
 		}
-		List<ReturnParam> returnParams = null;
+		Set<ReturnParam> returnParams = null;
 		if (response != null) {
 			representations.addAll(Arrays.asList(response
 					.getRepresentationArray()));
@@ -282,9 +290,9 @@ public class ApiInfoParseServiceImpl implements ApiInfoParseService {
 		}
 
 		Set<ApiMediaType> mediaTypes = processMediaType(representations, info);
-		info.setApiMediaTypeSet(mediaTypes);
-		info.setReturnParamList(returnParams);
-		info.setRequestParamList(requestParams);
+		info.setApiMediaTypes(mediaTypes);
+		info.setReturnParams(returnParams);
+		info.setRequestParams(requestParams);
 		return info;
 	}
 
@@ -306,28 +314,20 @@ public class ApiInfoParseServiceImpl implements ApiInfoParseService {
 		return typeSet;
 	}
 
-	private List<RequestParam> processRequest(Request request,
+	private Set<RequestParam> processRequest(Request request,
 			ApiInformation info) throws ApiParseException {
-		List<RequestParam> params = new ArrayList<RequestParam>();
+		Set<RequestParam> params = new HashSet<RequestParam>();
 		params.addAll(processParam(request, info));
 
 		List<Representation> representationList = Arrays.asList(request
 				.getRepresentationArray());
 		if (representationList != null && !representationList.isEmpty()) {
-			String elementValue = representationList.get(0).getElement()
-					.getLocalPart();
-			for (Representation representation : representationList) {
-				if (representation.getElement().getLocalPart() != elementValue) {
-					throw new ApiParseException(
-							"the element value in representation in same request should be same");
-				}
-
-			}
-			List<RequestParam> templist;
+			varifyRepresentationList(representationList);
+			Set<RequestParam> tempSet;
 			try {
-				templist = processRequestRepresentation(
+				tempSet = processRequestRepresentation(
 						representationList.get(0), info);
-				params.addAll(templist);
+				params.addAll(tempSet);
 			} catch (ApiParseException e) {
 				e.printStackTrace();
 			}
@@ -335,22 +335,16 @@ public class ApiInfoParseServiceImpl implements ApiInfoParseService {
 		return params;
 	}
 
-	private List<ReturnParam> processResponse(Response response,
+	private Set<ReturnParam> processResponse(Response response,
 			ApiInformation info) throws ApiParseException {
-		List<ReturnParam> params = new ArrayList<ReturnParam>();
+		Set<ReturnParam> params = new HashSet<ReturnParam>();
 		params.addAll(processParam(response, info));
 		List<Representation> representationList = Arrays.asList(response
 				.getRepresentationArray());
 		if (representationList != null && !representationList.isEmpty()) {
-			String elementValue = representationList.get(0).getElement()
-					.getLocalPart();
-			for (Representation representation : representationList) {
-				if (representation.getElement().getLocalPart() != elementValue) {
-					throw new ApiParseException(
-							"the element value in representation in same request should be same");
-				}
-			}
-			List<ReturnParam> templist;
+			varifyRepresentationList(representationList);
+
+			Set<ReturnParam> templist;
 			try {
 				templist = processResponseRepresentation(
 						representationList.get(0), info);
@@ -362,10 +356,28 @@ public class ApiInfoParseServiceImpl implements ApiInfoParseService {
 		return params;
 	}
 
-	private List<ReturnParam> processResponseRepresentation(
+	private void varifyRepresentationList(
+			List<Representation> representationList) throws ApiParseException {
+		if (representationList != null && !representationList.isEmpty()) {
+			QName element = representationList.get(0).getElement();
+			if (element != null) {
+				String localElement = element.getLocalPart();
+				for (Representation representation : representationList) {
+					String temp = representation.getElement().getLocalPart();
+					if (!representation.getElement().getLocalPart()
+							.equals(localElement)) {
+						throw new ApiParseException(
+								"the element value in representation in same request should be same");
+					}
+				}
+			}
+		}
+	}
+
+	private Set<ReturnParam> processResponseRepresentation(
 			Representation representation, ApiInformation info)
 			throws ApiParseException {
-		List<ReturnParam> params = new ArrayList<ReturnParam>();
+		Set<ReturnParam> params = new HashSet<ReturnParam>();
 		// get the entity name
 		QName qName = representation.getElement();
 		if (qName != null) {
@@ -439,10 +451,10 @@ public class ApiInfoParseServiceImpl implements ApiInfoParseService {
 
 	}
 
-	private List<RequestParam> processRequestRepresentation(
+	private Set<RequestParam> processRequestRepresentation(
 			Representation representation, ApiInformation info)
 			throws ApiParseException {
-		List<RequestParam> params = new ArrayList<RequestParam>();
+		Set<RequestParam> params = new HashSet<RequestParam>();
 		// get the entity name
 		QName qName = representation.getElement();
 		if (qName != null) {
@@ -457,7 +469,7 @@ public class ApiInfoParseServiceImpl implements ApiInfoParseService {
 					throw new ApiParseException("can not get params of type :"
 							+ typeName);
 				} else {
-					List<RequestParam> tempList = innerParams
+					Set<RequestParam> tempList = innerParams
 							.stream()
 							.map(param -> {
 								RequestParam temp = new RequestParam();
@@ -472,7 +484,7 @@ public class ApiInfoParseServiceImpl implements ApiInfoParseService {
 									temp.setIsBaseType(true);
 								}
 								return temp;
-							}).collect(Collectors.toList());
+							}).collect(Collectors.toSet());
 					params.addAll(tempList);
 				}
 			}

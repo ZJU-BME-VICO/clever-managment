@@ -14,7 +14,10 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+
+
 import org.hibernate.annotations.DynamicUpdate;
+import org.hibernate.annotations.FetchMode;
 
 @Entity
 @Table
@@ -26,7 +29,7 @@ public class ApiInformation extends AbstractIndentifiedEntity {
 	 */
 	private static final long serialVersionUID = 7996299782990479255L;
 
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "root_url_type_id", nullable = false)
 	private ApiRootUrlMaster apiRootUrlMaster;
 	@Column
@@ -37,14 +40,14 @@ public class ApiInformation extends AbstractIndentifiedEntity {
 	@Column
 	private String requestMethod;
 
-	@OneToMany(mappedBy = "apiInformation", orphanRemoval = true, cascade = CascadeType.ALL)
-	private List<RequestParam> requestParamList;
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "apiInformation", orphanRemoval = true, cascade = CascadeType.ALL)
+	private Set<RequestParam> requestParams;
 
-	@OneToMany(mappedBy = "apiInformation", orphanRemoval = true, cascade = CascadeType.ALL)
-	private List<ReturnParam> returnParamList;
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "apiInformation", orphanRemoval = true, cascade = CascadeType.ALL)
+	private Set<ReturnParam> returnParams;
 
-	@OneToMany(mappedBy = "apiInformation", cascade = CascadeType.ALL)
-	private Set<ApiMediaType> apiMediaTypeSet;
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "apiInformation", cascade = CascadeType.ALL)
+	private Set<ApiMediaType> apiMediaTypes;
 
 	@Lob
 	@Column
@@ -84,28 +87,29 @@ public class ApiInformation extends AbstractIndentifiedEntity {
 		this.apiRootUrlMaster = apiRootUrlMaster;
 	}
 
-	public List<RequestParam> getRequestParamList() {
-		return requestParamList;
+
+	public Set<RequestParam> getRequestParams() {
+		return requestParams;
 	}
 
-	public void setRequestParamList(List<RequestParam> requestParamList) {
-		this.requestParamList = requestParamList;
+	public void setRequestParams(Set<RequestParam> requestParams) {
+		this.requestParams = requestParams;
 	}
 
-	public List<ReturnParam> getReturnParamList() {
-		return returnParamList;
+	public Set<ReturnParam> getReturnParams() {
+		return returnParams;
 	}
 
-	public void setReturnParamList(List<ReturnParam> returnParamList) {
-		this.returnParamList = returnParamList;
+	public void setReturnParams(Set<ReturnParam> returnParams) {
+		this.returnParams = returnParams;
 	}
 
-	public Set<ApiMediaType> getApiMediaTypeSet() {
-		return apiMediaTypeSet;
+	public Set<ApiMediaType> getApiMediaTypes() {
+		return apiMediaTypes;
 	}
 
-	public void setApiMediaTypeSet(Set<ApiMediaType> apiMediaTypeSet) {
-		this.apiMediaTypeSet = apiMediaTypeSet;
+	public void setApiMediaTypes(Set<ApiMediaType> apiMediaTypes) {
+		this.apiMediaTypes = apiMediaTypes;
 	}
 
 	public String getApiDescription() {

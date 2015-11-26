@@ -1,6 +1,7 @@
 package edu.zju.bme.clever.management.service.entity;
 
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -8,6 +9,7 @@ import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+
 
 
 
@@ -28,7 +30,7 @@ public class ApiMaster extends AbstractIndentifiedEntity {
 	private String name;
 
 	@OneToMany(fetch=FetchType.LAZY, mappedBy = "apiMaster",orphanRemoval = true)
-	private List<ApiVersionMaster> versionMasterList;
+	private Set<ApiVersionMaster> versionMasters;
 
     @OneToOne
     private ApiVersionMaster latestVersionMaster;
@@ -42,12 +44,14 @@ public class ApiMaster extends AbstractIndentifiedEntity {
 		this.latestVersionMaster = latestVersionMaster;
 	}
 
-	public List<ApiVersionMaster> getVersionMasterList() {
-		return versionMasterList;
+
+
+	public Set<ApiVersionMaster> getVersionMasters() {
+		return versionMasters;
 	}
 
-	public void setVersionMasterList(List<ApiVersionMaster> versionMasterList) {
-		this.versionMasterList = versionMasterList;
+	public void setVersionMasters(Set<ApiVersionMaster> versionMasters) {
+		this.versionMasters = versionMasters;
 	}
 
 	public String getName() {

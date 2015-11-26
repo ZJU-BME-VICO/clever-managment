@@ -1,6 +1,7 @@
 package edu.zju.bme.clever.management.service.entity;
 
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -29,7 +30,7 @@ public class ApiVersionMaster extends AbstractIndentifiedEntity {
 	@Column(nullable = false)
 	private Integer version;
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "apiVersionMaster", cascade = CascadeType.ALL)
-	private List<ApiRootUrlMaster> apiRootUrlMasterList;
+	private Set<ApiRootUrlMaster> apiRootUrlMasters;
 
 	// getter and setter
 	public ApiMaster getApiMaster() {
@@ -40,16 +41,6 @@ public class ApiVersionMaster extends AbstractIndentifiedEntity {
 		this.apiMaster = apiMaster;
 	}
 
-	public List<ApiRootUrlMaster> getApiRootUrlMasterList() {
-		return apiRootUrlMasterList;
-	}
-
-	public void setApiRootUrlMasterList(
-			List<ApiRootUrlMaster> apiRootUrlMasterList) {
-		this.apiRootUrlMasterList = apiRootUrlMasterList;
-	}
-
-
 	public Integer getVersion() {
 		return version;
 	}
@@ -58,4 +49,11 @@ public class ApiVersionMaster extends AbstractIndentifiedEntity {
 		this.version = version;
 	}
 
+	public Set<ApiRootUrlMaster> getApiRootUrlMasters() {
+		return apiRootUrlMasters;
+	}
+
+	public void setApiRootUrlMasters(Set<ApiRootUrlMaster> apiRootUrlMasters) {
+		this.apiRootUrlMasters = apiRootUrlMasters;
+	}
 }

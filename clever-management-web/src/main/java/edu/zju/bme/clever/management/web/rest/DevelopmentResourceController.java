@@ -13,6 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -21,6 +22,7 @@ import edu.zju.bme.clever.management.service.ApiInfoMaintainService;
 import edu.zju.bme.clever.management.service.ApiInfoParseService;
 import edu.zju.bme.clever.management.service.ApiInfoProvideService;
 import edu.zju.bme.clever.management.service.entity.AbstractParam;
+import edu.zju.bme.clever.management.service.entity.ApiInformation;
 import edu.zju.bme.clever.management.service.entity.ApiMaster;
 import edu.zju.bme.clever.management.service.entity.ApiRootUrlMaster;
 import edu.zju.bme.clever.management.service.entity.ApiVersionMaster;
@@ -65,13 +67,14 @@ public class DevelopmentResourceController extends AbstractResourceController {
 					info.setLatestVersion(master.getLatestVersionMaster()
 							.getVersion());
 
-					info.setApiVersionList(master.getVersionMasterList()
+					info.setApiVersionList(master.getVersionMasters()
 							.stream().map(versionMaster -> {
 								return versionMaster.getVersion();
 							}).collect(Collectors.toList()));
 
 					return info;
 				}).collect(Collectors.toList());
+
 		return infos;
 	}
 
@@ -83,20 +86,31 @@ public class DevelopmentResourceController extends AbstractResourceController {
 		return constructApiVersionMasterInfo(master);
 	}
 
+	@RequestMapping(value = "/api/display/test", method = RequestMethod.GET)
+	public ApiInfo Test() {
+		ApiInformation info = this.apiInfoProvideService
+				.getApiInformationById(3);
+		ApiInfo inf = new ApiInfo();
+		info.getRequestParams();
+		info.getReturnParams();
+		info.getApiMediaTypes();
+		inf.setRequestParams(constructRequestParamInfoList(info
+				.getRequestParams()));
+		inf.setReturnParams(constructReturnParamInfoList(info.getReturnParams()));
+		return inf;
+	}
+
 	@RequestMapping(value = "/api/maintain/overall", method = RequestMethod.POST)
-	public ApiEditResult generateApi(ApiOriginInfo info) {
+	public ApiEditResult generateApi(@RequestBody ApiOriginInfo info) {
+		System.out.println("come in the maintain overall function");
+		System.out.println(info.getUrl());
+		System.out.println(info.getMasterName());
 		ApiEditResult result = new ApiEditResult();
 		result.setSucceeded(true);
 		try {
 			this.apiInfoParseService.parseWadl(info.getUrl(),
 					info.getMasterName());
-		} catch (MalformedURLException e) {
-			result.setSucceeded(false);
-			result.setMessage(e.getMessage());
-		} catch (ApiParseException e) {
-			result.setSucceeded(false);
-			result.setMessage(e.getMessage());
-		} catch (DocumentException e) {
+		} catch (Exception e) {
 			result.setSucceeded(false);
 			result.setMessage(e.getMessage());
 		}
@@ -104,7 +118,7 @@ public class DevelopmentResourceController extends AbstractResourceController {
 	}
 
 	@RequestMapping(value = "/api/maintain/single", method = RequestMethod.POST)
-	public ApiEditResult editApiDetails(ApiInfo info) {
+	public ApiEditResult editApiDetails(@RequestBody ApiInfo info) {
 		Map<Integer, String> requestParamDescMap = new HashMap<Integer, String>();
 		Map<Integer, String> returnParamDescMap = new HashMap<Integer, String>();
 		List<ApiParamInfo> requestParams = info.getRequestParams();
@@ -137,8 +151,7 @@ public class DevelopmentResourceController extends AbstractResourceController {
 		ApiVersionMasterInfo info = new ApiVersionMasterInfo();
 		info.setVersion(master.getVersion());
 		info.setId(master.getId());
-		List<ApiRootUrlMaster> rootUrlMasters = master
-				.getApiRootUrlMasterList();
+		Set<ApiRootUrlMaster> rootUrlMasters = master.getApiRootUrlMasters();
 		List<ApiRootUrlMasterInfo> rootUrlMasterInfoList = rootUrlMasters
 				.stream().map(rootMaster -> {
 					return constructApiRootUrlMasterInfo(rootMaster);
@@ -154,7 +167,7 @@ public class DevelopmentResourceController extends AbstractResourceController {
 		info.setRootUrlName(master.getName());
 		info.setId(master.getId());
 		info.setApiList(master
-				.getApiInformationList()
+				.getApiInformations()
 				.stream()
 				.map(api -> {
 					ApiInfo apiInfo = new ApiInfo();
@@ -163,17 +176,16 @@ public class DevelopmentResourceController extends AbstractResourceController {
 					apiInfo.setApiUrl(api.getUrl());
 					apiInfo.setReuqestMethod(api.getRequestMethod());
 					apiInfo.setDescription(api.getApiDescription());
-					apiInfo.setMediaTypes(api.getApiMediaTypeSet().stream()
+					apiInfo.setMediaTypes(api.getApiMediaTypes().stream()
 							.map(mediaType -> {
 								return mediaType.getMediaType();
 							}).collect(Collectors.toList()));
-					List<RequestParam> requestParams = api
-							.getRequestParamList();
+					Set<RequestParam> requestParams = api.getRequestParams();
 					if (requestParams != null) {
 						List<ApiParamInfo> requestParamList = constructRequestParamInfoList(requestParams);
 						apiInfo.setRequestParams(requestParamList);
 					}
-					List<ReturnParam> returnParams = api.getReturnParamList();
+					Set<ReturnParam> returnParams = api.getReturnParams();
 					if (returnParams != null) {
 						List<ApiParamInfo> returnParamList = constructReturnParamInfoList(returnParams);
 						apiInfo.setReturnParams(returnParamList);
@@ -186,14 +198,14 @@ public class DevelopmentResourceController extends AbstractResourceController {
 	}
 
 	private List<ApiParamInfo> constructRequestParamInfoList(
-			List<RequestParam> params) {
+			Set<RequestParam> params) {
 		return params.stream().map(param -> {
 			return constructApiParamInfo(param);
 		}).collect(Collectors.toList());
 	}
 
 	private List<ApiParamInfo> constructReturnParamInfoList(
-			List<ReturnParam> params) {
+			Set<ReturnParam> params) {
 		return params.stream().map(param -> {
 			return constructApiParamInfo(param);
 		}).collect(Collectors.toList());
