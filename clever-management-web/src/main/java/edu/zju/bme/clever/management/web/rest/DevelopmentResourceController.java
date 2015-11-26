@@ -56,7 +56,7 @@ public class DevelopmentResourceController extends AbstractResourceController {
 	@RequestMapping(value = "/api/display", method = RequestMethod.GET)
 	public List<ApiMasterInfo> getApiList() {
 
-		List<ApiMaster> masters = apiInfoProvideService.getAllApiMasters();
+		Set<ApiMaster> masters = apiInfoProvideService.getAllApiMasters();
 		List<ApiMasterInfo> infos = masters
 				.stream()
 				.map(master -> {

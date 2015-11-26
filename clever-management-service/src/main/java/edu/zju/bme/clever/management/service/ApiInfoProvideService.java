@@ -1,6 +1,7 @@
 package edu.zju.bme.clever.management.service;
 
 import java.util.List;
+import java.util.Set;
 
 import edu.zju.bme.clever.management.service.entity.ApiInformation;
 import edu.zju.bme.clever.management.service.entity.ApiMaster;
@@ -8,7 +9,7 @@ import edu.zju.bme.clever.management.service.entity.ApiRootUrlMaster;
 import edu.zju.bme.clever.management.service.entity.ApiVersionMaster;
 
 public interface ApiInfoProvideService {
-	public List<ApiMaster> getAllApiMasters();
+	public Set<ApiMaster> getAllApiMasters();
 
 	public ApiMaster getApiMasterByName(String name);
 

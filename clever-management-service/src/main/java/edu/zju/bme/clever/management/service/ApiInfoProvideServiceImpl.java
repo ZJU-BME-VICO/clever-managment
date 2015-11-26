@@ -1,6 +1,7 @@
 package edu.zju.bme.clever.management.service;
 
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,9 +26,9 @@ public class ApiInfoProvideServiceImpl implements ApiInfoProvideService {
 	private ApiInformationRepository apiInformationRepo;
 
 	@Override
-	public List<ApiMaster> getAllApiMasters() {
+	public Set<ApiMaster> getAllApiMasters() {
 		return this.apiMasterRepo
-				.findAllFetchVersionMastersAndLatestVersionMaster();
+				.findAllFetchAll();
 	}
 
 	@Override
