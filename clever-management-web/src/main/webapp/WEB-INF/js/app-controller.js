@@ -194,10 +194,14 @@ angular.module('clever.management.controllers.app', []).controller('appCtrl', fu
 			},
 			{
 				title : 'MENU_MANAGEMENT_DEVELOPMENT_API_DISPLAY',				   
-				state : 'management.development.api',
+				state : 'management.development.api.view',
 				introductionState : 'management.development.list.api',
 				icon : 'icon-magic',
 				info : 'MENU_MANAGEMENT_DEVELOPMENT_API_INFO',
+			},
+			{
+				state : 'management.development.api.edit',
+				icon : 'icon-magic',
 			},
 			// {
 				// title : 'MENU_MANAGEMENT_DEVELOPMENT_CDR',

@@ -54,7 +54,8 @@ angular.module('cleverManagementApp', ['ngAnimate', 'ui.bootstrap.typeahead', 'n
 		templateUrl : 'js/views/universal-ui-view.html',
 	}).state('management.archetype.list', {
 		url : '',
-		//templateUrl : 'js/views/management/archetype/management.archetype.list.html',
+		// templateUrl :
+		// 'js/views/management/archetype/management.archetype.list.html',
 		templateUrl : 'js/views/management/universal-management-list-view.html',
 		controller : UniversalManagementListCtrl,
 		data : {
@@ -71,7 +72,7 @@ angular.module('cleverManagementApp', ['ngAnimate', 'ui.bootstrap.typeahead', 'n
 	}).state('management.archetype.list.view', {
 		url :'/list/view',
 		templateUrl : 'js/views/management/archetype/introduction/view.html',
-		//controller: viewCtr,
+		// controller: viewCtr,
 	    
 	}).state('management.archetype.list.edit', {
 		url :'/list/edit',
@@ -294,13 +295,20 @@ angular.module('cleverManagementApp', ['ngAnimate', 'ui.bootstrap.typeahead', 'n
 		},
 		templateUrl : 'js/views/management/development/designer/management.development.designer.html',
 		controller : DesignerCtrl,
-	}).state('management.development.api', {
+	}).state('management.development.api',{
 		url : '/api',
+		template : '<div ui-view></div>',
+	}).	state('management.development.api.view', {
+		url : '/view',
 		data : {
 			title : 'MENU_MANAGEMENT_DEVELOPMENT_API_DISPLAY',
 		},
-		templateUrl : 'js/views/management/development/api/management.development.api.html',
-		controller : ApiCtr,
+		templateUrl : 'js/views/management/development/api/view/management.development.api.view.html',
+		controller : ApiViewCtr,
+	}).state('management.development.api.edit', {
+		url : '/edit',
+		templateUrl : 'js/views/management/development/api/edit/management.development.api.edit.html',
+		controller : ApiEditCtr,
 	}).state('management.development.cdr', {
 		url : '/cdr',
 		data : {

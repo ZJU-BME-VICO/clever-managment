@@ -8,14 +8,14 @@
 <script src="js/lib/angular-ui-router.js"></script>
 <script src="js/lib/ui-bootstrap-tpls-0.12.0.js"></script>
 <script src="js/lib/xml2json.js"></script>
-<script src="js/lib/jquery.min.js"></script>
+
 <script src="js/lib/jquery-transit.js"></script>
 <script src="js/lib/diffview.js"></script>
 <script src="js/lib/difflib.js"></script>
 <script src="js/lib/ng-context-menu.js"></script>
 <script src="js/lib/ui-bootstrap-typeahead.js"></script>
 <script src="js/lib/angular-drag-and-drop-list.js"></script>
-
+<script src="js/lib/bootstrap.js"></script>
 
 <!-- app init -->
 <script src="js/app-config.js"></script>
@@ -103,8 +103,8 @@
 <script src="js/views/management/application/edit/detail/application-edit-detail-controller.js"></script>
 <script src="js/views/management/development/designer/development-designer-controller.js"></script>
 <script src="js/views/management/development/cdr/development-cdr-controller.js"></script>
-<script src="js/views/management/development/api/development-api-controller.js"></script>
-
+<script src="js/views/management/development/api/view/development-api-view-controller.js"></script>
+<script src="js/views/management/development/api/edit/development-api-edit-controller.js"></script>
 
 <!-- filters -->
 <script src="js/filters/unsafe-filter.js"></script>
