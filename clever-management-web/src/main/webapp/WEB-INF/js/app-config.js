@@ -41,8 +41,12 @@ var config = {
 	'APPLICATION_LIST_URL' : prefix + '/applications/list',
 	'APPLICATION_UPLOAD_URL' : prefix + '/applications/application',
 	'APPLICATION_BY_ID_URL' : prefix + '/applications/application/id/',
-	'DEVELOPMENT_API_URL' : prefix + '/development/api/display',
-	'DEVELOPMENT_API_MAINTIAN_OVERALL_URL' : prefix + "/development/api/maintain/overall",
+	'DEVELOPMENT_API_DISPLAY_MASTER_URL' : prefix + '/development/api/display',
+	'DEVELOPMENT_API_DISPLAY_VERSION_URL' : prefix + '/development/api/display/',//{masterid}/{versionId}
+	'DEVELOPMENT_API_MAINTAIN_OVERALL_URL' : prefix + "/development/api/maintain/overall",
+	'DEVELOPMENT_API_MAINTAIN_SINGLE_URL' : prefix + '/development/api/maintain/single',
+	'DEVELOPMENT_API_REMOVE_BY_VERSIONID_URL' : prefix + '/development/api/maintain/remove/version/',
+	'DEVELOPMENT_API_REMOVE_BY_MASTER_URL' :  prefix + '/development/api/maintain/remove/master/',
 };
 var configModel = angular.module('clever.management.config', []);
 angular.forEach(config, function(value, key) {

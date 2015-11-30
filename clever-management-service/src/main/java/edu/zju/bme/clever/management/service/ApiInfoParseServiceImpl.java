@@ -129,6 +129,14 @@ public class ApiInfoParseServiceImpl implements ApiInfoParseService {
 		} else {
 			versionMaster = createApiVersionMaster();
 		}
+		ApiVersionMaster latestVersionMaster = apiMaster.getLatestVersionMaster();
+		if(latestVersionMaster!=null){
+		   versionMaster.setLastVersionMaster(latestVersionMaster);
+		   latestVersionMaster.setNextVersionMaster(versionMaster);
+		}else{
+			
+			//latestVersionMaster = null;
+		}
 
 		Application app = doc.getApplication();
 
@@ -422,7 +430,7 @@ public class ApiInfoParseServiceImpl implements ApiInfoParseService {
 				ReturnParam temp = new ReturnParam();
 				temp.setApiInformation(info);
 				temp.setName(param.getName());
-				temp.setType(param.getType().toString());
+				temp.setType(param.getType().getLocalPart());
 				temp.setIsList(false);
 				temp.setIsBaseType(true);
 				params.add(temp);
@@ -526,11 +534,11 @@ public class ApiInfoParseServiceImpl implements ApiInfoParseService {
 			for (Iterator j = ele.attributeIterator(); j.hasNext();) {
 				Attribute attribute = (Attribute) j.next();
 
-				if (attribute.getName() == "name") {
+				if (attribute.getName().equals("name")) {
 					name = attribute.getValue();
 				}
 				;
-				if (attribute.getName() == "type") {
+				if (attribute.getName().equals("type")) {
 					type = attribute.getValue();
 				}
 
@@ -548,7 +556,7 @@ public class ApiInfoParseServiceImpl implements ApiInfoParseService {
 			String typeName = null;
 			for (Iterator j = complexType.attributeIterator(); j.hasNext();) {
 				Attribute attribute = (Attribute) j.next();
-				if (attribute.getName() == "name") {
+				if (attribute.getName().equals("name")) {
 					typeName = attribute.getValue();
 				}
 			}
@@ -566,21 +574,21 @@ public class ApiInfoParseServiceImpl implements ApiInfoParseService {
 					for (Iterator iter = element.attributeIterator(); iter
 							.hasNext();) {
 						Attribute attr = (Attribute) iter.next();
-						if (attr.getName() == "name") {
+						if (attr.getName().equals("name")) {
 							param.name = attr.getStringValue();
 						}
-						if (attr.getName() == "type") {
+						if (attr.getName().equals("type")) {
 							param.type = attr.getStringValue();
 						}
-						if (attr.getName() == "nillable") {
-							if (attr.getValue() == "true") {
+						if (attr.getName().equals("nillable")) {
+							if (attr.getValue().equals("true")) {
 								param.required = false;
 							} else {
 								param.required = true;
 							}
 						}
-						if (attr.getName() == "maxOccurs") {
-							if (attr.getValue() == "unbounded") {
+						if (attr.getName().equals("maxOccurs")) {
+							if (attr.getValue().equals("unbounded")) {
 								param.isList = true;
 							} else {
 								param.isList = false;

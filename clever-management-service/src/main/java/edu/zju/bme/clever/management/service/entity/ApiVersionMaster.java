@@ -9,6 +9,7 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.ManyToOne;
 
@@ -31,6 +32,28 @@ public class ApiVersionMaster extends AbstractIndentifiedEntity {
 	private Integer version;
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "apiVersionMaster", cascade = CascadeType.ALL)
 	private Set<ApiRootUrlMaster> apiRootUrlMasters;
+	@OneToOne
+	private ApiVersionMaster lastVersionMaster;
+
+    @OneToOne
+    private ApiVersionMaster nextVersionMaster;
+    
+
+	public ApiVersionMaster getNextVersionMaster() {
+		return nextVersionMaster;
+	}
+
+	public void setNextVersionMaster(ApiVersionMaster nextVersionMaster) {
+		this.nextVersionMaster = nextVersionMaster;
+	}
+
+	public ApiVersionMaster getLastVersionMaster() {
+		return lastVersionMaster;
+	}
+
+	public void setLastVersionMaster(ApiVersionMaster lastVersionMaster) {
+		this.lastVersionMaster = lastVersionMaster;
+	}
 
 	// getter and setter
 	public ApiMaster getApiMaster() {
@@ -56,4 +79,9 @@ public class ApiVersionMaster extends AbstractIndentifiedEntity {
 	public void setApiRootUrlMasters(Set<ApiRootUrlMaster> apiRootUrlMasters) {
 		this.apiRootUrlMasters = apiRootUrlMasters;
 	}
+	
+	public boolean equals(ApiVersionMaster master){
+		return master.getId().equals(this.getId());
+	}
+	
 }

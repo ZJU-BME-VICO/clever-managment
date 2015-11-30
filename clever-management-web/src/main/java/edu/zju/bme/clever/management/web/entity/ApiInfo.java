@@ -3,8 +3,6 @@ package edu.zju.bme.clever.management.web.entity;
 import java.util.ArrayList;
 import java.util.List;
 
-
-
 public class ApiInfo {
 	private Integer Id;
 
@@ -13,10 +11,9 @@ public class ApiInfo {
 	private String apiName;
 	private String apiUrl;
 	private String reuqestMethod;
-	private String Description;
+	private String description;
 	private List<String> mediaTypes = new ArrayList<String>();
 
-	
 	public Integer getId() {
 		return Id;
 	}
@@ -66,11 +63,11 @@ public class ApiInfo {
 	}
 
 	public String getDescription() {
-		return Description;
+		return description;
 	}
 
 	public void setDescription(String description) {
-		Description = description;
+		this.description = description;
 	}
 
 	public List<String> getMediaTypes() {

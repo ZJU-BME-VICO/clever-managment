@@ -3,6 +3,7 @@ package edu.zju.bme.clever.management.service.entity;
 import java.util.List;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -14,6 +15,9 @@ import javax.persistence.Table;
 
 
 
+
+
+import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.DynamicUpdate;
 
 
@@ -29,11 +33,13 @@ public class ApiMaster extends AbstractIndentifiedEntity {
 	@Column
 	private String name;
 
-	@OneToMany(fetch=FetchType.LAZY, mappedBy = "apiMaster",orphanRemoval = true)
+	@OneToMany(fetch=FetchType.LAZY, mappedBy = "apiMaster",orphanRemoval = true, cascade=CascadeType.ALL)
 	private Set<ApiVersionMaster> versionMasters;
 
     @OneToOne
     private ApiVersionMaster latestVersionMaster;
+    
+
   
     
 	public ApiVersionMaster getLatestVersionMaster() {

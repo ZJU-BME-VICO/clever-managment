@@ -2,6 +2,8 @@ package edu.zju.bme.clever.management.service;
 
 import java.util.Map;
 
+import edu.zju.bme.clever.management.service.entity.ApiMaster;
+import edu.zju.bme.clever.management.service.entity.ApiVersionMaster;
 import edu.zju.bme.clever.management.service.exception.ResourceExportException;
 
 public interface ApiInfoMaintainService {
@@ -11,4 +13,8 @@ public interface ApiInfoMaintainService {
 			throws ResourceExportException;
 
 	public void editParamDesc(Integer id, String description);
+
+	public void deleteApiVersionMaster(Integer id) throws Exception;
+
+	public void deleteApiMaster(Integer id) throws Exception;
 }

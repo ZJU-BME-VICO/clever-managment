@@ -55,26 +55,32 @@ public class DevelopmentResourceController extends AbstractResourceController {
 
 	@RequestMapping(value = "/api/display", method = RequestMethod.GET)
 	public List<ApiMasterInfo> getApiList() {
-
 		Set<ApiMaster> masters = apiInfoProvideService.getAllApiMasters();
-		List<ApiMasterInfo> infos = masters
-				.stream()
-				.map(master -> {
-
-					ApiMasterInfo info = new ApiMasterInfo();
-					info.setApiMasterName(master.getName());
-					info.setId(master.getId());
-					info.setLatestVersion(master.getLatestVersionMaster()
-							.getVersion());
-
-					info.setApiVersionList(master.getVersionMasters()
-							.stream().map(versionMaster -> {
-								return versionMaster.getVersion();
-							}).collect(Collectors.toList()));
-
-					return info;
-				}).collect(Collectors.toList());
-
+		List<ApiMasterInfo> infos = null;
+		if (masters != null && !masters.isEmpty()) {
+			infos = masters
+					.stream()
+					.map(master -> {
+						ApiMasterInfo info = new ApiMasterInfo();
+						info.setApiMasterName(master.getName());
+						info.setId(master.getId());
+						ApiVersionMaster latestVersionMaster = master
+								.getLatestVersionMaster();
+						if (latestVersionMaster != null) {
+							info.setLatestVersion(latestVersionMaster
+									.getVersion());
+						}
+						Set<ApiVersionMaster> versionMasters = master
+								.getVersionMasters();
+						if (versionMasters != null && !versionMasters.isEmpty()) {
+							info.setApiVersionList(versionMasters.stream()
+									.map(versionMaster -> {
+										return versionMaster.getVersion();
+									}).collect(Collectors.toList()));
+						}
+						return info;
+					}).collect(Collectors.toList());
+		}
 		return infos;
 	}
 
@@ -86,19 +92,19 @@ public class DevelopmentResourceController extends AbstractResourceController {
 		return constructApiVersionMasterInfo(master);
 	}
 
-	@RequestMapping(value = "/api/display/test", method = RequestMethod.GET)
-	public ApiInfo Test() {
-		ApiInformation info = this.apiInfoProvideService
-				.getApiInformationById(3);
-		ApiInfo inf = new ApiInfo();
-		info.getRequestParams();
-		info.getReturnParams();
-		info.getApiMediaTypes();
-		inf.setRequestParams(constructRequestParamInfoList(info
-				.getRequestParams()));
-		inf.setReturnParams(constructReturnParamInfoList(info.getReturnParams()));
-		return inf;
-	}
+	// @RequestMapping(value = "/api/display/test", method = RequestMethod.GET)
+	// public ApiInfo Test() {
+	// ApiInformation info = this.apiInfoProvideService
+	// .getApiInformationById(3);
+	// ApiInfo inf = new ApiInfo();
+	// info.getRequestParams();
+	// info.getReturnParams();
+	// info.getApiMediaTypes();
+	// inf.setRequestParams(constructRequestParamInfoList(info
+	// .getRequestParams()));
+	// inf.setReturnParams(constructReturnParamInfoList(info.getReturnParams()));
+	// return inf;
+	// }
 
 	@RequestMapping(value = "/api/maintain/overall", method = RequestMethod.POST)
 	public ApiEditResult generateApi(@RequestBody ApiOriginInfo info) {
@@ -111,6 +117,34 @@ public class DevelopmentResourceController extends AbstractResourceController {
 			this.apiInfoParseService.parseWadl(info.getUrl(),
 					info.getMasterName());
 		} catch (Exception e) {
+			result.setSucceeded(false);
+			result.setMessage(e.getMessage());
+		}
+		return result;
+	}
+
+	@RequestMapping(value = "/api/maintain/remove/version/{id}", method = RequestMethod.GET)
+	public ApiEditResult deleteApiVersionMaster(@PathVariable Integer id) {
+		ApiEditResult result = new ApiEditResult();
+		result.setSucceeded(true);
+		try {
+			this.apiInfoMaintainService.deleteApiVersionMaster(id);
+		} catch (Exception e) {
+			// TODO: handle exception
+			result.setSucceeded(false);
+			result.setMessage(e.getMessage());
+		}
+		return result;
+	}
+
+	@RequestMapping(value = "/api/maintain/remove/master/{id}", method = RequestMethod.GET)
+	public ApiEditResult deleteApiMaster(@PathVariable Integer id) {
+		ApiEditResult result = new ApiEditResult();
+		result.setSucceeded(true);
+		try {
+			this.apiInfoMaintainService.deleteApiMaster(id);
+		} catch (Exception e) {
+			// TODO: handle exception
 			result.setSucceeded(false);
 			result.setMessage(e.getMessage());
 		}
