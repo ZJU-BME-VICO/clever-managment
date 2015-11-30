@@ -123,12 +123,13 @@ public class DevelopmentResourceController extends AbstractResourceController {
 		return result;
 	}
 
-	@RequestMapping(value = "/api/maintain/remove/version/{id}", method = RequestMethod.GET)
-	public ApiEditResult deleteApiVersionMaster(@PathVariable Integer id) {
+	@RequestMapping(value = "/api/maintain/remove/version/{masterId}/{version}", method = RequestMethod.GET)
+	public ApiEditResult deleteApiVersionMaster(@PathVariable Integer version,
+			@PathVariable Integer masterId) {
 		ApiEditResult result = new ApiEditResult();
 		result.setSucceeded(true);
 		try {
-			this.apiInfoMaintainService.deleteApiVersionMaster(id);
+			this.apiInfoMaintainService.deleteApiVersionMaster(masterId, version);
 		} catch (Exception e) {
 			// TODO: handle exception
 			result.setSucceeded(false);

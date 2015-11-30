@@ -14,7 +14,7 @@ public interface ApiInfoMaintainService {
 
 	public void editParamDesc(Integer id, String description);
 
-	public void deleteApiVersionMaster(Integer id) throws Exception;
+	public void deleteApiVersionMaster(Integer masterId, Integer version) throws Exception;
 
 	public void deleteApiMaster(Integer id) throws Exception;
 }

@@ -63,8 +63,8 @@ public class ApiInfoMaintainServiceImpl implements ApiInfoMaintainService {
 	}
 
 	@Override
-	public void deleteApiVersionMaster(Integer id) throws Exception {
-		ApiVersionMaster versionMaster = this.apiVersionMasterRepo.findByIdFetchAll(id);
+	public void deleteApiVersionMaster(Integer masterId, Integer version) throws Exception {
+		ApiVersionMaster versionMaster = this.apiVersionMasterRepo.findByVersionAndApiMasterIdFetchAll(version,masterId);
 		ApiMaster apiMaster = this.apiMasterRepo.findById(versionMaster
 				.getApiMaster().getId());
 
