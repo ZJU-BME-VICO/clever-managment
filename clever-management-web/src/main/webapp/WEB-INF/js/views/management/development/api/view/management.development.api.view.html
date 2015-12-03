@@ -1,138 +1,195 @@
 <div class="row">
 
-	<div class="col-md-3" role="complementary">
-		<div class="panel panel-default" ng-show="!isTemplateListHidden">
-
+	<div class="col-xs-12 col-md-12 col-lg-12 hbox">
+		<div class="panel panel-default" ng-show="true">
 			<div class="panel-heading">
-				<form class="form-horizontal">
-					<div class="form-group">
-						<label for="#category" class="col-sm-2 control-label">Category</label>
-						<div class="col-sm-10">
-							<select id="category" class="form-control" ng-model="selectedCategory"  ng-options="obj.apiMasterName for obj in list"></select>
-						</div>
+				<div class="row">
+					<div class="col-md-7 col-lg-7 col-xs-7">
+						<select  id="category" ng-model="selectedCategory" class="picker form-control" ng-options="obj.apiMasterName for obj in list"></select>
 					</div>
-
-					<div class="form-group">
-						<label for="#version" class="col-sm-2 control-label">Version</label>
-						<div class="col-sm-10">
-							<select id="version" class="form-control" ng-model="selectedVersion" ng-change="getApiListById(selectedCategory.id,selectedVersion)">
-								<option ng-repeat="version in selectedCategory.apiVersionList">{{version}}</option>
-							</select>
-						</div>
+					<div class="col-md-5 col-lg-5 col-xs-5">
+						<select id="version" class="picker form-control" ng-model="selectedVersion" ng-change="getApiListById(selectedCategory.id,selectedVersion)">
+							<option ng-repeat="version in selectedCategory.apiVersionList">{{version}}</option>
+						</select>
 					</div>
-				</form>
-				</div>
-				<div class="list-group" ng-style="{height: containerHeight - 55}" style="overflow: auto;margin-left: -5px;white-space: nowrap;">
-					<tree-view tree-data="apiList.rootUrlMastersInfos" node-id="id"
-					double-click-node-callback="selectApi(value)"
-					node-children="apiList"
-					tree-control="treeControl"
-					node-alias-name="node"
-					search-key-mapper="searchKeyMapper"
-					click-node-menu-callback="clickListNodeMenu(node, type)">
-						<tree-expanded-icon>
-							<span class="clever-icon expanded" style="padding: 0 6px;height: 12px;background-position-y: 6px;"></span>
-						</tree-expanded-icon>
-						<tree-collapsed-icon>
-							<span class="clever-icon collapsed" style="padding: 0 6px;height: 12px;background-position-y: 6px;"></span>
-						</tree-collapsed-icon>
-						<tree-node-label>
-							<span ng-show="node.apiName" ng-bind-html="node.apiName | unsafe" ></span>
-							<span ng-show="node.rootUrlName" ng-bind-html="node.rootUrlName | unsafe" style="font-weight:bold;"></span>
-						</tree-node-label>
-					</tree-view>
 				</div>
 			</div>
+
+			<div class="list-group" ng-style="{height: containerHeight - 55}" style="overflow-x:auto; overflow-y: auto; white-space: nowrap;  margin-left: -5px;">
+
+				<tree-view tree-data="apiList.rootUrlMastersInfos" node-id="id"
+				click-node-callback="selectApi(value)"
+				node-children="apiList"
+				tree-control="treeControl"
+				node-alias-name="node"
+				search-key-mapper="searchKeyMapper"
+				click-node-menu-callback="clickListNodeMenu(node, type)">
+					<tree-expanded-icon>
+						<span class="clever-icon expanded" style="padding: 0 6px;height: 12px;background-position-y: 6px;"></span>
+					</tree-expanded-icon>
+					<tree-collapsed-icon>
+						<span class="clever-icon collapsed" style="padding: 0 6px;height: 12px;background-position-y: 6px;"></span>
+					</tree-collapsed-icon>
+					<tree-node-label>
+						<img  ng-show="node.apiName" class="clever-icon api" style="padding: 0 10px;height: 16px;"></img>
+						<a ng-show="node.apiName" ng-bind-html="node.apiName | highlight:keyword | unsafe"  class="api"></a><!-- style="color: rgba(31, 139, 197, 0.94);"-->
+						<img  ng-show="node.rootUrlName" class="clever-icon list folder" style="padding: 0 10px;height: 16px;"></img>
+						<span ng-show="node.rootUrlName" ng-bind-html="node.rootUrlName | highlight:keyword | unsafe" style="font-weight:bold; color:#6F0101"></span>
+					</tree-node-label>
+				</tree-view>
+			</div>
+
 		</div>
-		<div class="col-md-9" role="main">
-			<div class="container bs-docs-container" ng-if= "selectedApi">
+		<splitter is-adjust-enabled="!isTemplateListHidden" style="min-height: 100%;">
+			<i style="cursor: pointer" ng-click="isTemplateListHidden = !isTemplateListHidden" ng-show="isTemplateListHidden" tooltip-placement="right" tooltip="Expand" tooltip-popup-delay="500"> <span class="glyphicon glyphicon-chevron-right" ng-style="{'margin-top': containerHeight/2}" ></span> </i>
+			<i style="cursor: pointer" ng-click="isTemplateListHidden = !isTemplateListHidden" ng-show="!isTemplateListHidden" tooltip-placement="right" tooltip="Collapse" tooltip-popup-delay="500"> <span class="glyphicon glyphicon-chevron-left" ng-style="{'margin-top': containerHeight/2}" ></span> </i>
+		</splitter>
+		<div class="col-xs-12 col-md-12 col-lg-12 flex-box">
+			<div class="btn-group" style="display:flex" >
+				<button ng-click="stretch()" class="btn btn-default ">
+					<span>{{stretchState | translate}}</span>
+				</button>
+				<i class="search-icon glyphicon glyphicon-search" style="position: absolute;
+				top: 3px;
+				left: 90px;
+				z-index: 20;
+				width: 30px;
+				font-size: 17px;
+				line-height: 30px;
+				color: #e6e9ed;
+				text-align: center;"></i>
+				<input  type="text" style="border-bottom-right-radius: 17px; border-top-right-radius:17px; padding-left: 40px; width: 50%"  ng-model = "apiListFilter" class="form-control" placeholder="{{'SEARCH_HINT' | translate}}" />
+			</div>
 
-				<div class="bs-callout bs-callout-info" id="callout-type-dl-truncate">
-					<h1 id="api-name" class="page-header">{{selectedApi.apiName}}</h1>
-					<p ng-if"selectedApi.description">
-						there is no description
-					</p>
-					<p ng-if"!selectedApi.description">
-						{{selectedApi.description}}
-					</p>
-					<div class="panel panel-info">
+			<div ng-if= "selectedApi" ng-style="{height: containerHeight - 55}">
+				<h1 style="margin-top: 15px;" id="api-name">{{selectedApi.apiName}}</h1>
 
-						<div class="panel-heading">
-							Introduction
+				<p>
+					You can get mangy message from this
+					<br>
+					api,for example bla bla bla
+				</p>
+				<p ng-if"!selectedApi.description">
+					{{selectedApi.description}}
+				</p>
+				<hr>
+				<tabset tab-control="tabControl">
+
+					<tab heading="Api Information">
+						<div style="padding: 15px; overflow: auto" ng-style="{height: containerHeight - 220}">
+							<div class="simpleline">
+								<span>{{'API_URL' | translate}}：</span>
+								<span class="url" id="url">{{selectedApi.apiUrl}}</span>
+								<button class="btn btn-default" ngclipboard data-clipboard-text="{{selectedApi.apiUrl}}">
+									<span class="octicon octicon-clippy" ></span>
+								</button>
+							</div>
+							<div class="simpleline">
+								<span>{{'MEDIA_TYPE' | translate}}：</span>
+								<span ng-repeat="item in selectedApi.mediaTypes">
+									<code >
+										{{item}};
+									</code>&nbsp;&nbsp; </span>
+							</div>
+							<div class="simpleline" style="display: block">
+								<span>{{'REQUEST_METHOD' | translate}}：</span>
+								<span class="button-label {{selectedApi.reuqestMethod | lowercase}}">{{selectedApi.reuqestMethod}}</span>
+							</div>
+							<div style="margin-top: 20px">
+								<span class="table-label">{{'REQUEST_PARAMS' | translate}}</span>
+								<table class="variables-matrix input-arguments">
+									<thead>
+										<tr>
+											<th>Name</th>
+											<th>Type</th>
+											<th>required</th>
+											<th>Description</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr ng-repeat="requestParam in selectedApi.requestParams">
+											<td>{{requestParam.name}}</td>
+											<td><span class="button-label {{getFixType(requestParam.type)}}">{{getFixType(requestParam.type)}}</span></td>
+											<td>{{requestParam.required}}</td>
+											<td>{{requestParam.description}}</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+							<div style="margin-top: 20px">
+								<span class="table-label">{{'RETURN_PARAMS' | translate}}</span>
+								<table class="variables-matrix input-arguments">
+									<thead>
+										<tr>
+											<th>Name</th>
+											<th>Type</th>
+											<th>Description</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr ng-repeat="returnParam in selectedApi.returnParams">
+											<td>{{returnParam.name}}</td>
+											<td><span class="button-label {{getFixType(returnParam.type)}}">{{getFixType(returnParam.type)}}</span></td>
+											<td>{{returnParam.description}}</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
 						</div>
-						<div class="panel-body" >
-							<dl class="dl-horizontal">
-								<dt>
-									<span class="label label-info">Url</span>
-								</dt>
-								<dd>
-									{{selectedApi.apiUrl}}
-								</dd>
-								<dt>
-									<span class="label label-info">FormatSupported</span>
-								</dt>
-								<dd ng-repeat="mediaType in selectedApi.mediaTypes">
-									{{mediaType}}
-								</dd>
-								<dt>
-									<span class="label label-info">RequestWay</span>
-								</dt>
-								<dd>
-									{{selectedApi.reuqestMethod}}
-								</dd>
-							</dl>
-						</div>
-					</div>
-				</div>
+					</tab>
 
-				<div class="panel panel-info">
-
-					<div class="panel-heading">
-						Request
+					<!--		<div class="panel-heading">
+					Request
 					</div>
 
 					<table class="table table-striped table-condensed">
-						<thead>
-							<tr>
-								<th>Name</th>
-								<th>Type</th>
-								<th>required</th>
-								<th>Description</th>
-							</tr>
-						</thead>
-						<tbody ng-repeat="requestParam in selectedApi.requestParams">
-							<tr>
-								<td>{{requestParam.name}}</td>
-								<td>{{requestParam.type}}</td>
-								<td>{{requestParam.required}}</td>
-								<td>{{requestParam.description}}</td>
-							</tr>
-						</tbody>
+					<thead>
+					<tr>
+					<th>Name</th>
+					<th>Type</th>
+					<th>required</th>
+					<th>Description</th>
+					</tr>
+					</thead>
+					<tbody ng-repeat="requestParam in selectedApi.requestParams">
+					<tr>
+					<td>{{requestParam.name}}</td>
+					<td>{{requestParam.type}}</td>
+					<td>{{requestParam.required}}</td>
+					<td>{{requestParam.description}}</td>
+					</tr>
+					</tbody>
 					</table>
-				</div>
-				<div class="panel panel-info">
+					</div>
+					<div class="panel panel-info">
 					<div class="panel-heading">
-						Respond
+					Respond
 					</div>
 
 					<table class="table table-striped">
-						<thead>
-							<tr>
-								<th>Name</th>
-								<th>Type</th>
-								<th>Description</th>
-							</tr>
-						</thead>
-						<tbody ng-repeat="returnParam in selectedApi.returnParams">
-							<tr>
-								<td>{{returnParam.name}}</td>
-								<td>{{returnParam.type}}</td>
-								<td>{{returnParam.description}}</td>
-							</tr>
-						</tbody>
+					<thead>
+					<tr>
+					<th>Name</th>
+					<th>Type</th>
+					<th>Description</th>
+					</tr>
+					</thead>
+					<tbody ng-repeat="returnParam in selectedApi.returnParams">
+					<tr>
+					<td>{{returnParam.name}}</td>
+					<td>{{returnParam.type}}</td>
+					<td>{{returnParam.description}}</td>
+					</tr>
+					</tbody>
 					</table>
-				</div>
+					</div>-->
+
+					<tab heading = "Error Code">
+
+					</tab>
+
 			</div>
 		</div>
 	</div>
+</div>
 

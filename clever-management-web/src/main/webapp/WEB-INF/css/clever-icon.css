@@ -20,143 +20,137 @@
 	background-repeat: no-repeat;
 }
 
-
-
-
-
 .clever-icon.dv_text {
-    background-image: url("../img/datatype/text.png");
-    background-repeat: no-repeat;
+	background-image: url("../img/datatype/text.png");
+	background-repeat: no-repeat;
 }
 .clever-icon.dv_coded_text {
-    background-image: url("../img/datatype/text.png");
-    background-repeat: no-repeat;
+	background-image: url("../img/datatype/text.png");
+	background-repeat: no-repeat;
 }
 .clever-icon.dv_quantity {
-    background-image: url("../img/datatype/quantity.png");
-    background-repeat: no-repeat;
+	background-image: url("../img/datatype/quantity.png");
+	background-repeat: no-repeat;
 }
 .clever-icon.dv_count {
-    background-image: url("../img/datatype/count.png");
-    background-repeat: no-repeat;
+	background-image: url("../img/datatype/count.png");
+	background-repeat: no-repeat;
 }
 .clever-icon.dv_date_time {
-    background-image: url("../img/datatype/datetime.png");
-    background-repeat: no-repeat;
+	background-image: url("../img/datatype/datetime.png");
+	background-repeat: no-repeat;
 }
 .clever-icon.dv_date {
-    background-image: url("../img/datatype/datetime.png");
-    background-repeat: no-repeat;
+	background-image: url("../img/datatype/datetime.png");
+	background-repeat: no-repeat;
 }
 .clever-icon.dv_time {
-    background-image: url("../img/datatype/datetime.png");
-    background-repeat: no-repeat;
+	background-image: url("../img/datatype/datetime.png");
+	background-repeat: no-repeat;
 }
 .clever-icon.dv_duration {
-    background-image: url("../img/datatype/duration.png");
-    background-repeat: no-repeat;
+	background-image: url("../img/datatype/duration.png");
+	background-repeat: no-repeat;
 }
 .clever-icon.dv_ordinal {
-    background-image: url("../img/datatype/ordinal.png");
-    background-repeat: no-repeat;
+	background-image: url("../img/datatype/ordinal.png");
+	background-repeat: no-repeat;
 }
 .clever-icon.ordinal {
-    background-image: url("../img/datatype/ordinal.png");
-    background-repeat: no-repeat;
+	background-image: url("../img/datatype/ordinal.png");
+	background-repeat: no-repeat;
 }
 .clever-icon.dv_boolean {
-    background-image: url("../img/datatype/boolean.png");
-    background-repeat: no-repeat;
+	background-image: url("../img/datatype/boolean.png");
+	background-repeat: no-repeat;
 }
 
 .clever-icon.interval_quantity {
-    background-image: url("../img/datatype/interval_quantity.png");
-    background-repeat: no-repeat;
+	background-image: url("../img/datatype/interval_quantity.png");
+	background-repeat: no-repeat;
 }
 .clever-icon.interval_count {
-    background-image: url("../img/datatype/interval_count.png");
-    background-repeat: no-repeat;
+	background-image: url("../img/datatype/interval_count.png");
+	background-repeat: no-repeat;
 }
 .clever-icon.dv_interval {
-    background-image: url("../img/datatype/interval.png");
-    background-repeat: no-repeat;
+	background-image: url("../img/datatype/interval.png");
+	background-repeat: no-repeat;
 }
 .clever-icon.dv_multimedia {
-    background-image: url("../img/datatype/multimedia.png");
-    background-repeat: no-repeat;
+	background-image: url("../img/datatype/multimedia.png");
+	background-repeat: no-repeat;
 }
 .clever-icon.dv_uri {
-    background-image: url("../img/datatype/uri.png");
-    background-repeat: no-repeat;
+	background-image: url("../img/datatype/uri.png");
+	background-repeat: no-repeat;
 }
 .clever-icon.dv_ehr_uri {
-    background-image: url("../img/datatype/uri.png");
-    background-repeat: no-repeat;
+	background-image: url("../img/datatype/uri.png");
+	background-repeat: no-repeat;
 }
-.clever-icon.dv_proportion{
-    background-image: url("../img/datatype/ratio.png");
-    background-repeat: no-repeat;
-}
-.clever-icon.dv_identifier{
-    background-image:  url("../img/datatype/identifier.png");
-    background-repeat: no-repeat;
-}
-.clever-icon.dv_amount{
-    background-image: ;/*no image*/
-    background-repeat: no-repeat;
-}
-.clever-icon.dv_parseble{
-    background-image:  url("../img/datatype/parseable.png");
-    background-repeat: no-repeat;
-}
-.clever-icon.any {
-    background-image: url("../img/datatype/any.png");
-    background-repeat: no-repeat;
-}
-.clever-icon.choice {
-    background-image: url("../img/datatype/choice.png");
-    background-repeat: no-repeat;
+.clever-icon.dv_proportion {
+	background-image: url("../img/datatype/ratio.png");
+	background-repeat: no-repeat;
 }
 .clever-icon.dv_identifier {
-    background-image: url("../img/datatype/id.png");
-    background-repeat: no-repeat;
+	background-image: url("../img/datatype/identifier.png");
+	background-repeat: no-repeat;
+}
+.clever-icon.dv_amount {
+	background-image: ;/*no image*/
+	background-repeat: no-repeat;
+}
+.clever-icon.dv_parseble {
+	background-image: url("../img/datatype/parseable.png");
+	background-repeat: no-repeat;
+}
+.clever-icon.any {
+	background-image: url("../img/datatype/any.png");
+	background-repeat: no-repeat;
+}
+.clever-icon.choice {
+	background-image: url("../img/datatype/choice.png");
+	background-repeat: no-repeat;
+}
+.clever-icon.dv_identifier {
+	background-image: url("../img/datatype/id.png");
+	background-repeat: no-repeat;
 }
 .clever-icon.slot {
-    background-image: url("../img/datatype/slot.png");
-    background-repeat: no-repeat;
+	background-image: url("../img/datatype/slot.png");
+	background-repeat: no-repeat;
 }
 .clever-icon.slot_item {
-    background-image: url("../img/datatype/slot.png");
-    background-repeat: no-repeat;
+	background-image: url("../img/datatype/slot.png");
+	background-repeat: no-repeat;
 }
 .clever-icon.slot_element {
-    background-image: url("../img/datatype/slot.png");
-    background-repeat: no-repeat;
+	background-image: url("../img/datatype/slot.png");
+	background-repeat: no-repeat;
 }
 .clever-icon.slot_cluster {
-    background-image: url("../img/datatype/slot.png");
-    background-repeat: no-repeat;
+	background-image: url("../img/datatype/slot.png");
+	background-repeat: no-repeat;
 }
 /*do not know whether we need these image*/
 .clever-icon.pointintime {
-    background-image: url("../img/datatype/pointintime.png");
-    background-repeat: no-repeat;
+	background-image: url("../img/datatype/pointintime.png");
+	background-repeat: no-repeat;
 }
 .clever-icon.interval_datetime {
-    background-image: url("../img/datatype/interval_datetime.png");
-    background-repeat: no-repeat;
+	background-image: url("../img/datatype/interval_datetime.png");
+	background-repeat: no-repeat;
 }
 .clever-icon.ratio {
-    background-image: url("../img/datatype/ratio.png");
-    background-repeat: no-repeat;
+	background-image: url("../img/datatype/ratio.png");
+	background-repeat: no-repeat;
 }
 .clever-icon.item {
-    background-image: url("../img/datatype/item.png");
-    background-repeat: no-repeat;
+	background-image: url("../img/datatype/item.png");
+	background-repeat: no-repeat;
 }
 
-
- 
 /* Reference model type */
 .clever-icon.list.action {
 	background-image: url("../img/archetype/action.png");
@@ -260,9 +254,9 @@
 	background-image: url("../img/datatype/multimedia.png");
 	background-repeat: no-repeat;
 }
-.clever-icon.parseable{
-    background-image:  url("../img/datatype/parseable.png");
-    background-repeat: no-repeat;
+.clever-icon.parseable {
+	background-image: url("../img/datatype/parseable.png");
+	background-repeat: no-repeat;
 }
 .clever-icon.id {
 	background-image: url("../img/datatype/id.png");
@@ -345,16 +339,14 @@
 	background-repeat: no-repeat;
 }
 .clever-icon.link {
-    background-image: url("../img/datatype/link.png");
-    background-repeat: no-repeat;
+	background-image: url("../img/datatype/link.png");
+	background-repeat: no-repeat;
 }
 
 .clever-icon.attribute {
-    background-image: url("../img/datatype/attribute.png");
-    background-repeat: no-repeat;
+	background-image: url("../img/datatype/attribute.png");
+	background-repeat: no-repeat;
 }
-
-
 
 /* Life cycle state */
 .clever-icon.draft {
@@ -369,7 +361,6 @@
 	background-image: url("../img/published.png");
 	background-repeat: no-repeat;
 }
-
 
 .clever-icon.archetype {
 	background-image: url("../img/letter-A-violet-icon.png");
@@ -388,7 +379,6 @@
 	background-repeat: no-repeat;
 }
 
-
 .clever-icon.expanded {
 	background-image: url("../img/arrow_expanded.png");
 	background-repeat: no-repeat;
@@ -399,6 +389,15 @@
 }
 
 .clever-icon.delete {
-    background-image: url("../img/delete.png");
-    background-repeat: no-repeat;
+	background-image: url("../img/delete.png");
+	background-repeat: no-repeat;
+}
+
+.clever-icon.api {
+	background-image: url("../img/api.png");
+	background-repeat: no-repeat;
+}
+.clever-icon.api-list{
+	background-image: url("../img/apilist.png");
+	background-repeat: no-repeat;
 }

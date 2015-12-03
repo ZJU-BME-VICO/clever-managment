@@ -1,37 +1,25 @@
-function ApiEditCtr($scope, resourceService,
-		DEVELOPMENT_API_DISPLAY_MASTER_URL,
-		DEVELOPMENT_API_MAINTAIN_SINGLE_URL,
-		DEVELOPMENT_API_REMOVE_BY_VERSIONID_URL,
-		DEVELOPMENT_API_REMOVE_BY_MASTER_URL,
-		DEVELOPMENT_API_MAINTAIN_OVERALL_URL, busyService, $modal) {
+function ApiEditCtr($scope, resourceService, DEVELOPMENT_API_DISPLAY_MASTER_URL, DEVELOPMENT_API_MAINTAIN_SINGLE_URL, DEVELOPMENT_API_REMOVE_BY_VERSIONID_URL, DEVELOPMENT_API_REMOVE_BY_MASTER_URL, DEVELOPMENT_API_MAINTAIN_OVERALL_URL, busyService, $modal) {
 
 	$scope.initData = function() {
-		resourceService.get(DEVELOPMENT_API_DISPLAY_MASTER_URL).then(
-				function(list) {
-					$scope.list = list;
-					console.log(list);
-				});
-	}
+		resourceService.get(DEVELOPMENT_API_DISPLAY_MASTER_URL).then(function(list) {
+			$scope.list = list;
+			console.log(list);
+		});
+	};
 
 	$scope.initData();
 
 	$scope.getApiListById = function(category, version) {
 		var bid = busyService.pushBusy('BUSY_LOADING');
-		resourceService.get(
-				DEVELOPMENT_API_DISPLAY_MASTER_URL + "/" + category + "/"
-						+ version).then(function(apiList) {
+		resourceService.get(DEVELOPMENT_API_DISPLAY_MASTER_URL + "/" + category + "/" + version).then(function(apiList) {
 			$scope.apiList = apiList;
 			console.log(apiList);
 		});
 		busyService.popBusy(bid);
-	}
+	};
 
 	$scope.searchKeyMapper = function(node) {
-		if (node.isDirectory) {
-			return node.name;
-		} else {
-			return node.conceptName + ' (' + node.version + ')';
-		}
+		return node.apiName? node.apiName : node.rootUrlName;
 	};
 
 	$scope.selectApi = function(api) {
@@ -56,23 +44,19 @@ function ApiEditCtr($scope, resourceService,
 		}).then(function(result) {
 			console.log(result);
 		});
-	}
+	};
 	$scope.deleteApiCategroy = function() {
-		resourceService.get(
-				DEVELOPMENT_API_REMOVE_BY_MASTER_URL
-						+ $scope.selectedCategory.id).then(function(result) {
+		resourceService.get(DEVELOPMENT_API_REMOVE_BY_MASTER_URL + $scope.selectedCategory.id).then(function(result) {
 			console.log(result);
 		});
-	}
+	};
 	$scope.deleteApiVersion = function() {
-		resourceService.get(
-				DEVELOPMENT_API_REMOVE_BY_VERSIONID_URL
-						+ $scope.selectedCategory.id + '/' + $scope.selectedVersion).then(function(result) {
+		resourceService.get(DEVELOPMENT_API_REMOVE_BY_VERSIONID_URL + $scope.selectedCategory.id + '/' + $scope.selectedVersion).then(function(result) {
 			console.log(result);
 		});
-	}
+	};
 
-	$scope.maintainOverallApi = function(masterName, url) {  
+	$scope.maintainOverallApi = function(masterName, url) {
 		var bid = busyService.pushBusy('BUSY_LOADING');
 		resourceService.post(DEVELOPMENT_API_MAINTAIN_OVERALL_URL, {
 			masterName : masterName,
@@ -82,21 +66,21 @@ function ApiEditCtr($scope, resourceService,
 			console.log(result);
 		});
 
-	}
+	};
 
 	$scope.openMaintainModel = function(size) {
 		var modalInstance = $modal.open({
 			animation : true, // animations on
 			templateUrl : 'maintainModel.html',
 			controller : function MaintainModelCtrl($scope, $modalInstance) {
-				$scope.inputMasterName;
-				$scope.inputUrl;
+				$scope.inputMasterName = '';
+				$scope.inputUrl = '';
 				console.log($scope.inputMasterName);
 				$scope.ok = function() {
 					$modalInstance.close({
 						masterName : $scope.inputMasterName,
 						url : $scope.inputUrl,
-					})
+					});
 				};
 				$scope.cancel = function() {
 					$modalInstance.dismiss('cancel');
@@ -108,7 +92,7 @@ function ApiEditCtr($scope, resourceService,
 		modalInstance.result.then(function(message) {// modal message back
 			$scope.maintainOverallApi(message.masterName, message.url);
 		});
-	}
+	};
 
 	// $scope.maintainOverallApi();
 
