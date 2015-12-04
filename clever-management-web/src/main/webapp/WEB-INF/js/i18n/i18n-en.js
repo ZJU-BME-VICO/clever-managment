@@ -14,7 +14,7 @@ angular.module('clever.management.i18n.en', ['pascalprecht.translate']).config(f
 		// Busy service
 		BUSY_LOADING : 'Loading...',
 		BUSY_UPLOADING : 'Uploading...',
-		
+
 		SEARCH_HINT : 'Key words',
 
 		// Home
@@ -70,14 +70,14 @@ angular.module('clever.management.i18n.en', ['pascalprecht.translate']).config(f
 		ARCHETYPE_EDIT_FAILED : 'Operation failed',
 		ARCHETYPE_EDIT_EDIT_SUCCEEDED_HINT : 'Edit Archetype successfully',
 		ARCHETYPE_EDIT_SAVE_SUCCEEDED_HINT : 'Save Achtetype successfully',
-		
+
 		//ARCHETYPE_EDIT_SUBMIT_SUCCEEDED_HINT : '原型提交成功',
 		ARCHETYPE_EDIT_EDIT_FAILED_HINT : ' Archetype edting failed,ERROR: {{errorMsg}}',
 		ARCHETYPE_EDIT_SUBMIT_SUCCEEDED_HINT : 'Archetype  submit successfully',
 		ARCHETYPE_EDIT_SUBMIT_FAILED_HINT : 'Archetype  submit failed,ERROR: {{errorMsg}}',
-		ARCHETYPE_NEW_VERSION_INSTRUCTION : 'Can not edit arthetype submitted or released,please create a new version of archetype by context menu', 
-        ARCHETYPE_EDIT_ADD_FAILED_HINT : ' Archetype edting failed,ERROR: {{errorMsg}}',
-        ARCHETYPE_EDIT_ADD_SUCCEEDED_HINT : 'Add archetype successfully',
+		ARCHETYPE_NEW_VERSION_INSTRUCTION : 'Can not edit arthetype submitted or released,please create a new version of archetype by context menu',
+		ARCHETYPE_EDIT_ADD_FAILED_HINT : ' Archetype edting failed,ERROR: {{errorMsg}}',
+		ARCHETYPE_EDIT_ADD_SUCCEEDED_HINT : 'Add archetype successfully',
 		// Storage template edit
 		STORAGE_TEMPLATE_EDIT_SAVE : 'Save',
 		STORAGE_TEMPLATE_EDIT_SUBMIT : 'Submit',
@@ -92,7 +92,7 @@ angular.module('clever.management.i18n.en', ['pascalprecht.translate']).config(f
 		STORAGE_TEMPLATE_NEW_VERSION_INSTRUCTION : 'Can not edit arthetype submitted or released,please create a new version of archetype by context menu',
 		STORAGE_TEMPLATE_ADD_SUCCEEDED_HINT : 'Add template successfully',
 		STORAGE_TEMPLATE_ADD_FAILED_HINT : 'Failed to add template，ERROR： {{errorMsg}}',
- 
+
 		// Archetype verify
 		ARCHETYPE_VERIFY : 'All approval items',
 		ARCHETYPE_VERIFY_ADL_DIFF : 'ADL contrast',
@@ -129,11 +129,9 @@ angular.module('clever.management.i18n.en', ['pascalprecht.translate']).config(f
 		STORAGE_TEMPLATE_UPLOAD_SUCCEEDED_HINT : 'Storage template upload succeed',
 		STORAGE_TEMPLATE_UPLOAD_FAILED : 'Operation failed',
 		STORAGE_TEMPLATE_UPLOAD_FAILED_HINT : 'Storage template upload succeed，ERROR：{{errorMsg}}',
-          
+
 		// Storage template edit
-		
-		
-		
+
 		// Storage template verify
 		STORAGE_TEMPLATE_VERIFY_OET_DIFF : 'OET comparation',
 		STORAGE_TEMPLATE_VERIFY_APPROVE : 'Approve',
@@ -193,7 +191,7 @@ angular.module('clever.management.i18n.en', ['pascalprecht.translate']).config(f
 		MENU_MANAGEMENT_STORAGE_EDIT : 'Template edit',
 		MENU_MANAGEMENT_STORAGE_VERIFY : 'Template verify',
 		MENU_MANAGEMENT_STORAGE_DEPLOY : 'Template deploy',
-		MENU_MANAGEMENT_APPLICATION : 'Applcation management',	
+		MENU_MANAGEMENT_APPLICATION : 'Applcation management',
 		MENU_MANAGEMENT_APPLICATION_VIEW : 'Application display',
 		MENU_MANAGEMENT_APPLICATION_EDIT : 'Application edit',
 		MENU_MANAGEMENT_INTEGRATION : 'Integration Management',
@@ -201,31 +199,31 @@ angular.module('clever.management.i18n.en', ['pascalprecht.translate']).config(f
 		MENU_MANAGEMENT_DEVELOPMENT_DESIGN : 'Designer',
 		MENU_MANAGEMENT_DEVELOPMENT_API_DISPLAY : 'API display',
 		MENU_MANAGEMENT_DEVELOPMENT_CDR : 'Database service',
-		
+
 		//MENU_MANAGEMENT_ARCHETYPE_VIEW_INFO : 'Archetype是CLEVER™的核心，它基于openEHR规范实现，是一套从临床基本概念出发的信息模型，而且与软件系统开发独立，因而可由临床人员直接管理和维护，具备较高灵活性。Archetype是CLEVER™的核心，它基于openEHR规范实现，是一套从临床基本概念出发的信息模型，而且与软件系统开发独立，因而可由临床人员直接管理和维护，具备较高灵活性。',//'原型查看简介',
 
 		//Menu-infomation
 		MENU_INFO : 'Outline information',
 		MENU_MANAGEMENT_INFO : 'CLEVER Management Platform，Function modules management',
 		MENU_MANAGEMENT_ARCHETYPE_INFO : 'Archetype is the kernel of CLEVER™，it is a information module origined base concept of clinic, implemented based on the standard of openEHR, and independent of software system development. Therefore it can be managed and maintained by clinical staff directly,which is highly flexible.',
-		MENU_MANAGEMENT_ARCHETYPE_VIEW_INFO : 'You can check all the archetypes in database here, including all the states and vertions',//'原型查看简介',
-		MENU_MANAGEMENT_ARCHETYPE_UPLOAD_INFO : 'You can upload archetypes to database here.The archetypes should be ADL files.Uploaded archetypes will be stored in database in draft status.',//'原型上传简介',
-		MENU_MANAGEMENT_ARCHETYPE_VERIFY_INFO : 'You can audit the submitted archetypes here. Approve archetype:Status changed into released; Reject archetype:Status restore to draft;Delete archetype:remove archetype. ',//'原型审核简介',
-		MENU_MANAGEMENT_ARCHETYPE_EDIT_INFO : 'You can creat archetype and edit archetypen here. Archetype editing includes that edit the basic information of archetype,add delete or modify the nodes of the part of archetype definition and ontology edit',//'原型编辑简介',
+		MENU_MANAGEMENT_ARCHETYPE_VIEW_INFO : 'You can check all the archetypes in database here, including all the states and vertions', //'原型查看简介',
+		MENU_MANAGEMENT_ARCHETYPE_UPLOAD_INFO : 'You can upload archetypes to database here.The archetypes should be ADL files.Uploaded archetypes will be stored in database in draft status.', //'原型上传简介',
+		MENU_MANAGEMENT_ARCHETYPE_VERIFY_INFO : 'You can audit the submitted archetypes here. Approve archetype:Status changed into released; Reject archetype:Status restore to draft;Delete archetype:remove archetype. ', //'原型审核简介',
+		MENU_MANAGEMENT_ARCHETYPE_EDIT_INFO : 'You can creat archetype and edit archetypen here. Archetype editing includes that edit the basic information of archetype,add delete or modify the nodes of the part of archetype definition and ontology edit', //'原型编辑简介',
 		MENU_MANAGEMENT_STORAGE_INFO : 'DataManager is responsible for the data management of CLEVER™ platform，All the data classify by archetype,which is conveniet for clinic staff to query,add,modify and delete.All the operation will be reflected to physical memory safely',
 		MENU_MANAGEMENT_STORAGE_VIEW_INFO : 'You can check the templates in database including all the states and versions.',
 		MENU_MANAGEMENT_STORAGE_UPLOAD_INFO : 'You can upload templates to database here，including OET files and ARM files',
 		MENU_MANAGEMENT_STORAGE_EDIT_INFO : 'You can create template for perticular archetype，edit the occurrences attribute of nodes and make slot operation',
 		MENU_MANAGEMENT_STORAGE_VERIFY_INFO : 'You can audit the templates submitted.Approve Template：change the state of template into published to deploy; Reject template： change the state of template into draft for further edit; Remove Template： Delete the template in database directly',
-		MENU_MANAGEMENT_STORAGE_DEPLOY_INFO : 'You can deployed the template in published condition into database, deploy operation will carete tables in database based on template.', 
+		MENU_MANAGEMENT_STORAGE_DEPLOY_INFO : 'You can deployed the template in published condition into database, deploy operation will carete tables in database based on template.',
 		MENU_MANAGEMENT_APPLICATION_INFO : 'CLEVER™ provide a full set of standard interface and archetype data access lauguage,and a method to generate application software template which is based on archetype.  Various data application software can be developed on this basis,which could promote the development and usage of data.',
 		MENU_MANAGEMENT_APPLICATION_VIEW_INFO : 'You can check all the applications here.',
 		MENU_MANAGEMENT_APPLICATION_EDIT_INFO : 'You can modify the name ,Introduction,url,and image of applications.',
 		MENU_MANAGEMENT_INTEGRATION_INFO : 'SHINE™ ,the engine of IHE，integrate various different strcture system to CLEVER™ platform. SHINE™ provide Integration method based on archetype semantic ，which can be configured convenietly and efficiently.',
 		MENU_MANAGEMENT_DEVELOPMENT_DESIGN_INFO : 'Introduction of designer',
-        MENU_MANAGEMENT_DEVELOPMENT_INFO : 'Introduction of development platform',
-        MENU_MANAGEMENT_DEVELOPMENT_API_INFO : 'Introduction of API display',
-        MENU_MANAGEMENT_DEVELOPMENT_CDR_INFO : 'Introduction of Database service',
+		MENU_MANAGEMENT_DEVELOPMENT_INFO : 'Introduction of development platform',
+		MENU_MANAGEMENT_DEVELOPMENT_API_INFO : 'Introduction of API display',
+		MENU_MANAGEMENT_DEVELOPMENT_CDR_INFO : 'Introduction of Database service',
 		// Application edit and view
 		APPLICATION_EDIT_FIND_HINT : 'Application name',
 		APPLICATION_EDIT_NAME : 'Name',
@@ -274,24 +272,61 @@ angular.module('clever.management.i18n.en', ['pascalprecht.translate']).config(f
 		// Storage template pane
 		STORAGE_TEMPLATE_PANE_INFO : 'Information',
 		STORAGE_TEMPLATE_PANE_DOWNLOAD : 'Download',
-		
+
 		//archetype editor pane
-		ARCHETYPE_PANE_CREATE: 'Create',
-		ARCHETYPE_PANE_SAVE: 'Save',
-		ARCHETYPE_PANE_SUBMIT: 'Submit',
-		ARCHETYPE_PANE_DIFF: 'Compare',
-		
-		
+		ARCHETYPE_PANE_CREATE : 'Create',
+		ARCHETYPE_PANE_SAVE : 'Save',
+		ARCHETYPE_PANE_SUBMIT : 'Submit',
+		ARCHETYPE_PANE_DIFF : 'Compare',
+
 		//verify pane
-		SUBMIT_TIME: 'Submit time',
+		SUBMIT_TIME : 'Submit time',
 		EDITOR : 'Editor',
 		ARCHETYPE_TYPE : 'Achtetype type',
 		TEMPLATE_TYPE : 'Template type',
 		CONCEPT_NAME : 'Concept Name',
-		
+
 		//header pane
-		BASE_INFORMATION : 'Base information' ,
+		BASE_INFORMATION : 'Base information',
 		AUTHORSHIP : 'Author information',
-		OTHER_DETAILS: 'Other details',
+		OTHER_DETAILS : 'Other details',
+
+		DEVELOPEMENT_API_VIEW_URL : 'Url',
+		DEVELOPEMENT_API_VIEW_MEDIA_TYPE : 'Media type',
+		DEVELOPEMENT_API_VIEW_REQUEST_METHOD : 'Request method',
+		DEVELOPEMENT_API_VIEW_REQUEST_PARAMS : 'Rquest params',
+		DEVELOPEMENT_API_VIEW_RETURN_PARAMS : 'Return params',
+		DEVELOPMENT_API_VIEW_NAME : 'Name',
+		DEVELOPMENT_API_VIEW_TYPE : 'Type',
+		DEVELOPMENT_API_VIEW_REQUIRED : 'Required',
+		DEVELOPMENT_API_VIEW_DESCRIPTIOIN : 'Description',
+		DEVELOPMENT_API_VIEW_TOOLTIP_COPY : 'Copy',
+		DEVELOPMENT_API_VIEW_ERROR_CODE : 'Error code',
+		DEVELOPMENT_API_VIEW_API_INFORMATION : 'Api information',
+
+	
+		DEVELOPMENT_API_EDIT_NAME : 'Name',
+		DEVELOPMENT_API_EDIT_TYPE : 'Type',
+		DEVELOPMENT_API_EDIT_REQUIRED : 'Required',
+		DEVELOPMENT_API_EDIT_DESCRIPTIOIN : 'Description',
+
+		DEVELOPEMENT_API_EDIT_REQUEST_PARAMS : 'Rquest params',
+		DEVELOPEMENT_API_EDIT_RETURN_PARAMS : 'Return params',
+		DEVELOPMENT_API_EDIT_BASE_INFO : 'Base',
+		DEVELOPMENT_API_EDIT_ROOT_URL_INFO : 'Root url',
+		DEVELOPMENT_API_EDIT_PARAM_INFO : 'Params',
+		DEVELOPMENT_API_EDIT_SUBMIT_CHANGES : 'Submit changes',
+		DEVELOPMENT_API_EDIT_ENGLISH : 'English',
+		DEVELOPMENT_API_EDIT_CHINESE : 'Chinese',
+		DEVELOPMENT_API_EDIT_ITEM : 'Item',
+      
+		DEVELOPMENT_API_EDIT_NO_API_INFO_HINT : 'Please select API from API list！',
+		DEVELOPMENT_API_EDIT_DESCRIPTION_PLACEHOLDER_EN : 'Desc in English',
+		DEVELOPMENT_API_EDIT_DESCRIPTION_PLACEHOLDER_ZH : 'Desc in Chinese',
+        DEVELOPMENT_API_EDIT_ADD_UPDATE:'Add/Update',
+        DEVELOPMENT_API_EDIT_REMOVE:'Delete',
+		//others,
+		EXPAND_ALL : 'Expand All',
+		COLLAPSE_ALL : 'Collapse All',
 	});
 });

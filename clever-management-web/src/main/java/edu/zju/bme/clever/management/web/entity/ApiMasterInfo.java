@@ -7,9 +7,10 @@ import java.util.Map;
 
 public class ApiMasterInfo {
 	private Integer Id;
-	private String ApiMasterName;
+	private String name;
+	private String chineseName;
 
-	private List<Integer> apiVersionList = new ArrayList<Integer>();
+	private List<Integer> versionList = new ArrayList<Integer>();
 
 	// private ApiVersionMasterInfo latestApiVersionMasterInfo;
 	private Integer latestVersion;
@@ -32,16 +33,12 @@ public class ApiMasterInfo {
 		Id = id;
 	}
 
-	public String getApiMasterName() {
-		return ApiMasterName;
+	public List<Integer> getVersionList() {
+		return versionList;
 	}
 
-	public List<Integer> getApiVersionList() {
-		return apiVersionList;
-	}
-
-	public void setApiVersionList(List<Integer> apiVersionList) {
-		this.apiVersionList = apiVersionList;
+	public void setVersionList(List<Integer> versionList) {
+		this.versionList = versionList;
 	}
 
 	public Integer getLatestVersion() {
@@ -52,8 +49,20 @@ public class ApiMasterInfo {
 		this.latestVersion = latestVersion;
 	}
 
-	public void setApiMasterName(String apiMasterName) {
-		ApiMasterName = apiMasterName;
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getChineseName() {
+		return chineseName;
+	}
+
+	public void setChineseName(String chineseName) {
+		this.chineseName = chineseName;
 	}
 
 }

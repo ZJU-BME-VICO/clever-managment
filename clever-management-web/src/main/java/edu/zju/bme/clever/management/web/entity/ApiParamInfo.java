@@ -6,6 +6,8 @@ public class ApiParamInfo {
 	private String name;
 	private Boolean required;
 	private String description;
+	private String chineseDescription;
+
 
 	public Integer getId() {
 		return Id;
@@ -47,4 +49,11 @@ public class ApiParamInfo {
 		this.description = description;
 	}
 
+	public String getChineseDescription() {
+		return chineseDescription;
+	}
+
+	public void setChineseDescription(String chineseDescription) {
+		this.chineseDescription = chineseDescription;
+	}
 }

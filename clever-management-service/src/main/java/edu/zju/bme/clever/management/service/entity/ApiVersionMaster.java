@@ -19,7 +19,7 @@ import org.hibernate.annotations.DynamicUpdate;
 @Entity
 @Table
 @DynamicUpdate(true)
-public class ApiVersionMaster extends AbstractIndentifiedEntity {
+public class ApiVersionMaster extends AbstractIndentifiedEntity implements Comparable<ApiVersionMaster>{
 
 	/**
 	 * 
@@ -83,5 +83,13 @@ public class ApiVersionMaster extends AbstractIndentifiedEntity {
 	public boolean equals(ApiVersionMaster master){
 		return master.getId().equals(this.getId());
 	}
-	
+
+	@Override
+	public int compareTo(ApiVersionMaster master) {
+		if (this.getVersion() < master.getVersion()) {
+			return -1;
+		} else {
+			return 1;
+		}
+	}
 }

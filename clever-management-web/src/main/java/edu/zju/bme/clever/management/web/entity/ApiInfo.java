@@ -8,10 +8,12 @@ public class ApiInfo {
 
 	private List<ApiParamInfo> requestParams = new ArrayList<ApiParamInfo>();
 	private List<ApiParamInfo> returnParams = new ArrayList<ApiParamInfo>();
-	private String apiName;
-	private String apiUrl;
+	private String name;
+	private String url;
 	private String reuqestMethod;
 	private String description;
+	private String chineseDescription;
+	private String chineseName;
 	private List<String> mediaTypes = new ArrayList<String>();
 
 	public Integer getId() {
@@ -20,6 +22,14 @@ public class ApiInfo {
 
 	public void setId(Integer id) {
 		Id = id;
+	}
+
+	public String getChineseDescription() {
+		return chineseDescription;
+	}
+
+	public void setChineseDescription(String chineseDescription) {
+		this.chineseDescription = chineseDescription;
 	}
 
 	public List<ApiParamInfo> getRequestParams() {
@@ -38,20 +48,28 @@ public class ApiInfo {
 		this.returnParams = returnParams;
 	}
 
-	public String getApiName() {
-		return apiName;
+	public String getName() {
+		return name;
 	}
 
-	public void setApiName(String apiName) {
-		this.apiName = apiName;
+	public void setName(String name) {
+		this.name = name;
 	}
 
-	public String getApiUrl() {
-		return apiUrl;
+	public String getUrl() {
+		return url;
 	}
 
-	public void setApiUrl(String apiUrl) {
-		this.apiUrl = apiUrl;
+	public void setUrl(String url) {
+		this.url = url;
+	}
+
+	public String getChineseName() {
+		return chineseName;
+	}
+
+	public void setChineseName(String chineseName) {
+		this.chineseName = chineseName;
 	}
 
 	public String getReuqestMethod() {

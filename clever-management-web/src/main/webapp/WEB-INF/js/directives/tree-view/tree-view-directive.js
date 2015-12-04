@@ -5,6 +5,7 @@ angular.module('clever.management.directives.treeView', []).directive('treeView'
 		scope : {
 			treeData : '=',
 			treeControl : '=',
+			language: '=',
 			nodeId : '@',
 			menuPrefix:'@',
 			nodeChildren : '@',
@@ -219,6 +220,7 @@ angular.module('clever.management.directives.treeView', []).directive('treeView'
 						});
 						
 						angular.forEach(nodes, function(node) {	
+							if($scope.searchKeyMapper(node)){					
 								if ($scope.searchKeyMapper(node).toLowerCase().indexOf(keyword.toLowerCase()) < 0) {
 									if (!node.containsTargetChild) {
 										node.show = false;
@@ -236,6 +238,8 @@ angular.module('clever.management.directives.treeView', []).directive('treeView'
 										tempNode.containsTargetChild = true;
 									}
 								}
+
+							}
 						}); 
 
 					} else {

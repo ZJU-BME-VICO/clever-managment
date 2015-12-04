@@ -175,6 +175,9 @@ h3.tag {
 .button-label.dateTime {
 	background: #F18E9F;
 }
+.button-label.others {
+	background: #333;
+}
 
 .api {
 	color: #999;
@@ -183,11 +186,11 @@ h3.tag {
 	color: black;
 	text-decoration: underline;
 }
-tree-view-node li .selected .api {
+/*tree-view-node li .selected .api {
 	color: black;
 	font-weight: bold;
-	/*background: #fff;*/
-}
+
+}*/
 
 .type-hint-expression {
 	background: purple;
@@ -278,4 +281,13 @@ tree-view-node li .selected .api {
 	text-overflow: '';
 }
 
-
+td > span.true {
+	color: #1D7424;
+	font-weight: 600;
+	
+}
+td > span.false {
+	color: #C7254E;
+	font-weight: 600;
+	
+}

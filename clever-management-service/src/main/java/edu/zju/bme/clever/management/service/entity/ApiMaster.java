@@ -11,15 +11,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-
-
-
-
-
-
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.DynamicUpdate;
-
 
 @Entity
 @Table
@@ -32,16 +25,23 @@ public class ApiMaster extends AbstractIndentifiedEntity {
 
 	@Column
 	private String name;
+	@Column
+	private String ChineseName;
 
-	@OneToMany(fetch=FetchType.LAZY, mappedBy = "apiMaster",orphanRemoval = true, cascade=CascadeType.ALL)
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "apiMaster", orphanRemoval = true, cascade = CascadeType.ALL)
 	private Set<ApiVersionMaster> versionMasters;
 
-    @OneToOne
-    private ApiVersionMaster latestVersionMaster;
-    
+	@OneToOne
+	private ApiVersionMaster latestVersionMaster;
 
-  
-    
+	public String getChineseName() {
+		return ChineseName;
+	}
+
+	public void setChineseName(String chineseName) {
+		ChineseName = chineseName;
+	}
+
 	public ApiVersionMaster getLatestVersionMaster() {
 		return latestVersionMaster;
 	}
@@ -49,8 +49,6 @@ public class ApiMaster extends AbstractIndentifiedEntity {
 	public void setLatestVersionMaster(ApiVersionMaster latestVersionMaster) {
 		this.latestVersionMaster = latestVersionMaster;
 	}
-
-
 
 	public Set<ApiVersionMaster> getVersionMasters() {
 		return versionMasters;
@@ -67,8 +65,5 @@ public class ApiMaster extends AbstractIndentifiedEntity {
 	public void setName(String name) {
 		this.name = name;
 	}
-
-
-
 
 }

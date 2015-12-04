@@ -31,10 +31,21 @@ public abstract class AbstractParam extends AbstractIndentifiedEntity {
 	private Boolean isBaseType;
 	@Column
 	private Boolean isList;
+	@Lob
+	@Column
+	private String description;
 
 	@Lob
 	@Column
-	private String Description;
+	private String chineseDescription;
+
+	public String getChineseDescription() {
+		return chineseDescription;
+	}
+
+	public void setChineseDescription(String chineseDescription) {
+		this.chineseDescription = chineseDescription;
+	}
 
 	public ApiInformation getApiInformation() {
 		return apiInformation;
@@ -61,11 +72,11 @@ public abstract class AbstractParam extends AbstractIndentifiedEntity {
 	}
 
 	public String getDescription() {
-		return Description;
+		return description;
 	}
 
 	public void setDescription(String description) {
-		Description = description;
+		this.description = description;
 	}
 
 	public Boolean getIsBaseType() {

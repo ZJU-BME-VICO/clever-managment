@@ -1,21 +1,30 @@
 function ApiViewCtr($scope, $document, resourceService, DEVELOPMENT_API_DISPLAY_MASTER_URL, treeDataFormatService, busyService) {
 
 	$scope.treeControl = {};
+	$scope.languages = ['zh', 'en'];
+	$scope.treeLanguage = 'en';
+	$scope.selectLanguage = function(lan) {
+		$scope.treeLanguage = lan;
+	};
+
 	$scope.initData = function() {
+		var bid = busyService.pushBusy('BUSY_LOADING');
 		resourceService.get(DEVELOPMENT_API_DISPLAY_MASTER_URL).then(function(list) {
 			$scope.list = list;
 			formatList(list);
 			console.log(list);
 			if (angular.isArray(list)) {
 				$scope.selectedCategory = list[0];
-				if (angular.isArray(list[0].apiVersionList)) {
-					$scope.selectedVersion = list[0].apiVersionList[0];
+				if (angular.isArray(list[0].versionList)) {
+					$scope.selectedVersion = list[0].versionList[0];
 					$scope.getApiListById($scope.selectedCategory.id, $scope.selectedVersion);
 				}
 			}
-
+			busyService.popBusy(bid);
 		});
-	};
+	}();
+
+	//api tree expand and collapse action
 	$scope.stretchState = 'EXPAND_ALL';
 	$scope.stretch = function() {
 		//$scope.stretchState = ($scope.stretchState == 'EXPAND_ALL') ? 'COLLAPSE_ALL' : 'EXPAND_ALL';
@@ -26,22 +35,32 @@ function ApiViewCtr($scope, $document, resourceService, DEVELOPMENT_API_DISPLAY_
 			$scope.treeControl.collapseAll();
 			$scope.stretchState = 'EXPAND_ALL';
 		}
-
 	};
+
 	$scope.copyUrl = function() {
-		//var string = angular.element( $document.querySelector('url')).value;
-      
-      return $scope.selectApi.apiUrl;
+		return $scope.selectApi.url;
 	};
 
-	$scope.getFixType = function(type) {
+	// auxiliary operate function, should be optimize
+	var baseTypeList = ['string', 'int', 'dateTime'];
+	$scope.getFixClass = function(type) {
+		var temp = type.slice(type.indexOf(":") + 1, type.length);
+		if (baseTypeList.indexOf(temp) != -1) {
+			return temp;
+		} else {
+			return 'others';
+		};
+	};
+	$scope.getFixTypeName = function(type) {
 		return type.slice(type.indexOf(":") + 1, type.length);
 	};
+
+	//sort the version list in master
 	function formatList(list) {
 		angular.forEach(list, function(value) {
-			if (value.apiVersionList) {
-				if (angular.isArray(value.apiVersionList)) {
-					value.apiVersionList.sort(function(a, b) {
+			if (value.versionList) {
+				if (angular.isArray(value.versionList)) {
+					value.versionList.sort(function(a, b) {
 						return a - b;
 					});
 				};
@@ -49,31 +68,59 @@ function ApiViewCtr($scope, $document, resourceService, DEVELOPMENT_API_DISPLAY_
 		});
 	};
 
-	$scope.initData();
-
-	$scope.getApiListById = function(category, version) {
+	//get data from backend with master id and version
+	$scope.getApiListById = function(categoryId, version) {
 		var bid = busyService.pushBusy('BUSY_LOADING');
-		resourceService.get(DEVELOPMENT_API_DISPLAY_MASTER_URL + "/" + category + "/" + version).then(function(apiList) {
+		resourceService.get(DEVELOPMENT_API_DISPLAY_MASTER_URL + "/" + categoryId + "/" + version).then(function(apiList) {
 			$scope.apiList = apiList;
-			console.log(apiList);
+			$scope.stretchState = 'EXPAND_ALL';
+			busyService.popBusy(bid);
 		});
-		busyService.popBusy(bid);
+
 	};
 
+	//for api tree search
 	$scope.searchKeyMapper = function(node) {
-		return node.apiName ? node.apiName : node.rootUrlName;
+		if ($scope.treeLanguage == 'en') {
+			return node.name ? node.name : node.rootUrlName;
+		} else if ($scope.treeLanguage == 'zh') {
+			return node.chineseName;
+		}
 	};
+	$scope.apiListFilter = {
+		value : "",
+	};
+	$scope.$watch("apiListFilter.value", function(newValue, oldValue) {
+		if (newValue != undefined) {
+			if ($scope.treeControl && $scope.treeControl.search) {
+				$scope.treeControl.search(newValue);
+			}
+		}
 
-	$scope.$watch("apiListFilter", function(newValue) {
-		$scope.treeControl.search(newValue);
 	});
+
+	//click api node call back,select api, and jump the tab to base tab
 	$scope.selectApi = function(api) {
 		if (api.rootUrlName) {
 			$scope.selectedApi = undefined;
 		}
-		if (api.apiName) {
+		if (api.name) {
 			$scope.selectedApi = api;
+
 		}
 	};
+
+	//when change the api master(category), select the latest version by default
+	$scope.$watch('selectedCategory', function(newValue, oldValue) {
+		if (newValue && oldValue) {
+			var versionList = $scope.selectedCategory.versionList;
+			$scope.selectedVersion = versionList[versionList.length - 1];
+		}
+	});
+	$scope.$watch('selectedVersion', function(newValue, oldValue) {
+		if (newValue && oldValue) {
+			$scope.getApiListById($scope.selectedCategory.id, $scope.selectedVersion);
+		}
+	});
 
 }
