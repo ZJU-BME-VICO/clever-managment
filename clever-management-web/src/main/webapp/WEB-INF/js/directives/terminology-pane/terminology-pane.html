@@ -3,13 +3,13 @@
 		<div class="panel-heading" style="cursor: pointer" ng-click="isTermCollapsed = !isTermCollapsed">
 			<span ng-show="isTermCollapsed" class="glyphicon glyphicon-chevron-right"></span>
 			<span ng-show="!isTermCollapsed" class="glyphicon glyphicon-chevron-down"></span>
-			<span>  Term</span>
+			<span>  {{'RERMINOLOGY_PANE_TERM' | translate}}</span>
 		</div>
 		<div class="panel-body" collapse="isTermCollapsed">
 			<table class="table table-hover">
 				<thead>
 					<tr>
-						<th>#</th><th>Code</th><th>Text</th><th>Description</th>
+						<th>#</th><th>{{'RERMINOLOGY_PANE_CODE' | translate}}</th><th>{{'RERMINOLOGY_PANE_TEXT' | translate}}</th><th>{{'RERMINOLOGY_PANE_DESCRIPTION' | translate}}</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -27,13 +27,13 @@
 		<div class="panel-heading" style="cursor: pointer" ng-click="isConstraintCollapsed = !isConstraintCollapsed">
 			<span ng-show="isConstraintCollapsed" class="glyphicon glyphicon-chevron-right"></span>
 			<span ng-show="!isConstraintCollapsed" class="glyphicon glyphicon-chevron-down"></span>
-			<span>  Constraint</span>
+			<span>  {{'RERMINOLOGY_PANE_CONSTRAINT' | translate}}</span>
 		</div>
 		<div class="panel-body" collapse="isConstraintCollapsed">
 			<table class="table table-hover">
 				<thead>
 					<tr>
-						<th>#</th><th>Code</th><th>Text</th><th>Description</th>
+						<th>#</th><th>{{'RERMINOLOGY_PANE_CODE' | translate}}</th><th>{{'RERMINOLOGY_PANE_TEXT' | translate}}</th><th>{{'RERMINOLOGY_PANE_DESCRIPTION' | translate}}</th>
 					</tr>
 				</thead>
 				<tbody>

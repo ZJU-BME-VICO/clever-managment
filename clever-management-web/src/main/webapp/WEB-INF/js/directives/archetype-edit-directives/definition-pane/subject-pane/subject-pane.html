@@ -5,69 +5,69 @@
 	<hr>
 
 	<div ng-if="partyType.value == 'PARTY_SELF'">
-		<span>Attributes :</span>
+		<span>{{'SUBJECT_PANE_ATTRIBUTES_' | translate}} :</span>
 		<br>
 		<div style="margin-left:20px">
-			<span class="attribute">externalRef</span>
+			<span class="attribute">{{'SUBJECT_PANE_EXTERNALREF' | translate}}</span>
 			<input type="checkbox" ng-model="hasExternalRef.value">
 			<div ng-if="hasExternalRef.value" style="margin-left:20px">
-				<h5>ID:</h5>
+				<h5>{{'SUBJECT_PANE_ID' | translate}}:</h5>
 				<input  class="form-control" type="text"  />
-				<h5>Namespace:</h5>
+				<h5>{{'SUBJECT_PANE_NAMESPACE' | translate}}:</h5>
 				<input class="form-control" type="text" />
-				<h5>Type:</h5>
+				<h5>{{'SUBJECT_PANE_TYPE' | translate}}:</h5>
 				<input class="form-control" type="text" />
 			</div>
 		</div>
 	</div>
 
 	<div ng-if="partyType.value == 'PARTY_IDENTIFIED'">
-		<span>Attributes :</span>
+		<span>{{'SUBJECT_PANE_ATTRIBUTES_' | translate}} :</span>
 		<br>
 		<div style="margin-left:20px">
-			<span class="attribute">externalRef</span>
+			<span class="attribute">{{'SUBJECT_PANE_EXTERNALREF' | translate}}</span>
 			<input type="checkbox" ng-model="hasExternalRef.value">
 			<br>
 			<div ng-if="hasExternalRef.value" style="margin-left:20px">
-				<h5>ID:</h5>
+				<h5>{{'SUBJECT_PANE_ID' | translate}}:</h5>
 				<input  class="form-control" type="text"  />
-				<h5>Namespace:</h5>
+				<h5>{{'SUBJECT_PANE_NAMESPACE' | translate}}:</h5>
 				<input class="form-control" type="text" />
-				<h5>Type:</h5>
+				<h5>{{'SUBJECT_PANE_TYPE' | translate}}:</h5>
 				<input class="form-control" type="text" />
 			</div>
-			<span class="attribute">name:</span>
+			<span class="attribute">{{'SUBJECT_PANE_NAME' | translate}}:</span>
 			<input type="checkbox" ng-model="hasName.value" />
 			<br>
 			<div ng-if="hasName.value" style="margin-left:20px">
-				<span>String</span>
+				<span>{{'SUBJECT_PANE_STRING' | translate}}</span>
 				<input  class ="form-control" type="text" />
 			</div>
-			<span class="attribute">identifiers:</span>
+			<span class="attribute">{{'SUBJECT_PANE_IDENTIFIERS' | translate}}:</span>
 			<input type="checkbox" ng-model="hasIdentifiers.value" />
 			<br>
 			<div ng-if="hasIdentifiers.value" style="margin-left:20px">
-				edit identifier here
+				{{'SUBJECT_PANE_EDIT_IDENTIFIER_HERE' | translate}}
 			</div>
 		</div>
 	</div>
 
 	<div ng-if="partyType.value=='PARTY_RELATED'">
-		<span><strong>Attributes :</strong></span>
+		<span><strong>{{'SUBJECT_PANE_ATTRIBUTES_' | translate}} :</strong></span>
 		<br>
 		<div style="margin-left:20px">
-			<span class="attribute">externalRef</span>
+			<span class="attribute">{{'SUBJECT_PANE_EXTERNALREF' | translate}}</span>
 			<input type="checkbox" ng-model="hasExternalRef.value">
 			<br>
 			<div ng-if="hasExternalRef.value" style="margin-left:20px">
-				<h5>ID:</h5>
+				<h5>{{'SUBJECT_PANE_ID' | translate}}:</h5>
 				<input  class="form-control" type="text" />
-				<h5>Namespace:</h5>
+				<h5>{{'SUBJECT_PANE_NAMESPACE' | translate}}:</h5>
 				<input class="form-control" type="text" />
-				<h5>Type:</h5>
+				<h5>{{'SUBJECT_PANE_TYPE' | translate}}:</h5>
 				<input class="form-control" type="text" />
 			</div>
-			<span class="attribute">relationship</span>
+			<span class="attribute">{{'SUBJECT_PANE_RELATIONSHIP' | translate}}</span>
 		</div>
 	</div>
 

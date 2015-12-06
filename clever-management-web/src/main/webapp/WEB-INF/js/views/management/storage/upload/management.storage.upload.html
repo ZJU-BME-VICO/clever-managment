@@ -34,7 +34,7 @@
 							<span ng-show="!template.oetValid" style="color: red;">{{'STORAGE_TEMPLATE_UPLOAD_OET_ERROR_HINT' | translate}}</span>
 							<span ng-show="!template.armValid" style="color: red;">{{'STORAGE_TEMPLATE_UPLOAD_ARM_ERROR_HINT' | translate}}</span>
 							<span ng-show="template.serverValidating"><img ng-src="{{WEBSITE_DOMAIN}}/img/loading.gif" style="max-height: 18px;"></img> {{'STORAGE_TEMPLATE_UPLOAD_VALIDATING_HINT' | translate}}</span>
-							<span ng-show="template.serverValid">Template ID: {{template.name}}</span>
+							<span ng-show="template.serverValid">{{'MANAGEMENT_STORAGE_UPLOAD_TEMPLATE_ID' | translate}}: {{template.name}}</span>
 							<span ng-show="template.serverValid == false"> <span style="color: red;">{{'STORAGE_TEMPLATE_UPLOAD_VALIDATE_ERROR_HINT' | translate}}</span> <a style="cursor: pointer;" popover-placement="bottom" popover="{{template.message}}" popover-trigger="mouseenter">{{'STORAGE_TEMPLATE_UPLOAD_VALIDATE_DETAILS_HINT' | translate}} </a> </span>
 							<button type="button" class="btn btn-warning pull-right" ng-visible="template.deleteEnabled" ng-click="deleteTemplate(template)">
 								{{'STORAGE_TEMPLATE_UPLOAD_BTN_DELETE' | translate}}
@@ -45,7 +45,7 @@
 					<div class="row">
 						<div class="col-sm-6 col-md-6 col-lg-6">
 							<div class="input-group">
-								<span class="input-group-addon">OET:</span>
+								<span class="input-group-addon">{{'MANAGEMENT_STORAGE_UPLOAD_OET' | translate}}:</span>
 								<input input class="form-control" type="text"
 								placeholder="{{'STORAGE_TEMPLATE_UPLOAD_OET_HINT' | translate}}"
 								ng-model="template.oet.path"
@@ -64,7 +64,7 @@
 						</div>
 						<div class="col-sm-6 col-md-6 col-lg-6">
 							<div class="input-group">
-								<span class="input-group-addon">ARM:</span>
+								<span class="input-group-addon">{{'MANAGEMENT_STORAGE_UPLOAD_ARM' | translate}}:</span>
 								<input input class="form-control" type="text"
 								placeholder="{{'STORAGE_TEMPLATE_UPLOAD_ARM_HINT' | translate}}"
 								ng-model="template.arm.path"

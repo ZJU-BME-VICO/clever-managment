@@ -1,5 +1,5 @@
 <div>
-	<label>Performer :</label>
+	<label>{{'PARTICIPATION_PANE_PERFORMER' | translate}} :</label>
 	<br>
 	<span ng-repeat="type in performerTypes"  style="margin-right:18px" for="{{type}}">
 		<input type="radio" ng-model="performerType.value" ng-value='type' id="{{type}}">
@@ -7,92 +7,92 @@
 	<hr>
 
 	<div ng-if="performerType.value == 'PARTY_SELF'">
-		<span>Attributes :</span>
+		<span>{{'PARTICIPATION_PANE_ATTRIBUTES' | translate}} :</span>
 		<br>
 		<div style="margin-left:20px">
-			<span class="attribute">externalRef</span>
+			<span class="attribute">{{'PARTICIPATION_PANE_EXTERNALREF' | translate}}</span>
 			<input type="checkbox" ng-model="hasExternalRef.value">
 			<div ng-if="hasExternalRef.value" style="margin-left:20px">
-				<h5>ID:</h5>
+				<h5>{{'PARTICIPATION_PANE_ID' | translate}}:</h5>
 				<input  class="form-control" type="text"  />
-				<h5>Namespace:</h5>
+				<h5>{{'PARTICIPATION_PANE_NAMESPACE' | translate}}:</h5>
 				<input class="form-control" type="text" />
-				<h5>Type:</h5>
+				<h5>{{'PARTICIPATION_PANE_TYPE' | translate}}:</h5>
 				<input class="form-control" type="text" />
 			</div>
 		</div>
 	</div>
 	
 	<div ng-if="performerType.value == 'PARTY_IDENTIFIED'">
-		<span>Attributes :</span>
+		<span>{{'PARTICIPATION_PANE_ATTRIBUTES' | translate}} :</span>
 		<br>
 		<div style="margin-left:20px">
-			<span class="attribute">externalRef</span>
+			<span class="attribute">{{'PARTICIPATION_PANE_EXTERNALREF' | translate}}</span>
 			<input type="checkbox" ng-model="hasExternalRef.value">
 			<br>
 			<div ng-if="hasExternalRef.value" style="margin-left:20px">
-				<h5>ID:</h5>
+				<h5>{{'PARTICIPATION_PANE_ID' | translate}}:</h5>
 				<input  class="form-control" type="text"  />
-				<h5>Namespace:</h5>
+				<h5>{{'PARTICIPATION_PANE_NAMESPACE' | translate}}:</h5>
 				<input class="form-control" type="text" />
-				<h5>Type:</h5>
+				<h5>{{'PARTICIPATION_PANE_TYPE' | translate}}:</h5>
 				<input class="form-control" type="text" />
 			</div>
-			<span class="attribute">name:</span>
+			<span class="attribute">{{'PARTICIPATION_PANE_NAME' | translate}}:</span>
 			<input type="checkbox" ng-model="hasName.value" />
 			<br>
 			<div ng-if="hasName.value" style="margin-left:20px">
-				<span>String</span>
+				<span>{{'PARTICIPATION_PANE_STRING' | translate}}</span>
 				<input  class ="form-control" type="text" />
 			</div>
-			<span class="attribute">identifiers:</span>
+			<span class="attribute">{{'PARTICIPATION_PANE_IDENTIFIERS' | translate}}:</span>
 			<input type="checkbox" ng-model="hasIdentifiers.value" />
 			<br>
 			<div ng-if="hasIdentifiers.value" style="margin-left:20px">
-				edit identifier here
+				{{'PARTICIPATION_PANE_EDIT_TIME_CONTRIBUTE_HERE' | translate}}
 			</div>
 		</div>
 	</div>
 	
 	
 	<div ng-if="performerType.value=='PARTY_RELATED'">
-		<span><strong>Attributes :</strong></span>
+		<span><strong>{{'PARTICIPATION_PANE_ATTRIBUTES_' | translate}} :</strong></span>
 		<br>
 		<div style="margin-left:20px">
-			<span class="attribute">externalRef</span>
+			<span class="attribute">{{'PARTICIPATION_PANE_EXTERNALREF' | translate}}</span>
 			<input type="checkbox" ng-model="hasExternalRef.value">
 			<br>
 			<div ng-if="hasExternalRef.value" style="margin-left:20px">
-				<h5>ID:</h5>
+				<h5>{{'PARTICIPATION_PANE_ID' | translate}}:</h5>
 				<input  class="form-control" type="text" />
-				<h5>Namespace:</h5>
+				<h5>{{'PARTICIPATION_PANE_NAMESPACE' | translate}}:</h5>
 				<input class="form-control" type="text" />
-				<h5>Type:</h5>
+				<h5>{{'PARTICIPATION_PANE_TYPE' | translate}}:</h5>
 				<input class="form-control" type="text" />
 			</div>
-			<span class="attribute">relationship</span>
+			<span class="attribute">{{'PARTICIPATION_PANE_RELATIONSHIP' | translate}}</span>
 		</div>
 	</div>
 </div>
 
 <div>
-	<label>Mode:</label>
+	<label>{{'PARTICIPATION_PANE_MODE' | translate}}:</label>
 	<input type="checkbox" ng-model="hasMode.value" tabindex="mode" />
 	<div ng-if="hasMode.value">
-		Edit mode contribute here
+		{{'PARTICIPATION_PANE_EDIT_MODE_CONTRIBUTE_HERE' | translate}}
 	</div>
 </div>
 <div>
-	<label>Function:</label>
+	<label>{{'PARTICIPATION_PANE_FUNCTION' | translate}}:</label>
 	<input type="checkbox" ng-model="hasFunction.value" tabindex="function" />
 	<div ng-if="hasFunction.value">
-		Edit function contribute here
+		{{'PARTICIPATION_PANE_EDIT_FUNCTION_CONTRIBUTE_HERE' | translate}}
 	</div>
 </div>
 <div>
-	<label>Time:</label>
+	<label>{{'PARTICIPATION_PANE_TIME' | translate}}:</label>
 	<input type="checkbox" ng-model="hasTime.value" tabindex="time" />
 	<div ng-if="hasTime.value">
-		Edit time contribute here
+		{{'PARTICIPATION_PANE_EDIT_TIME_CONTRIBUTE_HERE' | translate}}
 	</div>
 </div>

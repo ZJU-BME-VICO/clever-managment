@@ -1,13 +1,10 @@
 <div class="row">
 	<div class="col-xs-12 col-md-12 col-lg-12 hbox">
 		<div class="panel panel-default" ng-show="!isArchetypeListHidden" >
-			<div class="panel-heading">
-			
-
+			<div class="panel-heading">		
 					<i class="search-icon glyphicon glyphicon-search search-icon-list" ></i>
 					<input  type="text" style="border-radius: 17px; padding-left: 40px" ng-model = "archetypeListFilter" class="form-control" placeholder="{{'SEARCH_HINT' | translate}}" />
-					<!-- <input type="text" class="form-control" ng-model="archetypeListFilter" placeholder="{{'SEARCH_HINT' | translate}}"> -->
-				
+					<!-- <input type="text" class="form-control" ng-model="archetypeListFilter" placeholder="{{'SEARCH_HINT' | translate}}"> -->		
 			</div>
 			<div class="list-group" ng-style="{height:containerHeight-55}" style="overflow: auto;margin-left: -5px;white-space: nowrap;">
 				<!--node-menu-generator = "getTreeElementMenu"
@@ -77,7 +74,7 @@
 							<tabset class="row" tab-control="tabControl">
 								<tab>
 									<tab-heading>
-										Header
+										{{'MANAGEMENT_ARCHETYPE_EDIT_HEADER' | translate}}
 									</tab-heading>
 									<div class="col-xs-12 col-md-12 col-lg-12">
 										<edit-header-pane   header="header"  languages="languages" ontology="ontology"  max-height="tabContainerHeight" style="margin-top:5px; margin-bottom:20px;"></edit-header-pane>
@@ -86,7 +83,7 @@
 
 								<tab>
 									<tab-heading>
-										Definition
+										{{'MANAGEMENT_ARCHETYPE_EDIT_DEFINITION' | translate}}
 									</tab-heading>
 									<div class="col-xs-12 col-md-12 col-lg-12">
 										<edit-definition-pane style="margin-top:5px; margin-bottom:20px;" definition="definition"  ontology="ontology"  max-height="tabContainerHeight"   languages="languages"  is-expanded-all="definitionExpandedAll"></edit-definition-pane>
@@ -95,7 +92,7 @@
 
 								<tab>
 									<tab-heading>
-										Ontology
+										{{'MANAGEMENT_ARCHETYPE_EDIT_ONTOLOGY' | translate}}
 									</tab-heading>
 									<div class="col-xs-12 col-md-12 col-lg-12">
 										<edit-ontology-pane   style="margin-top:5px; margin-bottom:20px;" ontology="ontology"   max-height="tabContainerHeight"  languages="languages"></edit-ontology-pane>
@@ -105,13 +102,13 @@
 								<tab>
 								  
 									<tab-heading>
-										Display
+										{{'MANAGEMENT_ARCHETYPE_EDIT_DISPLAY' | translate}}
 									</tab-heading>
 									<div class="col-xs-12 col-md-12 col-lg-12" style="overflow:auto;">
 										<tabset class="row" style= "margin-top:5px;margin-bottom: 10px;" tab-control = "tabControl">
 											<tab>
 												<tab-heading>
-													ADL
+													{{'MANAGEMENT_ARCHETYPE_EDIT_ADL' | translate}}
 												</tab-heading>
 												<!-- <textarea ng-style="{height: containerHeight - 135}" style="overflow: auto; width: 100%; height: 803px;"readonly="true" ng-model="selectedArchetype.adl" class="ng-pristine ng-untouched ng-valid ng-scope">
 												</textarea> -->
@@ -119,7 +116,7 @@
 											</tab>
 											<tab>
 												<tab-heading>
-													XML
+													{{'MANAGEMENT_ARCHETYPE_EDIT_XML' | translate}}
 												</tab-heading>
 												<!-- <textarea ng-style="{height: containerHeight - 135}" style="overflow: auto; width: 100%; height: 803px;"readonly="true" ng-model="selectedArchetype.xml" class="ng-pristine ng-untouched ng-valid ng-scope">
 												</textarea> -->
@@ -164,48 +161,48 @@
 	</div>
 	<script type="text/ng-template" id="archetypeCreate.html">
 		<div class="modal-header">
-		<h3 class="modal-title">Create Your Own Archetype</h3>
+		<h3 class="modal-title">{{'MANAGEMENT_ARCHETYPE_EDIT_CREATE_YOUR_OWN_ARCHETYPE' | translate}}</h3>
 		</div>
 		<div class="modal-body">
 		<div class="row">
 		<div class="col-xs-2 col-sm-2 col-lg-2 flex-box" >
-		<label>Orgnization :</label>
+		<label>{{'MANAGEMENT_ARCHETYPE_EDIT_ORGNIZATIO' | translate}} :</label>
 		<select class="form-control" ng-model="organization" ng-options="org for org in organizations"></select>
 		</div>
 		<div class="col-xs-3 col-sm-3 col-lg-3 flex-box" >
-		<label>Reference Model:</label>
+		<label>{{'MANAGEMENT_ARCHETYPE_EDIT_REFERENCE_MODEL' | translate}}:</label>
 		<select class="form-control" ng-model="referenceModel" ng-options="ref for ref in referenceModels"></select>
 		</div>
 		<div class="col-xs-2 col-sm-2 col-lg-2 flex-box" >
-		<label>Entity Type :</label>
+		<label>{{'MANAGEMENT_ARCHETYPE_EDIT_ENTITY_TYP' | translate}} :</label>
 		<select class="form-control" ng-model="entityType" ng-options="type for type in entityTypes"></select>
 		</div>
 		<div class="col-xs-5 col-sm-5 col-lg-5 flex-box">
-		<label>Concept :</label>
+		<label>{{'MANAGEMENT_ARCHETYPE_EDIT_CONCEP' | translate}} :</label>
 		<input class="form-control" type="text" ng-model="concept">
 		</div>
 		</div>
 		</div>
 		<div class="modal-footer">
-		<button class="btn btn-primary" ng-click="ok()">CREATE</button>
-		<button class="btn btn-warning" ng-click="cancel()">CANCEL</button>
+		<button class="btn btn-primary" ng-click="ok()">{{'MANAGEMENT_ARCHETYPE_EDIT_CREATE' | translate}}</button>
+		<button class="btn btn-warning" ng-click="cancel()">{{'MANAGEMENT_ARCHETYPE_EDIT_CANCEL' | translate}}</button>
 		</div>
 	</script>
 
 	<script type="text/ng-template" id="archetypeSpecialise.html">
 		<div class="modal-header">
-		<h3 class="modal-title">Specialise this Archetype: <h4>{{archetypeName}}</h4></h3>
+		<h3 class="modal-title">{{'MANAGEMENT_ARCHETYPE_EDIT_SPECIALISE_THIS_ARCHETYPE' | translate}}: <h4>{{archetypeName}}</h4></h3>
 
 		</div>
 		<div class="modal-body">
 		<div class="row">
-		<label style="margin-left:10px">Enter a New Concept : </label>
+		<label style="margin-left:10px">{{'MANAGEMENT_ARCHETYPE_EDIT_ENTER_A_NEW_CONCEP' | translate}} : </label>
 		<input type="text" ng-model="newConceptName" style="margin-left:10px;width:500px;margin-right:10px;">
 		</div>
 		</div>
 		<div class="modal-footer">
-		<button class="btn btn-primary" ng-click="ok()">DOWN</button>
-		<button class="btn btn-warning" ng-click="cancel()">CANCEL</button>
+		<button class="btn btn-primary" ng-click="ok()">{{'MANAGEMENT_ARCHETYPE_EDIT_DOWN' | translate}}</button>
+		<button class="btn btn-warning" ng-click="cancel()">{{'MANAGEMENT_ARCHETYPE_EDIT_CANCEL' | translate}}</button>
 		</div>
 	</script>
 </div>

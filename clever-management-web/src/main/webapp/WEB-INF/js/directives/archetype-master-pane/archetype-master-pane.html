@@ -13,55 +13,55 @@
 			<table class="table table-hover">
 				<tbody>
 					<tr>
-						<th ng-style="{width: tableTitleWidth+ 'px'}"><b>Master ID</b></th>
+						<th ng-style="{width: tableTitleWidth+ 'px'}"><b>{{'ARCHETYPE_MASTER_PANE_MASTER_ID' | translate}}</b></th>
 						<th style="font-weight: normal">{{archetypeMasterInfo.name}}</th>
 					</tr>
 					<tr>
-						<th ng-style="{width: tableTitleWidth+ 'px'}"><b>History version</b></th>
+						<th ng-style="{width: tableTitleWidth+ 'px'}"><b>{{'ARCHETYPE_MASTER_PANE_HISTORY_VERSION' | translate}}</b></th>
 						<th style="font-weight: normal"><span ng-repeat="versionMaster in archetypeMasterInfo.historyVersionMasters | orderBy:'version'"> <a href ng-click="selectHistoryVersionMaster(versionMaster)">{{versionMaster.version}}</a>&nbsp;&nbsp; </span></th>
 					</tr>
 					<tr>
-						<th ng-style="{width: tableTitleWidth+ 'px'}"><b>History revision</b></th>
+						<th ng-style="{width: tableTitleWidth+ 'px'}"><b>{{'ARCHETYPE_MASTER_PANE_HISTORY_REVERSION' | translate}}</b></th>
 						<th style="font-weight: normal"><span ng-repeat="archetype in archetypeMasterInfo.archetypes | orderBy:'internalVersion'"> <a href ng-click="selectArchetype(archetype)">{{archetype.version}}</a>&nbsp;&nbsp; </span></th>
 					</tr>
 					<tr>
-						<th ng-style="{width: tableTitleWidth+ 'px'}"><b>Latest archetype lifecycle</b></th>
+						<th ng-style="{width: tableTitleWidth+ 'px'}"><b>{{'ARCHETYPE_MASTER_PANE_LATEST_ARCHETYPE_LIFECYCLE' | translate}}</b></th>
 						<th style="font-weight: normal">{{archetypeMasterInfo.lifecycleState}}</th>
 					</tr>
 					<tr>
-						<th ng-style="{width: tableTitleWidth+ 'px'}"><b>Specialise master ID</b></th>
+						<th ng-style="{width: tableTitleWidth+ 'px'}"><b>{{'ARCHETYPE_MASTER_PANE_SPECIALISE_MASTER_ID' | translate}}</b></th>
 						<th style="font-weight: normal"><a href ng-click="selectSpecialiseMaster(archetypeMasterInfo.specialiseArchetypeMaster)">{{archetypeMasterInfo.specialiseArchetypeMaster.name}}</a></th>
 					</tr>
 					<tr>
-						<th ng-style="{width: tableTitleWidth+ 'px'}"><b>Specialise master latest archetype version</b></th>
+						<th ng-style="{width: tableTitleWidth+ 'px'}"><b>{{'ARCHETYPE_MASTER_PANE_SPECIALISE_MASTER_LATEST_ARCHETYPE_VERSION' | translate}}</b></th>
 						<th style="font-weight: normal"><a href ng-click="selectSpecialiseArchetype({ id: archetypeMasterInfo.specialiseArchetypeMaster.latestArchetypeId, name: archetypeMasterInfo.specialiseArchetypeMaster.name})">{{archetypeMasterInfo.specialiseArchetypeMaster.latestArchetypeVersion}}</th>
 					</tr>
 					<tr>
-						<th ng-style="{width: tableTitleWidth+ 'px'}"><b>Concept name</b></th>
+						<th ng-style="{width: tableTitleWidth+ 'px'}"><b>{{'ARCHETYPE_MASTER_PANE_CONCEPT_NAME' | translate}}</b></th>
 						<th style="font-weight: normal">{{archetypeMasterInfo.conceptName}}</th>
 					</tr>
 					<tr>
-						<th ng-style="{width: tableTitleWidth+ 'px'}"><b>Concept description</b></th>
+						<th ng-style="{width: tableTitleWidth+ 'px'}"><b>{{'ARCHETYPE_MASTER_PANE_CONCEPT_DESCRIPTIOM' | translate}}</b></th>
 						<th style="font-weight: normal">{{archetypeMasterInfo.conceptDescription}}</th>
 					</tr>
 					<tr>
-						<th ng-style="{width: tableTitleWidth+ 'px'}"><b>Keywords</b></th>
+						<th ng-style="{width: tableTitleWidth+ 'px'}"><b>{{'ARCHETYPE_MASTER_PANE_KEYWORDS' | translate}}</b></th>
 						<th style="font-weight: normal">{{archetypeMasterInfo.keywords}}</th>
 					</tr>
 					<tr>
-						<th ng-style="{width: tableTitleWidth+ 'px'}"><b>Copyright</b></th>
+						<th ng-style="{width: tableTitleWidth+ 'px'}"><b>{{'ARCHETYPE_MASTER_PANE_COPYRIGHT' | translate}}</b></th>
 						<th style="font-weight: normal">{{archetypeMasterInfo.copyright}}</th>
 					</tr>
 					<tr>
-						<th ng-style="{width: tableTitleWidth+ 'px'}"><b>Purpose</b></th>
+						<th ng-style="{width: tableTitleWidth+ 'px'}"><b>{{'ARCHETYPE_MASTER_PANE_PURPOSE' | translate}}</b></th>
 						<th style="font-weight: normal">{{archetypeMasterInfo.purpose}}</th>
 					</tr>
 					<tr>
-						<th ng-style="{width: tableTitleWidth+ 'px'}"><b>Use</b></th>
+						<th ng-style="{width: tableTitleWidth+ 'px'}"><b>{{'ARCHETYPE_MASTER_PANE_USE' | translate}}</b></th>
 						<th style="font-weight: normal">{{archetypeMasterInfo.use}}</th>
 					</tr>
 					<tr>
-						<th ng-style="{width: tableTitleWidth+ 'px'}"><b>Misuse</b></th>
+						<th ng-style="{width: tableTitleWidth+ 'px'}"><b>{{'ARCHETYPE_MASTER_PANE_MISUSE' | translate}}</b></th>
 						<th style="font-weight: normal">{{archetypeMasterInfo.misuse}}</th>
 					</tr>
 				</tbody>

@@ -27,57 +27,62 @@
 		<div class="col-xs-12 col-md-12 col-lg-12" style="overflow: auto;margin-top: 5px;">
 			<table class="table table-hover" style="padding-top: 5px;">
 				<tbody>
-					<tr>
-						<th ng-style="{width: tableTitleWidth+ 'px'}"><b>Archetype ID</b></th>
+					
+<tr>
+						<th ng-style="{width: tableTitleWidth+ 'px'}"><b>{{'ARCHETYPE_PANE_ARCHETYPE_ID' | translate}}</b></th>
 						<th style="font-weight: normal">{{archetypeInfo.name}}</th>
 					</tr>
 					<tr>
-						<th ng-style="{width: tableTitleWidth+ 'px'}"><b>Master ID</b></th>
+						<th ng-style="{width: tableTitleWidth+ 'px'}"><b>{{'ARCHETYPE_PANE_MASTER_ID' | translate}}</b></th>
 						<th style="font-weight: normal"><a href ng-click="selectArchetypeMaster()">{{archetypeInfo.versionMasterName}}</a></th>
 					</tr>
 					<tr>
-						<th ng-style="{width: tableTitleWidth+ 'px'}"><b>Specialise archetype</b></th>
+						<th ng-style="{width: tableTitleWidth+ 'px'}"><b>{{'ARCHETYPE_PANE_SPECIALISE_ARCHETYPE' | translate}}</b></th>
 						<th style="font-weight: normal"><a href ng-click="selectSpecialiseArchetype()">{{archetypeInfo.specialiseArchetype.name}}</a></th>
 					</tr>
 					<tr>
-						<th ng-style="{width: tableTitleWidth+ 'px'}"><b>Lifecycle state</b></th>
+						<th ng-style="{width: tableTitleWidth+ 'px'}"><b>{{'ARCHETYPE_PANE_LIFECYCLE_STATE' | translate}}</b></th>
 						<th style="font-weight: normal">{{archetypeInfo.lifecycleState}}</th>
 					</tr>
 					<tr>
-						<th ng-style="{width: tableTitleWidth+ 'px'}"><b>Editor</b></th>
+						<th ng-style="{width: tableTitleWidth+ 'px'}"><b>{{'ARCHETYPE_PANE_EDITOR' | translate}}</b></th>
 						<th style="font-weight: normal">{{archetypeInfo.editorName}}</th>
 					</tr>
+
+					
+
 				</tbody>
 			</table>
 		</div>
 	</tab>
-	<tab>
+	
+<tab>
 		<tab-heading>
-			Header
+			{{'ARCHETYPE_PANE_HEADER' | translate}}
 		</tab-heading>
 		<div class="col-xs-12 col-md-12 col-lg-12" style="overflow: auto;">
-			<header-pane max-height="paneHeight" header="header" description="currentDescription" terminology="currentTerminology" style="margin-top: 5px; margin-bottom: 20px;"></header-tab>
+			<header-pane max-height="paneHeight" header="header" description="currentDescription" terminology="current{{'ARCHETYPE_PANE_TERMINOLOGY' | translate}}" style="margin-top: 5px; margin-bottom: 20px;"></header-tab>
 		</div>
 	</tab>
 	<tab>
 		<tab-heading>
-			Definition
+			{{'ARCHETYPE_PANE_DEFINITION' | translate}}
 		</tab-heading>
 		<div class="col-xs-12 col-md-12 col-lg-12" style="overflow: auto;">
-			<definition-pane definition="definition" max-height="paneHeight" terminology="currentTerminology" style="margin-top: 5px; margin-bottom: 20px;"></definition-tab>
+			<definition-pane definition="definition" max-height="paneHeight" terminology="current{{'ARCHETYPE_PANE_TERMINOLOGY' | translate}}" style="margin-top: 5px; margin-bottom: 20px;"></definition-tab>
 		</div>
 	</tab>
 	<tab>
 		<tab-heading>
-			Terminology
+			{{'ARCHETYPE_PANE_TERMINOLOGY' | translate}}
 		</tab-heading>
 		<div class="col-xs-12 col-md-12 col-lg-12" style="overflow: auto;">
-			<terminology-pane terminology="currentTerminology" max-height="paneHeight" style="margin-top: 5px; margin-bottom: 20px;"></terminology-tab>
+			<terminology-pane terminology="current{{'ARCHETYPE_PANE_TERMINOLOGY' | translate}}" max-height="paneHeight" style="margin-top: 5px; margin-bottom: 20px;"></terminology-tab>
 		</div>
 	</tab>
 	<tab>
 		<tab-heading>
-			XML
+			{{'ARCHETYPE_PANE_XML' | translate}}
 		</tab-heading>
 		<div class="col-xs-12 col-md-12 col-lg-12">
 			<div class="row" style="padding: 4px 0;">
@@ -92,7 +97,7 @@
 	</tab>
 	<tab>
 		<tab-heading>
-			ADL
+			{{'ARCHETYPE_PANE_ADL' | translate}}
 		</tab-heading>
 		<div class="col-xs-12 col-md-12 col-lg-12">
 			<div class="row" style="padding: 4px 0;">
