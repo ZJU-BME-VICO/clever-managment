@@ -93,6 +93,25 @@ angular.module('clever.management.i18n.zh', ['pascalprecht.translate']).config(f
 		STORAGE_TEMPLATE_ADD_SUCCEEDED_HINT : '添加模板成功',
 		STORAGE_TEMPLATE_ADD_FAILED_HINT : '添加模板失败，错误： {{errorMsg}}',
  
+		STORAGE_TEMPLATE_PANE_TEMPLATE_ID : '模板编号',
+		STORAGE_TEMPLATE_PANE_MASTER_ID : '类型编号',
+		STORAGE_TEMPLATE_PANE_SPECIALISE_ARCHETYPE : 'Specialise 原型',
+		STORAGE_TEMPLATE_PANE_LIFECYCLE_STATE : '生命周期状态',
+		STORAGE_TEMPLATE_PANE_EDITOR : '编辑者',
+
+		STORAGE_MASTER_PANE_MASTER_ID : '类型编号',
+		STORAGE_MASTER_PANE_HISTORY_VERSION : '历史版本',
+		STORAGE_MASTER_PANE_LATEST_TEMPLATE_LIFECYCLE : '最新模板生命周期',
+		STORAGE_MASTER_PANE_SPECIALISE_MASTER_ID : 'Specialise 类型编号',
+		STORAGE_MASTER_PANE_SPECIALISE_MASTER_LATEST_ARCHETYPE_VERSION : 'Specialise 管理最新原型版本',
+		STORAGE_MASTER_PANE_CONCEPT_NAME : '概念名称',
+		STORAGE_MASTER_PANE_CONCEPT_DESCRIPTION : '概念描述',
+		STORAGE_MASTER_PANE_KEYWORDS : '关键词',
+		STORAGE_MASTER_PANE_COPYRIGHT : '版权',
+		STORAGE_MASTER_PANE_PURPOSE : '目的',
+		STORAGE_MASTER_PANE_USE : '使用',
+		STORAGE_MASTER_PANE_MISUSE : '误用',
+
 		// Archetype verify
 		ARCHETYPE_VERIFY : '所有待审核项',
 		ARCHETYPE_VERIFY_ADL_DIFF : 'ADL对比',
@@ -256,11 +275,35 @@ angular.module('clever.management.i18n.zh', ['pascalprecht.translate']).config(f
 		ARCHETYPE_MASTER_PANE_OPERATIOR : '操作者',
 		ARCHETYPE_MASTER_PANE_OPERATE_TIME : '操作时间',
 
+	    ARCHETYPE_MASTER_PANE_MASTER_ID : '类型编号',
+		ARCHETYPE_MASTER_PANE_HISTORY_VERSION : '历史版本',
+		ARCHETYPE_MASTER_PANE_HISTORY_REVISION : '历史修正',
+		ARCHETYPE_MASTER_PANE_LATEST_ARCHETYPE_LIFECYCLE : '最新原型生命周期',
+		ARCHETYPE_MASTER_PANE_SPECIALISE_MASTER_ID : 'Specialise master identifiers',
+		ARCHETYPE_MASTER_PANE_SPECIALISE_MASTER_LATEST_ARCHETYPE_VERSION : 'Specialise mastr latest archetype version',
+		ARCHETYPE_MASTER_PANE_CONCEPT_NAME : '概念名称',
+		ARCHETYPE_MASTER_PANE_CONCEPT_DESCRIPTION : '概念描述',
+		ARCHETYPE_MASTER_PANE_KEYWORDS : '关键词',
+		ARCHETYPE_MASTER_PANE_COPYRIGHT : '版权',
+		ARCHETYPE_MASTER_PANE_PURPOSE : '目的',
+		ARCHETYPE_MASTER_PANE_USE : '使用',
+		ARCHETYPE_MASTER_PANE_MISUSE : '误用',
+		
 		// Archetype pane
 		ARCHETYPE_PANE_LANGUAGE : '语言',
 		ARCHETYPE_PANE_INFO : '基本信息',
 		ARCHETYPE_PANE_DOWNLOAD : '下载',
 		ARCHETYPE_PANE_COPY : '复制',
+		ARCHETYPE_PANE_ARCHETYPE_ID : '原型编号',
+		ARCHETYPE_PANE_MASTER_ID : '类型编号',
+		ARCHETYPE_PANE_SPECIALISE_ARCHETYPE : 'Specialise 原型',
+		ARCHETYPE_PANE_LIFECYCLE_STATE : '生命周期状态',
+		ARCHETYPE_PANE_EDITOR : '编辑者',
+		ARCHETYPE_PANE_HEADER : '标题头',
+		ARCHETYPE_PANE_DEFINITION : '定义',
+		ARCHETYPE_PANE_TERMINOLOGY : '术语',
+		ARCHETYPE_PANE_XML : 'XML',
+		ARCHETYPE_PANE_ADL : 'ADL',
 
 		// Template master pane
 		TEMPLATE_MASTER_PANE_INFO : '基本信息',
@@ -274,13 +317,14 @@ angular.module('clever.management.i18n.zh', ['pascalprecht.translate']).config(f
 		// Storage template pane
 		STORAGE_TEMPLATE_PANE_INFO : '基本信息',
 		STORAGE_TEMPLATE_PANE_DOWNLOAD : '下载',
+		STORAGE_TEMPLATE_PANE_OET : 'OET',
+		STORAGE_TEMPLATE_PANE_ARM : 'ARM',
 		
 		//archetype editor pane
 		ARCHETYPE_PANE_CREATE: '创建',
 		ARCHETYPE_PANE_SAVE: '保存',
 		ARCHETYPE_PANE_SUBMIT: '提交',
 		ARCHETYPE_PANE_DIFF: '对比',
-		
 		
 		//verify pane
 		SUBMIT_TIME: '提交时间',
@@ -329,7 +373,6 @@ angular.module('clever.management.i18n.zh', ['pascalprecht.translate']).config(f
 		MANAGEMENT_ARCHETYPE_EDIT_ENTITY_TYPE : '实体类型',
 		MANAGEMENT_ARCHETYPE_EDIT_CONCEPT : '概念',
 
-
 		//management.archetype.edit.html
 		MANAGEMENT_ARCHETYPE_EDIT_CREATE_YOUR_OWN_ARCHETYPE : '创建你自己的原型',
 		MANAGEMENT_ARCHETYPE_EDIT_ORGNIZATIO : '组织',
@@ -341,6 +384,15 @@ angular.module('clever.management.i18n.zh', ['pascalprecht.translate']).config(f
 		MANAGEMENT_ARCHETYPE_EDIT_ENTER_A_NEW_CONCEP : '输入新概念',
 		MANAGEMENT_ARCHETYPE_EDIT_DOWN : '向下',
 		MANAGEMENT_ARCHETYPE_EDIT_CANCEL : '取消',
+		MANAGEMENT_ARCHETYPE_EDIT_TOOTIP_CREATE_ARCHETYPE : '创建原型',
+		MANAGEMENT_ARCHETYPE_EDIT_TOOTIP_SAVE_ARCHETYPE : '保存原型',
+		MANAGEMENT_ARCHETYPE_EDIT_TOOTIP_SUBMIT_ARCHETYPE : '提交原型',
+		MANAGEMENT_ARCHETYPE_EDIT_TOOTIP_CONTRAST_ADL : '对比 adl',
+		MANAGEMENT_ARCHETYPE_EDIT_TOOTIP_NEW_VERSION : '新版本',
+		MANAGEMENT_ARCHETYPE_EDIT_TOOTIP_SPECIALISE_THIS_ARCHETYPE : 'specialise 原型',
+		MANAGEMENT_ARCHETYPE_EDIT_TOOTIP_EXPAND : '展开',
+		MANAGEMENT_ARCHETYPE_EDIT_TOOTIP_COLLAPSE : '合并',
+
 
 
 
@@ -363,8 +415,6 @@ angular.module('clever.management.i18n.zh', ['pascalprecht.translate']).config(f
 		MANAGEMENT_DEVELOPMENT_CDR_COLUMN : '列',
 		MANAGEMENT_DEVELOPMENT_CDR_TEMPLATE : '模板',
 
-
-
 		//management.development.designer.html
 		MANAGEMENT_DEVELOPMENT_DESIGNER_NEW : '新建',
 		MANAGEMENT_DEVELOPMENT_DESIGNER_SAVE : '保存',
@@ -372,17 +422,24 @@ angular.module('clever.management.i18n.zh', ['pascalprecht.translate']).config(f
 		MANAGEMENT_DEVELOPMENT_DESIGNER_COLLAPSEALL : '关闭全部',
 		MANAGEMENT_DEVELOPMENT_DESIGNER_GOLD : 'Gold',
 
-
 		//management.storage.edit.html
 		MANAGEMENT_STORAGE_EDIT_EXPAND_ALL : '展开全部',
 		MANAGEMENT_STORAGE_EDIT_NODE_PATH : '节点路径',
-
+		MANAGEMENT_STORAGE_EDIT_HEADING_TREE : '树形',
+		MANAGEMENT_STORAGE_EDIT_HEADING_OET : 'OET',
+		MANAGEMENT_STORAGE_EDIT_HEADING_ARM : 'ARM',
+		MANAGEMENT_STORAGE_EDIT_TOOLTIP_CREATE_TEMPLATE : '创建模板',
+		MANAGEMENT_STORAGE_EDIT_TOOLTIP_SAVE_TEMPLATE : '保存模板',
+		MANAGEMENT_STORAGE_EDIT_TOOLTIP_SUBMIT_TEMPLATE : '提交模板',
+		MANAGEMENT_STORAGE_EDIT_TOOLTIP_CONSTRAST_OET_CONTENT : '对比 oet 内容',
+		MANAGEMENT_STORAGE_EDIT_TOOLTIP_NEW_VERSION : '新版本',
+		MANAGEMENT_STORAGE_EDIT_TOOLTIP_EXPAND : '展开',
+		MANAGEMENT_STORAGE_EDIT_TOOLTIP_COLLAPSE : '闭合',
 
 		//management.storage.upload.html
 		MANAGEMENT_STORAGE_UPLOAD_TEMPLATE_ID : '模板编号',
 		MANAGEMENT_STORAGE_UPLOAD_OET : 'OET',
 		MANAGEMENT_STORAGE_UPLOAD_ARM : 'ARM',
-
 
 		//home.html
 		HOME_CLINICAL_EASY_VARIETY_EXTENSIBLE_REPOSITORY : '临床简易多样化可扩展仓库',
@@ -402,9 +459,8 @@ angular.module('clever.management.i18n.zh', ['pascalprecht.translate']).config(f
 		PARTICIPATION_PANE_EDIT_MODE_CONTRIBUTE_HERE : 'Edit mode contribute here',
 		PARTICIPATION_PANE_EDIT_FUNCTION_CONTRIBUTE_HERE : 'Edit function contribute here',
 
-
 		//subject-pane.html
-		SUBJECT_PANE_ATTRIBUTES_ : '属性',
+		SUBJECT_PANE_ATTRIBUTES : '属性',
 		SUBJECT_PANE_EXTERNALREF : '外部参考',
 		SUBJECT_PANE_ID : '编号',
 		SUBJECT_PANE_NAMESPACE : '命名空间',
@@ -415,17 +471,16 @@ angular.module('clever.management.i18n.zh', ['pascalprecht.translate']).config(f
 		SUBJECT_PANE_EDIT_IDENTIFIER_HERE : '在此编辑标识符',
 		SUBJECT_PANE_RELATIONSHIP : '关系',
 
-
 		//edit-definition-pane.html
 		EDIT_DEFINITION_PANE_EXPAND_ALL : '展开全部',
 		EDIT_DEFINITION_PANE_SUBJECT : '主题',
 		EDIT_DEFINITION_PANE_PARTICIPATION : '参与',
 		EDIT_DEFINITION_PANE_LINKS : '链接',
-		EDIT_DEFINITION_PANE_CONSTRAINT : '限制',
+		EDIT_DEFINITION_PANE_CONSTRAINT : '约束',
 		EDIT_DEFINITION_PANE_OCCURRENCES : '发生',
 		EDIT_DEFINITION_PANE_MIN : '最小',
 		EDIT_DEFINITION_PANE_MAX : '最大',
-		EDIT_DEFINITION_PANE_UNBOUNDED : 'Unbounded',
+		EDIT_DEFINITION_PANE_UNBOUNDED : '无限制的',
 		EDIT_DEFINITION_PANE_EXISTENCE : '存在',
 		EDIT_DEFINITION_PANE_CARDINALITY : '技术',
 		EDIT_DEFINITION_PANE_UNIQUE : '唯一',
@@ -471,8 +526,6 @@ angular.module('clever.management.i18n.zh', ['pascalprecht.translate']).config(f
 		EDIT_DEFINITION_PANE_ALLOW_VALUE : '允许 值',
 		EDIT_DEFINITION_PANE_TRUE : '是',
 		EDIT_DEFINITION_PANE_FALSE : '否',
-		EDIT_DEFINITION_PANE_SDFASDFGFDAGASDFGADFG : 'sdfasdfgfdagasdfgadfg',
-
 
 
 		//edit-header-pane.html
@@ -490,11 +543,14 @@ angular.module('clever.management.i18n.zh', ['pascalprecht.translate']).config(f
 		EDIT_HEADER_PANE_USE : '使用',
 		EDIT_HEADER_PANE_MISUSE : '误用',
 		EDIT_HEADER_PANE_COPYRIGHT : '版权',
+		EDIT_HEADER_PANE_HEADING_BASE : '基本信息',
+		EDIT_HEADER_PANE_HEADING_AUTHOR : '作者',
+		EDIT_HEADER_PANE_HEADING_DETAILS : '细节',
+	
 
 
 		//edit-ontology-pane.html
 		EDIT_ONTOLOGY_PANE_ITEM_CONTENT : '选项内容',
-
 
 		//definition-pane.html
 		DEFINITION_PANE_VIEW : '视图',
@@ -509,7 +565,7 @@ angular.module('clever.management.i18n.zh', ['pascalprecht.translate']).config(f
 		DEFINITION_PANE_MIN : '最小值',
 		DEFINITION_PANE_MAX : '最大值',
 		DEFINITION_PANE_INCLUDED : '包括的',
-		DEFINITION_PANE_UNBOUNDED : 'Unbounded',
+		DEFINITION_PANE_UNBOUNDED : '无限制的',
 		DEFINITION_PANE_EXISTENCE : '存在',
 		DEFINITION_PANE_COUNT : '计数',
 		DEFINITION_PANE_QUANTITY : '数量',
@@ -517,7 +573,6 @@ angular.module('clever.management.i18n.zh', ['pascalprecht.translate']).config(f
 		DEFINITION_PANE_BOOLEAN : '布尔',
 		DEFINITION_PANE_OPTIONAL : '可选',
 		DEFINITION_PANE_MANDATORY : '必选',
-
 
 		//template-create-service.html
 		TEMPLATE_CREATE_SERVICE_CONCEPT : '概念',
@@ -542,9 +597,7 @@ angular.module('clever.management.i18n.zh', ['pascalprecht.translate']).config(f
 		DEVELOPMENT_API_VIEW_DESCRIPTIOIN:'说明',
 		DEVELOPMENT_API_VIEW_ERROR_CODE :'错误代码',
 		DEVELOPMENT_API_VIEW_API_INFORMATION : '接口信息',
-		DEVELOPMENT_API_VIEW_TOOLTIP_COPY : '复制',
-		
-		
+		DEVELOPMENT_API_VIEW_TOOLTIP_COPY : '复制',	
 		
 		DEVELOPMENT_API_EDIT_NAME:'名称',
 		DEVELOPMENT_API_EDIT_TYPE:'类型',
@@ -570,7 +623,9 @@ angular.module('clever.management.i18n.zh', ['pascalprecht.translate']).config(f
 		EXPAND_ALL : '全部展开',
 		COLLAPSE_ALL : '全部收缩',
 
-		
+		//management.archrtype.view.html
+		MANAGEMENT_ARCHETYPE_VIEW_TOOLTIP_EXPAND : '展开',
+		MANAGEMENT_ARCHETYPE_VIEW_TOOLTIP_COLLAPSE : '闭合',
 
 	});
 });

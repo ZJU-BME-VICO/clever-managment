@@ -152,7 +152,6 @@ angular.module('clever.management.i18n.en', ['pascalprecht.translate']).config(f
 		// Storage template edit
 		
 		
-		
 		// Storage template verify
 		STORAGE_TEMPLATE_VERIFY_OET_DIFF : 'OET comparation',
 		STORAGE_TEMPLATE_VERIFY_APPROVE : 'Approve',
@@ -289,13 +288,11 @@ angular.module('clever.management.i18n.en', ['pascalprecht.translate']).config(f
 		ARCHETYPE_MASTER_PANE_USE : 'Use',
 		ARCHETYPE_MASTER_PANE_MISUSE : 'Misuse',
 
-
 		// Archetype pane
 		ARCHETYPE_PANE_LANGUAGE : 'Lauguage',
 		ARCHETYPE_PANE_INFO : 'Basic information',
 		ARCHETYPE_PANE_DOWNLOAD : 'Download',
 		ARCHETYPE_PANE_COPY : 'Copy',
-		
 		ARCHETYPE_PANE_ARCHETYPE_ID : 'Archetype ID',
 		ARCHETYPE_PANE_MASTER_ID : 'Master ID',
 		ARCHETYPE_PANE_SPECIALISE_ARCHETYPE : 'Specialise archetype',
@@ -306,9 +303,6 @@ angular.module('clever.management.i18n.en', ['pascalprecht.translate']).config(f
 		ARCHETYPE_PANE_TERMINOLOGY : 'Terminology',
 		ARCHETYPE_PANE_XML : 'XML',
 		ARCHETYPE_PANE_ADL : 'ADL',
-
-
-
 
 		// Template master pane
 		TEMPLATE_MASTER_PANE_INFO : 'Basic Information',
@@ -324,7 +318,6 @@ angular.module('clever.management.i18n.en', ['pascalprecht.translate']).config(f
 		STORAGE_TEMPLATE_PANE_DOWNLOAD : 'Download',
 		STORAGE_TEMPLATE_PANE_OET : 'OET',
 		STORAGE_TEMPLATE_PANE_ARM : 'ARM',
-
 		
 		//archetype editor pane
 		ARCHETYPE_PANE_CREATE: 'Create',
@@ -332,8 +325,6 @@ angular.module('clever.management.i18n.en', ['pascalprecht.translate']).config(f
 		ARCHETYPE_PANE_SUBMIT: 'Submit',
 		ARCHETYPE_PANE_DIFF: 'Compare',
 
-		
-		
 		//verify pane
 		SUBMIT_TIME: 'Submit time',
 		EDITOR : 'Editor',
@@ -381,8 +372,7 @@ angular.module('clever.management.i18n.en', ['pascalprecht.translate']).config(f
 		MANAGEMENT_ARCHETYPE_EDIT_ENTITY_TYPE : 'Entity Type',
 		MANAGEMENT_ARCHETYPE_EDIT_CONCEPT : 'Concept',
 
-
-		//management.archetype.edit.html
+   		//management.archetype.edit.html
 		MANAGEMENT_ARCHETYPE_EDIT_CREATE_YOUR_OWN_ARCHETYPE : 'Create Your Own Archetype',
 		MANAGEMENT_ARCHETYPE_EDIT_ORGNIZATIO : 'Orgnization ',
 		MANAGEMENT_ARCHETYPE_EDIT_REFERENCE_MODEL : 'Reference Model',
@@ -394,7 +384,14 @@ angular.module('clever.management.i18n.en', ['pascalprecht.translate']).config(f
 		MANAGEMENT_ARCHETYPE_EDIT_ENTER_A_NEW_CONCEP : 'Enter a New Concept ',
 		MANAGEMENT_ARCHETYPE_EDIT_DOWN : 'DOWN',
 		MANAGEMENT_ARCHETYPE_EDIT_CANCEL : 'CANCEL',
-
+		MANAGEMENT_ARCHETYPE_EDIT_TOOTIP_CREATE_ARCHETYPE : 'create archetype',
+		MANAGEMENT_ARCHETYPE_EDIT_TOOTIP_SAVE_ARCHETYPE : 'save archetype',
+		MANAGEMENT_ARCHETYPE_EDIT_TOOTIP_SUBMIT_ARCHETYPE : 'submit archetype',
+		MANAGEMENT_ARCHETYPE_EDIT_TOOTIP_CONTRAST_ADL : 'contrast adl',
+		MANAGEMENT_ARCHETYPE_EDIT_TOOTIP_NEW_VERSION : 'new version',
+		MANAGEMENT_ARCHETYPE_EDIT_TOOTIP_SPECIALISE_THIS_ARCHETYPE : 'specialise this archetype',
+		MANAGEMENT_ARCHETYPE_EDIT_TOOTIP_EXPAND : 'Expand',
+		MANAGEMENT_ARCHETYPE_EDIT_TOOTIP_COLLAPSE : 'Collapse',
 
 
 		//management.development.cdr.html
@@ -416,8 +413,6 @@ angular.module('clever.management.i18n.en', ['pascalprecht.translate']).config(f
 		MANAGEMENT_DEVELOPMENT_CDR_COLUMN : 'Column',
 		MANAGEMENT_DEVELOPMENT_CDR_TEMPLATE : 'Template',
 
-
-
 		//management.development.designer.html
 		MANAGEMENT_DEVELOPMENT_DESIGNER_NEW : 'New',
 		MANAGEMENT_DEVELOPMENT_DESIGNER_SAVE : 'Save',
@@ -425,10 +420,19 @@ angular.module('clever.management.i18n.en', ['pascalprecht.translate']).config(f
 		MANAGEMENT_DEVELOPMENT_DESIGNER_COLLAPSEALL : 'collapseAll',
 		MANAGEMENT_DEVELOPMENT_DESIGNER_GOLD : 'Gold',
 
-
 		//management.storage.edit.html
 		MANAGEMENT_STORAGE_EDIT_EXPAND_ALL : 'Expand All',
 		MANAGEMENT_STORAGE_EDIT_NODE_PATH : 'Node Path',
+		MANAGEMENT_STORAGE_EDIT_HEADING_TREE : 'Tree',
+		MANAGEMENT_STORAGE_EDIT_HEADING_OET : 'OET',
+		MANAGEMENT_STORAGE_EDIT_HEADING_ARM : 'ARM',
+		MANAGEMENT_STORAGE_EDIT_TOOLTIP_CREATE_TEMPLATE : 'Create template',
+		MANAGEMENT_STORAGE_EDIT_TOOLTIP_SAVE_TEMPLATE : 'save template',
+		MANAGEMENT_STORAGE_EDIT_TOOLTIP_SUBMIT_TEMPLATE : 'submit template',
+		MANAGEMENT_STORAGE_EDIT_TOOLTIP_CONSTRAST_OET_CONTENT : 'constrast oet content',
+		MANAGEMENT_STORAGE_EDIT_TOOLTIP_NEW_VERSION : 'New version',
+		MANAGEMENT_STORAGE_EDIT_TOOLTIP_EXPAND : 'Expand',
+		MANAGEMENT_STORAGE_EDIT_TOOLTIP_COLLAPSE : 'Collapse',
 
 
 		//management.storage.upload.html
@@ -436,10 +440,8 @@ angular.module('clever.management.i18n.en', ['pascalprecht.translate']).config(f
 		MANAGEMENT_STORAGE_UPLOAD_OET : 'OET',
 		MANAGEMENT_STORAGE_UPLOAD_ARM : 'ARM',
 
-
 		//home.html
 		HOME_CLINICAL_EASY_VARIETY_EXTENSIBLE_REPOSITORY : 'Clinical Easy Variety Extensible Repository',
-
 
 		//participation-pane.html
 		PARTICIPATION_PANE_EXTERNALREF : 'externalRef',
@@ -457,13 +459,8 @@ angular.module('clever.management.i18n.en', ['pascalprecht.translate']).config(f
 		PARTICIPATION_PANE_EDIT_MODE_CONTRIBUTE_HERE : 'Edit mode contribute here',
 		PARTICIPATION_PANE_EDIT_FUNCTION_CONTRIBUTE_HERE : 'Edit function contribute here',
 
-
-
-
-
-
 		//subject-pane.html
-		SUBJECT_PANE_ATTRIBUTES_ : 'Attributes ',
+		SUBJECT_PANE_ATTRIBUTES : 'Attributes ',
 		SUBJECT_PANE_EXTERNALREF : 'externalRef',
 		SUBJECT_PANE_ID : 'ID',
 		SUBJECT_PANE_NAMESPACE : 'Namespace',
@@ -473,7 +470,6 @@ angular.module('clever.management.i18n.en', ['pascalprecht.translate']).config(f
 		SUBJECT_PANE_IDENTIFIERS : 'identifiers',
 		SUBJECT_PANE_EDIT_IDENTIFIER_HERE : 'edit identifier here',
 		SUBJECT_PANE_RELATIONSHIP : 'relationship',
-
 
 		//edit-definition-pane.html
 		EDIT_DEFINITION_PANE_EXPAND_ALL : 'Expand All',
@@ -532,8 +528,6 @@ angular.module('clever.management.i18n.en', ['pascalprecht.translate']).config(f
 		EDIT_DEFINITION_PANE_FALSE : 'False',
 		EDIT_DEFINITION_PANE_SDFASDFGFDAGASDFGADFG : 'sdfasdfgfdagasdfgadfg',
 
-
-
 		//edit-header-pane.html
 		EDIT_HEADER_PANE_ARCHETYPEID : 'ArchetypeId',
 		EDIT_HEADER_PANE_CONCEP : 'Concept ',
@@ -549,11 +543,15 @@ angular.module('clever.management.i18n.en', ['pascalprecht.translate']).config(f
 		EDIT_HEADER_PANE_USE : 'Use',
 		EDIT_HEADER_PANE_MISUSE : 'Misuse',
 		EDIT_HEADER_PANE_COPYRIGHT : 'Copyright',
+		EDIT_HEADER_PANE_HEADING_BASE : 'Base',
+		EDIT_HEADER_PANE_HEADING_AUTHOR : 'Author',
+		EDIT_HEADER_PANE_HEADING_DETAILS : 'Details',
+		
 
-
+		
+		
 		//edit-ontology-pane.html
 		EDIT_ONTOLOGY_PANE_ITEM_CONTENT : 'Item content',
-
 
 		//definition-pane.html
 		DEFINITION_PANE_VIEW : 'View',
@@ -572,11 +570,10 @@ angular.module('clever.management.i18n.en', ['pascalprecht.translate']).config(f
 		DEFINITION_PANE_EXISTENCE : 'Existence',
 		DEFINITION_PANE_COUNT : 'Count',
 		DEFINITION_PANE_QUANTITY : 'Quantity',
-		DEFINITION_PANE_DATE/TIME : 'Date/Time',
+		DEFINITION_PANE_DATE_TIME : 'Date/Time',
 		DEFINITION_PANE_BOOLEAN : 'Boolean',
 		DEFINITION_PANE_OPTIONAL : 'Optional',
 		DEFINITION_PANE_MANDATORY : 'Mandatory',
-
 
 		//template-create-service.html
 		TEMPLATE_CREATE_SERVICE_CONCEPT : 'Concept ',
@@ -601,7 +598,6 @@ angular.module('clever.management.i18n.en', ['pascalprecht.translate']).config(f
 		DEVELOPMENT_API_VIEW_TOOLTIP_COPY : 'Copy',
 		DEVELOPMENT_API_VIEW_ERROR_CODE : 'Error code',
 		DEVELOPMENT_API_VIEW_API_INFORMATION : 'Api information',
-
 	
 		DEVELOPMENT_API_EDIT_NAME : 'Name',
 		DEVELOPMENT_API_EDIT_TYPE : 'Type',
@@ -626,7 +622,6 @@ angular.module('clever.management.i18n.en', ['pascalprecht.translate']).config(f
 		//others,
 		EXPAND_ALL : 'Expand All',
 		COLLAPSE_ALL : 'Collapse All',
-
 
 	});
 });

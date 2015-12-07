@@ -270,9 +270,9 @@
 <div class="row">
     <div class="col-xs-3 col-sm-3 col-lg-2">
         <tabset class="tabs-left" tab-control="tabControl">
-            <tab heading="Base" ng-click="selectTab('base')"></tab>
-            <tab heading="Author" ng-click="selectTab('author')"></tab>
-            <tab heading="Details" ng-click="selectTab('details')"></tab>
+            <tab heading="{{'EDIT_HEADER_PANE_HEADING_BASE' | translate}}" ng-click="selectTab('base')"></tab>
+            <tab heading="{{'EDIT_HEADER_PANE_HEADING_AUTHOR' | translate}}" ng-click="selectTab('author')"></tab>
+            <tab heading="{{'EDIT_HEADER_PANE_HEADING_DETAILS' | translate}}" ng-click="selectTab('details')"></tab>
         </tabset>
     </div>
     <div ng-style="{height: contentHeight.value - 200}" style="overflow:auto">

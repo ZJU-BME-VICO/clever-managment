@@ -31,7 +31,7 @@
 
 						<img ng-show="node.isDirectory" ng-class="node.type | lowercase" class="clever-icon list" style="padding: 0 10px;height: 16px;margin-left: 3px;"></img>
 						<span ng-show="node.isDirectory" ng-bind="node.name"></span>
-						<img ng-show="!node.isDirectory" ng-class="node.lifecycleState | lowercase" class="clever-icon list" style="padding: 0 10px;height: 16px;margin-left: 3px;"></img>
+						<impaneladding: 0 10px;height: 16px;margin-left: 3px;"></img>
 						<span ng-show="!node.isDirectory" ng-bind-html="node.conceptName | highlight:keyword | unsafe"></span>
 						&nbsp;<span ng-show="!node.isDirectory" style="color: grey;font-size: 10pt;">(<span ng-bind="node.version"></span>)</span>
 
@@ -45,8 +45,8 @@
 		</div>
 
 		<splitter is-adjust-enabled="!isArchetypeListHidden"  style="min-height: 100%;" >
-			<i style="cursor: pointer" ng-click="isArchetypeListHidden = !isArchetypeListHidden" ng-show="isArchetypeListHidden"   tooltip-placement="right" tooltip="Expand" tooltip-popup-delay="500"> <span class="glyphicon glyphicon-chevron-right" ng-style="{'margin-top': containerHeight/2}" ></span> </i>
-			<i style="cursor: pointer" ng-click="isArchetypeListHidden = !isArchetypeListHidden" ng-show="!isArchetypeListHidden"  tooltip-placement="right" tooltip="Collapse" tooltip-popup-delay="500"> <span class="glyphicon glyphicon-chevron-left" ng-style="{'margin-top': containerHeight/2}" ></span> </i>
+			<i style="cursor: pointer" ng-click="isArchetypeListHidden = !isArchetypeListHidden" ng-show="isArchetypeListHidden"   tooltip-placement="right" tooltip="{{'MANAGEMENT_ARCHETYPE_EDIT_TOOTIP_EXPAND' | translate}}" tooltip-popup-delay="500"> <span class="glyphicon glyphicon-chevron-right" ng-style="{'margin-top': containerHeight/2}" ></span> </i>
+			<i style="cursor: pointer" ng-click="isArchetypeListHidden = !isArchetypeListHidden" ng-show="!isArchetypeListHidden"  tooltip-placement="right" tooltip="{{'MANAGEMENT_ARCHETYPE_EDIT_TOOTIP_COLLAPSE' | translate}}" tooltip-popup-delay="500"> <span class="glyphicon glyphicon-chevron-left" ng-style="{'margin-top': containerHeight/2}" ></span> </i>
 		</splitter>
 		<div class="col-xs-12 col-md-12 col-lg-12 flex-box" ng-if="selectedArchetype" >
 			<div class="row" >
@@ -137,22 +137,22 @@
 		<div class="col-xs-1 col-md-1 col-lg-1" >
 			<div class="sidebar">
 				<ul class="side-menu-group">
-					<li class="side-menu-item" ng-click="openCreate('lg')" tooltip-placement="right" tooltip="create archetype" tooltip-popup-delay="500">
+					<li class="side-menu-item" ng-click="openCreate('lg')" tooltip-placement="right" tooltip="{{'MANAGEMENT_ARCHETYPE_EDIT_TOOTIP_CREATE_ARCHETYPE' | translate}}" tooltip-popup-delay="500">
 						<a href="" class="menu-item-content"> <span class="icon-plus-sign tool-menu" style="color: #777;"></span></a>
 					</li >
-					<li ng-if="selectedArchetype.lifecycleState=='Draft'"  class="side-menu-item" ng-click="saveSelectedArchetype()" tooltip-placement="right" tooltip="save archetype" tooltip-popup-delay="500">
+					<li ng-if="selectedArchetype.lifecycleState=='Draft'"  class="side-menu-item" ng-click="saveSelectedArchetype()" tooltip-placement="right" tooltip="{{'MANAGEMENT_ARCHETYPE_EDIT_TOOTIP_SAVE_ARCHETYPE' | translate}}" tooltip-popup-delay="500">
 						<a href="" class="menu-item-content"><span class="icon-save tool-menu"  > </span></a>
 					</li>
-					<li ng-if="selectedArchetype.lifecycleState=='Draft'" class="side-menu-item"  ng-click="submitSelectedArchetype()" tooltip-placement="right" tooltip="submit archetype" tooltip-popup-delay="500">
+					<li ng-if="selectedArchetype.lifecycleState=='Draft'" class="side-menu-item"  ng-click="submitSelectedArchetype()" tooltip-placement="right" tooltip="{{'MANAGEMENT_ARCHETYPE_EDIT_TOOTIP_SUBMIT_ARCHETYPE' | translate}}" tooltip-popup-delay="500">
 						<a href="" class="menu-item-content"><span class="icon-circle-arrow-up tool-menu" style="color: #777;"> </span></a>
 					</li>
-					<li ng-if="selectedArchetype" class="side-menu-item"  ng-click="generateDiff()" tooltip-placement="right" tooltip="contrast adl" tooltip-popup-delay="500">
+					<li ng-if="selectedArchetype" class="side-menu-item"  ng-click="generateDiff()" tooltip-placement="right" tooltip="{{'MANAGEMENT_ARCHETYPE_EDIT_TOOTIP_CONTRAST_ADL' | translate}}" tooltip-popup-delay="500">
 						<a href="" class="menu-item-content"><span class="icon-columns tool-menu" style="color: #777;"> </span></a>
 					</li>
-					<li ng-if="selectedArchetype.lifecycleState=='Published'" class="side-menu-item"  ng-click="createNewVersionArchetype()" tooltip-placement="right" tooltip="new version" tooltip-popup-delay="500">
+					<li ng-if="selectedArchetype.lifecycleState=='Published'" class="side-menu-item"  ng-click="createNewVersionArchetype()" tooltip-placement="right" tooltip="{{'MANAGEMENT_ARCHETYPE_EDIT_TOOTIP_NEW_VERSION' | translate}}" tooltip-popup-delay="500">
 						<a href="" class="menu-item-content"><span class="icon-level-up tool-menu" style="color: #777;"> </span></a>
 					</li>
-				    <li ng-if="selectedArchetype" class="side-menu-item"  ng-click="specialiseArchetype()" tooltip-placement="right" tooltip="specialise this archetype" tooltip-popup-delay="500">
+				    <li ng-if="selectedArchetype" class="side-menu-item"  ng-click="specialiseArchetype()" tooltip-placement="right" tooltip="{{'MANAGEMENT_ARCHETYPE_EDIT_TOOTIP_SPECIALISE_THIS_ARCHETYPE' | translate}}" tooltip-popup-delay="500">
 						<a href="" class="menu-item-content"><span class="icon-puzzle-piece tool-menu" style="color: #777;"> </span></a>
 					</li>
 				</ul>
