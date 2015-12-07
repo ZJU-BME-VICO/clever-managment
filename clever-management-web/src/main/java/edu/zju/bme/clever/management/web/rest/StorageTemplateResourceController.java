@@ -1,6 +1,7 @@
 package edu.zju.bme.clever.management.web.rest;
 
 import java.io.ByteArrayInputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -204,8 +205,7 @@ public class StorageTemplateResourceController extends
 	public FileUploadResult deplyTemplates(
 			@RequestBody DeployConfiguration config,
 			Authentication authentication) {
-		String userName = ((UserDetails) authentication.getPrincipal())
-				.getUsername();
+		String userName = ((UserDetails) authentication.getPrincipal()).getUsername();
 		config.setUserName(userName);
 		FileUploadResult result = new FileUploadResult();
 		result.setSucceeded(true);
@@ -407,23 +407,47 @@ public class StorageTemplateResourceController extends
 	@ResponseBody
 	public FileUploadResult uploadTemplates(
 			@RequestParam(value = "count", required = true) int count,
-			@RequestParam(value = "oets", required = true) MultipartFile[] oets,
-			@RequestParam(value = "arms", required = true) MultipartFile[] arms,
+			@RequestParam(value = "templates", required = true) MultipartFile[] templates,
 			Authentication authentication) {
 		FileUploadResult result = new FileUploadResult();
 		result.setSucceeded(true);
-		if (oets.length != count || arms.length != count) {
-			result.setSucceeded(false);
-			result.setMessage("OET's count and ARM's count does not match.");
+		List<MultipartFile> oets = new ArrayList<>();
+		List<MultipartFile> arms = new ArrayList<>();
+		List<String> fail_templates = new ArrayList<>();
+		if(templates.length > 0){
+			for(MultipartFile template: templates){
+				if(template.getOriginalFilename().endsWith(".oet")){
+					oets.add(template);
+				}
+				else if(template.getOriginalFilename().endsWith(".arm")){
+					arms.add(template);
+				}
+			}
 		}
-		String userName = ((UserDetails) authentication.getPrincipal())
-				.getUsername();
+		if(oets.size() != arms.size()){
+			result.setSucceeded(false);
+			result.setMessage("OET's count and ARM's count does not match");
+			for(MultipartFile oet: oets){
+				MultipartFile rel_arm = arms.stream().filter(file -> file.getOriginalFilename().substring(0, file.getOriginalFilename().lastIndexOf(".arm"))
+						.equals(oet.getOriginalFilename().substring(0, oet.getOriginalFilename().lastIndexOf(".oet")))).findAny().orElse(null);
+				if(rel_arm == null){
+					fail_templates.add(oet.getOriginalFilename().substring(0, oet.getOriginalFilename().lastIndexOf("oet")));
+				}
+			}
+			result.setFailTemplates(fail_templates);
+		}
+//		if (oets.size() != count || arms.size() != count) {
+//			result.setSucceeded(false);
+//			result.setMessage("OET's count and ARM's count does not match.");
+//		}
+		String userName = ((UserDetails) authentication.getPrincipal()).getUsername();
 		User user = this.userService.getUserByName(userName);
 		try {
 			for (int i = 0; i < count; i++) {
-				this.versionControlService.acceptNewTemplate(
-						oets[i].getInputStream(), arms[i].getInputStream(),
-						user);
+				MultipartFile oet = oets.get(i);
+				MultipartFile arm = arms.stream().filter(file -> file.getOriginalFilename().substring(0, file.getOriginalFilename().lastIndexOf(".arm"))
+						.equals(oet.getOriginalFilename().substring(0, oet.getOriginalFilename().lastIndexOf(".oet")))).findAny().get();
+				this.versionControlService.acceptNewTemplate(oet.getInputStream(), arm.getInputStream(),user);
 			}
 		} catch (VersionControlException | IOException ex) {
 			result.setSucceeded(false);

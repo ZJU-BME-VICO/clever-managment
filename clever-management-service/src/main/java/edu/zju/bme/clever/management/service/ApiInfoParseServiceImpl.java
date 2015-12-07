@@ -7,6 +7,7 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -71,7 +72,8 @@ public class ApiInfoParseServiceImpl implements ApiInfoParseService {
 	private Map<String, String> entityTypeMap = new HashMap<String, String>();
 
 	@Override
-	public void parseWadl(String url, String apiMasterName) throws Exception {
+	public void parseWadl(String url, String apiMasterName, Integer version)
+			throws Exception {
 		InputStream in = getUrlContent(url);
 		ApplicationDocument applicationDoc = null;
 
@@ -79,7 +81,7 @@ public class ApiInfoParseServiceImpl implements ApiInfoParseService {
 
 		if (applicationDoc != null) {
 			parseParam(new URL(getParamUrl(applicationDoc, url)));
-			persistWadlModel(applicationDoc, apiMasterName);
+			persistWadlModel(applicationDoc, apiMasterName, version);
 		}
 	}
 
@@ -95,72 +97,125 @@ public class ApiInfoParseServiceImpl implements ApiInfoParseService {
 		return apiMaster;
 	}
 
-	private ApiVersionMaster createApiVersionMaster() {
+	private ApiVersionMaster createApiVersionMaster(Integer version) {
 		ApiVersionMaster apiVersionMaster = new ApiVersionMaster();
-		apiVersionMaster.setVersion(1);
+		apiVersionMaster.setVersion(version);
 		return apiVersionMaster;
 
 	}
 
-	private Integer versionControl(Integer oldVersion) {
-		return oldVersion + 1;
-	}
+	// private Integer versionControl(Integer oldVersion) {
+	// return oldVersion + 1;
+	// }
 
-	private void persistWadlModel(ApplicationDocument doc, String apiMasterName)
-			throws ApiParseException {
+	private void persistWadlModel(ApplicationDocument doc,
+			String apiMasterName, Integer version) throws ApiParseException {
+		System.out.println(version);
 		// ApiMasterRepository repo = this.apiMasterRepo;
 		// if (repo == null) {
 		// System.out.println("respo is a null pointer");
 		// }
-		ApiMaster apiMaster = this.apiMasterRepo.findByName(apiMasterName);
+		ApiMaster apiMaster = this.apiMasterRepo
+				.findByNameFetchAll(apiMasterName);
 		// ApiMaster apiMaster = new ApiMaster();
-		ApiVersionMaster versionMaster = new ApiVersionMaster();
+		ApiVersionMaster oldVersionMaster = null;
 		if (apiMaster == null) {// there is no a apimaster in repository
+			System.out.println("api master is null");
 			apiMaster = createApiMaster(apiMasterName);
-		}
-
-		Set<ApiVersionMaster> versionMasterSet = apiMaster.getVersionMasters();
-		if (versionMasterSet == null) {
-			versionMasterSet = new HashSet<ApiVersionMaster>();
-		}
-		if (!versionMasterSet.isEmpty()) {
-			versionMaster.setVersion(versionControl(apiMaster
-					.getLatestVersionMaster().getVersion()));
 		} else {
-			versionMaster = createApiVersionMaster();
+			System.out.println("api master is exist");
+			oldVersionMaster = this.apiVersionMasterRepo
+					.findByVersionAndApiMasterIdFetchAll(version,
+							apiMaster.getId());
 		}
-		ApiVersionMaster latestVersionMaster = apiMaster.getLatestVersionMaster();
-		if(latestVersionMaster!=null){
-		   versionMaster.setLastVersionMaster(latestVersionMaster);
-		   latestVersionMaster.setNextVersionMaster(versionMaster);
-		}else{
-			
-			//latestVersionMaster = null;
-		}
+		ApiVersionMaster versionMaster = new ApiVersionMaster();
+		versionMaster.setVersion(version);
+		if (oldVersionMaster != null) {
+			System.out.println("oldVersionMaster  is exist");
+			versionMaster.setLastVersionMaster(oldVersionMaster
+					.getLastVersionMaster());
+			versionMaster.setNextVersionMaster(oldVersionMaster
+					.getNextVersionMaster());
+			this.apiVersionMasterRepo.delete(oldVersionMaster);
+		} else {
+			try {
 
-		Application app = doc.getApplication();
-
-		List<Resources> resourcesList = Arrays.asList(app.getResourcesArray());
-		Set<ApiRootUrlMaster> urlMasterSet = new HashSet<ApiRootUrlMaster>();
-
-		if (resourcesList != null) {
-			for (Resources resources : resourcesList) {
-				urlMasterSet.addAll(processResources(resources, versionMaster));
+				System.out.println("oldVersionMaster is null");
+				Set<ApiVersionMaster> versionMasterSet = apiMaster
+						.getVersionMasters();
+				if (versionMasterSet != null && !versionMasterSet.isEmpty()) {
+					List<ApiVersionMaster> largerList = new ArrayList<ApiVersionMaster>();
+					List<ApiVersionMaster> smallerList = new ArrayList<ApiVersionMaster>();
+					versionMasterSet.forEach(master -> {
+						if (versionMaster.getVersion() > master.getVersion()) {
+							smallerList.add(master);
+						} else {
+							largerList.add(master);
+						}
+					});
+					Collections.sort(largerList);
+					Collections.sort(smallerList);
+					if (!smallerList.isEmpty()) {
+						ApiVersionMaster last = smallerList.get(0);
+						versionMaster.setLastVersionMaster(last);
+						last.setNextVersionMaster(versionMaster);
+					}
+					if (!largerList.isEmpty()) {
+						ApiVersionMaster next = largerList.get(largerList
+								.size() - 1);
+						versionMaster.setNextVersionMaster(next);
+						next.setLastVersionMaster(versionMaster);
+					}
+					versionMasterSet.add(versionMaster);
+				} else {
+					versionMasterSet = new HashSet<ApiVersionMaster>();
+					versionMasterSet.add(versionMaster);
+					apiMaster.setVersionMasters(versionMasterSet);
+				}
+			} catch (Exception e) {
+				System.out.println("error :" + e.getMessage());
 			}
-			;
 		}
+		Set<ApiRootUrlMaster> urlMasterSet = new HashSet<ApiRootUrlMaster>();
+        try{
+        	
+			ApiVersionMaster latestVersionMaster = apiMaster
+					.getLatestVersionMaster();
+			if (latestVersionMaster != null) {
+				System.out.println("latestVersionMaster is Exist");
+				if (latestVersionMaster.getVersion() < versionMaster
+						.getVersion()) {
+					System.out.println("set version master as latest ");
+					apiMaster.setLatestVersionMaster(versionMaster);
+				}
+			} else {
+				System.out.println("latestVersionMaster is null");
+				apiMaster.setLatestVersionMaster(versionMaster);
+			}
+
+			Application app = doc.getApplication();
+
+			List<Resources> resourcesList = Arrays.asList(app
+					.getResourcesArray());
+			urlMasterSet = new HashSet<ApiRootUrlMaster>();
+
+			if (resourcesList != null) {
+				for (Resources resources : resourcesList) {
+					urlMasterSet.addAll(processResources(resources,
+							versionMaster));
+				}
+				;
+			}
+
+        }catch(Exception e){
+        	System.out.println("error :" + e.getMessage());
+        }
+        
 		if (!urlMasterSet.isEmpty()) {
+			System.out.println("save the apiMaster and versionMaster");
 			versionMaster.setApiMaster(apiMaster);
 			versionMaster.setApiRootUrlMasters(urlMasterSet);
-			apiVersionMasterRepo.save(versionMaster);
-			apiMaster.setLatestVersionMaster(versionMaster);
-			if (apiMaster.getVersionMasters() != null) {
-				apiMaster.getVersionMasters().add(versionMaster);
-			} else {
-				Set<ApiVersionMaster> temp = new HashSet<ApiVersionMaster>();
-				temp.add(versionMaster);
-				apiMaster.setVersionMasters(temp);
-			}
+			this.apiVersionMasterRepo.save(versionMaster);
 			this.apiMasterRepo.save(apiMaster);
 		} else {
 			throw new ApiParseException(

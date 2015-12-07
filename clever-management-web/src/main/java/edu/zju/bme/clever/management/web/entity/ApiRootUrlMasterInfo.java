@@ -6,11 +6,21 @@ import java.util.List;
 import java.util.Set;
 
 public class ApiRootUrlMasterInfo {
+	private Integer versionMasterId;
 	private Integer id;
 	// private Integer apiVersion;
 	private String rootUrlName;
+	private String chineseName;
 
 	private List<ApiInfo> apiList = new ArrayList<ApiInfo>();
+
+	public String getChineseName() {
+		return chineseName;
+	}
+
+	public void setChineseName(String chineseName) {
+		this.chineseName = chineseName;
+	}
 
 	public Integer getId() {
 		return id;
@@ -19,8 +29,6 @@ public class ApiRootUrlMasterInfo {
 	public void setId(Integer id) {
 		this.id = id;
 	}
-
-	
 
 	public List<ApiInfo> getApiList() {
 		return apiList;

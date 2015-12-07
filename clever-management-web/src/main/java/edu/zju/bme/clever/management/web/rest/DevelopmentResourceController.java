@@ -30,7 +30,7 @@ import edu.zju.bme.clever.management.service.entity.RequestParam;
 import edu.zju.bme.clever.management.service.entity.ReturnParam;
 import edu.zju.bme.clever.management.service.exception.ApiParseException;
 import edu.zju.bme.clever.management.service.exception.ResourceExportException;
-import edu.zju.bme.clever.management.web.entity.ApiEditResult;
+import edu.zju.bme.clever.management.web.entity.ApiMaintainResult;
 import edu.zju.bme.clever.management.web.entity.ApiOriginInfo;
 import edu.zju.bme.clever.management.web.entity.ApiInfo;
 import edu.zju.bme.clever.management.web.entity.ApiMasterInfo;
@@ -62,7 +62,8 @@ public class DevelopmentResourceController extends AbstractResourceController {
 					.stream()
 					.map(master -> {
 						ApiMasterInfo info = new ApiMasterInfo();
-						info.setApiMasterName(master.getName());
+						info.setName(master.getName());
+						info.setChineseName(master.getChineseName());
 						info.setId(master.getId());
 						ApiVersionMaster latestVersionMaster = master
 								.getLatestVersionMaster();
@@ -73,7 +74,7 @@ public class DevelopmentResourceController extends AbstractResourceController {
 						Set<ApiVersionMaster> versionMasters = master
 								.getVersionMasters();
 						if (versionMasters != null && !versionMasters.isEmpty()) {
-							info.setApiVersionList(versionMasters.stream()
+							info.setVersionList(versionMasters.stream()
 									.map(versionMaster -> {
 										return versionMaster.getVersion();
 									}).collect(Collectors.toList()));
@@ -106,16 +107,17 @@ public class DevelopmentResourceController extends AbstractResourceController {
 	// return inf;
 	// }
 
+	// generate or modify api information with a version
 	@RequestMapping(value = "/api/maintain/overall", method = RequestMethod.POST)
-	public ApiEditResult generateApi(@RequestBody ApiOriginInfo info) {
+	public ApiMaintainResult generateApi(@RequestBody ApiOriginInfo info) {
 		System.out.println("come in the maintain overall function");
 		System.out.println(info.getUrl());
 		System.out.println(info.getMasterName());
-		ApiEditResult result = new ApiEditResult();
+		ApiMaintainResult result = new ApiMaintainResult();
 		result.setSucceeded(true);
 		try {
 			this.apiInfoParseService.parseWadl(info.getUrl(),
-					info.getMasterName());
+					info.getMasterName(), info.getVersion());
 		} catch (Exception e) {
 			result.setSucceeded(false);
 			result.setMessage(e.getMessage());
@@ -123,13 +125,15 @@ public class DevelopmentResourceController extends AbstractResourceController {
 		return result;
 	}
 
+	// remove version version master
 	@RequestMapping(value = "/api/maintain/remove/version/{masterId}/{version}", method = RequestMethod.GET)
-	public ApiEditResult deleteApiVersionMaster(@PathVariable Integer version,
-			@PathVariable Integer masterId) {
-		ApiEditResult result = new ApiEditResult();
+	public ApiMaintainResult deleteApiVersionMaster(
+			@PathVariable Integer version, @PathVariable Integer masterId) {
+		ApiMaintainResult result = new ApiMaintainResult();
 		result.setSucceeded(true);
 		try {
-			this.apiInfoMaintainService.deleteApiVersionMaster(masterId, version);
+			this.apiInfoMaintainService.deleteApiVersionMaster(masterId,
+					version);
 		} catch (Exception e) {
 			// TODO: handle exception
 			result.setSucceeded(false);
@@ -138,9 +142,10 @@ public class DevelopmentResourceController extends AbstractResourceController {
 		return result;
 	}
 
+	// remover master
 	@RequestMapping(value = "/api/maintain/remove/master/{id}", method = RequestMethod.GET)
-	public ApiEditResult deleteApiMaster(@PathVariable Integer id) {
-		ApiEditResult result = new ApiEditResult();
+	public ApiMaintainResult deleteApiMaster(@PathVariable Integer id) {
+		ApiMaintainResult result = new ApiMaintainResult();
 		result.setSucceeded(true);
 		try {
 			this.apiInfoMaintainService.deleteApiMaster(id);
@@ -152,35 +157,132 @@ public class DevelopmentResourceController extends AbstractResourceController {
 		return result;
 	}
 
-	@RequestMapping(value = "/api/maintain/single", method = RequestMethod.POST)
-	public ApiEditResult editApiDetails(@RequestBody ApiInfo info) {
-		Map<Integer, String> requestParamDescMap = new HashMap<Integer, String>();
-		Map<Integer, String> returnParamDescMap = new HashMap<Integer, String>();
-		List<ApiParamInfo> requestParams = info.getRequestParams();
-		List<ApiParamInfo> returnParams = info.getReturnParams();
-		if (requestParams != null && !requestParams.isEmpty()) {
-			requestParams.forEach(param -> {
-				requestParamDescMap.put(param.getId(), param.getDescription());
+	// save root url information
+	@RequestMapping(value = "/api/maintain/save/rooturl", method = RequestMethod.POST)
+	public ApiMaintainResult saveRootUrl(
+			@RequestBody ApiVersionMasterInfo info) {
+		ApiMaintainResult result = new ApiMaintainResult();
+		result.setSucceeded(true);
+		List<ApiRootUrlMasterInfo> masters = info.getRootUrlMasters();
+		
+		Map<Integer, String> chineseNameMap = new HashMap<Integer, String>();
+		if (masters != null && !masters.isEmpty()) {
+			masters.forEach(master -> {
+				System.out.println(master.getChineseName());
+				chineseNameMap.put(master.getId(), master.getChineseName());
 			});
+			try {
+				this.apiInfoMaintainService.updateRootUrlName(info.getId(),
+						chineseNameMap);
+			} catch (Exception e) {
+				result.setMessage(e.getMessage());
+				result.setSucceeded(false);
+			}
+
+		} else {
+			result.setSucceeded(false);
+			result.setMessage("the infos passed to controller is null!");
 		}
-		if (returnParams != null && !returnParams.isEmpty()) {
-			returnParams.forEach(param -> {
-				returnParamDescMap.put(param.getId(), param.getDescription());
-			});
-		}
-		ApiEditResult result = new ApiEditResult();
+		return result;
+
+	}
+
+	@RequestMapping(value = "/api/maintain/save/api", method = RequestMethod.POST)
+	public ApiMaintainResult saveApi(@RequestBody ApiInfo info) {
+		ApiMaintainResult result = new ApiMaintainResult();
 		result.setSucceeded(true);
 		try {
-			this.apiInfoMaintainService.editApiDesc(info.getId(),
-					info.getDescription(), requestParamDescMap,
-					returnParamDescMap);
-		} catch (ResourceExportException e) {
-			result.setSucceeded(false);
+			this.apiInfoMaintainService.updateApi(info.getId(),
+					info.getChineseName(), info.getDescription(),
+					info.getChineseDescription());
+		} catch (Exception e) {
 			result.setMessage(e.getMessage());
+			result.setSucceeded(false);
+		}
+
+		return result;
+	}
+
+	@RequestMapping(value = "/api/maintain/save/params", method = RequestMethod.POST)
+	public ApiMaintainResult saveParams(@RequestBody ApiInfo info) {
+		ApiMaintainResult result = new ApiMaintainResult();
+		result.setSucceeded(true);
+		if (info != null) {
+			Map<Integer, String> requestParamDesc = new HashMap<Integer, String>();
+			Map<Integer, String> returnParamDesc = new HashMap<Integer, String>();
+			Map<Integer, String> requestParamChineseDesc = new HashMap<Integer, String>();
+			Map<Integer, String> returnParamChineseDesc = new HashMap<Integer, String>();
+			Map<Integer, Boolean> requiredMap = new HashMap<Integer, Boolean>();
+			List<ApiParamInfo> requestParams = info.getRequestParams();
+			List<ApiParamInfo> returnParams = info.getReturnParams();
+			if (requestParams != null && !requestParams.isEmpty()) {
+				requestParams.forEach(param -> {
+					Integer id = param.getId();
+					requestParamDesc.put(id, param.getDescription());
+					requestParamChineseDesc.put(id,
+							param.getChineseDescription());
+					requiredMap.put(id, param.getRequired());
+				});
+			}
+			if (returnParams != null && !returnParams.isEmpty()) {
+				returnParams.forEach(param -> {
+					Integer id = param.getId();
+					returnParamDesc.put(id, param.getDescription());
+					returnParamChineseDesc.put(id,
+							param.getChineseDescription());
+				});
+			}
+
+			try {
+				this.apiInfoMaintainService.updateParams(info.getId(),
+						requestParamDesc, returnParamDesc,
+						requestParamChineseDesc, returnParamChineseDesc,
+						requiredMap);
+
+			} catch (Exception e) {
+				result.setMessage(e.getMessage());
+				result.setSucceeded(false);
+			}
+
+		} else {
+			result.setMessage("the data passed to saveParams is null");
+			result.setSucceeded(false);
 		}
 		return result;
 	}
 
+	// @RequestMapping(value = "/api/maintain/single", method =
+	// RequestMethod.POST)
+	// public ApiEditResult editApiDetails(@RequestBody ApiInfo info) {
+	// Map<Integer, String> requestParamDescMap = new HashMap<Integer,
+	// String>();
+	// Map<Integer, String> returnParamDescMap = new HashMap<Integer, String>();
+	// List<ApiParamInfo> requestParams = info.getRequestParams();
+	// List<ApiParamInfo> returnParams = info.getReturnParams();
+	// if (requestParams != null && !requestParams.isEmpty()) {
+	// requestParams.forEach(param -> {
+	// requestParamDescMap.put(param.getId(), param.getDescription());
+	// });
+	// }
+	// if (returnParams != null && !returnParams.isEmpty()) {
+	// returnParams.forEach(param -> {
+	// returnParamDescMap.put(param.getId(), param.getDescription());
+	// });
+	// }
+	// ApiEditResult result = new ApiEditResult();
+	// result.setSucceeded(true);
+	// try {
+	// this.apiInfoMaintainService.editApiDesc(info.getId(),
+	// info.getDescription(), requestParamDescMap,
+	// returnParamDescMap);
+	// } catch (ResourceExportException e) {
+	// result.setSucceeded(false);
+	// result.setMessage(e.getMessage());
+	// }
+	// return result;
+	// }
+
+	// auxiliary function
 	private ApiVersionMasterInfo constructApiVersionMasterInfo(
 			ApiVersionMaster master) {
 		ApiVersionMasterInfo info = new ApiVersionMasterInfo();
@@ -191,7 +293,7 @@ public class DevelopmentResourceController extends AbstractResourceController {
 				.stream().map(rootMaster -> {
 					return constructApiRootUrlMasterInfo(rootMaster);
 				}).collect(Collectors.toList());
-		info.setRootUrlMastersInfos(rootUrlMasterInfoList);
+		info.setRootUrlMasters(rootUrlMasterInfoList);
 		return info;
 	}
 
@@ -200,6 +302,7 @@ public class DevelopmentResourceController extends AbstractResourceController {
 		ApiRootUrlMasterInfo info = new ApiRootUrlMasterInfo();
 		// info.setApiVersion(master.getApiVersionMaster().getVersion());
 		info.setRootUrlName(master.getName());
+		info.setChineseName(master.getChineseName());
 		info.setId(master.getId());
 		info.setApiList(master
 				.getApiInformations()
@@ -207,10 +310,12 @@ public class DevelopmentResourceController extends AbstractResourceController {
 				.map(api -> {
 					ApiInfo apiInfo = new ApiInfo();
 					apiInfo.setId(api.getId());
-					apiInfo.setApiName(api.getName());
-					apiInfo.setApiUrl(api.getUrl());
+					apiInfo.setName(api.getName());
+					apiInfo.setChineseName(api.getChineseName());
+					apiInfo.setChineseDescription(api.getChineseDescription());
+					apiInfo.setUrl(api.getUrl());
 					apiInfo.setReuqestMethod(api.getRequestMethod());
-					apiInfo.setDescription(api.getApiDescription());
+					apiInfo.setDescription(api.getDescription());
 					apiInfo.setMediaTypes(api.getApiMediaTypes().stream()
 							.map(mediaType -> {
 								return mediaType.getMediaType();
@@ -252,6 +357,7 @@ public class DevelopmentResourceController extends AbstractResourceController {
 		info.setDescription(param.getDescription());
 		info.setName(param.getName());
 		info.setType(param.getType());
+		info.setChineseDescription(param.getChineseDescription());
 		if (param instanceof RequestParam) {
 			info.setRequired(((RequestParam) param).getRequired());
 		}

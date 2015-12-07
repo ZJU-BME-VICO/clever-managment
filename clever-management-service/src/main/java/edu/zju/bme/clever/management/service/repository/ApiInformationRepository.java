@@ -10,4 +10,6 @@ public interface ApiInformationRepository extends
 		JpaRepository<ApiInformation, Integer> {
 	@Query("select info from ApiInformation info left join fetch info.requestParams left join fetch info.returnParams left join fetch info.apiMediaTypes where info.id = ?1")
 	public ApiInformation findByIdFetchAll(Integer id);
+	
+	public ApiInformation findById(Integer id);
 }

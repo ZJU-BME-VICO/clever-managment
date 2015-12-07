@@ -31,7 +31,7 @@ public class ApiRootUrlMaster extends AbstractIndentifiedEntity {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "api_version_master_id")
 	private ApiVersionMaster apiVersionMaster;
-	
+
 	@LazyCollection(LazyCollectionOption.FALSE)
 	@CollectionTable
 	@OneToMany(mappedBy = "apiRootUrlMaster", orphanRemoval = true, cascade = CascadeType.ALL)
@@ -39,7 +39,18 @@ public class ApiRootUrlMaster extends AbstractIndentifiedEntity {
 	@Column(nullable = false)
 	private String name;
 
+	@Column
+	private String chineseName;
+
 	// getter and setter
+
+	public String getChineseName() {
+		return chineseName;
+	}
+
+	public void setChineseName(String chineseName) {
+		this.chineseName = chineseName;
+	}
 
 	public ApiVersionMaster getApiVersionMaster() {
 		return apiVersionMaster;
@@ -64,6 +75,5 @@ public class ApiRootUrlMaster extends AbstractIndentifiedEntity {
 	public void setApiInformations(Set<ApiInformation> apiInformations) {
 		this.apiInformations = apiInformations;
 	}
-
 
 }

@@ -19,6 +19,9 @@ public interface ApiVersionMasterRepository extends JpaRepository<ApiVersionMast
     //  @Query("select versionmaster from ApiVersionMaster versionmaster. left join fetch versionmaster.apiRootUrlMasterList master left join fetch master.apiInformations  where versionmaster.version = ?1 and versionmaster.apiMaster.id = ?2")
      public ApiVersionMaster findByVersionAndApiMasterIdFetchAll(Integer version, Integer apiMasterId);
      
-     @Query
+  
      public ApiVersionMaster findById(Integer id);
+     
+     @Query("select master from ApiVersionMaster master left join fetch master.apiRootUrlMasters where master.id = ?1")
+     public ApiVersionMaster findByIdFetchApiRootUrlMasters(Integer id);
 }

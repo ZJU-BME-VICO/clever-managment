@@ -47,6 +47,9 @@ var config = {
 	'DEVELOPMENT_API_MAINTAIN_SINGLE_URL' : prefix + '/development/api/maintain/single',
 	'DEVELOPMENT_API_REMOVE_BY_VERSIONID_URL' : prefix + '/development/api/maintain/remove/version/',
 	'DEVELOPMENT_API_REMOVE_BY_MASTER_URL' :  prefix + '/development/api/maintain/remove/master/',
+	'DEVELOPMENT_API_MAINTAIN_SAVE_ROOTURL' : prefix + '/development/api/maintain/save/rooturl',
+	'DEVELOPMENT_API_MAINTAIN_SAVE_API' : prefix + '/development/api/maintain/save/api',
+	'DEVELOPMENT_API_MAINTAIN_SAVE_PARAMS' : prefix + '/development/api/maintain/save/params',
 };
 var configModel = angular.module('clever.management.config', []);
 angular.forEach(config, function(value, key) {

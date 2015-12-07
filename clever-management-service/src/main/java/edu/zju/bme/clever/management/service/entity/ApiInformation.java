@@ -14,8 +14,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-
-
 import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.FetchMode;
 
@@ -36,6 +34,8 @@ public class ApiInformation extends AbstractIndentifiedEntity {
 	private String url;
 	@Column
 	private String name;
+	@Column
+	private String chineseName;
 
 	@Column
 	private String requestMethod;
@@ -51,12 +51,24 @@ public class ApiInformation extends AbstractIndentifiedEntity {
 
 	@Lob
 	@Column
-	private String apiDescription;
+	private String description;
+	
+	@Lob
+	@Column
+	private String chineseDescription;
 
 	// getter and setter
 
 	public String getUrl() {
 		return url;
+	}
+
+	public String getChineseName() {
+		return chineseName;
+	}
+
+	public void setChineseName(String chineseName) {
+		this.chineseName = chineseName;
 	}
 
 	public void setUrl(String url) {
@@ -87,7 +99,6 @@ public class ApiInformation extends AbstractIndentifiedEntity {
 		this.apiRootUrlMaster = apiRootUrlMaster;
 	}
 
-
 	public Set<RequestParam> getRequestParams() {
 		return requestParams;
 	}
@@ -112,12 +123,21 @@ public class ApiInformation extends AbstractIndentifiedEntity {
 		this.apiMediaTypes = apiMediaTypes;
 	}
 
-	public String getApiDescription() {
-		return apiDescription;
+	public String getDescription() {
+		return description;
 	}
 
-	public void setApiDescription(String apiDescription) {
-		this.apiDescription = apiDescription;
+	public void setDescription(String description) {
+		this.description = description;
 	}
 
+	public String getChineseDescription() {
+		return chineseDescription;
+	}
+
+	public void setChineseDescription(String chineseDescription) {
+		this.chineseDescription = chineseDescription;
+	}
+
+	
 }

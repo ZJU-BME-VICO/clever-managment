@@ -1,6 +1,6 @@
 package edu.zju.bme.clever.management.web.entity;
 
-public class ApiEditResult {
+public class ApiMaintainResult {
 	private boolean succeeded;
 	private String message;
 
