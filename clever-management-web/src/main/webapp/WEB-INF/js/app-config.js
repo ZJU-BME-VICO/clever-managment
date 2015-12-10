@@ -50,6 +50,16 @@ var config = {
 	'DEVELOPMENT_API_MAINTAIN_SAVE_ROOTURL' : prefix + '/development/api/maintain/save/rooturl',
 	'DEVELOPMENT_API_MAINTAIN_SAVE_API' : prefix + '/development/api/maintain/save/api',
 	'DEVELOPMENT_API_MAINTAIN_SAVE_PARAMS' : prefix + '/development/api/maintain/save/params',
+	'DEVELOPMENT_API_MAINTAIN_CLASSMASTER_URL' : prefix + '/development/api/maintain/classmaster' ,
+    'DEVELOPMENT_API_MAINTAIN_CLASSMASTER_ADD_URL' : prefix +  '/development/api/maintain/classmaster/add',
+    'DEVELOPMENT_API_MAINTAIN_ADD_PARAM_URL' : prefix + '/development/api/maintain/add/param/',
+	'DEVELOPMENT_API_DISPLAY_RETURNPARAMS' : prefix + '/development/api/display/returnparam/',
+	'DEVELOPMENT_API_DISPLAY_REQUESTPARAMS' : prefix + '/development/api/display/requestparam/',
+    'DEVELOPMENT_API_DISPLAY_REQUESTPARAM_DETAILS' : prefix + '/development/api/display/requestparam/details/',
+    'DEVELOPMENT_API_DISPLAY_RETURNPARAM_DETAILS' : prefix + '/development/api/display/returnparam/details/',
+    'DEVELOPMENT_API_DISPLAY_PARAM_DETAILS' : prefix + '/development/api/display/param/details/',
+
+  
 };
 var configModel = angular.module('clever.management.config', []);
 angular.forEach(config, function(value, key) {

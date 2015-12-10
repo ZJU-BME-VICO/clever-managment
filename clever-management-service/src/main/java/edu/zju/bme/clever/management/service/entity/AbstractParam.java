@@ -1,5 +1,8 @@
 package edu.zju.bme.clever.management.service.entity;
 
+import java.util.Set;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.FetchType;
 import javax.persistence.Inheritance;
@@ -8,6 +11,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.MappedSuperclass;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 
 @MappedSuperclass
 @Inheritance(strategy = InheritanceType.JOINED)
@@ -34,10 +39,19 @@ public abstract class AbstractParam extends AbstractIndentifiedEntity {
 	@Lob
 	@Column
 	private String description;
-
+	@OneToOne(fetch = FetchType.LAZY, orphanRemoval = true, cascade = CascadeType.ALL)
+	private ClassMaster classMaster;
 	@Lob
 	@Column
 	private String chineseDescription;
+
+	public ClassMaster getClassMaster() {
+		return classMaster;
+	}
+
+	public void setClassMaster(ClassMaster classMaster) {
+		this.classMaster = classMaster;
+	}
 
 	public String getChineseDescription() {
 		return chineseDescription;

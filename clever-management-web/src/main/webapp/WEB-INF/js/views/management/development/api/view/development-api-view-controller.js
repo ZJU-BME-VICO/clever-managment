@@ -1,4 +1,4 @@
-function ApiViewCtr($scope, $document, resourceService, DEVELOPMENT_API_DISPLAY_MASTER_URL, treeDataFormatService, busyService) {
+function ApiViewCtr($scope, $document, resourceService, DEVELOPMENT_API_DISPLAY_PARAM_DETAILS, DEVELOPMENT_API_DISPLAY_MASTER_URL, DEVELOPMENT_API_DISPLAY_RETURNPARAMS, DEVELOPMENT_API_DISPLAY_REQUESTPARAMS, treeDataFormatService, busyService) {
 
 	$scope.treeControl = {};
 	$scope.languages = ['zh', 'en'];
@@ -96,7 +96,6 @@ function ApiViewCtr($scope, $document, resourceService, DEVELOPMENT_API_DISPLAY_
 				$scope.treeControl.search(newValue);
 			}
 		}
-
 	});
 
 	//click api node call back,select api, and jump the tab to base tab
@@ -105,7 +104,21 @@ function ApiViewCtr($scope, $document, resourceService, DEVELOPMENT_API_DISPLAY_
 			$scope.selectedApi = undefined;
 		}
 		if (api.name) {
+			console.log(api);
+			$scope.selectedRtParam = undefined; 
+			$scope.selectedRqParam = undefined;
 			$scope.selectedApi = api;
+			var rqbid = busyService.pushBusy("BUSY_LOADING");
+			resourceService.get(DEVELOPMENT_API_DISPLAY_REQUESTPARAMS + $scope.selectedApi.id).then(function(list) {
+				$scope.selectedApi.requestParams = list;
+				busyService.popBusy(rqbid);
+			});
+			var rtbid = busyService.pushBusy("BUSY_LOADING");
+			resourceService.get(DEVELOPMENT_API_DISPLAY_RETURNPARAMS + $scope.selectedApi.id).then(function(list) {
+				$scope.selectedApi.returnParams = list;
+				busyService.popBusy(rtbid);
+
+			});
 
 		}
 	};
@@ -122,5 +135,24 @@ function ApiViewCtr($scope, $document, resourceService, DEVELOPMENT_API_DISPLAY_
 			$scope.getApiListById($scope.selectedCategory.id, $scope.selectedVersion);
 		}
 	});
+
+	$scope.getRqParamDetails = function(param) {
+		//console.log(param);
+		$scope.selectedRqParam = param;
+
+		resourceService.get(DEVELOPMENT_API_DISPLAY_PARAM_DETAILS + param.id).then(function(details) {
+			$scope.selectedRqParam.details = details;
+		});
+	};
+	$scope.getRtParamDetails = function(param) {
+		$scope.selectedRtParam = param;
+
+		resourceService.get(DEVELOPMENT_API_DISPLAY_PARAM_DETAILS + param.id).then(function(details) {
+			$scope.selectedRtParam.details = details;
+		});
+
+	};
+
+//	$scope.getParamDetails = function(param) {}
 
 }

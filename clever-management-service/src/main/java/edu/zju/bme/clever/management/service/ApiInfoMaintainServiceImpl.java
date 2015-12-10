@@ -1,5 +1,6 @@
 package edu.zju.bme.clever.management.service;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -12,12 +13,16 @@ import edu.zju.bme.clever.management.service.entity.ApiInformation;
 import edu.zju.bme.clever.management.service.entity.ApiMaster;
 import edu.zju.bme.clever.management.service.entity.ApiRootUrlMaster;
 import edu.zju.bme.clever.management.service.entity.ApiVersionMaster;
+import edu.zju.bme.clever.management.service.entity.ClassAttribute;
+import edu.zju.bme.clever.management.service.entity.ClassMaster;
 import edu.zju.bme.clever.management.service.entity.RequestParam;
 import edu.zju.bme.clever.management.service.entity.ReturnParam;
+import edu.zju.bme.clever.management.service.exception.ApiMaintainException;
 import edu.zju.bme.clever.management.service.exception.ResourceExportException;
 import edu.zju.bme.clever.management.service.repository.ApiInformationRepository;
 import edu.zju.bme.clever.management.service.repository.ApiMasterRepository;
 import edu.zju.bme.clever.management.service.repository.ApiVersionMasterRepository;
+import edu.zju.bme.clever.management.service.repository.ClassMasterRepository;
 
 @Service
 @Transactional
@@ -29,6 +34,9 @@ public class ApiInfoMaintainServiceImpl implements ApiInfoMaintainService {
 	ApiVersionMasterRepository apiVersionMasterRepo;
 	@Autowired
 	ApiMasterRepository apiMasterRepo;
+
+	@Autowired
+	ClassMasterRepository classMasterrepo;
 
 	@Override
 	public void updateRootUrlName(Integer versionMasterId,
@@ -128,6 +136,12 @@ public class ApiInfoMaintainServiceImpl implements ApiInfoMaintainService {
 			}
 		}
 		apiMaster.getVersionMasters().remove(versionMaster);
+		// this.apiMasterRepo.save(apiMaster);
+		if (apiMaster.getVersionMasters().isEmpty()) {
+			this.apiMasterRepo.delete(apiMaster);
+		} else {
+			this.apiMasterRepo.save(apiMaster);
+		}
 		// versionMaster.getApiRootUrlMasters();
 	}
 
@@ -135,5 +149,61 @@ public class ApiInfoMaintainServiceImpl implements ApiInfoMaintainService {
 	public void deleteApiMaster(Integer id) throws Exception {
 		ApiMaster master = this.apiMasterRepo.findByIdFetchAll(id);
 		this.apiMasterRepo.delete(master);
+	}
+
+	@Override
+	public void addClassMaster(String name, String type,
+			Set<ClassAttribute> attributes) throws Exception {
+
+		// ClassMaster temp = this.classMasterrepo.findByType(type);
+		// if (temp != null) {
+		// throw new Exception("the class master :" + type + " already exist!");
+		//
+		// } else {
+		// ClassMaster master = new ClassMaster();
+		// master.setName(name);
+		// master.setType(type);
+		// master.setAttributes(attributes);
+		// this.classMasterrepo.save(master);
+		// }
+		ClassMaster temp = this.classMasterrepo.findByType(type);
+		if (temp != null) {
+			this.apiInforamtionRepo.delete(temp.getId());
+		}
+		ClassMaster master = new ClassMaster();
+		master.setName(name);
+		master.setType(type);
+		master.setAttributes(attributes);
+		this.classMasterrepo.save(master);
+
+	}
+
+	@Override
+	public void addRequestParam(Integer apiId, String masterType)
+			throws Exception {
+		ApiInformation info = this.apiInforamtionRepo.findById(apiId);
+		ClassMaster master = this.classMasterrepo.findByType(masterType);
+		if (master == null) {
+			throw new ApiMaintainException(
+					"can not find class master with type :" + masterType);
+		}
+		if (info == null) {
+			throw new ApiMaintainException(
+					"can not find api information with id : " + apiId);
+		}
+
+		RequestParam param = new RequestParam();
+		param.setClassMaster(master);
+		param.setIsBaseType(false);
+		//param.setApiInformation(info);
+		Set<RequestParam> params = info.getRequestParams();
+		if(params == null){
+			params = new HashSet<RequestParam>();
+		}else{
+			params.add(param);
+		}
+		
+		this.apiInforamtionRepo.save(info);
+
 	}
 }

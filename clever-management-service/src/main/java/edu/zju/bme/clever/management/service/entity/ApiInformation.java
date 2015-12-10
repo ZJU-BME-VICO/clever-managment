@@ -49,10 +49,13 @@ public class ApiInformation extends AbstractIndentifiedEntity {
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "apiInformation", cascade = CascadeType.ALL)
 	private Set<ApiMediaType> apiMediaTypes;
 
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "apiInformation", orphanRemoval = true, cascade = CascadeType.ALL)
+	private Set<ErrorCode> errorCodes;
+
 	@Lob
 	@Column
 	private String description;
-	
+
 	@Lob
 	@Column
 	private String chineseDescription;
@@ -139,5 +142,12 @@ public class ApiInformation extends AbstractIndentifiedEntity {
 		this.chineseDescription = chineseDescription;
 	}
 
-	
+	public Set<ErrorCode> getErrorCodes() {
+		return errorCodes;
+	}
+
+	public void setErrorCodes(Set<ErrorCode> errorCodes) {
+		this.errorCodes = errorCodes;
+	}
+
 }

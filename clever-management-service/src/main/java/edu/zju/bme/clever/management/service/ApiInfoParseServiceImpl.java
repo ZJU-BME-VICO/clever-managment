@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.security.KeyStore.Entry;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -49,11 +50,15 @@ import edu.zju.bme.clever.management.service.entity.ApiMaster;
 import edu.zju.bme.clever.management.service.entity.ApiMediaType;
 import edu.zju.bme.clever.management.service.entity.ApiRootUrlMaster;
 import edu.zju.bme.clever.management.service.entity.ApiVersionMaster;
+import edu.zju.bme.clever.management.service.entity.ClassMaster;
+import edu.zju.bme.clever.management.service.entity.ClassAttribute;
 import edu.zju.bme.clever.management.service.entity.RequestParam;
 import edu.zju.bme.clever.management.service.entity.ReturnParam;
 import edu.zju.bme.clever.management.service.exception.ApiParseException;
 import edu.zju.bme.clever.management.service.repository.ApiMasterRepository;
 import edu.zju.bme.clever.management.service.repository.ApiVersionMasterRepository;
+import edu.zju.bme.clever.management.service.repository.ClassAttributeRepository;
+import edu.zju.bme.clever.management.service.repository.ClassMasterRepository;
 
 @Service
 @Transactional
@@ -65,6 +70,12 @@ public class ApiInfoParseServiceImpl implements ApiInfoParseService {
 
 	@Autowired
 	private ApiVersionMasterRepository apiVersionMasterRepo;
+
+	@Autowired
+	private ClassMasterRepository classMasterRepo;
+
+	@Autowired
+	private ClassAttributeRepository classAttributeRepo;
 
 	private WadlParser wadlParser = new WadlParser();
 
@@ -177,8 +188,8 @@ public class ApiInfoParseServiceImpl implements ApiInfoParseService {
 			}
 		}
 		Set<ApiRootUrlMaster> urlMasterSet = new HashSet<ApiRootUrlMaster>();
-        try{
-        	
+		try {
+
 			ApiVersionMaster latestVersionMaster = apiMaster
 					.getLatestVersionMaster();
 			if (latestVersionMaster != null) {
@@ -207,10 +218,10 @@ public class ApiInfoParseServiceImpl implements ApiInfoParseService {
 				;
 			}
 
-        }catch(Exception e){
-        	System.out.println("error :" + e.getMessage());
-        }
-        
+		} catch (Exception e) {
+			System.out.println("error :" + e.getMessage());
+		}
+
 		if (!urlMasterSet.isEmpty()) {
 			System.out.println("save the apiMaster and versionMaster");
 			versionMaster.setApiMaster(apiMaster);
@@ -445,34 +456,54 @@ public class ApiInfoParseServiceImpl implements ApiInfoParseService {
 		QName qName = representation.getElement();
 		if (qName != null) {
 			String element = qName.getLocalPart();
-
-			String typeName = this.entityTypeMap.get(element);
-			if (typeName == null) {
-				throw new ApiParseException("can not get type of entity :"
-						+ element);
+			// String typeName = this.entityTypeMap.get(element);
+			// if(typeName == null){
+			// throw new ApiParseException("can not get type of entity :"
+			// + element);
+			// }
+			ClassMaster classMaster = this.classMasterRepo.findByName(element);
+			if (classMaster == null) {
+				throw new ApiParseException(
+						"can not find class master, type name :" + element);
 			} else {
-				List<InnerParam> innerParams = this.typeParamsMap.get(typeName);
-				if (innerParams == null) {
-					throw new ApiParseException("can not get params of type :"
-							+ typeName);
-				} else {
-					List<ReturnParam> tempList = innerParams
-							.stream()
-							.map(param -> {
-								ReturnParam temp = new ReturnParam();
-								temp.setApiInformation(info);
-								temp.setName(param.name);
-								temp.setType(param.type);
-								temp.setIsList(param.isList);
-								if (this.typeParamsMap.get(param.type) != null) {
-									temp.setIsBaseType(false);
-								}
-								return temp;
-							}).collect(Collectors.toList());
-					params.addAll(tempList);
-				}
+				ReturnParam param = new ReturnParam();
+				param.setApiInformation(info);
+				param.setClassMaster(classMaster);
+				param.setIsBaseType(false);
+				params.add(param);
 			}
 		}
+		// this solution is deprecated
+		// if (qName != null) {
+		// String element = qName.getLocalPart();
+		//
+		// String typeName = this.entityTypeMap.get(element);
+		// if (typeName == null) {
+		// throw new ApiParseException("can not get type of entity :"
+		// + element);
+		// } else {
+		// List<InnerParam> innerParams = this.typeParamsMap.get(typeName);
+		// if (innerParams == null) {
+		// throw new ApiParseException("can not get params of type :"
+		// + typeName);
+		// } else {
+		// List<ReturnParam> tempList = innerParams
+		// .stream()
+		// .map(param -> {
+		// ReturnParam temp = new ReturnParam();
+		// temp.setApiInformation(info);
+		// temp.setName(param.name);
+		// temp.setType(param.type);
+		// temp.setIsList(param.isList);
+		// if (this.typeParamsMap.get(param.type) != null) {
+		// temp.setIsBaseType(false);
+		// }
+		// return temp;
+		// }).collect(Collectors.toList());
+		// params.addAll(tempList);
+		// }
+		// }
+		// }
 		return params;
 	}
 
@@ -485,14 +516,31 @@ public class ApiInfoParseServiceImpl implements ApiInfoParseService {
 				ReturnParam temp = new ReturnParam();
 				temp.setApiInformation(info);
 				temp.setName(param.getName());
-				temp.setType(param.getType().getLocalPart());
-				temp.setIsList(false);
-				temp.setIsBaseType(true);
-				params.add(temp);
-			});
+				String type = param.getType().getLocalPart();
+				temp.setType(type);
+				if (this.typeParamsMap.get(type) != null) {
+					temp.setIsBaseType(false);
+					ClassMaster master = this.classMasterRepo.findByType(type);
+					if (master == null) {
+						try {
+							throw new ApiParseException(
+									"can not find class master, type name :"
+											+ type);
+						} catch (Exception e) {
+							// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			} else {
+				temp.setClassMaster(master);
+			}
+		} else {
+			temp.setIsBaseType(true);
+		}
+		temp.setIsList(false);
+		params.add(temp);
+	})		;
 
 		return params;
-
 	}
 
 	private List<RequestParam> processParam(Request request, ApiInformation info) {
@@ -503,15 +551,32 @@ public class ApiInfoParseServiceImpl implements ApiInfoParseService {
 				RequestParam temp = new RequestParam();
 				temp.setApiInformation(info);
 				temp.setName(param.getName());
-				temp.setType(param.getType().toString());
-				temp.setRequired(param.getRequired());
-				temp.setIsBaseType(true);
-				temp.setIsList(false);
-				params.add(temp);
-			});
+				String type = param.getType().getLocalPart();
+				temp.setType(type);
+				if (this.typeParamsMap.get(type) != null) {
+					temp.setIsBaseType(false);
+					ClassMaster master = this.classMasterRepo.findByType(type);
+					if (master == null) {
+						try {
+							throw new ApiParseException(
+									"can not find class master, type name :"
+											+ type);
+						} catch (Exception e) {
+							// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			} else {
+				temp.setClassMaster(master);
+			}
+		} else {
+			temp.setIsBaseType(true);
+		}
+		temp.setRequired(param.getRequired());
+		temp.setIsList(false);
+		params.add(temp);
+	})		;
 
 		return params;
-
 	}
 
 	private Set<RequestParam> processRequestRepresentation(
@@ -522,36 +587,57 @@ public class ApiInfoParseServiceImpl implements ApiInfoParseService {
 		QName qName = representation.getElement();
 		if (qName != null) {
 			String element = qName.getLocalPart();
-			String typeName = this.entityTypeMap.get(element);
-			if (typeName == null) {
-				throw new ApiParseException("can not get type of entity :"
-						+ element);
+			// String typeName = this.entityTypeMap.get(element);
+			// if(typeName == null){
+			// throw new ApiParseException("can not get type of entity :"
+			// + element);
+			// }
+			ClassMaster classMaster = this.classMasterRepo.findByName(element);
+			if (classMaster == null) {
+				throw new ApiParseException(
+						"can not find class master, type name :" + element);
 			} else {
-				List<InnerParam> innerParams = this.typeParamsMap.get(typeName);
-				if (innerParams == null) {
-					throw new ApiParseException("can not get params of type :"
-							+ typeName);
-				} else {
-					Set<RequestParam> tempList = innerParams
-							.stream()
-							.map(param -> {
-								RequestParam temp = new RequestParam();
-								temp.setApiInformation(info);
-								temp.setName(param.name);
-								temp.setType(param.type);
-								temp.setRequired(param.required);
-								temp.setIsList(param.isList);
-								if (this.typeParamsMap.get(param.type) != null) {
-									temp.setIsBaseType(false);
-								} else {
-									temp.setIsBaseType(true);
-								}
-								return temp;
-							}).collect(Collectors.toSet());
-					params.addAll(tempList);
-				}
+				RequestParam param = new RequestParam();
+				param.setApiInformation(info);
+				param.setClassMaster(classMaster);
+				param.setIsBaseType(false);
+				params.add(param);
 			}
 		}
+		// this solution is deprecated
+		// if (qName != null) {
+		// String element = qName.getLocalPart();
+		// String typeName = this.entityTypeMap.get(element);
+		// if (typeName == null) {
+		// throw new ApiParseException("can not get type of entity :"
+		// + element);
+		// } else {
+		// List<InnerParam> innerParams = this.typeParamsMap.get(typeName);
+		// if (innerParams == null) {
+		// throw new ApiParseException("can not get params of type :"
+		// + typeName);
+		// } else {
+		// Set<RequestParam> tempList = innerParams
+		// .stream()
+		// .map(param -> {
+		// RequestParam temp = new RequestParam();
+		// temp.setApiInformation(info);
+		// temp.setName(param.name);
+		// temp.setType(param.type);
+		// temp.setRequired(param.required);
+		// temp.setIsList(param.isList);
+		// if (this.typeParamsMap.get(param.type) != null) {
+		// temp.setIsBaseType(false);
+		// } else {
+		// temp.setIsBaseType(true);
+		// }
+		// return temp;
+		// }).collect(Collectors.toSet());
+		// params.addAll(tempList);
+		// }
+		// }
+		// }
+
 		return params;
 	}
 
@@ -649,6 +735,7 @@ public class ApiInfoParseServiceImpl implements ApiInfoParseService {
 								param.isList = false;
 							}
 						}
+
 					}
 					paramList.add(param);
 				}
@@ -656,8 +743,40 @@ public class ApiInfoParseServiceImpl implements ApiInfoParseService {
 			}
 			typeParamsMap.put(typeName, paramList);
 		}
+
+		persistAttribute(entityTypeMap, typeParamsMap);
 		this.typeParamsMap = typeParamsMap;
 
+	}
+
+	private void persistAttribute(Map<String, String> entityTypeMap,
+			Map<String, List<InnerParam>> typeParamsMap) {
+		entityTypeMap.forEach((key, value) -> {
+			System.out.println(key + ": " + value);
+			ClassMaster master = new ClassMaster();
+			master.setName(key);
+			master.setType(value);
+			// this.classMasterRepo.save(master);
+				List<InnerParam> params = typeParamsMap.get(value);
+				System.out.println(value + " size: " + params.size());
+				Set<ClassAttribute> attributes = params.stream().map(param -> {
+					ClassAttribute attribute = new ClassAttribute();
+					attribute.setClassMaster(master);
+					attribute.setName(param.name);
+					attribute.setType(param.type);
+					if (typeParamsMap.get(param.type) != null) {
+						attribute.setIsBaseType(false);
+					} else {
+						attribute.setIsBaseType(true);
+					}
+					attribute.setIsRequired(param.required);
+					attribute.setIsList(param.isList);
+					// this.classAttributeRepo.save(attribute);
+						return attribute;
+					}).collect(Collectors.toSet());
+				master.setAttributes(attributes);
+				this.classMasterRepo.save(master);
+			});
 	}
 
 	private class InnerParam {

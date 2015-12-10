@@ -1,4 +1,4 @@
-function ApiEditCtr($scope, resourceService, DEVELOPMENT_API_MAINTAIN_SAVE_PARAMS, DEVELOPMENT_API_MAINTAIN_SAVE_API, DEVELOPMENT_API_MAINTAIN_SAVE_ROOTURL, DEVELOPMENT_API_DISPLAY_MASTER_URL, DEVELOPMENT_API_MAINTAIN_SINGLE_URL, DEVELOPMENT_API_REMOVE_BY_VERSIONID_URL, DEVELOPMENT_API_REMOVE_BY_MASTER_URL, DEVELOPMENT_API_MAINTAIN_OVERALL_URL, busyService, $modal) {
+function ApiEditCtr($scope, resourceService, DEVELOPMENT_API_MAINTAIN_ADD_PARAM_URL, DEVELOPMENT_API_MAINTAIN_CLASSMASTER_ADD_URL, DEVELOPMENT_API_MAINTAIN_CLASSMASTER_URL, DEVELOPMENT_API_DISPLAY_RETURNPARAMS, DEVELOPMENT_API_DISPLAY_REQUESTPARAMS, DEVELOPMENT_API_MAINTAIN_SAVE_PARAMS, DEVELOPMENT_API_MAINTAIN_SAVE_API, DEVELOPMENT_API_MAINTAIN_SAVE_ROOTURL, DEVELOPMENT_API_DISPLAY_MASTER_URL, DEVELOPMENT_API_MAINTAIN_SINGLE_URL, DEVELOPMENT_API_REMOVE_BY_VERSIONID_URL, DEVELOPMENT_API_REMOVE_BY_MASTER_URL, DEVELOPMENT_API_MAINTAIN_OVERALL_URL, busyService, $modal) {
 
 	$scope.treeControl = {};
 	$scope.tabControl = {};
@@ -23,6 +23,14 @@ function ApiEditCtr($scope, resourceService, DEVELOPMENT_API_MAINTAIN_SAVE_PARAM
 			}
 			busyService.popBusy(bid);
 		});
+
+		var classBid = busyService.pushBusy('BUSY_LOADING');
+		resourceService.get(DEVELOPMENT_API_MAINTAIN_CLASSMASTER_URL).then(function(list) {
+			console.log(list);
+			$scope.classMasters = list;
+			busyService.popBusy(classBid);
+		});
+
 	}();
 
 	$scope.stretchState = 'EXPAND_ALL';
@@ -105,6 +113,17 @@ function ApiEditCtr($scope, resourceService, DEVELOPMENT_API_MAINTAIN_SAVE_PARAM
 		if (api.name) {
 			$scope.selectedApi = api;
 			$scope.tabControl.selectTabById('baseTabId');
+			var rqbid = busyService.pushBusy("BUSY_LOADING");
+			resourceService.get(DEVELOPMENT_API_DISPLAY_REQUESTPARAMS + $scope.selectedApi.id).then(function(list) {
+				$scope.selectedApi.requestParams = list;
+				busyService.popBusy(rqbid);
+			});
+			var rtbid = busyService.pushBusy("BUSY_LOADING");
+			resourceService.get(DEVELOPMENT_API_DISPLAY_RETURNPARAMS + $scope.selectedApi.id).then(function(list) {
+				$scope.selectedApi.returnParams = list;
+				busyService.popBusy(rtbid);
+
+			});
 		}
 	};
 
@@ -175,7 +194,7 @@ function ApiEditCtr($scope, resourceService, DEVELOPMENT_API_MAINTAIN_SAVE_PARAM
 		});
 	};
 	$scope.deleteByMasterId = function(masterId) {
-		resourceService.get(DEVELOPMENT_API_REMOVE_BY_MASTER_URL +masterId).then(function(result) {
+		resourceService.get(DEVELOPMENT_API_REMOVE_BY_MASTER_URL + masterId).then(function(result) {
 			console.log(result);
 		});
 	};
@@ -310,11 +329,68 @@ function ApiEditCtr($scope, resourceService, DEVELOPMENT_API_MAINTAIN_SAVE_PARAM
 		modalInstance.result.then(function(message) {// modal message back
 			var value = message.value;
 			if (value.isVersion) {
-                 $scope.deleteByVersion(value.masterId, value.version);
-			}else if(value.isMaster){
+				$scope.deleteByVersion(value.masterId, value.version);
+			} else if (value.isMaster) {
 				$scope.deleteByMasterId(value.id);
 			}
 		});
 	};
+
+	$scope.newMaster = function() {
+		$scope.freshMaster = {
+			name : "",
+			type : "",
+			attributes : [],
+		};
+
+	};
+	$scope.newAttribute = function() {
+		$scope.freshMaster.attributes.push({
+			descriptionEn : '',
+			descriptionZh : '',
+			isRequired : true,
+			name : '',
+			type : '',
+		});
+	};
+
+	$scope.submitMaster = function() {
+		var val = $scope.freshMaster;
+		resourceService.post(DEVELOPMENT_API_MAINTAIN_CLASSMASTER_ADD_URL, {
+			name : val.name,
+			type : val.type,
+			attributes : val.attributes,
+		}).then(function(result) {
+			console.log(result);
+		});
+	};
+	$scope.addRequestParam = function(size) {
+		var modalInstance = $modal.open({
+			animation : true, // animations on
+			templateUrl : 'js/views/management/development/api/edit/api.add.param.html',
+			controller : function MaintainModelCtrl($scope, $modalInstance) {
+				$scope.ok = function() {
+					$modalInstance.close({
+						type : $scope.type,
+					});
+				};
+				$scope.cancel = function() {
+					$modalInstance.dismiss('cancel');
+				};
+			},
+			size : size,
+			resolve : {}
+		});
+		modalInstance.result.then(function(message) {// modal message back
+			console.log(message);
+			addRequestParam(message.type);
+		});
+	};
+
+	function addReqestParam(type) {
+		resourceService.post(DEVELOPMENT_API_MAINTAIN_ADD_PARAM_URL+ $scope.selectedApi.id, type).then(function(result) {
+			console.log(result);
+		});
+	}
 
 }

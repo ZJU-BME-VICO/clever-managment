@@ -7,7 +7,33 @@ public class ApiParamInfo {
 	private Boolean required;
 	private String description;
 	private String chineseDescription;
+	private Boolean indirect;// describe where dose the param come from. true: from class attribute table , false : from param table
+    private Boolean isList;
+    private Boolean isBaseType;
 
+	public Boolean getIsList() {
+		return isList;
+	}
+
+	public void setIsList(Boolean isList) {
+		this.isList = isList;
+	}
+
+	public Boolean getIsBaseType() {
+		return isBaseType;
+	}
+
+	public void setIsBaseType(Boolean isBaseType) {
+		this.isBaseType = isBaseType;
+	}
+
+	public Boolean getIndirect() {
+		return indirect;
+	}
+
+	public void setIndirect(Boolean indirect) {
+		this.indirect = indirect;
+	}
 
 	public Integer getId() {
 		return Id;

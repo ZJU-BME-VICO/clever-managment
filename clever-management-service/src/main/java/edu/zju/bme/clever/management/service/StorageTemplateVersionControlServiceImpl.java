@@ -42,6 +42,7 @@ import edu.zju.bme.clever.management.service.entity.TemplateType;
 import edu.zju.bme.clever.management.service.entity.User;
 import edu.zju.bme.clever.management.service.exception.VersionControlException;
 import edu.zju.bme.clever.management.service.repository.ArchetypeRevisionFileRepository;
+import edu.zju.bme.clever.management.service.repository.ArchetypeVersionMasterRepository;
 import edu.zju.bme.clever.management.service.repository.EntityClassSourceRepository;
 import edu.zju.bme.clever.management.service.repository.TemplateActionLogRepository;
 import edu.zju.bme.clever.management.service.repository.TemplateMasterRepository;
@@ -66,6 +67,9 @@ public class StorageTemplateVersionControlServiceImpl implements
 	@Autowired
 	private TemplateActionLogRepository templateActionLogRepo;
 
+	@Autowired
+	private ArchetypeVersionMasterRepository archetypeVersionMasterRepo;
+
 	private OETParser oetParser = new OETParser();
 	private ArmParser armParser = new ArmParser();
 
@@ -84,8 +88,8 @@ public class StorageTemplateVersionControlServiceImpl implements
 		// Validate name consistency, name example
 		// openEHR-EHR-CLUSTER.organisation.v1.1
 		String templateName = oet.getTemplate().getName();
-		if (!arm.getArchetypeRelationshipMapping().getTemplate().getTemplateId()
-				.equals(templateName)) {
+		if (!arm.getArchetypeRelationshipMapping().getTemplate()
+				.getTemplateId().equals(templateName)) {
 			throw new VersionControlException(
 					"OET's name and ARM's name is not consisitent.");
 		}
@@ -114,22 +118,39 @@ public class StorageTemplateVersionControlServiceImpl implements
 			throws VersionControlException {
 		TemplateMaster master = new TemplateMaster();
 		// Validate specialise archetype
-		String specialiseArchetypeName = oet.getTemplate().getDefinition()
-				.getArchetypeId();
-		ArchetypeRevisionFile specialiseArchetype = this.archetypeFileRepo
-				.findByName(specialiseArchetypeName);
-		// Whether exist
-		if (specialiseArchetype == null) {
+
+		// String specialiseArchetypeName = oet.getTemplate().getDefinition()
+		// .getArchetypeId();
+		//
+		//
+		// ArchetypeRevisionFile specialiseArchetype = this.archetypeFileRepo
+		// .findByName(specialiseArchetypeName);
+		//
+		// // Whether exist
+		// if (specialiseArchetype == null) {
+		// throw new VersionControlException(
+		// "Cannot find specialise archetype");
+		// }
+		// // Whether specialise the specific archetype version master
+		// ArchetypeVersionMaster specialiseArchetypeVersionMaster =
+		// specialiseArchetype
+		// .getVersionMaster();
+		// if (!specialiseArchetypeVersionMaster.getName().equals(name)) {
+		// throw new VersionControlException("Template master name should be "
+		// + specialiseArchetypeVersionMaster.getName());
+		// }
+		//
+		// String specialiseArcVersionMasterName = WordUtils
+		// .extractVersionMasterName(oet.getTemplate().getDefinition()
+		// .getArchetypeId());
+		ArchetypeVersionMaster specialiseArchetypeVersionMaster = this.archetypeVersionMasterRepo
+				.findByName(name);
+
+		if (specialiseArchetypeVersionMaster == null) {
 			throw new VersionControlException(
-					"Cannot find specialise archetype");
+					"Can not find specialise archetype");
 		}
-		// Whether specialise the specific archetype version master
-		ArchetypeVersionMaster specialiseArchetypeVersionMaster = specialiseArchetype
-				.getVersionMaster();
-		if (!specialiseArchetypeVersionMaster.getName().equals(name)) {
-			throw new VersionControlException("Template master name should be "
-					+ specialiseArchetypeVersionMaster.getName());
-		}
+
 		// Set template master basic info
 		RESOURCEDESCRIPTIONITEM details = oet.getTemplate().getDescription()
 				.getDetails();
@@ -144,14 +165,12 @@ public class StorageTemplateVersionControlServiceImpl implements
 		master.setCopyright(details.getCopyright());
 		master.setTemplateType(TemplateType.STORAGE);
 		// Set template master specialse info
-		master.setConceptName(specialiseArchetypeVersionMaster
-				.getConceptName());
+		master.setConceptName(specialiseArchetypeVersionMaster.getConceptName());
 		master.setConceptDescription(specialiseArchetypeVersionMaster
 				.getConceptDescription());
 		master.setRmEntity(specialiseArchetypeVersionMaster.getRmEntity());
 		master.setRmName(specialiseArchetypeVersionMaster.getRmName());
-		master.setRmOrginator(specialiseArchetypeVersionMaster
-				.getRmOrginator());
+		master.setRmOrginator(specialiseArchetypeVersionMaster.getRmOrginator());
 		master.setVersion(specialiseArchetypeVersionMaster.getVersion());
 		master.setSpecialiseArchetypeVersionMaster(specialiseArchetypeVersionMaster);
 		this.templateMasterRepo.save(master);
@@ -167,44 +186,71 @@ public class StorageTemplateVersionControlServiceImpl implements
 		TemplateRevisionFile latestRevisionFile = master
 				.getLatestRevisionFile();
 		// Validate specialise archetype
-		String specialiseArchetypeName = oet.getTemplate().getDefinition()
-				.getArchetypeId();
-		ArchetypeRevisionFile specialiseArchetype = this.archetypeFileRepo
-				.findByName(specialiseArchetypeName);
+		// String specialiseArchetypeName = oet.getTemplate().getDefinition()
+		// .getArchetypeId();
+		// ArchetypeRevisionFile specialiseArchetype = this.archetypeFileRepo
+		// .findByName(specialiseArchetypeName);
+
+		// content in archetype_id attribute should be archetype versiona master
+		// name
+		String specialiseArchetypeVersionMasterName = WordUtils
+				.extractVersionMasterName(oet.getTemplate().getDefinition()
+						.getArchetypeId());
+		// find specialise archetype version master
+		ArchetypeVersionMaster specialiseArchetypeVersionMaster = this.archetypeVersionMasterRepo
+				.findByName(specialiseArchetypeVersionMasterName);
 		// Whether exist
-		if (specialiseArchetype == null) {
+		// if (specialiseArchetype == null) {
+		// throw new VersionControlException(
+		// "Cannot find specialise archetype");
+		// }
+
+		// there should be a archetype version master map to this oet
+		if (specialiseArchetypeVersionMaster == null) {
 			throw new VersionControlException(
-					"Cannot find specialise archetype");
+					"Cannot find specialise archetype version master");
 		}
-		// Whether specialise the specific archetype version master
-		if (!specialiseArchetype.getVersionMaster().equals(
-				master.getSpecialiseArchetypeVersionMaster())) {
+
+		// version master should equals versionMaster in template master
+		if (!master.getSpecialiseArchetypeVersionMaster().equals(
+				specialiseArchetypeVersionMaster)) {
 			throw new VersionControlException(
 					"Specialise archetype should be one of the revisions of "
-							+ specialiseArchetype.getVersionMaster().getName());
+							+ specialiseArchetypeVersionMaster.getName());
 		}
+
+		// Whether specialise the specific archetype version master
+		// if (!specialiseArchetype.getVersionMaster().equals(
+		// master.getSpecialiseArchetypeVersionMaster())) {
+		// throw new VersionControlException(
+		// "Specialise archetype should be one of the revisions of "
+		// + specialiseArchetype.getVersionMaster().getName());
+		// }
+
 		Integer nextSerialVersion;
 		if (latestRevisionFile != null) {
 			nextSerialVersion = latestRevisionFile.getSerialVersion() + 1;
 			nextRevisionFile.setLastRevisionFile(latestRevisionFile);
-			// Validate lifecycle state  This validate is removed to ValidateService
-//			if (!latestRevisionFile.getLifecycleState().equals(
-//					LifecycleState.PUBLISHED)) {
-//				throw new VersionControlException(
-//						"The latest revision template "
-//								+ latestRevisionFile.getName()
-//								+ "'s lifecycle state is not PUBLISHED.");
-//			}
+			// Validate lifecycle state This validate is removed to
+			// ValidateService
+			// if (!latestRevisionFile.getLifecycleState().equals(
+			// LifecycleState.PUBLISHED)) {
+			// throw new VersionControlException(
+			// "The latest revision template "
+			// + latestRevisionFile.getName()
+			// + "'s lifecycle state is not PUBLISHED.");
+			// }
 			// Validate specialise archetype order
-			if (specialiseArchetype.getSerialVersion() < latestRevisionFile
-					.getSpecialiseArchetypeRevisionFileSerialVersion()) {
-				throw new VersionControlException(
-						"Specialise archetype "
-								+ specialiseArchetype.getName()
-								+ " should not be earlier than "
-								+ latestRevisionFile
-										.getSpecialiseArchetypeRevisionFileVersion());
-			}
+			// if (specialiseArchetype.getSerialVersion() < latestRevisionFile
+			// .getSpecialiseArchetypeRevisionFileSerialVersion()) {
+			// throw new VersionControlException(
+			// "Specialise archetype "
+			// + specialiseArchetype.getName()
+			// + " should not be earlier than "
+			// + latestRevisionFile
+			// .getSpecialiseArchetypeRevisionFileVersion());
+			// }
+
 		} else {
 			// It is a new template master
 			nextSerialVersion = 1;
@@ -219,6 +265,8 @@ public class StorageTemplateVersionControlServiceImpl implements
 		nextRevisionFile.setSerialVersion(nextSerialVersion);
 		nextRevisionFile.setVersion(master.getVersion() + "."
 				+ nextSerialVersion);
+		ArchetypeRevisionFile specialiseArchetype = specialiseArchetypeVersionMaster
+				.getLatestRevisionFile();
 		nextRevisionFile
 				.setSpecialiseArchetypeRevisionFile(specialiseArchetype);
 		nextRevisionFile
@@ -331,7 +379,7 @@ public class StorageTemplateVersionControlServiceImpl implements
 		templateFile.setOet(oet.toString());
 		templateFile.getPropertyMap().put(TemplatePropertyType.ARM,
 				arm.toString());
-		
+
 		this.templateFileRepo.save(templateFile);
 		// Log action
 		this.logTemplateAction(templateFile, ActionType.EDIT, user);
@@ -382,7 +430,7 @@ public class StorageTemplateVersionControlServiceImpl implements
 							+ templateFile.getLifecycleState()
 							+ " instead of Draft.");
 		}
-		
+
 		templateFile.setLastModifyTime(Calendar.getInstance());
 		templateFile.setLifecycleState(LifecycleState.TEAMREVIEW);
 		// Save archetype file and master
@@ -433,6 +481,19 @@ public class StorageTemplateVersionControlServiceImpl implements
 							+ templateFile.getLifecycleState()
 							+ " instead of Teamreview.");
 		}
+
+		// validate specialize archetype lifecycle state
+		ArchetypeRevisionFile specialiseArchetype = templateFile
+				.getSpecialiseArchetypeRevisionFile();
+		if (specialiseArchetype.getLifecycleState().equals(
+				LifecycleState.PUBLISHED)) {
+			throw new VersionControlException(
+					"Illeagal action Approve for template "
+							+ templateFile.getName()
+							+ " because the specialise archetype's lifecycle state is "
+							+ specialiseArchetype.getLifecycleState()
+							+ " instead of Published");
+		}
 		templateFile.setLifecycleState(LifecycleState.PUBLISHED);
 
 		// Validate template effectiveness
@@ -456,7 +517,7 @@ public class StorageTemplateVersionControlServiceImpl implements
 		// templateFile, oet, arm);
 		// Save entity classes
 		// entityClasses.forEach(cls -> this.entityClassRepo.save(cls));
-		
+
 		templateFile.setLastModifyTime(Calendar.getInstance());
 
 		// Save template file
@@ -508,7 +569,6 @@ public class StorageTemplateVersionControlServiceImpl implements
 							+ templateFile.getLifecycleState()
 							+ " instead of Teamreview.");
 		}
-		
 		templateFile.setLastModifyTime(Calendar.getInstance());
 		templateFile.setLifecycleState(LifecycleState.DRAFT);
 		// Save archetype file and master
@@ -577,12 +637,13 @@ public class StorageTemplateVersionControlServiceImpl implements
 			// Remove file
 			this.templateFileRepo.delete(templateFile);
 			// Log action
-			this.logTemplateAction(templateFile, ActionType.REJECT_AND_REMOVE, user);
+			this.logTemplateAction(templateFile, ActionType.REJECT_AND_REMOVE,
+					user);
 		} else {
 			// The first file of master, remove master
 			this.templateMasterRepo.delete(templateMaster);
 		}
-		
+
 	}
 
 	private TemplateDocument parseOet(InputStream oetStream)

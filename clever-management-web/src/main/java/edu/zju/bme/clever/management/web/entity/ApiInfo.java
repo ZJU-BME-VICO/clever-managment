@@ -15,6 +15,7 @@ public class ApiInfo {
 	private String chineseDescription;
 	private String chineseName;
 	private List<String> mediaTypes = new ArrayList<String>();
+	private List<ErrorCodeInfo> errorCodes = new ArrayList<ErrorCodeInfo>();
 
 	public Integer getId() {
 		return Id;
@@ -94,6 +95,14 @@ public class ApiInfo {
 
 	public void setMediaTypes(List<String> mediaTypes) {
 		this.mediaTypes = mediaTypes;
+	}
+
+	public List<ErrorCodeInfo> getErrorCodes() {
+		return errorCodes;
+	}
+
+	public void setErrorCodes(List<ErrorCodeInfo> errorCodes) {
+		this.errorCodes = errorCodes;
 	}
 
 }

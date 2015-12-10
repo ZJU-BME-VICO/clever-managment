@@ -1,4 +1,4 @@
-<style type="text/css">
+<!-- <style type="text/css">
 	.template-pane-normal:hover {
 		background-color: #f5f5f5;
 	}
@@ -98,4 +98,107 @@
 	<button class="btn btn-warning btn-lg" ng-click="reset()">
 		{{'STORAGE_TEMPLATE_UPLOAD_BTN_RESET' | translate}}
 	</button>
+</div> -->
+<div class="modal-body">
+	<div ng-style="{height: containerHeight - 110}">
+		<div class="row">
+			<div class="col-sm-12 col-md-12 col-lg-12">
+				<button ng-show="onStatus('ToAddFile')" class="btn btn-success btn-file">
+					<span class="glyphicon glyphicon-plus"></span> {{'STORAGE_TEMPLATE_UPLOAD_ADD' | translate}}
+					<input id="inputFiles" type="file" multiple accept=".oet, .xml" files-model file-list="fileList">
+				</button>
+				<span ng-show="fileList.length>0" class="badge pull-right">{{fileList.length}}</span>
+				<h4 ng-show="onStatus('Validating')"><img ng-src="{{WEBSITE_DOMAIN}}/img/loading.gif" style="max-height: 18px;"></img> {{'ARCHETYPE_UPLOAD_VALIDATING_HINT' | translate}}</h4>
+				<!-- <h4 ng-show="onStatus('ValidationFailed')" style="color: red">{{'ARCHETYPE_UPLOAD_VALIDATION_FAILED_HINT' | translate}}</h4> -->
+				<h4 ng-show="onStatus('ValidationAccomplished')" style="color: green">{{'TEMPLATE_UPLOAD_VALIDATION_ACCOMPLISHED_HINT' | translate}}</h4>
+				<h4 ng-show="onStatus('Uploading')"><img ng-src="{{WEBSITE_DOMAIN}}/img/loading.gif" style="max-height: 18px;"></img> {{'ARCHETYPE_UPLOAD_UPLOADING_HINT' | translate}}</h4>
+			</div>
+			<br />
+			<br />
+			<div class="col-sm-12 col-md-12 col-lg-12">
+				<table role="presentation" class="table table-striped table-hover" ng-show="templateList.length">
+					<tbody>
+						<tr ng-repeat="template in templateList | orderBy:template.name" ng-class="{TOUPLOAD: '', VALID: 'success', EXISTED: 'info', CHANGED: 'warning', INVALID: 'danger', FAILED: 'danger'}[template.status]">
+							<td style="vertical-align: middle;"  class="bordered">
+								<span ng-show="template.status=='TOUPLOAD'"><span class="glyphicon glyphicon-plus-sign"></span> {{'ARCHETYPE_UPLOAD_FILE_TO_UPLOAD' | translate}}</span>
+								<span ng-show="template.status=='VALID'"><span class="glyphicon glyphicon-ok-sign"></span> {{'ARCHETYPE_UPLOAD_FILE_VALID' | translate}}</span>
+								<span ng-show="template.status=='INVALID'"><span class="glyphicon glyphicon-minus-sign"></span> {{'ARCHETYPE_UPLOAD_FILE_INVALID' | translate}}</span>
+								<span ng-show="template.status=='FAILED'"><span class="glyphicon glyphicon-remove-sign"></span> {{'ARCHETYPE_UPLOAD_FILE_FAILED' | translate}}</span>
+								<span ng-show="template.status=='UPLOADING'"><img ng-src="{{WEBSITE_DOMAIN}}/img/loading.gif" style="max-height: 20px;"></img> {{'ARCHETYPE_UPLOAD_FILE_UPLOADING' | translate}}</span>
+								<span ng-show="template.status=='VALIDATING'"><img ng-src="{{WEBSITE_DOMAIN}}/img/loading.gif" style="max-height: 20px;"></img> {{'ARCHETYPE_UPLOAD_FILE_VALIDATING' | translate}}</span>
+							</td>
+							<td style="vertical-align: middle;"  class="bordered">{{template.oet.name}}</td>
+							<td style="vertical-align: middle;"  class="bordered">{{template.arm.name}}</td>
+							
+							<td style="vertical-align: middle;">
+								<a ng-show="template.status == 'INVALID'" style="cursor: pointer;" popover-placement="bottom" popover="{{template.message}}" popover-trigger="mouseenter">
+									<span class="glyphicon glyphicon-exclamation-sign"></span> 
+									{{'ARCHETYPE_UPLOAD_FILE_DETAILS' | translate}}
+								</a>
+							</td>
+							<td style="vertical-align: middle;">
+							<button ng-show="template.status== 'TOUPLOAD' || template.status == 'INVALID'" type="button" class="btn btn-warning" ng-click="deleteTemplate(template)">
+								{{'ARCHETYPE_UPLOAD_DELETE' | translate}}
+							</button>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
 </div>
+<div class="modal-footer">
+	<button ng-show="onStatus('ToAddFile')" class="btn btn-primary btn-lg" ng-click="validateTemplates()" ng-disabled="templateList.length == 0">
+		{{'STORAGE_TEMPLATE_UPLOAD_BTN_VALIDATE' | translate}}
+	</button>
+	<!-- <button ng-show="onStatus('ValidationFailed')" class="btn btn-primary btn-lg" ng-click="validateTemplates()" ng-disabled="templateList.length == 0">
+		{{'STORAGE_TEMPLATE_UPLOAD_BTN_RETRY' | translate}}
+	</button> -->
+	<button ng-show="onStatus('ValidationAccomplished')" class="btn btn-success btn-lg" ng-click="uploadTemplates()" ng-disabled="templateList.length == 0">
+		{{'STORAGE_TEMPLATE_UPLOAD_BTN_UPLOAD' | translate}}
+	</button>
+	<button class="btn btn-warning btn-lg" ng-click="reset()">
+		{{'STORAGE_TEMPLATE_UPLOAD_BTN_RESET' | translate}}
+	</button>
+</div> -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

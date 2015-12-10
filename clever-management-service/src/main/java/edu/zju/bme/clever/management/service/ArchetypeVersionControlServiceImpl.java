@@ -3,6 +3,7 @@ package edu.zju.bme.clever.management.service;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Optional;
 
 import org.openehr.am.archetype.Archetype;
@@ -20,6 +21,8 @@ import edu.zju.bme.clever.management.service.entity.ArchetypeRevisionFile;
 import edu.zju.bme.clever.management.service.entity.ArchetypeMaster;
 import edu.zju.bme.clever.management.service.entity.ArchetypeVersionMaster;
 import edu.zju.bme.clever.management.service.entity.LifecycleState;
+import edu.zju.bme.clever.management.service.entity.TemplateMaster;
+import edu.zju.bme.clever.management.service.entity.TemplateRevisionFile;
 import edu.zju.bme.clever.management.service.entity.User;
 import edu.zju.bme.clever.management.service.entity.ActionType;
 import edu.zju.bme.clever.management.service.exception.VersionControlException;
@@ -27,6 +30,7 @@ import edu.zju.bme.clever.management.service.repository.ArchetypeActionLogReposi
 import edu.zju.bme.clever.management.service.repository.ArchetypeMasterRepository;
 import edu.zju.bme.clever.management.service.repository.ArchetypeRevisionFileRepository;
 import edu.zju.bme.clever.management.service.repository.ArchetypeVersionMasterRepository;
+import edu.zju.bme.clever.management.service.repository.TemplateMasterRepository;
 
 @Service
 @Transactional(rollbackFor = { Exception.class })
@@ -41,7 +45,8 @@ public class ArchetypeVersionControlServiceImpl implements
 	private ArchetypeRevisionFileRepository revisionFileRepo;
 	@Autowired
 	private ArchetypeActionLogRepository actionLogRepo;
-
+	@Autowired
+	private TemplateMasterRepository templateMasterrepro;
 	private ADLSerializer adlSerilizer = new ADLSerializer();
 
 	@Override
@@ -71,13 +76,15 @@ public class ArchetypeVersionControlServiceImpl implements
 		// Example openEHR-EHR-CLUSTER.organisation.v1.1
 		String versionMasterName = WordUtils
 				.extractVersionMasterName(archetypeId);
-		if (versionMasterName == null) {//can not extract a version master name，archetype name must be
+		if (versionMasterName == null) {// can not extract a version master
+										// name，archetype name must be
 			throw new VersionControlException("Archetype name is unqualified.");
 		}
 		ArchetypeVersionMaster versionMaster = this.versionMasterRepo
 				.findByName(versionMasterName);
-		
-		if (versionMaster == null) {// if there is not a version master,create one
+
+		if (versionMaster == null) {// if there is not a version master,create
+									// one
 			versionMaster = this.newVersionMaster(master, archetype);
 		}
 		ArchetypeRevisionFile revisionFile = this.revisionFileRepo
@@ -275,6 +282,7 @@ public class ArchetypeVersionControlServiceImpl implements
 				.getSerialVersion());
 		versionMaster.setLatestRevisionFileVersion(nextRevisionFile
 				.getVersion());
+
 		this.versionMasterRepo.save(versionMaster);
 		// Log action
 		this.logArchetypeAction(nextRevisionFile, ActionType.NEW_REVISION, user);
@@ -430,7 +438,7 @@ public class ArchetypeVersionControlServiceImpl implements
 
 	@Override
 	public void approveArchetype(String archetypeName, User user)
-			throws VersionControlException {
+			throws VersionControlException { 
 		ArchetypeRevisionFile archetypeFile = this.revisionFileRepo
 				.findByName(archetypeName);
 		if (archetypeFile == null) {
@@ -457,14 +465,18 @@ public class ArchetypeVersionControlServiceImpl implements
 		}
 		archetypeFile.setLastModifyTime(Calendar.getInstance());
 		archetypeFile.setLifecycleState(LifecycleState.PUBLISHED);
+		
 		// Save archetype file
 		this.revisionFileRepo.save(archetypeFile);
 		// Update archetype master info
-		ArchetypeVersionMaster archetypeMaster = archetypeFile
+		ArchetypeVersionMaster archetypeVersionMaster = archetypeFile
 				.getVersionMaster();
-		archetypeMaster.setLatestRevisionFileLifecycleState(archetypeFile
+		archetypeVersionMaster.setLatestRevisionFileLifecycleState(archetypeFile
 				.getLifecycleState());
-		this.versionMasterRepo.save(archetypeMaster);
+		this.versionMasterRepo.save(archetypeVersionMaster);
+		
+		//transfer template file to new latest revision file
+		transferTemplateFile(archetypeVersionMaster);
 		// Log action
 		logArchetypeAction(archetypeFile, ActionType.APPROVE, user);
 	}
@@ -639,4 +651,39 @@ public class ArchetypeVersionControlServiceImpl implements
 		this.actionLogRepo.save(log);
 	}
 
+	private void transferTemplateFile(ArchetypeVersionMaster versionMaster)
+			throws VersionControlException {
+		if (versionMaster.getLatestRevisionFileLifecycleState() != LifecycleState.PUBLISHED) {
+			throw new VersionControlException(
+					"Cannot transfer template to a version master with lifecycle state :"
+							+ versionMaster
+									.getLatestRevisionFileLifecycleState()
+							+ " instead of Published");
+		}
+		TemplateMaster templateMaster = this.templateMasterrepro
+				.findByName(versionMaster.getName());
+		if (templateMaster != null) {
+			List<TemplateRevisionFile> templateRevisionFiles = templateMaster
+					.getRevisionFiles();
+			if (templateRevisionFiles != null
+					&& !templateRevisionFiles.isEmpty()) {
+				templateRevisionFiles
+						.forEach(file -> {
+							file.setSpecialiseArchetypeRevisionFile(versionMaster
+									.getLatestRevisionFile());
+							file.setSpecialiseArchetypeRevisionFileName(versionMaster
+									.getLatestRevisionFile().getName());
+							file.setSpecialiseArchetypeRevisionFileSerialVersion(versionMaster
+									.getLatestRevisionFileSerialVersion());
+							file.setSpecialiseArchetypeRevisionFileVersion(versionMaster
+									.getLatestRevisionFileVersion());
+						});
+			}
+			this.templateMasterrepro.save(templateMaster);
+
+		} else {
+
+		}
+
+	}
 }

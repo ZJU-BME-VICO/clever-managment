@@ -205,7 +205,8 @@ public class StorageTemplateResourceController extends
 	public FileUploadResult deplyTemplates(
 			@RequestBody DeployConfiguration config,
 			Authentication authentication) {
-		String userName = ((UserDetails) authentication.getPrincipal()).getUsername();
+		String userName = ((UserDetails) authentication.getPrincipal())
+				.getUsername();
 		config.setUserName(userName);
 		FileUploadResult result = new FileUploadResult();
 		result.setSucceeded(true);
@@ -267,28 +268,27 @@ public class StorageTemplateResourceController extends
 		}
 		return result;
 	}
-	
+
 	@RequestMapping(value = "/action/edit/id/{id}", method = RequestMethod.POST)
 	public FileUploadResult editTemplateFile(@PathVariable int id,
-			@RequestBody OetInfo oetInfo,
-			Authentication authentication) {
+			@RequestBody OetInfo oetInfo, Authentication authentication) {
 		String userName = ((UserDetails) authentication.getPrincipal())
 				.getUsername();
 		User user = this.userService.getUserByName(userName);
 		FileUploadResult result = new FileUploadResult();
 		result.setSucceeded(true);
-		
+
 		try {
-			this.versionControlService.editTemplate(id,
-					oetInfo.getOet(), oetInfo.getArm(), user);
+			this.versionControlService.editTemplate(id, oetInfo.getOet(),
+					oetInfo.getArm(), user);
 		} catch (VersionControlException ex) {
 			result.setSucceeded(false);
-			result.setMessage("Edit template " +oetInfo.getName()
+			result.setMessage("Edit template " + oetInfo.getName()
 					+ " failed, error: " + ex.getMessage());
 		}
 		return result;
 	}
-   
+
 	@RequestMapping(value = "/action/approve/id/{id}", method = RequestMethod.GET)
 	public FileUploadResult approveTemplateFile(@PathVariable int id,
 			Authentication authentication) {
@@ -407,47 +407,29 @@ public class StorageTemplateResourceController extends
 	@ResponseBody
 	public FileUploadResult uploadTemplates(
 			@RequestParam(value = "count", required = true) int count,
-			@RequestParam(value = "templates", required = true) MultipartFile[] templates,
+			@RequestParam(value = "oets", required = true) MultipartFile[] oets,
+			@RequestParam(value = "arms", required = true) MultipartFile[] arms,
+
 			Authentication authentication) {
+		System.out.println(oets.length);
+		System.out.println(arms.length);
 		FileUploadResult result = new FileUploadResult();
 		result.setSucceeded(true);
-		List<MultipartFile> oets = new ArrayList<>();
-		List<MultipartFile> arms = new ArrayList<>();
-		List<String> fail_templates = new ArrayList<>();
-		if(templates.length > 0){
-			for(MultipartFile template: templates){
-				if(template.getOriginalFilename().endsWith(".oet")){
-					oets.add(template);
-				}
-				else if(template.getOriginalFilename().endsWith(".arm")){
-					arms.add(template);
-				}
-			}
-		}
-		if(oets.size() != arms.size()){
+		if (oets.length != count || arms.length != count) {
+
 			result.setSucceeded(false);
 			result.setMessage("OET's count and ARM's count does not match");
-			for(MultipartFile oet: oets){
-				MultipartFile rel_arm = arms.stream().filter(file -> file.getOriginalFilename().substring(0, file.getOriginalFilename().lastIndexOf(".arm"))
-						.equals(oet.getOriginalFilename().substring(0, oet.getOriginalFilename().lastIndexOf(".oet")))).findAny().orElse(null);
-				if(rel_arm == null){
-					fail_templates.add(oet.getOriginalFilename().substring(0, oet.getOriginalFilename().lastIndexOf("oet")));
-				}
-			}
-			result.setFailTemplates(fail_templates);
+
 		}
-//		if (oets.size() != count || arms.size() != count) {
-//			result.setSucceeded(false);
-//			result.setMessage("OET's count and ARM's count does not match.");
-//		}
-		String userName = ((UserDetails) authentication.getPrincipal()).getUsername();
+		String userName = ((UserDetails) authentication.getPrincipal())
+				.getUsername();
 		User user = this.userService.getUserByName(userName);
 		try {
 			for (int i = 0; i < count; i++) {
-				MultipartFile oet = oets.get(i);
-				MultipartFile arm = arms.stream().filter(file -> file.getOriginalFilename().substring(0, file.getOriginalFilename().lastIndexOf(".arm"))
-						.equals(oet.getOriginalFilename().substring(0, oet.getOriginalFilename().lastIndexOf(".oet")))).findAny().get();
-				this.versionControlService.acceptNewTemplate(oet.getInputStream(), arm.getInputStream(),user);
+				this.versionControlService.acceptNewTemplate(
+						oets[i].getInputStream(), arms[i].getInputStream(),
+						user);
+
 			}
 		} catch (VersionControlException | IOException ex) {
 			result.setSucceeded(false);
@@ -566,9 +548,10 @@ public class StorageTemplateResourceController extends
 		info.setContent(entityClass.getContent());
 		return info;
 	}
-	
-	private String GetTime(){
-		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+	private String GetTime() {
+		SimpleDateFormat dateFormat = new SimpleDateFormat(
+				"yyyy-MM-dd HH:mm:ss");
 		return dateFormat.format(new Date());
 	}
 

@@ -154,6 +154,7 @@ angular.module('clever.management.i18n.en', ['pascalprecht.translate']).config(f
 		DOCUMENT_DIFF_SERVICE_BTN_OK : 'Ok',
 
 		// Storage template deploy
+		STORAGE_TEMPLATE_UPLOAD_FILE_TO_UPLOAD : 'wait',
 		STORAGE_TEMPLATE_DEPLOY : 'Deploy',
 		STORAGE_TEMPLATE_DEPLOY_TODO : 'Undeployed',
 		STORAGE_TEMPLATE_DEPLOY_DONE : 'Deployed',
@@ -328,5 +329,9 @@ angular.module('clever.management.i18n.en', ['pascalprecht.translate']).config(f
 		//others,
 		EXPAND_ALL : 'Expand All',
 		COLLAPSE_ALL : 'Collapse All',
+		
+		DEVELOPMENT_API_EDIT_CLASS_INFO : "Type",
+        DEVELOPMENT_API_VIEW_CODE_CODE : 'code',
+		DEVELOPMENT_API_VIEW_CODE_DESC : 'description',
 	});
 });

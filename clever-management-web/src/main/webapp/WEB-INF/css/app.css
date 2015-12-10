@@ -291,3 +291,6 @@ td > span.false {
 	font-weight: 600;
 	
 }
+td > .bordered {
+	border-right: 1px solid #eee;
+}

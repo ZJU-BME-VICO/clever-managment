@@ -11,7 +11,7 @@
 					</button>
 				</div>
 				<hr>
-				
+
 				<div class="row">
 					<div class="col-md-7 col-lg-7 col-xs-7">
 						<select  id="category" ng-model="selectedCategory" class="picker form-control" ng-options="obj.name for obj in masterList"></select>
@@ -105,7 +105,7 @@
 					</div>
 					<div style="margin-top: 20px">
 						<button class="btn btn-success pull-right"  ng-click="saveRootUrl()" style="position: center">
-								{{'DEVELOPMENT_API_EDIT_SUBMIT_CHANGES' | translate}}
+							{{'DEVELOPMENT_API_EDIT_SUBMIT_CHANGES' | translate}}
 						</button>
 					</div>
 				</tab>
@@ -191,6 +191,12 @@
 									</tr>
 								</tbody>
 							</table>
+							<div class="modal-footer">
+								<button class="btn btn-success" ng-click="addRequestParam('sm')">
+									Add Param
+								</button>
+							</div>
+
 						</div>
 						<div style="margin-top: 20px">
 							<span class="table-label">{{'DEVELOPEMENT_API_EDIT_RETURN_PARAMS' | translate}}</span>
@@ -225,7 +231,7 @@
 					</div>
 					<div ng-if="selectedApi" style="margin-top: 20px">
 						<button class="btn btn-success pull-right" ng-click="saveParamInfo()" style="position: center">
-								{{'DEVELOPMENT_API_EDIT_SUBMIT_CHANGES' | translate}}
+							{{'DEVELOPMENT_API_EDIT_SUBMIT_CHANGES' | translate}}
 						</button>
 					</div>
 					<div ng-if="!selectedApi" ng-style="{height: containerHeight - 170}" >
@@ -234,6 +240,104 @@
 						</dd>
 					</div>
 				</tab>
+				<!-- class master info edit pane -->
+				<tab heading="{{'DEVELOPMENT_API_EDIT_CLASS_INFO' | translate }}">
+					<div  ng-style="{height: containerHeight - 170}" style="overflow: auto">
+						<div class="col-md-12"  ng-repeat="master in classMasters" >
+							<span class="table-label">{{master.name}}</span>
+							<table class="variables-matrix input-arguments">
+								<thead>
+									<tr>
+										<th style="width:120px">{{'DEVELOPMENT_API_EDIT_NAME' | translate}}</th>
+
+										<th style="width:80px">{{'DEVELOPMENT_API_EDIT_TYPE' | translate}}</th>
+										<th style="width:120px">{{'DEVELOPMENT_API_EDIT_REQUIRED' | translate}}</th>
+										<th>{{'DEVELOPMENT_API_EDIT_DESCRIPTIOIN' | translate}}</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr ng-repeat="attribute in master.attributes">
+										<td>
+										<p>
+											{{attribute.name}}
+										</p></td>
+
+										<td><span class="button-label {{getFixClass(attribute.type)}}">{{getFixTypeName(attribute.type)}}</span></td>
+										<td><select class="form-control" ng-model="attribute.required" ng-options="o.v as o.n for o in [{ n: 'false', v: false }, { n: 'true', v: true }]">
+
+										</select></td>
+										<td>
+										<input class="form-control" placeholder="{{'DEVELOPMENT_API_EDIT_DESCRIPTION_PLACEHOLDER_EN' | translate}} " ng-model="attribute.descriptionEn">
+										<br>
+										<input class="form-control" placeholder="{{'DEVELOPMENT_API_EDIT_DESCRIPTION_PLACEHOLDER_ZH' | translate}}" ng-model="attribute.descriptionZh">
+										</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</tab>
+				<!-- add master to db -->
+				<tab heading="addMaster">
+					<button class="btn btn-success" ng-click="newMaster()">
+						New Master
+					</button>
+					<button class="btn btn-success" ng-click="newAttribute()">
+						New Attribute
+					</button>
+					<table class="variables-matrix input-arguments" ng-show="freshMaster">
+						<thead>
+							<tr>
+								<th>Name</th>
+								<th>Type</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>
+								<input type="text" ng-model="freshMaster.name"  class="form-control"/>
+								</td>
+								<td>
+								<input type="text" ng-model="freshMaster.type" class="form-control"/>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+					<table class="variables-matrix input-arguments" ng-show="freshMaster.attributes">
+						<thead>
+							<tr>
+								<th style="width:120px">{{'DEVELOPMENT_API_EDIT_NAME' | translate}}</th>
+
+								<th style="width:80px">{{'DEVELOPMENT_API_EDIT_TYPE' | translate}}</th>
+								<th style="width:120px">{{'DEVELOPMENT_API_EDIT_REQUIRED' | translate}}</th>
+								<th>{{'DEVELOPMENT_API_EDIT_DESCRIPTIOIN' | translate}}</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr ng-repeat="attribute in freshMaster.attributes">
+								<td>
+								<input type="text" ng-model="attribute.name"  class="form-control"/>
+								</td>
+								<td>
+								<input type="text" ng-model="attribute.type"  class="form-control"/>
+								</td>
+								<td><select class="form-control" ng-model="attribute.isRequired" ng-options="o.v as o.n for o in [{ n: 'false', v: false }, { n: 'true', v: true }]"></select></td>
+								<td>
+								<input class="form-control" placeholder="{{'DEVELOPMENT_API_EDIT_DESCRIPTION_PLACEHOLDER_EN' | translate}} " ng-model="attribute.descriptionEn">
+								<br>
+								<input class="form-control" placeholder="{{'DEVELOPMENT_API_EDIT_DESCRIPTION_PLACEHOLDER_ZH' | translate}}" ng-model="attribute.descriptionZh">
+								</td>
+							</tr>
+						</tbody>
+					</table>
+					<div class="modal-footer">
+						<button class="btn btn-info" ng-click="submitMaster()">
+							Submit
+						</button>
+
+					</div>
+				</tab>
+			</tabset>
 		</div>
 	</div>
 </div>

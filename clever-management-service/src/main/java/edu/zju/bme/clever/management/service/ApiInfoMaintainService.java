@@ -1,9 +1,12 @@
 package edu.zju.bme.clever.management.service;
 
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import edu.zju.bme.clever.management.service.entity.ApiMaster;
 import edu.zju.bme.clever.management.service.entity.ApiVersionMaster;
+import edu.zju.bme.clever.management.service.entity.ClassAttribute;
 import edu.zju.bme.clever.management.service.exception.ResourceExportException;
 
 public interface ApiInfoMaintainService {
@@ -32,4 +35,8 @@ public interface ApiInfoMaintainService {
 			throws Exception;
 
 	public void deleteApiMaster(Integer id) throws Exception;
+
+	public void addClassMaster(String name, String type,
+			Set<ClassAttribute> attributes) throws Exception;
+	public void addRequestParam(Integer apiId, String masterType) throws Exception;
 }

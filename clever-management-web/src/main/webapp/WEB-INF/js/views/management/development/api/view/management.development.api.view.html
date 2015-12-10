@@ -72,16 +72,13 @@
 			</div>
 
 			<div ng-if= "selectedApi" ng-style="{height: containerHeight - 55}">
-				<span ng-switch="treeLanguage"> 
-					<span ng-switch-when="en"> <h1 style="margin-top: 15px;" id="api-name">{{selectedApi.name}}</h1>
+				<span ng-switch="treeLanguage"> <span ng-switch-when="en"> <h1 style="margin-top: 15px;" id="api-name">{{selectedApi.name}}</h1>
 						<p style="width: 300px;word-break:break-all; word-wrap:break-all;">
 							{{selectedApi.description}}
-						</p> </span>
-				   <span ng-switch-when="zh"> <h1 style="margin-top: 15px;" id="api-name">{{selectedApi.chineseName}}</h1>
+						</p> </span> <span ng-switch-when="zh"> <h1 style="margin-top: 15px;" id="api-name">{{selectedApi.chineseName}}</h1>
 						<p style="width: 300px;word-break:break-all; word-wrap:break-all;">
 							{{selectedApi.chineseDescription}}
-						</p> </span>
-				</span>
+						</p> </span> </span>
 
 				<hr>
 				<tabset tab-control="tabControl">
@@ -112,7 +109,7 @@
 									<thead>
 										<tr>
 											<th style="width:120px">{{'DEVELOPMENT_API_VIEW_NAME' | translate}}</th>
-											<th style="width:120px">{{'DEVELOPMENT_API_VIEW_TYPE' | translate}}</th>
+											<th style="width:200px">{{'DEVELOPMENT_API_VIEW_TYPE' | translate}}</th>
 											<th style="width:100px">{{'DEVELOPMENT_API_VIEW_REQUIRED' | translate}}</th>
 											<th>{{'DEVELOPMENT_API_VIEW_DESCRIPTIOIN' | translate}}</th>
 										</tr>
@@ -120,21 +117,52 @@
 									<tbody>
 										<tr ng-repeat="requestParam in selectedApi.requestParams">
 											<td>{{requestParam.name}}</td>
-											<td><span class="button-label {{getFixClass(requestParam.type)}}">{{getFixTypeName(requestParam.type)}}</span></td>
-											<td> <span class="{{requestParam.required}}">{{requestParam.required}}</span></td>
+											<td ng-click="getRqParamDetails(requestParam)"><span><span class="button-label {{getFixClass(requestParam.type)}}">{{getFixTypeName(requestParam.type)}}</span>&nbsp;&nbsp;&nbsp;
+												<button class="btn btn-default"  ng-show="!requestParam.isBaseType" >
+													<span tooltip-placement="right" tooltip="click to view details" tooltip-popup-delay="500" class="glyphicon glyphicon-eye-open"></span>
+												</button></span></td>
+											<td><span class="{{requestParam.required}}">{{requestParam.required}}</span></td>
 											<td ng-if="treeLanguage=='zh'" >{{requestParam.chineseDescription}}</td>
 											<td ng-if="treeLanguage=='en'" >{{requestParam.description}}</td>
 										</tr>
 									</tbody>
 								</table>
 							</div>
+
+							<!-- request params details -->
+							<div style="margin-top: 20px" ng-show="selectedRqParam">
+								<span class="table-label">{{selectedRqParam.name}}</span>
+								<table class="variables-matrix input-arguments">
+									<thead>
+										<tr>
+											<th style="width:120px">{{'DEVELOPMENT_API_VIEW_NAME' | translate}}</th>
+											<th style="width:120px">{{'DEVELOPMENT_API_VIEW_TYPE' | translate}}</th>
+											<th style="width:100px">{{'DEVELOPMENT_API_VIEW_REQUIRED' | translate}}</th>
+											<th>{{'DEVELOPMENT_API_VIEW_DESCRIPTIOIN' | translate}}</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr ng-repeat="param in selectedRqParam.details">
+											<td>{{param.name}}</td>
+											<td ng-click="getRqParamDetails(param)"><span><span class="button-label {{getFixClass(param.type)}}">{{getFixTypeName(param.type)}}</span>&nbsp;&nbsp;&nbsp;
+												<button class="btn btn-default"  ng-show="!param.isBaseType" >
+													<span tooltip-placement="right" tooltip="click to view details" tooltip-popup-delay="500" class="glyphicon glyphicon-eye-open"></span>
+												</button></span></td>
+											<td><span class="{{requestParam.required}}">{{param.required}}</span></td>
+											<td ng-if="treeLanguage=='zh'" >{{param.chineseDescription}}</td>
+											<td ng-if="treeLanguage=='en'" >{{param.description}}</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+							<!-- request params details end -->
 							<div style="margin-top: 20px">
 								<span class="table-label">{{'DEVELOPEMENT_API_VIEW_RETURN_PARAMS' | translate}}</span>
 								<table class="variables-matrix input-arguments">
 									<thead>
 										<tr>
-										    <th style="width:120px">{{'DEVELOPMENT_API_VIEW_NAME' | translate}}</th>
-											<th style="width:120px">{{'DEVELOPMENT_API_VIEW_TYPE' | translate}}</th>									
+											<th style="width:120px">{{'DEVELOPMENT_API_VIEW_NAME' | translate}}</th>
+											<th style="width:120px">{{'DEVELOPMENT_API_VIEW_TYPE' | translate}}</th>
 											<th>{{'DEVELOPMENT_API_VIEW_DESCRIPTIOIN' | translate}}</th>
 										</tr>
 									</thead>
@@ -151,9 +179,25 @@
 						</div>
 					</tab>
 					<tab heading = "{{'DEVELOPMENT_API_VIEW_ERROR_CODE' | translate}}">
-
+						<div style="padding: 15px; overflow: auto" ng-style="{height: containerHeight - 170}">
+							<table class="variables-matrix input-arguments">
+								<thead>
+									<tr>
+										<th>{{'DEVELOPMENT_API_VIEW_CODE_CODE' | translate}}</th>
+										<th>{{'DEVELOPMENT_API_VIEW_CODE_DESC' | translate}}</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr ng-repeat="code in selectedApi.errorCodes">
+										<td>{{code.code}}</td>
+										<td ng-if="treeLanguage=='zh'">{{code.descriptionZh}}</td>
+										<td ng-if="treeLanguage=='en'">{{code.descriptionEn}}</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
 					</tab>
-
+				</tabset>
 			</div>
 		</div>
 	</div>
