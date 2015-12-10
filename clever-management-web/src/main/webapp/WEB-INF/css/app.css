@@ -178,7 +178,9 @@ h3.tag {
 .button-label.others {
 	background: #333;
 }
-
+.button-label.list {
+	background: #00868B;
+}
 .api {
 	color: #999;
 }

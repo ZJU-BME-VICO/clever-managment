@@ -71,7 +71,7 @@
 				</div>
 			</div>
 
-			<div ng-if= "selectedApi" ng-style="{height: containerHeight - 55}">
+			<div ng-if= "selectedApi" ng-style="{height: containerHeight - 55}" class="col-xs-12 col-md-12 col-lg-12">
 				<span ng-switch="treeLanguage"> <span ng-switch-when="en"> <h1 style="margin-top: 15px;" id="api-name">{{selectedApi.name}}</h1>
 						<p style="width: 300px;word-break:break-all; word-wrap:break-all;">
 							{{selectedApi.description}}
@@ -117,10 +117,10 @@
 									<tbody>
 										<tr ng-repeat="requestParam in selectedApi.requestParams">
 											<td>{{requestParam.name}}</td>
-											<td ng-click="getRqParamDetails(requestParam)"><span><span class="button-label {{getFixClass(requestParam.type)}}">{{getFixTypeName(requestParam.type)}}</span>&nbsp;&nbsp;&nbsp;
-												<button class="btn btn-default"  ng-show="!requestParam.isBaseType" >
+											<td><span><span class="button-label {{getFixClass(requestParam.type)}}">{{getFixTypeName(requestParam.type)}}</span>&nbsp;&nbsp;&nbsp;
+												<button class="btn btn-default"  ng-show="!requestParam.isBaseType" ng-click="getRqParamDetails(requestParam)">
 													<span tooltip-placement="right" tooltip="click to view details" tooltip-popup-delay="500" class="glyphicon glyphicon-eye-open"></span>
-												</button></span></td>
+												</button></span>&nbsp;&nbsp;&nbsp;<span ng-if="requestParam.isList" class="button-label list">List</span></td>
 											<td><span class="{{requestParam.required}}">{{requestParam.required}}</span></td>
 											<td ng-if="treeLanguage=='zh'" >{{requestParam.chineseDescription}}</td>
 											<td ng-if="treeLanguage=='en'" >{{requestParam.description}}</td>
@@ -144,10 +144,10 @@
 									<tbody>
 										<tr ng-repeat="param in selectedRqParam.details">
 											<td>{{param.name}}</td>
-											<td ng-click="getRqParamDetails(param)"><span><span class="button-label {{getFixClass(param.type)}}">{{getFixTypeName(param.type)}}</span>&nbsp;&nbsp;&nbsp;
-												<button class="btn btn-default"  ng-show="!param.isBaseType" >
+											<td ><span><span class="button-label {{getFixClass(param.type)}}">{{getFixTypeName(param.type)}}</span>&nbsp;&nbsp;&nbsp;
+												<button class="btn btn-default"  ng-show="!param.isBaseType" ng-click="getRqParamDetails(param)">
 													<span tooltip-placement="right" tooltip="click to view details" tooltip-popup-delay="500" class="glyphicon glyphicon-eye-open"></span>
-												</button></span></td>
+												</button></span> &nbsp;&nbsp;&nbsp; <span ng-if="returnParam.isList" class="button-label list">List</span></td>
 											<td><span class="{{requestParam.required}}">{{param.required}}</span></td>
 											<td ng-if="treeLanguage=='zh'" >{{param.chineseDescription}}</td>
 											<td ng-if="treeLanguage=='en'" >{{param.description}}</td>
@@ -169,7 +169,33 @@
 									<tbody>
 										<tr ng-repeat="returnParam in selectedApi.returnParams">
 											<td>{{returnParam.name}}</td>
-											<td><span class="button-label {{getFixClass(returnParam.type)}}">{{getFixTypeName(returnParam.type)}}</span></td>
+											<td><span class="button-label {{getFixClass(returnParam.type)}}">{{getFixTypeName(returnParam.type)}}</span>&nbsp;&nbsp;&nbsp;
+												<button class="btn btn-default"  ng-show="!returnParam.isBaseType" ng-click="getRtParamDetails(returnParam)">
+													<span tooltip-placement="right" tooltip="click to view details" tooltip-popup-delay="500" class="glyphicon glyphicon-eye-open"></span>
+												</button></span>&nbsp;&nbsp;&nbsp;<span ng-if="returnParam.isList" class="button-label list">List</span></td>
+											<td ng-if="treeLanguage=='zh'" >{{returnParam.chineseDescription}}</td>
+											<td ng-if="treeLanguage=='en'" >{{returnParam.description}}</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+							<div style="margin-top: 20px" ng-show="selectedRtParam">
+								<span class="table-label">{{'DEVELOPEMENT_API_VIEW_RETURN_PARAMS' | translate}}</span>
+								<table class="variables-matrix input-arguments">
+									<thead>
+										<tr>
+											<th style="width:120px">{{'DEVELOPMENT_API_VIEW_NAME' | translate}}</th>
+											<th style="width:120px">{{'DEVELOPMENT_API_VIEW_TYPE' | translate}}</th>
+											<th>{{'DEVELOPMENT_API_VIEW_DESCRIPTIOIN' | translate}}</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr ng-repeat="param in selectedRtParam.details">
+											<td>{{returnParam.name}}</td>
+											<td><span class="button-label {{getFixClass(param.type)}}">{{getFixTypeName(param.type)}}</span>
+												<button class="btn btn-default"  ng-show="!param.isBaseType" ng-click="getRtParamDetails(param)">&nbsp;&nbsp;&nbsp;
+													<span tooltip-placement="right" tooltip="click to view details" tooltip-popup-delay="500" class="glyphicon glyphicon-eye-open"></span>
+												</button></span>&nbsp;&nbsp;&nbsp;<span ng-if="param.isList" class="button-label list">List</span></td>
 											<td ng-if="treeLanguage=='zh'" >{{returnParam.chineseDescription}}</td>
 											<td ng-if="treeLanguage=='en'" >{{returnParam.description}}</td>
 										</tr>
