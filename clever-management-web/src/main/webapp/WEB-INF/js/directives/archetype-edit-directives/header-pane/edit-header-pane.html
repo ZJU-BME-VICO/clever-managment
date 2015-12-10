@@ -270,9 +270,9 @@
 <div class="row">
     <div class="col-xs-3 col-sm-3 col-lg-2">
         <tabset class="tabs-left" tab-control="tabControl">
-            <tab heading="Base" ng-click="selectTab('base')"></tab>
-            <tab heading="Author" ng-click="selectTab('author')"></tab>
-            <tab heading="Details" ng-click="selectTab('details')"></tab>
+            <tab heading="{{'EDIT_HEADER_PANE_HEADING_BASE' | translate}}" ng-click="selectTab('base')"></tab>
+            <tab heading="{{'EDIT_HEADER_PANE_HEADING_AUTHOR' | translate}}" ng-click="selectTab('author')"></tab>
+            <tab heading="{{'EDIT_HEADER_PANE_HEADING_DETAILS' | translate}}" ng-click="selectTab('details')"></tab>
         </tabset>
     </div>
     <div ng-style="{height: contentHeight.value - 200}" style="overflow:auto">
@@ -280,20 +280,20 @@
             <div>
                 <!-- <span class="label">ArchetypeId:</span> -->
                 <p class="tag">
-                    ArchetypeId:
+                    {{'EDIT_HEADER_PANE_ARCHETYPEID' | translate}}:
                 </p>
                 <input type="text"  ng-model="baseInformation.archetypeId.value" class="form-control" id="ArchetypeId" placeholder="Archetype Id ..">
                 <p class="tag">
-                    Concept :
+                    {{'EDIT_HEADER_PANE_CONCEP' | translate}} :
                 </p>
                 <input class="form-control" ng-model="baseInformation.text.__text">
 
                 <p class="tag">
-                    Description :
+                    {{'EDIT_HEADER_PANE_DESCRIPTIO' | translate}} :
                 </p>
                 <textarea elastic  class="form-control" ng-model="baseInformation.description.__text"></textarea>
                 <p class="tag">
-                    Comment :
+                    {{'EDIT_HEADER_PANE_COMMEN' | translate}} :
                 </p>
                 <textarea elastic class="form-control" ng-model="baseInformation.comment.__text"></textarea>
             </div>
@@ -302,31 +302,31 @@
 
         <div class="col-xs-9 col-sm-9 col-lg-10"  ng-if="currentTab =='author'"  >
             <div class="col-xs-6 col-md-6 col-lg-6" style="border-right: 1px solid #F0EDED;">
-                <h3 class="tag">Original Author</h3>
+                <h3 class="tag">{{'EDIT_HEADER_PANE_ORIGINAL_AUTHOR' | translate}}</h3>
                 <br>
                 <form>
                     <div class="form-group">
                         <p class="tag">
-                            Name:
+                            {{'EDIT_HEADER_PANE_NAME' | translate}}:
                         </p>
                         <input type="text" class="form-control" id = "OriAuthorName" placeholder="Mecro" ng-model="oriAuthorInfo.name.__text">
                     </div>
                     <div class="form-group">
                         <p class="tag">
-                            Email:
+                            {{'EDIT_HEADER_PANE_EMAIL' | translate}}:
                         </p>
                         <input type="text" class="form-control" id = "OriAuthorEmail" placeholder="example@xxx.com" ng-model="oriAuthorInfo.email.__text">
                     </div>
                     <div class="form-group">
                         <p class="tag">
-                            Orgnization:
+                            {{'EDIT_HEADER_PANE_ORGNIZATION' | translate}}:
                         </p>
                         <input type="text" class="form-control" id = "OriAuthorOrgnization" placeholder="ZJU" ng-model="oriAuthorInfo.organisation.__text">
                     </div>
 
                     <div class="form-group">
                         <p class="tag">
-                            Date:
+                            {{'EDIT_HEADER_PANE_DATE' | translate}}:
                         </p>
                         <input type="date" class="form-control" id = "OriAuthorDate" ng-model="oriAuthorDate.value" style="width:100%" />
 
@@ -336,7 +336,7 @@
             </div>
 
             <div class="col-xs-6 col-md-6 col-lg-6">
-                <h3 class="tag">Other Contributors</h3>
+                <h3 class="tag">{{'EDIT_HEADER_PANE_OTHER_CONTRIBUTORS' | translate}}</h3>
                 <br>
                 <br>
 
@@ -377,19 +377,19 @@
 
         <div class="col-xs-9 col-sm-9 col-lg-10"  ng-if="currentTab =='details'">
             <div class="form-group">
-                <p class="tag">Purpose</p>
+                <p class="tag">{{'EDIT_HEADER_PANE_PURPOSE' | translate}}</p>
                 <textarea elastic class="form-control" id="purpose" placeholder="Purpose..." ng-model="detail.purpose"></textarea>
             </div>
             <div class="form-group">
-                <p class="tag">Use</p>
+                <p class="tag">{{'EDIT_HEADER_PANE_USE' | translate}}</p>
                 <textarea elastic class="form-control" id="use" placeholder="Use for ?..."  ng-model="detail.use"></textarea>
             </div>
             <div class="form-group">
-                <p class="tag">Misuse</p>
+                <p class="tag">{{'EDIT_HEADER_PANE_MISUSE' | translate}}</p>
                 <textarea elastic class="form-control" id="misuse"  placeholder="Misuse..." ng-model="detail.misuse"></textarea>
             </div>
             <div class="form-group">
-                 <p class="tag">Copyright</p>
+                 <p class="tag">{{'EDIT_HEADER_PANE_COPYRIGHT' | translate}}</p>
                 <input  class="form-control" id="copyright"  placeholder="Copyright..." ng-model="detail.copyright">
             </div>
         </div>

@@ -1,15 +1,15 @@
 <div class="container" style="width: 90%">
 			<div class="row">
-				<h4 class="text-center">AQL Query</h4>
+				<h4 class="text-center">{{'MANAGEMENT_DEVELOPMENT_CDR_AQL_QUERY' | translate}}</h4>
 			</div>
 			<div class="row">
 				<div class="col-md-6">
-					<h5>AQL</h5>
+					<h5>{{'MANAGEMENT_DEVELOPMENT_CDR_TOTAL' | translate}}</h5>
 					<select class="form-control" ng-options="type as type.name for type in aqlTypes" ng-model="aqlType">
 					</select>
 					<div class="row">
 						<div class="col-md-12">
-							<span>from</span>
+							<span>{{'MANAGEMENT_DEVELOPMENT_CDR_FROM' | translate}}</span>
 							<br />
 							<select class="form-control" ng-options="template as template for template in availableTemplates" ng-model="from"></select>
 							<hr >
@@ -17,7 +17,7 @@
 					</div>
 					<div class="row" ng-show="from != ''">
 						<div class="col-md-12">
-							<span>select</span>
+							<span>{{'MANAGEMENT_DEVELOPMENT_CDR_SELECT' | translate}}</span>
 							<button type="button" class="btn btn-default" ng-click="addSelect()">
 								+
 							</button>
@@ -42,17 +42,17 @@
 						<div class="col-md-12">
 							<div class="row">
 								<div class="col-md-12">
-									<span>where</span>
+									<span>{{'MANAGEMENT_DEVELOPMENT_CDR_WHERE' | translate}}</span>
 									<button type="button" class="btn btn-default" ng-click="addWhere()">
 										+
 									</button>
-									<span class="pull-right checkbox"><input type="checkbox" ng-model="customWhere">custom</span>
+									<span class="pull-right checkbox"><input type="checkbox" ng-model="customWhere">{{'MANAGEMENT_DEVELOPMENT_CDR_CUSTOM' | translate}}</span>
 								</div>
 							</div>
 							<br />
 							<div ng-show="!customWhere" class="row" ng-repeat="where in wheres">
 								<div class="col-md-12">
-									<span ng-if="$index > 0">and</span>
+									<span ng-if="$index > 0">{{'MANAGEMENT_DEVELOPMENT_CDR_AND' | translate}}</span>
 									<div class="input-group">
 										<textarea class="form-control" rows=3 tabindex="{{200 + $index}}" focus="$last" typeahead="nodePath for nodePath in nodePaths | filter:$viewValue:startsWith | orderBy: nodePath" ng-model="where.value" ng-keydown="whereKeyDown($event, select)"></textarea>
 										<span class="input-group-btn">
@@ -75,16 +75,16 @@
 						<div class="col-md-12">
 							<pre type="text" style="min-height: 50px;">{{getAql()}}</pre>
 							<button type="button" class="btn btn-default" ng-click="query()" ng-disabled="!queryable">
-								query
+								{{'MANAGEMENT_DEVELOPMENT_CDR_QUERY' | translate}}
 							</button>
-							<span>Last query time: {{lastQueryTime}}</span>
+							<span>{{'MANAGEMENT_DEVELOPMENT_CDR_LAST_QUERY_TIME' | translate}}: {{lastQueryTime}}</span>
 						</div>
 					</div>
 				</div>
 				<div class="col-md-6">
-					<h5>Result</h5>
+					<h5>{{'MANAGEMENT_DEVELOPMENT_CDR_RESULT' | translate}}</h5>
 					<select class="form-control" ng-options="result.uid for result in results track by result.uid" ng-model="selectedResult"></select>
-					<span>Total: {{results.length}}</span>
+					<span>{{'MANAGEMENT_DEVELOPMENT_CDR_TOTAL' | translate}}: {{results.length}}</span>
 					<pre ng-if="selectedResult.uid == 'error'" style="min-height: 300px;max-height: 700px;overflow: auto;" ng-bind-html="selectedResult.value | unsafe"></pre>
 					<pre ng-if="selectedResult.uid != 'error'" style="min-height: 300px;max-height: 700px;overflow: auto;" ng-bind="selectedResult.value"></pre>
 				</div>
@@ -93,21 +93,21 @@
 			<hr >
 			
 			<div class="row">
-				<h4 class="text-center">Column node mapping browse:</h4>
+				<h4 class="text-center">{{'MANAGEMENT_DEVELOPMENT_CDR_COLUMN_NODE_MAPPING_BROWSE' | translate}}:</h4>
 				<div class="row">
 					<div class="col-md-12">
-						Table:
+						{{'MANAGEMENT_DEVELOPMENT_CDR_TABLE' | translate}}:
 						<select class="form-control" ng-options="table for table in availableTables | orderBy: table" ng-model="targetTable"></select>
 						<hr >
 					</div>
 				</div>
 				<div class="row" ng-show="targetTable != ''">
 					<div class="col-md-6" ng-show="targetTable != ''">
-						Node:
+						{{'MANAGEMENT_DEVELOPMENT_CDR_NODE' | translate}}:
 						<select class="form-control" ng-options="column for column in targetTableColumns | orderBy: column" ng-model="column1"></select>
 					</div>
 					<div class="col-md-6">
-						Column:
+						{{'MANAGEMENT_DEVELOPMENT_CDR_COLUMN' | translate}}:
 						<pre type="text" style="min-height: 34px;">{{node1}}</pre>
 					</div>
 				</div>
@@ -116,21 +116,21 @@
 			<hr >
 
 			<div class="row">
-				<h4 class="text-center">Node column mapping browse:</h4>
+				<h4 class="text-center">{{'MANAGEMENT_DEVELOPMENT_CDR_NODE_COLUMN_MAPPING_BROWSE' | translate}}:</h4>
 				<div class="row">
 					<div class="col-md-12">
-						Template:
+						{{'MANAGEMENT_DEVELOPMENT_CDR_TEMPLATE' | translate}}:
 						<select class="form-control" ng-options="template for template in availableTemplates | orderBy: template" ng-model="targetTemplate"></select>
 						<hr >
 					</div>
 				</div>
 				<div class="row" ng-show="targetTemplate != ''">
 					<div class="col-md-6" ng-show="targetTemplate != ''">
-						Node:
+						{{'MANAGEMENT_DEVELOPMENT_CDR_NODE' | translate}}:
 						<select class="form-control" ng-options="nodePath for nodePath in targetTemplateNodePaths | orderBy: nodePath" ng-model="node"></select>
 					</div>
 					<div class="col-md-6">
-						Column:
+						{{'MANAGEMENT_DEVELOPMENT_CDR_COLUMN' | translate}}:
 						<pre type="text" style="min-height: 34px;">{{column}}</pre>
 					</div>
 				</div>

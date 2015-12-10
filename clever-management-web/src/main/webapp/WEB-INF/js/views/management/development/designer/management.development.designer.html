@@ -1,6 +1,6 @@
 <div class="Toolbox">
-            <button class="btn btn-primary btn-lg ng-binding" style="float:right;margin-right:150px;padding:8px 16px;" ng-click="newTemplate()">新建</button>
-            <button class="btn btn-primary btn-lg ng-binding" style="float:right;margin-right:20px;padding:8px 16px;"  ng-click="saveTemplate()">保存</button>
+            <button class="btn btn-primary btn-lg ng-binding" style="float:right;margin-right:150px;padding:8px 16px;" ng-click="newTemplate()">{{'MANAGEMENT_DEVELOPMENT_DESIGNER_NEW' | translate}}</button>
+            <button class="btn btn-primary btn-lg ng-binding" style="float:right;margin-right:20px;padding:8px 16px;"  ng-click="saveTemplate()">{{'MANAGEMENT_DEVELOPMENT_DESIGNER_SAVE' | translate}}</button>
        </div>
 <div class="row">
     <div class="col-xs-12 col-md-12 col-lg-12 hbox">  
@@ -20,8 +20,8 @@
 	    			</div>
 	    	        <div class="list-group" ng-style="{height: containerHeight - 55}" style="overflow: auto;auto;margin-left: -5px;white-space: nowrap;">
                       <div class="btn-group" style="margin-left:30px;">
-                        <button class="btn btn-default" type="button" ng-click="expand()">expandAll</button>
-                        <button class="btn btn-default" type="button" ng-click="collapse()">collapseAll</button>
+                        <button class="btn btn-default" type="button" ng-click="expand()">{{'MANAGEMENT_DEVELOPMENT_DESIGNER_EXPANDALL' | translate}}</button>
+                        <button class="btn btn-default" type="button" ng-click="collapse()">{{'MANAGEMENT_DEVELOPMENT_DESIGNER_COLLAPSEALL' | translate}}</button>
                       </div>
                       <storagetemplate-list-tree tree-data="templateList" select-node-callback="getTemplateDetail(node)" tree-control="treeControl">
                       </storagetemplate-list-tree>  
@@ -39,7 +39,7 @@
     <div class="col-xs-12 col-md-12 col-lg-12 edit-box" style="height:2800px">
         <div id="editArea"> 
              <div>
-        <strong>Gold: </strong>
+        <strong>{{'MANAGEMENT_DEVELOPMENT_DESIGNER_GOLD' | translate}}: </strong>
         {{player.gold}}
         </div>
         <div class="list-group">
@@ -52,13 +52,5 @@
         </div>
         </div>
 	</div>
-	<!--<div class="col-xs-12 col-md-12 col-lg-12 function-Box" > 
-    <div class="style">
-         <a>样式区</a>     
-    </div>
-    <control-box></control-box>
- </div>   
-    </div>  
-</div>
 
 
