@@ -485,7 +485,7 @@ public class StorageTemplateVersionControlServiceImpl implements
 		// validate specialize archetype lifecycle state
 		ArchetypeRevisionFile specialiseArchetype = templateFile
 				.getSpecialiseArchetypeRevisionFile();
-		if (specialiseArchetype.getLifecycleState().equals(
+		if (!specialiseArchetype.getLifecycleState().equals(
 				LifecycleState.PUBLISHED)) {
 			throw new VersionControlException(
 					"Illeagal action Approve for template "

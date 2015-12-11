@@ -1,21 +1,20 @@
 <div class="row">
 	<div class="col-xs-12 col-md-12 col-lg-12 hbox">
 		<div class="panel panel-default" ng-show="!isArchetypeListHidden" >
-			<div class="panel-heading">		
-					<i class="search-icon glyphicon glyphicon-search search-icon-list" ></i>
-					<input  type="text" style="border-radius: 17px; padding-left: 40px" ng-model = "archetypeListFilter" class="form-control" placeholder="{{'SEARCH_HINT' | translate}}" />
-					<!-- <input type="text" class="form-control" ng-model="archetypeListFilter" placeholder="{{'SEARCH_HINT' | translate}}"> -->		
+			<div class="panel-heading">
+				<i class="search-icon glyphicon glyphicon-search search-icon-list" ></i>
+				<input  type="text" style="border-radius: 17px; padding-left: 40px" ng-model = "archetypeListFilter" class="form-control" placeholder="{{'SEARCH_HINT' | translate}}" />
+				<!-- <input type="text" class="form-control" ng-model="archetypeListFilter" placeholder="{{'SEARCH_HINT' | translate}}"> -->
 			</div>
 			<div class="list-group" ng-style="{height:containerHeight-55}" style="overflow: auto;margin-left: -5px;white-space: nowrap;">
 				<!--node-menu-generator = "getTreeElementMenu"
-				    specialise-archetype-callback="specialiseArchetype(value)"
-				    <a href=""  ng-class="{active:selectedArchetype.id == archetype.id}" class="list-group-item" ng-repeat="archetype in draftArchetypeList"  ng-click="selectArchetype(archetype)">{{archetype.name}}</a>-->
+				specialise-archetype-callback="specialiseArchetype(value)"
+				<a href=""  ng-class="{active:selectedArchetype.id == archetype.id}" class="list-group-item" ng-repeat="archetype in draftArchetypeList"  ng-click="selectArchetype(archetype)">{{archetype.name}}</a>-->
 				<tree-view tree-data="archetypeList"
 				class="archetype-tree"
 				double-click-node-callback="selectArchetype(value)"
 				node-id="id" node-children="specialiseArchetype"
-				
-			
+
 				delete-archetype-callback="deleteArchetype(value)"
 				click-node-menu-callback="clickNodeMenu(node, type)"
 				menu-prefix = "list"
@@ -31,7 +30,7 @@
 
 						<img ng-show="node.isDirectory" ng-class="node.type | lowercase" class="clever-icon list" style="padding: 0 10px;height: 16px;margin-left: 3px;"></img>
 						<span ng-show="node.isDirectory" ng-bind="node.name"></span>
-						<impaneladding: 0 10px;height: 16px;margin-left: 3px;"></img>
+						<img ng-show="!node.isDirectory" ng-class="node.lifecycleState | lowercase" class="clever-icon list" style="padding: 0 10px;height: 16px;margin-left: 3px;"></img>
 						<span ng-show="!node.isDirectory" ng-bind-html="node.conceptName | highlight:keyword | unsafe"></span>
 						&nbsp;<span ng-show="!node.isDirectory" style="color: grey;font-size: 10pt;">(<span ng-bind="node.version"></span>)</span>
 
@@ -55,7 +54,7 @@
 
 						<span class="archetype-title" ng-if="!isArchetypeListHidden">{{getFixedTitle(selectedArchetype.name, 40)}}</span>
 						<span class="archetype-title" ng-if="isArchetypeListHidden">{{getFixedTitle(selectedArchetype.name, 70)}}</span>
-                        <span style="color:red" ng-if="selectedArchetype.lifecycleState != 'Draft'">(Not Editable)</span>
+						<span style="color:red" ng-if="selectedArchetype.lifecycleState != 'Draft'">(Not Editable)</span>
 						<!-- <button class="btn btn-small  btn-primary pull-right"   style="margin-left:20px; margin-right: 10px;" ng-disabled="selectedArchetype==undefined" ng-click="saveSelectedArchetype()">
 						{{"ARCHETYPE_PANE_SAVE" | translate}}
 						</button>
@@ -100,7 +99,7 @@
 								</tab>
 
 								<tab>
-								  
+
 									<tab-heading>
 										{{'MANAGEMENT_ARCHETYPE_EDIT_DISPLAY' | translate}}
 									</tab-heading>
@@ -134,26 +133,35 @@
 				</div>
 			</div>
 		</div>
+		<div class="col-xs-12 col-md-12 col-lg-12 flex-box" ng-if="batchStatus" >
+			<div ng-style="{height: containerHeight - 10}">
+				<batch-submit-pane  file-list="draftArchetypeList" type="archetype" max-height="containerHeight-10"></batch-submit-pane>
+			</div>
+
+		</div>
 		<div class="col-xs-1 col-md-1 col-lg-1" >
 			<div class="sidebar">
 				<ul class="side-menu-group">
 					<li class="side-menu-item" ng-click="openCreate('lg')" tooltip-placement="right" tooltip="{{'MANAGEMENT_ARCHETYPE_EDIT_TOOTIP_CREATE_ARCHETYPE' | translate}}" tooltip-popup-delay="500">
-						<a href="" class="menu-item-content"> <span class="icon-plus-sign tool-menu" style="color: #777;"></span></a>
+						<a href="" class="menu-item-content">{{'ARCHETYPE_EDIT_CREATE' | translate}} <!-- <span class="icon-plus-sign tool-menu" style="color: #777;"></span>--></a>
 					</li >
 					<li ng-if="selectedArchetype.lifecycleState=='Draft'"  class="side-menu-item" ng-click="saveSelectedArchetype()" tooltip-placement="right" tooltip="{{'MANAGEMENT_ARCHETYPE_EDIT_TOOTIP_SAVE_ARCHETYPE' | translate}}" tooltip-popup-delay="500">
-						<a href="" class="menu-item-content"><span class="icon-save tool-menu"  > </span></a>
+						<a href="" class="menu-item-content">{{'ARCHETYPE_EDIT_SAVE' | translate}}<!-- <span class="icon-save tool-menu"  > </span> --></a>
 					</li>
 					<li ng-if="selectedArchetype.lifecycleState=='Draft'" class="side-menu-item"  ng-click="submitSelectedArchetype()" tooltip-placement="right" tooltip="{{'MANAGEMENT_ARCHETYPE_EDIT_TOOTIP_SUBMIT_ARCHETYPE' | translate}}" tooltip-popup-delay="500">
-						<a href="" class="menu-item-content"><span class="icon-circle-arrow-up tool-menu" style="color: #777;"> </span></a>
+						<a href="" class="menu-item-content">{{'ARCHETYPE_EDIT_SUBMIT' | translate}}<!-- <span class="icon-circle-arrow-up tool-menu" style="color: #777;"> </span> --></a>
 					</li>
 					<li ng-if="selectedArchetype" class="side-menu-item"  ng-click="generateDiff()" tooltip-placement="right" tooltip="{{'MANAGEMENT_ARCHETYPE_EDIT_TOOTIP_CONTRAST_ADL' | translate}}" tooltip-popup-delay="500">
-						<a href="" class="menu-item-content"><span class="icon-columns tool-menu" style="color: #777;"> </span></a>
+						<a href="" class="menu-item-content">{{'ARCHETYPE_EDIT_DIFF' | translate}}<!-- <span class="icon-columns tool-menu" style="color: #777;"> </span> --></a>
 					</li>
 					<li ng-if="selectedArchetype.lifecycleState=='Published'" class="side-menu-item"  ng-click="createNewVersionArchetype()" tooltip-placement="right" tooltip="{{'MANAGEMENT_ARCHETYPE_EDIT_TOOTIP_NEW_VERSION' | translate}}" tooltip-popup-delay="500">
-						<a href="" class="menu-item-content"><span class="icon-level-up tool-menu" style="color: #777;"> </span></a>
+						<a href="" class="menu-item-content">{{'ARCHETYPE_EDIT_NEWVERSION' | translate}}<!-- <span class="icon-level-up tool-menu" style="color: #777;"> </span> --></a>
 					</li>
-				    <li ng-if="selectedArchetype" class="side-menu-item"  ng-click="specialiseArchetype()" tooltip-placement="right" tooltip="{{'MANAGEMENT_ARCHETYPE_EDIT_TOOTIP_SPECIALISE_THIS_ARCHETYPE' | translate}}" tooltip-popup-delay="500">
-						<a href="" class="menu-item-content"><span class="icon-puzzle-piece tool-menu" style="color: #777;"> </span></a>
+					<li ng-if="selectedArchetype" class="side-menu-item"  ng-click="specialiseArchetype()" tooltip-placement="right" tooltip="{{'MANAGEMENT_ARCHETYPE_EDIT_TOOTIP_SPECIALISE_THIS_ARCHETYPE' | translate}}" tooltip-popup-delay="500">
+						<a href="" class="menu-item-content">{{'ARCHETYPE_EDIT_SPECIALISE' | translate}}<!-- <span class="icon-puzzle-piece tool-menu" style="color: #777;"> </span> --></a>
+					</li>
+					<li  class="side-menu-item"  ng-click="batchSubmit()" tooltip-placement="right" tooltip="{{'MANAGEMENT_ARCHETYPE_EDIT_TOOTIP_BATCHPROCESS' | translate}}" tooltip-popup-delay="500">
+						<a href="" class="menu-item-content">{{'ARCHETYPE_EDIT_BATCHSUBMIT' | translate}}<!-- <span class="icon-puzzle-piece tool-menu" style="color: #777;"> </span> --></a>
 					</li>
 				</ul>
 			</div>

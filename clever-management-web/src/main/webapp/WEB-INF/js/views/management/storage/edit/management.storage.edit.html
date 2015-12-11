@@ -105,23 +105,31 @@
 				</div>
 			</div>
 		</div>
+		<div class="col-xs-12 col-md-12 col-lg-12 flex-box" ng-if="batchStatus" >
+			<div ng-style="{height: containerHeight - 10}">
+				<batch-submit-pane  file-list="templateFiles.draft" type="template" max-height="containerHeight-10"></batch-submit-pane>
+			</div>
+		</div>
 		<div class="col-xs-1 col-md-1 col-lg-1" >
 			<div class="sidebar">
 				<ul class="side-menu-group">
 					<li  class="side-menu-item" ng-click="createTemplate()" tooltip-placement="right" tooltip="{{'MANAGEMENT_STORAGE_EDIT_TOOLTIP_CREATE_TEMPLATE' | translate}}" tooltip-popup-delay="500">
-						<a href="" > <span class="icon-plus-sign tool-menu" style="color: #777;"></span></a>
+						<a href="" >{{'ARCHETYPE_EDIT_CREATE' | translate}}  <!-- <span class="icon-plus-sign tool-menu" style="color: #777;"></span> --></a>
 					</li >
 					<li ng-if="selectedTemplate.lifecycleState=='Draft'" class="side-menu-item " ng-click="saveTemplateFile()" tooltip-placement="right" tooltip="{{'MANAGEMENT_STORAGE_EDIT_TOOLTIP_SAVE_TEMPLATE' | translate}}" tooltip-popup-delay="500">
-						<a href="" ><span class="icon-save tool-menu" style="color: #777;"> </span></a>
+						<a href="" >{{'ARCHETYPE_EDIT_SAVE' | translate}}<!-- <span class="icon-save tool-menu" style="color: #777;"> </span> --></a>
 					</li>
 					<li ng-if="selectedTemplate.lifecycleState=='Draft'" class="side-menu-item"  ng-click="submitTemplateFile()" tooltip-placement="right" tooltip="{{'MANAGEMENT_STORAGE_EDIT_TOOLTIP_SUBMIT_TEMPLATE' | translate}}" tooltip-popup-delay="500">
-						<a href=""><span class="icon-circle-arrow-up tool-menu" style="color: #777;"> </span></a>
+						<a href="">{{'ARCHETYPE_EDIT_SUBMIT' | translate}}<!-- <span class="icon-circle-arrow-up tool-menu" style="color: #777;"> </span> --></a>
 					</li>
 					<li ng-if="selectedTemplate" class="side-menu-item"  ng-click="generateOetDiff()" tooltip-placement="right" tooltip="{{'MANAGEMENT_STORAGE_EDIT_TOOLTIP_CONSTRAST_OET_CONTENT' | translate}}" tooltip-popup-delay="500">
-						<a href=""><span class="icon-columns tool-menu" style="color: #777;"> </span></a>
+						<a href="">{{'ARCHETYPE_EDIT_DIFF' | translate}}<!-- <span class="icon-columns tool-menu" style="color: #777;"> </span> --></a>
 					</li>
 					<li ng-if="selectedTemplate.lifecycleState=='Published'" class="side-menu-item"  ng-click="createNewVersionTemplate()" tooltip-placement="right" tooltip="{{'MANAGEMENT_STORAGE_EDIT_TOOLTIP_NEW_VERSION' | translate}}" tooltip-popup-delay="500">
-						<a href=""><span class="icon-level-up tool-menu" style="color: #777;"> </span></a>
+						<a href="">{{'ARCHETYPE_EDIT_NEWVERSION' | translate}}<!-- <span class="icon-level-up tool-menu" style="color: #777;"> </span> --></a>
+					</li>
+					<li  class="side-menu-item"  ng-click="batchSubmit()" tooltip-placement="right" tooltip="{{'MANAGEMENT_ARCHETYPE_EDIT_TOOTIP_BATCHPROCESS' | translate}}" tooltip-popup-delay="500">
+						<a href="" class="menu-item-content">{{'ARCHETYPE_EDIT_BATCHSUBMIT' | translate}}<!-- <span class="icon-puzzle-piece tool-menu" style="color: #777;"> </span> --></a>
 					</li>
 				</ul>
 			</div>

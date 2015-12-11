@@ -57,11 +57,18 @@ angular.module('clever.management.i18n.zh', ['pascalprecht.translate']).config(f
 		ARCHETYPE_UPLOAD_FILE_INVALID : '无效',
 		ARCHETYPE_UPLOAD_FILE_FAILED : '失败',
 		ARCHETYPE_UPLOAD_SUCCEEDED : '操作成功',
-		ARCHETYPE_UPLOAD_SUCCEEDED_HINT : '原型上传成功。',
+		ARCHETYPE_UPLOAD_SUCCEEDED_HINT : '原型上传完成，请点击确定查看上传结果',
 		ARCHETYPE_UPLOAD_FAILED : '操作失败',
 		ARCHETYPE_UPLOAD_FAILED_HINT : '原型上传失败，错误：{{errorMsg}}',
 
 		// Archetype edit
+		MANAGEMENT_ARCHETYPE_EDIT_TOOTIP_BATCHPROCESS : '批量提交',
+		ARCHETYPE_EDIT_BATCHSUBMIT : '批量',
+		ARCHETYPE_EDIT_CREATE : '创建',
+		ARCHETYPE_EDIT_SAVE : '保存',
+		ARCHETYPE_EDIT_DIFF : '对比',
+		ARCHETYPE_EDIT_NEWVERSION : '新版',
+		ARCHETYPE_EDIT_SPECIALISE : '特化',
 		ARCHETYPE_EDIT_EDIT : '编辑',
 		ARCHETYPE_EDIT_SUBMIT : '提交',
 		ARCHETYPE_EDIT_DRAFT : '我的草稿',
@@ -146,7 +153,7 @@ angular.module('clever.management.i18n.zh', ['pascalprecht.translate']).config(f
 		STORAGE_TEMPLATE_UPLOAD_VALIDATE_ERROR_HINT : '验证失败。',
 		STORAGE_TEMPLATE_UPLOAD_VALIDATE_DETAILS_HINT : '详情...',
 		STORAGE_TEMPLATE_UPLOAD_SUCCEEDED : '操作成功',
-		STORAGE_TEMPLATE_UPLOAD_SUCCEEDED_HINT : '存储模板上传成功。',
+		STORAGE_TEMPLATE_UPLOAD_SUCCEEDED_HINT : '存储模板上传完毕，请点击确定查看结果。',
 		STORAGE_TEMPLATE_UPLOAD_FAILED : '操作失败',
 		STORAGE_TEMPLATE_UPLOAD_FAILED_HINT : '存储模板上传失败，错误：{{errorMsg}}',
           
@@ -635,5 +642,16 @@ angular.module('clever.management.i18n.zh', ['pascalprecht.translate']).config(f
         DEVELOPMENT_API_EDIT_CLASS_INFO : "类型信息",
         DEVELOPMENT_API_VIEW_CODE_CODE : '代码',
 		DEVELOPMENT_API_VIEW_CODE_DESC : '说明',
+		
+		UPLOAD_SUCCESSFUL:'上传成功',
+		ALREADY_EXIST:'已存在',
+		OTHERS:'其他',
+		
+		//BATCH PROCESS
+		BATCH_SUBMIT_SUCCESSFUL:'成功',
+		BATCH_SUBMIT_FAILED:'失败',
+		BATCH_SUBMIT: '批量提交',
+		BATCH_SUBMIT_CHECK_ALL:'全选',
+		BATCH_SUBMIT_SUBMIT_CHECKED : '提交选中项',
 	});
 });

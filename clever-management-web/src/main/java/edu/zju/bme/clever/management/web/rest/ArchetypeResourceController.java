@@ -369,7 +369,7 @@ public class ArchetypeResourceController extends AbstractResourceController {
 		} catch (Throwable ex) {
 			this.logger.debug("Parse file {} failed.",
 					file.getOriginalFilename(), ex);
-			result.setStatus(FileProcessResult.FileStatus.INVALID);
+			result.setStatus(FileProcessResult.FileStatus.INVALIDOTHERS);
 			result.setMessage("Archetype parse failed, error: "
 					+ ex.getMessage());
 			return result;

@@ -15,6 +15,7 @@ function ArchetypeEditCtrl($scope, $modal,$log, $q, $timeout, msgboxService,busy
 		$scope.tabContainerHeight.value = newValue - 35;
 	});
 
+$scope.draftArchetypeList = "list";
 	$scope.initData = function() {
 		var busyId = busyService.pushBusy('BUSY_LOADING');
 		resourceService.get(ARCHETYPE_LIST_EDIT_DRAFT_URL).then(function(list) {
@@ -138,6 +139,11 @@ function ArchetypeEditCtrl($scope, $modal,$log, $q, $timeout, msgboxService,busy
 		console.log($scope.definition);
 		documentDiffModalService.open('Modify records', editedArchetype, $scope.originalAdl);
 	};
+	$scope.batchStatus = false;
+	$scope.batchSubmit = function(){
+		$scope.batchStatus = !$scope.batchStatus ;
+		$scope.selectedArchetype = undefined;
+	};
 
 
 	$scope.submitSelectedArchetype = function() {
@@ -178,6 +184,7 @@ function ArchetypeEditCtrl($scope, $modal,$log, $q, $timeout, msgboxService,busy
     }; 
 
 	$scope.selectArchetype = function(archetype) {
+		$scope.batchStatus  = false;
 		if (archetype.isDirectory) {
 			busyService.popBusy(busyId);
 			return;
@@ -846,7 +853,7 @@ function ArchetypeEditCtrl($scope, $modal,$log, $q, $timeout, msgboxService,busy
 		return formatted;
 	}
 
-	
+	//$scope.batchSubmit = true;
 };
 
 

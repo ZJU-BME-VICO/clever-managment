@@ -52,7 +52,7 @@ public class ArchetypeValidateServiceImpl implements ArchetypeValidateService {
 				.findByName(archetypeId);
 		// Validate existence
 		if (revisionFile != null) {
-			result.setStatus(FileProcessResult.FileStatus.INVALID);
+			result.setStatus(FileProcessResult.FileStatus.ALREADYEXIST);
 			result.appendMessage("Archetype already exists. ");
 		}
 		ArchetypeVersionMaster versionMaster = this.versionMasterRepo
@@ -76,7 +76,7 @@ public class ArchetypeValidateServiceImpl implements ArchetypeValidateService {
 					+ (versionMaster.getLatestRevisionFileSerialVersion() + 1);
 		}
 		if (!archetype.getArchetypeId().versionID().equals(expectedVersion)) {
-			result.setStatus(FileStatus.INVALID);
+			result.setStatus(FileStatus.VERSIONNOTMATCH);
 			result.setMessage("Archetype's version should be "
 					+ expectedVersion + ". ");
 		}
@@ -88,7 +88,7 @@ public class ArchetypeValidateServiceImpl implements ArchetypeValidateService {
 			if (specialiseRevisionFile == null
 					|| !specialiseRevisionFile.getLifecycleState().equals(
 							LifecycleState.PUBLISHED)) {
-				result.setStatus(FileStatus.INVALID);
+				result.setStatus(FileStatus.NOPARENTFILE);
 				result.setMessage("Cannot find PUBLISHED specialise archetype "
 						+ specialiseArchetypeId.getValue() + ". ");
 			}

@@ -1,4 +1,4 @@
-function ApiViewCtr($scope, $document, resourceService, DEVELOPMENT_API_DISPLAY_PARAM_DETAILS, DEVELOPMENT_API_DISPLAY_MASTER_URL, DEVELOPMENT_API_DISPLAY_RETURNPARAMS, DEVELOPMENT_API_DISPLAY_REQUESTPARAMS, treeDataFormatService, busyService) {
+function ApiViewCtr($scope, $document,$timeout, resourceService, DEVELOPMENT_API_DISPLAY_PARAM_DETAILS, DEVELOPMENT_API_DISPLAY_MASTER_URL, DEVELOPMENT_API_DISPLAY_RETURNPARAMS, DEVELOPMENT_API_DISPLAY_REQUESTPARAMS, treeDataFormatService, busyService) {
 
 	$scope.treeControl = {};
 	$scope.languages = ['zh', 'en'];
@@ -127,11 +127,16 @@ function ApiViewCtr($scope, $document, resourceService, DEVELOPMENT_API_DISPLAY_
 	$scope.$watch('selectedCategory', function(newValue, oldValue) {
 		if (newValue && oldValue) {
 			var versionList = $scope.selectedCategory.versionList;
-			$scope.selectedVersion = versionList[versionList.length - 1];
+			$scope.selectedVersion = undefined;
+			$timeout(function(){
+				$scope.selectedVersion = versionList[versionList.length - 1];
+			},0);
+			
+			//$scope.getApiListById($scope.selectedCategory.id, $scope.selectedVersion);
 		}
 	});
 	$scope.$watch('selectedVersion', function(newValue, oldValue) {
-		if (newValue && oldValue) {
+		if (newValue) {
 			$scope.getApiListById($scope.selectedCategory.id, $scope.selectedVersion);
 		}
 	});

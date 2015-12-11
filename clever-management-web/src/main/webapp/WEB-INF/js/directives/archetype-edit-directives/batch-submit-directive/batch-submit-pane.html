@@ -1,0 +1,58 @@
+<div>
+
+	<span class="lead">{{'BATCH_SUBMIT' | translate}}</span>
+	<button class="btn btn-info pull-right" ng-click="submitChecked()">
+		{{'BATCH_SUBMIT_SUBMIT_CHECKED'| translate}}
+	</button>
+	<hr />
+	<div  ng-style="{height : maxHeight -60}" style="overflow: auto">
+		<div ng-show="pageStatus=='beforeSubmit'">
+			<span style="margin-left: 15px;cursor: pointer;"ng-click="checkAll()" >
+				<input type="checkbox" ng-checked="checkedAll">
+				{{'BATCH_SUBMIT_CHECK_ALL'|translate}}</span>
+			<div class="list-group"  style="overflow: auto; margin-top: 5px;">
+				<div class="list-group-item" ng-repeat="file in fileList" >
+					<div class="row" ng-if="!file.submited">
+						<div class="col-xs-12 col-md-12">
+							<div class="input-group" ng-click="checkFile(file)">
+								<span class="input-group-addon">
+									<input type="checkbox" ng-checked="file.checked">
+								</span>
+								<span type="text" class="form-control" style="cursor: pointer" > {{file.name}} </span>
+							</div>
+						</div>
+					</div>
+
+				</div>
+			</div>
+		</div>
+		<div ng-show="pageStatus=='afterSubmit'">
+			<div ng-show="submitResult.successful">
+				<label>{{'BATCH_SUBMIT_SUCCESSFUL'|translate}}</label>
+				<div >
+					<table class="table table-striped table-hover" >
+						<tbody>
+							<tr ng-repeat="file in submitResult.successful | orderBy:file.name" class="success" >
+								<td style="vertical-align: middle;">{{file.name}}</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+			<div ng-show="submitResult.failed">
+				<label>{{'BATCH_SUBMIT_FAILED' | translate}}</label>
+				<div >
+					<table class="table table-striped table-hover" >
+						<tbody>
+							<tr ng-repeat="file in submitResult.failed | orderBy:file.name" class="success" >
+								<td style="vertical-align: middle;">{{file.name}}</td>
+								<td><a style="cursor: pointer;" popover-placement="left" popover="{{file.message}}" popover-trigger="mouseenter"> <span class="glyphicon glyphicon-exclamation-sign"></span> {{'ARCHETYPE_UPLOAD_FILE_DETAILS' | translate}} </a></td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+
+</div>

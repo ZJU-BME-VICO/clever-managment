@@ -398,7 +398,7 @@ public class StorageTemplateResourceController extends
 					.getInputStream(), template.getArm().getInputStream());
 		} catch (IOException e) {
 			FileProcessResult result = new FileProcessResult();
-			result.setStatus(FileStatus.INVALID);
+			result.setStatus(FileStatus.INVALIDOTHERS);
 			return result;
 		}
 	}

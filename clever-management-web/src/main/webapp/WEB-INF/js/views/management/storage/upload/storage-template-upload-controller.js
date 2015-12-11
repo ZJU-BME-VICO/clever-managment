@@ -1,174 +1,167 @@
 function StorageTemplateUploadCtrl($scope, resourceService, busyService, msgboxService, STORAGE_TEMPLATE_VALIDATE_URL, STORAGE_TEMPLATE_UPLOAD_URL) {
 	// var pageStatus = {
-		// ToAddFile : 0,
-		// ToValidate : 1,
-		// Validating : 2,
-		// ValidationPast : 3,
-		// ValidationFailed : 4,
-		// ToUpload : 5,
-		// Uploading : 6,
+	// ToAddFile : 0,
+	// ToValidate : 1,
+	// Validating : 2,
+	// ValidationPast : 3,
+	// ValidationFailed : 4,
+	// ToUpload : 5,
+	// Uploading : 6,
 	// };
 
 	// $scope.templates = [];
 	// $scope.status = pageStatus.ToAddFile;
-// 
+	//
 	// $scope.$watch('templates.length', function(newValue) {
-		// if (newValue == 0) {
-			// $scope.status = pageStatus.ToAddFile;
-		// }
-	// });
-// 
-	// $scope.addTemplate = function() {
-		// if ($scope.templates.length == 0) {
-			// pushNewTemplate();
-		// } else {
-			// var lastTemplate = $scope.templates[$scope.templates.length - 1];
-			// $scope.validateOet(lastTemplate);
-			// $scope.validateArm(lastTemplate);
-			// lastTemplate.valid = lastTemplate.oetValid && lastTemplate.armValid ? undefined : false;
-			// if (lastTemplate.valid == undefined) {
-				// pushNewTemplate();
-			// }
-		// }
-	// };
-// 
-	// function pushNewTemplate() {
-		// $scope.templates.push({
-			// templateName : '',
-			// oet : {},
-			// arm : {},
-			// deleteEnabled : false,
-			// oetValid : true,
-			// armValid : true,
-			// serverValid : undefined,
-			// serverValidating : false,
-			// serverUploading : false,
-			// valid : undefined,
-		// });
+	// if (newValue == 0) {
+	// $scope.status = pageStatus.ToAddFile;
 	// }
-// 
-// 
+	// });
+	//
+	// $scope.addTemplate = function() {
+	// if ($scope.templates.length == 0) {
+	// pushNewTemplate();
+	// } else {
+	// var lastTemplate = $scope.templates[$scope.templates.length - 1];
+	// $scope.validateOet(lastTemplate);
+	// $scope.validateArm(lastTemplate);
+	// lastTemplate.valid = lastTemplate.oetValid && lastTemplate.armValid ? undefined : false;
+	// if (lastTemplate.valid == undefined) {
+	// pushNewTemplate();
+	// }
+	// }
+	// };
+	//
+	// function pushNewTemplate() {
+	// $scope.templates.push({
+	// templateName : '',
+	// oet : {},
+	// arm : {},
+	// deleteEnabled : false,
+	// oetValid : true,
+	// armValid : true,
+	// serverValid : undefined,
+	// serverValidating : false,
+	// serverUploading : false,
+	// valid : undefined,
+	// });
+	// }
+	//
+	//
 	// $scope.onStatus = function(status) {
-		// return $scope.status == pageStatus[status];
+	// return $scope.status == pageStatus[status];
 	// };
-// 
+	//
 	// $scope.validateOet = function(template) {
-		// template.oetValid = template.oet.file ? true : false;
-		// template.valid = template.oetValid && template.armValid ? undefined : false;
+	// template.oetValid = template.oet.file ? true : false;
+	// template.valid = template.oetValid && template.armValid ? undefined : false;
 	// };
-// 
+	//
 	// $scope.validateArm = function(template) {
-		// template.armValid = template.arm.file ? true : false;
-		// template.valid = template.oetValid && template.armValid ? undefined : false;
+	// template.armValid = template.arm.file ? true : false;
+	// template.valid = template.oetValid && template.armValid ? undefined : false;
 	// };
-// 
+	//
 	// $scope.deleteTemplate = function(template) {
-		// $scope.templates.splice($scope.templates.indexOf(template), 1);
+	// $scope.templates.splice($scope.templates.indexOf(template), 1);
 	// };
-// 
+	//
 	// $scope.reset = function() {
-		// $scope.templates = [];
-		// $scope.status = pageStatus.ToAddFile;
+	// $scope.templates = [];
+	// $scope.status = pageStatus.ToAddFile;
 	// };
-// 
+	//
 	// $scope.validateTemplates = function() {
-		// var allValid = true;
-		// angular.forEach($scope.templates, function(template) {
-			// $scope.validateOet(template);
-			// $scope.validateArm(template);
-			// template.valid = template.oetValid && template.armValid ? undefined : false;
-			// allValid = template.valid == false ? false : true;
-		// });
-		// if (!allValid) {
-			// $scope.status = pageStatus.ValidationFailed;
-			// return;
-		// }
-		// $scope.status = pageStatus.Validating;
-		// var count = $scope.templates.length;
-		// var isValidationPast = true;
-		// angular.forEach($scope.templates, function(template, index) {
-			// template.serverValidating = true;
-			// template.serverValid = undefined;
-			// var formData = new FormData();
-			// formData.append('name', index);
-			// formData.append('oet', template.oet.file);
-			// formData.append('arm', template.arm.file);
-			// resourceService.post(STORAGE_TEMPLATE_VALIDATE_URL, formData, {
-				// transformRequest : angular.identity,
-				// headers : {
-					// 'Content-Type' : undefined
-				// }
-			// }).then(function(result) {
-				// template.serverValidating = false;
-				// if (result.status == 'INVALID') {
-					// template.serverValid = false;
-					// template.valid = false;
-					// template.message = result.message;
-					// isValidationPast = false;
-				// } else {
-					// template.serverValid = true;
-					// template.valid = true;
-					// template.name = result.name;
-				// }
-				// count--;
-				// if (count == 0) {
-					// if (isValidationPast) {
-						// $scope.status = pageStatus.ValidationPast;
-					// } else {
-						// $scope.status = pageStatus.ValidationFailed;
-					// }
-				// }
-			// });
-// 
-		// });
+	// var allValid = true;
+	// angular.forEach($scope.templates, function(template) {
+	// $scope.validateOet(template);
+	// $scope.validateArm(template);
+	// template.valid = template.oetValid && template.armValid ? undefined : false;
+	// allValid = template.valid == false ? false : true;
+	// });
+	// if (!allValid) {
+	// $scope.status = pageStatus.ValidationFailed;
+	// return;
+	// }
+	// $scope.status = pageStatus.Validating;
+	// var count = $scope.templates.length;
+	// var isValidationPast = true;
+	// angular.forEach($scope.templates, function(template, index) {
+	// template.serverValidating = true;
+	// template.serverValid = undefined;
+	// var formData = new FormData();
+	// formData.append('name', index);
+	// formData.append('oet', template.oet.file);
+	// formData.append('arm', template.arm.file);
+	// resourceService.post(STORAGE_TEMPLATE_VALIDATE_URL, formData, {
+	// transformRequest : angular.identity,
+	// headers : {
+	// 'Content-Type' : undefined
+	// }
+	// }).then(function(result) {
+	// template.serverValidating = false;
+	// if (result.status == 'INVALID') {
+	// template.serverValid = false;
+	// template.valid = false;
+	// template.message = result.message;
+	// isValidationPast = false;
+	// } else {
+	// template.serverValid = true;
+	// template.valid = true;
+	// template.name = result.name;
+	// }
+	// count--;
+	// if (count == 0) {
+	// if (isValidationPast) {
+	// $scope.status = pageStatus.ValidationPast;
+	// } else {
+	// $scope.status = pageStatus.ValidationFailed;
+	// }
+	// }
+	// });
+	//
+	// });
 	// };
-// 
+	//
 	// $scope.uploadTemplates = function() {
-		// var busyId = busyService.pushBusy('BUSY_UPLOADING');
-		// var formData = new FormData();
-		// formData.append('count', $scope.templates.length);
-		// angular.forEach($scope.templates, function(template, index) {
-			// formData.append('oets', template.oet.file);
-			// formData.append('arms', template.arm.file);
-		// });
-		// resourceService.post(STORAGE_TEMPLATE_UPLOAD_URL, formData, {
-			// transformRequest : angular.identity,
-			// headers : {
-				// 'Content-Type' : undefined
-			// }
-		// }).then(function(result) {
-			// busyService.popBusy(busyId);
-			// if (result.succeeded) {
-				// msgboxService.createMessageBox("STORAGE_TEMPLATE_UPLOAD_SUCCEEDED", "STORAGE_TEMPLATE_UPLOAD_SUCCEEDED_HINT", {}, 'success').result.then(function() {
-					// $scope.reset();
-				// });
-			// } else {
-				// msgboxService.createMessageBox("STORAGE_TEMPLATE_UPLOAD_FAILED", "STORAGE_TEMPLATE_UPLOAD_FAILED_HINT", {
-					// errorMsg : result.message
-				// }, 'error').result.then(function() {
-					// $scope.reset();
-				// });
-			// }
-		// });
+	// var busyId = busyService.pushBusy('BUSY_UPLOADING');
+	// var formData = new FormData();
+	// formData.append('count', $scope.templates.length);
+	// angular.forEach($scope.templates, function(template, index) {
+	// formData.append('oets', template.oet.file);
+	// formData.append('arms', template.arm.file);
+	// });
+	// resourceService.post(STORAGE_TEMPLATE_UPLOAD_URL, formData, {
+	// transformRequest : angular.identity,
+	// headers : {
+	// 'Content-Type' : undefined
+	// }
+	// }).then(function(result) {
+	// busyService.popBusy(busyId);
+	// if (result.succeeded) {
+	// msgboxService.createMessageBox("STORAGE_TEMPLATE_UPLOAD_SUCCEEDED", "STORAGE_TEMPLATE_UPLOAD_SUCCEEDED_HINT", {}, 'success').result.then(function() {
+	// $scope.reset();
+	// });
+	// } else {
+	// msgboxService.createMessageBox("STORAGE_TEMPLATE_UPLOAD_FAILED", "STORAGE_TEMPLATE_UPLOAD_FAILED_HINT", {
+	// errorMsg : result.message
+	// }, 'error').result.then(function() {
+	// $scope.reset();
+	// });
+	// }
+	// });
 	// };
-	
-  
 
 	var pageStatus = {
 		ToAddFile : 0,
-		ToValidate : 1,
 		Validating : 2,
-		ValidationAccomplished : 3,
-		ValidationFailed : 4,
-		ToUpload : 5,
+		AfterUpload : 5,
 		Uploading : 6,
-	}; 
+	};
 
-    $scope.templateList = [];
-    $scope.fileList = [];
-    
+	$scope.templateList = [];
+	$scope.fileList = [];
 
-	
 	$scope.$watch('fileList.length', function(newValue, oldValue) {
 		console.log("oldLength : " + oldValue);
 		console.log("newLength : " + newValue);
@@ -188,7 +181,7 @@ function StorageTemplateUploadCtrl($scope, resourceService, busyService, msgboxS
 		xml : "arm",
 		oet : "oet",
 	};
-	
+
 	function matchPartner(file) {
 
 		if (isFresh(file)) {
@@ -210,7 +203,7 @@ function StorageTemplateUploadCtrl($scope, resourceService, busyService, msgboxS
 			});
 			if (!findTemplate) {
 				var temp = {
-					name : fileNameBody,			
+					name : fileNameBody,
 					status : 'TOUPLOAD',
 				};
 				temp[fileType] = file;
@@ -238,45 +231,48 @@ function StorageTemplateUploadCtrl($scope, resourceService, busyService, msgboxS
 		return isFresh;
 	}
 
- 
-     $scope.status = pageStatus.ToAddFile;
-     $scope.onStatus = function(status) {
+
+	$scope.status = pageStatus.ToAddFile;
+	$scope.onStatus = function(status) {
 		return $scope.status == pageStatus[status];
 	};
-	$scope.reset = function(){
+	$scope.reset = function() {
 		$scope.templateList = [];
 		$scope.fileList = [];
 		$scope.status = pageStatus.ToAddFile;
+		$scope.validateResult = {
+			successful : [],
+			alreadyExist : [],
+			others : [],
+		};
 	};
-	
+
 	$scope.deleteTemplate = function(template) {
 		$scope.fileList.splice($scope.fileList.indexOf(template.arm), 1);
 		$scope.fileList.splice($scope.fileList.indexOf(template.oet), 1);
 		$scope.templateList.splice($scope.templateList.indexOf(template), 1);
 	};
 
-
-   
-
+	$scope.validateResult = {
+		successful : [],
+		alreadyExist : [],
+		others : [],
+	};
 	$scope.validateTemplates = function() {
-		var allValid = true;
+		$scope.status = pageStatus.Validating;
+		$scope.validateFinished = false;
 		angular.forEach($scope.templateList, function(template) {
 			$scope.validateOet(template);
 			$scope.validateArm(template);
 			template.valid = template.oetValid && template.armValid ? true : false;
-			//allValid = template.valid == false ? false : true;
 		});
-		// if (!allValid) {
-		// $scope.status = pageStatus.ValidationFailed;
-		// return;
-		// }
+
 		$scope.status = pageStatus.Validating;
 		var count = $scope.templateList.length;
-		var isValidationPast = true;
 		angular.forEach($scope.templateList, function(template, index) {
-			if (template.valid) {
-				//template.serverValidating = true;
-				//template.serverValid = undefined;
+
+			if (template.valid == true) {
+
 				var formData = new FormData();
 				formData.append('name', index);
 				formData.append('oet', template.oet.file);
@@ -288,60 +284,49 @@ function StorageTemplateUploadCtrl($scope, resourceService, busyService, msgboxS
 						'Content-Type' : undefined
 					}
 				}).then(function(result) {
-					template.serverValidating = false;
-					if (result.status == 'INVALID') {
-						template.status = "INVALID";
-						//template.serverValid = false;
-						template.valid = false;
-						template.message = result.message;
-						//isValidationPast = false;
+
+					template.message = result.message;
+					if (result.status == 'VALID') {
+						$scope.validateResult.successful.push(template);
+					} else if (result.status == 'ALREADYEXIST' || result.status == 'VERSIONNOTMATCH') {
+						$scope.validateResult.alreadyExist.push(template);
+
 					} else {
-						template.status = "VALID";
-						//template.serverValid = true;
-						template.valid = true;
-						template.name = result.name;
+						$scope.validateResult.others.push(template);
 					}
+
 					count--;
 					if (count == 0) {
-						//if (isValidationPast) {
-						$scope.status = pageStatus.ValidationAccomplished;
-						//} else {
-						//	$scope.status = pageStatus.ValidationFailed;
-						//}
-						
+						$scope.validateFinished = true;
 					}
 				});
 
 			} else {
+				template.message = "can not find oet file or arm file";
+				$scope.validateResult.others.push(template);
 				count--;
-				template.status = "INVALID";
-				template.nameValid = false;
-				template.valid = false;
-				template.message = "oet or arm file is not find";
-		
 				if (count == 0) {
-					$scope.status = pageStatus.ValidationAccomplished;
+					$scope.validateFinished = true;
 				}
 
 			}
 
 		});
 	};
-	
-	
-	$scope.uploadTemplates = function() {
-		var allValid = true;
-	    angular.forEach($scope.templateList, function(template){
-	    	if(template.status == "INVALID"){
-	    		allValid = false;
-	    	}
-	    });
-	    if(allValid){
-	    	
+
+	$scope.$watch('validateFinished', function(newValue) {
+		if (newValue) {
+			uploadTemplates();
+			$scope.validateFinished = false;
+		}
+	});
+	function uploadTemplates() {
+		$scope.status = pageStatus.Uploading;
+
 		var busyId = busyService.pushBusy('BUSY_UPLOADING');
 		var formData = new FormData();
-		formData.append('count', $scope.templateList.length);
-		angular.forEach($scope.templateList, function(template, index) {
+		formData.append('count', $scope.validateResult.successful.length);
+		angular.forEach($scope.validateResult.successful, function(template, index) {
 			formData.append('oets', template.oet.file);
 			formData.append('arms', template.arm.file);
 		});
@@ -354,7 +339,7 @@ function StorageTemplateUploadCtrl($scope, resourceService, busyService, msgboxS
 			busyService.popBusy(busyId);
 			if (result.succeeded) {
 				msgboxService.createMessageBox("STORAGE_TEMPLATE_UPLOAD_SUCCEEDED", "STORAGE_TEMPLATE_UPLOAD_SUCCEEDED_HINT", {}, 'success').result.then(function() {
-					$scope.reset();
+					$scope.status = pageStatus.AfterUpload;
 				});
 			} else {
 				msgboxService.createMessageBox("STORAGE_TEMPLATE_UPLOAD_FAILED", "STORAGE_TEMPLATE_UPLOAD_FAILED_HINT", {
@@ -364,14 +349,8 @@ function StorageTemplateUploadCtrl($scope, resourceService, busyService, msgboxS
 				});
 			}
 		});
-	    }else{
-	    	msgboxService.createMessageBox("STORAGE_TEMPLATE_UPLOAD_FAILED", "STORAGE_TEMPLATE_UPLOAD_FAILED_SUGGESTION", {}, 'error').result.then(function() {
-					//$scope.reset();
-				});
-	    }
+
 	};
-
-
 
 	$scope.validateOet = function(template) {
 		template.oetValid = template.oet ? true : false && template.oet.file ? true : false;
@@ -379,7 +358,6 @@ function StorageTemplateUploadCtrl($scope, resourceService, busyService, msgboxS
 
 	$scope.validateArm = function(template) {
 		template.armValid = template.arm ? true : false && template.arm.file ? true : false;
-	}; 
-
+	};
 
 };
