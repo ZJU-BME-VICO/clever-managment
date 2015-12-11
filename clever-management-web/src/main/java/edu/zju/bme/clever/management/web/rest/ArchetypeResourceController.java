@@ -154,27 +154,31 @@ public class ArchetypeResourceController extends AbstractResourceController {
 	public List<ArchetypeInfo> getArchetypeListToReference() {
 		List<ArchetypeRevisionFile> files = this.archetypeProvideService
 				.getArchetypeRevisionFileToReference();
-		return files.stream().map(file -> {
-			ArchetypeInfo info = new ArchetypeInfo();
-			info.setId(file.getId());
-			info.setName(file.getName());
-			info.setAdl(file.getAdl());
-			ADLParser parser = new ADLParser(file.getAdl());
-			Archetype archetype;
-			try {
-				archetype = parser.parse();
-				info.setXml(this.xmlSerializer.output(archetype));
-				info.setRmEntity(archetype.getArchetypeId().rmEntity());
-				info.setRmName(archetype.getArchetypeId().rmName());
-				info.setRmOriginator(archetype.getArchetypeId().rmOriginator());
-				info.setConceptName(archetype.getConceptName(archetype
-						.getOriginalLanguage().getCodeString()));
-				info.setLifecycleState(file.getLifecycleState().getValue());
-			} catch (Exception e) {
-				return null;
-			}
-			return info;
-		}).collect(Collectors.toList());
+		return files
+				.stream()
+				.map(file -> {
+					ArchetypeInfo info = new ArchetypeInfo();
+					info.setId(file.getId());
+					info.setName(file.getName());
+					info.setAdl(file.getAdl());
+					ADLParser parser = new ADLParser(file.getAdl());
+					Archetype archetype;
+					try {
+						archetype = parser.parse();
+						info.setXml(this.xmlSerializer.output(archetype));
+						info.setRmEntity(archetype.getArchetypeId().rmEntity());
+						info.setRmName(archetype.getArchetypeId().rmName());
+						info.setRmOriginator(archetype.getArchetypeId()
+								.rmOriginator());
+						info.setConceptName(archetype.getConceptName(archetype
+								.getOriginalLanguage().getCodeString()));
+						info.setLifecycleState(file.getLifecycleState()
+								.getValue());
+					} catch (Exception e) {
+						return null;
+					}
+					return info;
+				}).collect(Collectors.toList());
 	}
 
 	@RequestMapping(value = "/list/edit/draft", method = RequestMethod.GET)
@@ -188,66 +192,66 @@ public class ArchetypeResourceController extends AbstractResourceController {
 		return constructArchetypeInfoList(files);
 	}
 
-//	@RequestMapping(value = "/list/edit/draft", method = RequestMethod.GET)
-//	public List<ArchetypeInfo> getArchtypeListToEdit(
-//			Authentication authentication) {
-//		Integer number = 1;
-//		String fileName = "src/test/resources/";
-//		List<ArchetypeInfo> archetypeInfoList = new ArrayList<ArchetypeInfo>();
-//	    List<File> fileList = new ArrayList<File>();
-//		File archetypeFile = new File(fileName + number + ".adl");
-//		while(archetypeFile.isFile()){
-//			System.out.println("open File successfully");
-//			fileList.add(archetypeFile);
-//			number++;
-//			archetypeFile = new File(fileName + number + ".adl");
-//		}
-//		BufferedReader reader = null;
-//		int line = 1;
-//	//	try{
-//		for (File file : fileList) {
-//			try {
-//				reader = new BufferedReader(new FileReader(file));
-//
-//				String tempString = "";
-//				
-//                String adl = "";
-//				while ((tempString = reader.readLine()) != null) {
-//					adl += tempString;
-//					adl += "\r\n";
-//					line++;
-//				}
-//				line = 1;
-//
-//				ArchetypeInfo info = new ArchetypeInfo();
-//				
-//				info.setAdl(adl);
-//				ADLParser parser;
-//
-//				parser = new ADLParser(file);
-//
-//				Archetype arc;
-//
-//				arc = parser.parse();
-//
-//				info.setXml(this.xmlSerializer.output(arc));
-//
-//				archetypeInfoList.add(info);
-//
-//			} catch (FileNotFoundException e) {
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//			} catch (IOException e) {
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//			} catch (Exception e) {
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//			}
-//		}
-//		System.out.println(archetypeInfoList.size());
-//	    return archetypeInfoList;
-//	}
+	// @RequestMapping(value = "/list/edit/draft", method = RequestMethod.GET)
+	// public List<ArchetypeInfo> getArchtypeListToEdit(
+	// Authentication authentication) {
+	// Integer number = 1;
+	// String fileName = "src/test/resources/";
+	// List<ArchetypeInfo> archetypeInfoList = new ArrayList<ArchetypeInfo>();
+	// List<File> fileList = new ArrayList<File>();
+	// File archetypeFile = new File(fileName + number + ".adl");
+	// while(archetypeFile.isFile()){
+	// System.out.println("open File successfully");
+	// fileList.add(archetypeFile);
+	// number++;
+	// archetypeFile = new File(fileName + number + ".adl");
+	// }
+	// BufferedReader reader = null;
+	// int line = 1;
+	// // try{
+	// for (File file : fileList) {
+	// try {
+	// reader = new BufferedReader(new FileReader(file));
+	//
+	// String tempString = "";
+	//
+	// String adl = "";
+	// while ((tempString = reader.readLine()) != null) {
+	// adl += tempString;
+	// adl += "\r\n";
+	// line++;
+	// }
+	// line = 1;
+	//
+	// ArchetypeInfo info = new ArchetypeInfo();
+	//
+	// info.setAdl(adl);
+	// ADLParser parser;
+	//
+	// parser = new ADLParser(file);
+	//
+	// Archetype arc;
+	//
+	// arc = parser.parse();
+	//
+	// info.setXml(this.xmlSerializer.output(arc));
+	//
+	// archetypeInfoList.add(info);
+	//
+	// } catch (FileNotFoundException e) {
+	// // TODO Auto-generated catch block
+	// e.printStackTrace();
+	// } catch (IOException e) {
+	// // TODO Auto-generated catch block
+	// e.printStackTrace();
+	// } catch (Exception e) {
+	// // TODO Auto-generated catch block
+	// e.printStackTrace();
+	// }
+	// }
+	// System.out.println(archetypeInfoList.size());
+	// return archetypeInfoList;
+	// }
 
 	@RequestMapping(value = "/list/edit/published", method = RequestMethod.GET)
 	public List<ArchetypeInfo> getArchtypeListToEdit() {
@@ -277,6 +281,15 @@ public class ArchetypeResourceController extends AbstractResourceController {
 			throws Exception {
 		ArchetypeRevisionFile file = this.archetypeProvideService
 				.getArchetypeRevisionFileByName(name);
+		this.isResourcesNull(file);
+		return this.constructArchetypeInfo(file);
+	}
+
+	@RequestMapping(value = "/versionmastername/{name}", method = RequestMethod.GET)
+	public ArchetypeInfo getArchtypeByVersionMasterName(
+			@PathVariable String name) throws Exception {
+		ArchetypeRevisionFile file = this.archetypeProvideService
+				.getArchetypeVersionMasterByName(name).getLatestRevisionFile();
 		this.isResourcesNull(file);
 		return this.constructArchetypeInfo(file);
 	}
@@ -428,15 +441,15 @@ public class ArchetypeResourceController extends AbstractResourceController {
 
 	@RequestMapping(value = "/action/edit/id/{id}", method = RequestMethod.POST)
 	public FileUploadResult editFile(@PathVariable int id,
-			@RequestBody AdlInfo info,
-			Authentication authentication) {
+			@RequestBody AdlInfo info, Authentication authentication) {
 		System.out.println(info.getAdl());
 		FileUploadResult result = new FileUploadResult();
 		result.setSucceeded(true);
 		String userName = ((UserDetails) authentication.getPrincipal())
 				.getUsername();
 		User user = this.userService.getUserByName(userName);
-		//String fileAdl = this.archetypeProvideService.getArchetypeAdlById(id);
+		// String fileAdl =
+		// this.archetypeProvideService.getArchetypeAdlById(id);
 		String fileAdl = info.getAdl();
 		try {
 			this.archetypeVersionControlService
@@ -449,6 +462,24 @@ public class ArchetypeResourceController extends AbstractResourceController {
 		return result;
 	}
 
+//	@RequestMapping(value = "/action/fallback/id/{id}", method = RequestMethod.GET)
+//	public FileUploadResult fallbackArchetype(@PathVariable int id,
+//			Authentication authentication) {
+//		FileUploadResult result = new FileUploadResult();
+//		result.setSucceeded(true);
+//		String userName = ((UserDetails) authentication.getPrincipal())
+//				.getUsername();
+//		User user = this.userService.getUserByName(userName);
+//		try {
+//			this.archetypeVersionControlService.fallbackArchetype(id, user);
+//		} catch (Exception ex) {
+//			result.setMessage(ex.getMessage());
+//			result.setSucceeded(false);
+//			return result;
+//		}
+//		return result;
+//	}
+	
 	@RequestMapping(value = "/action/submit/id/{id}", method = RequestMethod.GET)
 	public FileUploadResult submitArchrtype(@PathVariable int id,
 			Authentication authentication) {
@@ -516,6 +547,24 @@ public class ArchetypeResourceController extends AbstractResourceController {
 					user);
 		} catch (Exception ex) {
 			result.setMessage(ex.getMessage());
+			result.setSucceeded(false);
+			return result;
+		}
+		return result;
+	}
+
+	@RequestMapping(value = "/action/fallback/id/{id}", method = RequestMethod.GET)
+	public FileUploadResult fallbackFile(@PathVariable int id,
+			Authentication authentication) {
+		FileUploadResult result = new FileUploadResult();
+		result.setSucceeded(true);
+		String userName = ((UserDetails) authentication.getPrincipal())
+				.getUsername();
+		User user = this.userService.getUserByName(userName);
+		try {
+			this.archetypeVersionControlService.fallbackArchetype(id, user);
+		} catch (Exception e) {
+			result.setMessage(e.getMessage());
 			result.setSucceeded(false);
 			return result;
 		}

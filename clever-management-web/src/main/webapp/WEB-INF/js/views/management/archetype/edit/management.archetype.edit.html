@@ -163,6 +163,9 @@
 					<li  class="side-menu-item"  ng-click="batchSubmit()" tooltip-placement="right" tooltip="{{'MANAGEMENT_ARCHETYPE_EDIT_TOOTIP_BATCHPROCESS' | translate}}" tooltip-popup-delay="500">
 						<a href="" class="menu-item-content">{{'ARCHETYPE_EDIT_BATCHSUBMIT' | translate}}<!-- <span class="icon-puzzle-piece tool-menu" style="color: #777;"> </span> --></a>
 					</li>
+					<li  ng-if="selectedArchetype.lifecycleState=='Published'" class="side-menu-item"  ng-click="fallbackArchetype()" tooltip-placement="right" tooltip="{{'MANAGEMENT_ARCHETYPE_EDIT_TOOTIP_FALLBACK' | translate}}" tooltip-popup-delay="500">
+						<a href="" class="menu-item-content">{{'ARCHETYPE_EDIT_FALLBACK' | translate}}<!-- <span class="icon-puzzle-piece tool-menu" style="color: #777;"> </span> --></a>
+					</li>
 				</ul>
 			</div>
 		</div>

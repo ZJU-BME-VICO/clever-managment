@@ -143,12 +143,16 @@ public class StorageTemplateVersionControlServiceImpl implements
 		// String specialiseArcVersionMasterName = WordUtils
 		// .extractVersionMasterName(oet.getTemplate().getDefinition()
 		// .getArchetypeId());
+		
+		
+		//previously we use the archetype id to find the specialise archetype, but when we publish a new version archetype, its difficult to 
+		//update the archetype id 
 		ArchetypeVersionMaster specialiseArchetypeVersionMaster = this.archetypeVersionMasterRepo
 				.findByName(name);
 
 		if (specialiseArchetypeVersionMaster == null) {
 			throw new VersionControlException(
-					"Can not find specialise archetype");
+					"Can not find specialise archetype: " + name);
 		}
 
 		// Set template master basic info

@@ -1,4 +1,4 @@
-function ArchetypeEditCtrl($scope, $modal,$log, $q, $timeout, msgboxService,busyService,archetypeEditService,documentDiffModalService, resourceService,archetypeParseEditService,templateParseToEditService,archetypeSerializeService, archetypeParseService, treeDataFormatService, ARCHETYPE_LIST_EDIT_DRAFT_URL, ARCHETYPE_LIST_EDIT_PUBLISHED_URL, ARCHETYPE_CREATE_BY_URL,  ARCHETYPE_EDIT_BY_ID_URL, ARCHETYPE_SUBMIT_BY_ID_URL,ARCHETYPE_REMOVE_BY_ID_URL) {
+function ArchetypeEditCtrl($scope, $modal,$log, $q, $timeout, msgboxService,busyService,archetypeEditService,documentDiffModalService, resourceService,archetypeParseEditService,templateParseToEditService,archetypeSerializeService, archetypeParseService, treeDataFormatService, ARCHETYPE_LIST_EDIT_DRAFT_URL, ARCHETYPE_LIST_EDIT_PUBLISHED_URL, ARCHETYPE_CREATE_BY_URL,AECHETYPE_FALLBACK_BY_ID_URL,  ARCHETYPE_EDIT_BY_ID_URL, ARCHETYPE_SUBMIT_BY_ID_URL,ARCHETYPE_REMOVE_BY_ID_URL) {
     
    
 	$scope.treeControl = {};
@@ -176,8 +176,42 @@ $scope.draftArchetypeList = "list";
 			}
 		});
 	}; 
-
-	
+  
+  $scope.fallbackArchetype = function(){
+  	var bid = busyService.pushBusy('BUSY_LOADING');
+  	resourceService.get(AECHETYPE_FALLBACK_BY_ID_URL + $scope.selectedArchetype.id).then(function(result){
+  		busyService.popBusy(bid);
+  		if (result.succeeded) {
+				msgboxService.createMessageBox('ARCHETYPE_EDIT_SUCCEEDED', 'ARCHETYPE_FALLBACK_SUCCEEDE_HINT', {}, 'success');
+				$scope.selectedArchetype.lifecycleState = "Draft";
+			} else {
+				msgboxService.createMessageBox('ARCHETYPE_EDIT_FAILED', 'ARCHETYPE_FALLBACK_FAILED_HINT', {
+					errorMsg : result.message
+				}, "error");
+			}
+  	 });
+  };
+	// $scope.fallbackArchetype = function(size) {
+		// var modalInstance = $modal.open({
+			// animation : true, //animations on
+			// templateUrl : 'archetypeCreate.html',
+			// controller : function ArchetypeCreateCtrl($scope, $modalInstance) {
+				// $scope.ok = function() {
+					// $modalInstance.close({				
+					// });
+				// };
+				// $scope.cancel = function() {
+					// $modalInstance.dismiss('cancel');
+				// };
+			// },
+			// size : size,
+			// resolve : {
+			// }
+		// });
+		// modalInstance.result.then(function(message) {// modal message back
+		// });
+// 
+	// };
 	
     $scope.definitionExpandedAll = {      
             value : false,  

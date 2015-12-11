@@ -15,9 +15,11 @@ var config = {
 	'ARCHETYPE_APPROVE_BY_ID_URL' : prefix + '/archetypes/action/approve/id/',
 	'ARCHETYPE_REJECT_BY_ID_URL' : prefix + '/archetypes/action/reject/id/',
 	'ARCHETYPE_REMOVE_BY_ID_URL' : prefix + '/archetypes/action/remove/id/',
+	'AECHETYPE_FALLBACK_BY_ID_URL' : prefix + '/archetypes/action/fallback/id/',
 	'ARCHETYPE_MASTER_BY_ID_URL' : prefix + '/archetypes/master/id/',
 	'ARCHETYPE_BY_ID_URL' : prefix + '/archetypes/id/',
 	'ARCHETYPE_BY_NAME_URL' : prefix + '/archetypes/name/',
+	'ARCHETYPE_BY_VERSION_MASTER_NAME_URL' : prefix + '/archetypes/versionmastername/',
 	'STORAGE_TEMPLATE_LIST_URL' :prefix +'/templates/storage/list',
 	'STORAGE_TEMPLATE_MASTER_BY_ID_URL' : prefix + '/templates/storage/master/id/',
 	'STORAGE_TEMPLATE_BY_NAME_URL' : prefix + '/templates/storage/name/',
@@ -58,7 +60,7 @@ var config = {
     'DEVELOPMENT_API_DISPLAY_REQUESTPARAM_DETAILS' : prefix + '/development/api/display/requestparam/details/',
     'DEVELOPMENT_API_DISPLAY_RETURNPARAM_DETAILS' : prefix + '/development/api/display/returnparam/details/',
     'DEVELOPMENT_API_DISPLAY_PARAM_DETAILS' : prefix + '/development/api/display/param/details/',
-
+    
   
 };
 var configModel = angular.module('clever.management.config', []);

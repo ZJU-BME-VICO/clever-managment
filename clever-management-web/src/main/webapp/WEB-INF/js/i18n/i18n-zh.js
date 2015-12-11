@@ -63,6 +63,8 @@ angular.module('clever.management.i18n.zh', ['pascalprecht.translate']).config(f
 
 		// Archetype edit
 		MANAGEMENT_ARCHETYPE_EDIT_TOOTIP_BATCHPROCESS : '批量提交',
+		MANAGEMENT_ARCHETYPE_EDIT_TOOTIP_FALLBACK : '状态回退',
+		ARCHETYPE_EDIT_FALLBACK : '回退',
 		ARCHETYPE_EDIT_BATCHSUBMIT : '批量',
 		ARCHETYPE_EDIT_CREATE : '创建',
 		ARCHETYPE_EDIT_SAVE : '保存',
@@ -77,6 +79,8 @@ angular.module('clever.management.i18n.zh', ['pascalprecht.translate']).config(f
 		ARCHETYPE_EDIT_FAILED : '操作失败',
 		ARCHETYPE_EDIT_EDIT_SUCCEEDED_HINT : '成功编辑原型',
 		ARCHETYPE_EDIT_SAVE_SUCCEEDED_HINT : '原型保存成功',
+		ARCHETYPE_FALLBACK_SUCCEEDE_HINT : '回退原型状态成功',
+		ARCHETYPE_FALLBACK_FAILED_HINT : '回退原型状态失败',
 		
 		//ARCHETYPE_EDIT_SUBMIT_SUCCEEDED_HINT : '原型提交成功',
 		ARCHETYPE_EDIT_EDIT_FAILED_HINT : '编辑原型失败,错误: {{errorMsg}}',
