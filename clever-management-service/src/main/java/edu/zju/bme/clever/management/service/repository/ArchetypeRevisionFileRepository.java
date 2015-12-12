@@ -13,6 +13,8 @@ public interface ArchetypeRevisionFileRepository extends
 		JpaRepository<ArchetypeRevisionFile, Integer> {
 	public ArchetypeRevisionFile findByName(String name);
 	
+	public List<ArchetypeRevisionFile> findBySpecialiseArchetypeRevisionFileId(Integer id);
+	
 	public List<ArchetypeRevisionFile> findByLifecycleState(LifecycleState lifecycleState);
 	
     //@Query("from ArchetypeRevisionFile file left join fetch file.specialiseArchetypeRevisionFile")

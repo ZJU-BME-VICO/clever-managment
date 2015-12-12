@@ -288,8 +288,20 @@ public class ArchetypeResourceController extends AbstractResourceController {
 	@RequestMapping(value = "/versionmastername/{name}", method = RequestMethod.GET)
 	public ArchetypeInfo getArchtypeByVersionMasterName(
 			@PathVariable String name) throws Exception {
-		ArchetypeRevisionFile file = this.archetypeProvideService
-				.getArchetypeVersionMasterByName(name).getLatestRevisionFile();
+		ArchetypeRevisionFile file = null;
+		try {
+			ArchetypeVersionMaster versionMaster = this.archetypeProvideService
+				.getArchetypeVersionMasterByName(name);
+			if(versionMaster!=null){
+				file = versionMaster.getLatestPublishedRevisionFile();
+				if(file == null){
+					file = versionMaster.getLatestRevisionFile();
+				}
+			}
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
 		this.isResourcesNull(file);
 		return this.constructArchetypeInfo(file);
 	}

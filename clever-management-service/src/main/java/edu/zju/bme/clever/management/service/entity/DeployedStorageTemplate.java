@@ -39,11 +39,11 @@ public class DeployedStorageTemplate extends AbstractIndentifiedEntity {
 	private TemplateRevisionFile originalTemplate;
 	@ManyToOne(fetch = FetchType.LAZY)
 	private DeployRecord deployRecord;
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "storageTemplate")
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "storageTemplate", orphanRemoval = true)
 	private List<EntityClassSource> entityClassSources = new ArrayList<EntityClassSource>();
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "sourceTemplate")
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "sourceTemplate", orphanRemoval = true)
 	private List<EntityRelationship> forwardRelationships = new ArrayList<EntityRelationship>();
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "destinationTemplate")
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "destinationTemplate", orphanRemoval = true)
 	private List<EntityRelationship> backwardRelationships = new ArrayList<EntityRelationship>();
 
 	public String getName() {

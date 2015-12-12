@@ -1,4 +1,4 @@
-function StorageTemplateEditCtrl($scope, $modal, $stateParams, $timeout, treeDataFormatService, resourceService, busyService, msgboxService, treeDataFormatService, templateCreateService, templateParseToEditService, archetypeParseService, documentDiffModalService, STORAGE_TEMPLATE_LIST_EDIT_DRAFT_URL, STORAGE_TEMPLATE_LIST_EDIT_PUBLISHED_URL, STORAGE_TEMPLATE_SUBMIT_BY_ID_URL, STORAGE_TEMPLATE_EDIT_BY_ID_URL, ARCHETYPE_LIST_REFERENCE_URL, STORAGE_TEMPLATE_BY_ID_URL, STORAGE_TEMPLATE_CREATE_URL) {
+function StorageTemplateEditCtrl($scope, $modal, $stateParams, $timeout, treeDataFormatService, resourceService, busyService, msgboxService, treeDataFormatService, templateCreateService, templateParseToEditService, archetypeParseService, documentDiffModalService, STORAGE_TEMPLATE_FALLBACK_BY_ID_URL, STORAGE_TEMPLATE_LIST_EDIT_DRAFT_URL, STORAGE_TEMPLATE_LIST_EDIT_PUBLISHED_URL, STORAGE_TEMPLATE_SUBMIT_BY_ID_URL, STORAGE_TEMPLATE_EDIT_BY_ID_URL, ARCHETYPE_LIST_REFERENCE_URL, STORAGE_TEMPLATE_BY_ID_URL, STORAGE_TEMPLATE_CREATE_URL) {
 
 	$scope.treeControl = {};
 	//	$scope.arcTreeControl = {};
@@ -169,7 +169,6 @@ function StorageTemplateEditCtrl($scope, $modal, $stateParams, $timeout, treeDat
 				parent = parent.parent;
 			}
 		}
-
 		if (resultNode) {
 			if (resultNode.parent) {
 				var topPath = constructNodePath(resultNode.parent);
@@ -186,6 +185,9 @@ function StorageTemplateEditCtrl($scope, $modal, $stateParams, $timeout, treeDat
 		}
 	}
 
+    // function constructPathForNodeLength(node){
+//     	
+    // }
 
 	$scope.generateOetDiff = function() {
 		var xmlDocStr = x2js.json2xml_str($scope.oetObj);
@@ -863,6 +865,21 @@ function StorageTemplateEditCtrl($scope, $modal, $stateParams, $timeout, treeDat
 		});
 	};
 
+	$scope.fallbackTemplate = function() {
+		var bid = busyService.pushBusy('BUSY_LOADING');
+		resourceService.get(STORAGE_TEMPLATE_FALLBACK_BY_ID_URL + $scope.selectedTemplate.id).then(function(result) {
+			busyService.popBusy(bid);
+			console.log(result);
+			if (result.succeeded) {
+				msgboxService.createMessageBox('ARCHETYPE_EDIT_SUCCEEDED', 'ARCHETYPE_FALLBACK_SUCCEEDE_HINT', {}, 'success');
+				$scope.selectedTemplate.lifecycleState = "TeamReview";
+			} else {
+				msgboxService.createMessageBox('ARCHETYPE_EDIT_FAILED', 'ARCHETYPE_FALLBACK_FAILED_HINT', {
+					errorMsg : result.message
+				}, "error");
+			}
+		});
+	};
 	function formatXml(xml) {
 		var formatted = '';
 		var reg = /(>)(<)(\/*)/g;

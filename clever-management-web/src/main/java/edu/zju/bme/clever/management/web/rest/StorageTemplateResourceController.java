@@ -12,7 +12,10 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
+
+
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -133,7 +136,7 @@ public class StorageTemplateResourceController extends
 		String userName = ((UserDetails) authentication.getPrincipal())
 				.getUsername();
 		User user = userService.getUserByName(userName);
-		List<TemplateRevisionFile> templateFiles = this.provideService
+		Set<TemplateRevisionFile> templateFiles = this.provideService
 				.getDraftTemplateFilesToEdit(user);
 		this.isResourcesNull(templateFiles);
 		return templateFiles.stream()
@@ -143,7 +146,7 @@ public class StorageTemplateResourceController extends
 
 	@RequestMapping(value = "/list/edit/published", method = RequestMethod.GET)
 	public List<StorageTemplateInfo> getTemplateListToEdit() {
-		List<TemplateRevisionFile> templateFiles = this.provideService
+		Set<TemplateRevisionFile> templateFiles = this.provideService
 				.getLatestPublishedTemplateFilesToEdit();
 		this.isResourcesNull(templateFiles);
 		return templateFiles.stream()
@@ -169,8 +172,9 @@ public class StorageTemplateResourceController extends
 			Authentication authentication) {
 		// Validate user authority
 
-		List<TemplateMaster> masters = this.provideService
+		Set<TemplateMaster> masters = this.provideService
 				.getAllStorageTemplateMasters();
+		System.out.println(masters.size());
 		return masters
 				.stream()
 				.map(master -> {
@@ -333,6 +337,23 @@ public class StorageTemplateResourceController extends
 		result.setSucceeded(true);
 		try {
 			this.versionControlService.rejectAndRemoveTemplate(id, user);
+		} catch (VersionControlException e) {
+			result.setMessage(e.getMessage());
+			result.setSucceeded(false);
+		}
+		return result;
+	}
+
+	@RequestMapping(value = "/action/fallback/id/{id}", method = RequestMethod.GET)
+	public FileUploadResult fallbackTemplateFile(@PathVariable int id,
+			Authentication authentication) {
+		String userName = ((UserDetails) authentication.getPrincipal())
+				.getUsername();
+		User user = this.userService.getUserByName(userName);
+		FileUploadResult result = new FileUploadResult();
+		result.setSucceeded(true);
+		try {
+			this.versionControlService.fallbackTemplate(id, user);
 		} catch (VersionControlException e) {
 			result.setMessage(e.getMessage());
 			result.setSucceeded(false);

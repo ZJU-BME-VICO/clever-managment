@@ -183,7 +183,7 @@ $scope.draftArchetypeList = "list";
   		busyService.popBusy(bid);
   		if (result.succeeded) {
 				msgboxService.createMessageBox('ARCHETYPE_EDIT_SUCCEEDED', 'ARCHETYPE_FALLBACK_SUCCEEDE_HINT', {}, 'success');
-				$scope.selectedArchetype.lifecycleState = "Draft";
+				$scope.selectedArchetype.lifecycleState = "Teamreview";
 			} else {
 				msgboxService.createMessageBox('ARCHETYPE_EDIT_FAILED', 'ARCHETYPE_FALLBACK_FAILED_HINT', {
 					errorMsg : result.message

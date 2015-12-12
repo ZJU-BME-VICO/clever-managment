@@ -1,6 +1,7 @@
 package edu.zju.bme.clever.management.service.repository;
 
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -16,7 +17,8 @@ public interface TemplateRevisionFileRepository extends
 		JpaRepository<TemplateRevisionFile, Integer> {
 
 	public TemplateRevisionFile findByName(String name);
-
+    
+	public List<TemplateRevisionFile> findBySpecialiseArchetypeRevisionFileId(Integer id);
 	public List<TemplateRevisionFile> findByLifecycleState(LifecycleState state);
 
 	public List<TemplateRevisionFile> findByTemplateTypeAndLifecycleState(
@@ -29,10 +31,10 @@ public interface TemplateRevisionFileRepository extends
 			TemplateType templateType, User user, LifecycleState lifecycleState);
 
 	@Query("select file from TemplateRevisionFile file left join fetch file.editor left join fetch file.templateMaster left join fetch file.properties where file.templateType = ?1 and file.editor = ?2 and file.lifecycleState = ?3")
-	public List<TemplateRevisionFile> findByTemplateTypeAndEditorAndLifecycleStateFetchAll(
+	public Set<TemplateRevisionFile> findByTemplateTypeAndEditorAndLifecycleStateFetchAll(
 			TemplateType templateType, User user, LifecycleState lifecycleState);
 
 	@Query("select file from TemplateRevisionFile file left join fetch file.editor left join fetch file.templateMaster left join fetch file.properties where file.templateType = ?1 and file.lifecycleState = ?2")
-	public List<TemplateRevisionFile> findByTemplateTypeAndLifecycleStateFetchAll(
+	public Set<TemplateRevisionFile> findByTemplateTypeAndLifecycleStateFetchAll(
 			TemplateType templateType, LifecycleState lifecycleState);
 }

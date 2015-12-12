@@ -16,8 +16,8 @@ function ApiViewCtr($scope, $document,$timeout, resourceService, DEVELOPMENT_API
 			if (angular.isArray(list)) {
 				$scope.selectedCategory = list[0];
 				if (angular.isArray(list[0].versionList)) {
-					$scope.selectedVersion = list[0].versionList[0];
-					$scope.getApiListById($scope.selectedCategory.id, $scope.selectedVersion);
+					//$scope.selectedVersion = list[0].versionList[0];
+					//$scope.getApiListById($scope.selectedCategory.id, $scope.selectedVersion);
 				}
 			}
 			busyService.popBusy(bid);
@@ -70,8 +70,8 @@ function ApiViewCtr($scope, $document,$timeout, resourceService, DEVELOPMENT_API
 	//get data from backend with master id and version
 	$scope.getApiListById = function(categoryId, version) {
 		var bid = busyService.pushBusy('BUSY_LOADING');
-		//resourceService.get(DEVELOPMENT_API_DISPLAY_MASTER_URL + "/" + categoryId + "/" + version).then(function(apiList) {
-			resourceService.get(DEVELOPMENT_API_DISPLAY_MASTER_URL + "/" + 3 + "/" + 1).then(function(apiList) {
+		resourceService.get(DEVELOPMENT_API_DISPLAY_MASTER_URL + "/" + categoryId + "/" + version).then(function(apiList) {
+			// resourceService.get(DEVELOPMENT_API_DISPLAY_MASTER_URL + "/" + 3 + "/" + 1).then(function(apiList) {
 			$scope.apiList = apiList;
 			$scope.stretchState = 'EXPAND_ALL';
 			busyService.popBusy(bid);

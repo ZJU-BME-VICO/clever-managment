@@ -6,6 +6,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
@@ -80,7 +81,7 @@ public class StorageTemplateProvideServiceImpl implements
 	}
 
 	@Override
-	public List<TemplateMaster> getAllStorageTemplateMasters() {
+	public Set<TemplateMaster> getAllStorageTemplateMasters() {
 		return this.TemplateMasterRepo
 				.findByTemplateTypeFetchRevisionFiles(TemplateType.STORAGE);
 	}
@@ -122,14 +123,14 @@ public class StorageTemplateProvideServiceImpl implements
 	}
 
 	@Override
-	public List<TemplateRevisionFile> getDraftTemplateFilesToEdit(User user) {
+	public Set<TemplateRevisionFile> getDraftTemplateFilesToEdit(User user) {
 		return this.templateFileRepo
 				.findByTemplateTypeAndEditorAndLifecycleStateFetchAll(
 						TemplateType.STORAGE, user, LifecycleState.DRAFT);
 	}
 
 	@Override
-	public List<TemplateRevisionFile> getLatestPublishedTemplateFilesToEdit() {
+	public Set<TemplateRevisionFile> getLatestPublishedTemplateFilesToEdit() {
 		return this.templateFileRepo
 				.findByTemplateTypeAndLifecycleStateFetchAll(
 						TemplateType.STORAGE, LifecycleState.PUBLISHED);

@@ -17,7 +17,6 @@ public interface ApiMasterRepository extends JpaRepository<ApiMaster, Integer> {
 	@Query("select master from ApiMaster master left join fetch master.versionMasters left join fetch master.latestVersionMaster where master.name = ?1")
 	public ApiMaster findByNameFetchAll(String name);
 	
-	
 	public ApiMaster findByName(String name);
 
 	public ApiMaster findById(Integer Id);

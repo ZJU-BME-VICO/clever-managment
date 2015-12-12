@@ -9,6 +9,7 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.function.Function;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -32,6 +33,7 @@ import edu.zju.bme.clever.commons.util.WordUtils;
 import edu.zju.bme.clever.management.service.entity.ActionType;
 import edu.zju.bme.clever.management.service.entity.ArchetypeRevisionFile;
 import edu.zju.bme.clever.management.service.entity.ArchetypeVersionMaster;
+import edu.zju.bme.clever.management.service.entity.DeployedStorageTemplate;
 import edu.zju.bme.clever.management.service.entity.EntityClassSource;
 import edu.zju.bme.clever.management.service.entity.LifecycleState;
 import edu.zju.bme.clever.management.service.entity.TemplateActionLog;
@@ -43,6 +45,7 @@ import edu.zju.bme.clever.management.service.entity.User;
 import edu.zju.bme.clever.management.service.exception.VersionControlException;
 import edu.zju.bme.clever.management.service.repository.ArchetypeRevisionFileRepository;
 import edu.zju.bme.clever.management.service.repository.ArchetypeVersionMasterRepository;
+import edu.zju.bme.clever.management.service.repository.DeployedStorageTemplateRepository;
 import edu.zju.bme.clever.management.service.repository.EntityClassSourceRepository;
 import edu.zju.bme.clever.management.service.repository.TemplateActionLogRepository;
 import edu.zju.bme.clever.management.service.repository.TemplateMasterRepository;
@@ -66,7 +69,8 @@ public class StorageTemplateVersionControlServiceImpl implements
 	private ArchetypeRevisionFileRepository archetypeFileRepo;
 	@Autowired
 	private TemplateActionLogRepository templateActionLogRepo;
-
+	@Autowired
+	private DeployedStorageTemplateRepository delopyedStorageTemplateRepo;
 	@Autowired
 	private ArchetypeVersionMasterRepository archetypeVersionMasterRepo;
 
@@ -119,41 +123,28 @@ public class StorageTemplateVersionControlServiceImpl implements
 		TemplateMaster master = new TemplateMaster();
 		// Validate specialise archetype
 
-		// String specialiseArchetypeName = oet.getTemplate().getDefinition()
-		// .getArchetypeId();
-		//
-		//
-		// ArchetypeRevisionFile specialiseArchetype = this.archetypeFileRepo
-		// .findByName(specialiseArchetypeName);
-		//
-		// // Whether exist
-		// if (specialiseArchetype == null) {
-		// throw new VersionControlException(
-		// "Cannot find specialise archetype");
-		// }
-		// // Whether specialise the specific archetype version master
-		// ArchetypeVersionMaster specialiseArchetypeVersionMaster =
-		// specialiseArchetype
-		// .getVersionMaster();
-		// if (!specialiseArchetypeVersionMaster.getName().equals(name)) {
-		// throw new VersionControlException("Template master name should be "
-		// + specialiseArchetypeVersionMaster.getName());
-		// }
-		//
+		String specialiseArchetypeName = oet.getTemplate().getDefinition()
+				.getArchetypeId();
+
+		ArchetypeRevisionFile specialiseArchetype = this.archetypeFileRepo
+				.findByName(specialiseArchetypeName);
+
+		// Whether exist
+		if (specialiseArchetype == null) {
+			throw new VersionControlException(
+					"Cannot find specialise archetype");
+		}
+		// Whether specialise the specific archetype version master
+		ArchetypeVersionMaster specialiseArchetypeVersionMaster = specialiseArchetype
+				.getVersionMaster();
+		if (!specialiseArchetypeVersionMaster.getName().equals(name)) {
+			throw new VersionControlException("Template master name should be "
+					+ specialiseArchetypeVersionMaster.getName());
+		}
+
 		// String specialiseArcVersionMasterName = WordUtils
 		// .extractVersionMasterName(oet.getTemplate().getDefinition()
 		// .getArchetypeId());
-		
-		
-		//previously we use the archetype id to find the specialise archetype, but when we publish a new version archetype, its difficult to 
-		//update the archetype id 
-		ArchetypeVersionMaster specialiseArchetypeVersionMaster = this.archetypeVersionMasterRepo
-				.findByName(name);
-
-		if (specialiseArchetypeVersionMaster == null) {
-			throw new VersionControlException(
-					"Can not find specialise archetype: " + name);
-		}
 
 		// Set template master basic info
 		RESOURCEDESCRIPTIONITEM details = oet.getTemplate().getDescription()
@@ -190,46 +181,34 @@ public class StorageTemplateVersionControlServiceImpl implements
 		TemplateRevisionFile latestRevisionFile = master
 				.getLatestRevisionFile();
 		// Validate specialise archetype
-		// String specialiseArchetypeName = oet.getTemplate().getDefinition()
-		// .getArchetypeId();
-		// ArchetypeRevisionFile specialiseArchetype = this.archetypeFileRepo
-		// .findByName(specialiseArchetypeName);
+		String specialiseArchetypeName = oet.getTemplate().getDefinition()
+				.getArchetypeId();
+		ArchetypeRevisionFile specialiseArchetype = this.archetypeFileRepo
+				.findByName(specialiseArchetypeName);
 
-		// content in archetype_id attribute should be archetype versiona master
-		// name
-		String specialiseArchetypeVersionMasterName = WordUtils
-				.extractVersionMasterName(oet.getTemplate().getDefinition()
-						.getArchetypeId());
-		// find specialise archetype version master
-		ArchetypeVersionMaster specialiseArchetypeVersionMaster = this.archetypeVersionMasterRepo
-				.findByName(specialiseArchetypeVersionMasterName);
 		// Whether exist
-		// if (specialiseArchetype == null) {
-		// throw new VersionControlException(
-		// "Cannot find specialise archetype");
-		// }
+		if (specialiseArchetype == null) {
+			throw new VersionControlException(
+					"Cannot find specialise archetype");
+		}
 
 		// there should be a archetype version master map to this oet
-		if (specialiseArchetypeVersionMaster == null) {
+		// if (specialiseArchetypeVersionMaster == null) {
+		// throw new VersionControlException(
+		// "Cannot find specialise archetype version master");
+		// }
+		if (specialiseArchetype == null) {
 			throw new VersionControlException(
-					"Cannot find specialise archetype version master");
+					"Cannot find specialise archetype"
+							+ specialiseArchetypeName);
 		}
-
-		// version master should equals versionMaster in template master
-		if (!master.getSpecialiseArchetypeVersionMaster().equals(
-				specialiseArchetypeVersionMaster)) {
+		// Whether specialise the specific archetype version master
+		if (!specialiseArchetype.getVersionMaster().equals(
+				master.getSpecialiseArchetypeVersionMaster())) {
 			throw new VersionControlException(
 					"Specialise archetype should be one of the revisions of "
-							+ specialiseArchetypeVersionMaster.getName());
+							+ specialiseArchetype.getVersionMaster().getName());
 		}
-
-		// Whether specialise the specific archetype version master
-		// if (!specialiseArchetype.getVersionMaster().equals(
-		// master.getSpecialiseArchetypeVersionMaster())) {
-		// throw new VersionControlException(
-		// "Specialise archetype should be one of the revisions of "
-		// + specialiseArchetype.getVersionMaster().getName());
-		// }
 
 		Integer nextSerialVersion;
 		if (latestRevisionFile != null) {
@@ -269,8 +248,7 @@ public class StorageTemplateVersionControlServiceImpl implements
 		nextRevisionFile.setSerialVersion(nextSerialVersion);
 		nextRevisionFile.setVersion(master.getVersion() + "."
 				+ nextSerialVersion);
-		ArchetypeRevisionFile specialiseArchetype = specialiseArchetypeVersionMaster
-				.getLatestRevisionFile();
+		
 		nextRevisionFile
 				.setSpecialiseArchetypeRevisionFile(specialiseArchetype);
 		nextRevisionFile
@@ -648,6 +626,102 @@ public class StorageTemplateVersionControlServiceImpl implements
 			this.templateMasterRepo.delete(templateMaster);
 		}
 
+	}
+
+	@Override
+	public void fallbackTemplate(Integer templateId, User user)
+			throws VersionControlException {
+		TemplateRevisionFile templateFile = this.templateFileRepo
+				.findOne(templateId);
+		if (templateFile == null) {
+			throw new VersionControlException("Cannot find template with id: "
+					+ templateId);
+		}
+		this.fallbackTemplate(templateFile, user);
+
+	}
+
+	@Override
+	public void fallbackTemplate(String templateName, User user)
+			throws VersionControlException {
+		TemplateRevisionFile templateFile = this.templateFileRepo
+				.findByName(templateName);
+		if (templateFile == null) {
+			throw new VersionControlException(
+					"Cannot find template with name: " + templateName);
+		}
+		this.fallbackTemplate(templateFile, user);
+	}
+
+	@Override
+	public void fallbackTemplate(TemplateRevisionFile templateFile, User user)
+			throws VersionControlException {
+		// log action
+		logTemplateAction(templateFile, ActionType.FALLBACK, user);
+		// check state
+		if (!templateFile.getLifecycleState().equals(LifecycleState.PUBLISHED)) {
+			throw new VersionControlException(
+					"Illeagal action fallback status for template "
+							+ templateFile.getName()
+							+ " because the archetype's lifecycle state is "
+							+ templateFile.getLifecycleState()
+							+ " instead of Published.");
+
+		}
+		// set master
+		TemplateMaster templateMaster = templateFile.getTemplateMaster();
+		TemplateRevisionFile lastTemplateRevisionFile = templateFile
+				.getLastRevisionFile();
+		if (!templateMaster.getLatestRevisionFile().getVersion()
+				.equals(templateFile.getVersion())) {
+			throw new VersionControlException(
+					"this template file is not the latest serial version file of template master :"
+							+ templateMaster.getName()
+							+ ",the latest serial version is "
+							+ templateMaster.getLatestRevisionFileVersion()
+							+ " Pleases remove that before fallback this one");
+		}
+		if (lastTemplateRevisionFile != null) {// not the last one revision file
+												// of this master, redirect the
+												// master
+			templateMaster.setLatestRevisionFile(lastTemplateRevisionFile);
+			templateMaster
+					.setLatestRevisionFileLifecycleState(lastTemplateRevisionFile
+							.getLifecycleState());
+			templateMaster
+					.setLatestRevisionFileSerialVersion(lastTemplateRevisionFile
+							.getSerialVersion());
+			templateMaster
+					.setLatestRevisionFileVersion(lastTemplateRevisionFile
+							.getVersion());
+			this.templateMasterRepo.save(templateMaster);
+			templateFile.setLifecycleState(LifecycleState.TEAMREVIEW);
+			templateFile.setLastModifyTime(Calendar.getInstance());
+
+			this.templateFileRepo.save(templateFile);
+		} else {// the last one revision file of this master , just fallback
+			templateFile.setLifecycleState(LifecycleState.TEAMREVIEW);
+			templateFile.setLastModifyTime(Calendar.getInstance());
+			templateMaster
+					.setLatestRevisionFileLifecycleState(LifecycleState.TEAMREVIEW);
+			this.templateMasterRepo.save(templateMaster);
+			this.templateFileRepo.save(templateFile);
+		}
+
+		removeDeployedStorageTemplate(templateFile);
+
+	}
+
+	private void removeDeployedStorageTemplate(TemplateRevisionFile templateFile) {
+		Set<DeployedStorageTemplate> templates = this.delopyedStorageTemplateRepo
+				.findByOriginalTemplateId(templateFile.getId());
+		if (templates != null && !templates.isEmpty()) {// remove all records
+														// bind with template
+														// file
+			templates.forEach(template -> {
+				this.delopyedStorageTemplateRepo.delete(template);
+			});
+		}
 	}
 
 	private TemplateDocument parseOet(InputStream oetStream)

@@ -1,0 +1,55 @@
+diff a/clever-management-service/src/main/java/edu/zju/bme/clever/management/service/StorageTemplateVersionControlServiceImpl.java b/clever-management-service/src/main/java/edu/zju/bme/clever/management/service/StorageTemplateVersionControlServiceImpl.java	(rejected hunks)
+@@ -118,22 +118,39 @@
+ 			throws VersionControlException {
+ 		TemplateMaster master = new TemplateMaster();
+ 		// Validate specialise archetype
+-		String specialiseArchetypeName = oet.getTemplate().getDefinition()
+-				.getArchetypeId();
+-		ArchetypeRevisionFile specialiseArchetype = this.archetypeFileRepo
+-				.findByName(specialiseArchetypeName);
+-		// Whether exist
+-		if (specialiseArchetype == null) {
++
++		// String specialiseArchetypeName = oet.getTemplate().getDefinition()
++		// .getArchetypeId();
++		//
++		//
++		// ArchetypeRevisionFile specialiseArchetype = this.archetypeFileRepo
++		// .findByName(specialiseArchetypeName);
++		//
++		// // Whether exist
++		// if (specialiseArchetype == null) {
++		// throw new VersionControlException(
++		// "Cannot find specialise archetype");
++		// }
++		// // Whether specialise the specific archetype version master
++		// ArchetypeVersionMaster specialiseArchetypeVersionMaster =
++		// specialiseArchetype
++		// .getVersionMaster();
++		// if (!specialiseArchetypeVersionMaster.getName().equals(name)) {
++		// throw new VersionControlException("Template master name should be "
++		// + specialiseArchetypeVersionMaster.getName());
++		// }
++		//
++		// String specialiseArcVersionMasterName = WordUtils
++		// .extractVersionMasterName(oet.getTemplate().getDefinition()
++		// .getArchetypeId());
++		ArchetypeVersionMaster specialiseArchetypeVersionMaster = this.archetypeVersionMasterRepo
++				.findByName(name);
++
++		if (specialiseArchetypeVersionMaster == null) {
+ 			throw new VersionControlException(
+-					"Cannot find specialise archetype");
+-		}
+-		// Whether specialise the specific archetype version master
+-		ArchetypeVersionMaster specialiseArchetypeVersionMaster = specialiseArchetype
+-				.getVersionMaster();
+-		if (!specialiseArchetypeVersionMaster.getName().equals(name)) {
+-			throw new VersionControlException("Template master name should be "
+-					+ specialiseArchetypeVersionMaster.getName());
++					"Can not find specialise archetype");
+ 		}
++
+ 		// Set template master basic info
+ 		RESOURCEDESCRIPTIONITEM details = oet.getTemplate().getDescription()
+ 				.getDetails();

@@ -10,7 +10,7 @@ function StorageTemplateDeployCtrl($scope, $state, authenticationService, resour
 		var busyId = busyService.pushBusy('BUSY_LOADING');
 		resourceService.get(STORAGE_TEMPLATE_LIST_DEPLOY_URL).then(function(list) {
 			$scope.templateMasterList = list;
-
+            console.log(list);
 			angular.forEach($scope.templateMasterList, function(master) {
 				master.isSelected = false;
 				master.selectedTemplate = master.templates[0];
@@ -26,7 +26,7 @@ function StorageTemplateDeployCtrl($scope, $state, authenticationService, resour
 		var busyId = busyService.pushBusy('BUSY_LOADING');
 		resourceService.get(DEPLOY_RECORDS_LIST_URL).then(function(list) {
 			$scope.deployRecords = list;
-			console.log(list);
+			//console.log(list);
 			busyService.popBusy(busyId);
 		});
 	}

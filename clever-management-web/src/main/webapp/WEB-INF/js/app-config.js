@@ -28,6 +28,7 @@ var config = {
 	'STORAGE_TEMPLATE_LIST_EDIT_PUBLISHED_URL' : prefix + '/templates/storage/list/edit/published',
 	'STORAGE_TEMPLATE_CREATE_URL' : prefix + '/templates/storage/action/create',
 	'STORAGE_TEMPLATE_SUBMIT_BY_ID_URL' : prefix + '/templates/storage/action/submit/id/',
+	'STORAGE_TEMPLATE_FALLBACK_BY_ID_URL' : prefix + '/templates/storage/action/fallback/id/',
 	'STORAGE_TEMPLATE_EDIT_BY_ID_URL' : prefix + '/templates/storage/action/edit/id/',
 	'STORAGE_TEMPLATE_LIST_VERIFY_URL' : prefix + '/templates/storage/list/verify',
 	'STORAGE_TEMPLATE_APPROVE_BY_ID_URL' : prefix + '/templates/storage/action/approve/id/',
