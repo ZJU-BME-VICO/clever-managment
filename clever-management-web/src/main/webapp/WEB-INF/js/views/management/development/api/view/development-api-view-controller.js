@@ -2,7 +2,7 @@ function ApiViewCtr($scope, $document,$timeout, resourceService, DEVELOPMENT_API
 
 	$scope.treeControl = {};
 	$scope.languages = ['zh', 'en'];
-	$scope.treeLanguage = 'en';
+	$scope.treeLanguage = 'zh';
 	$scope.selectLanguage = function(lan) {
 		$scope.treeLanguage = lan;
 	};
@@ -16,8 +16,8 @@ function ApiViewCtr($scope, $document,$timeout, resourceService, DEVELOPMENT_API
 			if (angular.isArray(list)) {
 				$scope.selectedCategory = list[0];
 				if (angular.isArray(list[0].versionList)) {
-					//$scope.selectedVersion = list[0].versionList[0];
-					//$scope.getApiListById($scope.selectedCategory.id, $scope.selectedVersion);
+					$scope.selectedVersion = list[0].versionList[0];
+					$scope.getApiListById($scope.selectedCategory.id, $scope.selectedVersion);
 				}
 			}
 			busyService.popBusy(bid);
@@ -41,9 +41,9 @@ function ApiViewCtr($scope, $document,$timeout, resourceService, DEVELOPMENT_API
 	};
 
 	// auxiliary operate function, should be optimize
-	var baseTypeList = ['string', 'int', 'dateTime'];
+	var baseTypeList = ['string', 'int', 'datetime'];
 	$scope.getFixClass = function(type) {
-		var temp = type.slice(type.indexOf(":") + 1, type.length);
+		var temp = type.slice(type.indexOf(":") + 1, type.length).toLowerCase();
 		if (baseTypeList.indexOf(temp) != -1) {
 			return temp;
 		} else {
@@ -138,13 +138,13 @@ function ApiViewCtr($scope, $document,$timeout, resourceService, DEVELOPMENT_API
 	});
 	$scope.getRqParamDetails = function(param) {
 		$scope.selectedRqParam = param;
-		resourceService.get(DEVELOPMENT_API_DISPLAY_PARAM_DETAILS + param.id).then(function(details) {
+		resourceService.get(DEVELOPMENT_API_DISPLAY_PARAM_DETAILS + param.type).then(function(details) {
 			$scope.selectedRqParam.details = details;
 		});
 	};
 	$scope.getRtParamDetails = function(param) {
 		$scope.selectedRtParam = param;
-		resourceService.get(DEVELOPMENT_API_DISPLAY_PARAM_DETAILS + param.id).then(function(details) {
+		resourceService.get(DEVELOPMENT_API_DISPLAY_PARAM_DETAILS + param.type).then(function(details) {
 			$scope.selectedRtParam.details = details;
 		});
 

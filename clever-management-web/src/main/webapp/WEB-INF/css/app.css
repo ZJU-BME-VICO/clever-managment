@@ -154,10 +154,10 @@ h3.tag {
 	background-color: rgb(95, 158, 160);
 }
 .button-label.get {
-	background-color: rgb(95, 158, 160);
+	background-color: rgb(94, 38, 18);
 }
 .button-label.delete {
-	background-color: rgb(95, 158, 160);
+	background-color: rgb(227, 23, 13);
 }
 .button-label.put {
 	background-color: rgb(95, 158, 160);
@@ -172,11 +172,11 @@ h3.tag {
 .button-label.int {
 	background: rgb(189, 63, 66);
 }
-.button-label.dateTime {
+.button-label.datetime {
 	background: #F18E9F;
 }
 .button-label.others {
-	background: #333;
+	background: #802A2A;
 }
 .button-label.list {
 	background: #00868B;

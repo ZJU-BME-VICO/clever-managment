@@ -71,20 +71,19 @@
 				</div>
 			</div>
 
-			<div ng-if= "selectedApi" ng-style="{height: containerHeight - 55}" class="col-xs-12 col-md-12 col-lg-12">
+			<div ng-if= "selectedApi" ng-style="{height: containerHeight - 55}" class="col-xs-12 col-md-12 col-lg-12 flex-box">
 				<span ng-switch="treeLanguage"> <span ng-switch-when="en"> <h1 style="margin-top: 15px;" id="api-name">{{selectedApi.name}}</h1>
-						<p style="width: 300px;word-break:break-all; word-wrap:break-all;">
+						<p style="width: 100%;word-break:break-all; word-wrap:break-all;">
 							{{selectedApi.description}}
 						</p> </span> <span ng-switch-when="zh"> <h1 style="margin-top: 15px;" id="api-name">{{selectedApi.chineseName}}</h1>
-						<p style="width: 300px;word-break:break-all; word-wrap:break-all;">
+						<p style="width: 100%;word-break:break-all; word-wrap:break-all;">
 							{{selectedApi.chineseDescription}}
 						</p> </span> </span>
-
 				<hr>
 				<tabset tab-control="tabControl">
 
 					<tab heading="{{'DEVELOPMENT_API_VIEW_API_INFORMATION' | translate}}">
-						<div style="padding: 15px; overflow: auto" ng-style="{height: containerHeight - 170}">
+						<div style="padding: 15px; overflow: auto" ng-style="{height: containerHeight - 210}">
 							<div class="simpleline">
 								<span>{{'DEVELOPEMENT_API_VIEW_URL' | translate}}：</span>
 								<span class="url" id="url">{{selectedApi.url}}</span>
@@ -191,13 +190,13 @@
 									</thead>
 									<tbody>
 										<tr ng-repeat="param in selectedRtParam.details">
-											<td>{{returnParam.name}}</td>
+											<td>{{param.name}}</td>
 											<td><span class="button-label {{getFixClass(param.type)}}">{{getFixTypeName(param.type)}}</span>
 												<button class="btn btn-default"  ng-show="!param.isBaseType" ng-click="getRtParamDetails(param)">&nbsp;&nbsp;&nbsp;
 													<span tooltip-placement="right" tooltip="click to view details" tooltip-popup-delay="500" class="glyphicon glyphicon-eye-open"></span>
 												</button></span>&nbsp;&nbsp;&nbsp;<span ng-if="param.isList" class="button-label list">List</span></td>
-											<td ng-if="treeLanguage=='zh'" >{{returnParam.chineseDescription}}</td>
-											<td ng-if="treeLanguage=='en'" >{{returnParam.description}}</td>
+											<td ng-if="treeLanguage=='zh'" >{{param.chineseDescription}}</td>
+											<td ng-if="treeLanguage=='en'" >{{param.description}}</td>
 										</tr>
 									</tbody>
 								</table>

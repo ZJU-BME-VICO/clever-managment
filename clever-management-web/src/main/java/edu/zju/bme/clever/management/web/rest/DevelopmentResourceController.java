@@ -379,22 +379,37 @@ public class DevelopmentResourceController extends AbstractResourceController {
 
 	// this two function content is same with each other, just for someday some
 	// difference will appear
-	@RequestMapping(value = "/api/display/param/details/{paramId}", method = RequestMethod.GET)
-	public List<ApiParamInfo> fetchRequestParamDetails(
-			@PathVariable Integer paramId) {
-		List<ApiParamInfo> infos = new ArrayList<>();
+	// @RequestMapping(value = "/api/display/param/details/{paramId}", method =
+	// RequestMethod.GET)
+	// public List<ApiParamInfo> fetchRequestParamDetails(
+	// @PathVariable Integer paramId) {
+	// List<ApiParamInfo> infos = new ArrayList<>();
+	//
+	// ClassAttribute attribute = this.apiInfoProvideService
+	// .getClassAttributeById(paramId);
+	// if (attribute != null) {
+	// System.out.println(attribute.getType());
+	// ClassMaster master = this.apiInfoProvideService
+	// .getClassMasterByType(attribute.getType());
+	// if (master != null) {
+	// Set<ClassAttribute> attributeSet = master.getAttributes();
+	// if (attributeSet != null && !attributeSet.isEmpty()) {
+	// infos.addAll(constructParamFromAttributes(attributeSet));
+	// }
+	// }
+	// }
+	// return infos;
+	// }
 
-		ClassAttribute attribute = this.apiInfoProvideService
-				.getClassAttributeById(paramId);
-		if (attribute != null) {
-			System.out.println(attribute.getType());
-			ClassMaster master = this.apiInfoProvideService
-					.getClassMasterByType(attribute.getType());
-			if (master != null) {
-				Set<ClassAttribute> attributeSet = master.getAttributes();
-				if (attributeSet != null && !attributeSet.isEmpty()) {
-					infos.addAll(constructParamFromAttributes(attributeSet));
-				}
+	@RequestMapping(value = "/api/display/param/details/{type}", method = RequestMethod.GET)
+	public List<ApiParamInfo> fetchRequestParamDetails(@PathVariable String type) {
+		List<ApiParamInfo> infos = new ArrayList<>();
+		ClassMaster master = this.apiInfoProvideService
+				.getClassMasterByType(type);
+		if (master != null) {
+			Set<ClassAttribute> attributeSet = master.getAttributes();
+			if (attributeSet != null && !attributeSet.isEmpty()) {
+				infos.addAll(constructParamFromAttributes(attributeSet));
 			}
 		}
 		return infos;
@@ -532,12 +547,17 @@ public class DevelopmentResourceController extends AbstractResourceController {
 				info.setRequired(((RequestParam) param).getRequired());
 			}
 			infoList.add(info);
+		} else if (param.getIsList()!=null && param.getIsList() == true) {
+			ApiParamInfo listInfo = new ApiParamInfo();
+			listInfo.setId(param.getId());
+			listInfo.setType(param.getClassMaster().getType());
+			listInfo.setIsList(true);
+			infoList.add(listInfo);
 		} else {
 			Set<ClassAttribute> attributes = param.getClassMaster()
 					.getAttributes();
 
 			infoList.addAll(constructParamFromAttributes(attributes));
-
 		}
 		return infoList;
 	}
@@ -548,7 +568,6 @@ public class DevelopmentResourceController extends AbstractResourceController {
 		List<ApiParamInfo> tempInfos = attributes.stream().map(attribute -> {
 			return construcParamFromAttribute(attribute);
 		}).collect(Collectors.toList());
-
 		infoList.addAll(tempInfos);
 		return infoList;
 	}

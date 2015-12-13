@@ -794,18 +794,18 @@ public class ArchetypeVersionControlServiceImpl implements
 		this.actionLogRepo.save(log);
 	}
 
-	protected void logTemplateAction(TemplateRevisionFile templateFile,
-			ActionType actionType, User user) {
-		TemplateActionLog log = new TemplateActionLog();
-		log.setActionType(actionType);
-		log.setTemplateMaster(templateFile.getTemplateMaster());
-		log.setVersion(templateFile.getVersion());
-		log.setOperator(user);
-		log.setOperatorName(user.getName());
-		log.setRecordTime(Calendar.getInstance());
-		log.setLifecycleState(templateFile.getLifecycleState());
-		this.templateActionLogRepo.save(log);
-	}
+//	protected void logTemplateAction(TemplateRevisionFile templateFile,
+//			ActionType actionType, User user) {
+//		TemplateActionLog log = new TemplateActionLog();
+//		log.setActionType(actionType);
+//		log.setTemplateMaster(templateFile.getTemplateMaster());
+//		log.setVersion(templateFile.getVersion());
+//		log.setOperator(user);
+//		log.setOperatorName(user.getName());
+//		log.setRecordTime(Calendar.getInstance());
+//		log.setLifecycleState(templateFile.getLifecycleState());
+//		this.templateActionLogRepo.save(log);
+//	}
 
 	// private void transferTemplateFile(ArchetypeVersionMaster versionMaster)
 	// throws VersionControlException {
