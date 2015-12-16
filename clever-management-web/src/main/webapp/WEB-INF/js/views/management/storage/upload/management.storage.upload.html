@@ -105,7 +105,7 @@ tooltip-popup-delay="100">
 			<div class="col-sm-12 col-md-12 col-lg-12">
 				<button ng-show="onStatus('ToAddFile')" class="btn btn-success btn-file">
 					<span class="glyphicon glyphicon-plus"></span> {{'STORAGE_TEMPLATE_UPLOAD_ADD' | translate}}
-					<input id="inputFiles" type="file" multiple accept=".oet, .xml" files-model file-list="fileList">
+					<input id="inputFiles" type="file" multiple accept=".oet,.arm" files-model file-list="fileList">
 				</button>
 				<span ng-show="fileList.length>0" class="badge pull-right">{{fileList.length}}</span>
 				<h4 ng-show="onStatus('Validating')"><img ng-src="{{WEBSITE_DOMAIN}}/img/loading.gif" style="max-height: 18px;"></img> {{'ARCHETYPE_UPLOAD_VALIDATING_HINT' | translate}}</h4>

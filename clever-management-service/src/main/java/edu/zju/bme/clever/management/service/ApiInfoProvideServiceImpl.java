@@ -32,22 +32,21 @@ public class ApiInfoProvideServiceImpl implements ApiInfoProvideService {
 	private ApiVersionMasterRepository apiVersionMasterRepo;
 	@Autowired
 	private ApiInformationRepository apiInformationRepo;
-	
+
 	@Autowired
 	private RequestParamRepository requestParamRepo;
 
 	@Autowired
 	private ReturnParamRepository returnParamRepo;
-	
+
 	@Autowired
 	private ClassAttributeRepository classAttributeRepo;
 	@Autowired
 	private ClassMasterRepository classMasterRepo;
-	
+
 	@Override
 	public Set<ApiMaster> getAllApiMasters() {
-		return this.apiMasterRepo
-				.findAllFetchAll();
+		return this.apiMasterRepo.findAllFetchAll();
 	}
 
 	@Override
@@ -71,10 +70,8 @@ public class ApiInfoProvideServiceImpl implements ApiInfoProvideService {
 	}
 
 	@Override
-	public ApiVersionMaster getApiVersionMasterByVersionAndApiMasterId(
-			Integer version, Integer apiMasterId) {
-		return this.apiVersionMasterRepo.findByVersionAndApiMasterIdFetchAll(
-				version, apiMasterId);
+	public ApiVersionMaster getApiVersionMasterByVersionAndApiMasterId(Integer version, Integer apiMasterId) {
+		return this.apiVersionMasterRepo.findByVersionAndApiMasterIdFetchAll(version, apiMasterId);
 	}
 
 	@Override
@@ -82,35 +79,38 @@ public class ApiInfoProvideServiceImpl implements ApiInfoProvideService {
 		return this.apiInformationRepo.findByIdFetchAll(id);
 	}
 
-	@Override 
-	public Set<RequestParam> getRequestParams(Integer id){
+	@Override
+	public Set<RequestParam> getRequestParams(Integer id) {
 		return this.apiInformationRepo.findByIdFetchAll(id).getRequestParams();
 	}
-	
+
 	@Override
-	public Set<ReturnParam> getReturnParams(Integer id){
+	public Set<ReturnParam> getReturnParams(Integer id) {
 		return this.apiInformationRepo.findByIdFetchAll(id).getReturnParams();
 	}
+
 	@Override
-	public ReturnParam getReturnParamById(Integer id){
+	public ReturnParam getReturnParamById(Integer id) {
 		return this.returnParamRepo.findByIdFetchAll(id);
 	}
+
 	@Override
-	public RequestParam getRequestParamById(Integer id){
+	public RequestParam getRequestParamById(Integer id) {
 		return this.requestParamRepo.findByIdFetchAll(id);
 	}
-	
+
 	@Override
-	public ClassAttribute getClassAttributeById(Integer id){
+	public ClassAttribute getClassAttributeById(Integer id) {
 		return this.classAttributeRepo.findById(id);
 	}
+
 	@Override
-	public ClassMaster getClassMasterByType(String type){
-		return this.classMasterRepo.findByTypeFetchAll(type);
+	public ClassMaster getClassMasterByTypeAndVersionMasterId(String type, Integer id) {
+		return this.classMasterRepo.findByTypeAndVersionMasterIdFetchAll(type, id);
 	}
-	
+
 	@Override
-	public Set<ClassMaster> getAllClassMaster(){
-		return this.classMasterRepo.findAllFetchAll();
-	} 
+	public Set<ClassMaster> getAllClassMasterByVersionMasterId(Integer id) {
+		return this.classMasterRepo.findByVersionMasterIdFetchAll(id);
+	}
 }

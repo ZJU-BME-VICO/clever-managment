@@ -177,17 +177,14 @@ function StorageTemplateUploadCtrl($scope, resourceService, busyService, msgboxS
 		arm : "oet",
 		oet : 'arm',
 	};
-	var realMap = {
-		xml : "arm",
-		oet : "oet",
-	};
+	
 
 	function matchPartner(file) {
 
 		if (isFresh(file)) {
 			var findTemplate = false;
 			var fileNameBody = getNameBody(file.name);
-			var fileType = realMap[getNameSuffix(file.name)];
+			var fileType = getNameSuffix(file.name);
 			angular.forEach($scope.templateList, function(template) {
 				var mirrorFile = template[mirrorMap[fileType]];
 				var mirrorNameBody;
@@ -222,7 +219,7 @@ function StorageTemplateUploadCtrl($scope, resourceService, busyService, msgboxS
 
 	function isFresh(file) {
 		var isFresh = true;
-		var type = realMap[getNameSuffix(file.name)];
+		var type = getNameSuffix(file.name);
 		angular.forEach($scope.templateList, function(template) {
 			if (template[type] && template[type].name == file.name) {
 				isFresh = false;

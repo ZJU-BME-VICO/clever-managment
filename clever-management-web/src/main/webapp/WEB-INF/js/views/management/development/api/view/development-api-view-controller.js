@@ -65,9 +65,8 @@ function ApiViewCtr($scope, $document, $timeout, resourceService,
 		var bid = busyService.pushBusy('BUSY_LOADING');
 		resourceService.get(
 				DEVELOPMENT_API_DISPLAY_MASTER_URL + "/" + categoryId + "/"
-						+ version).then(function(apiList) {
-			$scope.apiList = apiList;
-			console.log(apiList);
+						+ version).then(function(versionMaster) {
+			$scope.versionMaster = versionMaster;
 			$scope.stretchState = 'EXPAND_ALL';
 			busyService.popBusy(bid);
 		});
@@ -135,7 +134,7 @@ function ApiViewCtr($scope, $document, $timeout, resourceService,
 	});
 	$scope.getRqParamDetails = function(param) {
 		$scope.selectedRqParam = param;
-		resourceService.get(DEVELOPMENT_API_DISPLAY_PARAM_DETAILS + param.type)
+		resourceService.get(DEVELOPMENT_API_DISPLAY_PARAM_DETAILS + param.type + '/versionid/' + $scope.versionMaster.id)
 				.then(function(details) {
 					$scope.selectedRqParam.details = details;
 				});
@@ -143,7 +142,7 @@ function ApiViewCtr($scope, $document, $timeout, resourceService,
 	$scope.getRtParamDetails = function(param) {
 		// console.log(param);
 		$scope.selectedRtParam = param;
-		resourceService.get(DEVELOPMENT_API_DISPLAY_PARAM_DETAILS + param.type)
+		resourceService.get(DEVELOPMENT_API_DISPLAY_PARAM_DETAILS + param.type + '/versionid/' + $scope.versionMaster.id)
 				.then(function(details) {
 					$scope.selectedRtParam.details = details;
 				});

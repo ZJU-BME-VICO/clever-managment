@@ -25,9 +25,10 @@ public interface ApiInfoMaintainService {
 
 	public void deleteApiMaster(Integer id) throws Exception;
 
-	public void addClassMaster(String name, String type, Set<ClassAttribute> attributes) throws Exception;
+	public void addClassMaster(String name, String type, Set<ClassAttribute> attributes, Integer versionMasterId)
+			throws Exception;
 
-	public void addRequestParam(Integer apiId, String masterType) throws Exception;
+	public void addRequestParam(Integer apiId, String masterType, Integer versionMasterId) throws Exception;
 
 	public void editClassAttributeById(Integer id, String descriptionZh, String descriptionEn, Boolean isRequired)
 			throws Exception;

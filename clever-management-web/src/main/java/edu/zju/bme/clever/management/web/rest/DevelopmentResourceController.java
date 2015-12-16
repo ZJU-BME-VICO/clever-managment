@@ -159,12 +159,13 @@ public class DevelopmentResourceController extends AbstractResourceController {
 		return result;
 	}
 
-	@RequestMapping(value = "/api/maintain/add/param/{apiId}", method = RequestMethod.POST)
-	public ApiMaintainResult addParam(@PathVariable Integer apiId, @RequestBody String type) {
+	@RequestMapping(value = "/api/maintain/add/param/{apiId}/versionid/{versionId}", method = RequestMethod.POST)
+	public ApiMaintainResult addParam(@PathVariable Integer apiId, @PathVariable Integer versionId,
+			@RequestBody String type) {
 		ApiMaintainResult result = new ApiMaintainResult();
 		result.setSucceeded(true);
 		try {
-			this.apiInfoMaintainService.addRequestParam(apiId, type);
+			this.apiInfoMaintainService.addRequestParam(apiId, type, versionId);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			result.setSucceeded(false);
@@ -198,9 +199,9 @@ public class DevelopmentResourceController extends AbstractResourceController {
 		return result;
 	}
 
-	@RequestMapping(value = "/api/maintain/classmaster", method = RequestMethod.GET)
-	public Set<ClassMasterInfo> fetchAllClassMaster() {
-		Set<ClassMaster> masters = this.apiInfoProvideService.getAllClassMaster();
+	@RequestMapping(value = "/api/maintain/classmaster/versionid/{id}", method = RequestMethod.GET)
+	public Set<ClassMasterInfo> fetchAllClassMaster(@PathVariable Integer id) {
+		Set<ClassMaster> masters = this.apiInfoProvideService.getAllClassMasterByVersionMasterId(id);
 		Set<ClassMasterInfo> masterInfos = new HashSet<>();
 		if (masters != null && !masters.isEmpty()) {
 			masterInfos = masters.stream().map(master -> {
@@ -252,7 +253,8 @@ public class DevelopmentResourceController extends AbstractResourceController {
 					}).collect(Collectors.toSet());
 				}
 
-				this.apiInfoMaintainService.addClassMaster(info.getName(), info.getType(), attributes);
+				this.apiInfoMaintainService.addClassMaster(info.getName(), info.getType(), attributes,
+						info.getVersionId());
 			} catch (Exception e) {
 				result.setSucceeded(false);
 				result.setMessage(e.getMessage());
@@ -338,10 +340,10 @@ public class DevelopmentResourceController extends AbstractResourceController {
 		return infos;
 	}
 
-	@RequestMapping(value = "/api/display/param/details/{type}", method = RequestMethod.GET)
-	public List<ApiParamInfo> fetchRequestParamDetails(@PathVariable String type) {
+	@RequestMapping(value = "/api/display/param/details/{type}/versionid/{id}", method = RequestMethod.GET)
+	public List<ApiParamInfo> fetchRequestParamDetails(@PathVariable String type, @PathVariable Integer id) {
 		List<ApiParamInfo> infos = new ArrayList<>();
-		ClassMaster master = this.apiInfoProvideService.getClassMasterByType(type);
+		ClassMaster master = this.apiInfoProvideService.getClassMasterByTypeAndVersionMasterId(type, id);
 		if (master != null) {
 			Set<ClassAttribute> attributeSet = master.getAttributes();
 			if (attributeSet != null && !attributeSet.isEmpty()) {

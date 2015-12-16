@@ -8,6 +8,8 @@ function ApiEditCtr($scope, resourceService, DEVELOPMENT_API_MAINTAIN_ADD_PARAM_
 	$scope.selectLanguage = function(lan) {
 		$scope.treeLanguage = lan;
 	};
+	
+	// initial data, get api information with first category and firt version of it 
 	$scope.initData = function() {
 		var bid = busyService.pushBusy('BUSY_LOADING');
 		resourceService.get(DEVELOPMENT_API_DISPLAY_MASTER_URL).then(function(list) {
@@ -24,18 +26,13 @@ function ApiEditCtr($scope, resourceService, DEVELOPMENT_API_MAINTAIN_ADD_PARAM_
 			busyService.popBusy(bid);
 		});
 
-		var classBid = busyService.pushBusy('BUSY_LOADING');
-		resourceService.get(DEVELOPMENT_API_MAINTAIN_CLASSMASTER_URL).then(function(list) {
-			console.log(list);
-			$scope.classMasters = list;
-			busyService.popBusy(classBid);
-		});
+	
 
 	}();
 
+	//api inforamtion tree expand and collapse
 	$scope.stretchState = 'EXPAND_ALL';
 	$scope.stretch = function() {
-		//$scope.stretchState = ($scope.stretchState == 'EXPAND_ALL') ? 'COLLAPSE_ALL' : 'EXPAND_ALL';
 		if ($scope.stretchState == 'EXPAND_ALL') {
 			$scope.treeControl.expandAll();
 			$scope.stretchState = 'COLLAPSE_ALL';
@@ -45,10 +42,8 @@ function ApiEditCtr($scope, resourceService, DEVELOPMENT_API_MAINTAIN_ADD_PARAM_
 		}
 
 	};
-	$scope.copyUrl = function() {
-		return $scope.selectApi.url;
-	};
 
+	//format type string 
 	var baseTypeList = ['string', 'int', 'dateTime'];
 	$scope.getFixClass = function(type) {
 		var temp = type.slice(type.indexOf(":") + 1, type.length);
@@ -63,6 +58,8 @@ function ApiEditCtr($scope, resourceService, DEVELOPMENT_API_MAINTAIN_ADD_PARAM_
 		return type.slice(type.indexOf(":") + 1, type.length);
 	};
 
+	
+	// sort api version list,because the list fetch from backend is a set structure and is unsorted.
 	function formatList(list) {
 		angular.forEach(list, function(value) {
 			if (value.versionList) {
@@ -74,18 +71,30 @@ function ApiEditCtr($scope, resourceService, DEVELOPMENT_API_MAINTAIN_ADD_PARAM_
 			};
 		});
 	};
-
+   
+	
+	//get api list with category id and version 
 	$scope.getApiListById = function(categoryId, version) {
 		var bid = busyService.pushBusy('BUSY_LOADING');
 		resourceService.get(DEVELOPMENT_API_DISPLAY_MASTER_URL + "/" + categoryId + "/" + version).then(function(master) {
 			$scope.versionMaster = master;
+			
 			$scope.stretchState = 'EXPAND_ALL';
 			console.log(master);
 			busyService.popBusy(bid);
+			
+			
+			var classBid = busyService.pushBusy('BUSY_LOADING');
+			resourceService.get(DEVELOPMENT_API_MAINTAIN_CLASSMASTER_URL + $scope.versionMaster.id ).then(function(list) {
+				console.log(list);
+				$scope.classMasters = list;
+				busyService.popBusy(classBid);
+			});
 		});
 
 	};
-
+ 
+	//api tree search mapper
 	$scope.searchKeyMapper = function(node) {
 		if ($scope.treeLanguage == 'en') {
 			return node.name ? node.name : node.rootUrlName;
@@ -105,6 +114,7 @@ function ApiEditCtr($scope, resourceService, DEVELOPMENT_API_MAINTAIN_ADD_PARAM_
 		}
 	});
 
+	//callback function for click tree node. change the tab to base ifno tab
 	$scope.baseTabId = 'baseTabId';
 	$scope.selectApi = function(api) {
 		if (api.rootUrlName) {
@@ -127,18 +137,25 @@ function ApiEditCtr($scope, resourceService, DEVELOPMENT_API_MAINTAIN_ADD_PARAM_
 		}
 	};
 
+	// watch category change and change,
 	$scope.$watch('selectedCategory', function(newValue, oldValue) {
 		if (newValue && oldValue) {
 			var versionList = $scope.selectedCategory.versionList;
-			$scope.selectedVersion = versionList[versionList.length - 1];
+			$scope.selectedVersion = undefined;
+			$timeout(function() {
+				$scope.selectedVersion = versionList[versionList.length - 1];
+			}, 0);
 		}
 	});
 	$scope.$watch('selectedVersion', function(newValue, oldValue) {
-		if (newValue && oldValue) {
-			$scope.getApiListById($scope.selectedCategory.id, $scope.selectedVersion);
+		if (newValue) {
+			$scope.getApiListById($scope.selectedCategory.id,
+					$scope.selectedVersion);
 		}
 	});
 
+	
+	// save root url content , is chinese name here
 	$scope.saveRootUrl = function() {
 		var tempList = [];
 		angular.forEach($scope.versionMaster.rootUrlMasters, function(master) {
@@ -354,9 +371,10 @@ function ApiEditCtr($scope, resourceService, DEVELOPMENT_API_MAINTAIN_ADD_PARAM_
 		});
 	};
 
-	$scope.submitMaster = function() {
+	$scope.addClassMaster = function() {
 		var val = $scope.freshMaster;
-		resourceService.post(DEVELOPMENT_API_MAINTAIN_CLASSMASTER_ADD_URL, {
+		resourceService.post(DEVELOPMENT_API_MAINTAIN_CLASSMASTER_ADD_URL , {
+			versionId : $scope.versionMaster.id,
 			name : val.name,
 			type : val.type,
 			attributes : val.attributes,
@@ -389,7 +407,7 @@ function ApiEditCtr($scope, resourceService, DEVELOPMENT_API_MAINTAIN_ADD_PARAM_
 
 	function addRequestParam(type) {
 		var bid = busyService.pushBusy('BUSY_LOADING');
-		resourceService.post(DEVELOPMENT_API_MAINTAIN_ADD_PARAM_URL+ $scope.selectedApi.id, type).then(function(result) {
+		resourceService.post(DEVELOPMENT_API_MAINTAIN_ADD_PARAM_URL+ $scope.selectedApi.id + '/versionid/' + $scope.versionMaster.id, type).then(function(result) {
 			console.log(result);
 			busyService.popBusy(bid);
 		});

@@ -53,7 +53,7 @@ var config = {
 	'DEVELOPMENT_API_MAINTAIN_SAVE_ROOTURL' : prefix + '/development/api/maintain/save/rooturl',
 	'DEVELOPMENT_API_MAINTAIN_SAVE_API' : prefix + '/development/api/maintain/save/api',
 	'DEVELOPMENT_API_MAINTAIN_SAVE_PARAMS' : prefix + '/development/api/maintain/save/params',
-	'DEVELOPMENT_API_MAINTAIN_CLASSMASTER_URL' : prefix + '/development/api/maintain/classmaster' ,
+	'DEVELOPMENT_API_MAINTAIN_CLASSMASTER_URL' : prefix + '/development/api/maintain/classmaster/versionid/' ,
     'DEVELOPMENT_API_MAINTAIN_CLASSMASTER_ADD_URL' : prefix +  '/development/api/maintain/classmaster/add',
     'DEVELOPMENT_API_MAINTAIN_ADD_PARAM_URL' : prefix + '/development/api/maintain/add/param/',
 	'DEVELOPMENT_API_DISPLAY_RETURNPARAMS' : prefix + '/development/api/display/returnparam/',

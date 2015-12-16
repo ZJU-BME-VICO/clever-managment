@@ -140,8 +140,8 @@ public class ApiInfoMaintainServiceImpl implements ApiInfoMaintainService {
 	}
 
 	@Override
-	public void addClassMaster(String name, String type, Set<ClassAttribute> attributes) throws Exception {
-
+	public void addClassMaster(String name, String type, Set<ClassAttribute> attributes, Integer versionMasterId)
+			throws Exception {
 		// ClassMaster temp = this.classMasterrepo.findByType(type);
 		// if (temp != null) {
 		// throw new Exception("the class master :" + type + " already exist!");
@@ -153,7 +153,7 @@ public class ApiInfoMaintainServiceImpl implements ApiInfoMaintainService {
 		// master.setAttributes(attributes);
 		// this.classMasterrepo.save(master);
 		// }
-		ClassMaster temp = this.classMasterrepo.findByType(type);
+		ClassMaster temp = this.classMasterrepo.findByTypeAndVersionMasterId(type, versionMasterId);
 		if (temp != null) {
 			this.apiInforamtionRepo.delete(temp.getId());
 		}
@@ -167,14 +167,15 @@ public class ApiInfoMaintainServiceImpl implements ApiInfoMaintainService {
 			});
 		}
 		master.setAttributes(attributes);
+		master.setVersionMaster(this.apiVersionMasterRepo.findOne(versionMasterId));
 		this.classMasterrepo.save(master);
 
 	}
 
 	@Override
-	public void addRequestParam(Integer apiId, String masterType) throws Exception {
+	public void addRequestParam(Integer apiId, String masterType, Integer versionMasterId) throws Exception {
 		ApiInformation info = this.apiInforamtionRepo.findById(apiId);
-		ClassMaster master = this.classMasterrepo.findByType(masterType);
+		ClassMaster master = this.classMasterrepo.findByTypeAndVersionMasterId(masterType, versionMasterId);
 		if (master == null) {
 			throw new ApiMaintainException("can not find class master with type :" + masterType);
 		}

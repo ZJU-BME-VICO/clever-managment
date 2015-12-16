@@ -3,10 +3,8 @@ package edu.zju.bme.clever.management.service;
 import java.util.List;
 import java.util.Set;
 
-import edu.zju.bme.clever.management.service.entity.AbstractParam;
 import edu.zju.bme.clever.management.service.entity.ApiInformation;
 import edu.zju.bme.clever.management.service.entity.ApiMaster;
-import edu.zju.bme.clever.management.service.entity.ApiRootUrlMaster;
 import edu.zju.bme.clever.management.service.entity.ApiVersionMaster;
 import edu.zju.bme.clever.management.service.entity.ClassAttribute;
 import edu.zju.bme.clever.management.service.entity.ClassMaster;
@@ -24,8 +22,7 @@ public interface ApiInfoProvideService {
 
 	public ApiVersionMaster getApiVersionMasterById(Integer Id);
 
-	public ApiVersionMaster getApiVersionMasterByVersionAndApiMasterId(
-			Integer version, Integer apiMasterId);
+	public ApiVersionMaster getApiVersionMasterByVersionAndApiMasterId(Integer version, Integer apiMasterId);
 
 	// public List<ApiRootUrlMaster> getAllRootUrlMasters();
 
@@ -38,13 +35,14 @@ public interface ApiInfoProvideService {
 	public Set<RequestParam> getRequestParams(Integer id);
 
 	public Set<ReturnParam> getReturnParams(Integer id);
-	
+
 	public ReturnParam getReturnParamById(Integer id);
 
 	public RequestParam getRequestParamById(Integer id);
-	
+
 	public ClassAttribute getClassAttributeById(Integer id);
-	
-	public ClassMaster getClassMasterByType(String type);
-	public Set<ClassMaster> getAllClassMaster();
+
+	public ClassMaster getClassMasterByTypeAndVersionMasterId(String type, Integer id);
+
+	public Set<ClassMaster> getAllClassMasterByVersionMasterId(Integer id);
 }
