@@ -263,7 +263,7 @@
 										</p></td>
 
 										<td><span class="button-label {{getFixClass(attribute.type)}}">{{getFixTypeName(attribute.type)}}</span></td>
-										<td><select class="form-control" ng-model="attribute.required" ng-options="o.v as o.n for o in [{ n: 'false', v: false }, { n: 'true', v: true }]">
+										<td><select class="form-control" ng-model="attribute.isRequired" ng-options="o.v as o.n for o in [{ n: 'false', v: false }, { n: 'true', v: true }]">
 
 										</select></td>
 										<td>
@@ -274,6 +274,11 @@
 									</tr>
 								</tbody>
 							</table>
+							<div class="modal-footer">
+						       <button class="btn btn-success pull-right" ng-click="saveAttribute(master)" style="position: center">
+                               {{'DEVELOPMENT_API_EDIT_SUBMIT_CHANGES' | translate}}
+                            </div>
+                        </button>
 						</div>
 					</div>
 				</tab>

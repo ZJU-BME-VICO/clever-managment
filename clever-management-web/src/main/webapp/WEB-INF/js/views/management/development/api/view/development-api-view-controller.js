@@ -1,7 +1,13 @@
-function ApiViewCtr($scope, $document,$timeout, resourceService, DEVELOPMENT_API_DISPLAY_PARAM_DETAILS, DEVELOPMENT_API_DISPLAY_MASTER_URL, DEVELOPMENT_API_DISPLAY_RETURNPARAMS, DEVELOPMENT_API_DISPLAY_REQUESTPARAMS, treeDataFormatService, busyService) {
+function ApiViewCtr($scope, $document, $timeout, resourceService,
+		DEVELOPMENT_API_DISPLAY_PARAM_DETAILS,
+		DEVELOPMENT_API_DISPLAY_MASTER_URL,
+		DEVELOPMENT_API_DISPLAY_RETURNPARAMS,
+		DEVELOPMENT_API_DISPLAY_APIINFOMATION_URL,
+		DEVELOPMENT_API_DISPLAY_REQUESTPARAMS, treeDataFormatService,
+		busyService) {
 
 	$scope.treeControl = {};
-	$scope.languages = ['zh', 'en'];
+	$scope.languages = [ 'zh', 'en' ];
 	$scope.treeLanguage = 'zh';
 	$scope.selectLanguage = function(lan) {
 		$scope.treeLanguage = lan;
@@ -9,22 +15,24 @@ function ApiViewCtr($scope, $document,$timeout, resourceService, DEVELOPMENT_API
 
 	$scope.initData = function() {
 		var bid = busyService.pushBusy('BUSY_LOADING');
-		resourceService.get(DEVELOPMENT_API_DISPLAY_MASTER_URL).then(function(list) {
-			$scope.list = list;
-			formatList(list);
-			console.log(list);
-			if (angular.isArray(list)) {
-				$scope.selectedCategory = list[0];
-				if (angular.isArray(list[0].versionList)) {
-					$scope.selectedVersion = list[0].versionList[0];
-					$scope.getApiListById($scope.selectedCategory.id, $scope.selectedVersion);
-				}
-			}
-			busyService.popBusy(bid);
-		});
+		resourceService.get(DEVELOPMENT_API_DISPLAY_MASTER_URL).then(
+				function(list) {
+					$scope.list = list;
+					formatList(list);
+					// console.log(list);
+					if (angular.isArray(list)) {
+						$scope.selectedCategory = list[0];
+						if (angular.isArray(list[0].versionList)) {
+							$scope.selectedVersion = list[0].versionList[0];
+							$scope.getApiListById($scope.selectedCategory.id,
+									$scope.selectedVersion);
+						}
+					}
+					busyService.popBusy(bid);
+				});
 	}();
 
-	//api tree expand and collapse action
+	// api tree expand and collapse action
 	$scope.stretchState = 'EXPAND_ALL';
 	$scope.stretch = function() {
 		if ($scope.stretchState == 'EXPAND_ALL') {
@@ -36,25 +44,12 @@ function ApiViewCtr($scope, $document,$timeout, resourceService, DEVELOPMENT_API
 		}
 	};
 
+	// copy api information url
 	$scope.copyUrl = function() {
 		return $scope.selectApi.url;
 	};
 
-	// auxiliary operate function, should be optimize
-	var baseTypeList = ['string', 'int', 'datetime'];
-	$scope.getFixClass = function(type) {
-		var temp = type.slice(type.indexOf(":") + 1, type.length).toLowerCase();
-		if (baseTypeList.indexOf(temp) != -1) {
-			return temp;
-		} else {
-			return 'others';
-		};
-	};
-	$scope.getFixTypeName = function(type) {
-		return type.slice(type.indexOf(":") + 1, type.length);
-	};
-
-	//sort the version list in master
+	// sort the version list in master
 	function formatList(list) {
 		angular.forEach(list, function(value) {
 			if (value.versionList) {
@@ -62,23 +57,30 @@ function ApiViewCtr($scope, $document,$timeout, resourceService, DEVELOPMENT_API
 					value.versionList.sort(function(a, b) {
 						return a - b;
 					});
-				};
-			};
+				}
+				;
+			}
+			;
 		});
-	};
+	}
+	;
 
-	//get data from backend with master id and version
+	// get data from backend with master id and version
 	$scope.getApiListById = function(categoryId, version) {
 		var bid = busyService.pushBusy('BUSY_LOADING');
-		resourceService.get(DEVELOPMENT_API_DISPLAY_MASTER_URL + "/" + categoryId + "/" + version).then(function(apiList) {
-			// resourceService.get(DEVELOPMENT_API_DISPLAY_MASTER_URL + "/" + 3 + "/" + 1).then(function(apiList) {
+		resourceService.get(
+				DEVELOPMENT_API_DISPLAY_MASTER_URL + "/" + categoryId + "/"
+						+ version).then(function(apiList) {
+			// resourceService.get(DEVELOPMENT_API_DISPLAY_MASTER_URL + "/" + 3
+			// + "/" + 1).then(function(apiList) {
 			$scope.apiList = apiList;
+			console.log(apiList);
 			$scope.stretchState = 'EXPAND_ALL';
 			busyService.popBusy(bid);
 		});
 	};
 
-	//for api tree search
+	// for api tree search
 	$scope.searchKeyMapper = function(node) {
 		if ($scope.treeLanguage == 'en') {
 			return node.name ? node.name : node.rootUrlName;
@@ -86,6 +88,8 @@ function ApiViewCtr($scope, $document,$timeout, resourceService, DEVELOPMENT_API
 			return node.chineseName;
 		}
 	};
+
+	// api search function
 	$scope.apiListFilter = {
 		value : "",
 	};
@@ -97,27 +101,25 @@ function ApiViewCtr($scope, $document,$timeout, resourceService, DEVELOPMENT_API
 		}
 	});
 
-	//click api node call back,select api, and jump the tab to base tab
+	// click api node call back,select api
 	$scope.selectApi = function(api) {
+		// root url name node
 		if (api.rootUrlName) {
 			$scope.selectedApi = undefined;
 		}
+		// api node
 		if (api.name) {
-			console.log(api);
-			$scope.selectedRtParam = undefined; 
+			// console.log(api);
+			$scope.selectedRtParasm = undefined;
 			$scope.selectedRqParam = undefined;
 			$scope.selectedApi = api;
-			var rqbid = busyService.pushBusy("BUSY_LOADING");
-			resourceService.get(DEVELOPMENT_API_DISPLAY_REQUESTPARAMS + $scope.selectedApi.id).then(function(list) {
-				$scope.selectedApi.requestParams = list;
-				busyService.popBusy(rqbid);
-			});
-			var rtbid = busyService.pushBusy("BUSY_LOADING");
-			resourceService.get(DEVELOPMENT_API_DISPLAY_RETURNPARAMS + $scope.selectedApi.id).then(function(list) {
-				$scope.selectedApi.returnParams = list;
-				busyService.popBusy(rtbid);
-
-			});
+			var bid = busyService.pushBusy("BUSY_LOADING")
+			resourceService.get(
+					DEVELOPMENT_API_DISPLAY_APIINFOMATION_URL
+							+ $scope.selectedApi.id).then(function(result) {
+				$scope.selectedApi = result;
+				busyService.popBusy(bid);
+			})
 
 		}
 	};
@@ -126,27 +128,32 @@ function ApiViewCtr($scope, $document,$timeout, resourceService, DEVELOPMENT_API
 		if (newValue && oldValue) {
 			var versionList = $scope.selectedCategory.versionList;
 			$scope.selectedVersion = undefined;
-			$timeout(function(){
+			$timeout(function() {
 				$scope.selectedVersion = versionList[versionList.length - 1];
-			},0);
+			}, 0);
 		}
 	});
 	$scope.$watch('selectedVersion', function(newValue, oldValue) {
 		if (newValue) {
-			$scope.getApiListById($scope.selectedCategory.id, $scope.selectedVersion);
+			$scope.getApiListById($scope.selectedCategory.id,
+					$scope.selectedVersion);
 		}
 	});
 	$scope.getRqParamDetails = function(param) {
 		$scope.selectedRqParam = param;
-		resourceService.get(DEVELOPMENT_API_DISPLAY_PARAM_DETAILS + param.type).then(function(details) {
-			$scope.selectedRqParam.details = details;
-		});
+		resourceService.get(DEVELOPMENT_API_DISPLAY_PARAM_DETAILS + param.type)
+				.then(function(details) {
+					$scope.selectedRqParam.details = details;
+				});
 	};
 	$scope.getRtParamDetails = function(param) {
+		// console.log(param);
 		$scope.selectedRtParam = param;
-		resourceService.get(DEVELOPMENT_API_DISPLAY_PARAM_DETAILS + param.type).then(function(details) {
-			$scope.selectedRtParam.details = details;
-		});
+		resourceService.get(DEVELOPMENT_API_DISPLAY_PARAM_DETAILS + param.type)
+				.then(function(details) {
+					$scope.selectedRtParam.details = details;
+				});
 
 	};
+	
 }

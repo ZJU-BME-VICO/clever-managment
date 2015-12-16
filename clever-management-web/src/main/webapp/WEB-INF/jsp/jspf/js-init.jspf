@@ -83,6 +83,7 @@
 <script src="js/directives/document-diff/document-diff-directive.js"></script>
 <script src="js/directives/elastic/elastic-directive.js"></script>
 
+
 <script src="js/directives/archetype-edit-directives/definition-pane/edit-definition-pane.js"></script>
 <script src="js/directives/archetype-edit-directives/header-pane/edit-header-pane.js"></script>
 <script src="js/directives/archetype-edit-directives/ontology-pane/edit-ontology-pane.js"></script>
@@ -91,6 +92,8 @@
 <script src="js/directives/archetype-edit-directives/definition-pane/links-pane/links-pane.js"></script>
 <script src="js/directives/archetype-edit-directives/batch-submit-directive/batch-submit-pane.js"></script>
 <script src="js/directives/introduction-pane/introduction-pane.js"></script>
+<!-- api directives -->
+<script src="js/directives/api-directives/param-table/param-table.js"></script>
 
 <!-- controllers -->
 <script src="js/views/management/management-controller.js"></script>

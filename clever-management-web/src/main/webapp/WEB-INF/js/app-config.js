@@ -61,6 +61,8 @@ var config = {
     'DEVELOPMENT_API_DISPLAY_REQUESTPARAM_DETAILS' : prefix + '/development/api/display/requestparam/details/',
     'DEVELOPMENT_API_DISPLAY_RETURNPARAM_DETAILS' : prefix + '/development/api/display/returnparam/details/',
     'DEVELOPMENT_API_DISPLAY_PARAM_DETAILS' : prefix + '/development/api/display/param/details/',
+    'DEVELOPMENT_API_DISPLAY_APIINFOMATION_URL' : prefix + '/development/api/display/apiinfo/id/',
+    'DEVELOPMENT_API_MAINTAIN_CLASSATTRIBUTE_URL' : prefix + '/development/api/maintain/classattributes'
     
   
 };

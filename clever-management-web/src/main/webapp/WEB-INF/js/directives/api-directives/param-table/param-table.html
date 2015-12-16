@@ -1,0 +1,33 @@
+<div>
+    <table class="variables-matrix input-arguments">
+        <thead>
+            <tr>
+                <th style="width: 120px">{{'DEVELOPMENT_API_VIEW_NAME' |
+                translate}}</th>
+                <th style="width: 200px">{{'DEVELOPMENT_API_VIEW_TYPE' |
+                translate}}</th>
+                <th style="width: 100px" ng-if="paramType == 'requestParam'">{{'DEVELOPMENT_API_VIEW_REQUIRED'
+                | translate}}</th>
+                <th>{{'DEVELOPMENT_API_VIEW_DESCRIPTIOIN' | translate}}</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="param in paramList">
+                <td>{{param.name}}</td>
+                <td><span><span
+                    class="button-label {{getFixClass(param.type)}}">{{getFixTypeName(param.type)}}</span>&nbsp;&nbsp;&nbsp; </span>&nbsp;&nbsp;&nbsp;<span ng-if="param.isList"
+                class="button-label list">List</span></td>
+                <td ng-if="paramType=='requestParam'"><span
+                class="{{param.required}}">{{param.required}}</span></td>
+                <td><span ng-if="param.isBaseType"> <span
+                    ng-if="language=='en'">{{param.description}}</span> <span
+                    ng-if="language=='zh'">{{param.chineseDescription}}</span> </span><span ng-if="!param.isBaseType" tooltip-placement="right"
+                tooltip="click to view details" tooltip-popup-delay="50">
+                    <button class="btn btn-default" ng-show="!param.isBaseType"
+                    ng-click="getParamDetails(param)">
+                        <span class="glyphicon glyphicon-eye-open"></span>
+                    </button> </span></td>
+            </tr>
+        </tbody>
+    </table>
+</div>

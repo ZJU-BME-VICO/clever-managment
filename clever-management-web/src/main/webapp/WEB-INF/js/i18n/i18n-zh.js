@@ -64,15 +64,15 @@ angular.module('clever.management.i18n.zh', ['pascalprecht.translate']).config(f
 		// Archetype edit
 		MANAGEMENT_ARCHETYPE_EDIT_TOOTIP_BATCHPROCESS : '批量提交',
 		MANAGEMENT_ARCHETYPE_EDIT_TOOTIP_FALLBACK : '状态回退',
-		ARCHETYPE_EDIT_FALLBACK : '回退',
-		ARCHETYPE_EDIT_BATCHSUBMIT : '批量',
-		ARCHETYPE_EDIT_CREATE : '创建',
-		ARCHETYPE_EDIT_SAVE : '保存',
-		ARCHETYPE_EDIT_DIFF : '对比',
-		ARCHETYPE_EDIT_NEWVERSION : '新版',
-		ARCHETYPE_EDIT_SPECIALISE : '特化',
+		ARCHETYPE_EDIT_FALLBACK : '状态回退',
+		ARCHETYPE_EDIT_BATCHSUBMIT : '批量提交',
+		ARCHETYPE_EDIT_CREATE : '创建原型',
+		ARCHETYPE_EDIT_SAVE : '保存原型',
+		ARCHETYPE_EDIT_DIFF : '对比adl',
+		ARCHETYPE_EDIT_NEWVERSION : '新版原型',
+		ARCHETYPE_EDIT_SPECIALISE : '特化原型',
 		ARCHETYPE_EDIT_EDIT : '编辑',
-		ARCHETYPE_EDIT_SUBMIT : '提交',
+		ARCHETYPE_EDIT_SUBMIT : '提交原型',
 		ARCHETYPE_EDIT_DRAFT : '我的草稿',
 		ARCHETYPE_EDIT_PUBLISHED : '公共项',
 		ARCHETYPE_EDIT_SUCCEEDED : '操作成功',
@@ -90,9 +90,15 @@ angular.module('clever.management.i18n.zh', ['pascalprecht.translate']).config(f
         ARCHETYPE_EDIT_ADD_FAILED_HINT : '编辑原型失败,错误: {{errorMsg}}',
         ARCHETYPE_EDIT_ADD_SUCCEEDED_HINT : '添加原型成功',
 		// Storage template edit
-		STORAGE_TEMPLATE_EDIT_SAVE : '保存',
-		STORAGE_TEMPLATE_EDIT_SUBMIT : '提交',
-		STORAGE_TEMPLATE_EDIT_DIFF : '对比',
+        TEMPLATE_EDIT_FALLBACK : '状态回退',
+        TEMPLATE_EDIT_BATCHSUBMIT : '批量提交',
+        TEMPLATE_EDIT_CREATE : '创建模板',
+        TEMPLATE_EDIT_SAVE : '保存模板',
+        TEMPLATE_EDIT_DIFF : '对比oet',
+        TEMPLATE_EDIT_NEWVERSION : '新版模板',
+		STORAGE_TEMPLATE_EDIT_SAVE : '保存模板',
+		STORAGE_TEMPLATE_EDIT_SUBMIT : '提交模板',
+		STORAGE_TEMPLATE_EDIT_DIFF : '对比oet',
 		STORAGE_TEMPLATE_EDIT_EXPAND : '全部展开',
 		STORAGE_TEMPLATE_SUCCEEDED : '操作成功',
 		STORAGE_TEMPLATE_FAILED : '操作失败',
@@ -258,8 +264,8 @@ angular.module('clever.management.i18n.zh', ['pascalprecht.translate']).config(f
 		MENU_MANAGEMENT_APPLICATION_EDIT_INFO : '在这里你可以对应用的名称，介绍，url，以及示例图片进行修改',
 		MENU_MANAGEMENT_INTEGRATION_INFO : 'SHINE™为医疗信息集成引擎，它负责从现有各类异构系统中集成数据到CLEVER™平台，SHINE™提供了基于Archetype的语义集成方法，可方便快速地进行集成配置。',
 		MENU_MANAGEMENT_DEVELOPMENT_DESIGN_INFO : '设计器简介',
-        MENU_MANAGEMENT_DEVELOPMENT_INFO : '开发平台简介',
-        MENU_MANAGEMENT_DEVELOPMENT_API_INFO : 'API显示简介',
+        MENU_MANAGEMENT_DEVELOPMENT_INFO : 'CLEVER™可根据临床实际需求，以原型和模板为媒介，开发或服务于临床数据应用。主要包括对外提供数据服务的API的发布和面向数据应用开发的设计器。',
+        MENU_MANAGEMENT_DEVELOPMENT_API_INFO : '在这里你可以查看clever平台对外提供的数据服务接口信息，包括接口的url，请求方式，数据交互格式，参数信息等信息。',
         MENU_MANAGEMENT_DEVELOPMENT_CDR_INFO : '数据库服务简介',
 		// Application edit and view
 		APPLICATION_EDIT_FIND_HINT : '输入应用名称',
@@ -337,10 +343,10 @@ angular.module('clever.management.i18n.zh', ['pascalprecht.translate']).config(f
 		STORAGE_TEMPLATE_PANE_ARM : 'ARM',
 		
 		//archetype editor pane
-		ARCHETYPE_PANE_CREATE: '创建',
-		ARCHETYPE_PANE_SAVE: '保存',
-		ARCHETYPE_PANE_SUBMIT: '提交',
-		ARCHETYPE_PANE_DIFF: '对比',
+//		ARCHETYPE_PANE_CREATE: '创建',
+//		ARCHETYPE_PANE_SAVE: '保存',
+//		ARCHETYPE_PANE_SUBMIT: '提交',
+//		ARCHETYPE_PANE_DIFF: '对比',
 		
 		//verify pane
 		SUBMIT_TIME: '提交时间',
@@ -378,7 +384,7 @@ angular.module('clever.management.i18n.zh', ['pascalprecht.translate']).config(f
 		PARTICIPATION_PANE_ATTRIBUTES : '属性',
 
 		//management archetype
-		MANAGEMENT_ARCHETYPE_EDIT_HEADER : '数据头',
+		MANAGEMENT_ARCHETYPE_EDIT_HEADER : '介绍',
 		MANAGEMENT_ARCHETYPE_EDIT_DEFINITION : '定义',
 		MANAGEMENT_ARCHETYPE_EDIT_ONTOLOGY : '本体',
 		MANAGEMENT_ARCHETYPE_EDIT_DISPLAY : '显示',
@@ -451,6 +457,9 @@ angular.module('clever.management.i18n.zh', ['pascalprecht.translate']).config(f
 		MANAGEMENT_STORAGE_EDIT_TOOLTIP_NEW_VERSION : '新版本',
 		MANAGEMENT_STORAGE_EDIT_TOOLTIP_EXPAND : '展开',
 		MANAGEMENT_STORAGE_EDIT_TOOLTIP_COLLAPSE : '闭合',
+		DEVELOPMENT_MANAGEMENT : '开发平台',
+		
+		
 
 		//management.storage.upload.html
 		MANAGEMENT_STORAGE_UPLOAD_TEMPLATE_ID : '模板编号',
@@ -611,7 +620,7 @@ angular.module('clever.management.i18n.zh', ['pascalprecht.translate']).config(f
 		DEVELOPMENT_API_VIEW_TYPE : '类型',
 		DEVELOPMENT_API_VIEW_REQUIRED : '必填',
 		DEVELOPMENT_API_VIEW_DESCRIPTIOIN : '说明',
-		DEVELOPMENT_API_VIEW_ERROR_CODE : '错误代码',
+		DEVELOPMENT_API_VIEW_RETURN_CODE : '返回代码',
 		DEVELOPMENT_API_VIEW_API_INFORMATION : '接口信息',
 		DEVELOPMENT_API_VIEW_TOOLTIP_COPY : '复制',	
 		

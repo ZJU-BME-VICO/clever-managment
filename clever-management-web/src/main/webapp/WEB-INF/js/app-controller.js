@@ -185,13 +185,13 @@ angular.module('clever.management.controllers.app', []).controller('appCtrl', fu
 				info : 'MENU_MANAGEMENT_DEVELOPMENT_INFO',
 				introductionState : 'management.development.list.breif',
 			},
-			{
-				title : 'MENU_MANAGEMENT_DEVELOPMENT_DESIGN',
-				state : 'management.development.design',
-				introductionState : 'management.development.list.design',
-				icon :  'icon-magic',
-				info : 'MENU_MANAGEMENT_DEVELOPMENT_DESIGN_INFO',
-			},
+//			{
+//				title : 'MENU_MANAGEMENT_DEVELOPMENT_DESIGN',
+//				state : 'management.development.design',
+//				introductionState : 'management.development.list.design',
+//				icon :  'icon-magic',
+//				info : 'MENU_MANAGEMENT_DEVELOPMENT_DESIGN_INFO',
+//			},
 			{
 				title : 'MENU_MANAGEMENT_DEVELOPMENT_API_DISPLAY',				   
 				state : 'management.development.api.view',
@@ -199,10 +199,10 @@ angular.module('clever.management.controllers.app', []).controller('appCtrl', fu
 				icon : 'icon-magic',
 				info : 'MENU_MANAGEMENT_DEVELOPMENT_API_INFO',
 			},
-			{
-				state : 'management.development.api.edit',
-				icon : 'icon-magic',
-			},
+//			{
+//				state : 'management.development.api.edit',
+//				icon : 'icon-magic',
+//			},
 			// {
 				// title : 'MENU_MANAGEMENT_DEVELOPMENT_CDR',
 				// state : 'management.development.cdr',
@@ -212,7 +212,7 @@ angular.module('clever.management.controllers.app', []).controller('appCtrl', fu
 			// }
 		],
 	};
-	$scope.menus = [archetype,storage,application,integration, development];
+	$scope.menus = [archetype,storage,application, development];//integration,
 	
 	$scope.stateMenuMap = {};
 	

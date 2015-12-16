@@ -1,4 +1,4 @@
-function ApiEditCtr($scope, resourceService, DEVELOPMENT_API_MAINTAIN_ADD_PARAM_URL, DEVELOPMENT_API_MAINTAIN_CLASSMASTER_ADD_URL, DEVELOPMENT_API_MAINTAIN_CLASSMASTER_URL, DEVELOPMENT_API_DISPLAY_RETURNPARAMS, DEVELOPMENT_API_DISPLAY_REQUESTPARAMS, DEVELOPMENT_API_MAINTAIN_SAVE_PARAMS, DEVELOPMENT_API_MAINTAIN_SAVE_API, DEVELOPMENT_API_MAINTAIN_SAVE_ROOTURL, DEVELOPMENT_API_DISPLAY_MASTER_URL, DEVELOPMENT_API_MAINTAIN_SINGLE_URL, DEVELOPMENT_API_REMOVE_BY_VERSIONID_URL, DEVELOPMENT_API_REMOVE_BY_MASTER_URL, DEVELOPMENT_API_MAINTAIN_OVERALL_URL, busyService, $modal) {
+function ApiEditCtr($scope, resourceService, DEVELOPMENT_API_MAINTAIN_ADD_PARAM_URL, DEVELOPMENT_API_MAINTAIN_CLASSATTRIBUTE_URL,DEVELOPMENT_API_MAINTAIN_CLASSMASTER_ADD_URL, DEVELOPMENT_API_MAINTAIN_CLASSMASTER_URL, DEVELOPMENT_API_DISPLAY_RETURNPARAMS, DEVELOPMENT_API_DISPLAY_REQUESTPARAMS, DEVELOPMENT_API_MAINTAIN_SAVE_PARAMS, DEVELOPMENT_API_MAINTAIN_SAVE_API, DEVELOPMENT_API_MAINTAIN_SAVE_ROOTURL, DEVELOPMENT_API_DISPLAY_MASTER_URL, DEVELOPMENT_API_MAINTAIN_SINGLE_URL, DEVELOPMENT_API_REMOVE_BY_VERSIONID_URL, DEVELOPMENT_API_REMOVE_BY_MASTER_URL, DEVELOPMENT_API_MAINTAIN_OVERALL_URL, busyService, $modal) {
 
 	$scope.treeControl = {};
 	$scope.tabControl = {};
@@ -387,10 +387,46 @@ function ApiEditCtr($scope, resourceService, DEVELOPMENT_API_MAINTAIN_ADD_PARAM_
 		});
 	};
 
-	function addReqestParam(type) {
+	function addRequestParam(type) {
+		var bid = busyService.pushBusy('BUSY_LOADING');
 		resourceService.post(DEVELOPMENT_API_MAINTAIN_ADD_PARAM_URL+ $scope.selectedApi.id, type).then(function(result) {
 			console.log(result);
+			busyService.popBusy(bid);
 		});
+	}
+	
+	
+	$scope.saveAttribute = function(master){
+		console.log(master);
+		var  attributeList = [];
+		if(master.attributes){
+			
+			if(angular.isArray(master.attributes)){
+				angular.forEach(master.attributes, function(attribute){
+					var temp = {
+							id: attribute.id,
+							descriptionEn: attribute.descriptionEn,
+							descriptionZh: attribute.descriptionZh,
+							isRequired : attribute.isRequired,
+					}
+					attributeList.push(temp);
+				})
+			}else{
+				var tempAttr = {
+						id: attributes.id,
+						descriptionEn: attributes.descriptionEn,
+						descriptionZh: attributes.descriptionZh,
+						isRequired : attributes.isRequired,
+				}
+			}
+		}
+		if(attributeList.length >0){
+			var bid = busyService.pushBusy('BUSY_LOADING');
+			resourceService.post(DEVELOPMENT_API_MAINTAIN_CLASSATTRIBUTE_URL, attributeList).then(function(result){
+				busyService.popBusy(bid);
+			});
+		}
+		
 	}
 
 }
