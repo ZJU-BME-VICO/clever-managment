@@ -44,11 +44,6 @@ function ApiViewCtr($scope, $document, $timeout, resourceService,
 		}
 	};
 
-	// copy api information url
-	$scope.copyUrl = function() {
-		return $scope.selectApi.url;
-	};
-
 	// sort the version list in master
 	function formatList(list) {
 		angular.forEach(list, function(value) {
@@ -71,8 +66,6 @@ function ApiViewCtr($scope, $document, $timeout, resourceService,
 		resourceService.get(
 				DEVELOPMENT_API_DISPLAY_MASTER_URL + "/" + categoryId + "/"
 						+ version).then(function(apiList) {
-			// resourceService.get(DEVELOPMENT_API_DISPLAY_MASTER_URL + "/" + 3
-			// + "/" + 1).then(function(apiList) {
 			$scope.apiList = apiList;
 			console.log(apiList);
 			$scope.stretchState = 'EXPAND_ALL';
@@ -110,7 +103,7 @@ function ApiViewCtr($scope, $document, $timeout, resourceService,
 		// api node
 		if (api.name) {
 			// console.log(api);
-			$scope.selectedRtParasm = undefined;
+			$scope.selectedRtParam = undefined;
 			$scope.selectedRqParam = undefined;
 			$scope.selectedApi = api;
 			var bid = busyService.pushBusy("BUSY_LOADING")
@@ -118,6 +111,7 @@ function ApiViewCtr($scope, $document, $timeout, resourceService,
 					DEVELOPMENT_API_DISPLAY_APIINFOMATION_URL
 							+ $scope.selectedApi.id).then(function(result) {
 				$scope.selectedApi = result;
+				console.log(result);
 				busyService.popBusy(bid);
 			})
 
@@ -155,5 +149,26 @@ function ApiViewCtr($scope, $document, $timeout, resourceService,
 				});
 
 	};
-	
+	$scope.returnCodeNeeded = function() {
+		var params = $scope.selectedApi.returnParams;
+		var result;
+		if (params) {
+			if (angular.isArray(params)) {
+				angular.forEach(params, function(param) {
+					if (param.name == 'resultCode') {
+						result = true;
+					}
+				})
+			} else {
+				if (params.name == 'resultCode') {
+					result = true;
+				}
+			}
+		}else{
+			result = false;
+		}
+
+		return result;
+	}
+
 }

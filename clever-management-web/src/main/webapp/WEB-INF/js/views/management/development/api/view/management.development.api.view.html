@@ -125,7 +125,7 @@
                             </div>
                         </div>
                     </tab>
-                    <tab heading = "{{'DEVELOPMENT_API_VIEW_RETURN_CODE' | translate}}">
+                    <tab heading = "{{'DEVELOPMENT_API_VIEW_RETURN_CODE' | translate}}" ng-if="returnCodeNeeded()">
                         <div style="padding: 15px; overflow: auto" ng-style="{height: containerHeight - 170}">
                             <table class="variables-matrix input-arguments">
                                 <thead>
