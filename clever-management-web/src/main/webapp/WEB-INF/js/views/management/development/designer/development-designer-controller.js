@@ -25,8 +25,34 @@ function DesignerCtrl($scope,resourceService,$q,templateParseService,archetypePa
                 $scope.player.gold += $itemScope.item.cost;
             }]
         ];
-        
-     //for template display don't delete!!
+      
+      $scope.models = {
+        selected: null,
+        templates: [
+            {type: "item", id: 2},
+            {type: "container", id: 1, columns: [[], []]}
+        ],
+        dropzones: {"A": [
+                    {
+                        "type": "container",
+                        "id": 1,
+                        "columns": [
+                            [
+                                {
+                                    "type": "item",
+                                    "id": "1"
+                                },
+                                {
+                                    "type": "item",
+                                    "id": "2"
+                                }
+                            ]
+                          ]
+                       }
+                      ]
+                  }
+        };
+     //for template display don't delete
      resourceService.get(STORAGE_TEMPLATE_LIST_URL).then(function(list) {            
             $scope.templateList = list;
         });

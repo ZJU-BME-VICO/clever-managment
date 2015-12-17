@@ -4,9 +4,10 @@
        </div>
 <div class="row">
     <div class="col-xs-12 col-md-12 col-lg-12 hbox">  
+       <!--panel-->
 	   <div class="panel panel-default" ng-show="!isTemolateListHidden" >
-	    			<div class="panel-heading">
-	    				<div class="input-group">
+			<div class="panel-heading">
+				<div class="input-group">
                     <input type="text" class="form-control" ng-model="archetypeListFilter">
                     <span class="input-group-btn">
                         <button class="btn btn-default" type="button" ng-click="expand()">
@@ -17,48 +18,89 @@
                             <span class="glyphicon glyphicon-minus"></span>
                         </button> </span>
                 </div>
-	    			</div>
-	    	        <div class="list-group" ng-style="{height: containerHeight - 55}" style="overflow: auto;auto;margin-left: -5px;white-space: nowrap;">
-                      <div class="btn-group" style="margin-left:30px;">
-                        <button class="btn btn-default" type="button" ng-click="expand()">expandAll</button>
-                        <button class="btn btn-default" type="button" ng-click="collapse()">collapseAll</button>
-                      </div>
-                      <storagetemplate-list-tree tree-data="templateList" select-node-callback="getTemplateDetail(node)" tree-control="treeControl">
-                      </storagetemplate-list-tree>  
-                      <template-list-tree ng-repeat="node in templateDetail" tree-data="node" ng-mousedown="cloneItems()" temp-control="tempControl">
-                      </template-list-tree>
-                                      
-                  </div>
-	    		</div>	   
+			</div>
+	        <div class="list-group" ng-style="{height: containerHeight - 55}" style="overflow: auto;auto;margin-left: -5px;white-space: nowrap;">
+              <div class="btn-group" style="margin-left:30px;">
+                <button class="btn btn-default" type="button" ng-click="expand()">expandAll</button>
+                <button class="btn btn-default" type="button" ng-click="collapse()">collapseAll</button>
+              </div>
+              <storagetemplate-list-tree tree-data="templateList" select-node-callback="getTemplateDetail(node)" tree-control="treeControl">
+              </storagetemplate-list-tree>  
+              <template-list-tree ng-repeat="node in templateDetail" tree-data="node" ng-mousedown="cloneItems()" temp-control="tempControl">
+              </template-list-tree>                     
+             </div>
+	   </div>	   
 	   <!-- splitter -->
 	   <splitter is-adjust-enabled="!isTemolateListHidden" style="min-height: 100%;">
 			<i style="cursor: pointer" ng-click="isTemolateListHidden = !isTemolateListHidden" ng-show="isTemolateListHidden" tooltip-placement="right" tooltip="Expand" tooltip-popup-delay="500"> <span class="glyphicon glyphicon-chevron-right" ng-style="{'margin-top': containerHeight/2}" ></span> </i>
 			<i style="cursor: pointer" ng-click="isTemolateListHidden = !isTemolateListHidden" ng-show="!isTemolateListHidden" tooltip-placement="right" tooltip="Collapse" tooltip-popup-delay="500"> <span class="glyphicon glyphicon-chevron-left" ng-style="{'margin-top': containerHeight/2}" ></span> </i>
 		</splitter>
-		
-    <div class="col-xs-12 col-md-12 col-lg-12 edit-box" style="height:2800px">
-        <div id="editArea"> 
-             <div>
-        <strong>Gold: </strong>
-        {{player.gold}}
-        </div>
-        <div class="list-group">
-             <a class="list-group-item"
-                ng-repeat="item in items"
-                ng-context-menu="menuOptions">
-                 <span class="badge">{{item.cost}}</span>
-                 {{item.name}}
-            </a>
-        </div>
-        </div>
-	</div>
-	<!--<div class="col-xs-12 col-md-12 col-lg-12 function-Box" > 
-    <div class="style">
-         <a>样式区</a>     
-    </div>
-    <control-box></control-box>
- </div>   
+	  <div class="col-xs-12 col-md-12 col-lg-12 edit-box" style="min-height: 100%;">	
+          <div class="col-xs-9 col-md-9 col-lg-9 edit-box" style="min-height: 100%;">
+            <div id="editArea"> 
+                <div ng-repeat="(zone, list) in models.dropzones" class="col-md-6">
+                    <div class="dropzone box box-yellow">
+                        <!-- The dropzone also uses the list template -->
+                        <h3>Dropzone {{zone}}</h3>
+                            <ul dnd-list="list">
+                                <li dragable ng-repeat="item in list"
+                                    dnd-draggable="item"
+                                    dnd-effect-allowed="move"
+                                    dnd-moved="list.splice($index, 1)"
+                                    dnd-selected="models.selected = item"
+                                    ng-class="{selected: models.selected === item}"
+                                    ng-include="item.type + '.html'">
+                                </li>
+                        </ul>
+                    </div>
+                </div>
+          <!--<div>
+            <strong>Gold: </strong>
+            {{player.gold}}
+            </div>
+            <div class="list-group">
+                 <a class="list-group-item"
+                    ng-repeat="item in items"
+                    ng-context-menu="menuOptions">
+                     <span class="badge">{{item.cost}}</span>
+                     {{item.name}}
+                </a>
+            </div>-->
+            </div>
+    	 </div>
+    	  <div class="col-xs-3 col-md-3 col-lg-3 function-Box" > 
+            <div class="style">
+                <div class="toolbox box box-grey box-padding">
+                <h3>New Elements</h3>
+                <ul>
+                    <!-- The toolbox only allows to copy objects, not move it. After a new
+                         element was created, dnd-copied is invoked and we generate the next id -->
+                    <li ng-repeat="item in models.templates"
+                        dnd-draggable="item"
+                        dnd-effect-allowed="copy"
+                        dnd-copied="item.id = item.id + 1">
+                        <button type="button" class="btn btn-default btn-lg" disabled="disabled">{{item.type}}</button>
+                    </li>
+                </ul>
+            </div>
+            </div>
+            <div class="style">
+                 <control-box></control-box>    
+            </div>        
+          </div> 
     </div>  
+ </div>  
 </div>
+<script type="text/ng-template" id="container.html">
+    <div class="container-element box box-blue">
+        <h3>Container {{item.id}}</h3>
+        
+        <div class="clearfix"></div>
+    </div>
+</script>
 
+<!-- Template for a normal list item -->
+<script type="text/ng-template" id="item.html">
+    <div class="item">Item {{item.id}}</div>
+</script>
 

@@ -1,14 +1,17 @@
 .edit-box{
     position: relative;
-    height: 300%;
+    height: 100%;
     -webkit-box-flex: 1;
     -moz-box-flex: 1;
     -ms-flex: 1;  
     border:thin solid lightgray;
-   // margin-left:20px;
 }
 .function-Box{
-	
+	position: relative;
+    height: 100%;
+    -webkit-box-flex: 1;
+    -moz-box-flex: 1;
+    -ms-flex: 1;  
 }
 .listBox {
 	margin-top: 30px;
@@ -180,23 +183,21 @@ template-list-tree li .selected {
 }
 
 .style{
-    float:left;
-   /* width:120px;*/
     height:190px;
     border:thin solid lightgray;
 }
 .Control {
-    float:left;
-    width:120px;
     height:190px;
     border:thin solid lightgray;
 }
 .Control a{
     display: block;
+    margin:10px;
 }
 .controlItem{
     width : 50px;
     height:50px;
+    margin:5px;
     text-align:center;
     float: left;
 }

@@ -418,7 +418,9 @@ angular.module('clever.management.services.archetypeParse', []).service('archety
 				enname=label;
 			}
 		}
-
+        if(!cnname){
+            cnname=enname;
+        }
 		if (type == "ELEMENT") {
 			picType = dataType;
 		} else {
@@ -451,7 +453,7 @@ angular.module('clever.management.services.archetypeParse', []).service('archety
 				occurrences : occurrences,
 				existence : existence,
 				cardinality : cardinality,				
-				labelContent : cnname,//display content
+				labelContent : cnname,//display content cnname first
 				enText : enname,//useless if path is ok
 				dataType : dataType,
 				picType : picType,
