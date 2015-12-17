@@ -20,8 +20,9 @@
 		<servlet-api.version>3.1.0</servlet-api.version>
 		<jetty.version>9.2.2.v20140723</jetty.version>
 		<jackson.version>2.2.1</jackson.version>
-		<tomcat.url>http://172.16.100.63:8080/manager/text</tomcat.url>
+		<tomcat.url>http://172.16.100.63:9095/manager/text</tomcat.url>
 	</properties>
+
 
 	<build>
 		<pluginManagement>
@@ -168,6 +169,5 @@
 			<artifactId>jackson-databind</artifactId>
 			<version>${jackson.version}</version>
 		</dependency>
-
 	</dependencies>
 </project>

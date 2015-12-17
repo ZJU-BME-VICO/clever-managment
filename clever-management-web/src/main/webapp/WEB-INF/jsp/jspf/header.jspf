@@ -19,11 +19,16 @@
 			</ul>
 			<ul class="nav navbar-nav navbar-right">
 				<li class="dropdown" dropdown>
-					<a href class="dropdown-toggle"
-					dropdown-toggle> <img ng-show="getCurrentLanguage() == 'LANGUAGE_ZH'" src="img/zh.png" style="height: 18px;"> <img ng-show="getCurrentLanguage() == 'LANGUAGE_EN'" src="img/en.png" style="height: 20px;"> {{getCurrentLanguage() | translate}}<b class="caret"></b> </a>
+					<a href class="dropdown-toggle" dropdown-toggle> 
+					<img ng-show="getCurrentLanguage() == 'LANGUAGE_ZH'" src="img/zh.png" style="height: 18px;"> 
+					<img ng-show="getCurrentLanguage() == 'LANGUAGE_EN'" src="img/en.png" style="height: 20px;"> 
+					{{getCurrentLanguage() | translate}}<b class="caret"></b> </a>
 					<ul class="dropdown-menu">
 						<li ng-click="selectLanguage('zh')" style="cursor: pointer;">
 							&nbsp;&nbsp;&nbsp;&nbsp;<img src="img/zh.png" style="height: 20px;">&nbsp;&nbsp;{{'LANGUAGE_ZH' | translate}}
+						</li>
+						<li ng-click="selectLanguage('en')" style="cursor: pointer;">
+							&nbsp;&nbsp;&nbsp;&nbsp;<img src="img/en.png" style="height: 20px;">&nbsp;&nbsp;{{'LANGUAGE_EN' | translate}}
 						</li>
 					</ul>
 				</li>

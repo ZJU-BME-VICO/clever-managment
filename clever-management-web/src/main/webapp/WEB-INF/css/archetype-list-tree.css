@@ -52,8 +52,8 @@ archetype-list-tree-node li {
 archetype-list-tree-node li i, archetype-list-tree-node li span {
 	cursor: pointer;
 }
-
+/*
 archetype-list-tree-node li .selected {
 	background-color: #aaddff;
 	font-weight: bold;
-}
+}*/

@@ -60,5 +60,14 @@ public interface ArchetypeVersionControlService {
 			User user) throws VersionControlException;
 
 	void acceptArchetype(String archetype, User user) throws VersionControlException;
+	
+	public void fallbackArchetype(Integer archetypeId, User user)
+			throws VersionControlException;
+
+	public void fallbackArchetype(String archetypeName, User user)
+			throws VersionControlException;
+
+	public void fallbackArchetype(ArchetypeRevisionFile archetypeFile, User user)
+			throws VersionControlException;
 
 }

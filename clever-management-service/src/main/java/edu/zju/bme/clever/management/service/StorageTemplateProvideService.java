@@ -2,6 +2,7 @@ package edu.zju.bme.clever.management.service;
 
 import java.io.OutputStream;
 import java.util.List;
+import java.util.Set;
 
 import edu.zju.bme.clever.management.service.entity.EntityClassSource;
 import edu.zju.bme.clever.management.service.entity.TemplateMaster;
@@ -11,7 +12,7 @@ import edu.zju.bme.clever.management.service.exception.ResourceExportException;
 
 public interface StorageTemplateProvideService {
 
-	public List<TemplateMaster> getAllStorageTemplateMasters();
+	public Set<TemplateMaster> getAllStorageTemplateMasters();
 
 	public TemplateMaster getTemplateMasterById(Integer id);
 
@@ -23,9 +24,9 @@ public interface StorageTemplateProvideService {
 
 	public List<TemplateRevisionFile> getTemplateFilesToVerify();
 
-	public List<TemplateRevisionFile> getDraftTemplateFilesToEdit(User user);
+	public Set<TemplateRevisionFile> getDraftTemplateFilesToEdit(User user);
 	
-	public List<TemplateRevisionFile> getLatestPublishedTemplateFilesToEdit();
+	public Set<TemplateRevisionFile> getLatestPublishedTemplateFilesToEdit();
 
 	public String getTemplateOetById(Integer templateId);
 

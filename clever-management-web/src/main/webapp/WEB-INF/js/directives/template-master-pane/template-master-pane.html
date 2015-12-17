@@ -12,52 +12,53 @@
 		<div class="col-xs-12 col-md-12 col-lg-12" ng-style="{'max-height': tableMaxHeight.value - 100}" style="overflow: auto;margin-top: 5px; margin-bottom: 20px;">
 			<table class="table table-hover">
 				<tbody>
+					
 					<tr>
-						<th ng-style="{width: tableTitleWidth+ 'px'}"><b>Master ID</b></th>
+						<th ng-style="{width: tableTitleWidth+ 'px'}"><b>{{'STORAGE_MASTER_PANE_MASTER_ID' | translate}}</b></th>
 						<th style="font-weight: normal">{{templateMasterInfo.name}}</th>
 					</tr>
 					<tr>
-						<th ng-style="{width: tableTitleWidth+ 'px'}"><b>History version</b></th>
+						<th ng-style="{width: tableTitleWidth+ 'px'}"><b>{{'STORAGE_MASTER_PANE_HISTORY_VERSION' | translate}}</b></th>
 						<th style="font-weight: normal"><span ng-repeat="template in templateMasterInfo.templates | orderBy:'internalVersion'"> <a href ng-click="selectTemplate(template)">{{template.version}}</a>&nbsp;&nbsp; </span></th>
 					</tr>
 					<tr>
-						<th ng-style="{width: tableTitleWidth+ 'px'}"><b>Latest template lifecycle</b></th>
+						<th ng-style="{width: tableTitleWidth+ 'px'}"><b>{{'STORAGE_MASTER_PANE_LATEST_TEMPLATE_LIFECYCLE' | translate}}</b></th>
 						<th style="font-weight: normal">{{templateMasterInfo.lifecycleState}}</th>
 					</tr>
 					<tr>
-						<th ng-style="{width: tableTitleWidth+ 'px'}"><b>Specialise master ID</b></th>
+						<th ng-style="{width: tableTitleWidth+ 'px'}"><b>{{'STORAGE_MASTER_PANE_SPECIALISE_MASTER_ID' | translate}}</b></th>
 						<th style="font-weight: normal"><a href ng-click="selectSpecialiseMaster(templateMasterInfo.specialiseArchetypeVersionMaster)">{{templateMasterInfo.specialiseArchetypeVersionMaster.name}}</a></th>
 					</tr>
 					<tr>
-						<th ng-style="{width: tableTitleWidth+ 'px'}"><b>Specialise master latest archetype version</b></th>
+						<th ng-style="{width: tableTitleWidth+ 'px'}"><b>{{'STORAGE_MASTER_PANE_SPECIALISE_MASTER_LATEST_ARCHETYPE_VERSION' | translate}}</b></th>
 						<th style="font-weight: normal"><a href ng-click="selectSpecialiseArchetype({ id: templateMasterInfo.specialiseArchetypeVersionMaster.latestArchetypeId, name: templateMasterInfo.specialiseArchetypeVersionMaster.name})">{{templateMasterInfo.specialiseArchetypeVersionMaster.latestArchetypeVersion}}</th>
 					</tr>
 					<tr>
-						<th ng-style="{width: tableTitleWidth+ 'px'}"><b>Concept name</b></th>
+						<th ng-style="{width: tableTitleWidth+ 'px'}"><b>{{'STORAGE_MASTER_PANE_CONCEPT_NAME' | translate}}</b></th>
 						<th style="font-weight: normal">{{templateMasterInfo.conceptName}}</th>
 					</tr>
 					<tr>
-						<th ng-style="{width: tableTitleWidth+ 'px'}"><b>Concept description</b></th>
+						<th ng-style="{width: tableTitleWidth+ 'px'}"><b>{{'STORAGE_MASTER_PANE_CONCEPT_DESCRIPTION' | translate}}</b></th>
 						<th style="font-weight: normal">{{templateMasterInfo.conceptDescription}}</th>
 					</tr>
 					<tr>
-						<th ng-style="{width: tableTitleWidth+ 'px'}"><b>Keywords</b></th>
+						<th ng-style="{width: tableTitleWidth+ 'px'}"><b>{{'STORAGE_MASTER_PANE_KEYWORDS' | translate}}</b></th>
 						<th style="font-weight: normal">{{templateMasterInfo.keywords}}</th>
 					</tr>
 					<tr>
-						<th ng-style="{width: tableTitleWidth+ 'px'}"><b>Copyright</b></th>
+						<th ng-style="{width: tableTitleWidth+ 'px'}"><b>{{'STORAGE_MASTER_PANE_COPYRIGHT' | translate}}</b></th>
 						<th style="font-weight: normal">{{templateMasterInfo.copyright}}</th>
 					</tr>
 					<tr>
-						<th ng-style="{width: tableTitleWidth+ 'px'}"><b>Purpose</b></th>
+						<th ng-style="{width: tableTitleWidth+ 'px'}"><b>{{'STORAGE_MASTER_PANE_PURPOSE' | translate}}</b></th>
 						<th style="font-weight: normal">{{templateMasterInfo.purpose}}</th>
 					</tr>
 					<tr>
-						<th ng-style="{width: tableTitleWidth+ 'px'}"><b>Use</b></th>
+						<th ng-style="{width: tableTitleWidth+ 'px'}"><b>{{'STORAGE_MASTER_PANE_USE' | translate}}</b></th>
 						<th style="font-weight: normal">{{templateMasterInfo.use}}</th>
 					</tr>
 					<tr>
-						<th ng-style="{width: tableTitleWidth+ 'px'}"><b>Misuse</b></th>
+						<th ng-style="{width: tableTitleWidth+ 'px'}"><b>{{'STORAGE_MASTER_PANE_MISUSE' | translate}}</b></th>
 						<th style="font-weight: normal">{{templateMasterInfo.misuse}}</th>
 					</tr>
 				</tbody>

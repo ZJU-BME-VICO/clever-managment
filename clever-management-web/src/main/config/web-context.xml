@@ -77,7 +77,7 @@
         class="org.springframework.jmx.support.ConnectorServerFactoryBean" depends-on="registry">
 	    <property name="objectName" value="connector:name=rmi"/>
 	    <property name="serviceUrl"
-	            value="service:jmx:rmi://localhost/jndi/rmi://localhost:${jmx.port}/connector"/>
+	            value="service:jmx:rmi://${management.ip}/jndi/rmi://${management.ip}:${jmx.port}/connector"/>
 	    <property name="environment">
 	    	<map>
 	    		<entry key="jmx.remote.authenticator" value-ref="jmxSecurityAuthenticator" />
@@ -90,11 +90,11 @@
 	</bean>
 	
 	<bean class="edu.zju.bme.clever.commons.rest.RestClientSpringImpl" >
-		<constructor-arg value="localhost" />
-		<constructor-arg value="8090" />
-		<constructor-arg value="clever-cdr-service" />
-		<constructor-arg value="admin" />
-		<constructor-arg value="admin" />
+		<constructor-arg value="${cdrService.ip}" />
+		<constructor-arg value="${cdrService.port}" />
+		<constructor-arg value="${cdrService.name}" />
+		<constructor-arg value="${cdrService.username}" />
+		<constructor-arg value="${cdrService.password}" />
 	</bean>
 	
 </beans>

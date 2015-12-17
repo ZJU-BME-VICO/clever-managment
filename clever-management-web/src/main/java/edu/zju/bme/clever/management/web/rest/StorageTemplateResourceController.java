@@ -1,6 +1,7 @@
 package edu.zju.bme.clever.management.web.rest;
 
 import java.io.ByteArrayInputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -11,7 +12,10 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
+
+
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -132,7 +136,7 @@ public class StorageTemplateResourceController extends
 		String userName = ((UserDetails) authentication.getPrincipal())
 				.getUsername();
 		User user = userService.getUserByName(userName);
-		List<TemplateRevisionFile> templateFiles = this.provideService
+		Set<TemplateRevisionFile> templateFiles = this.provideService
 				.getDraftTemplateFilesToEdit(user);
 		this.isResourcesNull(templateFiles);
 		return templateFiles.stream()
@@ -142,7 +146,7 @@ public class StorageTemplateResourceController extends
 
 	@RequestMapping(value = "/list/edit/published", method = RequestMethod.GET)
 	public List<StorageTemplateInfo> getTemplateListToEdit() {
-		List<TemplateRevisionFile> templateFiles = this.provideService
+		Set<TemplateRevisionFile> templateFiles = this.provideService
 				.getLatestPublishedTemplateFilesToEdit();
 		this.isResourcesNull(templateFiles);
 		return templateFiles.stream()
@@ -168,8 +172,9 @@ public class StorageTemplateResourceController extends
 			Authentication authentication) {
 		// Validate user authority
 
-		List<TemplateMaster> masters = this.provideService
+		Set<TemplateMaster> masters = this.provideService
 				.getAllStorageTemplateMasters();
+		System.out.println(masters.size());
 		return masters
 				.stream()
 				.map(master -> {
@@ -267,28 +272,27 @@ public class StorageTemplateResourceController extends
 		}
 		return result;
 	}
-	
+
 	@RequestMapping(value = "/action/edit/id/{id}", method = RequestMethod.POST)
 	public FileUploadResult editTemplateFile(@PathVariable int id,
-			@RequestBody OetInfo oetInfo,
-			Authentication authentication) {
+			@RequestBody OetInfo oetInfo, Authentication authentication) {
 		String userName = ((UserDetails) authentication.getPrincipal())
 				.getUsername();
 		User user = this.userService.getUserByName(userName);
 		FileUploadResult result = new FileUploadResult();
 		result.setSucceeded(true);
-		
+
 		try {
-			this.versionControlService.editTemplate(id,
-					oetInfo.getOet(), oetInfo.getArm(), user);
+			this.versionControlService.editTemplate(id, oetInfo.getOet(),
+					oetInfo.getArm(), user);
 		} catch (VersionControlException ex) {
 			result.setSucceeded(false);
-			result.setMessage("Edit template " +oetInfo.getName()
+			result.setMessage("Edit template " + oetInfo.getName()
 					+ " failed, error: " + ex.getMessage());
 		}
 		return result;
 	}
-   
+
 	@RequestMapping(value = "/action/approve/id/{id}", method = RequestMethod.GET)
 	public FileUploadResult approveTemplateFile(@PathVariable int id,
 			Authentication authentication) {
@@ -333,6 +337,23 @@ public class StorageTemplateResourceController extends
 		result.setSucceeded(true);
 		try {
 			this.versionControlService.rejectAndRemoveTemplate(id, user);
+		} catch (VersionControlException e) {
+			result.setMessage(e.getMessage());
+			result.setSucceeded(false);
+		}
+		return result;
+	}
+
+	@RequestMapping(value = "/action/fallback/id/{id}", method = RequestMethod.GET)
+	public FileUploadResult fallbackTemplateFile(@PathVariable int id,
+			Authentication authentication) {
+		String userName = ((UserDetails) authentication.getPrincipal())
+				.getUsername();
+		User user = this.userService.getUserByName(userName);
+		FileUploadResult result = new FileUploadResult();
+		result.setSucceeded(true);
+		try {
+			this.versionControlService.fallbackTemplate(id, user);
 		} catch (VersionControlException e) {
 			result.setMessage(e.getMessage());
 			result.setSucceeded(false);
@@ -398,7 +419,7 @@ public class StorageTemplateResourceController extends
 					.getInputStream(), template.getArm().getInputStream());
 		} catch (IOException e) {
 			FileProcessResult result = new FileProcessResult();
-			result.setStatus(FileStatus.INVALID);
+			result.setStatus(FileStatus.INVALIDOTHERS);
 			return result;
 		}
 	}
@@ -409,12 +430,17 @@ public class StorageTemplateResourceController extends
 			@RequestParam(value = "count", required = true) int count,
 			@RequestParam(value = "oets", required = true) MultipartFile[] oets,
 			@RequestParam(value = "arms", required = true) MultipartFile[] arms,
+
 			Authentication authentication) {
+		System.out.println(oets.length);
+		System.out.println(arms.length);
 		FileUploadResult result = new FileUploadResult();
 		result.setSucceeded(true);
 		if (oets.length != count || arms.length != count) {
+
 			result.setSucceeded(false);
-			result.setMessage("OET's count and ARM's count does not match.");
+			result.setMessage("OET's count and ARM's count does not match");
+
 		}
 		String userName = ((UserDetails) authentication.getPrincipal())
 				.getUsername();
@@ -424,6 +450,7 @@ public class StorageTemplateResourceController extends
 				this.versionControlService.acceptNewTemplate(
 						oets[i].getInputStream(), arms[i].getInputStream(),
 						user);
+
 			}
 		} catch (VersionControlException | IOException ex) {
 			result.setSucceeded(false);
@@ -542,9 +569,10 @@ public class StorageTemplateResourceController extends
 		info.setContent(entityClass.getContent());
 		return info;
 	}
-	
-	private String GetTime(){
-		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+	private String GetTime() {
+		SimpleDateFormat dateFormat = new SimpleDateFormat(
+				"yyyy-MM-dd HH:mm:ss");
 		return dateFormat.format(new Date());
 	}
 

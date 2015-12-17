@@ -41,7 +41,7 @@ tree-view-node li .selected {
 
 tree-view-node li[role="context-menu"] .selected {
 	background-color: #aaddff;
-	font-weight: normal;
+	font-weight: strong;
 }
 
 .position-fixed {

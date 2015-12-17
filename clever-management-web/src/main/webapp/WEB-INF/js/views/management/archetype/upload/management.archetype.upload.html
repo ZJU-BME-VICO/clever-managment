@@ -7,41 +7,73 @@
 					<input id="inputFiles" type="file" multiple accept=".adl" files-model file-list="fileList">
 				</button>
 				<span ng-show="fileList.length>0" class="badge pull-right">{{fileList.length}}</span>
-				<h4 ng-show="onStatus('Validating')"><img ng-src="{{WEBSITE_DOMAIN}}/img/loading.gif" style="max-height: 18px;"></img> {{'ARCHETYPE_UPLOAD_VALIDATING_HINT' | translate}}</h4>
-				<h4 ng-show="onStatus('ValidationFailed')" style="color: red">{{'ARCHETYPE_UPLOAD_VALIDATION_FAILED_HINT' | translate}}</h4>
-				<h4 ng-show="onStatus('ValidationPast')" style="color: green">{{'ARCHETYPE_UPLOAD_VALIDATION_PAST_HINT' | translate}}</h4>
+				 <h4 ng-show="onStatus('Validating')"><img ng-src="{{WEBSITE_DOMAIN}}/img/loading.gif" style="max-height: 18px;"></img> {{'ARCHETYPE_UPLOAD_VALIDATING_HINT' | translate}}</h4>
+				<!-- <h4 ng-show="onStatus('ValidationFailed')" style="color: red">{{'ARCHETYPE_UPLOAD_VALIDATION_FAILED_HINT' | translate}}</h4>
+				<h4 ng-show="onStatus('ValidationPast')" style="color: green">{{'ARCHETYPE_UPLOAD_VALIDATION_PAST_HINT' | translate}}</h4> -->
 				<h4 ng-show="onStatus('Uploading')"><img ng-src="{{WEBSITE_DOMAIN}}/img/loading.gif" style="max-height: 18px;"></img> {{'ARCHETYPE_UPLOAD_UPLOADING_HINT' | translate}}</h4>
 			</div>
 		</div>
 		<br/>
 		<div class="row">
-			<div class="col-sm-12 col-md-12 col-lg-12" ng-style="{height: containerHeight - 170}" style="overflow: auto">
+			<div class="col-sm-12 col-md-12 col-lg-12" ng-style="{height: containerHeight - 170}" style="overflow: auto" ng-if="onStatus('ToAddFile')">
 				<table role="presentation" class="table table-striped table-hover" ng-show="fileList.length">
 					<tbody>
-						<tr ng-repeat="file in fileList | orderBy:file.name" ng-class="{TOUPLOAD: '', VALID: 'success', EXISTED: 'info', CHANGED: 'warning', INVALID: 'danger', FAILED: 'danger'}[file.status]">
-							<td style="vertical-align: middle;">
-								<span ng-show="file.status=='TOUPLOAD'"><span class="glyphicon glyphicon-plus-sign"></span> {{'ARCHETYPE_UPLOAD_FILE_TO_UPLOAD' | translate}}</span>
-								<span ng-show="file.status=='VALID'"><span class="glyphicon glyphicon-ok-sign"></span> {{'ARCHETYPE_UPLOAD_FILE_VALID' | translate}}</span>
-								<span ng-show="file.status=='INVALID'"><span class="glyphicon glyphicon-minus-sign"></span> {{'ARCHETYPE_UPLOAD_FILE_INVALID' | translate}}</span>
-								<span ng-show="file.status=='FAILED'"><span class="glyphicon glyphicon-remove-sign"></span> {{'ARCHETYPE_UPLOAD_FILE_FAILED' | translate}}</span>
-								<span ng-show="file.status=='UPLOADING'"><img ng-src="{{WEBSITE_DOMAIN}}/img/loading.gif" style="max-height: 20px;"></img> {{'ARCHETYPE_UPLOAD_FILE_UPLOADING' | translate}}</span>
-								<span ng-show="file.status=='VALIDATING'"><img ng-src="{{WEBSITE_DOMAIN}}/img/loading.gif" style="max-height: 20px;"></img> {{'ARCHETYPE_UPLOAD_FILE_VALIDATING' | translate}}</span>
-							</td>
+						<tr ng-repeat="file in fileList | orderBy:file.name">
+							<td style="vertical-align: middle;"><span ng-show="file.status=='TOUPLOAD'"><span class="glyphicon glyphicon-plus-sign"></span> {{'ARCHETYPE_UPLOAD_FILE_TO_UPLOAD' | translate}}</span><span ng-show="file.status=='UPLOADING'"><img ng-src="{{WEBSITE_DOMAIN}}/img/loading.gif" style="max-height: 20px;"></img> {{'ARCHETYPE_UPLOAD_FILE_UPLOADING' | translate}}</span></td>
 							<td style="vertical-align: middle;">{{file.name}}</td>
 							<td style="vertical-align: middle;">{{file.size/1024 | number:0}}KB</td>
+							<!-- <td style="vertical-align: middle;">
+							<a ng-show="file.status == 'INVALID'" style="cursor: pointer;" popover-placement="bottom" popover="{{file.message}}" popover-trigger="mouseenter">
+							<span class="glyphicon glyphicon-exclamation-sign"></span>
+							{{'ARCHETYPE_UPLOAD_FILE_DETAILS' | translate}}
+							</a>
+							</td> -->
 							<td style="vertical-align: middle;">
-								<a ng-show="file.status == 'INVALID'" style="cursor: pointer;" popover-placement="bottom" popover="{{file.message}}" popover-trigger="mouseenter">
-									<span class="glyphicon glyphicon-exclamation-sign"></span> 
-									{{'ARCHETYPE_UPLOAD_FILE_DETAILS' | translate}}
-								</a>
-							</td>
-							<td style="vertical-align: middle;">
-							<button ng-show="file.status== 'TOUPLOAD' || file.status == 'INVALID'" type="button" class="btn btn-warning" ng-click="deleteFile(file.name)">
+							<button ng-show="file.status== 'TOUPLOAD'" type="button" class="btn btn-warning" ng-click="deleteFile(file.name)">
 								{{'ARCHETYPE_UPLOAD_DELETE' | translate}}
 							</button>
 						</tr>
 					</tbody>
 				</table>
+			</div>
+			<div class="col-sm-12 col-md-12 col-lg-12" ng-style="{height: containerHeight - 170}" style="overflow: auto" ng-if="onStatus('AfterUpload')">
+				<div ng-show="validateResult.successful.length">
+					<label>{{'UPLOAD_SUCCESSFUL' | translate}} </label><span class="badge pull-right">{{validateResult.successful.length}}</span>
+					<table role="presentation" class="table table-striped table-hover" >
+						<tbody>
+							<tr ng-repeat="file in validateResult.successful | orderBy:file.name" class="success" >
+								<td><span><span class="glyphicon glyphicon-ok-sign"></span> {{'ARCHETYPE_UPLOAD_FILE_VALID' | translate}}</span></td>
+								<td style="vertical-align: middle;">{{file.name}}</td>
+								<td style="vertical-align: middle;">
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				<div  ng-show="validateResult.alreadyExist.length" >
+					<label>{{'ALREADY_EXIST' | translate}}</label><span class="badge pull-right">{{validateResult.alreadyExist.length}}</span>
+					<table role="presentation" class="table table-striped table-hover">
+						<tbody>
+							<tr ng-repeat="file in validateResult.alreadyExist | orderBy:file.name"  class="warning">
+								<td><span><span class="glyphicon glyphicon-minus-sign"></span> {{'ARCHETYPE_UPLOAD_FILE_INVALID' | translate}}</span></td>
+								<td style="vertical-align: middle;">{{file.name}}</td>
+								<td><a style="cursor: pointer;" popover-placement="left" popover="{{file.message}}" popover-trigger="mouseenter"> <span class="glyphicon glyphicon-exclamation-sign"></span> {{'ARCHETYPE_UPLOAD_FILE_DETAILS' | translate}} </a></td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				<div ng-show="validateResult.others.length">
+					<label>{{'OTHERS'| translate}}</label><span class="badge pull-right">{{validateResult.others.length}}</span>
+					<table role="presentation" class="table table-striped table-hover" ng-show="validateResult.others.length">
+						<tbody>
+							<tr ng-repeat="file in validateResult.others | orderBy:file.name" class="danger" >
+								<td><span><span class="glyphicon glyphicon-minus-sign"></span> {{'ARCHETYPE_UPLOAD_FILE_INVALID' | translate}}</span></td>
+								<td style="vertical-align: middle;">{{file.name}}</td>
+								<td><a style="cursor: pointer;" popover-placement="left" popover="{{file.message}}" popover-trigger="mouseenter"> <span class="glyphicon glyphicon-exclamation-sign"></span> {{'ARCHETYPE_UPLOAD_FILE_DETAILS' | translate}} </a></td>
+
+							</tr>
+						</tbody>
+					</table>
+				</div>
 			</div>
 			<br/>
 		</div>
@@ -49,14 +81,9 @@
 </div>
 <div class="modal-footer">
 	<button ng-show="onStatus('ToAddFile')" class="btn btn-primary btn-lg" ng-click="validateFiles()" ng-disabled="fileList.length == 0">
-		{{'ARCHETYPE_UPLOAD_VALIDATE' | translate}}
-	</button>
-	<button ng-show="onStatus('ValidationFailed')" class="btn btn-primary btn-lg" ng-click="validateFiles()" ng-disabled="fileList.length == 0">
-		{{'ARCHETYPE_UPLOAD_RETRY' | translate}}
-	</button>
-	<button ng-show="onStatus('ValidationPast')" class="btn btn-success btn-lg" ng-click="uploadFiles()" ng-disabled="fileList.length == 0">
 		{{'ARCHETYPE_UPLOAD_UPLOAD' | translate}}
 	</button>
+
 	<button class="btn btn-warning btn-lg" ng-click="reset()">
 		{{'ARCHETYPE_UPLOAD_RESET' | translate}}
 	</button>

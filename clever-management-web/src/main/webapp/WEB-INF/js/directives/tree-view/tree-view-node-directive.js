@@ -28,7 +28,7 @@ angular.module('clever.management.directives.treeViewNode', []).directive('treeV
 									'<span class="dropdown position-fixed" id="' + prefix + parentIndex + '.{{$index}}">' + scope.getNodeMenu1() +
 								    '</span>'+
 									'<tree-view-node ' + 
-										'ng-repeat="_node in childNodes" ' + 
+										'ng-repeat="_node in childNodes track by $index" ' + 
 										'ng-hide="_node.parent.collapsed || !_node.show" ' + 
 										'ng-init="_node.parent = ' + nodeAliasName + '" ' + 'node-index="' + parentIndex + '.{{$index}}"' +  nodeAliasName.replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase() + '="_node">' + 
 									'</tree-view-node>' + 

@@ -40,8 +40,12 @@ public class ArchetypeVersionMaster extends AbstractMaster {
 	private List<ArchetypeRevisionFile> revisionFiles;
 	@ManyToOne(fetch = FetchType.LAZY)
 	private ArchetypeRevisionFile latestRevisionFile;
+
+	@ManyToOne(fetch = FetchType.LAZY)
+	private ArchetypeRevisionFile latestPublishedRevisionFile;
 	@Column
 	private String latestRevisionFileVersion;
+
 	@Column
 	private Integer latestRevisionFileSerialVersion;
 	@Column
@@ -57,6 +61,15 @@ public class ArchetypeVersionMaster extends AbstractMaster {
 
 	public void setVersion(String version) {
 		this.version = version;
+	}
+
+	public ArchetypeRevisionFile getLatestPublishedRevisionFile() {
+		return latestPublishedRevisionFile;
+	}
+
+	public void setLatestPublishedRevisionFile(
+			ArchetypeRevisionFile latestPublishedRevisionFile) {
+		this.latestPublishedRevisionFile = latestPublishedRevisionFile;
 	}
 
 	public Integer getSerialVersion() {

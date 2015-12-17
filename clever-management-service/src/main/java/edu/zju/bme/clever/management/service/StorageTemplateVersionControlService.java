@@ -81,5 +81,8 @@ public interface StorageTemplateVersionControlService {
 
 	public void rejectAndRemoveTemplate(TemplateRevisionFile templateFile,
 			User user) throws VersionControlException;
-
+	
+	public void fallbackTemplate(Integer templateId, User user)throws  VersionControlException;
+	public void fallbackTemplate(String templateName, User user)throws  VersionControlException;
+	public void fallbackTemplate(TemplateRevisionFile templateFile, User user)throws  VersionControlException;
 }

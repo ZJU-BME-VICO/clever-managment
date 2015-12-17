@@ -42,8 +42,8 @@
 		</div>
 		<!-- splitter -->
 		<splitter is-adjust-enabled="!isTemplateListHidden" style="min-height: 100%;">
-			<i style="cursor: pointer" ng-click="isTemplateListHidden = !isTemplateListHidden" ng-show="isTemplateListHidden" tooltip-placement="right" tooltip="Expand" tooltip-popup-delay="500"> <span class="glyphicon glyphicon-chevron-right" ng-style="{'margin-top': containerHeight/2}" ></span> </i>
-			<i style="cursor: pointer" ng-click="isTemplateListHidden = !isTemplateListHidden" ng-show="!isTemplateListHidden" tooltip-placement="right" tooltip="Collapse" tooltip-popup-delay="500"> <span class="glyphicon glyphicon-chevron-left" ng-style="{'margin-top': containerHeight/2}" ></span> </i>
+			<i style="cursor: pointer" ng-click="isTemplateListHidden = !isTemplateListHidden" ng-show="isTemplateListHidden" tooltip-placement="right" tooltip="{{'MANAGEMENT_STORAGE_EDIT_TOOLTIP_EXPAND' | translate}}" tooltip-popup-delay="500"> <span class="glyphicon glyphicon-chevron-right" ng-style="{'margin-top': containerHeight/2}" ></span> </i>
+			<i style="cursor: pointer" ng-click="isTemplateListHidden = !isTemplateListHidden" ng-show="!isTemplateListHidden" tooltip-placement="right" tooltip="{{'MANAGEMENT_STORAGE_EDIT_TOOLTIP_COLLAPSE' | translate}}" tooltip-popup-delay="500"> <span class="glyphicon glyphicon-chevron-left" ng-style="{'margin-top': containerHeight/2}" ></span> </i>
 		</splitter>
 		<div class="col-xs-11 col-md-11 col-lg-11 flex-box" ng-if="selectedTemplate">
 			<div class="row" >
@@ -59,14 +59,14 @@
 					<div class="panel-body" ng-style="{height: containerHeight - 50}">
 						<div class="col-xs-12 col-md-12 col-lg-12 flex-box">
 							<tabset tab-control="tabControl">
-								<tab heading="Tree">
+								<tab heading="{{'MANAGEMENT_STORAGE_EDIT_HEADING_TREE' | translate}}">
 									<div class="col-xs-12 col-md-12 col-lg-12" style="margin-top: 10px">
-										<span><b>Expand All:&nbsp;&nbsp;&nbsp;</b></span>
+										<span><b>{{'MANAGEMENT_STORAGE_EDIT_EXPAND_ALL' | translate}}:&nbsp;&nbsp;&nbsp;</b></span>
 										<toggle-switch model="isExpandedAll.value"></toggle-switch>
 									</div>
 									<!-- click-node-menu-callback="setNodeByContextMenu(node, type, value)"    node-menu-generator="getTreeNodeMenu"   -->
 									<div class="col-xs-12 col-md-12 col-lg-12">
-										<div class="row" ng-style="{height: containerHeight - 165}" style="overflow: auto;">
+										<div class="row" ng-style="{height: containerHeight - 245}" style="overflow: auto;">
 											<tree-view tree-data="parsedTemplate.definition"
 											node-alias-name="template"
 											tree-control="arcTreeControl.value"
@@ -86,17 +86,17 @@
 										</div>
 									</div>
 
-									<!-- <div class="col-xs-12 col-md-12 col-lg-12">
-										<label>Node Path: </label>
+									<div class="col-xs-12 col-md-12 col-lg-12">
+										<label>{{'MANAGEMENT_STORAGE_EDIT_NODE_PATH' | translate}}: </label>
 										<textarea class="form-control" ng-model="path"></textarea>
-									</div> -->
+									</div>
 
 								</tab>
-								<tab heading="OET" >
+								<tab heading="{{'MANAGEMENT_STORAGE_EDIT_HEADING_OET' | translate}}" >
 									<!--<pre ng-style="{height: containerHeight - 135}" style="overflow: auto;">{{getOet()}}</pre>-->
 									<pre  ng-style="{height: containerHeight - 135}" style="overflow: auto;width: 100%; margin-top:10px">{{selectedTemplate.oet}}</pre>
 								</tab>
-								<tab heading="ARM">
+								<tab heading="{{'MANAGEMENT_STORAGE_EDIT_HEADING_ARM' | translate}}">
 									<textarea ng-style="{height: containerHeight - 135}" style="overflow: auto;width: 100%; margin-top:10px" ng-model="selectedTemplate.arm"></textarea>
 								</tab>
 							</tabset>
@@ -105,23 +105,34 @@
 				</div>
 			</div>
 		</div>
+		<div class="col-xs-12 col-md-12 col-lg-12 flex-box" ng-if="batchStatus" >
+			<div ng-style="{height: containerHeight - 10}">
+				<batch-submit-pane  file-list="templateFiles.draft" type="template" max-height="containerHeight-10"></batch-submit-pane>
+			</div>
+		</div>
 		<div class="col-xs-1 col-md-1 col-lg-1" >
 			<div class="sidebar">
 				<ul class="side-menu-group">
-					<li  class="side-menu-item" ng-click="createTemplate()" tooltip-placement="right" tooltip="Create template" tooltip-popup-delay="500">
-						<a href="" > <span class="icon-plus-sign tool-menu" style="color: #777;"></span></a>
+					<li  class="side-menu-item" ng-click="createTemplate()" tooltip-placement="right" tooltip="{{'MANAGEMENT_STORAGE_EDIT_TOOLTIP_CREATE_TEMPLATE' | translate}}" tooltip-popup-delay="500">
+						<a href="" >{{'TEMPLATE_EDIT_CREATE' | translate}}  <!-- <span class="icon-plus-sign tool-menu" style="color: #777;"></span> --></a>
 					</li >
-					<li ng-if="selectedTemplate.lifecycleState=='Draft'" class="side-menu-item " ng-click="saveTemplateFile()" tooltip-placement="right" tooltip="save template" tooltip-popup-delay="500">
-						<a href="" ><span class="icon-save tool-menu" style="color: #777;"> </span></a>
+					<li ng-if="selectedTemplate.lifecycleState=='Draft'" class="side-menu-item " ng-click="saveTemplateFile()" tooltip-placement="right" tooltip="{{'MANAGEMENT_STORAGE_EDIT_TOOLTIP_SAVE_TEMPLATE' | translate}}" tooltip-popup-delay="500">
+						<a href="" >{{'TEMPLATE_EDIT_SAVE' | translate}}<!-- <span class="icon-save tool-menu" style="color: #777;"> </span> --></a>
 					</li>
-					<li ng-if="selectedTemplate.lifecycleState=='Draft'" class="side-menu-item"  ng-click="submitTemplateFile()" tooltip-placement="right" tooltip="submit template" tooltip-popup-delay="500">
-						<a href=""><span class="icon-circle-arrow-up tool-menu" style="color: #777;"> </span></a>
+					<li ng-if="selectedTemplate.lifecycleState=='Draft'" class="side-menu-item"  ng-click="submitTemplateFile()" tooltip-placement="right" tooltip="{{'MANAGEMENT_STORAGE_EDIT_TOOLTIP_SUBMIT_TEMPLATE' | translate}}" tooltip-popup-delay="500">
+						<a href="">{{'TEMPLATE_EDIT_SUBMIT' | translate}}<!-- <span class="icon-circle-arrow-up tool-menu" style="color: #777;"> </span> --></a>
 					</li>
-					<li ng-if="selectedTemplate" class="side-menu-item"  ng-click="generateOetDiff()" tooltip-placement="right" tooltip="constrast oet content" tooltip-popup-delay="500">
-						<a href=""><span class="icon-columns tool-menu" style="color: #777;"> </span></a>
+					<li ng-if="selectedTemplate" class="side-menu-item"  ng-click="generateOetDiff()" tooltip-placement="right" tooltip="{{'MANAGEMENT_STORAGE_EDIT_TOOLTIP_CONSTRAST_OET_CONTENT' | translate}}" tooltip-popup-delay="500">
+						<a href="">{{'TEMPLATE_EDIT_DIFF' | translate}}<!-- <span class="icon-columns tool-menu" style="color: #777;"> </span> --></a>
 					</li>
-					<li ng-if="selectedTemplate.lifecycleState=='Published'" class="side-menu-item"  ng-click="createNewVersionTemplate()" tooltip-placement="right" tooltip="New version" tooltip-popup-delay="500">
-						<a href=""><span class="icon-level-up tool-menu" style="color: #777;"> </span></a>
+					<li ng-if="selectedTemplate.lifecycleState=='Published'" class="side-menu-item"  ng-click="createNewVersionTemplate()" tooltip-placement="right" tooltip="{{'MANAGEMENT_STORAGE_EDIT_TOOLTIP_NEW_VERSION' | translate}}" tooltip-popup-delay="500">
+						<a href="">{{'TEMPLATE_EDIT_NEWVERSION' | translate}}<!-- <span class="icon-level-up tool-menu" style="color: #777;"> </span> --></a>
+					</li>
+					<li  class="side-menu-item"  ng-click="batchSubmit()" tooltip-placement="right" tooltip="{{'MANAGEMENT_ARCHETYPE_EDIT_TOOTIP_BATCHPROCESS' | translate}}" tooltip-popup-delay="500">
+						<a href="" class="menu-item-content">{{'TEMPLATE_EDIT_BATCHSUBMIT' | translate}}<!-- <span class="icon-puzzle-piece tool-menu" style="color: #777;"> </span> --></a>
+					</li>
+					<li  ng-if="selectedTemplate.lifecycleState=='Published'" class="side-menu-item"  ng-click="fallbackTemplate()" tooltip-placement="right" tooltip="{{'MANAGEMENT_ARCHETYPE_EDIT_TOOTIP_FALLBACK' | translate}}" tooltip-popup-delay="500">
+						<a href="" class="menu-item-content">{{'TEMPLATE_EDIT_FALLBACK' | translate}}<!-- <span class="icon-puzzle-piece tool-menu" style="color: #777;"> </span> --></a>
 					</li>
 				</ul>
 			</div>

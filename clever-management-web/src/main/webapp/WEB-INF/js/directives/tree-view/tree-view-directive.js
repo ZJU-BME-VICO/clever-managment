@@ -5,6 +5,7 @@ angular.module('clever.management.directives.treeView', []).directive('treeView'
 		scope : {
 			treeData : '=',
 			treeControl : '=',
+			language: '=',
 			nodeId : '@',
 			menuPrefix:'@',
 			nodeChildren : '@',
@@ -141,6 +142,13 @@ angular.module('clever.management.directives.treeView', []).directive('treeView'
 				}
 			};
 			
+			// used by archetype editor now , get tree node label should be abandoned
+		
+            $scope.getLabelContent = function(node) {
+                return $scope.nodeLabelGenerator(node);
+
+            };
+
 			$scope.getNodeMenu1 = function() {
 				if(treeNodeMenuElement){
 					return  $scope.getTreeNodeMenuElement();
@@ -212,6 +220,7 @@ angular.module('clever.management.directives.treeView', []).directive('treeView'
 						});
 						
 						angular.forEach(nodes, function(node) {	
+							if($scope.searchKeyMapper(node)){					
 								if ($scope.searchKeyMapper(node).toLowerCase().indexOf(keyword.toLowerCase()) < 0) {
 									if (!node.containsTargetChild) {
 										node.show = false;
@@ -229,6 +238,8 @@ angular.module('clever.management.directives.treeView', []).directive('treeView'
 										tempNode.containsTargetChild = true;
 									}
 								}
+
+							}
 						}); 
 
 					} else {

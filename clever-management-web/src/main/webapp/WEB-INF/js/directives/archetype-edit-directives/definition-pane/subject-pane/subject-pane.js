@@ -15,7 +15,7 @@ angular.module('clever.management.directives.subjectPane', []).directive('subjec
 		   	console.log(newValue);
 		   });
 		   
-        	$scope.partyTypeList = ["PARTY_SELF", "PARTY_IDENTIFIED", "PARTY_RELATED"];
+            $scope.partyTypeList = ["PARTY_SELF", "PARTY_IDENTIFIED", "PARTY_RELATED"];
 			
 			$scope.partyType = {};
 			$scope.hasExternalRef = {};

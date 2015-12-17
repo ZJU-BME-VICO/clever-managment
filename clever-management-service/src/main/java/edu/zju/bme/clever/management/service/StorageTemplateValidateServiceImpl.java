@@ -57,7 +57,7 @@ public class StorageTemplateValidateServiceImpl implements
 			return this.validateConsistency(oetDoc, armDoc);
 		} catch (Exception ex) {
 			FileProcessResult result = new FileProcessResult();
-			result.setStatus(FileStatus.INVALID);
+			result.setStatus(FileStatus.INVALIDOTHERS);
 			result.appendMessage("Cannot parse oet or arm, error: "
 					+ ex.getMessage());
 			return result;
@@ -76,7 +76,7 @@ public class StorageTemplateValidateServiceImpl implements
 				.lastIndexOf(".v") + 1);
 		if (templateName.compareTo(arm.getArchetypeRelationshipMapping()
 				.getTemplate().getTemplateId()) != 0) {
-			result.setStatus(FileStatus.INVALID);
+			result.setStatus(FileStatus.INVALIDOTHERS);
 			result.appendMessage("OET'name and ARM'name don't match. ");
 		}
 		// Validate existence
@@ -90,7 +90,7 @@ public class StorageTemplateValidateServiceImpl implements
 			Validator validator = schema.newValidator();
 			validator.validate(new StreamSource(arm.newInputStream()));
 		} catch (IOException | SAXException ex) {
-			result.setStatus(FileStatus.INVALID);
+			result.setStatus(FileStatus.INVALIDOTHERS);
 			result.appendMessage("Validate arm against xsd failed, error: "
 					+ ex.getMessage());
 		}
@@ -100,21 +100,21 @@ public class StorageTemplateValidateServiceImpl implements
 		ArchetypeRevisionFile specialiseArchetypeFile = this.archetypeFileRepo
 				.findByName(specialiseArchetypeName);
 		if (specialiseArchetypeFile == null) {
-			result.setStatus(FileStatus.INVALID);
+			result.setStatus(FileStatus.NOPARENTFILE);
 			result.appendMessage("Cannot find specialise archetype: "
 					+ specialiseArchetypeName + ". ");
 		} else {
 			String templateMasterName = WordUtils
 					.extractVersionMasterName(templateName);
 			if (templateMasterName != null) {
-				// Whether specialise the specific archetype version master
+				// Whether specialise the specific archetype version master, is the speciliseArchetypeVersionMaster equals to version master of specialiseArchetype
 				ArchetypeVersionMaster specialiseArchetypeVersionMaster = specialiseArchetypeFile
 						.getVersionMaster();
 				String archetypeVersionMasterName = specialiseArchetypeVersionMaster
 						.getName();
 				if (!specialiseArchetypeVersionMaster.getName().equals(
 						templateMasterName)) {
-					result.setStatus(FileStatus.INVALID);
+					result.setStatus(FileStatus.INVALIDOTHERS);
 					result.appendMessage("Template master name should be "
 							+ specialiseArchetypeVersionMaster.getName());
 				}
@@ -127,7 +127,7 @@ public class StorageTemplateValidateServiceImpl implements
 					// Validate lifecycle state
 					if (!latestTemplate.getLifecycleState().equals(
 							LifecycleState.PUBLISHED)) {
-						result.setStatus(FileStatus.INVALID);
+						result.setStatus(FileStatus.INVALIDOTHERS);
 						result.appendMessage("The latest revision template "
 								+ latestTemplate.getName()
 								+ "'s lifecycle state is not PUBLISHED.");
@@ -138,7 +138,7 @@ public class StorageTemplateValidateServiceImpl implements
 					Integer currentSpecialiseArchetypeSerialVersion = specialiseArchetypeFile
 							.getSerialVersion();
 					if (currentSpecialiseArchetypeSerialVersion < latestTemplateSpecialiseArchetypeSerialVersion) {
-						result.setStatus(FileStatus.INVALID);
+						result.setStatus(FileStatus.INVALIDOTHERS);
 						result.appendMessage("Specialise archetype's version should not be earlier than "
 								+ latestTemplate
 										.getSpecialiseArchetypeRevisionFileVersion());
@@ -149,13 +149,13 @@ public class StorageTemplateValidateServiceImpl implements
 				// Validate version
 				if (!templateName.equals(templateMasterName + "."
 						+ nextSerialVersion)) {
-					result.setStatus(FileStatus.INVALID);
+					result.setStatus(FileStatus.VERSIONNOTMATCH);
 					result.appendMessage("Template version should be "
 							+ specialiseArchetypeVersionMaster.getVersion()
 							+ "." + nextSerialVersion);
 				}
 			} else {
-				result.setStatus(FileStatus.INVALID);
+				result.setStatus(FileStatus.INVALIDOTHERS);
 				result.appendMessage("Template name is unqualified.");
 			}
 		}
@@ -191,7 +191,7 @@ public class StorageTemplateValidateServiceImpl implements
 		TemplateRevisionFile templateFile = this.templateFileRepo
 				.findByName(templateName);
 		if (templateFile != null) {
-			result.setStatus(FileStatus.INVALID);
+			result.setStatus(FileStatus.ALREADYEXIST);
 			result.appendMessage("Template: " + templateName
 					+ " already exists.");
 		}

@@ -15,9 +15,11 @@ var config = {
 	'ARCHETYPE_APPROVE_BY_ID_URL' : prefix + '/archetypes/action/approve/id/',
 	'ARCHETYPE_REJECT_BY_ID_URL' : prefix + '/archetypes/action/reject/id/',
 	'ARCHETYPE_REMOVE_BY_ID_URL' : prefix + '/archetypes/action/remove/id/',
+	'AECHETYPE_FALLBACK_BY_ID_URL' : prefix + '/archetypes/action/fallback/id/',
 	'ARCHETYPE_MASTER_BY_ID_URL' : prefix + '/archetypes/master/id/',
 	'ARCHETYPE_BY_ID_URL' : prefix + '/archetypes/id/',
 	'ARCHETYPE_BY_NAME_URL' : prefix + '/archetypes/name/',
+	'ARCHETYPE_BY_VERSION_MASTER_NAME_URL' : prefix + '/archetypes/versionmastername/',
 	'STORAGE_TEMPLATE_LIST_URL' :prefix +'/templates/storage/list',
 	'STORAGE_TEMPLATE_MASTER_BY_ID_URL' : prefix + '/templates/storage/master/id/',
 	'STORAGE_TEMPLATE_BY_NAME_URL' : prefix + '/templates/storage/name/',
@@ -26,6 +28,7 @@ var config = {
 	'STORAGE_TEMPLATE_LIST_EDIT_PUBLISHED_URL' : prefix + '/templates/storage/list/edit/published',
 	'STORAGE_TEMPLATE_CREATE_URL' : prefix + '/templates/storage/action/create',
 	'STORAGE_TEMPLATE_SUBMIT_BY_ID_URL' : prefix + '/templates/storage/action/submit/id/',
+	'STORAGE_TEMPLATE_FALLBACK_BY_ID_URL' : prefix + '/templates/storage/action/fallback/id/',
 	'STORAGE_TEMPLATE_EDIT_BY_ID_URL' : prefix + '/templates/storage/action/edit/id/',
 	'STORAGE_TEMPLATE_LIST_VERIFY_URL' : prefix + '/templates/storage/list/verify',
 	'STORAGE_TEMPLATE_APPROVE_BY_ID_URL' : prefix + '/templates/storage/action/approve/id/',
@@ -41,7 +44,27 @@ var config = {
 	'APPLICATION_LIST_URL' : prefix + '/applications/list',
 	'APPLICATION_UPLOAD_URL' : prefix + '/applications/application',
 	'APPLICATION_BY_ID_URL' : prefix + '/applications/application/id/',
-	'TEMP_URL' : prefix + '/temp',
+	'DEVELOPMENT_API_DISPLAY_MASTER_URL' : prefix + '/development/api/display',
+	'DEVELOPMENT_API_DISPLAY_VERSION_URL' : prefix + '/development/api/display/',//{masterid}/{versionId}
+	'DEVELOPMENT_API_MAINTAIN_OVERALL_URL' : prefix + "/development/api/maintain/overall",
+	'DEVELOPMENT_API_MAINTAIN_SINGLE_URL' : prefix + '/development/api/maintain/single',
+	'DEVELOPMENT_API_REMOVE_BY_VERSIONID_URL' : prefix + '/development/api/maintain/remove/version/',
+	'DEVELOPMENT_API_REMOVE_BY_MASTER_URL' :  prefix + '/development/api/maintain/remove/master/',
+	'DEVELOPMENT_API_MAINTAIN_SAVE_ROOTURL' : prefix + '/development/api/maintain/save/rooturl',
+	'DEVELOPMENT_API_MAINTAIN_SAVE_API' : prefix + '/development/api/maintain/save/api',
+	'DEVELOPMENT_API_MAINTAIN_SAVE_PARAMS' : prefix + '/development/api/maintain/save/params',
+	'DEVELOPMENT_API_MAINTAIN_CLASSMASTER_URL' : prefix + '/development/api/maintain/classmaster/versionid/' ,
+    'DEVELOPMENT_API_MAINTAIN_CLASSMASTER_ADD_URL' : prefix +  '/development/api/maintain/classmaster/add',
+    'DEVELOPMENT_API_MAINTAIN_ADD_PARAM_URL' : prefix + '/development/api/maintain/add/param/',
+	'DEVELOPMENT_API_DISPLAY_RETURNPARAMS' : prefix + '/development/api/display/returnparam/',
+	'DEVELOPMENT_API_DISPLAY_REQUESTPARAMS' : prefix + '/development/api/display/requestparam/',
+    'DEVELOPMENT_API_DISPLAY_REQUESTPARAM_DETAILS' : prefix + '/development/api/display/requestparam/details/',
+    'DEVELOPMENT_API_DISPLAY_RETURNPARAM_DETAILS' : prefix + '/development/api/display/returnparam/details/',
+    'DEVELOPMENT_API_DISPLAY_PARAM_DETAILS' : prefix + '/development/api/display/param/details/',
+    'DEVELOPMENT_API_DISPLAY_APIINFOMATION_URL' : prefix + '/development/api/display/apiinfo/id/',
+    'DEVELOPMENT_API_MAINTAIN_CLASSATTRIBUTE_URL' : prefix + '/development/api/maintain/classattributes'
+    
+  
 };
 var configModel = angular.module('clever.management.config', []);
 angular.forEach(config, function(value, key) {

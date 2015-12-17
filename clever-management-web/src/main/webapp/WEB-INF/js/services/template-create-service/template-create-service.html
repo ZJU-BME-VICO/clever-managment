@@ -42,16 +42,16 @@
 	</div>
 	<div class="col-xs-6 col-lg-6 col-sm-6">
 		<div ng-show="currentArchetype" style="height: 500px; margin-top:50px; margin-right: 20px">
-			<label>Concept :</label>
+			<label>{{'TEMPLATE_CREATE_SERVICE_CONCEPT' | translate}} :</label>
 			<pre>{{currentArchetype.conceptName}}</pre>
-			<label>Archetype Id :</label>
+			<label>{{'TEMPLATE_CREATE_SERVICE_ARCHETYPE_ID' | translate}} :</label>
 			<pre>{{currentArchetype.name}}</pre>
-			<label>Purpose :</label>
+			<label>{{'TEMPLATE_CREATE_SERVICE_PURPOSE' | translate}} :</label>
 			<pre style="color:brown">{{currentArchetype.purpose}}</pre>
 		</div>
 		<div ng-show="currentArchetype" class="modal-footer">
-		<button class="btn btn-success" ng-click="ok()">CREATE</button>
-		<button class="btn btn-warning" ng-click="cancel()">CANCEL</button>
+		<button class="btn btn-success" ng-click="ok()">{{'TEMPLATE_CREATE_SERVICE_CREATE' | translate}}</button>
+		<button class="btn btn-warning" ng-click="cancel()">{{'TEMPLATE_CREATE_SERVICE_CANCEL' | translate}}</button>
 		</div>
 	</div>
 </div>

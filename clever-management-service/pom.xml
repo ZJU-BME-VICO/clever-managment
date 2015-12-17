@@ -85,7 +85,12 @@
 			<artifactId>clever-management-env</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-
+		<dependency>
+			<groupId>edu.zju.bme.clever</groupId>
+			<artifactId>wadl-parser</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+        
 		<!-- jpa -->
 		<dependency>
 			<groupId>org.springframework.data</groupId>

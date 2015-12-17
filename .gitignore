@@ -3,3 +3,5 @@
 *.classpath
 .idea/
 *.iml
+target/
+clever-management-web/workspace/.metadata/

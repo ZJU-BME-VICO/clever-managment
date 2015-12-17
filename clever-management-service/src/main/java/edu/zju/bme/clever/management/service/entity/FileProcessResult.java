@@ -36,7 +36,7 @@ public class FileProcessResult {
 
 	public enum FileStatus {
 
-		VALID("VALID"), INVALID("INVALID");
+		VALID("VALID"), ALREADYEXIST("ALREADYEXIST"), NOPARENTFILE("NOPARENTFILE"),VERSIONNOTMATCH("VERSIONNOTMATCH"),INVALIDOTHERS("INVALIDOTHERS");
 
 		private final String value;
 

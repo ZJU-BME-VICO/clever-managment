@@ -1,22 +1,22 @@
 <div class="row" style="padding: 5px 0px;">
 	<div class="col-xs-8 col-md-8 col-lg-8">
 		<div class="input-group pull-left" style="padding: 5px;width: 260px;">
-			<span class="input-group-addon" style="width: 70px;">View:</span>
+			<span class="input-group-addon" style="width: 70px;">{{'DEFINITION_PANE_VIEW' | translate}}:</span>
 			<div class="btn-group" dropdown>
 				<button type="button" class="btn btn-default dropdown-toggle" dropdown-toggle style="width: 160px;">
 					{{selectedView}} <span class="glyphicon glyphicon-chevron-down pull-right" style="margin-top: 2px;"></span>
 				</button>
 				<ul class="dropdown-menu" role="menu">
 					<li>
-						<a href class="text-center" ng-click="selectedView = 'Table';">Table</a>
+						<a href class="text-center" ng-click="selectedView = 'Table';">{{'DEFINITION_PANE_TABLE' | translate}}</a>
 					</li>
 					<li>
-						<a href class="text-center" ng-click="selectedView = 'Tree';">Tree</a>
+						<a href class="text-center" ng-click="selectedView = 'Tree';">{{'DEFINITION_PANE_TREE' | translate}}</a>
 					</li>
 				</ul>
 			</div>
 		</div>
-		<span ng-show="selectedView == 'Tree'" class="pull-right"><span><b>Expand All:&nbsp;&nbsp;&nbsp;</b></span><toggle-switch model="isExpandedAll"></toggle-switch></span>
+		<span ng-show="selectedView == 'Tree'" class="pull-right"><span><b>{{'DEFINITION_PANE_EXPAND_ALL' | translate}}:&nbsp;&nbsp;&nbsp;</b></span><toggle-switch model="isExpandedAll"></toggle-switch></span>
 	</div>
 
 </div>
@@ -40,21 +40,21 @@
 					<!-- Terminology -->
 					<div ng-if="selectedDefinitionItem.code" class="panel panel-default">
 						<div class="panel-heading">
-							Terminology
+							{{'DEFINITION_PANE_TERMINOLOGY' | translate}}
 						</div>
 						<div class="panel-body">
 							<table>
 								<tbody>
 									<tr>
-										<th style="width: 100px;">Code:</th>
+										<th style="width: 100px;">{{'DEFINITION_PANE_CODE' | translate}}:</th>
 										<th style="font-weight: normal">{{selectedDefinitionItem.code}}</th>
 									</tr>
 									<tr>
-										<th style="width: 100px;">Text:</th>
+										<th style="width: 100px;">{{'DEFINITION_PANE_TEXT' | translate}}:</th>
 										<th style="font-weight: normal">{{getOntologyByCode(selectedDefinitionItem.code).text}}</th>														
 									</tr>
 									<tr>
-										<th style="width: 100px;">Description:</th>
+										<th style="width: 100px;">{{'DEFINITION_PANE_DESCRIPTION' | translate}}:</th>
 										<th style="font-weight: normal">{{getOntologyByCode(selectedDefinitionItem.code).description}}</th>
 									</tr>
 								</tbody>
@@ -64,31 +64,31 @@
 					<!-- Occurrence -->
 					<div ng-if="selectedDefinitionItem.occurrences" class="panel panel-default">
 						<div class="panel-heading">
-							Occurrence
+							{{'DEFINITION_PANE_OCCURRENCE' | translate}}
 						</div>
 						<div class="panel-body">
 							<table style="border-collapse:separate;border-spacing: 8px;">
 								<tbody>
 									<tr>
-										<th style="width: 100px;">Min:</th>
+										<th style="width: 100px;">{{'DEFINITION_PANE_MIN' | translate}}:</th>
 										<th style="font-weight: normal">
 										<input type="number" style="width: 100%;" value="{{selectedDefinitionItem.occurrences.lower}}"/>
 										</th>
 									</tr>
 									<tr>
-										<th style="width: 100px;">Max:</th>
+										<th style="width: 100px;">{{'DEFINITION_PANE_MAX' | translate}}:</th>
 										<th style="font-weight: normal">
 										<input type="number" style="width: 100%;" value="{{selectedDefinitionItem.occurrences.upper}}"/>
 										</th>
 									</tr>
 									<tr>
-										<th style="width: 100px;">Included:</th>
+										<th style="width: 100px;">{{'DEFINITION_PANE_INCLUDED' | translate}}:</th>
 										<th style="font-weight: normal">
 										<input type="checkbox" ng-checked="selectedDefinitionItem.occurrences.lower_included == 'true'">
 										</th>
 									</tr>
 									<tr>
-										<th style="width: 100px;">Unbounded:</th>
+										<th style="width: 100px;">{{'DEFINITION_PANE_UNBOUNDED' | translate}}:</th>
 										<th style="font-weight: normal">
 										<input type="checkbox" ng-checked="selectedDefinitionItem.occurrences.lower_unbounded == 'true'">
 										</th>
@@ -100,31 +100,31 @@
 					<!-- Existence -->
 					<div ng-if="selectedDefinitionItem.existence" class="panel panel-default">
 						<div class="panel-heading">
-							Existence
+							{{'DEFINITION_PANE_EXISTENCE' | translate}}
 						</div>
 						<div class="panel-body">
 							<table style="border-collapse:separate;border-spacing: 8px;">
 								<tbody>
 									<tr>
-										<th style="width: 100px;">Min:</th>
+										<th style="width: 100px;">{{'DEFINITION_PANE_MIN' | translate}}:</th>
 										<th style="font-weight: normal">
 										<input type="number" style="width: 100%;" value="{{selectedDefinitionItem.existence.lower}}"/>
 										</th>
 									</tr>
 									<tr>
-										<th style="width: 100px;">Max:</th>
+										<th style="width: 100px;">{{'DEFINITION_PANE_MAX' | translate}}:</th>
 										<th style="font-weight: normal">
 										<input type="number" style="width: 100%;" value="{{selectedDefinitionItem.existence.upper}}"/>
 										</th>
 									</tr>
 									<tr>
-										<th style="width: 100px;">Included:</th>
+										<th style="width: 100px;">{{'DEFINITION_PANE_INCLUDED' | translate}}:</th>
 										<th style="font-weight: normal">
 										<input type="checkbox" ng-checked="selectedDefinitionItem.existence.lower_included == 'true'">
 										</th>
 									</tr>
 									<tr>
-										<th style="width: 100px;">Unbounded:</th>
+										<th style="width: 100px;">{{'DEFINITION_PANE_UNBOUNDED' | translate}}:</th>
 										<th style="font-weight: normal">
 										<input type="checkbox" ng-checked="selectedDefinitionItem.existence.lower_unbounded == 'true'">
 										</th>
@@ -147,9 +147,9 @@
 				<tr ng-repeat="item in definition.tableItems">
 					<td style="width: 200px;"><b>{{getOntologyByCode(item.code).text}}</b>
 					<br />
-					<font color="#8d8d8d" size="2" ng-switch="item.type"> <span class="clever-icon" ng-class="item.type" style="padding: 6px 6px;background-position-y: 7px;"></span> <span ng-switch-when="DV_TEXT">&nbsp;Text&nbsp;</span> <span ng-switch-when="DV_COUNT">&nbsp;Count&nbsp;</span> <span ng-switch-when="DV_QUANTITY">&nbsp;Quantity&nbsp;</span> <span ng-switch-when="DV_DATE_TIME">&nbsp;Date/Time&nbsp;</span> <span ng-switch-when="DV_BOOLEAN">&nbsp;Boolean&nbsp;</span>
+					<font color="#8d8d8d" size="2" ng-switch="item.type"> <span class="clever-icon" ng-class="item.type" style="padding: 6px 6px;background-position-y: 7px;"></span> <span ng-switch-when="DV_TEXT">&nbsp;{{'DEFINITION_PANE_TEXT' | translate}}&nbsp;</span> <span ng-switch-when="DV_COUNT">&nbsp;{{'DEFINITION_PANE_COUNT' | translate}}&nbsp;</span> <span ng-switch-when="DV_QUANTITY">&nbsp;{{'DEFINITION_PANE_QUANTITY' | translate}}&nbsp;</span> <span ng-switch-when="DV_DATE_TIME">&nbsp;{{'DEFINITION_PANE_DATE/TIME' | translate}}&nbsp;</span> <span ng-switch-when="DV_BOOLEAN">&nbsp;{{'DEFINITION_PANE_BOOLEAN' | translate}}&nbsp;</span>
 						<br />
-						<span ng-if="item.occurrences.lower == 0">Optional&nbsp;</span> <span ng-if="item.occurrences.lower == 1">Mandatory&nbsp;</span> ({{item.occurrences.lower}}..{{item.occurrences.upper}}) </font></td>
+						<span ng-if="item.occurrences.lower == 0">{{'DEFINITION_PANE_OPTIONAL' | translate}}&nbsp;</span> <span ng-if="item.occurrences.lower == 1">{{'DEFINITION_PANE_MANDATORY' | translate}}&nbsp;</span> ({{item.occurrences.lower}}..{{item.occurrences.upper}}) </font></td>
 					<td>
 					<div>
 						{{getOntologyByCode(item.code).description}}

@@ -16,16 +16,17 @@
 		<!-- </div> -->
 		<div class="col-xs-6 col-md-6 col-lg-6"  ng-style="{height: contentHeight.value - 85}" style="overflow: auto; padding-left:0px; margin-left:0px;" >
      		<div style="margin-top:10px; margin-left:10px;">
-				<span><b>Expand All:&nbsp;&nbsp;&nbsp;</b></span>
+				<span><b>{{'EDIT_DEFINITION_PANE_EXPAND_ALL' | translate}}:&nbsp;&nbsp;&nbsp;</b></span>
 				<toggle-switch model="isExpandedAll.value"></toggle-switch>
 			</div>
+			
 			<tree-view tree-data="definition.treeItems" 
 			 class="definition-tree"  
-			 node-alias-name="archetype" 
+			 node-alias-name="node" 
 			 tree-control="treeControl" 
 			 click-node-callback="getNodeInfo(value)" 
-			 node-label-generator="getTreeNodeLabel"
-			 node-menu-generator="getTreeNodeMenu" 
+			 node-label-generator="getLabelContent"
+			  node-menu-generator="getTreeNodeMenu" 
 			 menu-prefix = "definition" 
 			 click-node-menu-callback="editArchetype(node,type)">
 				<tree-expanded-icon>
@@ -34,6 +35,22 @@
 				<tree-collapsed-icon>
 					<span class="clever-icon collapsed" style="padding: 0 6px;height: 12px;background-position-y: 6px;"></span>
 				</tree-collapsed-icon>
+				<tree-node-label>
+				  <span ng-show="node.label.slot" class="clever-icon slot" style="padding: 7px 10px; background-position-y: 10px;"></span>		
+				  <span ng-show="!node.label.slot" class="clever-icon list" ng-class="node.label.picType | typemap | lowercase  " style="padding: 7px 10px; background-position-y: 10px;"></span>
+				  <span ng-show="node.label.code">
+				      <span ng-show="node.label.archetypeNode" style="color: black;font-weight: bold;"> <span ng-bind-html="getLabelContent(node) | unsafe"></span> </span>
+                      <span ng-show="!node.label.archetyeNode" style="color: brown;"><span ng-bind-html="getLabelContent(node) | unsafe"></span> </span>
+				  </span>				  
+				 
+				  <span ng-show="(!node.label.code)&&node.label.text" style="color: brown;" > <span ng-bind-html="node.label.text | unsafe"></span></span>
+				</tree-node-label>
+				<!-- <tree-node-menu>
+				   <ul class="dropdown-menu" role="menu" ng-if="true">
+				        <li ng-show="node.label.slot" class="menu-item"><a class="pointer" role="menuitem"></a></li> 
+				       <li ng-show="['ITEM_TREE', 'ITEM_LIST', 'CLUSTER'].indexOf(node.label.picType) != -1" class="menu-item"><a class="pointer" role="menuitem"></a></li> 
+				   </ul>
+				</tree-node-menu> -->
 			</tree-view>
 		</div>
 		<!-- constraint edit pane -->
@@ -42,7 +59,7 @@
 				 
 			<div class="panel" ng-if="currentNode.oriNodeRef.rm_attribute_name == 'subject'">
 				<div class="panel-heading" style="color: white;background-color: #8cc152;border-color: #8cc152;">
-					Subject
+					{{'EDIT_DEFINITION_PANE_SUBJECT' | translate}}
 				</div>
 				<div class="panel-body" style="border:1px solid #dddddd">
 					<subject-pane subject="currentNode"></subject-pane>
@@ -51,7 +68,7 @@
 
 			 <div class="panel" ng-if="currentNode.oriNodeRef.rm_type_name == 'PARTICIPATION'">
 				<div class="panel-heading" style="color: white;background-color: #8cc152;border-color: #8cc152;">
-					Participation
+					{{'EDIT_DEFINITION_PANE_PARTICIPATION' | translate}}
 				</div>
 				
 				<div class="panel-body" style="border:1px solid #dddddd">
@@ -61,7 +78,7 @@
 			
 			<div class="panel" ng-if="currentNode.oriNodeRef.rm_type_name == 'LINK'">
 				<div class="panel-heading" style="color: white;background-color: #8cc152;border-color: #8cc152;">
-					Links
+					{{'EDIT_DEFINITION_PANE_LINKS' | translate}}
 				</div>
 				<div class="panel-body" style="border:1px solid #dddddd">
 					<links-pane link="currentNode"></links-pane>
@@ -71,39 +88,40 @@
 			
 			<div class="panel" ng-if="currentNode">
 				<div class="panel-heading" style="color: white;background-color: #FF7F00;border-color: #FF7F00;">
-					Constraint
+					{{'EDIT_DEFINITION_PANE_CONSTRAINT' | translate}}
 				</div>
 				<div class="panel-body" style="border:1px solid #dddddd">
 
 					<div ng-if="currentNode.oriNodeRef.occurrences">
-						<label>OCCURRENCES:</label>
+						<label>{{'EDIT_DEFINITION_PANE_OCCURRENCES' | translate}}:</label>
 						<table style="border-collapse: separate; border-spacing: 5px;">
 							<tbody >
 								<tr>
-									<td style="width:35px">Min:</td>
+									<td style="width:35px">{{'EDIT_DEFINITION_PANE_MIN' | translate}}:</td>
 									<td style="width:50px">
 									<input type="number" ng-model="simpleOccurrences.lower" style="width: 100%;" />
 									</td>
-									<td style="width:20px">
+									<!-- <td style="width:20px">
 									<input type="checkbox" ng-model="occurrences.lower_included"  ng-true-value="'true'" ng-false-value="'false'" />
-									</td>
-									<td ng-if="occurrences.upper_unbounded == 'false'" style="width:35px;">Max:</td>
+									</td> -->			
+									<td ng-if="occurrences.upper_unbounded == 'false'" style="width:35px;">{{'EDIT_DEFINITION_PANE_MAX' | translate}}:</td>
 									<td style="width:50px">
 									<input ng-if="occurrences.upper_unbounded == 'false'" type="number" ng-model="simpleOccurrences.upper" style="width: 100%;" />
 									</td>
-									<td style="width:20px">
+									<!-- <td style="width:20px">
 									<input ng-if="occurrences.upper_unbounded == 'false'" type="checkbox"  ng-model="occurrences.upper_included"  ng-true-value="'true'" ng-false-value="'false'" />
-									</td>
-									<td>Unbounded:</td>
+									</td> -->
+									
 									<td>
 									<input type="checkbox" ng-model="occurrences.upper_unbounded" ng-true-value="'true'" ng-false-value="'false'"/>
 									</td>
+									<td>{{'EDIT_DEFINITION_PANE_UNBOUNDED' | translate}}:</td>
 								</tr>
 							</tbody>
-						</table>
-					</div><br>
+						</table><br>
+					</div>
 					<div ng-if="currentNode.oriNodeRef.existence">
-						<label>EXISTENCE:</label>
+						<label>{{'EDIT_DEFINITION_PANE_EXISTENCE' | translate}}:</label>
 						<table style="border-collapse: separate; border-spacing: 5px;">
 							<tbody >
 								<tr>
@@ -112,79 +130,81 @@
 									 {{item}}</td>
 								</tr>
 							</tbody>
-						</table>
-					</div><br>
+						</table><br>
+					</div>
 					<div ng-if="currentNode.oriNodeRef.cardinality">
-						<label>CARDINALITY:</label>
+						<label>{{'EDIT_DEFINITION_PANE_CARDINALITY' | translate}}:</label>
 						<table style="border-collapse: separate; border-spacing: 5px;">
 							<tbody >
 								<tr>
-									<td style="width:35px">Min:</td>
+									<td style="width:35px">{{'EDIT_DEFINITION_PANE_MIN' | translate}}:</td>
 									<td style="width:50px">
 									<input type="number"  ng-model="simpleCardinality.lower"  style="width: 100%;"/>
 									</td>
-									<td style="width:20px">
+									<!-- <td style="width:20px">
 									<input type="checkbox"  ng-model="cardinality.lower_included" ng-true-value="'true'" ng-false-value="'false'"/>
-									</td>
-									<td style="width:35px;" ng-if="cardinality.interval.upper_unbounded == 'false'">Max:</td>
+									</td> -->
+									<td style="width:35px;" ng-if="cardinality.interval.upper_unbounded == 'false'">{{'EDIT_DEFINITION_PANE_MAX' | translate}}:</td>
 									<td style="width:50px" ng-if="cardinality.interval.upper_unbounded == 'false'">
 									<input type="number" style="width: 100%;" ng-model="simpleCardinality.upper"/>
 									</td>
-									<td style="width:20px" ng-if="cardinality.interval.upper_unbounded == 'false'">
+									<!-- <td style="width:20px" ng-if="cardinality.interval.upper_unbounded == 'false'">
 									<input type="checkbox" ng-model="cardinality.upper_included" ng-true-value="'true'" ng-false-value="'false'"/>
-									</td>
-									<td>Unbounded:</td>
+									</td> -->
+								
 									<td>
 									<input type="checkbox" ng-model="cardinality.interval.upper_unbounded" ng-true-value="'true'" ng-false-value="'false'"/>
 									</td>
-
+                                    <td>{{'EDIT_DEFINITION_PANE_UNBOUNDED' | translate}}</td>
 								</tr>
 								<tr>
-									<td style="width:35px">Unique:</td>
-									<td style="width:50px">
+									
+									<td style="width:35px">
 									<input type="checkbox" ng-model="cardinality.is_unique" ng-true-value="'true'" ng-false-value="'false'" />
 									</td>
-									<td style="width:20px"></td>
+									<td style="width:50px">{{'EDIT_DEFINITION_PANE_UNIQUE' | translate}}:</td>
+									<!-- <td style="width:20px"></td> -->
 									<td style="width:35px;" ng-if="cardinality.interval.upper_unbounded == 'false'"></td>
 									<td style="width:50px" ng-if="cardinality.interval.upper_unbounded == 'false'"></td>
-									<td style="width:20px" ng-if="cardinality.interval.upper_unbounded == 'false'"></td>
-									<td>Ordered:</td>
+									<!-- <td style="width:20px" ng-if="cardinality.interval.upper_unbounded == 'false'"></td> -->
+									
 									<td>
 									<input type="checkbox" ng-model="cardinality.is_ordered" ng-true-value="'true'" ng-false-value="'false'" />
 									</td>
+									<td>{{'EDIT_DEFINITION_PANE_ORDERED' | translate}}:</td>
 								</tr>
 							</tbody>
-						</table>
-					</div><br>
+						</table><br>
+					</div>
 				</div>
 			</div>
 
 			<div class="panel" ng-if="currentNode.oriNodeRef.node_id">
 				<div class="panel-heading" style="color: white;background-color: #f6bb42;border-color: #f6bb42;">
-					Ontology
+					{{'EDIT_DEFINITION_PANE_ONTOLOGY' | translate}}
 				</div>
 				<div class="panel-body" style="border:1px solid #dddddd">
 
 					<div ng-if="true">
-						<label>LANGUAGE:</label>
+						<!-- <label>LANGUAGE:</label>
 						<select style="width:100px"  ng-model="currentLanguage.code" ng-options="lan for lan in languageList" ></select>
-						<br><br>
-
-						<label>TEXT:</label>
+						<br><br> -->
+						<label>{{'EDIT_DEFINITION_PANE_TEXT' | translate}}:</label>
 						<input class="form-control " type="text" ng-model="ontologyItem[0].__text"/ ><br>						
-						<label>DESCRIPTION:</label>
-						<textarea class="form-control" id="textContent"  ng-model="ontologyItem[1].__text"  > </textarea>
+						<label>{{'EDIT_DEFINITION_PANE_DESCRIPTION' | translate}}:</label>
+						<textarea elastic class="form-control" id="textContent"  ng-model="ontologyItem[1].__text"  > </textarea>
 					</div>
 				</div>
 			</div>
-             <div class="panel" ng-if="currentNode.oriNodeRef.node_id">
+             <!-- <div class="panel" ng-if="currentNode.oriNodeRef.node_id"> -->
+                 <div class="panel" ng-if="false"> 
 				<div class="panel-heading" style="color: white;background-color: #8cc152;border-color: #8cc152;">
-					Node term bind
+					{{'EDIT_DEFINITION_PANE_NODE_TERM_BIND' | translate}}
 				</div>
 				<div class="panel-body" style="border:1px solid #dddddd">
 					<div class="row">
 						<div class="col-lg-4 col-md-4 col-sm-4">
-							<label>Terminology set :</label>
+							<label>{{'EDIT_DEFINITION_PANE_TERMINOLOGY_SET' | translate}} :</label>
 						</div>
 						<div class="col-lg-8 col-md-8 col-sm-8">
 							<select style="width:100%" ng-model="selectedTerminology" ng-options="code for code in terminologyList"></select>
@@ -210,7 +230,7 @@
 					</div>
 					<div class="row">
 						<div class="col-lg-4 col-md-4 col-sm-4">
-							<label>Available :</label>
+							<label>{{'EDIT_DEFINITION_PANE_AVAILABLE' | translate}} :</label>
 						</div>
 						<div class="col-lg-8 col-md-8 col-sm-8">
 							<select style="width:100%" ng-model="currentTerminology" ng-options="code for code in avaiTerminologyList"></select>
@@ -218,18 +238,18 @@
 					</div><br>
 					<div>
 						<form class="form-group">
-							<label style="width:100px">Code:</label>
+							<label style="width:100px">{{'EDIT_DEFINITION_PANE_CODE' | translate}}:</label>
 							<code>
 								#{{currentNode.oriNodeRef.node_id}}</code><br>
-							<label>Path[text] :</label>
+							<label>{{'EDIT_DEFINITION_PANE_PATH[TEXT]' | translate}} :</label>
 							<span class="form-control"  style="border:hidden">{{currentNode.oriNodeRef.textPath}}</span><br>
-							<label>Path[id] :</label>
+							<label>{{'EDIT_DEFINITION_PANE_PATH[ID]' | translate}} :</label>
 							<span class="form-control"  style="border:hidden">{{currentNode.oriNodeRef.idPath}}</span>
-						    <br><label>Bind code :</label>
+						    <br><label>{{'EDIT_DEFINITION_PANE_BIND_CODE' | translate}} :</label>
 						    <input type="text" ng-model="bindCode" class="form-control" />
-						    <label>Release :</label>
+						    <label>{{'EDIT_DEFINITION_PANE_RELEASE' | translate}} :</label>
 						    <input type="text" ng-model="release" class="form-control" /><br>
-						    <button class="btn btn-success pull-right" style="position: center">Add Term Bind to This Node</button>
+						    <button class="btn btn-success pull-right" style="position: center">{{'EDIT_DEFINITION_PANE_ADD_TERM_BIND_TO_THIS_NODE' | translate}}</button>
 						</form>
 					</div>
 				</div>
@@ -239,7 +259,7 @@
 			<!-- node value-->
 			<div class="panel" ng-if="false">
 				<div class="panel-heading" style="color: white;background-color: #8cc152;border-color: #8cc152;">
-					Node Value
+					{{'EDIT_DEFINITION_PANE_NODE_VALUE' | translate}}
 				</div>
 				<div class="panel-body" style="border:1px solid #dddddd">
 					<!-- DV_CODED_TEXT -->
@@ -275,11 +295,11 @@
 								<ul style="padding-left:15px; ">
 									<li>
 										<span class="glyphicon glyphicon-star"></span>
-										<a href="#" ng-click="$event.preventDefault();" >codeText1</a>
+										<a href="#" ng-click="$event.preventDefault();" >{{'EDIT_DEFINITION_PANE_CODETEXT1' | translate}}</a>
 									</li>
 									<li>
 										<span class="glyphicon glyphicon-star"></span>
-										<a href="#" ng-click="$event.preventDefault();" >codeText1</a>
+										<a href="#" ng-click="$event.preventDefault();" >{{'EDIT_DEFINITION_PANE_CODETEXT1' | translate}}</a>
 									</li>
 								</ul>
 
@@ -287,13 +307,13 @@
 						</div>
 						<div>
 							<form style="margin-left:15px">
-								<h5>code : <span style="color:black">#at0012<span></h5>
+								<h5>{{'EDIT_DEFINITION_PANE_CODE' | translate}} : <span style="color:black">#at0012<span></h5>
 
-								<h5>text :</h5>
+								<h5>{{'EDIT_DEFINITION_PANE_TEXT' | translate}} :</h5>
 								<input type="text" class="form-control"  id="formGroupInputSmall" />
-								<h5>description :</h5>
+								<h5>{{'EDIT_DEFINITION_PANE_DESCRIPTION' | translate}} :</h5>
 								<input type="text" class="form-control"  id="formGroupInputSmall" />
-								<h5>Assumed value :</h5>
+								<h5>{{'EDIT_DEFINITION_PANE_ASSUMED_VALUE' | translate}} :</h5>
 								<select ng-options = "code for code in codeList" class="form-control"></select>
 							</form>
 						</div>
@@ -302,21 +322,21 @@
 					<!-- DV_QUANTITY -->
 					<div ng-if="false" >
 						<div>
-							<h5>Property : </h5>
+							<h5>{{'EDIT_DEFINITION_PANE_PROPERTY' | translate}} : </h5>
 							<select ng-options ="pro for pro in propertyList" class="form-control"></select>
 						</div>
 
 						<hr style="margin-bottom: 1px">
 						<div class="row">
 							<div class="col-lg-2 col-md-2 col-sm-2 bordered">
-								<h5>Unit:</h5>
+								<h5>{{'EDIT_DEFINITION_PANE_UNIT' | translate}}:</h5>
 							</div>
 							<div class="col-lg-5 col-md-5 col-sm-5 bordered">
 
-								<label style="padding-left:15px; ">Original</label>
+								<label style="padding-left:15px; ">{{'EDIT_DEFINITION_PANE_ORIGINAL' | translate}}</label>
 							</div>
 							<div class="col-lg-5 col-md-5 col-sm-5 bordered">
-								<label style="padding-left:15px; ">Selected</label>
+								<label style="padding-left:15px; ">{{'EDIT_DEFINITION_PANE_SELECTED' | translate}}</label>
 							</div>
 						</div>
 						<hr style="margin-top:1px; margin-bottom: 1px">
@@ -328,15 +348,15 @@
 								<ul style="padding-left:15px; ">
 									<li>
 										<span class="glyphicon glyphicon-star"></span>
-										<a href="#" ng-click="$event.preventDefault();" >codeText1</a>
+										<a href="#" ng-click="$event.preventDefault();" >{{'EDIT_DEFINITION_PANE_CODETEXT1' | translate}}</a>
 									</li>
 									<li>
 										<span class="glyphicon glyphicon-star"></span>
-										<a href="#" ng-click="$event.preventDefault();" >codeText1</a>
+										<a href="#" ng-click="$event.preventDefault();" >{{'EDIT_DEFINITION_PANE_CODETEXT1' | translate}}</a>
 									</li>
 									<li>
 										<span class="glyphicon glyphicon-star"></span>
-										<a href="#" ng-click="$event.preventDefault();" >codeText1</a>
+										<a href="#" ng-click="$event.preventDefault();" >{{'EDIT_DEFINITION_PANE_CODETEXT1' | translate}}</a>
 									</li>
 								</ul>
 							</div>
@@ -345,11 +365,11 @@
 								<ul style="padding-left:15px; ">
 									<li>
 										<span class="glyphicon glyphicon-star"></span>
-										<a href="#" ng-click="$event.preventDefault();" >codeText1</a>
+										<a href="#" ng-click="$event.preventDefault();" >{{'EDIT_DEFINITION_PANE_CODETEXT1' | translate}}</a>
 									</li>
 									<li>
 										<span class="glyphicon glyphicon-star"></span>
-										<a href="#" ng-click="$event.preventDefault();" >codeText1</a>
+										<a href="#" ng-click="$event.preventDefault();" >{{'EDIT_DEFINITION_PANE_CODETEXT1' | translate}}</a>
 									</li>
 								</ul>
 
@@ -363,7 +383,7 @@
 									<tr>
 										<td style="width: 150px" >
 										<input type="checkbox"  ng-model="pre"/>
-										Precision:</td>
+										{{'EDIT_DEFINITION_PANE_PRECISION' | translate}}:</td>
 										<td style="width: 50px">
 										<input ng-show="pre" type="number" style="width: 100%" />
 										</select></td>
@@ -372,7 +392,7 @@
 									<tr>
 										<td>
 										<input type="checkbox"  ng-model="min"/>
-										Set Min:</td>
+										{{'EDIT_DEFINITION_PANE_SET_MIN' | translate}}:</td>
 										<td><select ng-show="min" ng-options="" style="width: 100%" ></select></td>
 										<td>
 										<input ng-show="min" type="number" style="width: 100%" />
@@ -381,7 +401,7 @@
 									<tr>
 										<td>
 										<input type="checkbox" ng-model="max" />
-										Set Max:</td>
+										{{'EDIT_DEFINITION_PANE_SET_MAX' | translate}}:</td>
 										<td><select ng-show="max" ng-options="" style="width: 100%" ></select></td>
 										<td>
 										<input ng-show="max" type="number" style="width: 100%" />
@@ -390,7 +410,7 @@
 									<tr>
 										<td>
 										<input type="checkbox" ng-model="assumed" />
-										Set Ass.:</td>
+										{{'EDIT_DEFINITION_PANE_SET_ASS' | translate}}:</td>
 										<td><select  ng-show="assumed" ng-options="" style="width: 100%" ></select></td>
 										<td>
 										<input ng-show="assumed" type="number" style="width: 100%" />
@@ -410,7 +430,7 @@
 									<tr>
 										<td>
 										<input type="checkbox"  ng-model="min"/>
-										Set Min:</td>
+										{{'EDIT_DEFINITION_PANE_SET_MIN' | translate}}:</td>
 										<td><select ng-show="min" ng-options="" style="width: 100%" ></select></td>
 										<td>
 										<input ng-show="min" type="number" style="width: 100%" />
@@ -419,7 +439,7 @@
 									<tr>
 										<td>
 										<input type="checkbox" ng-model="max" />
-										Set Max:</td>
+										{{'EDIT_DEFINITION_PANE_SET_MAX' | translate}}:</td>
 										<td><select ng-show="max" ng-options="" style="width: 100%" ></select></td>
 										<td>
 										<input ng-show="max" type="number" style="width: 100%" />
@@ -428,7 +448,7 @@
 									<tr>
 										<td>
 										<input type="checkbox" ng-model="assumed" />
-										Set Ass.:</td>
+										{{'EDIT_DEFINITION_PANE_SET_ASS.' | translate}}.:</td>
 										<td><select  ng-show="assumed" ng-options="" style="width: 100%" ></select></td>
 										<td>
 										<input ng-show="assumed" type="number" style="width: 100%" />
@@ -500,7 +520,7 @@
 						</div>
 						-->
 						<form class="form-group">
-							<h5>Your Date-Time Parttern :</h5>
+							<h5>{{'EDIT_DEFINITION_PANE_YOUR_DATE_TIME_PARTTERN' | translate}} :</h5>
 							<select class="form-control" ng-options="par.name for par in dateTimePartterList" ng-model="asdf"></select>
 						</form>
 					</div>
@@ -520,34 +540,34 @@
 									</button> </span>
 							</div>
 							<div class="col-lg-8 col-ms-8 col-sm-8" style="margin-left:10px">
-								<span class="btn-group"> <span>Code :</span>
+								<span class="btn-group"> <span>{{'EDIT_DEFINITION_PANE_CODE' | translate}} :</span>
 									<button class="btn-default {{code.selected}}"  ng-click="setValue(code)" ng-repeat="code in ordinalCodes">
 										{{code.number}}
 									</button> </span>
 							</div>
 						</div>
 						<form>
-							<h5>text :</h5>
+							<h5>{{'EDIT_DEFINITION_PANE_TEXT' | translate}} :</h5>
 							<input type="text" class="form-control" />
-							<h5>description :</h5>
+							<h5>{{'EDIT_DEFINITION_PANE_DESCRIPTION' | translate}} :</h5>
 							<input type="text" class="form-control"  />
 
 							<input type="checkbox" ng-model="assumed" />
-							<span>Assumed value :</span>
+							<span>{{'EDIT_DEFINITION_PANE_ASSUMED_VALUE' | translate}}:</span>
 							<select class="form-control" ng-show="assumed" ng-options="" style="width: 100%" ></select>
 						</form>
 					</div>
 					<!-- DV_BOOLEAN -->
 					<div ng-if="false" >
 						<form class="form-group">
-							<h5>Allow value :</h5>
-							<span>True
+							<h5>{{'EDIT_DEFINITION_PANE_ALLOW_VALUE' | translate}} :</h5>
+							<span>{{'EDIT_DEFINITION_PANE_TRUE' | translate}}
 								<input type="checkbox" />
 							</span>
-							<span>False
+							<span>{{'EDIT_DEFINITION_PANE_FALSE' | translate}}
 								<input type="checkbox" />
 							</span>
-							<h5>Assumed value :</h5>
+							<h5>{{'EDIT_DEFINITION_PANE_ASSUMED_VALUE' | translate}} :</h5>
 							<select class="form-control" ng-options="var for var in allowValues"></select>
 						</form>
 					</div>
@@ -558,7 +578,7 @@
 
 	<script type="text/ng-template" id="nodeBind.html">
 		<div>
-		sdfasdfgfdagasdfgadfg
+
 		</div>
 	</script>
 </div>

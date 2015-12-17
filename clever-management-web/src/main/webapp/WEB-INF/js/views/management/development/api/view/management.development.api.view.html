@@ -1,0 +1,152 @@
+<div class="row">
+
+    <div class="col-xs-12 col-md-12 col-lg-12 hbox">
+        <div class="panel panel-default" ng-show="!isApiListHidden">
+            <div class="panel-heading">
+                <div class="row">
+                    <div class="col-md-7 col-lg-7 col-xs-7">
+                        <select  id="category" ng-model="selectedCategory" class="picker form-control" ng-options="obj.name for obj in list"></select>
+                    </div>
+                    <div class="col-md-5 col-lg-5 col-xs-5">
+                        <select id="version" class="picker form-control" ng-model="selectedVersion">
+                            <option ng-repeat="version in selectedCategory.versionList">{{version}}</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="list-group" ng-style="{height: containerHeight - 55}" style="overflow-x:auto; overflow-y: auto; white-space: nowrap;  margin-left: -5px;">
+
+                <tree-view tree-data="versionMaster.rootUrlMasters" node-id="id"
+                click-node-callback="selectApi(value)"
+                node-children="apiList"
+                tree-control="treeControl"
+                node-alias-name="node"
+                search-key-mapper="searchKeyMapper"
+                click-node-menu-callback="clickListNodeMenu(node, type)"
+                language="treeLanguage">
+                    <tree-expanded-icon>
+                        <span class="clever-icon expanded" style="padding: 0 6px;height: 12px;background-position-y: 6px;"></span>
+                    </tree-expanded-icon>
+                    <tree-collapsed-icon>
+                        <span class="clever-icon collapsed" style="padding: 0 6px;height: 12px;background-position-y: 6px;"></span>
+                    </tree-collapsed-icon>
+                    <tree-node-label>
+                        <span ng-show="language == 'en'"> <img  ng-show="node.name" class="clever-icon api" style="padding: 0 10px;height: 16px;"></img> <a ng-show="node.name" ng-bind-html="node.name | highlight:keyword | unsafe"  class="api"></a> <img  ng-show="node.rootUrlName" class="clever-icon list folder" style="padding: 0 10px;height: 16px;"></img> <span ng-show="node.rootUrlName" ng-bind-html="node.rootUrlName | highlight:keyword | unsafe" style="font-weight:bold; color:#6F0101"> </span> </span>
+                        <span ng-show="language == 'zh'"> <img  ng-show="node.name" class="clever-icon api" style="padding: 0 10px;height: 16px;"></img> <a ng-show="node.name" ng-bind-html="node.chineseName | highlight:keyword | unsafe"  class="api"></a> <img  ng-show="node.rootUrlName" class="clever-icon list folder" style="padding: 0 10px;height: 16px;"></img> <span ng-show="node.rootUrlName" ng-bind-html="node.chineseName | highlight:keyword | unsafe" style="font-weight:bold; color:#6F0101"></span> </span>
+                    </tree-node-label>
+                </tree-view>
+            </div>
+
+        </div>
+        <splitter is-adjust-enabled="!isApiListHidden" style="min-height: 100%;">
+            <i style="cursor: pointer" ng-click="isApiListHidden = !isApiListHidden" ng-show="isApiListHidden" tooltip-placement="right" tooltip="Expand" tooltip-popup-delay="500"> <span class="glyphicon glyphicon-chevron-right" ng-style="{'margin-top': containerHeight/2}" ></span> </i>
+            <i style="cursor: pointer" ng-click="isApiListHidden = !isApiListHidden" ng-show="!isApiListHidden" tooltip-placement="right" tooltip="Collapse" tooltip-popup-delay="500"> <span class="glyphicon glyphicon-chevron-left" ng-style="{'margin-top': containerHeight/2}" ></span> </i>
+        </splitter>
+        <div class="col-xs-12 col-md-12 col-lg-12 flex-box">
+            <div class="btn-group" ng-if="!isApiListHidden" style="display:flex" >
+                <button ng-click="stretch()" class="btn btn-default " style="width: 92px">
+                    <span>{{stretchState | translate}}</span>
+                </button>
+                <i class="search-icon glyphicon glyphicon-search" style="position: absolute;
+                top: 3px;
+                left: 90px;
+                z-index: 20;
+                width: 30px;
+                font-size: 17px;
+                line-height: 30px;
+                color: #e6e9ed;
+                text-align: center;"></i>
+                <input type="text" style="border-bottom-right-radius: 17px; border-top-right-radius:17px; padding-left: 40px; width: 50%"  ng-model = "apiListFilter.value" class="form-control" placeholder="{{'SEARCH_HINT' | translate}}" />
+                <span class="input-group-addon" style="width: 100px;">{{'ARCHETYPE_PANE_LANGUAGE' | translate}}:</span>
+                <div class="btn-group" dropdown>
+                    <button type="button" class="btn btn-default dropdown-toggle" dropdown-toggle style="width: 160px;">
+                        {{treeLanguage}} <span class="glyphicon glyphicon-chevron-down pull-right" style="margin-top: 2px;"></span>
+                    </button>
+                    <ul class="dropdown-menu" role="menu">
+                        <li ng-repeat="language in languages" style="text-align: center">
+                            <a style="width:inherit" href class="text-center" ng-click="selectLanguage(language)">{{language}}</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div ng-if= "selectedApi" ng-style="{height: containerHeight - 55}" class="col-xs-12 col-md-12 col-lg-12 flex-box">
+                <span ng-switch="treeLanguage"> <span ng-switch-when="en"> <h1 style="margin-top: 15px;" id="api-name">{{selectedApi.name}}</h1>
+                        <p style="width: 100%;word-break:break-all; word-wrap:break-all;">
+                            {{selectedApi.description}}
+                        </p> </span> <span ng-switch-when="zh"> <h1 style="margin-top: 15px;" id="api-name">{{selectedApi.chineseName}}</h1>
+                        <p style="width: 100%;word-break:break-all; word-wrap:break-all;">
+                            {{selectedApi.chineseDescription}}
+                        </p> </span> </span>
+                <hr>
+                <tabset tab-control="tabControl">
+                    <tab heading="{{'DEVELOPMENT_API_VIEW_API_INFORMATION' | translate}}">
+                        <div style="padding: 15px; overflow: auto" ng-style="{height: containerHeight - 210}">
+                            <div class="simpleline">
+                                <span>{{'DEVELOPEMENT_API_VIEW_URL' | translate}}:</span>
+                                <span class="url" id="url">{{selectedApi.url}}</span>
+                                <button class="btn btn-default" ngclipboard data-clipboard-text="{{selectedApi.url}}"  tooltip-placement="right" tooltip="{{'DEVELOPMENT_API_VIEW_TOOLTIP_COPY' | translate}}" tooltip-popup-delay="500">
+                                    <span class="octicon octicon-clippy" ></span>
+                                </button>
+                            </div>
+                            <div class="simpleline">
+                                <span>{{'DEVELOPEMENT_API_VIEW_MEDIA_TYPE' | translate}}:</span>
+                                <span ng-repeat="item in selectedApi.mediaTypes">
+                                    <code >
+                                        {{item}};
+                                    </code>&nbsp;&nbsp; </span>
+                            </div>
+                            <div class="simpleline" style="display: block">
+                                <span>{{'DEVELOPEMENT_API_VIEW_REQUEST_METHOD' | translate}}:</span>
+                                <span class="button-label {{selectedApi.reuqestMethod | lowercase}}">{{selectedApi.reuqestMethod}}</span>
+                            </div>
+                            <div style="margin-top: 20px">
+                                <span class="table-label">{{'DEVELOPEMENT_API_VIEW_REQUEST_PARAMS' | translate}}</span>
+                                <param-table param-list='selectedApi.requestParams' language="treeLanguage" select-param-callback="getRqParamDetails(value)" param-type="requestParam"></param-table>
+
+                            </div>
+
+                            <!-- request params details -->
+                            <div style="margin-top: 20px" ng-show="selectedRqParam">
+                                <span class="table-label">{{selectedRqParam.type}}</span>
+                                <param-table param-list='selectedRqParam.details' language="treeLanguage"  param-type="requestParam"></param-table>
+                            </div>
+
+                          
+                            <div style="margin-top: 20px">
+                                <span class="table-label">{{'DEVELOPEMENT_API_VIEW_RETURN_PARAMS' | translate}}</span>
+                                <param-table param-list='selectedApi.returnParams' language="treeLanguage" select-param-callback="getRtParamDetails(value)" param-type="returnParam"></param-table>
+                            </div>
+                           <!-- return params details-->
+                            <div style="margin-top: 20px" ng-show="selectedRtParam">
+                                <span class="table-label">{{selectedRtParam.type}}</span>
+                                <param-table param-list='selectedRtParam.details' language="treeLanguage"  param-type="returnParam"></param-table>
+                            </div>
+                        </div>
+                    </tab>
+                    <tab heading = "{{'DEVELOPMENT_API_VIEW_RETURN_CODE' | translate}}" ng-if="returnCodeNeeded()">
+                        <div style="padding: 15px; overflow: auto" ng-style="{height: containerHeight - 170}">
+                            <table class="variables-matrix input-arguments">
+                                <thead>
+                                    <tr>
+                                        <th>{{'DEVELOPMENT_API_VIEW_CODE_CODE' | translate}}</th>
+                                        <th>{{'DEVELOPMENT_API_VIEW_CODE_DESC' | translate}}</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="code in selectedApi.errorCodes">
+                                        <td>{{code.code}}</td>
+                                        <td ng-if="treeLanguage=='zh'">{{code.descriptionZh}}</td>
+                                        <td ng-if="treeLanguage=='en'">{{code.descriptionEn}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </tab>
+                </tabset>
+            </div>
+        </div>
+    </div>
+</div>
+
