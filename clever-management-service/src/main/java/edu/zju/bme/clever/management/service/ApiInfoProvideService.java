@@ -5,6 +5,7 @@ import java.util.Set;
 
 import edu.zju.bme.clever.management.service.entity.ApiInformation;
 import edu.zju.bme.clever.management.service.entity.ApiMaster;
+import edu.zju.bme.clever.management.service.entity.ApiRootUrlMaster;
 import edu.zju.bme.clever.management.service.entity.ApiVersionMaster;
 import edu.zju.bme.clever.management.service.entity.ClassAttribute;
 import edu.zju.bme.clever.management.service.entity.ClassMaster;
@@ -45,4 +46,6 @@ public interface ApiInfoProvideService {
 	public ClassMaster getClassMasterByTypeAndVersionMasterId(String type, Integer id);
 
 	public Set<ClassMaster> getAllClassMasterByVersionMasterId(Integer id);
+	
+	public List<ApiRootUrlMaster> getRootUrlMasterByVersionMasterId(Integer id);
 }

@@ -7,7 +7,7 @@ angular.module('clever.management.directives.batchSubmitPane', []).directive('ba
 			type : '@',
 			maxHeight : '=',
 		},
-		templateUrl : 'js/directives/archetype-edit-directives/batch-submit-directive/batch-submit-pane.html',
+		templateUrl : 'js/directives/archetype-edit-directives/batch-submit-directive/batch.submit.pane.html',
 
 		controller : function($scope, $element, $attrs) {
 			$scope.pageStatus = 'beforeSubmit';

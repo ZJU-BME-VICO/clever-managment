@@ -483,12 +483,7 @@ public class ApiInfoParseServiceImpl implements ApiInfoParseService {
 					temp.setIsBaseType(false);
 					ClassMaster master = this.classMasterRepo.findByTypeAndVersionMasterId(type, versionMasterId);
 					if (master == null) {
-						try {
-							throw new ApiParseException("can not find class master, type name :" + type);
-						} catch (Exception e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
+						System.out.println("can not find class master with type: " + type +"with version master id : " +versionMasterId);
 					} else {
 						temp.setClassMaster(master);
 					}
@@ -498,7 +493,6 @@ public class ApiInfoParseServiceImpl implements ApiInfoParseService {
 				temp.setIsList(false);
 				params.add(temp);
 			});
-
 		return params;
 	}
 

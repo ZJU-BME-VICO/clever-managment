@@ -1,36 +1,11 @@
-function ApiViewCtr($scope, $document, $timeout, resourceService,
-		DEVELOPMENT_API_DISPLAY_PARAM_DETAILS,
-		DEVELOPMENT_API_DISPLAY_MASTER_URL,
-		DEVELOPMENT_API_DISPLAY_RETURNPARAMS,
-		DEVELOPMENT_API_DISPLAY_APIINFOMATION_URL,
-		DEVELOPMENT_API_DISPLAY_REQUESTPARAMS, treeDataFormatService,
-		busyService) {
+function ApiViewCtr($scope, $document, $timeout, resourceService, DEVELOPMENT_API_DISPLAY_VERSIONMASTER_BY_ID_URL, DEVELOPMENT_API_DISPLAY_PARAM_DETAILS_URL, DEVELOPMENT_API_DISPLAY_MASTER_URL, DEVELOPMENT_API_DISPLAY_APIINFOMATION_URL, busyService) {
 
 	$scope.treeControl = {};
-	$scope.languages = [ 'zh', 'en' ];
+	$scope.languages = ['zh', 'en'];
 	$scope.treeLanguage = 'zh';
 	$scope.selectLanguage = function(lan) {
 		$scope.treeLanguage = lan;
 	};
-
-	$scope.initData = function() {
-		var bid = busyService.pushBusy('BUSY_LOADING');
-		resourceService.get(DEVELOPMENT_API_DISPLAY_MASTER_URL).then(
-				function(list) {
-					$scope.list = list;
-					formatList(list);
-					// console.log(list);
-					if (angular.isArray(list)) {
-						$scope.selectedCategory = list[0];
-						if (angular.isArray(list[0].versionList)) {
-							$scope.selectedVersion = list[0].versionList[0];
-							$scope.getApiListById($scope.selectedCategory.id,
-									$scope.selectedVersion);
-						}
-					}
-					busyService.popBusy(bid);
-				});
-	}();
 
 	// api tree expand and collapse action
 	$scope.stretchState = 'EXPAND_ALL';
@@ -42,34 +17,6 @@ function ApiViewCtr($scope, $document, $timeout, resourceService,
 			$scope.treeControl.collapseAll();
 			$scope.stretchState = 'EXPAND_ALL';
 		}
-	};
-
-	// sort the version list in master
-	function formatList(list) {
-		angular.forEach(list, function(value) {
-			if (value.versionList) {
-				if (angular.isArray(value.versionList)) {
-					value.versionList.sort(function(a, b) {
-						return a - b;
-					});
-				}
-				;
-			}
-			;
-		});
-	}
-	;
-
-	// get data from backend with master id and version
-	$scope.getApiListById = function(categoryId, version) {
-		var bid = busyService.pushBusy('BUSY_LOADING');
-		resourceService.get(
-				DEVELOPMENT_API_DISPLAY_MASTER_URL + "/" + categoryId + "/"
-						+ version).then(function(versionMaster) {
-			$scope.versionMaster = versionMaster;
-			$scope.stretchState = 'EXPAND_ALL';
-			busyService.popBusy(bid);
-		});
 	};
 
 	// for api tree search
@@ -93,6 +40,45 @@ function ApiViewCtr($scope, $document, $timeout, resourceService,
 		}
 	});
 
+	$scope.getApiMasters = function() {
+		var bid = busyService.pushBusy('BUSY_LOADING');
+		resourceService.get(DEVELOPMENT_API_DISPLAY_MASTER_URL).then(function(list) {
+			$scope.list = list;
+			sortVersionMasters(list);
+			if (angular.isArray(list)) {
+				$scope.selectedApiMaster = list[0];
+				if (angular.isArray(list[0].versionMasters)) {//init selected version master
+					$scope.selectedVersionMaster = list[0].versionMasters[0];
+					$scope.getApiListById($scope.selectedVersionMaster.id);
+				}
+			}
+			busyService.popBusy(bid);
+		});
+	}();
+
+	// sort the version list in master
+	function sortVersionMasters(list) {
+		angular.forEach(list, function(value) {
+			if (value.versionMasters) {
+				if (angular.isArray(value.versionMasters)) {
+					value.versionMasters.sort(function(a, b) {
+						return a.version - b.version;
+					});
+				};
+			};
+		});
+	};
+
+	// get data from backend with master id and version
+	$scope.getApiListById = function(id) {
+		var bid = busyService.pushBusy('BUSY_LOADING');
+		resourceService.get(DEVELOPMENT_API_DISPLAY_VERSIONMASTER_BY_ID_URL + id).then(function(versionMaster) {
+			$scope.versionMaster = versionMaster;
+			$scope.stretchState = 'EXPAND_ALL';
+			busyService.popBusy(bid);
+		});
+	};
+
 	// click api node call back,select api
 	$scope.selectApi = function(api) {
 		// root url name node
@@ -101,54 +87,44 @@ function ApiViewCtr($scope, $document, $timeout, resourceService,
 		}
 		// api node
 		if (api.name) {
-			// console.log(api);
 			$scope.selectedRtParam = undefined;
 			$scope.selectedRqParam = undefined;
 			$scope.selectedApi = api;
-			var bid = busyService.pushBusy("BUSY_LOADING")
-			resourceService.get(
-					DEVELOPMENT_API_DISPLAY_APIINFOMATION_URL
-							+ $scope.selectedApi.id).then(function(result) {
+			var bid = busyService.pushBusy("BUSY_LOADING");
+			resourceService.get(DEVELOPMENT_API_DISPLAY_APIINFOMATION_URL + $scope.selectedApi.id).then(function(result) {
 				$scope.selectedApi = result;
-				console.log(result);
 				busyService.popBusy(bid);
-			})
-
+			});
 		}
 	};
 
-	$scope.$watch('selectedCategory', function(newValue, oldValue) {
-		if (newValue && oldValue) {
-			var versionList = $scope.selectedCategory.versionList;
-			$scope.selectedVersion = undefined;
-			$timeout(function() {
-				$scope.selectedVersion = versionList[versionList.length - 1];
-			}, 0);
+	$scope.afterChangeApiMaster = function() {
+		if ($scope.selectedApiMaster) {
+			$scope.selectedVersionMaster = $scope.selectedMaster.versionMasters[0];
+			$scope.getApiListById($scope.selectedVersionMaster.id);
 		}
-	});
-	$scope.$watch('selectedVersion', function(newValue, oldValue) {
-		if (newValue) {
-			$scope.getApiListById($scope.selectedCategory.id,
-					$scope.selectedVersion);
-		}
-	});
+	};
+	
+	$scope.afterChangeVersionMaster = function() {
+		$scope.getApiListById($scope.selectedVersionMaster.id);
+	};
+	
 	$scope.getRqParamDetails = function(param) {
 		$scope.selectedRqParam = param;
-		resourceService.get(DEVELOPMENT_API_DISPLAY_PARAM_DETAILS + param.type + '/versionid/' + $scope.versionMaster.id)
-				.then(function(details) {
-					$scope.selectedRqParam.details = details;
-				});
+		resourceService.get(DEVELOPMENT_API_DISPLAY_PARAM_DETAILS_URL + param.type + '/versionid/' + $scope.versionMaster.id).then(function(details) {
+			$scope.selectedRqParam.details = details;
+		});
 	};
+
 	$scope.getRtParamDetails = function(param) {
-		// console.log(param);
 		$scope.selectedRtParam = param;
-		resourceService.get(DEVELOPMENT_API_DISPLAY_PARAM_DETAILS + param.type + '/versionid/' + $scope.versionMaster.id)
-				.then(function(details) {
-					$scope.selectedRtParam.details = details;
-				});
+		resourceService.get(DEVELOPMENT_API_DISPLAY_PARAM_DETAILS_URL + param.type + '/versionid/' + $scope.versionMaster.id).then(function(details) {
+			$scope.selectedRtParam.details = details;
+		});
 
 	};
-	$scope.returnCodeNeeded = function() {
+
+	$scope.isReturnCodeNeeded = function() {
 		var params = $scope.selectedApi.returnParams;
 		var result;
 		if (params) {
@@ -157,17 +133,16 @@ function ApiViewCtr($scope, $document, $timeout, resourceService,
 					if (param.name == 'resultCode') {
 						result = true;
 					}
-				})
+				});
 			} else {
 				if (params.name == 'resultCode') {
 					result = true;
 				}
 			}
-		}else{
+		} else {
 			result = false;
 		}
 
 		return result;
-	}
-
+	};
 }

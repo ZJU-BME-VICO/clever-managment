@@ -15,7 +15,7 @@ angular
 							isExpandedAll : '=',
 
 						},
-						templateUrl : 'js/directives/archetype-edit-directives/definition-pane/edit-definition-pane.html',
+						templateUrl : 'js/directives/archetype-edit-directives/definition-pane/edit.definition.pane.html',
 
 						controller : function($scope, $element, $attrs) {
 

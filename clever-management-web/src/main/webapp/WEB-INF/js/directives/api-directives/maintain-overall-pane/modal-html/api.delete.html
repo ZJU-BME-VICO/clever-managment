@@ -4,7 +4,7 @@
 <div class="modal-body">
 	<tree-view tree-data="treeData" node-id="id"
 	click-node-callback="selectNode(value)"
-	node-children="children"
+	node-children="versionMasters"
 	tree-control="treeControl"
 	node-alias-name="node"
 	>
@@ -15,7 +15,11 @@
 			<span class="clever-icon collapsed" style="padding: 0 6px;height: 12px;background-position-y: 6px;"></span>
 		</tree-collapsed-icon>
 		<tree-node-label>
-			<span ng-bind-html="node.label | unsafe"></span>
+			<span ng-show="node.name" ng-bind-html="node.name | unsafe"></span>
+			<span ng-show="node.version">version-
+				<span  ng-bind-html="node.version.toString() | unsafe"></span>
+			</span>
+			
 		</tree-node-label>
 	</tree-view>
 </div>

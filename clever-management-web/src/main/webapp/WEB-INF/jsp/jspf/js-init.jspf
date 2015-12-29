@@ -82,7 +82,14 @@
 <script src="js/directives/application-template/DV/DV-LABEL-directive.js"></script>
 <script src="js/directives/document-diff/document-diff-directive.js"></script>
 <script src="js/directives/elastic/elastic-directive.js"></script>
-
+<script src="js/directives/api-directives/pojo-class-pane/pojo-class-pane.js"></script>
+<script src="js/directives/api-directives/api-base-information-pane/api-base-information-pane.js"></script>
+<script src="js/directives/api-directives/api-param-information-pane/api-param-information-pane.js"></script>
+<script src="js/directives/api-directives/api-class-pane/api-class-pane.js"></script>
+<script src="js/directives/api-directives/param-table/param-table.js"></script>
+<script src="js/directives/api-directives/api-information-pane/api-information-pane.js"></script>
+<script src="js/directives/api-directives/pojo-class-add-pane/pojo-class-add-pane.js"></script>
+<script src="js/directives/api-directives/maintain-overall-pane/maintain-overall-pane.js"></script>
 
 <script src="js/directives/archetype-edit-directives/definition-pane/edit-definition-pane.js"></script>
 <script src="js/directives/archetype-edit-directives/header-pane/edit-header-pane.js"></script>
@@ -93,7 +100,7 @@
 <script src="js/directives/archetype-edit-directives/batch-submit-directive/batch-submit-pane.js"></script>
 <script src="js/directives/introduction-pane/introduction-pane.js"></script>
 <!-- api directives -->
-<script src="js/directives/api-directives/param-table/param-table.js"></script>
+
 
 <!-- controllers -->
 <script src="js/views/management/management-controller.js"></script>

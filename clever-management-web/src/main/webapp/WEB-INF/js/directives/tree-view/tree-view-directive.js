@@ -106,11 +106,11 @@ angular.module('clever.management.directives.treeView', []).directive('treeView'
 				return specialisedArchetype;
 				
 			};
-			$scope.deleteArchetype = function(node){
-				$scope.deleteArchetypeCallback({
-					value:node,
-				});
-			};
+			// $scope.deleteArchetype = function(node){
+				// $scope.deleteArchetypeCallback({
+					// value:node,
+				// });
+			// };
 			
 			
 			$scope.doubleClickNode = function(node) {
@@ -122,8 +122,7 @@ angular.module('clever.management.directives.treeView', []).directive('treeView'
 	    
 			
 
-			$scope.getNodeLabel = function(node, aliasName) {
-				
+			$scope.getNodeLabel = function(node, aliasName) {			
 				if (treeNodeLabelElement) {
 					return '<span class="' + $scope.getNodeLabelClass() + '">' + $scope.getTreeNodeLabelElement() + '</span>';
 				}else if($scope.nodeLabelGenerator){

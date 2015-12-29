@@ -14,11 +14,11 @@ angular.module('clever.management.services.busy', []).service('busyService', fun
 
 	this.pushBusy = function(busyHint) {
 		var randomId = random();
-		while (threads.indexOf("" + randomId) >= 0) {//indexof某字符串在一串字符中第一次出现的位置
+		while (threads.indexOf("" + randomId) >= 0) {//get a randomId never occur
 			ranmowId = random();
 		}
 		threads.push("" + randomId);
-		hints.push(busyHint);
+		hints.push(busyHint); 
 		isBusy = true;
 		return randomId;
 	};
@@ -26,6 +26,7 @@ angular.module('clever.management.services.busy', []).service('busyService', fun
 	this.popBusy = function(id) {
 		var index = threads.indexOf("" + id);
 		threads.splice(index, 1);
+		hints.splice(index,1);
 		if (threads.length == 0) {
 			isBusy = false;
 			while (threads.length != 0) {

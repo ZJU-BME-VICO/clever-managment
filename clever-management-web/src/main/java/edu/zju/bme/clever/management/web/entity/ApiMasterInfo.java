@@ -10,7 +10,7 @@ public class ApiMasterInfo {
 	private String name;
 	private String chineseName;
 
-	private List<Integer> versionList = new ArrayList<Integer>();
+	private List<ApiVersionMasterInfo> versionMasters = new ArrayList<>();
 
 	// private ApiVersionMasterInfo latestApiVersionMasterInfo;
 	private Integer latestVersion;
@@ -33,12 +33,12 @@ public class ApiMasterInfo {
 		Id = id;
 	}
 
-	public List<Integer> getVersionList() {
-		return versionList;
+	public List<ApiVersionMasterInfo> getVersionMasters() {
+		return versionMasters;
 	}
 
-	public void setVersionList(List<Integer> versionList) {
-		this.versionList = versionList;
+	public void setVersionMasters(List<ApiVersionMasterInfo> versionMasters) {
+		this.versionMasters = versionMasters;
 	}
 
 	public Integer getLatestVersion() {

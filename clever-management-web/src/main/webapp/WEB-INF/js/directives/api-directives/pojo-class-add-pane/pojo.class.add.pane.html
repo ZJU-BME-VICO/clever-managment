@@ -1,0 +1,62 @@
+<div class="col-xs-12 col-md-12 col-sm-12" ng-style="{height : maxHeight-100}" style="overflow: auto">
+	<table class="variables-matrix input-arguments" ng-show="freshMaster">
+		<thead>
+			<tr>
+				<th>Name</th>
+				<th>Type</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td>
+				<input type="text" ng-model="freshMaster.name"  class="form-control"/>
+				</td>
+				<td>
+				<input type="text" ng-model="freshMaster.type" class="form-control"/>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+	<table class="variables-matrix input-arguments" ng-show="freshMaster.attributes">
+		<thead>
+			<tr>
+				<th style="width:120px">{{'DEVELOPMENT_API_EDIT_NAME' | translate}}</th>
+
+				<th style="width:80px">{{'DEVELOPMENT_API_EDIT_TYPE' | translate}}</th>
+				<th style="width:120px">{{'DEVELOPMENT_API_EDIT_REQUIRED' | translate}}</th>
+				<th>{{'DEVELOPMENT_API_EDIT_DESCRIPTIOIN' | translate}}</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr ng-repeat="attribute in freshMaster.attributes">
+				<td>
+				<input type="text" ng-model="attribute.name"  class="form-control"/>
+				</td>
+				<td>
+				<input type="text" ng-model="attribute.type"  class="form-control"/>
+				</td>
+				<td><select class="form-control" ng-model="attribute.isRequired" ng-options="o.v as o.n for o in [{ n: 'false', v: false }, { n: 'true', v: true }]"></select></td>
+				<td>
+				<input class="form-control" placeholder="{{'DEVELOPMENT_API_EDIT_DESCRIPTION_PLACEHOLDER_EN' | translate}} " ng-model="attribute.descriptionEn">
+				<br>
+				<input class="form-control" placeholder="{{'DEVELOPMENT_API_EDIT_DESCRIPTION_PLACEHOLDER_ZH' | translate}}" ng-model="attribute.descriptionZh">
+				</td>
+			</tr>
+		</tbody>
+	</table>
+</div>
+<div class="modal-footer">
+	<button class="btn btn-success" ng-click="newMaster()">
+		<span class="glyphicon glyphicon-plus-sign"></span>
+		{{'DEVELOPMENT_API_MAINTAIN_CLASS_MASTER_ADD' | translate }}
+	</button>
+	<button class="btn btn-success" ng-click="newAttribute()">
+		<span class="glyphicon glyphicon-plus-sign"></span>
+		{{'DEVELOPMENT_API_MAINTAIN_CLASS_ATTRIBUTE_ADD' | translate}}
+	</button>
+	<button class="btn btn-info" ng-click="addClassMaster()">
+		<span class="glyphicon glyphicon-floppy-open"></span>
+		{{'DEVELOPMENT_API_MAINTAIN_SUBMIT' | translate}}
+	</button>
+
+</div>

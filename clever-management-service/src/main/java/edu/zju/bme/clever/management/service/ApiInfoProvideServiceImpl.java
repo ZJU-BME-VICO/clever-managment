@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import edu.zju.bme.clever.management.service.entity.ApiInformation;
 import edu.zju.bme.clever.management.service.entity.ApiMaster;
+import edu.zju.bme.clever.management.service.entity.ApiRootUrlMaster;
 import edu.zju.bme.clever.management.service.entity.ApiVersionMaster;
 import edu.zju.bme.clever.management.service.entity.ClassAttribute;
 import edu.zju.bme.clever.management.service.entity.ClassMaster;
@@ -16,6 +17,7 @@ import edu.zju.bme.clever.management.service.entity.RequestParam;
 import edu.zju.bme.clever.management.service.entity.ReturnParam;
 import edu.zju.bme.clever.management.service.repository.ApiInformationRepository;
 import edu.zju.bme.clever.management.service.repository.ApiMasterRepository;
+import edu.zju.bme.clever.management.service.repository.ApiRootUrlMasterRepository;
 import edu.zju.bme.clever.management.service.repository.ApiVersionMasterRepository;
 import edu.zju.bme.clever.management.service.repository.ClassAttributeRepository;
 import edu.zju.bme.clever.management.service.repository.ClassMasterRepository;
@@ -43,7 +45,8 @@ public class ApiInfoProvideServiceImpl implements ApiInfoProvideService {
 	private ClassAttributeRepository classAttributeRepo;
 	@Autowired
 	private ClassMasterRepository classMasterRepo;
-
+   @Autowired
+   private ApiRootUrlMasterRepository rootUrlMasterRepo;
 	@Override
 	public Set<ApiMaster> getAllApiMasters() {
 		return this.apiMasterRepo.findAllFetchAll();
@@ -113,4 +116,9 @@ public class ApiInfoProvideServiceImpl implements ApiInfoProvideService {
 	public Set<ClassMaster> getAllClassMasterByVersionMasterId(Integer id) {
 		return this.classMasterRepo.findByVersionMasterIdFetchAll(id);
 	}
+	
+	@Override
+	public List<ApiRootUrlMaster> getRootUrlMasterByVersionMasterId(Integer id){
+		return this.rootUrlMasterRepo.findByApiVersionMasterId(id);
+	}	
 }

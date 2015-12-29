@@ -12,7 +12,7 @@
             </tr>
         </thead>
         <tbody>
-            <tr ng-repeat="param in paramList">
+            <tr ng-repeat="param in paramList | orderBy: 'name'">
                 <td>{{param.name}}</td>
                 <td><span><span
                     class="button-label {{getFixClass(param.type)}}">{{getFixTypeName(param.type)}}</span>&nbsp;&nbsp;&nbsp; </span>&nbsp;&nbsp;&nbsp;<span ng-if="param.isList"

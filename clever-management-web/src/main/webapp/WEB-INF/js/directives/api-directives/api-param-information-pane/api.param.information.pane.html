@@ -1,0 +1,75 @@
+<div style="padding: 15px; overflow: auto">
+	<div style="margin-top: 20px">
+		<span class="table-label">{{'DEVELOPEMENT_API_EDIT_REQUEST_PARAMS' | translate}}</span>
+		<table class="variables-matrix input-arguments">
+			<thead>
+				<tr>
+					<th style="width:120px">{{'DEVELOPMENT_API_EDIT_NAME' | translate}}</th>
+
+					<th style="width:80px">{{'DEVELOPMENT_API_EDIT_TYPE' | translate}}</th>
+					<th style="width:120px">{{'DEVELOPMENT_API_EDIT_REQUIRED' | translate}}</th>
+					<th>{{'DEVELOPMENT_API_EDIT_DESCRIPTIOIN' | translate}}</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr ng-repeat="requestParam in apiInfo.requestParams">
+					<td>
+					<p>
+						{{requestParam.name}}
+					</p></td>
+
+					<td><input type="text" class="form-control" ng-model="requestParam.type"></td>
+					<td><select class="form-control" ng-model="requestParam.required" ng-options="o.v as o.n for o in [{ n: 'false', v: false }, { n: 'true', v: true }]">
+
+					</select></td>
+					<td>
+					<input class="form-control" placeholder="{{'DEVELOPMENT_API_EDIT_DESCRIPTION_PLACEHOLDER_EN' | translate}} " ng-model="requestParam.description">
+					<br>
+					<input class="form-control" placeholder="{{'DEVELOPMENT_API_EDIT_DESCRIPTION_PLACEHOLDER_ZH' | translate}}" ng-model="requestParam.chineseDescription">
+					</td>
+				</tr>
+			</tbody>
+		</table>
+		<div class="modal-footer">
+			<button class="btn btn-success" ng-click="addRequestParam('sm')">
+				Add Param
+			</button>
+		</div>
+
+	</div>
+	<div style="margin-top: 20px">
+		<span class="table-label">{{'DEVELOPEMENT_API_EDIT_RETURN_PARAMS' | translate}}</span>
+		<table class="variables-matrix input-arguments">
+			<thead>
+				<tr>
+					<th style="width:120px">{{'DEVELOPMENT_API_EDIT_NAME' | translate}}</th>
+					<th style="width:100px">{{'DEVELOPMENT_API_EDIT_TYPE' | translate}}</th>
+					<th>{{'DEVELOPMENT_API_EDIT_DESCRIPTIOIN' | translate}}</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr ng-repeat="returnParam in apiInfo.returnParams">
+					<td>
+					<p>
+						{{returnParam.name}}
+					</p></td>
+
+					<td><input type="text" class="form-control" ng-model="returnParam.type"></td>
+
+					<td>
+					<input class="form-control" placeholder="{{'DEVELOPMENT_API_EDIT_DESCRIPTION_PLACEHOLDER_EN' | translate}} " ng-model="returnParam.description">
+					<br>
+					<input class="form-control" placeholder="{{'DEVELOPMENT_API_EDIT_DESCRIPTION_PLACEHOLDER_ZH' | translate}}" ng-model="returnParam.chineseDescription">
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+
+</div>
+<div ng-if="apiInfo" style="margin-top: 20px">
+	<button class="btn btn-success pull-right" ng-click="saveParamInfo()" style="position: center">
+		<span class="glyphicon glyphicon-floppy-open"></span>
+	{{'DEVELOPMENT_API_MAINTAIN_SUBMIT' | translate}}
+	</button>
+</div>

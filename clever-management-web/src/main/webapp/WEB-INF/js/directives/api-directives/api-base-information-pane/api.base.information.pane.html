@@ -1,0 +1,41 @@
+<div>
+	<h2 style="margin-top: 15px;" id="api-name">{{apiInfo.chineseName}}({{apiInfo.name}})</h2>
+	<p style="word-break:break-all; word-wrap:break-all;">
+		{{'DEVELOPMENT_API_EDIT_ENGLISH' | translate}}:{{apiInfo.description}}
+	</p>
+	<p style="word-break:break-all; word-wrap:break-all;">
+		{{'DEVELOPMENT_API_EDIT_CHINESE' | translate}}:{{apiInfo.chineseDescription}}
+	</p>
+	<table class="variables-matrix input-arguments">
+		<thead>
+			<tr>
+				<th>{{'DEVELOPMENT_API_EDIT_ITEM' | translate}}</th>
+				<th>{{'DEVELOPMENT_API_EDIT_ENGLISH' | translate}}</th>
+				<th>{{'DEVELOPMENT_API_EDIT_CHINESE' | translate}}</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td>{{'DEVELOPMENT_API_EDIT_NAME' | translate}}</td>
+				<td>{{apiInfo.name}}</td>
+				<td>
+				<input class="form-control" ng-model="apiInfo.chineseName">
+				</td>
+			</tr>
+			<tr>
+				<td>{{'DEVELOPMENT_API_EDIT_DESCRIPTIOIN' | translate}}</td>
+				<td>
+				<input class="form-control" ng-model="apiInfo.description">
+				</td>
+				<td>
+				<input class="form-control" ng-model="apiInfo.chineseDescription">
+				</td>
+			</tr>
+		</tbody>
+	</table>
+	<div class="modal-footer">
+		<button class="btn btn-success pull-right " ng-click="saveApiBaseInfo()" style="position: center">
+			<span class="glyphicon glyphicon-floppy-open"></span>
+			{{'DEVELOPMENT_API_MAINTAIN_SUBMIT' | translate}}
+	</div>
+</div>

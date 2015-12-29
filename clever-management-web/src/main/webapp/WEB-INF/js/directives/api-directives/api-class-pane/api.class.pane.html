@@ -1,0 +1,25 @@
+<div  ng-style="{height: maxHeight}" style="overflow: auto; border-bottom: inset 1px">
+	<div>
+		<table class="variables-matrix input-arguments">
+			<thead>
+				<tr>
+					<th>{{'DEVELOPMENT_API_EDIT_ENGLISH' | translate}}</th>
+					<th>{{'DEVELOPMENT_API_EDIT_CHINESE' | translate}}</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr ng-repeat="item in rootUrlList">
+					<td>{{item.rootUrlName}}</td>
+					<td>
+					<input class="form-control" ng-model="item.chineseName">
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</div>
+<div class="modal-footer">
+	<button class="btn btn-success pull-right " ng-click="saveRootUrl()" style="position: center">
+		<span class="glyphicon glyphicon-floppy-open"></span>
+		{{'DEVELOPMENT_API_MAINTAIN_SUBMIT' | translate}}
+</div>

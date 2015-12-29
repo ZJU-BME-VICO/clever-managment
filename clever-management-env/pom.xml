@@ -22,7 +22,7 @@
 		<profile>
 			<id>local-dev</id>
 			<properties>
-				<database.url>jdbc:sqlserver://172.16.100.33;instanceName=CDR;databaseName=clever-management-temp</database.url>
+				<database.url>jdbc:sqlserver://172.16.100.33;instanceName=CDR;databaseName=clever-management-temp-mecro</database.url>
 				<database.username>sa</database.username>
 				<database.password>@Sxdyy0808</database.password>
 			</properties>
