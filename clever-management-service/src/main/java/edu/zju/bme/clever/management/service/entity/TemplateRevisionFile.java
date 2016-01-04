@@ -18,12 +18,7 @@ import org.hibernate.annotations.DynamicUpdate;
 @Entity
 @Table
 @DynamicUpdate(true)
-public class TemplateRevisionFile extends
-		AbstractRevisionFile<TemplateRevisionFile> {
-
-	/**
-	 * 
-	 */
+public class TemplateRevisionFile extends AbstractRevisionFile<TemplateRevisionFile> {
 	private static final long serialVersionUID = -8715669749258421079L;
 
 	@Column
@@ -41,6 +36,7 @@ public class TemplateRevisionFile extends
 	private TemplateMaster templateMaster;
 	@Column(name = "template_master_id", insertable = false, updatable = false)
 	private Integer templateMasterId;
+	// like v1
 	@Column
 	private String templateMasterVersion;
 

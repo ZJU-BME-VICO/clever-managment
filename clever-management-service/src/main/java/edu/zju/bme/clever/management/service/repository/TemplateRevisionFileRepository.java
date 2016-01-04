@@ -3,6 +3,7 @@ package edu.zju.bme.clever.management.service.repository;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.xmlbeans.impl.xb.xsdschema.Public;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -37,4 +38,6 @@ public interface TemplateRevisionFileRepository extends
 	@Query("select file from TemplateRevisionFile file left join fetch file.editor left join fetch file.templateMaster left join fetch file.properties where file.templateType = ?1 and file.lifecycleState = ?2")
 	public Set<TemplateRevisionFile> findByTemplateTypeAndLifecycleStateFetchAll(
 			TemplateType templateType, LifecycleState lifecycleState);
+	
+	public List<TemplateRevisionFile> findByNameLikeAndSerialVersionLessThan(String name, Integer serialVersion);
 }

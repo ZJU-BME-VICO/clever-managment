@@ -183,4 +183,9 @@ public class StorageTemplateProvideServiceImpl implements
 		return templateFile.getTemplateType().equals(TemplateType.STORAGE);
 	}
 
+	@Override
+	public List<TemplateRevisionFile> getTemplateFilesLessThanSerialVersion(String name, Integer serialVersion) {
+		return templateFileRepo.findByNameLikeAndSerialVersionLessThan(name, serialVersion);
+	}
+
 }

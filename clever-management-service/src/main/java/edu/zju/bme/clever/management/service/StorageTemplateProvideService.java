@@ -21,6 +21,8 @@ public interface StorageTemplateProvideService {
 	public TemplateRevisionFile getTemplateFileById(Integer templateId);
 
 	public TemplateRevisionFile getTemplateFileByName(String templateName);
+	
+	public List<TemplateRevisionFile> getTemplateFilesLessThanSerialVersion(String name, Integer serialVersion);
 
 	public List<TemplateRevisionFile> getTemplateFilesToVerify();
 

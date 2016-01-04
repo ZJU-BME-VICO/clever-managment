@@ -23,8 +23,10 @@ public class EntityClassSource extends AbstractIndentifiedEntity {
 	 */
 	private static final long serialVersionUID = 3408157777080650481L;
 
+	// class name
 	@Column(nullable = false)
 	private String name;
+	// package name + name
 	@Column(nullable = false)
 	private String fullName;
 	@Column(nullable = false)

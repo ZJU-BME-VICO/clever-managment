@@ -172,8 +172,7 @@ public class StorageTemplateResourceController extends
 			Authentication authentication) {
 		// Validate user authority
 
-		Set<TemplateMaster> masters = this.provideService
-				.getAllStorageTemplateMasters();
+		Set<TemplateMaster> masters = this.provideService.getAllStorageTemplateMasters();
 		System.out.println(masters.size());
 		return masters
 				.stream()
