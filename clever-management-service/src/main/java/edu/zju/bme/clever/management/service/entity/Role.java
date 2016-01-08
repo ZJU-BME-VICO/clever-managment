@@ -27,20 +27,20 @@ public class Role extends AbstractIndentifiedEntity {
 	@ManyToMany(targetEntity = Authority.class, fetch = FetchType.LAZY)
 	@JoinTable
 	private Set<Authority> authorities;
-	@ManyToMany(targetEntity = User.class, fetch = FetchType.LAZY, mappedBy = "roles")
-	private Set<User> users;
+//	@ManyToMany(targetEntity = User.class, fetch = FetchType.LAZY, mappedBy = "roles")
+//	private Set<User> users;
 
 	public Role() {
 
 	}
 
-	public Set<User> getUsers() {
-		return users;
-	}
-
-	public void setUsers(Set<User> users) {
-		this.users = users;
-	}
+//	public Set<User> getUsers() {
+//		return users;
+//	}
+//
+//	public void setUsers(Set<User> users) {
+//		this.users = users;
+//	}
 
 	public String getRoleName() {
 		return roleName;

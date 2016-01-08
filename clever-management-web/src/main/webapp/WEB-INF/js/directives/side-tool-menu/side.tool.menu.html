@@ -1,0 +1,9 @@
+
+<div class="sidebar">
+	<ul class="side-menu-group">
+		<li ng-repeat="menu in toolMenus" ng-if="menu.ngIf(menu.ifLifecycleState)" access="{{menu.access}}" class="side-menu-item" ng-click="menu.clickCallback()" tooltip-placement="right" tooltip="{{menu.tooltip | translate}}" tooltip-popup-delay="500">
+			<a href="" class="menu-item-content">{{menu.name | translate}}</a>
+		</li >
+		</li>
+	</ul>
+</div>

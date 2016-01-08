@@ -33,6 +33,7 @@ angular.module('clever.management.controllers.app', []).controller('appCtrl', fu
 				title : 'MENU_MANAGEMENT_BRIEF',
 				info : 'MENU_MANAGEMENT_ARCHETYPE_INFO',
 				introductionState : 'management.archetype.list.breif',
+				authority: 'PERMIT_ALL',
 			},
 			// View
 			{
@@ -41,6 +42,7 @@ angular.module('clever.management.controllers.app', []).controller('appCtrl', fu
 				introductionState : 'management.archetype.list.view',
 				icon : 'icon-film',
 				info : 'MENU_MANAGEMENT_ARCHETYPE_VIEW_INFO',
+				authority: 'ROLE_ARCHETYPE_VIEW',
 			},
 			// Upload
 			{
@@ -49,6 +51,7 @@ angular.module('clever.management.controllers.app', []).controller('appCtrl', fu
 				introductionState : 'management.archetype.list.upload',
 				icon : 'icon-upload-alt',
 				info : 'MENU_MANAGEMENT_ARCHETYPE_UPLOAD_INFO',
+				authority: 'ROLE_ARCHETYPE_UPLOAD',
 			},
 			// Edit
 			{
@@ -58,6 +61,7 @@ angular.module('clever.management.controllers.app', []).controller('appCtrl', fu
 				icon : 'icon-edit',
 				info : 'MENU_MANAGEMENT_ARCHETYPE_EDIT_INFO',
 				pane : 'archetype-edit-introduction',
+				authority: 'ROLE_ARCHETYPE_EDIT',
 			},
 			// Verify
 			{
@@ -66,6 +70,7 @@ angular.module('clever.management.controllers.app', []).controller('appCtrl', fu
 				introductionState : 'management.archetype.list.verify',
 				icon : 'icon-tags',
 				info : 'MENU_MANAGEMENT_ARCHETYPE_VERIFY_INFO',
+				authority: 'ROLE_ARCHETYPE_VERIFY',
 			},
 		],
 	};
@@ -84,41 +89,47 @@ angular.module('clever.management.controllers.app', []).controller('appCtrl', fu
 				info : 'MENU_MANAGEMENT_STORAGE_INFO',
 				pane : 'archetype-edit-introduction',
 				introductionState : 'management.storage.list.breif',
+				authority: 'PERMIT_ALL',
 			},
 			{
 				title : 'MENU_MANAGEMENT_STORAGE_VIEW',
 				state : 'management.storage.view',
 				introductionState : 'management.storage.list.view',
 				icon : 'icon-cog',
-				info : 'MENU_MANAGEMENT_STORAGE_VIEW_INFO'
+				info : 'MENU_MANAGEMENT_STORAGE_VIEW_INFO',
+				authority: 'ROLE_TEMPLATE_VIEW',
 			},
 			{
 				title : 'MENU_MANAGEMENT_STORAGE_UPLOAD',
 				state : 'management.storage.upload',
 				introductionState : 'management.storage.list.upload',
 				icon : 'icon-cog',
-				info : 'MENU_MANAGEMENT_STORAGE_UPLOAD_INFO'
+				info : 'MENU_MANAGEMENT_STORAGE_UPLOAD_INFO',
+				authority: 'ROLE_TEMPLATE_UPLOAD',
 			},
 			{
 				title : 'MENU_MANAGEMENT_STORAGE_EDIT',
 				state : 'management.storage.edit',
 				introductionState : 'management.storage.list.edit',
 				icon : 'icon-cog',
-				info : 'MENU_MANAGEMENT_STORAGE_EDIT_INFO'
+				info : 'MENU_MANAGEMENT_STORAGE_EDIT_INFO',
+				authority: 'ROLE_TEMPLATE_EDIT',
 			},
 			{
 				title : 'MENU_MANAGEMENT_STORAGE_VERIFY',
 				state : 'management.storage.verify',
-					introductionState : 'management.storage.list.verify',
+				introductionState : 'management.storage.list.verify',
 				icon : 'icon-cog',
-				info : 'MENU_MANAGEMENT_STORAGE_VERIFY_INFO'
+				info : 'MENU_MANAGEMENT_STORAGE_VERIFY_INFO',
+				authority: 'ROLE_TEMPLATE_VERIFY',
 			},
 			{
 				title : 'MENU_MANAGEMENT_STORAGE_DEPLOY',
 				state : 'management.storage.deploy',
 				introductionState : 'management.storage.list.deploy',
 				icon : 'icon-cog',
-				info : 'MENU_MANAGEMENT_STORAGE_DEPLOY_INFO'
+				info : 'MENU_MANAGEMENT_STORAGE_DEPLOY_INFO',
+				authority: 'ROLE_TEMPLATE_DEPLOY',
 			},
 		],
 	};
@@ -136,6 +147,7 @@ angular.module('clever.management.controllers.app', []).controller('appCtrl', fu
 				title : 'MENU_MANAGEMENT_BRIEF',
 				info : 'MENU_MANAGEMENT_APPLICATION_INFO',
 				introductionState : 'management.application.list.breif',
+				authority: 'PERMIT_ALL',
 			},
 			
 			{
@@ -144,6 +156,7 @@ angular.module('clever.management.controllers.app', []).controller('appCtrl', fu
 				introductionState : 'management.application.list.view',
 				icon : 'icon-picture',
 				info : 'MENU_MANAGEMENT_APPLICATION_VIEW_INFO',
+				authority: 'ROLE_APPILCATION_VIEW',
 			},
 			{
 				title : 'MENU_MANAGEMENT_APPLICATION_EDIT',
@@ -151,6 +164,7 @@ angular.module('clever.management.controllers.app', []).controller('appCtrl', fu
 				introductionState : 'management.application.list.edit',
 				icon : 'icon-wrench',
 				info : 'MENU_MANAGEMENT_APPLICATION_EDIT_INFO',
+				authority: 'ROLE_APPILCATION_EDIT',
 			},
 		],
 	};
@@ -168,6 +182,7 @@ angular.module('clever.management.controllers.app', []).controller('appCtrl', fu
 				title : 'MENU_MANAGEMENT_BRIEF',
 				info : 'MENU_MANAGEMENT_INTEGRATION_INFO',
 				introductionState : 'management.integration.list.breif',
+				authority: 'PERMIT_ALL',
 			},
 		],
 	};
@@ -184,25 +199,34 @@ angular.module('clever.management.controllers.app', []).controller('appCtrl', fu
 				title : 'MENU_MANAGEMENT_BRIEF',
 				info : 'MENU_MANAGEMENT_DEVELOPMENT_INFO',
 				introductionState : 'management.development.list.breif',
+				authority: 'PERMIT_ALL',
+				
 			},
-//			{
-//				title : 'MENU_MANAGEMENT_DEVELOPMENT_DESIGN',
-//				state : 'management.development.design',
-//				introductionState : 'management.development.list.design',
-//				icon :  'icon-magic',
-//				info : 'MENU_MANAGEMENT_DEVELOPMENT_DESIGN_INFO',
-//			},
+			{
+				title : 'MENU_MANAGEMENT_DEVELOPMENT_DESIGN',
+				state : 'management.development.design',
+				introductionState : 'management.development.list.design',
+				icon :  'icon-magic',
+				info : 'MENU_MANAGEMENT_DEVELOPMENT_DESIGN_INFO',
+				authority: 'PERMIT_ALL',
+			},
 			{
 				title : 'MENU_MANAGEMENT_DEVELOPMENT_API_DISPLAY',				   
 				state : 'management.development.api.view',
 				introductionState : 'management.development.list.api',
 				icon : 'icon-magic',
 				info : 'MENU_MANAGEMENT_DEVELOPMENT_API_INFO',
+				authority: 'ROLE_API_VIEW',
 			},
-//			{
-//				state : 'management.development.api.edit',
-//				icon : 'icon-magic',
-//			},
+			{
+				title : 'MENU_MANAGEMENT_DEVELOPMENT_API_EDIT',				   
+				state : 'management.development.api.edit',
+				introductionState : 'management.development.list.api',
+				icon : 'icon-magic',
+				info : 'MENU_MANAGEMENT_DEVELOPMENT_API_INFO',
+				authority: 'ROLE_API_MAINTAIN',
+			
+			},
 			// {
 				// title : 'MENU_MANAGEMENT_DEVELOPMENT_CDR',
 				// state : 'management.development.cdr',
@@ -212,7 +236,33 @@ angular.module('clever.management.controllers.app', []).controller('appCtrl', fu
 			// }
 		],
 	};
-	$scope.menus = [archetype,storage,application, development];//integration,
+	
+	var developerItem = {
+		title : 'MENU_MANAGEMENT_DEVELOPER',
+		state : 'management.developer.list',
+		icon : 'icon-screenshot',
+		info : 'MENU_MANAGEMENT_DEVELOPER_INFO',
+		isOpen : false,
+		subMenus : [
+		{
+				title : 'MENU_MANAGEMENT_BRIEF',
+				info : 'MENU_MANAGEMENT_DEVELOPER_INFO',
+				introductionState : 'management.developer.list.breif',
+				authority: 'ROLE_AUTHORIZE',
+		},
+		{
+			    title : 'MENU_MANAGEMETN_DEVELOPER_AUTHORITY',				   
+				state : 'management.developer.authority',
+				introductionState : 'management.developer.list.authority',
+				icon : 'icon-magic',
+				info : 'MENU_MANAGEMENT_DEVELOPER_AUTHORITY_INFO',
+				authority: 'ROLE_AUTHORIZE',
+		}],
+	
+	};
+	
+	
+	$scope.menus = [archetype,storage,application,integration, development, developerItem];//integration,
 	
 	$scope.stateMenuMap = {};
 	

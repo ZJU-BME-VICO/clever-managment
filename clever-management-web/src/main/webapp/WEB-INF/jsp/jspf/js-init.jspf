@@ -15,7 +15,7 @@
 <script src="js/lib/ng-context-menu.js"></script>
 <script src="js/lib/ui-bootstrap-typeahead.js"></script>
 <script src="js/lib/angular-drag-and-drop-list.js"></script>
-
+<script src="js/lib/ngPopover.js"></script>
 
 
 <script src="js/lib/ngclipboard.min.js"></script>
@@ -99,6 +99,8 @@
 <script src="js/directives/archetype-edit-directives/definition-pane/links-pane/links-pane.js"></script>
 <script src="js/directives/archetype-edit-directives/batch-submit-directive/batch-submit-pane.js"></script>
 <script src="js/directives/introduction-pane/introduction-pane.js"></script>
+<script src="js/directives/access/access.js"></script>
+<script src="js/directives/side-tool-menu/side-tool-menu.js"></script>
 <!-- api directives -->
 
 
@@ -121,6 +123,7 @@
 <script src="js/views/management/development/cdr/development-cdr-controller.js"></script>
 <script src="js/views/management/development/api/view/development-api-view-controller.js"></script>
 <script src="js/views/management/development/api/edit/development-api-edit-controller.js"></script>
+<script src="js/views/authority-manager/authority-manager-controller.js"></script>
 
 <!-- filters -->
 <script src="js/filters/unsafe-filter.js"></script>

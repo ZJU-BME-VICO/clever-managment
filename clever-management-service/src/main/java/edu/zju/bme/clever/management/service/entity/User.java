@@ -9,6 +9,7 @@ import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -29,9 +30,11 @@ public class User extends AbstractIndentifiedEntity {
 	private String password;
 	@Column
 	private boolean isEnabled;
-	@ManyToMany(targetEntity = Role.class, fetch = FetchType.LAZY)
-	@JoinTable
-	private Set<Role> roles;
+//	@ManyToMany(targetEntity = Role.class, fetch = FetchType.LAZY)
+//	@JoinTable
+//	private Set<Role> roles;
+	@OneToOne
+	private Role role;
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column
 	private Calendar updateTime;
@@ -59,16 +62,25 @@ public class User extends AbstractIndentifiedEntity {
 		this.lastLogoutTime = lastLogoutTime;
 	}
 
-	public Set<Role> getRoles() {
-		return roles;
-	}
+//	public Set<Role> getRoles() {
+//		return roles;
+//	}
+//
+//	public void setRoles(Set<Role> roles) {
+//		this.roles = roles;
+//	}
 
-	public void setRoles(Set<Role> roles) {
-		this.roles = roles;
-	}
-
+	
 	public String getName() {
 		return name;
+	}
+
+	public Role getRole() {
+		return role;
+	}
+
+	public void setRole(Role role) {
+		this.role = role;
 	}
 
 	public void setName(String name) {

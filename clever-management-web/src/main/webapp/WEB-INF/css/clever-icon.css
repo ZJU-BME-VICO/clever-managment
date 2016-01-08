@@ -405,3 +405,7 @@
 	background-image: url("../img/pojo-class.png");
 	background-repeat: no-repeat;
 }
+.clever-icon.user{
+	background-image: url("../img/user.png");
+	background-repeat: no-repeat;
+}

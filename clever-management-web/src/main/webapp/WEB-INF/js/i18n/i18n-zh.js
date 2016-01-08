@@ -16,6 +16,7 @@ angular.module('clever.management.i18n.zh', ['pascalprecht.translate']).config(f
 		BUSY_UPLOADING : '上传中',
 		
 		SEARCH_HINT : '请输入关键字',
+		OPERATE_PROMPT_HINT : '操作提示',
 
 		// Home
 		ARCHETYPE_MANAGEMENT : '原型管理',
@@ -95,6 +96,7 @@ angular.module('clever.management.i18n.zh', ['pascalprecht.translate']).config(f
         TEMPLATE_EDIT_CREATE : '创建模板',
         TEMPLATE_EDIT_SAVE : '保存模板',
         TEMPLATE_EDIT_DIFF : '对比oet',
+        TEMPLATE_EDIT_SUBMIT : '模板提交',
         TEMPLATE_EDIT_NEWVERSION : '新版模板',
 		STORAGE_TEMPLATE_EDIT_SAVE : '保存模板',
 		STORAGE_TEMPLATE_EDIT_SUBMIT : '提交模板',
@@ -241,7 +243,12 @@ angular.module('clever.management.i18n.zh', ['pascalprecht.translate']).config(f
 		MENU_MANAGEMENT_DEVELOPMENT : '开发平台',
 		MENU_MANAGEMENT_DEVELOPMENT_DESIGN : '设计器',
 		MENU_MANAGEMENT_DEVELOPMENT_API_DISPLAY : 'API显示',
+		 MENU_MANAGEMENT_DEVELOPMENT_API_EDIT : 'API编辑',
 		MENU_MANAGEMENT_DEVELOPMENT_CDR : '数据库服务',
+		//MENU_AUTHORITY : '权限管理',
+		//AUTHORITY_MANAGEMENT : '权限管理',
+		MENU_MANAGEMENT_DEVELOPER : '开发者选项',
+		MENU_MANAGEMETN_DEVELOPER_AUTHORITY:'权限管理',
 		
 		//MENU_MANAGEMENT_ARCHETYPE_VIEW_INFO : 'Archetype是CLEVER™的核心，它基于openEHR规范实现，是一套从临床基本概念出发的信息模型，而且与软件系统开发独立，因而可由临床人员直接管理和维护，具备较高灵活性。Archetype是CLEVER™的核心，它基于openEHR规范实现，是一套从临床基本概念出发的信息模型，而且与软件系统开发独立，因而可由临床人员直接管理和维护，具备较高灵活性。',//'原型查看简介',
 
@@ -267,6 +274,7 @@ angular.module('clever.management.i18n.zh', ['pascalprecht.translate']).config(f
         MENU_MANAGEMENT_DEVELOPMENT_INFO : 'CLEVER™可根据临床实际需求，以原型和模板为媒介，开发或服务于临床数据应用。主要包括对外提供数据服务的API的发布和面向数据应用开发的设计器。',
         MENU_MANAGEMENT_DEVELOPMENT_API_INFO : '在这里你可以查看clever平台对外提供的数据服务接口信息，包括接口的url，请求方式，数据交互格式，参数信息等信息。',
         MENU_MANAGEMENT_DEVELOPMENT_CDR_INFO : '数据库服务简介',
+       
 		// Application edit and view
 		APPLICATION_EDIT_FIND_HINT : '输入应用名称',
 		APPLICATION_EDIT_NAME : '名称',
@@ -458,6 +466,7 @@ angular.module('clever.management.i18n.zh', ['pascalprecht.translate']).config(f
 		MANAGEMENT_STORAGE_EDIT_TOOLTIP_EXPAND : '展开',
 		MANAGEMENT_STORAGE_EDIT_TOOLTIP_COLLAPSE : '闭合',
 		DEVELOPMENT_MANAGEMENT : '开发平台',
+		MENU_AUTHORITY_MANAGER : '权限管理',
 		
 		
 
@@ -658,6 +667,55 @@ angular.module('clever.management.i18n.zh', ['pascalprecht.translate']).config(f
 		DEVELOPMENT_API_EDIT_ADD_UPDATE : '添加/更新',
 		DEVELOPMENT_API_EDIT_REMOVE : '删除',
 
+        //authority
+        AUTHORITY_MANAGEMENT_ADD_USER : '添加成员',
+        AUTHORITY_MANAGEMENT_ADD_ROLE : '添加角色',
+        AUTHORITY_USER_REMOVE_HINT : '是否要删除用户: {{userName}} ?',
+        AUTHORITY_USER_NOTENABLED : '禁用',
+        AUTHORITY_USER_ENABLED : '启用',
+        AUTHORITY_USER_AUTHORITY_VIEW : '查看',
+        AUTHORITY_ADMIN_NOT_FOUND_HINT : '未找到ADMIN角色',
+        USER2ROLE : '用户角色映射',
+        ROLE2AUTHORITY: '角色权限映射',
+        AUTHORITY_ROLE_AUTHORITY_MANAGE_SAVE : '保存',
+        AUTHORITY_ROLE_AUTHORITY_MANAGE_CANCEL: '取消',
+        AUTHORITY_ROLE_AUTHORITY_DISTRIBUTION: '权限分配',
+        AUTHORITY_ROLE_REMOVE_SUCCEEDED_HINT: '删除角色成功',
+        AUTHORITY_ROLE_REMOVE_HINT : '是否要删除角色 ：{{roleName}}',
+        AUTHORITY_ROLE_REMOVE_ERROR_HINT : '删除角色失败 ：{{errorMsg}}',
+        AUTHORITY_ROLE_ADD_SUCCEEDED_HINT : '添加角色成功',
+        AUTHORITY_ROLE_ADD_FAILED_HINT : '添加角色失败',
+        ROLE_ARCHETYPE_VIEW: '查看原型',//
+		ROLE_ARCHETYPE_UPLOAD: '上传原型',//
+ ROLE_ARCHETYPE_EDIT: '编辑原型',//
+ ROLE_ARCHETYPE_CREATE: '创建原型',//
+ ROLE_ARCHETYPE_SAVE: '保存原型',//
+ ROLE_ARCHETYPE_NEW_REVISION: '升迁原型小版本',//
+ ROLE_ARCHETYPE_NEW_VERSION: '升迁原型大版本',
+ ROLE_ARCHETYPE_SPECIALIZE: '特殊化原型',//
+ ROLE_ARCHETYPE_BATCH_SUBMIT: '批量处理原型',//
+ ROLE_ARCHETYPE_STATUS_FALLBACK: '回退原型状态',//
+ ROLE_ARCHETYPE_SUBMIT: '提交原型',//
+ ROLE_ARCHETYPE_VERIFY: '审核原型',//
+ ROLE_TEMPLATE_UPLOAD: '上传模板',//
+ ROLE_TEMPLATE_VIEW: '查看模板',//
+ ROLE_TEMPLATE_EDIT: '编辑模板',//
+ ROLE_TEMPLATE_SAVE: '保存模板',//
+ ROLE_TEMPLATE_NEW_REVISION: '升迁模板小版本',//
+ ROLE_TEMPLATE_NEW_VERSION: '升迁模板大版本',
+ ROLE_TEMPLATE_CREATE: '创建模板',//
+ ROLE_TEMPLATE_BACTH_SUBMIT: '批量处理模板',//
+ ROLE_TEMPLATE_STATUS_FALLBACK: '回退模板状态',//
+ ROLE_TEMPLATE_SUBMIT: '提交模板',//
+ ROLE_TEMPLATE_VERIFY: '审核模板',//
+ ROLE_TEMPLATE_DEPLOY: '部署模板',//
+ ROLE_APPILCATION_VIEW: '查看应用',//
+ ROLE_APPILCATION_EDIT: '编辑应用',//
+ ROLE_API_VIEW: '查看接口信息',//
+ ROLE_API_MAINTAIN: '编辑接口信息',
+ ROLE_AUTHORIZE: '认证',
+
+
 		//others,
 		EXPAND_ALL : '全部展开',
 		COLLAPSE_ALL : '全部收缩',
@@ -680,5 +738,11 @@ angular.module('clever.management.i18n.zh', ['pascalprecht.translate']).config(f
 		BATCH_SUBMIT: '批量提交',
 		BATCH_SUBMIT_CHECK_ALL:'全选',
 		BATCH_SUBMIT_SUBMIT_CHECKED : '提交选中项',
+		
+		
+		//authority map
+		ROLE_ADMIN :'管理员',
+		ROLE_USER: '使用者',
+	
 	});
 });

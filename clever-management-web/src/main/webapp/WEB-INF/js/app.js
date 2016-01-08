@@ -1,4 +1,4 @@
-angular.module('clever.management.directives', ['clever.management.directives.api', 'clever.management.directives.commons', 'clever.management.directives.templateDesign', 'clever.management.directives.editor', 'clever.management.directives.archetypeListTree', 'clever.management.directives.archetypeListTreeNode', 'clever.management.directives.archetypeMasterPane', 'clever.management.directives.archetypePane', 'clever.management.directives.headerPane', 'clever.management.directives.participationPane', 'clever.management.directives.definitionPane', 'clever.management.directives.terminologyPane', 'clever.management.directives.treeView', 'clever.management.directives.treeViewNode', 'clever.management.directives.introduction', 'clever.management.directives.elastic']);
+angular.module('clever.management.directives', ['clever.management.directives.api', 'clever.management.directives.commons', 'clever.management.directives.templateDesign', 'clever.management.directives.editor', 'clever.management.directives.archetypeListTree', 'clever.management.directives.archetypeListTreeNode', 'clever.management.directives.archetypeMasterPane', 'clever.management.directives.archetypePane', 'clever.management.directives.headerPane', 'clever.management.directives.participationPane', 'clever.management.directives.definitionPane', 'clever.management.directives.terminologyPane', 'clever.management.directives.treeView', 'clever.management.directives.treeViewNode', 'clever.management.directives.introduction', 'clever.management.directives.elastic', 'clever.management.directives.access', 'clever.management.directives.sideToolMenu']);
 angular.module('clever.management.directives.api', ['clever.management.directives.maintainOverallPane', 'clever.management.directives.pojoClassAddPane', 'clever.management.directives.apiClassPane', 'clever.management.directives.apiParamInformationPane', 'clever.management.directives.apiBaseInformationPane', 'clever.management.directives.apiInformationPane', 'clever.management.directives.pojoClassPane', 'clever.management.directives.paramTable']);
 angular.module('clever.management.directives.commons', ['ui.bootstrap.accordion', 'toggle-switch', 'clever.management.directives.filesModel', 'clever.management.directives.busyModel', 'clever.management.directives.splitter', 'clever.management.drectives.documentDiff']);
 angular.module('clever.management.directives.templateDesign', ['clever.management.directives.templateListTree', 'clever.management.directives.storagetemplateListTree', 'clever.management.directives.templateListTreeNode', 'clever.management.directives.storagetemplateListTreeNode', 'clever.management.directives.DVTEXT', 'clever.management.directives.longPress', 'clever.management.directives.DVQUANTITY', 'clever.management.directives.dragable', 'clever.management.directives.DVORDINAL', 'clever.management.directives.DVBOOLEAN', 'clever.management.directives.DVCOUNT', 'clever.management.directives.DVDATETIME', 'clever.management.directives.groupNodeView', 'clever.management.directives.controlBox', 'clever.management.directives.templateDesigner', 'clever.management.directives.cluster', 'clever.management.directives.rightClick', 'clever.management.directives.ngContextMenu', 'clever.management.directives.dvbutton', 'clever.management.directives.dvLabel']);
@@ -8,7 +8,7 @@ angular.module('clever.management.services', ['clever.management.services.treeDa
 angular.module('clever.management.filters', ['clever.management.filters.unsafe', 'clever.management.filters.typemap']);
 angular.module('clever.management.controllers', ['clever.management.controllers.app']);
 angular.module('clever.management.i18n', ['clever.management.i18n.zh', 'clever.management.i18n.en']);
-angular.module('cleverManagementApp', ['ngclipboard', 'ngAnimate', 'ui.bootstrap.typeahead', 'ngVisible', 'ui.bootstrap', 'pascalprecht.translate', 'dndLists', 'ui.router', 'ui.utils', 'ng-context-menu', 'clever.management.i18n', 'clever.management.directives', 'clever.management.controllers', 'clever.management.services', 'clever.management.filters', 'clever.management.config']).config(function($stateProvider, $urlRouterProvider, $translateProvider, $controllerProvider, $compileProvider, $filterProvider, $provide) {
+angular.module('cleverManagementApp', ['ngPopover', 'ngclipboard', 'ngAnimate', 'ui.bootstrap.typeahead', 'ngVisible', 'ui.bootstrap', 'pascalprecht.translate', 'dndLists', 'ui.router', 'ui.utils', 'ng-context-menu', 'clever.management.i18n', 'clever.management.directives', 'clever.management.controllers', 'clever.management.services', 'clever.management.filters', 'clever.management.config']).config(function($stateProvider, $urlRouterProvider, $translateProvider, $controllerProvider, $compileProvider, $filterProvider, $provide) {
 
 	define('lazyLoader', function() {
 		return {
@@ -39,12 +39,17 @@ angular.module('cleverManagementApp', ['ngclipboard', 'ngAnimate', 'ui.bootstrap
 				return $scope.errorType == errorType;
 			};
 		},
-	})
-	.state('prevent', {
-		url:'/access/prevent',
-		templateUrl:'js/views/access-prevent/access.prevent.html',
-		controller:function($scope){
-			
+	}).state('forbidden', {
+		url : '/forbidden',
+		templateUrl : 'js/views/errorPage/forbidden.html',
+		controller : function($scope) {
+
+		}
+	}).state('notfound', {
+		url : '/notfound',
+		templateUrl : 'js/views/errorPage/notfound.html',
+		controller : function($scope) {
+
 		}
 	})
 	// Management
@@ -320,6 +325,35 @@ angular.module('cleverManagementApp', ['ngclipboard', 'ngAnimate', 'ui.bootstrap
 		},
 		templateUrl : 'js/views/management/development/cdr/management.development.cdr.html',
 		controller : CdrCtr,
+	}).state('management.developer', {
+		abstract : true,
+		url : '/developer',
+		templateUrl : 'js/views/universal-ui-view.html',
+	}).state('management.developer.list', {
+		url : '',
+		templateUrl : 'js/views/management/universal-management-list-view.html',
+		controller : UniversalManagementListCtrl,
+		data : {
+			title : 'MENU_MANAGEMENT_DEVELOPER',
+		},
+		params : {
+			isHeader : true,
+		},
+	}).state('management.developer.list.breif', {
+		url : '/list/breif',
+		templateUrl : 'js/views/management/integration/introduction/breif.html',
+
+	}).state('management.developer.list.authority', {
+		url : '/list/breif',
+		templateUrl : 'js/views/management/integration/introduction/breif.html',
+
+	}).state('management.developer.authority', {
+		url : '/authority',
+		templateUrl : 'js/views/authority-manager/authority.manager.html',
+		controller : AuthorityManagerCtrl,
+		data : {
+			title : 'MENU_AUTHORITY_MANAGER',
+		},
 	});
 
 	// Translate config
@@ -335,6 +369,22 @@ angular.module('cleverManagementApp', ['ngclipboard', 'ngAnimate', 'ui.bootstrap
 
 	var id;
 
+	$rootScope.authenticate = function() {
+		authenticationService.validateAuthentication().then(function(result) {
+			if (!result.isAuthenticated) {
+				event.preventDefault();
+				if (result.previousIsAuthenticated) {
+					$state.go('login', {
+						errorType : 'SessionExpired'
+					});
+				} else {
+					$state.go('login', {
+						errorType : 'Unauthorized'
+					});
+				}
+			}
+		});
+	}();
 	$rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams) {
 		if (id) {
 			busyService.popBusy(id);

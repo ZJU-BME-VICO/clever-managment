@@ -15,3 +15,4 @@
 <link rel="stylesheet" href="css/master.css" />
 <link rel="stylesheet" href="css/editor-style.css" />
 <link rel="stylesheet" href="css/octicons/octicons.css">
+<link rel="stylesheet" href="css/ngPopover.css">

@@ -1,0 +1,110 @@
+<div class="row" ng-style="{height: containerHeight.value}" style="overflow:hidden">
+	<div col-lg-12 col-md-12 col-xs-12>
+		<div >
+			<div class="btn-group col-lg-8 col-md-8 col-xs-8"  dropdown style="display: flex; padding-left: 0">
+				<button type="button" class="btn btn-primary dropdown-toggle" style="width:160px" dropdown-toggle aria-haspopup="true" aria-expanded="false">
+					{{currentTable | translate}} &nbsp; &nbsp; <span class="caret"></span>
+				</button>
+				<ul class="dropdown-menu" role="menu">
+					<li>
+						<a href="" ng-click="selectTable('USER2ROLE')">{{'USER2ROLE' | translate}}</a>
+					</li>
+					<li>
+						<a href="" ng-click="selectTable('ROLE2AUTHORITY')">{{'ROLE2AUTHORITY' | translate}}</a>
+					</li>
+				</ul>
+				&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+				<input ng-if="currentTable == 'USER2ROLE' " type="text" class="search-input form-control" ng-model="userNameFilter.userName"  style="width:50%"placeholder="{{'SEARCH_HINT' | translate}}"/>
+				<input ng-if="currentTable == 'ROLE2AUTHORITY'"  type="text" class="search-input form-control" ng-model="roleNameFilter.roleName"  style="width:50%"placeholder="{{'SEARCH_HINT' | translate}}"/>
+				<i class=" glyphicon glyphicon-search search-icon" style="top: 3px; 	left: 200px;"></i>
+			</div>
+			<button ng-if="currentTable == 'USER2ROLE'" class="btn btn-success pull-right" ng-click="addUser()">
+				<span class="glyphicon glyphicon-plus"> <span> {{'AUTHORITY_MANAGEMENT_ADD_USER' | translate}} </span> </span>
+			</button>
+			<button ng-if="currentTable == 'ROLE2AUTHORITY'" class="btn btn-success pull-right" ng-click="addRole()">
+				<span class="glyphicon glyphicon-plus"> <span> {{'AUTHORITY_MANAGEMENT_ADD_ROLE' | translate}} </span> </span>
+			</button>
+		</div>
+
+		<br />
+		<br />
+
+		<div ng-if="currentTable == 'USER2ROLE'" ng-style="{height:containerHeight.value -45}" style="overflow: auto">
+			<!-- Default panel contents -->
+
+			<!-- Table -->
+			<table class="table">
+				<thead>
+					<th></th>
+					<th>Role</th>
+					<th>Password</th>
+					<th>Status</th>
+					<th>Authority</th>
+					<th></th>
+					<th></th>
+				</thead>
+
+				<tbody>
+					<tr ng-repeat="user in userList | filter: userNameFilter | orderBy : user.id" >
+						<td class="user-name"><a   ng-popover="userName" title="user name" placement="right" maximize="false" ><img class="clever-icon user img-circle" style="height:40px; width:40px" />&nbsp;&nbsp;&nbsp;&nbsp;{{user.userName}}</a></td>
+						<td style="vertical-align:middle"><select ng-model="user.role"  ng-options="role.roleName for role in roleList track by role.id" class="success"></select></td>
+						<td style="vertical-align:middle"><a href='' ng-popover="password" title="password" placement="right" maximize="false">{{user.password}}</a></td>
+						<td style="vertical-align:middle"><span  ng-if="!user.isEnabled" ng-click="changeUserStatus(user)"  style="color:#902626; font-size: large"  class="glyphicon glyphicon-ban-circle" > <span style="font-size: small;">{{'AUTHORITY_USER_NOTENABLED' | translate}}</span> </span><span ng-if="user.isEnabled" style="color:#0E8B40; font-size: large" class="glyphicon glyphicon-ok" ng-click="changeUserStatus(user)"> <span style="font-size: small;">{{'AUTHORITY_USER_ENABLED' | translate}}</span> </span></td>
+						<td style="vertical-align:middle"><a href='' ng-popover="authority" title="Authority" placement="right" maximize="true"><span class="glyphicon glyphicon-cog"></span>{{'AUTHORITY_USER_AUTHORITY_VIEW' | translate}}</a></td>
+						<td style="vertical-align:middle">
+						<button class="btn btn-default" ng-click="saveUser(user)">
+							<span class="glyphicon glyphicon-floppy-disk">
+						</button></td>
+						<td style="vertical-align:middle">
+						<button class="btn btn-danger" ng-click="deleteUser(user)">
+							<span class="glyphicon glyphicon-minus">
+						</button></td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+		<div ng-if="currentTable == 'ROLE2AUTHORITY'" ng-style="{height:containerHeight.value -45}" style="overflow: auto">
+			<table class="table">
+				<thead>
+					<th>Role Name</th>
+					<th>Authorities</th>
+					<th style="width : 200px">Description</th>
+					<th style="width : 200px"></th>
+				</thead>
+
+				<tbody>
+					<tr ng-repeat="role in roleList | filter: roleNameFilter ">
+						<td style="vertical-align:middle"><a href="" ng-click="authorityManage(role)">{{role.roleName}}</a></td>
+						<td style="vertical-align:middle">
+						<ul style="padding-left: 0">
+							<li ng-repeat="authority in role.authorities">
+								<span popover-placement="left" popover="{{authority.description}}" popover-trigger="mouseenter" class="glyphicon glyphicon-info-sign"></span>
+								<span>{{authority.authorityName | translate}}</span>
+								
+							</li>
+						</ul></td>
+						<td style="vertical-align:middle; "><span style="font-style:oblique">{{role.description}}</span></td>
+						<td style="vertical-align:middle">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						<button class="btn btn-danger" ng-click="deleteRole(role)">
+							<span class="glyphicon glyphicon-minus">
+						</button></td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>
+
+<script type="text/ng-template" id="password">
+	<input type="text" class="form-control" ng-model="user.password">
+</script>
+<script type="text/ng-template" id="userName">
+	<input type="text" class="form-control" ng-model="user.userName">
+</script>
+<script type="text/ng-template" id="authority">
+	<ul style="padding-left:0; margin:10px" >
+	<li ng-repeat="auth in user.role.authorities">
+	<span>{{auth.authorityName}} : </span><span>{{auth.description}}</span>
+	</li>
+	</ul>
+</script>

@@ -16,6 +16,12 @@ function StorageTemplateEditCtrl($scope, $modal, $stateParams, $timeout, treeDat
 
 	$scope.isTemplateListHidden = false;
 
+	
+	
+	
+	
+	
+
 	$scope.initData = function() {
 		var busyDraft = busyService.pushBusy('BUSY_LOADING');
 		resourceService.get(STORAGE_TEMPLATE_LIST_EDIT_DRAFT_URL).then(function(list) {
@@ -880,6 +886,96 @@ function StorageTemplateEditCtrl($scope, $modal, $stateParams, $timeout, treeDat
 			}
 		});
 	};
+	
+	
+	var TemplateLifecycleStateFilter = function(lifecycleState) {
+		if (lifecycleState == "All") {
+			return true;
+		}
+		if (lifecycleState == "Any") {
+			if ($scope.selectedTemplate) {
+				return true;
+			} else {
+				return false;
+			}
+		}
+		if ($scope.selectedTemplate) {
+			if ($scope.selectedTemplate.lifecycleState == lifecycleState) {
+				return true;
+			} else {
+				return false;
+			}
+		} else {
+			return false;
+		}
+	}; 
+
+	
+	$scope.toolMenus = [
+	//create
+	{
+		access : 'ROLE_TEMPLATE_CREATE',
+		ifLifecycleState : 'All',
+		ngIf : TemplateLifecycleStateFilter,
+		clickCallback : $scope.createTemplate,
+		tooltip : 'MANAGEMENT_STORAGE_EDIT_TOOLTIP_CREATE_TEMPLATE',
+		name : 'TEMPLATE_EDIT_CREATE',
+	},
+	//save
+	{
+		access : 'ROLE_TEMPLATE_SAVE',
+		ifLifecycleState : 'Draft',
+		ngIf : TemplateLifecycleStateFilter,
+		clickCallback : $scope.saveTemplateFile,
+		tooltip : 'MANAGEMENT_ARCHETYPE_EDIT_TOOTIP_CREATE_ARCHETYPE',
+		name : 'TEMPLATE_EDIT_SAVE',
+	},
+	//submit
+	{
+		access : 'ROLE_TEMPLATE_SUBMIT',
+		ifLifecycleState : 'Draft',
+		ngIf : TemplateLifecycleStateFilter,
+		clickCallback : $scope.submitTemplateFile,
+		tooltip : 'MANAGEMENT_ARCHETYPE_EDIT_TOOTIP_CREATE_ARCHETYPE',
+		name : 'TEMPLATE_EDIT_SUBMIT',
+	},
+	//generate diff
+	{
+		access : 'PERMIT_ALL',
+		ifLifecycleState : 'Draft',
+		ngIf : TemplateLifecycleStateFilter,
+		clickCallback : $scope.generateOetDiff,
+		tooltip : 'MANAGEMENT_ARCHETYPE_EDIT_TOOTIP_CREATE_ARCHETYPE',
+		name : 'TEMPLATE_EDIT_DIFF',
+	},
+	//new revision
+	{
+		access : 'ROLE_TEMPLATE_NEW_REVISION',
+		ifLifecycleState : 'Published',
+		ngIf : TemplateLifecycleStateFilter,
+		clickCallback : $scope.createNewVersionTemplate,
+		tooltip : 'MANAGEMENT_ARCHETYPE_EDIT_TOOTIP_CREATE_ARCHETYPE',
+		name : 'TEMPLATE_EDIT_NEWVERSION',
+	},
+	// batch submit
+	{
+		access : 'ROLE_TEMPLATE_BACTH_SUBMIT',
+		ifLifecycleState : 'All',
+		ngIf : TemplateLifecycleStateFilter,
+		clickCallback : $scope.batchSubmit,
+		tooltip : 'MANAGEMENT_ARCHETYPE_EDIT_TOOTIP_CREATE_ARCHETYPE',
+		name : 'TEMPLATE_EDIT_BATCHSUBMIT',
+	},
+	//fallback
+	{
+		access : 'ROLE_TEMPLATE_STATUS_FALLBACK',
+		ifLifecycleState : 'Published',
+		ngIf : TemplateLifecycleStateFilter,
+		clickCallback : $scope.fallbackTemplate,
+		tooltip : 'MANAGEMENT_ARCHETYPE_EDIT_TOOTIP_CREATE_ARCHETYPE',
+		name : 'TEMPLATE_EDIT_FALLBACK',
+	},]; 
+
 	function formatXml(xml) {
 		var formatted = '';
 		var reg = /(>)(<)(\/*)/g;
