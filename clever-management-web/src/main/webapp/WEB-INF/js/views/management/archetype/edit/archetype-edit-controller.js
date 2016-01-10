@@ -1,5 +1,5 @@
 function ArchetypeEditCtrl($scope, $modal,$log, $q, $timeout, msgboxService,busyService,archetypeEditService,documentDiffModalService, resourceService,archetypeParseEditService,templateParseToEditService,archetypeSerializeService, archetypeParseService, treeDataFormatService, ARCHETYPE_LIST_EDIT_DRAFT_URL, ARCHETYPE_LIST_EDIT_PUBLISHED_URL, ARCHETYPE_CREATE_BY_URL,AECHETYPE_FALLBACK_BY_ID_URL,  ARCHETYPE_EDIT_BY_ID_URL, ARCHETYPE_SUBMIT_BY_ID_URL,ARCHETYPE_REMOVE_BY_ID_URL) {
-    
+  
    
 	$scope.treeControl = {};
 	$scope.isCollapse = true;
@@ -32,7 +32,7 @@ $scope.draftArchetypeList = "list";
 			$scope.publishedOver = true;
 			console.log(list);
 			generateTreeData();
-			busyService.popBusy(busyId);
+		busyService.popBusy(busyId);
 		});
 
 	};
@@ -704,7 +704,7 @@ $scope.draftArchetypeList = "list";
 	};
 
 	// archetype create modal-----------------
-	$scope.openCreate = function(size) {
+	$scope.openCreate = function() {
 		var modalInstance = $modal.open({
 			animation : true, //animations on
 			templateUrl : 'archetypeCreate.html',
@@ -735,7 +735,7 @@ $scope.draftArchetypeList = "list";
 					$modalInstance.dismiss('cancel');
 				};
 			},
-			size : size,
+			size : 'lg',
 			resolve : {
 				organizations : function() {
 					return $scope.organizations;
@@ -854,6 +854,114 @@ $scope.draftArchetypeList = "list";
 		});
 
 	};
+
+
+
+	
+	var ArchetypeLifecycleStateFilter = function(lifecycleState) {
+		if (lifecycleState == "All") {
+			return true;
+		}
+		if (lifecycleState == "Any") {
+			if ($scope.selectedArchetype) {
+				return true;
+			} else {
+				return false;
+			}
+		}
+		if ($scope.selectedArchetype) {
+			if ($scope.selectedArchetype.lifecycleState == lifecycleState) {
+				return true;
+			} else {
+				return false;
+			}
+		} else {
+			return false;
+		}
+	};
+
+
+
+	$scope.toolMenus = [
+	//create
+	{
+		access : 'ROLE_ARCHETYPE_CREATE',
+		ifLifecycleState : 'All',
+		ngIf : ArchetypeLifecycleStateFilter,
+		clickCallback : $scope.openCreate,
+		tooltip : 'MANAGEMENT_ARCHETYPE_EDIT_TOOTIP_CREATE_ARCHETYPE',
+		name : 'ARCHETYPE_EDIT_CREATE',
+		
+	}, 
+	//save
+	{  
+		access : 'ROLE_ARCHETYPE_SAVE',
+		ifLifecycleState : 'Draft',
+		ngIf : ArchetypeLifecycleStateFilter,
+		clickCallback : $scope.saveSelectedArchetype,
+		tooltip : 'MANAGEMENT_ARCHETYPE_EDIT_TOOTIP_SAVE_ARCHETYPE',
+		name : 'ARCHETYPE_EDIT_SAVE',
+	}, 
+	//submit
+	{
+		access : 'ROLE_ARCHETYPE_SUBMIT',
+		ifLifecycleState : 'Draft',
+		ngIf : ArchetypeLifecycleStateFilter,
+		clickCallback : $scope.submitSelectedArchetype,
+		tooltip : 'MANAGEMENT_ARCHETYPE_EDIT_TOOTIP_SUBMIT_ARCHETYPE',
+		name : 'ARCHETYPE_EDIT_SUBMIT',
+	}, 
+	//generate diff
+	{
+		access : 'PERMIT_ALL',
+		ifLifecycleState : 'Draft',
+		ngIf : ArchetypeLifecycleStateFilter,
+		clickCallback : $scope.generateDiff,
+		tooltip : 'MANAGEMENT_ARCHETYPE_EDIT_TOOTIP_CONTRAST_ADL',
+		name : 'ARCHETYPE_EDIT_DIFF',
+	}, 
+	//createNewVersionArchetype
+	{
+		access : 'ROLE_TEMPLATE_NEW_REVISION',
+		ifLifecycleState : 'Published',
+		ngIf : ArchetypeLifecycleStateFilter,
+		clickCallback : $scope.createNewVersionArchetype,
+		tooltip : 'MANAGEMENT_ARCHETYPE_EDIT_TOOTIP_NEW_VERSION',
+		name : 'ARCHETYPE_EDIT_NEWVERSION',
+	}, 
+	//specialize
+	{
+		access : 'ROLE_ARCHETYPE_SPECIALIZE',
+		ifLifecycleState : 'Any',
+		ngIf : ArchetypeLifecycleStateFilter,
+		clickCallback : $scope.specialiseArchetype,
+		tooltip : 'MANAGEMENT_ARCHETYPE_EDIT_TOOTIP_SPECIALISE_THIS_ARCHETYPE',
+		name : 'ARCHETYPE_EDIT_SPECIALISE',
+	}, 
+	//batch submit
+	{
+		access : 'ROLE_ARCHETYPE_BATCH_SUBMIT',
+		ifLifecycleState : 'All',
+		ngIf : ArchetypeLifecycleStateFilter,
+		clickCallback : $scope.batchSubmit,
+		tooltip : 'MANAGEMENT_ARCHETYPE_EDIT_TOOTIP_BATCHPROCESS',
+		name : 'ARCHETYPE_EDIT_BATCHSUBMIT',
+	},
+	//fallback
+	{
+		access : 'ROLE_ARCHETYPE_CREATE',
+		ifLifecycleState : 'Published',
+		ngIf : ArchetypeLifecycleStateFilter,
+		clickCallback : $scope.fallbackArchetype,
+		tooltip : 'MANAGEMENT_ARCHETYPE_EDIT_TOOTIP_FALLBACK',
+		name : 'ARCHETYPE_EDIT_FALLBACK',
+	},
+	];
+
+
+
+
+
 
 	function formatXml(xml) {
 		var formatted = '';

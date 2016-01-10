@@ -3,13 +3,15 @@
 	<br />
 	<nav>
 		<ul class="nav nav-pills nav-stacked">
-			<li ng-repeat="sub in stateMenuMap[$state.current.name].subMenus" ng-class="{active : sub == selectedSubMenu}" ng-click="selectSubMenu(sub)">
-				<a href style="border-radius: 0"><h4 style="margin-top: 5px;margin-bottom: 5px;">{{sub.title | translate}}</h4></a>
-			</li>
+			
+				<li access="{{sub.authority}}" ng-repeat="sub in stateMenuMap[$state.current.name].subMenus"  ng-class="{active : sub == selectedSubMenu}" ng-click="selectSubMenu(sub)">
+					<a  href style="border-radius: 0" ><h4 style="margin-top: 5px;margin-bottom: 5px;">{{sub.title | translate}}</h4></a>
+				</li>
+		
 		</ul>
 	</nav>
 </div>
-	
+
 <div class="col-lg-10 col-md-10 col-sm-10 col-xs-10">
 	<div ui-view class="col-lg-12 col-md-12 col-sm-12"></div>
 </div>

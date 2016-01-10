@@ -1,4 +1,4 @@
-angular.module('clever.management.services.templateParseToEdit', []).service('templateParseToEditService', function(resourceService, $q, archetypeParseService, ARCHETYPE_BY_NAME_URL, ARCHETYPE_BY_VERSION_MASTER_NAME_URL) {
+angular.module('clever.management.services.templateParseToEdit', []).service('templateParseToEditService', function(resourceService, $q, archetypeParseService, ARCHETYPE_BY_NAME_URL) {
 
 	var rootThis = this;
 	this.parseTemplate = function(template) {
@@ -23,7 +23,7 @@ angular.module('clever.management.services.templateParseToEdit', []).service('te
 			angular.forEach(oet, function(value) {
 				var parseResult;
 				$.ajax({
-					url : ARCHETYPE_BY_VERSION_MASTER_NAME_URL + value._archetype_id,
+					url : ARCHETYPE_BY_NAME_URL + value._archetype_id,
 					type : 'GET',
 					async : false,
 					success : function(archetype) {

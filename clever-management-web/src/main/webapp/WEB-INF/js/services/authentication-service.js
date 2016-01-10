@@ -2,7 +2,7 @@ angular.module('clever.management.services.authentication', []).service('authent
 
 	var isAuthenticated = false;
 	var userName;
-
+	var authorities = [];
 	validateAuthentication();
 
 	//$interval(validateAuthentication, 5000);
@@ -20,11 +20,13 @@ angular.module('clever.management.services.authentication', []).service('authent
 	function validateAuthentication() {
 		var deferred = $q.defer();
 		$http.get(AUTHENTICATION_URL).success(function(data, status, headers, config) {
+			console.log(data);
 			deferred.resolve({
 				isAuthenticated : true,
 				previousIsAuthenticated : isAuthenticated,
 				userName : userName,
 			});
+			authorities = data.authorities;
 			isAuthenticated = true;
 			userName = data.userName;
 		}).error(function(data, status, headers, config) {
@@ -42,4 +44,13 @@ angular.module('clever.management.services.authentication', []).service('authent
 		return deferred.promise;
 	}
 
+
+	this.allowed = function(authority) {
+		if (authority == "PERMIT_ALL") {
+			return true;
+		} else {
+			return authorities.indexOf(authority) == -1 ? false : true;
+		}
+
+	};
 });

@@ -44,10 +44,13 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
 		Set<Authority> authorities = new HashSet<Authority>();
 
-		user.getRoles().forEach(role -> {
-			role.getAuthorities().forEach(authority -> {
-				authorities.add(authority);
-			});
+		// user.getRoles().forEach(role -> {
+		// role.getAuthorities().forEach(authority -> {
+		// authorities.add(authority);
+		// });
+		// });
+		user.getRole().getAuthorities().forEach(authority -> {
+			authorities.add(authority);
 		});
 
 		return new org.springframework.security.core.userdetails.User(

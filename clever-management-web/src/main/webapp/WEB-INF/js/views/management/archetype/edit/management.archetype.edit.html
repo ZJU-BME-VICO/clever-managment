@@ -139,36 +139,11 @@
 			</div>
 
 		</div>
-		<div class="col-xs-1 col-md-1 col-lg-1" >
-			<div class="sidebar">
-				<ul class="side-menu-group">
-					<li class="side-menu-item" ng-click="openCreate('lg')" tooltip-placement="right" tooltip="{{'MANAGEMENT_ARCHETYPE_EDIT_TOOTIP_CREATE_ARCHETYPE' | translate}}" tooltip-popup-delay="500">
-						<a href="" class="menu-item-content">{{'ARCHETYPE_EDIT_CREATE' | translate}} <!-- <span class="icon-plus-sign tool-menu" style="color: #777;"></span>--></a>
-					</li >
-					<li ng-if="selectedArchetype.lifecycleState=='Draft'"  class="side-menu-item" ng-click="saveSelectedArchetype()" tooltip-placement="right" tooltip="{{'MANAGEMENT_ARCHETYPE_EDIT_TOOTIP_SAVE_ARCHETYPE' | translate}}" tooltip-popup-delay="500">
-						<a href="" class="menu-item-content">{{'ARCHETYPE_EDIT_SAVE' | translate}}<!-- <span class="icon-save tool-menu"  > </span> --></a>
-					</li>
-					<li ng-if="selectedArchetype.lifecycleState=='Draft'" class="side-menu-item"  ng-click="submitSelectedArchetype()" tooltip-placement="right" tooltip="{{'MANAGEMENT_ARCHETYPE_EDIT_TOOTIP_SUBMIT_ARCHETYPE' | translate}}" tooltip-popup-delay="500">
-						<a href="" class="menu-item-content">{{'ARCHETYPE_EDIT_SUBMIT' | translate}}<!-- <span class="icon-circle-arrow-up tool-menu" style="color: #777;"> </span> --></a>
-					</li>
-					<li ng-if="selectedArchetype" class="side-menu-item"  ng-click="generateDiff()" tooltip-placement="right" tooltip="{{'MANAGEMENT_ARCHETYPE_EDIT_TOOTIP_CONTRAST_ADL' | translate}}" tooltip-popup-delay="500">
-						<a href="" class="menu-item-content">{{'ARCHETYPE_EDIT_DIFF' | translate}}<!-- <span class="icon-columns tool-menu" style="color: #777;"> </span> --></a>
-					</li>
-					<li ng-if="selectedArchetype.lifecycleState=='Published'" class="side-menu-item"  ng-click="createNewVersionArchetype()" tooltip-placement="right" tooltip="{{'MANAGEMENT_ARCHETYPE_EDIT_TOOTIP_NEW_VERSION' | translate}}" tooltip-popup-delay="500">
-						<a href="" class="menu-item-content">{{'ARCHETYPE_EDIT_NEWVERSION' | translate}}<!-- <span class="icon-level-up tool-menu" style="color: #777;"> </span> --></a>
-					</li>
-					<li ng-if="selectedArchetype" class="side-menu-item"  ng-click="specialiseArchetype()" tooltip-placement="right" tooltip="{{'MANAGEMENT_ARCHETYPE_EDIT_TOOTIP_SPECIALISE_THIS_ARCHETYPE' | translate}}" tooltip-popup-delay="500">
-						<a href="" class="menu-item-content">{{'ARCHETYPE_EDIT_SPECIALISE' | translate}}<!-- <span class="icon-puzzle-piece tool-menu" style="color: #777;"> </span> --></a>
-					</li>
-					<li  class="side-menu-item"  ng-click="batchSubmit()" tooltip-placement="right" tooltip="{{'MANAGEMENT_ARCHETYPE_EDIT_TOOTIP_BATCHPROCESS' | translate}}" tooltip-popup-delay="500">
-						<a href="" class="menu-item-content">{{'ARCHETYPE_EDIT_BATCHSUBMIT' | translate}}<!-- <span class="icon-puzzle-piece tool-menu" style="color: #777;"> </span> --></a>
-					</li>
-					<li  ng-if="selectedArchetype.lifecycleState=='Published'" class="side-menu-item"  ng-click="fallbackArchetype()" tooltip-placement="right" tooltip="{{'MANAGEMENT_ARCHETYPE_EDIT_TOOTIP_FALLBACK' | translate}}" tooltip-popup-delay="500">
-						<a href="" class="menu-item-content">{{'ARCHETYPE_EDIT_FALLBACK' | translate}}<!-- <span class="icon-puzzle-piece tool-menu" style="color: #777;"> </span> --></a>
-					</li>
-				</ul>
-			</div>
+        <!-- side tool menu -->
+		<div>
+			<side-tool-menu tool-menus="toolMenus"></side-tool-menu>
 		</div>
+
 	</div>
 	<script type="text/ng-template" id="archetypeCreate.html">
 		<div class="modal-header">
