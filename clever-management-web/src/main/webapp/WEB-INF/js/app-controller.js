@@ -185,13 +185,13 @@ angular.module('clever.management.controllers.app', []).controller('appCtrl', fu
 				info : 'MENU_MANAGEMENT_DEVELOPMENT_INFO',
 				introductionState : 'management.development.list.breif',
 			},
-//			{
-//				title : 'MENU_MANAGEMENT_DEVELOPMENT_DESIGN',
-//				state : 'management.development.design',
-//				introductionState : 'management.development.list.design',
-//				icon :  'icon-magic',
-//				info : 'MENU_MANAGEMENT_DEVELOPMENT_DESIGN_INFO',
-//			},
+			{
+				title : 'MENU_MANAGEMENT_DEVELOPMENT_DESIGN',
+				state : 'management.development.design',
+				introductionState : 'management.development.list.design',
+				icon :  'icon-magic',
+				info : 'MENU_MANAGEMENT_DEVELOPMENT_DESIGN_INFO',
+			},
 			{
 				title : 'MENU_MANAGEMENT_DEVELOPMENT_API_DISPLAY',				   
 				state : 'management.development.api.view',

@@ -1,4 +1,4 @@
-function DesignerCtrl($scope,resourceService,$q,templateParseService,archetypeParseService,$compile,STORAGE_TEMPLATE_LIST_URL,ARCHETYPE_BY_NAME_URL,STORAGE_TEMPLATE_BY_NAME_URL,ARCHETYPE_LIST_URL){
+function DesignerCtrl($scope,resourceService,$q,templateParseService,archetypeParseService,busyService,treeDataFormatService, $compile,STORAGE_TEMPLATE_LIST_EDIT_PUBLISHED_URL,STORAGE_TEMPLATE_LIST_URL,ARCHETYPE_BY_NAME_URL,STORAGE_TEMPLATE_LIST_EDIT_DRAFT_URL,STORAGE_TEMPLATE_BY_NAME_URL,ARCHETYPE_LIST_URL){
 	$scope.language = [];
 	$scope.defination={};
 	$scope.templateDetail=[];
@@ -7,59 +7,17 @@ function DesignerCtrl($scope,resourceService,$q,templateParseService,archetypePa
 	$scope.controlList=['btnFn','labelFn'];
 	$scope.selectedElement="初始化";
 	$scope.tempControl={};
-	//test contextmenu
-    $scope.player = {
-            gold: 100
-        };
-        $scope.items = [
-            { name: 'Small Health Potion', cost: 4 },
-            { name: 'Small Mana Potion', cost: 5 },
-            { name: 'Iron Short Sword', cost: 12 }
-        ];
-        $scope.menuOptions = [
-            ['Buy', function ($itemScope) {
-                $scope.player.gold -= $itemScope.item.cost;
-            }],
-            null,
-            ['Sell', function ($itemScope) {
-                $scope.player.gold += $itemScope.item.cost;
-            }]
-        ];
-      
-      $scope.models = {
-        selected: null,
-        templates: [
-            {type: "item", id: 2},
-            {type: "container", id: 1, columns: [[], []]}
-        ],
-        dropzones: {"A": [
-                    {
-                        "type": "container",
-                        "id": 1,
-                        "columns": [
-                            [
-                                {
-                                    "type": "item",
-                                    "id": "1"
-                                },
-                                {
-                                    "type": "item",
-                                    "id": "2"
-                                }
-                            ]
-                          ]
-                       }
-                      ]
-                  }
-        };
-     //for template display don't delete
-     resourceService.get(STORAGE_TEMPLATE_LIST_URL).then(function(list) {            
-            $scope.templateList = list;
-        });
-        $scope.getTemplateDetail=function(node){
-        var tempName=node.name;
-        var pos=tempName.lastIndexOf(".v");        
-        var url=tempName.substring(0,pos)+"."+node.latestTemplateVersion;
+	
+	$scope.newtemplateList={};
+    $scope.templateFiles = {
+        draft : [],
+        published : []
+    };
+        
+    $scope.getTemplateDetail=function(node){
+        var url=node.name;
+      /*  var pos=tempName.lastIndexOf(".v");        
+        var url=tempName.substring(0,pos)+"."+node.latestTemplateVersion;*/
         resourceService.get(STORAGE_TEMPLATE_BY_NAME_URL+url).then(function(temp){
         var xml=temp.oet;
         var x2js=new X2JS();
@@ -68,42 +26,53 @@ function DesignerCtrl($scope,resourceService,$q,templateParseService,archetypePa
         var tempalteName=parseResult.template_name;
         if($scope.tplist.indexOf(tempalteName)==-1){
             $scope.tplist.push(tempalteName);
-           // $scope.templateDetail.push(parseResult.definitions);
-             var simplifyTree=processTreeContent(parseResult.definitions);
+            var simplifyTree=processTreeContent(parseResult);
             $scope.templateDetail.push(simplifyTree);
          }       
         });
     };
     
-       
-      //for archetype display
-    /*  resourceService.get(ARCHETYPE_LIST_URL).then(function(list) {            
-            $scope.templateList = list;
-        });
-      $scope.getTemplateDetail=function(node){
-        var url=node.name+"."+node.latestArchetypeVersion;
-        resourceService.get(ARCHETYPE_BY_NAME_URL+url).then(function(temp){
-        var xml=temp.xml;
-        var x2js=new X2JS();
-        var archetype=x2js.xml_str2json(xml).archetype;       
-        var parseResult=archetypeParseService.parseArchetype(archetype);  
-        var archetypeName=node.name;
-        if($scope.tplist.indexOf(archetypeName)==-1){
-            $scope.tplist.push(archetypeName);
-            var simplifyTree=processTreeContent(parseResult.definitions.treeItems);
-            $scope.templateDetail.push(simplifyTree);
-         }       
-        });
-    };*/
+    //change templtatelist view as other pages
     
-	//local file
-	/* resourceService.get(STORAGE_TEMPLATE_BY_NAME_URL+'openEHR-EHR-INSTRUCTION.request-imaging_exam.v1.1').then(function(temp){
-	    var xml=temp.oet;
-	    var x2js=new X2JS();
-	    var template=x2js.xml_str2json(xml).template;	    
-	    var parseResult=templateParseService.parseTemplate(template);    
-	    $scope.templateDetail=parseResult;
-	});*/
+    $scope.isTemplateListHidden = false;
+
+    $scope.initData = function() {
+        var busyDraft = busyService.pushBusy('BUSY_LOADING');
+        resourceService.get(STORAGE_TEMPLATE_LIST_EDIT_DRAFT_URL).then(function(list) {
+            $scope.templateFiles.draft = list;
+            $scope.templateFiles.draftReady = true;
+            generateTreeData();
+            busyService.popBusy(busyDraft);
+        });
+
+        var busyPublished = busyService.pushBusy('BUSY_LOADING');
+        resourceService.get(STORAGE_TEMPLATE_LIST_EDIT_PUBLISHED_URL).then(function(list) {
+            $scope.templateFiles.published = list;
+            $scope.templateFiles.publishedReady = true;
+            generateTreeData();
+            busyService.popBusy(busyPublished);
+        });
+    };
+
+    function generateTreeData() {
+        if ($scope.templateFiles.draftReady && $scope.templateFiles.publishedReady) {
+            $scope.templateFiles.draftReady = false;
+            $scope.templateFiles.publishedReady = false;
+            var list = $scope.templateFiles.draft.concat($scope.templateFiles.published);
+            $scope.originalTemplateList = list;
+            $scope.formatedObject = treeDataFormatService.formatTreeData(list, 'children');
+            $scope.newtemplateList = $scope.formatedObject.formatedList;
+            //console.log($scope.templateList);
+            if ($scope.needLocatedObjectName) {
+                $timeout(function() {
+                    $scope.locateTemplate(findTemplateByName($scope.needLocatedObjectName));
+                    $scope.needLocatedObjectName = undefined;
+                }, 0);
+            }
+        }
+
+    }
+    $scope.initData();
 
     console.log("Main Controller loaded.");
     $scope.isVisible = false;
@@ -131,13 +100,13 @@ function DesignerCtrl($scope,resourceService,$q,templateParseService,archetypePa
 	$scope.collapse = function() {
 		for(i=0;i<$scope.templateDetail.length;i++){
             var data=$scope.templateDetail[i];
-            collapseAll(data);
+            collapseAll(data.definitions);
         }
 	};
 	$scope.expand = function() {
 	    for(i=0;i<$scope.templateDetail.length;i++){
 	        var data=$scope.templateDetail[i];
-	        expandAll(data);
+	        expandAll(data.definitions);
 	    }	
 	};
 	
@@ -199,8 +168,13 @@ function DesignerCtrl($scope,resourceService,$q,templateParseService,archetypePa
 	// delete archetype node for display
 	function processTreeContent(tree){
 	    var definition=[];
-        processNode(tree,undefined,definition);
-        return definition; 
+        processNode(tree.definitions,undefined,definition);
+         return { 
+            template_id:tree.template_id,
+            template_name:tree.template_name,
+           // template_contentName:template_contentName,
+            definitions:definition     
+       };
 	};
 	function processNode(tree,parent,archetypeTree){
 	    if(angular.isArray(tree)){//route 1

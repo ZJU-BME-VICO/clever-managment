@@ -7,6 +7,7 @@ angular.module('clever.management.services.templateParse',[]).service('templateP
         return {
             template_id:id,
             template_name:name,
+           // template_contentName:template_contentName,
             definitions:definitions[length-1]         
        };
     };  

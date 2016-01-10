@@ -7,11 +7,19 @@ function($document) {
                 UIData:'=guiData',    
         },      
         
-        template: '<li dragable id={{UIData.label.enText+"_"+UIData.label.code}}>'+
+        template: '<li dragable ng-context-menu="menuOptions" id={{UIData.label.enText+"_"+UIData.label.code}}>'+
                     '<img ng-class="UIData.label.picType"></img>'+
                     '<span>'+'<b>'+'{{UIData.label.labelContent}}'+'</b>'+ '</span>'+
                   '</li>',
         controller:function($scope){
+             $scope.menuOptions = [
+                ['delete', function ($itemScope) {
+                    var id=$itemScope.UIData.label.enText+"_"+$itemScope.UIData.label.code;
+                    var obj=document.getElementById(id);
+                    var parentDiv=document.getElementById("editArea");
+                    parentDiv.removeChild(obj);
+                }],
+            ];
         },
         link : function(scope, element, attrs) {
     }

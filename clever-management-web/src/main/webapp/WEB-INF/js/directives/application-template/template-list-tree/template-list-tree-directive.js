@@ -4,9 +4,10 @@ angular.module('clever.management.directives.templateListTree', []).directive('t
 		transclude : true,
 		scope : {
 			treeData : '=',
+			templateName:'=',
 			tempControl : '=',
 		},
-		template : '<template-list-tree-node ng-repeat="node in treeData" node-data="node" tree-scope="treeScope" select-node-callback="selectNode" ng-mousedown="cloneItems(nodeData)">'
+		template : '<template-list-tree-node ng-repeat="node in treeData" node-data="node" template-name="templateName" tree-scope="treeScope" select-node-callback="selectNode" ng-mousedown="cloneItems(nodeData)">'
 		            +'</template-list-tree-node>',
 		controller : function($scope,$element,$document) {
 		

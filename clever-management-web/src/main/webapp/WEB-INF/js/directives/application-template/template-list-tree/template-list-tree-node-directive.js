@@ -1,10 +1,14 @@
 angular.module('clever.management.directives.templateListTreeNode', []).directive('templateListTreeNode',
 function($compile,$document) {
          var datatypeList= new Array('DV_QUANTITY','DV_TEXT','DV_ORDINAL', 'DV_DATE_TIME','DV_DATE', 'DV_COUNT', 'DV_BOOLEAN','DV_CODED_TEXT','DV_PROPORTION','DV_DURATION');
-         var templatestrList= new Array('<dv-quantity gui-data="nodeData" gui-control="dvquantityControl"></dv-quantity>','<dv-text gui-data="nodeData" gui-control="dvtextControl" number="number" selected-Element="$parent.selectedElement"></dv-text>',
-                                    '<dv-ordinal gui-data="nodeData" gui-control="dvordinalControl"></dv-ordinal>','<dv-datetime gui-data="nodeData" gui-control="dvdatetimeControl"></dv-datetime>','<dv-datetime gui-data="nodeData" gui-control="dvdatetimeControl"></dv-datetime>',
-                                    '<dv-count gui-data="nodeData" gui-control="dvcountControl"></dv-count>','<dv-boolean gui-data="nodeData" gui-control="dvbooleanControl"></dv-boolean>',
-                                    '<dv-codedtext gui-data="nodeData" gui-control="dvcodedtextControl"></dv-codedtext>','9');
+         var templatestrList= new Array('<dv-quantity gui-data="nodeData" template-name="templateName" gui-control="dvquantityControl"></dv-quantity>',
+                                    '<dv-text gui-data="nodeData" template-name="templateName" gui-control="dvtextControl" number="number" selected-Element="$parent.selectedElement"></dv-text>',
+                                    '<dv-ordinal gui-data="nodeData" template-name="templateName" gui-control="dvordinalControl"></dv-ordinal>',
+                                    '<dv-datetime gui-data="nodeData" template-name="templateName" gui-control="dvdatetimeControl"></dv-datetime>',
+                                    '<dv-datetime gui-data="nodeData" template-name="templateName" gui-control="dvdatetimeControl"></dv-datetime>',
+                                    '<dv-count gui-data="nodeData" template-name="templateName" gui-control="dvcountControl"></dv-count>',
+                                    '<dv-boolean gui-data="nodeData" template-name="templateName" gui-control="dvbooleanControl"></dv-boolean>',
+                                    '<dv-codedtext gui-data="nodeData" template-name="templateName" gui-control="dvcodedtextControl"></dv-codedtext>','9');
          var floatDiv=angular.element('<div class="floatDiv" style="z-index:999" ng-show=true></div>');  
     	
     	return {
@@ -15,6 +19,7 @@ function($compile,$document) {
 			nodeData : '=',
 			treeScope : '=',
 			selectNodeCallback : '=',
+			templateName:'=',
 		},
 		controller:function($scope,$element){
 		    $scope.nodeScope={
@@ -27,7 +32,7 @@ function($compile,$document) {
 			scope.nodeData.collapsed = true;
 			scope.treeScope.nodes.push(scope.nodeData); 
 			
-			var template ='<ul id={{nodeData.label.code+"_"+nodeData.label.labelContent}}>' +
+			var template ='<ul id={{nodeData.label.code+"_"+nodeData.label.labelContent}} template={{templateName}}>' +
 								'<li>'+
 								    '<img class="collapsed" ng-show="nodeData.children.length && nodeData.collapsed" ng-click="selectNodeHead(nodeData)"></img>' +
                                     '<img class="expanded" ng-show="nodeData.children.length  && !nodeData.collapsed" ng-click="selectNodeHead(nodeData)"></img>' +
@@ -37,7 +42,7 @@ function($compile,$document) {
 									'<span ng-class="nodeData.selected"  ng-click="selectNodeLabel(nodeData)" ng-dblclick="doubleClickNodeLabel(nodeData)">' +
 										'{{nodeData.label.labelContent}}' +
 									'</span>' +
-									'<template-list-tree-node ng-hide="nodeData.collapsed" ng-repeat="node in nodeData.children" ng-init="node.parent = nodeData" tree-scope="treeScope" node-data="node" select-node-callback="selectNodeCallback"  ng-mousedown="cloneItems(nodeData)"></template-tree-list-node>' +
+									'<template-list-tree-node ng-hide="nodeData.collapsed" ng-repeat="node in nodeData.children" ng-init="node.parent = nodeData" tree-scope="treeScope" node-data="node" template-name="templateName" select-node-callback="selectNodeCallback"  ng-mousedown="cloneItems(nodeData)"></template-tree-list-node>' +
 								'</li>' +
 							'</ul>';
 
@@ -65,14 +70,11 @@ function($compile,$document) {
                  var html="";
                  
                  var name=nodeData.label.enText+"/"+nodeData.label.tableName;
-			//var parent=document.getElementById("editArea");
-			//var eles=parent.getElementsByName(name);
-			 var eles=document.getElementsByName(name);
-			 var number="0";
-			if(eles){
-			 number=eles.length.toString();
-			}	
-                 
+			     var eles=document.getElementsByName(name);
+    			 var number="0";
+    			 if(eles){
+    			      number=eles.length.toString();
+    			 }	                 
                  if(type){
                     /* if(nodeData.parent.label.occurrences.upper_unbounded=="true"){
                             nodeData.label.tableName=nodeData.parent.label.labelContent;
@@ -155,16 +157,8 @@ function($compile,$document) {
                          if(!nodeData.label.dataType){
                             currentDivId=nodeData.label.picType+'_'+nodeData.label.labelContent;
                             imgClass=nodeData.label.picType;
-                            textContent=nodeData.label.labelContent;
-                            
-                             part_template='<cluster gui-data="nodeData"></cluster>';
-                             
-                           /* part_template='<div class="{{nodeData.label.picType}}" id={{nodeData.label.picType}}+"_"+nodeData.label.labelContent">'+
-                                          '<img ng-class="{{nodeData.label.picType}}"></img>'+
-                                          '<span>{{nodeData.label.labelContent}}</span>'+'</div>'; 
-                            part_template='<div id={{currentDivId}}>'+
-                              '<img ng-class={{imgClass}}></img>'+
-                              '<span>{{textContent}}</span>'+'</div>';       */                              
+                            textContent=nodeData.label.labelContent;                            
+                            part_template='<cluster gui-data="nodeData"></cluster>';                           
                          }else{
                              var type=nodeData.label.dataType;
                              currentDivId=nodeData.label.labelContent+"_"+nodeData.label.code;

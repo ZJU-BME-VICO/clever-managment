@@ -5,29 +5,43 @@
 <div class="row">
     <div class="col-xs-12 col-md-12 col-lg-12 hbox">  
 	   <div class="panel panel-default" ng-show="!isTemolateListHidden" >
-	    			<div class="panel-heading">
-	    				<div class="input-group">
-                    <input type="text" class="form-control" ng-model="archetypeListFilter">
-                    <span class="input-group-btn">
-                        <button class="btn btn-default" type="button" ng-click="expand()">
-                            <span class="glyphicon glyphicon-plus"></span>
-                        </button> </span>
-                    <span class="input-group-btn">
-                        <button class="btn btn-default" type="button" ng-click="collapse()">
-                            <span class="glyphicon glyphicon-minus"></span>
-                        </button> </span>
-                </div>
-	    			</div>
-	    	        <div class="list-group" ng-style="{height: containerHeight - 55}" style="overflow: auto;auto;margin-left: -5px;white-space: nowrap;">
-                      <div class="btn-group" style="margin-left:30px;">
-                        <button class="btn btn-default" type="button" ng-click="expand()">{{'MANAGEMENT_DEVELOPMENT_DESIGNER_EXPANDALL' | translate}}</button>
-                        <button class="btn btn-default" type="button" ng-click="collapse()">{{'MANAGEMENT_DEVELOPMENT_DESIGNER_COLLAPSEALL' | translate}}</button>
-                      </div>
-                      <storagetemplate-list-tree tree-data="templateList" select-node-callback="getTemplateDetail(node)" tree-control="treeControl">
-                      </storagetemplate-list-tree>  
-                      <template-list-tree ng-repeat="node in templateDetail" tree-data="node" ng-mousedown="cloneItems()" temp-control="tempControl">
-                      </template-list-tree>
-                                      
+			<div class="panel-heading">
+				<div class="input-group">
+            <input type="text" class="form-control" ng-model="archetypeListFilter">
+            <span class="input-group-btn">
+                <button class="btn btn-default" type="button" ng-click="expand()">
+                    <span class="glyphicon glyphicon-plus"></span>
+                </button> </span>
+            <span class="input-group-btn">
+                <button class="btn btn-default" type="button" ng-click="collapse()">
+                    <span class="glyphicon glyphicon-minus"></span>
+                </button> </span>
+            </div>
+		</div>
+        <div class="list-group" ng-style="{height: containerHeight - 55}" style="overflow: auto;auto;margin-left: -5px;white-space: nowrap;">
+          <tree-view tree-data="newtemplateList" node-id="id"
+                double-click-node-callback="getTemplateDetail(value)"
+                node-children="children"
+                tree-control="treeControl"
+                node-alias-name="node"
+                search-key-mapper="searchKeyMapper">
+                    <tree-expanded-icon>
+                        <span class="clever-icon expanded" style="padding: 0 6px;height: 12px;background-position-y: 6px;"></span>
+                    </tree-expanded-icon>
+                    <tree-collapsed-icon>
+                        <span class="clever-icon collapsed" style="padding: 0 6px;height: 12px;background-position-y: 6px;"></span>
+                    </tree-collapsed-icon>
+                    <tree-node-label>
+                        <img ng-show="node.isDirectory" ng-class="node.type | lowercase" class="clever-icon list" style="padding: 0 10px;height: 16px;"></img>
+                        <span ng-show="node.isDirectory" ng-bind="node.name"></span>
+                        <img ng-show="!node.isDirectory" ng-class="node.lifecycleState | lowercase" class="clever-icon" style="padding: 0 10px;height: 16px;"></img>
+                        <span ng-show="!node.isDirectory" ng-bind-html="node.conceptName | highlight:keyword | unsafe"></span>
+                        &nbsp;<span ng-show="!node.isDirectory" style="color: grey;font-size: 10pt;">(<span ng-bind="node.version"></span>)</span>
+                    </tree-node-label>
+                </tree-view>
+
+              <template-list-tree ng-repeat="node in templateDetail" tree-data="node.definitions" template-name="node.template_name" ng-mousedown="cloneItems()" temp-control="tempControl">
+              </template-list-tree>                                      
                   </div>
 	    		</div>	   
 	   <!-- splitter -->
@@ -36,21 +50,8 @@
 			<i style="cursor: pointer" ng-click="isTemolateListHidden = !isTemolateListHidden" ng-show="!isTemolateListHidden" tooltip-placement="right" tooltip="Collapse" tooltip-popup-delay="500"> <span class="glyphicon glyphicon-chevron-left" ng-style="{'margin-top': containerHeight/2}" ></span> </i>
 		</splitter>
 		
-    <div class="col-xs-12 col-md-12 col-lg-12 edit-box" style="height:2800px">
+    <div class="col-xs-12 col-md-12 col-lg-12 edit-box" ng-style="{height: containerHeight}" >
         <div id="editArea"> 
-             <div>
-        <strong>{{'MANAGEMENT_DEVELOPMENT_DESIGNER_GOLD' | translate}}: </strong>
-        {{player.gold}}
-        </div>
-        <div class="list-group">
-             <a class="list-group-item"
-                ng-repeat="item in items"
-                ng-context-menu="menuOptions">
-                 <span class="badge">{{item.cost}}</span>
-                 {{item.name}}
-            </a>
-        </div>
-        </div>
 	</div>
 
 
