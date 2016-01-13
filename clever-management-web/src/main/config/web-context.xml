@@ -75,7 +75,7 @@
 		<!-- template save -->
 		<sec:intercept-url pattern="/templates/storage/action/edit/id/**" access="hasRole('ROLE_TEMPLATE_SAVE')" />
 		<!-- template edit resource-->
-		<sec:intercept-url pattern="/templates/storage/list/edit/draft'" access="hasRole('ROLE_TEMPLATE_EDIT')" />
+		<sec:intercept-url pattern="/templates/storage/list/edit/draft" access="hasRole('ROLE_TEMPLATE_EDIT')" />
 		<sec:intercept-url pattern="/templates/storage/list/edit/published" access="hasRole('ROLE_TEMPLATE_EDIT')" />
 		<sec:intercept-url pattern="/archetypes/name/**" access="hasAnyRole('ROLE_TEMPLATE_EDIT', 'ROLE_TEMPLATE_VIEW')" />
 		<sec:intercept-url pattern="/archetypes/list/reference" access="hasRole('ROLE_TEMPLATE_EDIT')" />
@@ -84,7 +84,7 @@
 		<sec:intercept-url pattern="/templates/storage/name/**" access="hasRole('ROLE_TEMPLATE_VIEW')" />
 		<sec:intercept-url pattern="/templates/storage/id/**" access="hasRole('ROLE_TEMPLATE_VIEW')" />
 		<sec:intercept-url pattern="/templates/storage/list" access="hasRole('ROLE_TEMPLATE_VIEW')" />
-		<sec:intercept-url pattern="/templates/storage/master/id/" access="hasRole('ROLE_TEMPLATE_VIEW')" />
+		<sec:intercept-url pattern="/templates/storage/master/id/*" access="hasRole('ROLE_TEMPLATE_VIEW')" />
 		<!-- template upload -->
 		<sec:intercept-url pattern="/templates/storage/action/upload" access="hasRole('ROLE_TEMPLATE_UPLOAD')" />
 		<sec:intercept-url pattern="/templates/storage/action/validate" access="hasRole('ROLE_TEMPLATE_UPLOAD')" />
