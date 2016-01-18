@@ -21,6 +21,7 @@ angular.module('clever.management.directives.archetypePane', []).directive('arch
 					$scope.definition = archetype.definitions;
 					$scope.languages = archetype.languages.languages;
 					$scope.selectedLanguage = archetype.languages.originalLanguage;
+					console.log($scope.languages);
 				}
 			});
 

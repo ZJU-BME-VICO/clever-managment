@@ -13,6 +13,6 @@ import edu.zju.bme.clever.management.service.entity.LifecycleState;
 public interface ArchetypeVersionMasterRepository extends
 		JpaRepository<ArchetypeVersionMaster, Integer> {
 	public ArchetypeVersionMaster findByName(String name);
-	
+	@Query("select master from ArchetypeVersionMaster master left join fetch master.latestRevisionFile where master.latestRevisionFileLifecycleState = ?1")
 	public List<ArchetypeVersionMaster> findByLatestRevisionFileLifecycleState(LifecycleState published);
 }

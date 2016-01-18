@@ -37,10 +37,12 @@ tree-view-node li[role="context-menu"] i, tree-view-node li[role="context-menu"]
 tree-view-node li .selected {
 	background-color: #aaddff;
 	font-weight: bold;
+	border-radius: 5px;
+    padding-right: 12px;
 }
 
 tree-view-node li[role="context-menu"] .selected {
-	background-color: #aaddff;
+	background-color: #F8D952;
 	font-weight: strong;
 }
 

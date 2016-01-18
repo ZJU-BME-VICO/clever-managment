@@ -22,6 +22,7 @@ uri="http://www.springframework.org/security/tags"%>
 		<%@ include file="jspf/css-init.jspf"%>
 	</head>
 	<body ng-controller="appCtrl" style="font-family: Microsoft YaHei;" ng-cloak>
+     	<toaster-container></toaster-container>
 		<!-- header -->
 		<%@ include file="jspf/header.jspf"%>
 

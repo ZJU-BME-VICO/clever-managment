@@ -128,8 +128,8 @@
 .archetype-item{
 	cursor: pointer;
 }
- li  .selected {
-	background-color: #aaddff;
+ li .selected {
+	background-color: #EEA8BC;
 	font-weight: bold;
 }
 code {
@@ -395,4 +395,11 @@ code {
     margin: 0 0 0 -25px;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+}
+.background-label {
+	background-color: #E4CE2E;
+    border-radius: 5px;
+    font-size: 25px;
+    color: white;
+    padding: 0;
 }
