@@ -96,7 +96,7 @@ function AuthorityManagerCtrl($scope, $modal, ngPopover, msgboxService, resource
 	$scope.changeUserStatus = function(user) {
 		user.isEnabled = !user.isEnabled;
 	};
-	$scope.userNameFilterr = {
+	$scope.userNameFilter = {
 		userName : "",
 	};
 	$scope.roleNameFilter = {

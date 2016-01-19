@@ -61,6 +61,7 @@ angular.module('clever.management.i18n.zh', ['pascalprecht.translate']).config(f
 		ARCHETYPE_UPLOAD_SUCCEEDED_HINT : '原型上传完成，请点击确定查看上传结果',
 		ARCHETYPE_UPLOAD_FAILED : '操作失败',
 		ARCHETYPE_UPLOAD_FAILED_HINT : '原型上传失败，错误：{{errorMsg}}',
+		ARCHETYPE_EDIT_SAVE_FAILED_HINT : '原型保存失败，错误： {{errorMsg}}',
 
 		// Archetype edit
 		MANAGEMENT_ARCHETYPE_EDIT_TOOTIP_BATCHPROCESS : '批量提交',
@@ -572,7 +573,7 @@ angular.module('clever.management.i18n.zh', ['pascalprecht.translate']).config(f
 		EDIT_HEADER_PANE_EMAIL : '电子邮件',
 		EDIT_HEADER_PANE_ORGNIZATION : '组织',
 		EDIT_HEADER_PANE_DATE : '日期',
-		EDIT_HEADER_PANE_OTHER_CONTRIBUTORS : '其他参与者',
+		EDIT_HEADER_PANE_OTHER_CONTRIBUTORS : '参与者',
 		EDIT_HEADER_PANE_PURPOSE : '目的',
 		EDIT_HEADER_PANE_USE : '使用',
 		EDIT_HEADER_PANE_MISUSE : '误用',
@@ -580,6 +581,7 @@ angular.module('clever.management.i18n.zh', ['pascalprecht.translate']).config(f
 		EDIT_HEADER_PANE_HEADING_BASE : '基本信息',
 		EDIT_HEADER_PANE_HEADING_AUTHOR : '作者',
 		EDIT_HEADER_PANE_HEADING_DETAILS : '细节',
+		EDIT_HEADER_PANE_KEY_WORDS : '关键词',
 	
 
 

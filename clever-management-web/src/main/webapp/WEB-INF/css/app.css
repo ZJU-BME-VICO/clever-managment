@@ -364,24 +364,26 @@ tr.succeeded {
 
 .side-menu-group {
 	padding-left: 0;
+	margin-left: 10px;
 	margin-top: 10px;
-	background-image: linear-gradient(to right, #f6f6f6 0%, #fff 8px);
+	background-image: linear-gradient(to right, #ECE6E6 0%, #fff 8px);
 	box-shadow: inset 1px 0 0 #eee;
 }
 
 .side-menu-item {
 	position: relative;
 	padding: 8px 10px;
-	box-shadow: 0px 1px 3px rgba(0,0,0,0.08);
+	box-shadow:  6px 5px 10px rgba(0,0,0,0.10);;
 	margin-top: 10px;
 	margin-bottom: 10px;
 	padding-left: 0;
 	border: 1px solid transparent;
+	border-radius: 0px 20px 20px 0px;
 }
 
 .side-menu-item:hover {
 	text-decoration: none;
-	box-shadow: inset 2px 0 0 #ccc;
+	box-shadow: inset 3px 0 0 #990033;
 }
 .side-menu-item a {
 	margin-left: 14px;

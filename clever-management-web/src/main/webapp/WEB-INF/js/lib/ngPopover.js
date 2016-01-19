@@ -8,7 +8,7 @@ module.provider('ngPopover', function () {
 	var currentTarget;
 	var margin = 15;
 	var overlayClasses = [];
-	
+	var enabled = true;
 
 	$(document).on('click', function (e) {
 		if (open) {
@@ -38,7 +38,7 @@ module.provider('ngPopover', function () {
 
 
 
-	var calcPosition = function(element, placement, maximize, useParentWidth, anchorSelector, maxWidth) {
+	var calcPosition = function(element, placement, maximize, useParentWidth, anchorSelector, maxWidth, backgroundColor) {
 
 		var elementPosition = $(element).offset();
 		var elementWidth = $(element).outerWidth();
@@ -46,7 +46,21 @@ module.provider('ngPopover', function () {
 		var popoverWidth = $('#ng-popover').outerWidth();
 		var popoverHeight = $('#ng-popover').outerHeight();
 		var windowWidth = $(window).width();
-
+      
+      /*
+       * Mecro add 
+       * set popover's background color
+       */
+       if(backgroundColor){
+      		$('#ng-popover').css({
+				'background-color' : backgroundColor,
+			});
+			$('#ng-popover.bottom-no-title .arrow:after').css({
+				'border-bottom-color' : 'red',
+			});
+        }
+      
+      
 		if (maxWidth) {
 			$('#ng-popover').css({
 				maxWidth: +maxWidth
@@ -178,8 +192,14 @@ module.provider('ngPopover', function () {
 			close: function(data) {
 				$rootScope.$broadcast('ng-popover-hide', data);
 			}, 
-
+            disable : function(){
+            	enabled = false;
+            },
+            enable : function(){
+            	enabled = true;
+            },
 			open: function(element, scope, options) {
+				enabled = true;
 				var template = $templateCache.get(options.template || options.ngPopover);
 				if (!template) {
 					template = options.template || options.ngPopover;
@@ -190,6 +210,7 @@ module.provider('ngPopover', function () {
 				var useParentWidth = options.useparentwidth || false;
 				var anchorSelector = options.anchorselector || '';
 				var maxWidth = options.maxwidth || null;
+				var backgroundColor = options.backgroundColor || 'white';
 
 				if (options.data) {
 					scope = scope.$new();
@@ -208,7 +229,7 @@ module.provider('ngPopover', function () {
 					$compile($('#ng-popover').contents())(scope);
 					scope.$apply();
 
-					var popoverPosition = calcPosition(element, placement, maximize, useParentWidth, anchorSelector, maxWidth);
+					var popoverPosition = calcPosition(element, placement, maximize, useParentWidth, anchorSelector, maxWidth, backgroundColor);
 
 					$('.close-pop').on('click', function() {
 						$('#ng-popover').fadeOut(200, function() {
@@ -225,7 +246,7 @@ module.provider('ngPopover', function () {
 					$('#ng-popover')
 						.css({
 							left: popoverPosition.left, 
-							top: popoverPosition.top
+							top: popoverPosition.top,					
 						})
 						.toggleClass(placementClass)
 						.fadeIn(100, function() {
@@ -235,7 +256,7 @@ module.provider('ngPopover', function () {
 				}
 
 				$(element).on('click', function(evt) {
-					if (!open) {
+					if (!open && enabled) {
 
 						currentTarget = evt.target;
 

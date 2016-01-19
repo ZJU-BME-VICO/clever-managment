@@ -266,6 +266,156 @@
 
     </tab>
 </tabset> -->
+
+
+<tabset>
+	<tab heading="{{'EDIT_HEADER_PANE_HEADING_DETAILS' | translate}}">
+		<div ng-style="{height: contentHeight.value - 100}" style="overflow-y:auto">
+			<div class="row" style="margin-top: 30px">
+				<div class="col-lg-6 col-xs-5 col-sm-6">
+					<div class="input-group" >
+						<span class="input-group-addon" style="  color: #3c763d;	background-color: #dff0d8; border-color: #d6e9c6;"><span class="glyphicon glyphicon-list-alt"></span>&nbsp;&nbsp;<span>{{'EDIT_HEADER_PANE_DESCRIPTIO' | translate}}</span></span>
+						<input type="text" class="form-control" id="description" ng-model="baseInformation.description.__text" aria-describedby="inputGroupSuccess1Status">
+					</div>
+				</div>
+				<div class="col-lg-6 col-xs-5 col-sm-6">
+					<div class="input-group" >
+						<span class="input-group-addon" style="  color: #3c763d;	background-color: #dff0d8; border-color: #d6e9c6;"><span class="glyphicon glyphicon-list-alt"></span>&nbsp;&nbsp;<span>{{'EDIT_HEADER_PANE_COMMEN' | translate}}</span></span>
+						<input type="text" class="form-control" id="comment"  ng-model="baseInformation.comment.__text" aria-describedby="inputGroupSuccess1Status">
+					</div>
+				</div>
+			</div>
+			<form class="form-horizontal" style="margin-top: 50px;">
+				<div class="form-group">
+					<label class="col-md-2  control-label" style="width:100px;">{{'EDIT_HEADER_PANE_PURPOSE' | translate}}</label>
+					<div class="col-md-10 flex-box">
+						<textarea rows="3"  class="form-control" id="purpose" placeholder="Purpose..." ng-model="detail.purpose"></textarea>
+					</div>
+				</div>
+
+				<div class="form-group">
+					<label class="col-md-2 control-label" style="width:100px;" > {{'EDIT_HEADER_PANE_USE' | translate}}</label>
+					<div class="col-md-10">
+						<textarea rows="5" class="form-control" id="use" placeholder="Use for ?..."  ng-model="detail.use"></textarea>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-md-2 control-label" style="width:100px;" >{{'EDIT_HEADER_PANE_MISUSE' | translate}}</label>
+					<div class="col-md-10">
+						<textarea rows="2" class="form-control" id="misuse"  placeholder="Misuse..." ng-model="detail.misuse"></textarea>
+					</div>
+				</div>
+			</form>
+
+			<div class="row" style="margin-top: 30px">
+				<div class="col-lg-6 col-xs-5 col-sm-6">
+					<div class="input-group" >
+						<span class="input-group-addon" style="  color: #3c763d;	background-color: #dff0d8; border-color: #d6e9c6;"><span class="glyphicon glyphicon-copyright-mark"></span>&nbsp;&nbsp;<span>{{'EDIT_HEADER_PANE_COPYRIGHT' | translate}}</span></span>
+						<input  class="form-control" id="copyright"  placeholder="Copyright..." ng-model="detail.copyright">
+					</div>
+				</div>
+				<div class="col-lg-6 col-xs-5 col-sm-6">
+					<div class="input-group" >
+						<span class="input-group-addon" style="  color: #3c763d;	background-color: #dff0d8; border-color: #d6e9c6;"><span class="glyphicon glyphicon-star"></span>&nbsp;&nbsp;<span>{{'EDIT_HEADER_PANE_KEY_WORDS' | translate}}</span></span>
+						<input  class="form-control" id="keywords"  placeholder="Key words" ng-model="detail.keywords">
+					</div>
+				</div>
+			</div>
+		</div>
+	</tab>
+	<tab heading="{{'EDIT_HEADER_PANE_HEADING_AUTHOR' | translate}}">
+		<div ng-style="{height: contentHeight.value - 160}" style="overflow-y:auto; margin-top:20px; " >
+			<div class="col-xs-6 col-md-6 col-lg-6" >
+				<span class="background-label pull-right">&nbsp;<i class="fa fa-user" style="color:white"></i> &nbsp;{{'EDIT_HEADER_PANE_ORIGINAL_AUTHOR' | translate}}&nbsp;</span>
+				
+				<form style="margin-top: 60px;">
+					<div class="form-group has-success has-feedback">
+						<label class="control-label" for="OriAuthorName">{{'EDIT_HEADER_PANE_NAME' | translate}}</label>						
+						<input type="text" class="form-control" id = "OriAuthorName" placeholder="Mecro" valid-check ng-model="oriAuthorInfo.name.__text">
+					</div>
+					<div class="form-group has-success has-feedback">
+						<label class="control-label" for="OriAuthorName">{{'EDIT_HEADER_PANE_EMAIL' | translate}}</label>
+						<div class="input-group">
+							<span class="input-group-addon"><i class="fa fa-at"></i></span>
+							<input type="text" class="form-control" id = "OriAuthorEmail" placeholder="example@xxx.com" valid-check ng-model="oriAuthorInfo.email.__text">
+						</div>
+					</div>
+					<div class="form-group has-success has-feedback">
+							<label class="control-label" for="OriAuthorName">{{'EDIT_HEADER_PANE_ORGNIZATION' | translate}}</label>
+					
+						<input type="text" class="form-control" id = "OriAuthorOrgnization" placeholder="ZJU" valid-check  ng-model="oriAuthorInfo.organisation.__text">
+					</div>
+
+					<div class="form-group has-success has-feedback">
+					<label class="control-label" for="OriAuthorName">{{'EDIT_HEADER_PANE_DATE' | translate}}</label>
+					<p class="input-group">
+							<input type="date" class="form-control" id = "OriAuthorDate" ng-model="oriAuthorDate.value" style="width:100%" />
+							<span class="input-group-btn">
+								<a href='' ng-popover="datepicker" title="" placement="right" maximize="false">
+								<button type="button" class="btn btn-default">
+									<i class="glyphicon glyphicon-calendar"></i>
+								</button> </span></a>
+									
+						</p>
+					</div>
+					
+		
+				</form>
+			</div>
+			<div class="col-xs-1 col-md-1 col-lg-1">
+				<div class="ver-spacer left" style="margin-left: 15px;">
+					<div class="mask" ng-style="{height: contentHeight.value - 200}" ></div>
+				</div>
+			</div>
+			<div class="col-xs-6 col-md-6 col-lg-6">
+				<span class="background-label pull-right">&nbsp;<i class="fa fa-users"></i>&nbsp;{{'EDIT_HEADER_PANE_OTHER_CONTRIBUTORS' | translate}}&nbsp;</span>
+		       <form style="margin-top: 60px;">
+		        <label class="control-label" for="OriAuthorName">&nbsp;</label>			
+				<div class="row">
+					<div class="col-xs-8 col-md-8 col-lg-8" style="padding-right:0">
+						<div class="form-group">
+							<input type="text"  class="form-control"  ng-model="currentContributor.value" valid-check  placeholder="current contributor">
+						</div>
+					</div>
+
+					<div class="col-xs-4 col-md-4 col-lg-4" style="padding-left:0">
+						<div class="btn-group">
+							<button ng-click="addContributor()" class="btn btn-default ">
+								<i class="fa fa-user-plus" ></i>
+							</button>
+							<button ng-click="removeContributor()"class="btn btn-danger">
+								<i class="fa fa-user-times"></i>
+							</button>
+						</div>
+					</div>
+				</div>
+				</form>
+			
+				<div class="form-group"  ng-style="{height: contentHeight.value - 400}" style="border:2px ridge; width:82%; overflow: auto;" >
+					<br>
+					<ul>
+						<li ng-repeat="contributor in otherContributors track by $index">
+							<i class="fa fa-user"></i>
+							<a ng-class="isSelected($index)"  href="#" ng-click="$event.preventDefault(); selectContributor(contributor, $index)" style="border-radius: 8px;">{{contributor}}</a>
+
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</tab>
+	<tab heading="{{'EDIT_HEADER_PANE_HEADING_TRANSLATE' | translate}}">
+
+	</tab>
+</tabset>
+
+<script type="text/ng-template" id="datepicker">
+	<div style="display:inline-block;">
+	<datepicker  ng-model="oriAuthorDate.value" min-date="minDate" show-weeks="true" class="well well-sm" style="margin-bottom: 0; "></datepicker>
+	</div>
+</script>
+
+<!--
 <hr>
 <div class="row">
     <div class="col-xs-3 col-sm-3 col-lg-2">
@@ -278,7 +428,7 @@
     <div ng-style="{height: contentHeight.value - 200}" style="overflow:auto">
         <div class="col-xs-9 col-sm-9 col-lg-10"  ng-if="currentTab =='base'" >
             <div>
-                <!-- <span class="label">ArchetypeId:</span> -->
+            
                 <p class="tag">
                     {{'EDIT_HEADER_PANE_ARCHETYPEID' | translate}}:
                 </p>
@@ -291,7 +441,7 @@
                 <p class="tag">
                     {{'EDIT_HEADER_PANE_DESCRIPTIO' | translate}} :
                 </p>
-                <textarea elastic  class="form-control" ng-model="baseInformation.description.__text"></textarea>
+                <textarea   class="form-control" ng-model="baseInformation.description.__text"></textarea>
                 <p class="tag">
                     {{'EDIT_HEADER_PANE_COMMEN' | translate}} :
                 </p>
@@ -344,9 +494,7 @@
                     <div class="col-xs-8 col-md-8 col-lg-8" style="padding-right:0">
                         <div class="form-group">
                             <input type="text"  class="form-control"  ng-model="currentContributor.value" placeholder="current contributor">
-                            <!-- <div class="btn-group pull-right" > -->
-
-                            <!-- </div> -->
+                          
                         </div>
                     </div>
 
@@ -396,7 +544,7 @@
 
     </div>
     <hr>
-</div>
+</div>-->
 
 <!-- button switching -->
 <!-- <div class="row">

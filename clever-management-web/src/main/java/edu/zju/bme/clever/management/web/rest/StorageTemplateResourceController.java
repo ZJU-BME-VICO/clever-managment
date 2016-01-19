@@ -451,7 +451,7 @@ public class StorageTemplateResourceController extends
 						user);
 
 			}
-		} catch (VersionControlException | IOException ex) {
+		} catch (Exception ex) {
 			result.setSucceeded(false);
 			result.setMessage(ex.getMessage());
 		}
