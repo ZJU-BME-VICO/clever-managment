@@ -1,61 +1,48 @@
 <div class="row">
-	<div class="col-xs-12 col-md-12 col-lg-12 hbox">
-		<div class="panel panel-default" ng-show="!isArchetypeListHidden" >
-			<div class="panel-heading">
-				<i class="search-icon glyphicon glyphicon-search search-icon-list" ></i>
-				<input  type="text" style="border-radius: 17px; padding-left: 40px" ng-model = "archetypeListFilter" class="form-control" placeholder="{{'SEARCH_HINT' | translate}}" />
-				<!-- <input type="text" class="form-control" ng-model="archetypeListFilter" placeholder="{{'SEARCH_HINT' | translate}}"> -->
-			</div>
-			<div class="list-group" ng-style="{height:containerHeight-55}" style="overflow: auto;margin-left: -5px;white-space: nowrap;">
-				<!--node-menu-generator = "getTreeElementMenu"
+    <div class="col-xs-12 col-md-12 col-lg-12 hbox">
+        <div class="panel panel-default" ng-show="!isArchetypeListHidden">
+            <div class="panel-heading">
+                <i class="search-icon glyphicon glyphicon-search search-icon-list"></i>
+                <input type="text" style="border-radius: 17px; padding-left: 40px" ng-model="archetypeListFilter" class="form-control" placeholder="{{'SEARCH_HINT' | translate}}" />
+                <!-- <input type="text" class="form-control" ng-model="archetypeListFilter" placeholder="{{'SEARCH_HINT' | translate}}"> -->
+            </div>
+            <div class="list-group" ng-style="{height:containerHeight-55}" style="overflow: auto;margin-left: -5px;white-space: nowrap;">
+                <!--node-menu-generator = "getTreeElementMenu"
 				specialise-archetype-callback="specialiseArchetype(value)"
 				<a href=""  ng-class="{active:selectedArchetype.id == archetype.id}" class="list-group-item" ng-repeat="archetype in draftArchetypeList"  ng-click="selectArchetype(archetype)">{{archetype.name}}</a>-->
-				<tree-view tree-data="archetypeList"
-				class="archetype-tree"
-				double-click-node-callback="selectArchetype(value)"
-				node-id="id" node-children="specialiseArchetype"
-
-				delete-archetype-callback="deleteArchetype(value)"
-				click-node-menu-callback="clickNodeMenu(node, type)"
-				menu-prefix = "list"
-				tree-control="treeControl"  node-alias-name="node"
-				search-key-mapper="searchKeyMapper">
-					<tree-expanded-icon>
-						<span class="clever-icon expanded" style="padding: 0 6px;height: 12px;background-position-y: 6px;"></span>
-					</tree-expanded-icon>
-					<tree-collapsed-icon>
-						<span class="clever-icon collapsed" style="padding: 0 6px;height: 12px;background-position-y: 6px;"></span>
-					</tree-collapsed-icon>
-					<tree-node-label>
-
-						<img ng-show="node.isDirectory" ng-class="node.type | lowercase" class="clever-icon list" style="padding: 0 10px;height: 16px;margin-left: 3px;"></img>
-						<span ng-show="node.isDirectory" ng-bind="node.name"></span>
-						<img ng-show="!node.isDirectory" ng-class="node.lifecycleState | lowercase" class="clever-icon list" style="padding: 0 10px;height: 16px;margin-left: 3px;"></img>
-						<span ng-show="!node.isDirectory" ng-bind-html="node.conceptName | highlight:keyword | unsafe"></span>
-						&nbsp;<span ng-show="!node.isDirectory" style="color: grey;font-size: 10pt;">(<span ng-bind="node.version"></span>)</span>
-
-						<!--
+                <tree-view tree-data="archetypeList" class="archetype-tree" double-click-node-callback="selectArchetype(value)" node-id="id" node-children="specialiseArchetype" delete-archetype-callback="deleteArchetype(value)" click-node-menu-callback="clickNodeMenu(node, type)" menu-prefix="list" tree-control="treeControl" node-alias-name="node" search-key-mapper="searchKeyMapper">
+                    <tree-expanded-icon>
+                        <span class="clever-icon expanded" style="padding: 0 6px;height: 12px;background-position-y: 6px;"></span>
+                    </tree-expanded-icon>
+                    <tree-collapsed-icon>
+                        <span class="clever-icon collapsed" style="padding: 0 6px;height: 12px;background-position-y: 6px;"></span>
+                    </tree-collapsed-icon>
+                    <tree-node-label>
+                        <img ng-show="node.isDirectory" ng-class="node.type | lowercase" class="clever-icon list" style="padding: 0 10px;height: 16px;margin-left: 3px;"></img>
+                        <span ng-show="node.isDirectory" ng-bind="node.name"></span>
+                        <img ng-show="!node.isDirectory" ng-class="node.lifecycleState | lowercase" class="clever-icon list" style="padding: 0 10px;height: 16px;margin-left: 3px;"></img>
+                        <span ng-show="!node.isDirectory" ng-bind-html="node.conceptName | highlight:keyword | unsafe"></span> &nbsp;
+                        <span ng-show="!node.isDirectory" style="color: grey;font-size: 10pt;">(<span ng-bind="node.version"></span>)</span>
+                        <!--
 						<img ng-class="archetype.lifecycleState | lowercase" class="clever-icon" style="padding: 0 10px;height: 16px;"></img>
 						<span ng-bind-html="archetype.conceptName | highlight:keyword | unsafe"></span>
 						&nbsp;<span style="color:grey;font-size: 10pt;"></span> -->
-					</tree-node-label>
-				</tree-view>
-			</div>
-		</div>
-
-		<splitter is-adjust-enabled="!isArchetypeListHidden"  style="min-height: 100%;" >
-			<i style="cursor: pointer" ng-click="isArchetypeListHidden = !isArchetypeListHidden" ng-show="isArchetypeListHidden"   tooltip-placement="right" tooltip="{{'MANAGEMENT_ARCHETYPE_EDIT_TOOTIP_EXPAND' | translate}}" tooltip-popup-delay="500"> <span class="glyphicon glyphicon-chevron-right" ng-style="{'margin-top': containerHeight/2}" ></span> </i>
-			<i style="cursor: pointer" ng-click="isArchetypeListHidden = !isArchetypeListHidden" ng-show="!isArchetypeListHidden"  tooltip-placement="right" tooltip="{{'MANAGEMENT_ARCHETYPE_EDIT_TOOTIP_COLLAPSE' | translate}}" tooltip-popup-delay="500"> <span class="glyphicon glyphicon-chevron-left" ng-style="{'margin-top': containerHeight/2}" ></span> </i>
-		</splitter>
-		<div class="col-xs-12 col-md-12 col-lg-12 flex-box" ng-if="selectedArchetype" >
-			<div class="row" >
-				<div class="panel panel-default">
-					<div class="panel-heading" style="height: 50px">
-
-						<span class="archetype-title" ng-if="!isArchetypeListHidden">{{getFixedTitle(selectedArchetype.name, 40)}}</span>
-						<span class="archetype-title" ng-if="isArchetypeListHidden">{{getFixedTitle(selectedArchetype.name, 70)}}</span>
-						<span style="color:red" ng-if="selectedArchetype.lifecycleState != 'Draft'">(Not Editable)</span>
-						<!-- <button class="btn btn-small  btn-primary pull-right"   style="margin-left:20px; margin-right: 10px;" ng-disabled="selectedArchetype==undefined" ng-click="saveSelectedArchetype()">
+                    </tree-node-label>
+                </tree-view>
+            </div>
+        </div>
+        <splitter is-adjust-enabled="!isArchetypeListHidden" style="min-height: 100%;">
+            <i style="cursor: pointer" ng-click="isArchetypeListHidden = !isArchetypeListHidden" ng-show="isArchetypeListHidden" tooltip-placement="right" tooltip="{{'MANAGEMENT_ARCHETYPE_EDIT_TOOTIP_EXPAND' | translate}}" tooltip-popup-delay="500"> <span class="glyphicon glyphicon-chevron-right" ng-style="{'margin-top': containerHeight/2}" ></span> </i>
+            <i style="cursor: pointer" ng-click="isArchetypeListHidden = !isArchetypeListHidden" ng-show="!isArchetypeListHidden" tooltip-placement="right" tooltip="{{'MANAGEMENT_ARCHETYPE_EDIT_TOOTIP_COLLAPSE' | translate}}" tooltip-popup-delay="500"> <span class="glyphicon glyphicon-chevron-left" ng-style="{'margin-top': containerHeight/2}" ></span> </i>
+        </splitter>
+        <div class="col-xs-12 col-md-12 col-lg-12 flex-box" ng-if="selectedArchetype">
+            <div class="row">
+                <div class="panel panel-default">
+                    <div class="panel-heading" style="height: 50px">
+                        <span class="archetype-title" ng-if="!isArchetypeListHidden">{{getFixedTitle(selectedArchetype.name, 40)}}</span>
+                        <span class="archetype-title" ng-if="isArchetypeListHidden">{{getFixedTitle(selectedArchetype.name, 70)}}</span>
+                        <span style="color:red" ng-if="selectedArchetype.lifecycleState != 'Draft'">(Not Editable)</span>
+                        <!-- <button class="btn btn-small  btn-primary pull-right"   style="margin-left:20px; margin-right: 10px;" ng-disabled="selectedArchetype==undefined" ng-click="saveSelectedArchetype()">
 						{{"ARCHETYPE_PANE_SAVE" | translate}}
 						</button>
 
@@ -66,129 +53,118 @@
 						<button class="btn btn-info pull-right" style="margin-left:20px";ng-disabled="selectedArchetype==undefined" ng-click="generateDiff()">
 						{{"ARCHETYPE_PANE_DIFF" | translate}}
 						</button> -->
-
-					</div>
-					<div class="panel-body" ng-style="{height: containerHeight - 50}">
-						<div class="col-xs-12 col-md-12 col-lg-12 flex-box">
-							<tabset class="row" tab-control="tabControl">
-								<tab>
-									<tab-heading>
-										{{'MANAGEMENT_ARCHETYPE_EDIT_HEADER' | translate}}
-									</tab-heading>
-									<div class="col-xs-12 col-md-12 col-lg-12"  style="padding-left:0; margin-top: 20px">
-										<edit-header-pane   header="header"  languages="languages" ontology="ontology"  max-height="tabContainerHeight" style="margin-top:5px; margin-bottom:20px;"></edit-header-pane>
-									</div>
-								</tab>
-
-								<tab>
-									<tab-heading>
-										{{'MANAGEMENT_ARCHETYPE_EDIT_DEFINITION' | translate}}
-									</tab-heading>
-									<div class="col-xs-12 col-md-12 col-lg-12">
-										<edit-definition-pane style="margin-top:5px; margin-bottom:20px;" definition="definition"  ontology="ontology"  max-height="tabContainerHeight"   languages="languages"  is-expanded-all="definitionExpandedAll"></edit-definition-pane>
-									</div>
-								</tab>
-
-								<tab>
-									<tab-heading>
-										{{'MANAGEMENT_ARCHETYPE_EDIT_ONTOLOGY' | translate}}
-									</tab-heading>
-									<div class="col-xs-12 col-md-12 col-lg-12">
-										<edit-ontology-pane   style="margin-top:5px; margin-bottom:20px;" ontology="ontology"   max-height="tabContainerHeight"  languages="languages"></edit-ontology-pane>
-									</div>
-								</tab>
-
-								<tab>
-
-									<tab-heading ng-click="refreshAdlAndXml()"> 
-										{{'MANAGEMENT_ARCHETYPE_EDIT_DISPLAY' | translate}}
-									</tab-heading>
-									<div class="col-xs-12 col-md-12 col-lg-12" style="overflow:auto;">
-										<tabset class="row" style= "margin-top:5px;margin-bottom: 10px;" tab-control = "tabControl">
-											<tab>
-												<tab-heading>
-													{{'MANAGEMENT_ARCHETYPE_EDIT_ADL' | translate}}
-												</tab-heading>
-												<!-- <textarea ng-style="{height: containerHeight - 135}" style="overflow: auto; width: 100%; height: 803px;"readonly="true" ng-model="selectedArchetype.adl" class="ng-pristine ng-untouched ng-valid ng-scope">
+                    </div>
+                    <div class="panel-body" ng-style="{height: containerHeight - 50}">
+                        <div class="col-xs-12 col-md-12 col-lg-12 flex-box">
+                            <tabset class="row" tab-control="tabControl">
+                                <tab>
+                                    <tab-heading>
+                                        {{'MANAGEMENT_ARCHETYPE_EDIT_HEADER' | translate}}
+                                    </tab-heading>
+                                    <div class="col-xs-12 col-md-12 col-lg-12" style="padding-left:0; margin-top: 20px">
+                                        <edit-header-pane header="header" languages="languages" ontology="ontology" max-height="tabContainerHeight" style="margin-top:5px; margin-bottom:20px;"></edit-header-pane>
+                                    </div>
+                                </tab>
+                                <tab>
+                                    <tab-heading>
+                                        {{'MANAGEMENT_ARCHETYPE_EDIT_DEFINITION' | translate}}
+                                    </tab-heading>
+                                    <div class="col-xs-12 col-md-12 col-lg-12">
+                                        <edit-definition-pane style="margin-top:5px; margin-bottom:20px;" definition="definition" ontology="ontology" max-height="tabContainerHeight" languages="languages" is-expanded-all="definitionExpandedAll"></edit-definition-pane>
+                                    </div>
+                                </tab>
+                                <tab>
+                                    <tab-heading ng-click="refreshOntology()">
+                                        {{'MANAGEMENT_ARCHETYPE_EDIT_ONTOLOGY' | translate}}
+                                    </tab-heading>
+                                    <div class="col-xs-12 col-md-12 col-lg-12">
+                                        <edit-ontology-pane style="margin-top:5px; margin-bottom:20px;" ontology="ontology" max-height="tabContainerHeight" languages="languages"></edit-ontology-pane>
+                                    </div>
+                                </tab>
+                                <tab>
+                                    <tab-heading ng-click="refreshAdlAndXml()">
+                                        {{'MANAGEMENT_ARCHETYPE_EDIT_DISPLAY' | translate}}
+                                    </tab-heading>
+                                    <div class="col-xs-12 col-md-12 col-lg-12" style="overflow:auto;">
+                                        <tabset class="row" style="margin-top:5px;margin-bottom: 10px;" tab-control="tabControl">
+                                            <tab>
+                                                <tab-heading>
+                                                    {{'MANAGEMENT_ARCHETYPE_EDIT_ADL' | translate}}
+                                                </tab-heading>
+                                                <!-- <textarea ng-style="{height: containerHeight - 135}" style="overflow: auto; width: 100%; height: 803px;"readonly="true" ng-model="selectedArchetype.adl" class="ng-pristine ng-untouched ng-valid ng-scope">
 												</textarea> -->
-												<pre ng-style="{height: containerHeight - 165}" style="overflow: auto; ">{{selectedArchetype.adl}}</pre>
-											</tab>
-											<tab>
-												<tab-heading>
-													{{'MANAGEMENT_ARCHETYPE_EDIT_XML' | translate}}
-												</tab-heading>
-												<!-- <textarea ng-style="{height: containerHeight - 135}" style="overflow: auto; width: 100%; height: 803px;"readonly="true" ng-model="selectedArchetype.xml" class="ng-pristine ng-untouched ng-valid ng-scope">
+                                                <pre ng-style="{height: containerHeight - 165}" style="overflow: auto; ">{{selectedArchetype.adl}}</pre>
+                                            </tab>
+                                            <tab>
+                                                <tab-heading>
+                                                    {{'MANAGEMENT_ARCHETYPE_EDIT_XML' | translate}}
+                                                </tab-heading>
+                                                <!-- <textarea ng-style="{height: containerHeight - 135}" style="overflow: auto; width: 100%; height: 803px;"readonly="true" ng-model="selectedArchetype.xml" class="ng-pristine ng-untouched ng-valid ng-scope">
 												</textarea> -->
-												<pre ng-style="{height: containerHeight - 165}" style="overflow: auto; ">{{selectedArchetype.xml}}</pre>
-											</tab>
-										</tabset>
-
-										<!--	<edit-display-pane  max-height="paneHeight"  style="magin-top:5px; margin-bottom:20px;" ArchetypeInfo = "selectedArchetype"></edit-display-pane>-->
-									</div>
-								</tab>
-
-							</tabset>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-		<div class="col-xs-12 col-md-12 col-lg-12 flex-box" ng-if="batchStatus" >
-			<div ng-style="{height: containerHeight - 10}">
-				<batch-submit-pane  file-list="draftArchetypeList" type="archetype" max-height="containerHeight-10"></batch-submit-pane>
-			</div>
-
-		</div>
+                                                <pre ng-style="{height: containerHeight - 165}" style="overflow: auto; ">{{selectedArchetype.xml}}</pre>
+                                            </tab>
+                                        </tabset>
+                                        <!--	<edit-display-pane  max-height="paneHeight"  style="magin-top:5px; margin-bottom:20px;" ArchetypeInfo = "selectedArchetype"></edit-display-pane>-->
+                                    </div>
+                                </tab>
+                            </tabset>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-12 col-md-12 col-lg-12 flex-box" ng-if="batchStatus">
+            <div ng-style="{height: containerHeight - 10}">
+                <batch-submit-pane file-list="draftArchetypeList" type="archetype" max-height="containerHeight-10"></batch-submit-pane>
+            </div>
+        </div>
         <!-- side tool menu -->
-		<div>
-			<side-tool-menu tool-menus="toolMenus"></side-tool-menu>
-		</div>
-
-	</div>
-	<script type="text/ng-template" id="archetypeCreate.html">
-		<div class="modal-header">
-		<h3 class="modal-title">{{'MANAGEMENT_ARCHETYPE_EDIT_CREATE_YOUR_OWN_ARCHETYPE' | translate}}</h3>
-		</div>
-		<div class="modal-body">
-		<div class="row">
-		<div class="col-xs-2 col-sm-2 col-lg-2 flex-box" >
-		<label>{{'MANAGEMENT_ARCHETYPE_EDIT_ORGNIZATIO' | translate}} :</label>
-		<select class="form-control" ng-model="organization" ng-options="org for org in organizations"></select>
-		</div>
-		<div class="col-xs-3 col-sm-3 col-lg-3 flex-box" >
-		<label>{{'MANAGEMENT_ARCHETYPE_EDIT_REFERENCE_MODEL' | translate}}:</label>
-		<select class="form-control" ng-model="referenceModel" ng-options="ref for ref in referenceModels"></select>
-		</div>
-		<div class="col-xs-2 col-sm-2 col-lg-2 flex-box" >
-		<label>{{'MANAGEMENT_ARCHETYPE_EDIT_ENTITY_TYP' | translate}} :</label>
-		<select class="form-control" ng-model="entityType" ng-options="type for type in entityTypes"></select>
-		</div>
-		<div class="col-xs-5 col-sm-5 col-lg-5 flex-box">
-		<label>{{'MANAGEMENT_ARCHETYPE_EDIT_CONCEP' | translate}} :</label>
-		<input class="form-control" type="text" ng-model="concept">
-		</div>
-		</div>
-		</div>
-		<div class="modal-footer">
-		<button class="btn btn-primary" ng-click="ok()">{{'MANAGEMENT_ARCHETYPE_EDIT_CREATE' | translate}}</button>
-		<button class="btn btn-warning" ng-click="cancel()">{{'MANAGEMENT_ARCHETYPE_EDIT_CANCEL' | translate}}</button>
-		</div>
-	</script>
-
-	<script type="text/ng-template" id="archetypeSpecialise.html">
-		<div class="modal-header">
-		<h3 class="modal-title">{{'MANAGEMENT_ARCHETYPE_EDIT_SPECIALISE_THIS_ARCHETYPE' | translate}}: <h4>{{archetypeName}}</h4></h3>
-
-		</div>
-		<div class="modal-body">
-		<div class="row">
-		<label style="margin-left:10px">{{'MANAGEMENT_ARCHETYPE_EDIT_ENTER_A_NEW_CONCEP' | translate}} : </label>
-		<input type="text" ng-model="newConceptName" style="margin-left:10px;width:500px;margin-right:10px;">
-		</div>
-		</div>
-		<div class="modal-footer">
-		<button class="btn btn-primary" ng-click="ok()">{{'MANAGEMENT_ARCHETYPE_EDIT_DOWN' | translate}}</button>
-		<button class="btn btn-warning" ng-click="cancel()">{{'MANAGEMENT_ARCHETYPE_EDIT_CANCEL' | translate}}</button>
-		</div>
-	</script>
+        <div>
+            <side-tool-menu tool-menus="toolMenus"></side-tool-menu>
+        </div>
+    </div>
+    <script type="text/ng-template" id="archetypeCreate.html">
+        <div class="modal-header">
+            <h3 class="modal-title">{{'MANAGEMENT_ARCHETYPE_EDIT_CREATE_YOUR_OWN_ARCHETYPE' | translate}}</h3>
+        </div>
+        <div class="modal-body">
+            <div class="row">
+                <div class="col-xs-2 col-sm-2 col-lg-2 flex-box">
+                    <label>{{'MANAGEMENT_ARCHETYPE_EDIT_ORGNIZATIO' | translate}} :</label>
+                    <select class="form-control" ng-model="organization" ng-options="org for org in organizations"></select>
+                </div>
+                <div class="col-xs-3 col-sm-3 col-lg-3 flex-box">
+                    <label>{{'MANAGEMENT_ARCHETYPE_EDIT_REFERENCE_MODEL' | translate}}:</label>
+                    <select class="form-control" ng-model="referenceModel" ng-options="ref for ref in referenceModels"></select>
+                </div>
+                <div class="col-xs-2 col-sm-2 col-lg-2 flex-box">
+                    <label>{{'MANAGEMENT_ARCHETYPE_EDIT_ENTITY_TYP' | translate}} :</label>
+                    <select class="form-control" ng-model="entityType" ng-options="type for type in entityTypes"></select>
+                </div>
+                <div class="col-xs-5 col-sm-5 col-lg-5 flex-box">
+                    <label>{{'MANAGEMENT_ARCHETYPE_EDIT_CONCEP' | translate}} :</label>
+                    <input class="form-control" type="text" ng-model="concept">
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-primary" ng-click="ok()">{{'MANAGEMENT_ARCHETYPE_EDIT_CREATE' | translate}}</button>
+            <button class="btn btn-warning" ng-click="cancel()">{{'MANAGEMENT_ARCHETYPE_EDIT_CANCEL' | translate}}</button>
+        </div>
+    </script>
+    <script type="text/ng-template" id="archetypeSpecialise.html">
+        <div class="modal-header">
+            <h3 class="modal-title">{{'MANAGEMENT_ARCHETYPE_EDIT_SPECIALISE_THIS_ARCHETYPE' | translate}}: <h4>{{archetypeName}}</h4></h3>
+        </div>
+        <div class="modal-body">
+            <div class="row">
+                <label style="margin-left:10px">{{'MANAGEMENT_ARCHETYPE_EDIT_ENTER_A_NEW_CONCEP' | translate}} : </label>
+                <input type="text" ng-model="newConceptName" style="margin-left:10px;width:500px;margin-right:10px;">
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-primary" ng-click="ok()">{{'MANAGEMENT_ARCHETYPE_EDIT_DOWN' | translate}}</button>
+            <button class="btn btn-warning" ng-click="cancel()">{{'MANAGEMENT_ARCHETYPE_EDIT_CANCEL' | translate}}</button>
+        </div>
+    </script>
 </div>

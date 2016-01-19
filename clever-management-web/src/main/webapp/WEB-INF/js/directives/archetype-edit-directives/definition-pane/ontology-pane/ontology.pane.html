@@ -1,0 +1,19 @@
+<div class="row">
+	<div class="col-xs-2 hidden-optional">
+		<h4><span class="label label-info" style="margin-left: 10px;">{{'EDIT_DEFINITION_PANE_ONTOLOGY' | translate}}</span></h4>
+	</div>
+	<div class="col-xs-10">
+		<pre> Description: {{ontologyItem.displayPart.description}}</pre>
+		<div class="input-group input-group-sm" style="width: 50%">
+			<span class="input-group-addon" id="sizing-addon3">Text</span>
+			<input type="text" class="form-control" ng-model="ontologyItem.displayPart.text"  aria-describedby="sizing-addon3">
+		</div>
+		<div class="input-group input-group-sm">
+			<span class="input-group-addon" id="sizing-addon3">Description</span>
+			<input type="text" class="form-control"  aria-describedby="sizing-addon3" ng-model="ontologyItem.displayPart.description">
+
+		</div>
+
+	</div>
+</div>
+<hr class="fancy-line" />

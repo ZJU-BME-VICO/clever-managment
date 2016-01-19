@@ -13,159 +13,41 @@ angular.module('clever.management.directives.editDefinitionPane', []).directive(
 		templateUrl : 'js/directives/archetype-edit-directives/definition-pane/edit.definition.pane.html',
 
 		controller : function($scope, $element, $attrs) {
+			
 
-			// node value logic ---??
-			$scope.setValue = function(code) {
-				angular.forEach($scope.ordinalCodes, function(value) {
-					if (code != value) {
-						value.selected = undefined;
-					}
-				});
-				code.selected = "code-selected";
-			};
-
-			// node term bind
-			// $scope.selectedTerminology
-			// $scope.terminologyList = ['DS800', 'DSM-III-R, 1987', 'Current Dental Terminology(CDT), 4'];
-			// $scope.currentTerminology
-			// $scope.avaiTerminologyList = ['DS800'];
-			// $scope.add2AvailableList = function() {
-				// var hasExist;
-				// var terminology = $scope.selectedTerminology;
-				// angular.forEach($scope.avaiTerminologyList, function(termi) {
-					// if (termi == terminology) {
-						// hasExist = true;
-					// }
-				// });
-				// if (hasExist) {
-					// return;
-				// }
-				// $scope.avaiTerminologyList.push(terminology);
-				// $scope.currentTerminology = terminology;
-			// };
 			$scope.$watch('languages', function(newValue) {
 				if (newValue) {
-					$scope.definitionLanguage = $scope.languages.originalLanguage;
+					//console.log($scope.languages);
+					$scope.currentLanguage = $scope.languages.originalLanguage;
+					getLanguageList();
 				}
 			});
-
-			// ------constraint logic start -------------
-			$scope.EXISTENCE = ["REQUIRED", "OPTIONAL", "NOT_ALLOWED"];
-
-			$scope.getNodeInfo = function(node) {
-				getLanguageList();
-				$scope.currentLanguage = $scope.languages.originalLanguage;
-				console.log($scope.currentLanguage);
-				console.log("this is the selected node");
-				console.log(node);
-				$scope.currentNode = node;
-				$scope.occurrences = node.oriNodeRef.occurrences;
-
-				$scope.cardinality = node.oriNodeRef.cardinality;
-				$scope.existence = node.oriNodeRef.existence;
-				if ($scope.occurrences) {
-					$scope.simpleOccurrences = {
-						lower : parseInt($scope.occurrences.lower), // occurrences.lower,//
-						upper : isTrue($scope.occurrences.upper) ? parseInt($scope.occurrences.upper) : undefined,
-					};
-				}
-				if ($scope.existence) {
-					$scope.simpleExistence = {
-						value : "",
-					};
-					if ($scope.existence.lower == "1") {
-						$scope.simpleExistence.value = "REQUIRED";
-
-					} else if ($scope.existence.upper == "1" && $scope.existence.lower == "0") {
-						$scope.simpleExistence.value = "OPTIONAL";
-					} else {
-						$scope.simpleExistence.value = "NOT_ALLOWED";
-					}
-				}
-
-				if ($scope.cardinality) {
-					$scope.simpleCardinality = {
-						lower : parseInt($scope.cardinality.interval.lower),
-						upper : isTrue($scope.cardinality.interval.upper) ? parseInt($scope.cardinality.interval.upper) : undefined,
-					};
-					console.log($scope.simpleCardinality);
-				}
-
-				// get ontology information
-				var nodeId = node.oriNodeRef.node_id;
-				if (nodeId) {
-					$scope.ontologyItem = getOntologyByNodeId(nodeId);
-				}
-				console.log($scope.ontologyItem);
-			};
-
 			function getLanguageList() {
 				$scope.languageList = [];
 				if (angular.isArray($scope.languages.languages)) {
 					angular.forEach($scope.languages.languages, function(language) {
-						$scope.languageList.push(language.code);
+						$scope.languageList.push(language);
 					});
 				} else {
-					$scope.languageList.push($scope.languages.languages.code);
+					$scope.languageList.push($scope.languages.languages);
 				}
 			}
 
-
-			$scope.$watch('currentLanguage.code', function(newValue, oldValue) {
-				if (newValue && oldValue) {
-					$scope.ontologyItem = getOntologyByNodeId($scope.currentNode.oriNodeRef.node_id);
+			$scope.selectNode = function(node) {
+				$scope.currentNode = node;
+				var nodeId = node.oriNodeRef.node_id;
+				if (nodeId) {
+					$scope.ontologyItem = {
+						displayPart : $scope.getOntologyByCode($scope.currentNode.label.code),
+						originalPart : getOriginalOntologyByNodeId(nodeId),
+					};
+				} else {
+					$scope.ontologyItem = undefined;
 				}
-			});
+			};
 
-			$scope.$watch('simpleOccurrences.lower', function(newValue, oldValue) {
-				if (newValue && oldValue) {
-					$scope.currentNode.oriNodeRef.occurrences.lower = newValue.toString();
-				}
-			});
-			$scope.$watch('simpleOccurrences.upper', function(newValue, oldValue) {
-				if (newValue && oldValue) {
-					$scope.currentNode.oriNodeRef.occurrences.upper = newValue.toString();
-				}
-			});
-			$scope.$watch('simpleExistence.value', function(newValue, oldValue) {
-				if (newValue && oldValue) {
-					switch (newValue) {
-					case "REQUIRED":
-						$scope.existence.lower = "1";
-						$scope.existence.upper = "1";
-						break;
-					case "OPTIONAL":
-						$scope.existence.lower = "0";
-						$scope.existence.upper = "1";
-						break;
-					case "NOT_ALLOWED":
-						$scope.existence.lower = "0";
-						$scope.existence.upper = "0";
-						break;
-					}
-				}
-			});
-			$scope.$watch('simpleCardinality.upper', function(newValue, oldValue) {
-				if (newValue && oldValue) {
-					$scope.currentNode.oriNodeRef.cardinality.interval.upper = newValue.upper.toString();
-				}
-			});
-			$scope.$watch('simpleCardinality.lower', function(newValue, oldValue) {
-				if (newValue && oldValue) {
-					$scope.currentNode.oriNodeRef.cardinality.interval.lower = newValue.lower.toString();
-				}
-			});
-
-			function isTrue(value) {
-				return value != undefined && value != null;
-			}
-
-			// --------------------constraint logic end--------------------------
-
-			// ontology logic start
-			// this function return the original ontology item
-
-			function getOntologyByNodeId(nodeId) {
+		
+			function getOriginalOntologyByNodeId(nodeId) {
 				var termDefinitions = $scope.ontology.term_definitions;
 				var ontologyTerm;
 				if (termDefinitions) {
@@ -190,43 +72,15 @@ angular.module('clever.management.directives.editDefinitionPane', []).directive(
 				if (angular.isArray(items)) {
 					angular.forEach(items, function(item) {
 						if (item._code == nodeId) {
-							amendItem(item.items);
 							ite = item.items;
 						}
 					});
 				} else {
 					if (items._code == nodeId) {
-						amendItem(items.items);
 						ite = items.items;
 					}
 				}
 				return ite;
-			}
-
-			function amendItem(items) {
-				if (items[0]._id != "text") {
-
-					angular.forEach(items, function(item) {
-						if (item._id == "text") {
-							var temp;
-							temp = items[0];
-							items[0] = item;
-							item = temp;
-						}
-					});
-				}
-
-				if (items[1]._id != "description") {
-					angular.forEach(items, function(item) {
-						if (item._id == "description") {
-							var temp;
-							temp = items[1];
-							items[1] = item;
-							item = temp;
-						}
-					});
-				}
-
 			}
 
 			// synchronize two section of ontology
@@ -349,7 +203,7 @@ angular.module('clever.management.directives.editDefinitionPane', []).directive(
 			 * there would not a items attributs behind this
 			 * type, so when we add a type to this node , a
 			 * items attribute should be added;
-			 */ 
+			 */
 			var needCheckedType = ['ITEM_TREE', 'ITEM_LIST', 'ITEM_TABLE', 'CLUSTER', 'SECTION'];
 			var checkList = ['SECTION'];
 			$scope.editArchetype = function(node, type) {
@@ -822,8 +676,7 @@ angular.module('clever.management.directives.editDefinitionPane', []).directive(
 							oriEvents[i].attributes = pushTo(stateAttr, oriEvents[i].attributes);
 							parser.processAttribute(stateAttr, disEvents[1], disEvents[i].children, $scope.ontology.term_definitions);
 						}
-					}
-					;
+					};
 				}
 			}
 
@@ -1156,8 +1009,7 @@ angular.module('clever.management.directives.editDefinitionPane', []).directive(
 					Array = [];
 					if (tempNode) {
 						Array.push(tempNode);
-					}
-					;
+					};
 					Array.push(node);
 				}
 				return Array;
@@ -1219,7 +1071,10 @@ angular.module('clever.management.directives.editDefinitionPane', []).directive(
 				return DV_EHR_URI;
 			}
 
-			// ---------delete Element-------------
+			/*
+			 *@Param node
+			 *@Function delete a node from the definition tree, there are many condition need to be considered, view the details in function body
+			 */
 
 			function deleteNode(node) {
 				node.parent.children.splice(node.parent.children.indexOf(node), 1);
@@ -1254,10 +1109,12 @@ angular.module('clever.management.directives.editDefinitionPane', []).directive(
 					}
 				}
 
-			}
+			};
 
-			;
-
+			/*
+			 * @Param code : code of the node which would be delete
+			 * @function delete the ontology be parsed and delete the original ontology too
+			 */
 			function deleteOntology(code) {
 				var termDefinitions = $scope.ontology.term_definitions;
 				if (angular.isArray(termDefinitions)) {
@@ -1273,10 +1130,8 @@ angular.module('clever.management.directives.editDefinitionPane', []).directive(
 						deleteOriDefinition(originalTermDefinition, code);
 					});
 				} else {
-					deleteOriDefinition(originalTermDefinitions);
+					deleteOriDefinition(originalTermDefinitions, code);
 				}
-
-				console.log($scope.ontology);
 			}
 
 			function deleteDefinition(termDefinition, code) {
@@ -1333,76 +1188,23 @@ angular.module('clever.management.directives.editDefinitionPane', []).directive(
 				}
 			};
 
+			$scope.dragableIcons = ['dv_text', 'dv_quantity', 'dv_count', 'dv_date_time', 
+			                                'dv_duration', 'dv_ordinal', 'dv_boolean', 'interval_quantity', 
+			                                'interval_count', 'dv_multimedia', 'dv_uri'];
+
 		},
 		link : function($scope, element, attrs) {
-			// //var typeList = ["ITEM_TREE", "ITEM_LIST",
-			// "ITEM_TABLE", "HISTORY"];
-			//
-			// $scope.getTreeNodeLabel = function(node,
-			// nodeAliasName) {
-			// var picType = node.label.picType.toLowerCase();
-			// if (picType.indexOf('<') != -1) {
-			// //dv_interval<dv_date_time> to
-			// dv_interval__dv_date_time
-			// picType = picType.replace(/(<dv)/, '_');
-			// picType = picType.replace(/>/g, "");
-			// }
-			// var label = '';
-			//
-			// if (node.label.slot) {
-			// label += '<span class="clever-icon list slot"
-			// style="padding: 7px 10px; background-position-y:
-			// 10px;"></span>';
-			// } else if(node.label.type == "attribute"){
-			// label += '<span class="clever-icon list
-			// attribute' + '" style="padding: 7px 10px;
-			// background-position-y: 10px;"></span>';
-			//
-			// }else {
-			// label += '<span class="clever-icon list ' +
-			// picType + '" style="padding: 7px 10px;
-			// background-position-y: 10px;"></span>';
-			// }
-			//
-			// // if (typeList.indexOf(node.label.picType) !=
-			// -1) {
-			// // label += '<span style="color: brown;">&nbsp' +
-			// node.label.text + '</span>';
-			// // } else
-			// if (node.label.code) {
-			// if (node.label.archetypeNode) {
-			// label += '<span style="color: black;font-weight:
-			// bold;">&nbsp';
-			// } else {
-			// label += '<span style="color: brown;">&nbsp';
-			// }
-			// var tempOntology =
-			// getOntologyByCode(node.label.code,
-			// $scope.ontology);
-			// if (tempOntology) {
-			// label += tempOntology.text;
-			// }
-			// label += '</span>';
-			// } else if (node.label.text) {
-			// label += '<span style="color: brown;">&nbsp' +
-			// node.label.text + '</span>';
-			// }
-			//
-			// return label;
-			// };
-
 			$scope.getOntologyByCode = function(code) {
 				return getOntologyByCode(code, $scope.ontology);
 			};
 
-			// this function return the ontology which has
-			// parsed
+			// this function return the ontology which has parsed
 			function getOntologyByCode(code, ontology) {
 				if (ontology && code) {
 					var matchedOntology;
 					if (ontology.term_definitions) {
 						angular.forEach(ontology.term_definitions, function(term) {
-							if (term.language == $scope.definitionLanguage.code) {// $scope.selectedLanguage){
+							if (term.language == $scope.currentLanguage.code) {// $scope.selectedLanguage){
 								angular.forEach(term.items, function(value) {
 									if (value.code == code)
 										matchedOntology = value;
