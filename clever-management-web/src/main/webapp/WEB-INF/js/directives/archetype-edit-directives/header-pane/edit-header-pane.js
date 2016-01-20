@@ -204,13 +204,7 @@ angular.module('clever.management.directives.editHeaderPane', []).directive('edi
 
 
             $scope.$watch("header", function(newValue) {
-                if (newValue) {
-                    if (!newValue.archetype_id) {
-                        throw "archetype id should not be null";
-                    }
-                    if (!newValue.concept) {
-                        throw "concept code should not be null";
-                    }       
+                if (newValue) { 
                     processHeader(newValue);
                     $scope.baseInformation = getBaseInfo($scope.conceptItem);
                     $scope.oriAuthorInfo = getOriAuthorInfo(); 

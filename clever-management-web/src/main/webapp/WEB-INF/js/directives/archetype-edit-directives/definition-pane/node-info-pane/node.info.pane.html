@@ -1,21 +1,14 @@
-
 <div class="row" ng-if="node">
 	<div class="col-xs-2 hidden-optional">
 		<h4><span class="label label-warning" style="margin-left: 10px;">{{'EDIT_DEFINITION_PANE_NODE_INFO' | translate}}</span></h4>
 	</div>
 	<div class="col-xs-10">
 		<ul class="list-group">
-			<li class="list-group-item" ng-if="node.label.code">
-				<label class="control-label" >Id:</label> &nbsp;&nbsp; <span class="button-label post ">{{node.label.code}}</span>
-			</li>
-			<li class="list-group-item">
-				<label class="control-label">Type:</label>&nbsp;&nbsp; <span class="button-label post">{{node.label.type}}</span>
-			</li>
-			<li class="list-group-item" ng-if="node.label.type == 'type'">
-				<label class="control-label">Ref Model:</label>&nbsp;&nbsp; <span class="button-label post">{{node.label.picType}}</span>
-			</li>
-			<li class="list-group-item" ng-if="node.label.type == 'attribute'">
-				<label class="control-label">Attribute Name:</label>&nbsp;&nbsp;<span class="button-label post"> {{node.label.picType}}</span>
+			<li class="list-group-item" >
+				&nbsp;&nbsp; <span class="button-label post " ng-if="node.label.code">{{node.label.code}}</span>
+				&nbsp;&nbsp; <span class="button-label post">{{node.label.type}}</span>
+				&nbsp;&nbsp; <span  ng-if="node.label.type == 'type'" class="button-label post">{{node.label.picType}}</span>
+				&nbsp;&nbsp;<span class="button-label post" ng-if="node.label.type == 'attribute'"> {{node.label.picType}}</span>
 			</li>
 			<li class="list-group-item" ng-if="node.oriNodeRef.idPath">
 				<label class="control-label" >Id Path:</label>

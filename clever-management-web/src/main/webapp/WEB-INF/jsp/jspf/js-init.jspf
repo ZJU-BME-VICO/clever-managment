@@ -96,6 +96,7 @@
 <script src="js/directives/archetype-edit-directives/definition-pane/edit-definition-pane.js"></script>
 <script src="js/directives/archetype-edit-directives/header-pane/edit-header-pane.js"></script>
 <script src="js/directives/archetype-edit-directives/ontology-pane/edit-ontology-pane.js"></script>
+<script src="js/directives/archetype-edit-directives/ontology-pane/term-definition-pane/term-definition-pane.js"></script>
 <script src="js/directives/archetype-edit-directives/definition-pane/participation-pane/participation-pane.js"></script>
 <script src="js/directives/archetype-edit-directives/definition-pane/subject-pane/subject-pane.js"></script>
 <script src="js/directives/archetype-edit-directives/definition-pane/links-pane/links-pane.js"></script>

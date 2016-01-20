@@ -17,7 +17,7 @@
 				</div>
 				<div class="input-group input-group-sm" style="padding: 5px;width: 260px;margin-top: 10px;">
 					<span class="input-group-addon" style="width: 100px;">{{'ARCHETYPE_PANE_LANGUAGE' | translate}}:</span>
-					<select class="form-control" ng-options="lan.code for lan in languageList" ng-model="currentLanguage"></select>
+					<select class="form-control" ng-options="lan.code for lan in languages.languages" ng-model="currentLanguage"></select>
 				</div>
 			</div>
 
@@ -51,8 +51,14 @@
 						<tree-node-label>
 							<span ng-show="node.label.slot" class="clever-icon slot" style="padding: 7px 10px; background-position-y: 10px;"></span>
 							<span ng-show="!node.label.slot" class="clever-icon list" ng-class="node.label.picType | typemap | lowercase  " style="padding: 7px 10px; background-position-y: 10px;"></span>
-							<span ng-show="node.label.code"> <span ng-show="node.label.archetypeNode" style="color: black;font-weight: bold;"> <span ng-bind-html="getLabelContent(node) | unsafe"></span> </span> <span ng-show="!node.label.archetyeNode" style="color: brown;"><span ng-bind-html="getLabelContent(node) | unsafe"></span> </span> </span>
-
+							<span ng-show="node.label.code"> 
+								<span ng-show="node.label.archetypeNode" style="color: black;font-weight: bold;"> 
+									<span ng-bind-html="getLabelContent(node) | unsafe"></span> 
+								</span> 
+								<span ng-show="!node.label.archetyeNode" style="color: brown;">
+									<span ng-bind-html="getLabelContent(node) | unsafe"></span> 
+								</span> 
+							</span>
 							<span ng-show="(!node.label.code)&&node.label.text" style="color: brown;" > <span ng-bind-html="node.label.text | unsafe"></span></span>
 						</tree-node-label>
 

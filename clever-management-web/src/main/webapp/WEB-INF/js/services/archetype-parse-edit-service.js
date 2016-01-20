@@ -196,6 +196,7 @@ angular.module('clever.management.service.archetypeParseEdit', []).service('arch
             text: text,
             description: description,
             comment: comment,
+            oriNodeRef : item,
         };
     }
 
@@ -205,32 +206,14 @@ angular.module('clever.management.service.archetypeParseEdit', []).service('arch
             if (angular.isArray(termDefinitions)) { //termDefinition is an array with element which consist of an language an an archetypTermList
                 angular.forEach(termDefinitions, function(termDefinition) {
                     var term = {
-                        //oriNodeRef:termDefinition,                 // no need
+                        oriNodeRef:termDefinition,                 // no need
                         language: termDefinition._language,
                         items: []
                     };
                     var items = termDefinition.items;
                     if (angular.isArray(items)) {
                         angular.forEach(items, function(definition) {
-                            term.items.push(parseItem(definition));
-                            // var code, text, description, comment;
-                            // code = definition._code;
-                            // angular.forEach(definition.items, function(value) {
-                            // if (value._id == 'text') {
-                            // text = value.__text;
-                            // } else if (value._id == 'description') {
-                            // description = value.__text;
-                            // } else if (value._id == 'comment') {
-                            // comment = value.__text;
-                            // }
-                            // });
-                            // term.items.push({
-                            // code : code,
-                            // text : text,
-                            // description : description,
-                            // comment : comment,
-                            // });
-
+                            term.items.push(parseItem(definition));                       
                         });
                     } else {
                         term.items.push(parseItem(items));

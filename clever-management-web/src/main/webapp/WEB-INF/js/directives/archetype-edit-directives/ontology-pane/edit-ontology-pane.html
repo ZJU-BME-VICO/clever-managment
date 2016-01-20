@@ -1,51 +1,68 @@
-<div style="margin-top:10px" class="row">
-	<div class="col-lg-3 col-md-3 col-sm-3">
-		<select class="form-control" ng-model = "currentOntology.value" ng-options = "val for val in ontologyList"></select>
-	</div>
-	<div class="col-lg-3 col-md-3 col-sm-3">
-		<select class="form-control" ng-model = "currentLanguage.code" ng-options = "val for val in languageList"></select>
-	</div>
-	<div class="col-lg-6 col-md-6 col-sm-6">
-		<div class="form-search search-only" style="position: relative;">
-			<i class="search-icon glyphicon glyphicon-search search-icon-ontology"></i>
-			<input  type="text" style="border-radius: 17px; padding-left: 40px" ng-model = "searchValue" class="form-control" />
-		</div>
-	</div>
+<!-- <div style="margin-top:10px" class="row">
+<div class="col-lg-3 col-md-3 col-sm-3">
+<select class="form-control" ng-model = "currentOntology.value" ng-options = "val for val in ontologyList"></select>
+</div>
+<div class="col-lg-3 col-md-3 col-sm-3">
+<select class="form-control" ng-model = "currentLanguage.code" ng-options = "val for val in languageList"></select>
+</div>
+<div class="col-lg-6 col-md-6 col-sm-6">
+<div class="form-search search-only" style="position: relative;">
+<i class="search-icon glyphicon glyphicon-search search-icon-ontology"></i>
+<input  type="text" style="border-radius: 17px; padding-left: 40px" ng-model = "searchValue" class="form-control" />
+</div>
+</div>
 </div>
 <div class="row" ng-if="currentOntology.value=='Term definitions'">
-	<div class="col-lg-6 col-md-6 col-sm-6 flex-box" ng-style="{height: contentHeight.value - 115}" style="overflow: auto;margin-left: -5px;white-space: nowrap;">
-		<ul style="margin-top:10px" >
-			<li ng-repeat="val in ontologyContent" style="color:#3bafda; margin-top:5px" ng-show="val.show">
-				<span style="color:grey">#</span>
-				<code>
-					{{val._code}}:
-				</code>
-				<span class="ontology-item {{val.selected}}" ng-click = "setCurrentItem(val)"> {{val.items[0].__text}}</span>
-			</li>
-		</ul>
+<div class="col-lg-6 col-md-6 col-sm-6 flex-box" ng-style="{height: contentHeight.value - 115}" style="overflow: auto;margin-left: -5px;white-space: nowrap;">
+<ul style="margin-top:10px" >
+<li ng-repeat="val in ontologyContent" style="color:#3bafda; margin-top:5px" ng-show="val.show">
+<span style="color:grey">#</span>
+<code>
+{{val._code}}:
+</code>
+<span class="ontology-item {{val.selected}}" ng-click = "setCurrentItem(val)"> {{val.items[0].__text}}</span>
+</li>
+</ul>
+</div>
+<div class="col-lg-6 col-md-6 col-sm-6">
+<div  ng-show="currentItem" class="panel" style="margin-top:10px">
+<div class="panel-heading" style="color: white;background-color: #3bafda;border-color: #3bafda;">
+{{'EDIT_ONTOLOGY_PANE_ITEM_CONTENT' | translate}}
+</div>
+<div class="panel-body" style=" border:1px solid #dddddd">
+<form class="form-group">
+<div>
+<span  ng-repeat="val in currentItem.items track by $index" >
+<label>{{val._id | uppercase}}</label>
+<input ng-if = "val._id == 'text'" type="text"  ng-model="val.__text" class="form-control" /><br>
+<textarea ng-if="val._id !='text'" ng-model="val.__text" class="form-control"></textarea><br>
+</span>
+</div>
+
+</form>
+</div>
+</div>
+</div>
+</div> -->
+
+<div  ng-style="{height: contentHeight.value - 95}">
+	<div class="input-group input-group-sm pull-right" style="padding: 5px;width: 260px;margin-top: 10px;">
+		<span class="input-group-addon" style="width: 100px;">{{'ARCHETYPE_PANE_LANGUAGE' | translate}}:</span>
+		<select class="form-control" ng-options="lan.code for lan in languages.languages" ng-model="currentLanguage"></select>
 	</div>
-	<div class="col-lg-6 col-md-6 col-sm-6">
-		<div  ng-show="currentItem" class="panel" style="margin-top:10px">
-			<div class="panel-heading" style="color: white;background-color: #3bafda;border-color: #3bafda;">
-			   {{'EDIT_ONTOLOGY_PANE_ITEM_CONTENT' | translate}}
-			</div>
-			<div class="panel-body" style=" border:1px solid #dddddd">
-			  <form class="form-group">
-			  	<div>
-			  	<span  ng-repeat="val in currentItem.items track by $index" >
-			  	<label>{{val._id | uppercase}}</label>
-			  	<input ng-if = "val._id == 'text'" type="text"  ng-model="val.__text" class="form-control" /><br>
-			    <textarea ng-if="val._id !='text'" ng-model="val.__text" class="form-control"></textarea><br>
-			  	</span>
-			  	</div>
-			  	<!--<label>{{val._id}}</label>
-			  	<input type="text"  ng-model="{{val.__text}}" class="form-control" />
-			  		<label>Text :</label>
-			  	<input type="text"  ng-model="currentItem.items[0].__text" class="form-control" />
-			  	<label>Description :</label>
-			  	<textarea  class="form-control" ng-model="currentItem.items[1].__text" ></textarea> -->
-			  </form>
-			</div>
-		</div>
+	<div>
+		
+	<tabset tab-control="tabControl">
+			<tab heading="Term Definition">
+				<term-definition-pane term-definition="currentTermDefinition" max-height='contentHeight.value-155'>
+					</term-defiition-pane>
+			</tab>
+			<tab heading="Constraint Definition">
+
+			</tab>
+			<tab heading="Term Binding">
+
+			</tab>
+		</tabset>
 	</div>
 </div>

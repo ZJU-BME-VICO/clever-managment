@@ -13,90 +13,7 @@ angular.module('clever.management.directives.editDefinitionPane', []).directive(
 		templateUrl : 'js/directives/archetype-edit-directives/definition-pane/edit.definition.pane.html',
 
 		controller : function($scope, $element, $attrs) {
-			
 
-			$scope.$watch('languages', function(newValue) {
-				if (newValue) {
-					//console.log($scope.languages);
-					$scope.currentLanguage = $scope.languages.originalLanguage;
-					getLanguageList();
-				}
-			});
-			function getLanguageList() {
-				$scope.languageList = [];
-				if (angular.isArray($scope.languages.languages)) {
-					angular.forEach($scope.languages.languages, function(language) {
-						$scope.languageList.push(language);
-					});
-				} else {
-					$scope.languageList.push($scope.languages.languages);
-				}
-			}
-
-			$scope.selectNode = function(node) {
-				$scope.currentNode = node;
-				var nodeId = node.oriNodeRef.node_id;
-				if (nodeId) {
-					$scope.ontologyItem = {
-						displayPart : $scope.getOntologyByCode($scope.currentNode.label.code),
-						originalPart : getOriginalOntologyByNodeId(nodeId),
-					};
-				} else {
-					$scope.ontologyItem = undefined;
-				}
-			};
-
-		
-			function getOriginalOntologyByNodeId(nodeId) {
-				var termDefinitions = $scope.ontology.term_definitions;
-				var ontologyTerm;
-				if (termDefinitions) {
-					termDefinitions = termDefinitions.oriNodeRef;
-					if (angular.isArray(termDefinitions)) {
-						angular.forEach(termDefinitions, function(termDefinition) {
-							if (termDefinition._language == $scope.currentLanguage.code) {
-								ontologyTerm = getTerm(termDefinition.items, nodeId);
-							}
-						});
-					} else {
-						if (termDefinitions._language == $scope.currentLanguage.code) {
-							ontologyTerm = getTerm(termDefinitions.items, nodeId);
-						}
-					}
-				}
-				return ontologyTerm;
-			}
-
-			function getTerm(items, nodeId) {
-				var ite;
-				if (angular.isArray(items)) {
-					angular.forEach(items, function(item) {
-						if (item._code == nodeId) {
-							ite = item.items;
-						}
-					});
-				} else {
-					if (items._code == nodeId) {
-						ite = items.items;
-					}
-				}
-				return ite;
-			}
-
-			// synchronize two section of ontology
-			$scope.$watch('ontologyItem[0].__text', function(newValue, oldValue) {
-				if (newValue && oldValue) {
-					setOntology(newValue);
-				}
-			});
-			function setOntology(value) {
-				var temp = $scope.getOntologyByCode($scope.currentNode.label.code);
-				temp.text = value;
-			}
-
-			// ontology logic end
-
-			// ------------------------------------------------------------------------------------------
 			var editor = archetypeEditService;
 			var parser = archetypeParseEditService;
 			$scope.treeControl = {};
@@ -112,8 +29,20 @@ angular.module('clever.management.directives.editDefinitionPane', []).directive(
 				}
 
 			});
-			// when display the type in this type list,we want
-			// it display the parentAttribue text
+
+			$scope.$watch('languages', function(newValue) {
+				if (newValue) {
+					$scope.currentLanguage = $scope.languages.originalLanguage;
+				}
+			});
+
+			$scope.selectNode = function(node) {
+				$scope.currentNode = node;
+				$scope.ontologyItem = getOntologyItemByCode(node.label.code, $scope.ontology);
+
+			};
+
+			// when display the type in this type list,we want it to display the parentAttribue text
 			var typeWithSlot = ['ITEM_TREE', 'ITEM_LIST', 'CLUSTER'];
 			var typeWithInterval = ['ITEM_TREE', 'ITEM_LIST', 'CLUSTER'];
 
@@ -121,28 +50,24 @@ angular.module('clever.management.directives.editDefinitionPane', []).directive(
 				var menuList;
 				var menuHtml = '<ul class="dropdown-menu" role="menu" ng-if="true" >';
 
-				if (node.label.slot) {// if the node type is
-					// slot, it's pictype	 will be ITEM,CLUSTER...,so we should distinguish it with other CLUSTER and so on..
+				if (node.label.slot) {// if the node type is slot, it's pictype will be ITEM,CLUSTER...,so we should distinguish it with other CLUSTER and so on..
 					menuHtml += '<li class="menu-item ">' + '<span class="clever-icon list delete" style="padding: 7px 10px; background-position-y: 10px;"></span>' + '<a class="pointer" role="menuitem"  ng-click="operateNodeByContextMenu(' + aliasName + ', ' + '\'delete\')" >Delete</a></li>';
 				} else {
-					if (typeWithSlot.indexOf(node.label.picType) != -1) {// add
-						// the slot sub menu
+					if (typeWithSlot.indexOf(node.label.picType) != -1) {// add the slot sub menu
 						menuHtml += '<li class="menu-item dropdown dropdown-submenu"  style="margin-right:18px" ng-if="item==slot"><span class="clever-icon list slot" style="padding: 7px 10px; background-position-y: 10px;"></span><a class="dropdown-toogle" data-toogle="dropdown">Slot</a>' + '<ul class="dropdown-menu">';
 						angular.forEach($scope.nodeMenu.baseSlotType, function(menuItem) {
 							menuHtml += '<li class="menu-item ">' + '<span class="clever-icon list" ng-class="\'' + menuItem.toLowerCase() + '\'| typemap" style="padding: 7px 10px; background-position-y: 10px;"></span>' + '<a class="pointer" role="menuitem"  ng-click="operateNodeByContextMenu(' + aliasName + ', ' + '\'' + 'BS_' + menuItem + '\')">' + menuItem + '</a></li>';
 						});
 						menuHtml += '</ul></li>';
 					}
-					if (node.label.picType == 'SECTION') {// if
-						// the pictype is 'section', the sub menu should be section slot type
+					if (node.label.picType == 'SECTION') {// if the pictype is 'section', the sub menu should be section slot type
 						menuHtml += '<li class="menu-item dropdown dropdown-submenu" ng-if="item==slot"><a class="dropdown-toogle" data-toogle="dropdown">Slot</a>' + '<ul class="dropdown-menu">';
 						angular.forEach($scope.nodeMenu.sectionSlotType, function(menuItem) {
 							menuHtml += '<li class="menu-item ">' + '<span class="clever-icon list" ng-class="\'' + menuItem.toLowerCase() + '\'| typemap" style="padding: 7px 10px; background-position-y: 10px;"></span>' + '<a class="pointer" role="menuitem"  ng-click="operateNodeByContextMenu(' + aliasName + ', ' + '\'' + 'SS_' + menuItem + '\')">' + menuItem + '</a></li>';
 						});
 						menuHtml += '</ul></li>';
 					}
-					if (typeWithInterval.indexOf(node.label.picType) != -1) {// add
-						// the interval sub menu
+					if (typeWithInterval.indexOf(node.label.picType) != -1) {// add  the interval sub menu
 						menuHtml += '<li class="menu-item dropdown dropdown-submenu"  style="margin-right:18px"  ng-if="item==slot"><span class="clever-icon list interval" style="padding: 7px 10px; background-position-y: 10px;"></span><a class="dropdown-toogle" data-toogle="dropdown">Interval</a>' + '<ul class="dropdown-menu">';
 						angular.forEach($scope.nodeMenu.intervalType, function(menuItem) {
 							menuHtml += '<li class="menu-item ">' + '<span class="clever-icon list" ng-class="\'' + menuItem.toLowerCase() + '\'| typemap" style="padding: 7px 10px; background-position-y: 10px;"></span>' + '<a class="pointer" role="menuitem"  ng-click="operateNodeByContextMenu(' + aliasName + ', ' + '\'' + intervalTypeMap[menuItem] + '\')">' + menuItem + '</a></li>';
@@ -154,8 +79,7 @@ angular.module('clever.management.directives.editDefinitionPane', []).directive(
 						menuHtml += '<li class="menu-item ">' + '<span class="clever-icon list" ng-class="\'' + menuItem.toLowerCase() + '\'| typemap" style="padding: 7px 10px; background-position-y: 10px;"></span>' + '<a class="pointer" role="menuitem"  ng-click="operateNodeByContextMenu(' + aliasName + ', ' + '\'' + menuItem + '\')">' + menuItem + '</a></li>';
 					});
 
-					if (node.parent) {// if the node parent
-						// does not exist,so the node should be root node of the archetype, it can not be delete
+					if (node.parent) {// if the node parent does not exist,so the node should be root node of the archetype, it can not be delete
 						menuHtml += '<li class="menu-item ">' + '<span class="clever-icon list delete" style="padding: 7px 10px; background-position-y: 10px;"></span>' + '<a class="pointer" role="menuitem"  ng-click="operateNodeByContextMenu(' + aliasName + ', ' + '\'delete\')" >Delete</a></li>';
 
 					}
@@ -715,12 +639,10 @@ angular.module('clever.management.directives.editDefinitionPane', []).directive(
 				return returnedNode;
 			}
 
-			// ==========================add base type node
-			// function==================================
+			// ==========================add base type node function==================================
 
 			// this function can be used to add element which is
-			// not special type ,just a ccomplexibject and
-			// attribute.no CType
+			// not special type ,just a CComplexObject and attribute.no CType
 			function addElement(node, type) {
 				// attributeCheck(node);
 				var nodeId = getNextNodeId();
@@ -1021,53 +943,29 @@ angular.module('clever.management.directives.editDefinitionPane', []).directive(
 			}
 
 			function getDV_CODED_TEXT() {
-				// var CodePhrase = editor.getCCodePhrase();
-				// var defining_code =
-				// editor.getCSingleAttribute(CodePhrase,
-				// editor.getDefaultExistence(1, 1),
-				// "defining_code");
+
 				var DV_CODED_TEXT = editor.getCComplexObject(null, "", editor.getDefaultOccurrences(1, 1), "DV_CODED_TEXT");
 				return DV_CODED_TEXT;
 			}
 
 			function getDV_TEXT(value) {
-				// var attr;
-				// if (attribute) {
-				// attr = editor.getCSingleAttribute([],
-				// editor.getDefaultExistence(1, 1), attribute);
-				// var DV_TEXT = editor.getCComplexObject(attr,
-				// "", editor.getDefaultOccurrences(1, 1),
-				// "DV_TEXT");
 
-				// } else {
 				if (value) {
 					var DV_TEXT = editor.getCComplexObject(value, "", editor.getDefaultOccurrences(1, 1), "DV_TEXT");
 				} else {
 					var DV_TEXT = editor.getCComplexObject(null, "", editor.getDefaultOccurrences(1, 1), "DV_TEXT");
 				}
-				// }
+
 				return DV_TEXT;
 
 			}
 
 			function getDV_EHR_URI(value) {
-				// var attr;
-				// if (attribute) {
-				// attr = editor.getCSingleAttribute([],
-				// editor.getDefaultExistence(1, 1), attribute);
-				// var DV_EHR_URI =
-				// editor.getCComplexObject(attr, "",
-				// editor.getDefaultOccurrences(1, 1),
-				// "DV_EHR_URI");
-				//
-				// } else {
 				if (value) {
 					var DV_EHR_URI = editor.getCComplexObject(value, "", editor.getDefaultOccurrences(1, 1), "DV_EHR_URI");
 				} else {
 					var DV_EHR_URI = editor.getCComplexObject(null, "", editor.getDefaultOccurrences(1, 1), "DV_EHR_URI");
 				}
-
-				// }
 				return DV_EHR_URI;
 			}
 
@@ -1081,15 +979,17 @@ angular.module('clever.management.directives.editDefinitionPane', []).directive(
 
 				if (node.label.type == "type") {
 					if (node.parentAttribute) {
-						if (angular.isArray(node.parentAttribute.oriNodeRef.children)) {
-							node.parentAttribute.oriNodeRef.children.splice(node.parentAttribute.oriNodeRef.children.indexOf(node.oriNodeRef), 1);
+						var tempChildren = node.parentAttribute.oriNodeRef.children;
+						if (angular.isArray(tempChildren)) {
+							tempChildren.splice(tempChildren.indexOf(node.oriNodeRef), 1);
 						} else {
 							node.parentAttribute.oriNodeRef.children = undefined;
 						}
 
 					} else if (node.parent) {
-						if (angular.isArray(node.parent.oriNodeRef.children)) {
-							node.parent.oriNodeRef.children.splice(node.parent.oriNodeRef.children.indexOf(node.oriNodeRef), 1);
+						var tempChildren = node.parent.oriNodeRef.children;
+						if (angular.isArray(tempChildren)) {
+							tempChildren.splice(tempChildren.indexOf(node.oriNodeRef), 1);
 						} else {
 							node.parent.oriNodeRef.children = undefined;
 						}
@@ -1102,8 +1002,9 @@ angular.module('clever.management.directives.editDefinitionPane', []).directive(
 				}
 
 				if (node.label.type == "attribute") {
-					if (angular.isArray(node.parent.oriNodeRef.attributes)) {
-						node.parent.oriNodeRef.attributes.splice(node.parent.oriNodeRef.attributes.indexOf(node.oriNodeRef), 1);
+					var tempAttributes = node.parent.oriNodeRef.attributes;
+					if (angular.isArray(tempAttributes)) {
+						tempAttribute.splice(tempAttributes.indexOf(node.oriNodeRef), 1);
 					} else {
 						node.parent.oriNodeRef.attributes = undefined;
 					}
@@ -1178,45 +1079,38 @@ angular.module('clever.management.directives.editDefinitionPane', []).directive(
 				}
 			}
 
-
+			//tree view node label generator callback
 			$scope.getLabelContent = function(node) {
 				if (node) {
-					var temp = $scope.getOntologyByCode(node.label.code, $scope.ontology);
+					var temp = getOntologyItemByCode(node.label.code, $scope.ontology);
 					if (temp) {
 						return temp.text;
 					}
 				}
 			};
 
-			$scope.dragableIcons = ['dv_text', 'dv_quantity', 'dv_count', 'dv_date_time', 
-			                                'dv_duration', 'dv_ordinal', 'dv_boolean', 'interval_quantity', 
-			                                'interval_count', 'dv_multimedia', 'dv_uri'];
+			function getOntologyItemByCode(code, ontology) {
 
-		},
-		link : function($scope, element, attrs) {
-			$scope.getOntologyByCode = function(code) {
-				return getOntologyByCode(code, $scope.ontology);
-			};
-
-			// this function return the ontology which has parsed
-			function getOntologyByCode(code, ontology) {
 				if (ontology && code) {
-					var matchedOntology;
 					if (ontology.term_definitions) {
-						angular.forEach(ontology.term_definitions, function(term) {
-							if (term.language == $scope.currentLanguage.code) {// $scope.selectedLanguage){
-								angular.forEach(term.items, function(value) {
-									if (value.code == code)
-										matchedOntology = value;
-									return matchedOntology;
-								});
-							}
-						});
+						return ontology.term_definitions.filter(withLanguage)[0].items.filter(withCode)[0];
 					}
-					return matchedOntology;
+				}
+				function withLanguage(value) {
+					return  value.language == $scope.currentLanguage.code;
+		
+				}
+				function withCode(value) {
+					return value.code == code;
+				
 				}
 			}
 
+
+			$scope.dragableIcons = ['dv_text', 'dv_quantity', 'dv_count', 'dv_date_time', 'dv_duration', 'dv_ordinal', 'dv_boolean', 'interval_quantity', 'interval_count', 'dv_multimedia', 'dv_uri'];
+
+		},
+		link : function($scope, element, attrs) {
 
 			$scope.contentHeight = angular.isDefined(attrs.maxHeight) ? $scope.$parent.$eval(attrs.maxHeight) : undefined;
 			console.log($scope.contentHeight);
