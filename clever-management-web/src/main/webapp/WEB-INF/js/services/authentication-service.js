@@ -20,7 +20,6 @@ angular.module('clever.management.services.authentication', []).service('authent
 	function validateAuthentication() {
 		var deferred = $q.defer();
 		$http.get(AUTHENTICATION_URL).success(function(data, status, headers, config) {
-			console.log(data);
 			deferred.resolve({
 				isAuthenticated : true,
 				previousIsAuthenticated : isAuthenticated,

@@ -7,11 +7,7 @@ angular.module('clever.management.directives.nodeInfoPane', []).directive('nodeI
 		},
 		templateUrl : 'js/directives/archetype-edit-directives/definition-pane/node-info-pane/node.info.pane.html',
 
-		controller : function($scope, $element, $attrs) {
-			$scope.$watch('node', function(newValue){
-				console.log(newValue);
-			});
-	         
+		controller : function($scope, $element, $attrs) {        
 		}
 	};
 });

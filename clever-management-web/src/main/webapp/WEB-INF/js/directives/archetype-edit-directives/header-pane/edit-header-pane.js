@@ -1,25 +1,20 @@
 angular.module('clever.management.directives.editHeaderPane', []).directive('editHeaderPane', function() {
     return {
-        restrict : 'E',
-        transclude : true,
-        scope : {
-            header : '=',
-            languages : "=",
-            ontology : "=",
-            maxHeight : "=",
+        restrict: 'E',
+        transclude: true,
+        scope: {
+            header: '=',
+            languages: "=",
+            ontology: "=",
+            maxHeight: "=",
 
         },
-        templateUrl : 'js/directives/archetype-edit-directives/header-pane/edit-header-pane.html',
+        templateUrl: 'js/directives/archetype-edit-directives/header-pane/edit-header-pane.html',
 
-        controller : function($scope, toaster) {
-      
+        controller: function($scope, toaster) {
+
 
             $scope.language = "en";
-            
-            
-            $scope.quotaCheckRegx = /[^"]/g;
-            
-           console.log( $scope.quotaCheckRegx.test("ahhah"));
 
             function processHeader(header) {
                 // assume archetype id and concept have defined
@@ -30,7 +25,7 @@ angular.module('clever.management.directives.editHeaderPane', []).directive('edi
                 processBaseInfo($scope.conceptItem);
                 processOriAuthor(header);
             }
-            
+
             function getDetail() {
                 var details = $scope.header.description.details;
                 var matchDetail;
@@ -78,8 +73,8 @@ angular.module('clever.management.directives.editHeaderPane', []).directive('edi
                 angular.forEach(attributeList, function(attribute) {
                     if (existAttributes.indexOf(attribute) == -1) {
                         var temp = {
-                            _id : attribute,
-                            __text : '',
+                            _id: attribute,
+                            __text: '',
                         };
                         conceptItem.push(temp);
                     }
@@ -101,14 +96,14 @@ angular.module('clever.management.directives.editHeaderPane', []).directive('edi
                 var termDefinitions = $scope.header.ontology.term_definitions;
                 if (angular.isArray(termDefinitions)) {
                     angular.forEach(termDefinitions, function(definition) {
-                        if(definition._language == $scope.language){
-                             conceptItem = getItemByCode(definition,  $scope.header.concept);
+                        if (definition._language == $scope.language) {
+                            conceptItem = getItemByCode(definition, $scope.header.concept);
                         }
-                      
+
                     });
                 } else {
                     if (termDefinitions._language == $scope.language) {
-                      conceptItem = getItemByCode(termDefinitions, $scope.header.concept);
+                        conceptItem = getItemByCode(termDefinitions, $scope.header.concept);
                     }
                 }
 
@@ -118,7 +113,7 @@ angular.module('clever.management.directives.editHeaderPane', []).directive('edi
                     throw "concept is undefined";
                 }
             }
-         
+
             function getItemByCode(definition, code) {
                 var matchItem;
 
@@ -141,17 +136,17 @@ angular.module('clever.management.directives.editHeaderPane', []).directive('edi
             function processOriAuthor(header) {
                 if (!header.description.original_author) {
                     header.description.original_author = [{
-                        _id : 'date',
-                        __text : ''
+                        _id: 'date',
+                        __text: ''
                     }, {
-                        _id : 'name',
-                        __text : ''
+                        _id: 'name',
+                        __text: ''
                     }, {
-                        _id : 'organisation',
-                        __text : ''
+                        _id: 'organisation',
+                        __text: ''
                     }, {
-                        _id : 'email',
-                        __text : ''
+                        _id: 'email',
+                        __text: ''
                     }];
                 } else {
                     processOriAuthorArray(header.description);
@@ -168,16 +163,16 @@ angular.module('clever.management.directives.editHeaderPane', []).directive('edi
                     });
                 } else {
                     array = [{
-                        _id : array._id,
-                        __text : array.text ? array.text : ''
+                        _id: array._id,
+                        __text: array.text ? array.text : ''
                     }];
                     existAttributes.push(array[0]._id);
                 }
                 angular.forEach(neededAttributes, function(attribute) {
                     if (existAttributes.indexOf(attribute) == -1) {
                         var temp = {
-                            _id : attribute,
-                            __text : '',
+                            _id: attribute,
+                            __text: '',
                         };
                         array.push(temp);
                     }
@@ -196,37 +191,37 @@ angular.module('clever.management.directives.editHeaderPane', []).directive('edi
                 });
                 //$scope.oriAuthorInfo = oriAuthorInfo;
                 $scope.oriAuthorDate = {
-                    value : new Date(oriAuthorInfo.date.__text),
+                    value: new Date(oriAuthorInfo.date.__text),
                 };
-               
+
                 return oriAuthorInfo;
             }
 
 
             $scope.$watch("header", function(newValue) {
-                if (newValue) { 
+                if (newValue) {
                     processHeader(newValue);
                     $scope.baseInformation = getBaseInfo($scope.conceptItem);
-                    $scope.oriAuthorInfo = getOriAuthorInfo(); 
+                    $scope.oriAuthorInfo = getOriAuthorInfo();
                     $scope.detail = getDetail();
-                    $scope.otherContributors = getOtherContributors();                 
+                    $scope.otherContributors = getOtherContributors();
                 }
             });
-            
-            
-            
-            
+
+
+
+
             function getOtherContributors() {
                 var contributors = $scope.header.description.other_contributors;
                 if (contributors) {
                     if (angular.isArray(contributors)) {
-                       return contributors;
+                        return contributors;
                     } else {
                         $scope.header.description.other_contributors = [contributors];
-                        return  $scope.header.description.other_contributors;
+                        return $scope.header.description.other_contributors;
                     }
                 } else {
-                   return  undefined;
+                    return undefined;
                 }
             }
 
@@ -241,27 +236,27 @@ angular.module('clever.management.directives.editHeaderPane', []).directive('edi
                     $scope.selectContributor($scope.otherContributors[0], 0);
                 }
             };
-                                        
-            $scope.selectContributor = function(value, index) { 
+
+            $scope.selectContributor = function(value, index) {
                 $scope.currentContributor = {
-                    value : value,
-                    index : index,      
+                    value: value,
+                    index: index,
                 };
             };
-            $scope.isSelected = function(index){
-                if(index == $scope.currentContributor.index){
+            $scope.isSelected = function(index) {
+                if (index == $scope.currentContributor.index) {
                     return 'selected';
-                   
-                }else{
+
+                } else {
                     return '';
                 }
             };
 
-           
+
             $scope.$watch('currentContributor.value', function(newValue, oldValue) {
                 if (newValue && oldValue) {
                     $scope.otherContributors[$scope.currentContributor.index] = newValue;
-                    
+
                 }
             });
 
@@ -284,12 +279,11 @@ angular.module('clever.management.directives.editHeaderPane', []).directive('edi
                 }
             });
 
-          
-         
+
+
         },
-        link : function(scope, elemetn, attr) {
+        link: function(scope, elemetn, attr) {
             scope.contentHeight = angular.isDefined(attr.maxHeight) ? scope.$parent.$eval(attr.maxHeight) : undefined;
         }
     };
 });
-

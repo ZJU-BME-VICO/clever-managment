@@ -183,11 +183,11 @@ angular.module('clever.management.service.archetypeParseEdit', []).service('arch
         code = item._code;
         angular.forEach(item.items, function(value) {
             if (value._id == 'text') {
-                text = value.__text;
+                text = value;
             } else if (value._id == 'description') {
-                description = value.__text;
+                description = value;
             } else if (value._id == 'comment') {
-                comment = value.__text;
+                comment = value;
             }
         });
 
@@ -196,8 +196,10 @@ angular.module('clever.management.service.archetypeParseEdit', []).service('arch
             text: text,
             description: description,
             comment: comment,
-            oriNodeRef : item,
         };
+    }
+    this.parseTermDefinition = function(termDefinitions) {
+        return parseTermDefinition(termDefinitions);
     }
 
     function parseTermDefinition(termDefinitions) {
@@ -206,14 +208,14 @@ angular.module('clever.management.service.archetypeParseEdit', []).service('arch
             if (angular.isArray(termDefinitions)) { //termDefinition is an array with element which consist of an language an an archetypTermList
                 angular.forEach(termDefinitions, function(termDefinition) {
                     var term = {
-                        oriNodeRef:termDefinition,                 // no need
+                        //oriNodeRef:termDefinition,                 // no need
                         language: termDefinition._language,
                         items: []
                     };
                     var items = termDefinition.items;
                     if (angular.isArray(items)) {
                         angular.forEach(items, function(definition) {
-                            term.items.push(parseItem(definition));                       
+                            term.items.push(parseItem(definition));
                         });
                     } else {
                         term.items.push(parseItem(items));
@@ -593,7 +595,6 @@ angular.module('clever.management.service.archetypeParseEdit', []).service('arch
 
             if (angular.isArray(attributes)) {
                 //generator node path
-
                 angular.forEach(attributes, function(attribute) {
                     generatorNodePath(attribute, parent.oriNodeRef, terminologies);
                     if (noTraverseAttributes.indexOf(attribute.rm_attribute_name) != -1) { //if attribute type should be keep
