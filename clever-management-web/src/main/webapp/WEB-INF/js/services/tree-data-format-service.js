@@ -161,7 +161,7 @@ angular.module('clever.management.services.treeDataFormat', []).service('treeDat
 		with (self) {
 			this.listMap = {
 				cluster : cluster[childrenName],
-				composition : element[childrenName],
+				composition : composition[childrenName],
 				element : composition[childrenName],
 				action : action[childrenName],
 				evaluation : evaluation[childrenName],

@@ -25,10 +25,7 @@ angular.module('clever.management.service.archetypeParseEdit', []).service('arch
         } else {
             var parentArchetype = undefined;
         }
-        console.log("this is terminologies");
-        console.log(definitions);
-        //console.log("this is definition");
-        //console.log()
+      
         return {
             oriNodeRef: archetype, //---------for edit
             header: header,
@@ -200,7 +197,7 @@ angular.module('clever.management.service.archetypeParseEdit', []).service('arch
     }
     this.parseTermDefinition = function(termDefinitions) {
         return parseTermDefinition(termDefinitions);
-    }
+    };
 
     function parseTermDefinition(termDefinitions) {
         if (termDefinitions) {
@@ -472,9 +469,12 @@ angular.module('clever.management.service.archetypeParseEdit', []).service('arch
                 }
             }
         }
-
-
+             
     };
+    
+    function getElementDeepPath(node){
+    	
+    }
 
     function getOntologyByNodeId(nodeId, language, termDefinitions) {
         var text;

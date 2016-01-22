@@ -9,7 +9,7 @@
         </form>
         <span class="text-danger" ng-show="textForm.textInput.$error.required">Text is required!</span>
         <br />
-        <pre> Description: {{ontologyItem.displayPart.description}}</pre>
+        <pre> Description: {{ontologyItem.description.__text}}</pre>
         <form class="input-group input-group-sm" name="descriptionForm" ng-class="{'has-error' : descriptionForm.descriptionInput.$error.required }">
             <span class="input-group-addon" id="sizing-addon3">Description</span>
             <input name="descriptionInput" type="text" class="form-control" aria-describedby="sizing-addon3" ng-model="ontologyItem.description.__text" required>

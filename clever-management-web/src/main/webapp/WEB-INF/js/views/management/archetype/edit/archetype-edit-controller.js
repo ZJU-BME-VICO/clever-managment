@@ -174,6 +174,7 @@ function ArchetypeEditCtrl($scope, $modal, $log, $q, $timeout, msgboxService, bu
     $scope.selectArchetype = function(archetype) {
         $scope.batchStatus = false;
         if (archetype.isDirectory) {
+        	 $scope.selectedArchetype = undefined;
             busyService.popBusy(busyId);
             return;
         } else {
@@ -181,7 +182,8 @@ function ArchetypeEditCtrl($scope, $modal, $log, $q, $timeout, msgboxService, bu
             $scope.definitionExpandedAll.value = false;
 
             $scope.selectedArchetype = archetype;
-
+             
+            //$scope.currentArchetypeId = archetype.id;
             //	get this adl to generate difference
             $scope.originalAdl = archetype.adl;
 
@@ -190,6 +192,7 @@ function ArchetypeEditCtrl($scope, $modal, $log, $q, $timeout, msgboxService, bu
             $q(function(resolve, reject) { //asynchronously run the archetype parse service
                 setTimeout(function() {
                     var oriArchetype = archetypeParseEditService.getOriginalArchetype($scope.selectedArchetype.xml);
+                    console.log(oriArchetype);
                     var resultJson = archetypeParseEditService.parseArchetypeJson(oriArchetype);
                     if (oriArchetype && resultJson) {
                         resolve({
@@ -209,13 +212,13 @@ function ArchetypeEditCtrl($scope, $modal, $log, $q, $timeout, msgboxService, bu
                 $scope.ontology = resultJson.terminologies;
                 $scope.definition = resultJson.definitions;
                 $scope.languages = resultJson.languages;
-          
+                console.log($scope.languages);
 				var languages = $scope.languages.languages;
 				if (angular.isArray(languages)) {
 					$scope.languages.originalLanguage = languages.filter(equalToOriginal)[0];
 				}
 
-                $scope.languages.selectedLanguage = resultJson.languages.originalLanguage;
+                $scope.currentLanguage = resultJson.languages.originalLanguage;
                 //	get the header from the original archetype directly
                 $scope.header = initHeader(oriArchetype);
 
@@ -226,6 +229,14 @@ function ArchetypeEditCtrl($scope, $modal, $log, $q, $timeout, msgboxService, bu
         }
 
     };
+    
+    
+    $scope.$watch('languages.originalLanguage', function(newValue){
+    	if(newValue){
+    	console.log(newValue);	
+    	}
+    	
+    });
 
     function equalToOriginal(value){
     	if(value.code == $scope.languages.originalLanguage.code){

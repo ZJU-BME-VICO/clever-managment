@@ -31,7 +31,8 @@
 
 		<div ng-if="currentTable == 'USER2ROLE'" ng-style="{height:containerHeight.value -45}" style="overflow: auto">
 			<!-- Default panel contents -->
-
+			<div ng-init="names=['Igor Minar', 'Brad Green', 'Dave Geddes', 'Naomi Black', 'Greg Weber', 'Dean Sofer', 'Wes Alvaro', 'John Scott', 'Daniel Nadasi'];">
+				
 			<!-- Table -->
 			<table class="table">
 				<thead>
@@ -80,7 +81,7 @@
 							<li ng-repeat="authority in role.authorities">
 								<span popover-placement="left" popover="{{authority.description}}" popover-trigger="mouseenter" class="glyphicon glyphicon-info-sign"></span>
 								<span>{{authority.authorityName | translate}}</span>
-								
+
 							</li>
 						</ul></td>
 						<td style="vertical-align:middle; "><span style="font-style:oblique">{{role.description}}</span></td>

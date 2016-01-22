@@ -486,3 +486,38 @@ hr.fancy-line, hr.fancy-line:before {
 	}
 }
 
+
+
+
+.occur-delay.ng-enter {
+    -webkit-transition: 1s;
+    transition: 1s;
+    margin-left: 100%;
+}
+
+.occur-delay.ng-enter-active {
+    margin-left: 0;
+}
+
+.occur-delay.ng-leave {
+    -webkit-transition: 1s;
+    transition: 1s;
+    margin-left: 0;
+}
+
+.occur-delay.ng-leave-active {
+    margin-left: 100%;
+}
+
+.occur-delay.ng-move {
+    -webkit-transition: 1s;
+    transition: 1s;
+    background: gold;
+}
+
+.occur-delay.ng-move-active {
+    background: #fff;
+}
+
+
+
