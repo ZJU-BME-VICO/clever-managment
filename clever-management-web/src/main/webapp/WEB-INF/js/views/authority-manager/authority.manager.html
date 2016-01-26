@@ -31,8 +31,7 @@
 
 		<div ng-if="currentTable == 'USER2ROLE'" ng-style="{height:containerHeight.value -45}" style="overflow: auto">
 			<!-- Default panel contents -->
-			<div ng-init="names=['Igor Minar', 'Brad Green', 'Dave Geddes', 'Naomi Black', 'Greg Weber', 'Dean Sofer', 'Wes Alvaro', 'John Scott', 'Daniel Nadasi'];">
-				
+		
 			<!-- Table -->
 			<table class="table">
 				<thead>
@@ -44,9 +43,8 @@
 					<th></th>
 					<th></th>
 				</thead>
-
 				<tbody>
-					<tr ng-repeat="user in userList | filter: userNameFilter | orderBy : user.id" >
+					<tr  ng-repeat="user in userList | filter: userNameFilter | orderBy : user.id" >
 						<td class="user-name"><a   ng-popover="userName" title="user name" placement="right" maximize="false" ><img class="clever-icon user img-circle" style="height:40px; width:40px" />&nbsp;&nbsp;&nbsp;&nbsp;{{user.userName}}</a></td>
 						<td style="vertical-align:middle"><select ng-model="user.role"  ng-options="role.roleName for role in roleList track by role.id" class="success"></select></td>
 						<td style="vertical-align:middle"><a href='' ng-popover="password" title="password" placement="right" maximize="false">{{user.password}}</a></td>

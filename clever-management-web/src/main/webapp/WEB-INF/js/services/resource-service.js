@@ -5,7 +5,7 @@ angular.module('clever.management.services.resource', []).service('resourceServi
 		$http.get(url, config).success(function(data, status, headers, config) {
 			deferred.resolve(data);
 		}).error(function(data, status, headers, config) {
-			errorStateCatch(status);
+			errorStatusCatch(status);
 		});
 		return deferred.promise;
 	};
@@ -15,7 +15,7 @@ angular.module('clever.management.services.resource', []).service('resourceServi
 		$http.post(url, data, config).success(function(data, status, headers, config) {
 			deferred.resolve(data);
 		}).error(function(data, status, headers, config) {
-				errorStateCatch(status);
+				errorStatusCatch(status);
 		});
 		return deferred.promise;
 	};
@@ -33,22 +33,22 @@ angular.module('clever.management.services.resource', []).service('resourceServi
 		$http.delete(url, data, config).success(function(data, status, headers, config) {
 			deferred.resolve(data);
 		}).error(function(data, status, headers, config) {
-			errorStateCatch(status);
+			errorStatusCatch(status);
 		});
 		return deferred.promise;
 	};
 
-	function errorStateCatch(status) {
+	function errorStatusCatch(status) {
 		if (status == 401) {
 			$state.go('login', {
 				errorType : 'SessionExpired'
 			});
 		}
 		if(status == 403){
-			$state.go('forbidden');
+		//	$state.go('forbidden');
 		}
 		if(status == 404){
-			$state.go('notfound');
+		//	$state.go('notfound');
 		}
 	}
 

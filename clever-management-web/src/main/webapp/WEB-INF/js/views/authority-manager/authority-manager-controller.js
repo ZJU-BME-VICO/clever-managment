@@ -9,12 +9,13 @@ function AuthorityManagerCtrl($scope, $modal, ngPopover, msgboxService, resource
 		$scope.containerHeight.value = newValue - 35;
 	});
 
-	//	$scope.currentTable = 'USER2ROLE';
+		$scope.currentTable = 'USER2ROLE';
+	//$scope.currentTable = 'ROLE2AUTHORITY';
 	console.log($scope);
 	$scope.selectTable = function(value) {
 		$scope.currentTable = value;
 	};
-	$scope.currentTable = 'ROLE2AUTHORITY';
+	
 	$scope.deployAuthority = function() {
 		resourceService.get(AUTHORITY_MANAGEMENT_AUTHORITY_DEPLOY_URL).then(function(result) {
 			console.log(result);
