@@ -2,7 +2,8 @@
  original node ,when we operate in the diaplay element ,we can bind the operation to the original archetype,
  by edit original archetype directly*/
 
-angular.module('clever.management.service.archetypeParseEdit', []).service('archetypeParseEditService', function() {
+angular.module('clever.management.service.archetypeParseEdit', []).service('archetypeParseEditService', function(rmFactoryService) {
+    var editor
     var x2js = new X2JS();
     this.parseArchetypeXml = function(xml) {
         var archetype = x2js.xml_str2json(xml).archetype;
@@ -25,7 +26,7 @@ angular.module('clever.management.service.archetypeParseEdit', []).service('arch
         } else {
             var parentArchetype = undefined;
         }
-      
+
         return {
             oriNodeRef: archetype, //---------for edit
             header: header,
@@ -448,7 +449,7 @@ angular.module('clever.management.service.archetypeParseEdit', []).service('arch
 
     }
 
-    function generatorNodePath(node, parentNode, termDefinitions) {
+    function generateNodePath(node, parentNode, termDefinitions) {
         if (!parentNode) {
             node.idPath = "";
             node.textPath = "";
@@ -469,12 +470,9 @@ angular.module('clever.management.service.archetypeParseEdit', []).service('arch
                 }
             }
         }
-             
+
     };
-    
-    function getElementDeepPath(node){
-    	
-    }
+
 
     function getOntologyByNodeId(nodeId, language, termDefinitions) {
         var text;
@@ -514,6 +512,48 @@ angular.module('clever.management.service.archetypeParseEdit', []).service('arch
         return text;
     }
 
+    function processPath(typeNode, parent, terminologies, parentAttribute) {
+        if (parentAttribute) {
+            generateNodePath(typeNode, parentAttribute.oriNodeRef, terminologies);
+        } else if (parent) {
+            generateNodePath(typeNode, parent.oriNodeRef, terminologies);
+        } else {
+            generateNodePath(typeNode, parent, terminologies);
+        }
+
+    }
+
+
+    function processSingleNode(value, parent, treeItems, terminologies, parentAttribute) {
+        var rmObject = rmFactoryService[value.rm_type_name] && new rmFactoryService[value.rm_type_name];
+        console.log(rmObject);
+        var keepAttribute = rmObject && rmObject.menuType == 'ATTRIBUTE';
+        processPath(value, parent, terminologies, parentAttribute);
+        //generator node path start
+        // if (parentAttribute) {
+        //     generateNodePath(value, parentAttribute.oriNodeRef, terminologies);
+        // } else if (parent) {
+        //     generateNodePath(value, parent.oriNodeRef, terminologies);
+        // } else {
+        //     generateNodePath(value, parent, terminologies);
+        // }
+        //generator node path end
+
+        if (rmObject && rmObject.parsable) {
+            var extractedNode = extractNode(value, terminologies, parentAttribute);
+            extractedNode.oriNodeRef = value;
+            nodeForReturn = extractedNode;
+            extractedNode.children = [];
+            if (value.attributes) {
+                self.processAttribute(value.attributes, extractedNode, extractedNode.children, terminologies, keepAttribute);
+            }
+            if (parentAttribute) {
+                extractedNode.parentAttribute = parentAttribute;
+            }
+
+            treeItems.push(extractedNode);
+        }
+    }
 
     /*
      * @Author Mecro
@@ -528,67 +568,105 @@ angular.module('clever.management.service.archetypeParseEdit', []).service('arch
     this.myProcessNode = function(typeNode, parent, treeItems, terminologies, parentAttribute) {
         var nodeForReturn;
         var self = this;
+
         if (typeNode) {
+
             if (angular.isArray(typeNode)) {
                 angular.forEach(typeNode, function(value) {
-                    //generator node path start
-                    if (parentAttribute) {
-                        generatorNodePath(value, parentAttribute.oriNodeRef, terminologies);
-                    } else if (parent) {
-                        generatorNodePath(value, parent.oriNodeRef, terminologies);
-                    } else {
-                        generatorNodePath(value, parent, terminologies);
-                    }
-                    //generator node path end
+                    processSingleNode(value, parent, treeItems, terminologies, parentAttribute);
+                    // var rmObject = rmFactoryService[value.rm_type_name] && new rmFactoryService[value.rm_type_name];
+                    // console.log(rmObject);
+                    // var keepAttribute = rmObject && rmObject.menuType == 'ATTRIBUTE';
+                    // processPath(value, parent, terminologies, parentAttribute);
+                    // //generator node path start
+                    // // if (parentAttribute) {
+                    // //     generateNodePath(value, parentAttribute.oriNodeRef, terminologies);
+                    // // } else if (parent) {
+                    // //     generateNodePath(value, parent.oriNodeRef, terminologies);
+                    // // } else {
+                    // //     generateNodePath(value, parent, terminologies);
+                    // // }
+                    // //generator node path end
 
-                    if (noTraverseTypeList.indexOf(value.rm_type_name) == -1) {
-                        var extractedNode = extractNode(value, terminologies, parentAttribute);
-                        extractedNode.oriNodeRef = value;
-                        nodeForReturn = extractedNode;
-                        extractedNode.children = [];
-                        if (value.attributes) {
-                            self.processAttribute(value.attributes, extractedNode, extractedNode.children, terminologies);
-                        }
-                        if (parentAttribute) {
-                            extractedNode.parentAttribute = parentAttribute;
-                        }
+                    // if (noTraverseTypeList.indexOf(value.rm_type_name) == -1) {
+                    //     var extractedNode = extractNode(value, terminologies, parentAttribute);
+                    //     extractedNode.oriNodeRef = value;
+                    //     nodeForReturn = extractedNode;
+                    //     extractedNode.children = [];
+                    //     if (value.attributes) {
+                    //         self.processAttribute(value.attributes, extractedNode, extractedNode.children, terminologies, keepAttribute);
+                    //     }
+                    //     if (parentAttribute) {
+                    //         extractedNode.parentAttribute = parentAttribute;
+                    //     }
 
-                        treeItems.push(extractedNode);
-                    }
+                    //     treeItems.push(extractedNode);
+                    // }
                 });
 
             } else {
-                //generator node path
-                if (parentAttribute) {
-                    generatorNodePath(typeNode, parentAttribute.oriNodeRef, terminologies);
-                } else if (parent) {
-                    generatorNodePath(typeNode, parent.oriNodeRef, terminologies);
-                } else {
-                    generatorNodePath(typeNode, parent, terminologies);
-                }
+                processSingleNode(typeNode, parent, treeItems, terminologies, parentAttribute);
+                // var rmObject = rmFactoryService[typeNode.rm_type_name] && new rmFactoryService[typeNode.rm_type_name];
+                // console.log(rmObject);
+                // var keepAttribute = rmObject && rmObject.menuType == 'ATTRIBUTE';
+                // //generator node path
+                // processPath(typeNode, parent, terminologies, parentAttribute);
+                // // if (parentAttribute) {
+                // //     generateNodePath(typeNode, parentAttribute.oriNodeRef, terminologies);
+                // // } else if (parent) {
+                // //     generateNodePath(typeNode, parent.oriNodeRef, terminologies);
+                // // } else {
+                // //     generateNodePath(typeNode, parent, terminologies);
+                // // }
 
-                if (noTraverseTypeList.indexOf(typeNode.rm_type_name) == -1) {
-                    var extractedNode = extractNode(typeNode, terminologies, parentAttribute);
-                    extractedNode.oriNodeRef = typeNode;
-                    nodeForReturn = extractedNode;
-                    extractedNode.children = [];
-                    if (typeNode.attributes) {
+                // if (noTraverseTypeList.indexOf(typeNode.rm_type_name) == -1) {
+                //     var extractedNode = extractNode(typeNode, terminologies, parentAttribute);
+                //     extractedNode.oriNodeRef = typeNode;
+                //     nodeForReturn = extractedNode;
+                //     extractedNode.children = [];
+                //     if (typeNode.attributes) {
 
-                        self.processAttribute(typeNode.attributes, extractedNode, extractedNode.children, terminologies);
-                    }
-                    if (parentAttribute) {
-                        extractedNode.parentAttribute = parentAttribute;
-                    }
+                //         self.processAttribute(typeNode.attributes, extractedNode, extractedNode.children, terminologies, keepAttribute);
+                //     }
+                //     if (parentAttribute) {
+                //         extractedNode.parentAttribute = parentAttribute;
+                //     }
 
-                    treeItems.push(extractedNode);
-                }
+                //     treeItems.push(extractedNode);
+                // }
             }
 
             return nodeForReturn;
         }
     };
 
-    this.processAttribute = function(attributes, parent, treeItems, terminologies) {
+    var self = this;
+
+    function processSingleAttribute(attribute, parent, treeItems, terminologies, keepAttribute) {
+        //var self = this;
+        generateNodePath(attribute, parent.oriNodeRef, terminologies);
+        //if (noTraverseAttributes.indexOf(attribute.rm_attribute_name) != -1) { //if attribute type should be keep
+        if (keepAttribute) { //if attribute type should be keep
+            var keepAttribute = extractNode(attribute, terminologies, undefined);
+            nodeForReturn = keepAttribute;
+            keepAttribute.oriNodeRef = attribute;
+            keepAttribute.children = [];
+            self.myProcessNode(attribute.children, keepAttribute, keepAttribute.children, terminologies, undefined);
+
+            treeItems.push(keepAttribute);
+        } else {
+            var noKeepAttribute = extractNode(attribute, terminologies, undefined);
+            noKeepAttribute.oriNodeRef = attribute;
+            parent.childrenAttribute = noKeepAttribute;
+            if (attribute.children) {
+                nodeForReturn = self.myProcessNode(attribute.children, treeItems.parent, treeItems, terminologies, noKeepAttribute);
+            }
+
+        }
+
+    }
+
+    this.processAttribute = function(attributes, parent, treeItems, terminologies, keepAttribute) {
         var nodeForReturn = "";
         var self = this;
         if (attributes) {
@@ -596,46 +674,47 @@ angular.module('clever.management.service.archetypeParseEdit', []).service('arch
             if (angular.isArray(attributes)) {
                 //generator node path
                 angular.forEach(attributes, function(attribute) {
-                    generatorNodePath(attribute, parent.oriNodeRef, terminologies);
-                    if (noTraverseAttributes.indexOf(attribute.rm_attribute_name) != -1) { //if attribute type should be keep
-                        var keepAttribute = extractNode(attribute, terminologies, undefined);
-                        nodeForReturn = keepAttribute;
-                        keepAttribute.oriNodeRef = attribute;
-                        keepAttribute.children = [];
-                        self.myProcessNode(attribute.children, keepAttribute, keepAttribute.children, terminologies, undefined);
+                    processSingleAttribute(attribute, parent, treeItems, terminologies, keepAttribute);
+                    // generateNodePath(attribute, parent.oriNodeRef, terminologies);
+                    // if (noTraverseAttributes.indexOf(attribute.rm_attribute_name) != -1) { //if attribute type should be keep
+                    //     var keepAttribute = extractNode(attribute, terminologies, undefined);
+                    //     nodeForReturn = keepAttribute;
+                    //     keepAttribute.oriNodeRef = attribute;
+                    //     keepAttribute.children = [];
+                    //     self.myProcessNode(attribute.children, keepAttribute, keepAttribute.children, terminologies, undefined);
 
-                        treeItems.push(keepAttribute);
-                    } else {
-                        var noKeepAttribute = extractNode(attribute, terminologies, undefined);
-                        noKeepAttribute.oriNodeRef = attribute;
-                        parent.childrenAttribute = noKeepAttribute;
-                        if (attribute.children) {
-                            nodeForReturn = self.myProcessNode(attribute.children, treeItems.parent, treeItems, terminologies, noKeepAttribute);
-                        }
+                    //     treeItems.push(keepAttribute);
+                    // } else {
+                    //     var noKeepAttribute = extractNode(attribute, terminologies, undefined);
+                    //     noKeepAttribute.oriNodeRef = attribute;
+                    //     parent.childrenAttribute = noKeepAttribute;
+                    //     if (attribute.children) {
+                    //         nodeForReturn = self.myProcessNode(attribute.children, treeItems.parent, treeItems, terminologies, noKeepAttribute);
+                    //     }
 
-                    }
+                    // }
                 });
             } else {
                 //generator node path
-
-                generatorNodePath(attributes, parent.oriNodeRef, terminologies);
-                if (noTraverseAttributes.indexOf(attributes.rm_attribute_name) != -1) { //if attribute type should be keep
-                    var keepAttribute = extractNode(attributes, terminologies, undefined);
-                    nodeForReturn = keepAttribute;
-                    keepAttribute.children = [];
-                    keepAttribute.oriNodeRef = attributes;
-                    self.myProcessNode(attributes.children, keepAttribute, keepAttribute.children, terminologies, undefined);
-                    treeItems.push(keepAttribute);
-                } else {
-                    var noKeepAttribute = extractNode(attributes, terminologies, undefined);
-                    noKeepAttribute.oriNodeRef = attributes;
-                    parent.childrenAttribute = noKeepAttribute;
-                    if (attributes.children) {
-                        nodeForReturn = self.myProcessNode(attributes.children, treeItems.parent, treeItems, terminologies, noKeepAttribute);
-                    }
-                }
-
+                processSingleAttribute(attributes, parent, treeItems, terminologies, keepAttribute);
+                //     generateNodePath(attributes, parent.oriNodeRef, terminologies);
+                //     if (noTraverseAttributes.indexOf(attributes.rm_attribute_name) != -1) { //if attribute type should be keep
+                //         var keepAttribute = extractNode(attributes, terminologies, undefined);
+                //         nodeForReturn = keepAttribute;
+                //         keepAttribute.children = [];
+                //         keepAttribute.oriNodeRef = attributes;
+                //         self.myProcessNode(attributes.children, keepAttribute, keepAttribute.children, terminologies, undefined);
+                //         treeItems.push(keepAttribute);
+                //     } else {
+                //         var noKeepAttribute = extractNode(attributes, terminologies, undefined);
+                //         noKeepAttribute.oriNodeRef = attributes;
+                //         parent.childrenAttribute = noKeepAttribute;
+                //         if (attributes.children) {
+                //             nodeForReturn = self.myProcessNode(attributes.children, treeItems.parent, treeItems, terminologies, noKeepAttribute);
+                //         }
             }
+
+            // }
         }
         return nodeForReturn;
     };

@@ -46,6 +46,8 @@
 <script src="js/services/archetype-edit-service.js"></script>
 <script src="js/services/template-create-service/template-create-service.js"></script>
 <script src="js/services/tree-data-format-service.js"></script>
+<script src="js/services/rm-factory-service.js"></script>
+
 
 <!-- directives -->
 <script src="js/directives/files-model/files-model-directive.js"></script>

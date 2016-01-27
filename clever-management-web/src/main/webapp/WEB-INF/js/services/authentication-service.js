@@ -50,6 +50,5 @@ angular.module('clever.management.services.authentication', []).service('authent
 		} else {
 			return authorities.indexOf(authority) == -1 ? false : true;
 		}
-
 	};
 });

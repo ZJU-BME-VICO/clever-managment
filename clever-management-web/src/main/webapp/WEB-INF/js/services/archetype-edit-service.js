@@ -1,4 +1,8 @@
-angular.module('clever.management.service.archetypeEdit', []).service('archetypeEditService', function(archetypeParseEditService, $rootScope) {
+angular.module('clever.management.service.archetypeEdit', []).service('archetypeEditService', function(archetypeParseEditService, rmFactoryService, $rootScope) {
+
+    var self = this;
+
+
 
     this.getCBoolean = function() {
         return {
@@ -436,8 +440,6 @@ angular.module('clever.management.service.archetypeEdit', []).service('archetype
         }
 
         ontology.term_definitions = archetypeParseEditService.parseTermDefinition(term_definitions.oriNodeRef);
-
-        console.log(ontology);
     };
 
     function pushToOriOntoltogyTerm(items, nodeId, text, description) {
@@ -605,5 +607,142 @@ angular.module('clever.management.service.archetypeEdit', []).service('archetype
         var primitive = this.getCPrimitiveObject(cstring, '', this.getDefaultOccurrences(1, 1), "STRING");
         return primitive;
     };
+
+
+
+
+    function getArchetypeId(info) {
+        return info.organization + "-" + info.referenceModel + '-' + info.entityType + "." + info.concept + ".v1.1";
+    }
+
+    function getLanguage(codeString, terminologyId) {
+        return {
+            code_string: codeString,
+            terminology_id: {
+                value: terminologyId,
+            },
+        };
+    }
+
+    function getDefaultDescription() {
+        return {
+            original_author: {
+                _id: "name"
+            },
+            lifecycle_state: "0",
+            details: {
+                copyright: "",
+                missue: "",
+                purpose: "",
+                use: "",
+                language: getLanguage("en", "ISO_639-1"),
+            },
+
+            other_details: {
+                _id: "",
+                __text: "",
+            }
+        };
+    }
+
+    function getDefaultOntology(info) {
+        return {
+            term_definitions: [{
+                _language: "en",
+                items: [{
+                    _code: "at0000",
+                    items: [{
+                        _id: "text",
+                        __text: info.concept,
+                    }, {
+                        _id: "description",
+                        __text: "*"
+                    }]
+                }, ]
+            }]
+        };
+    }
+
+
+    function createBaseArchetype(info) {
+        var occ = self.getDefaultOccurrences(0, 1);
+        var archetypeId = getArchetypeId(info);
+        info.archetypeId = archetypeId;
+        var jsonObj = {
+            adl_version: "1.4",
+            archetype_id: {
+                value: archetypeId
+            },
+            concept: "at0000",
+            definition: {
+                attributes: undefined,
+                node_id: "at0000",
+                occurrences: occ,
+                rm_type_name: info.entityType,
+                rm_obejct: new rmFactoryService[info.entityType],
+            },
+            description: getDefaultDescription(),
+            ontology: getDefaultOntology(info),
+            original_language: getLanguage("en", "ISO_639-1"),
+        };
+        return jsonObj;
+    }
+    console.log(this);
+
+
+
+    this.createArchetype = function(pattern) {
+        var jsonArchetype = createBaseArchetype(pattern);
+        console.log(jsonArchetype);
+        var rm_object = jsonArchetype.definition.rm_obejct;
+        var attributes = generateAttributes(rm_object.attributes, jsonArchetype.ontology);
+        if (attributes.length) {
+            jsonArchetype.definition.attributes = attributes;
+        }
+        return jsonArchetype;
+    }
+
+
+    function nextNodeIdInOriOntology(ontology) {
+        var term_definition = ontology.term_definitions[0];
+        var nodeId = term_definition.items.length;
+        return nodeId < 10 ? 'at000' + nodeId : 'at00' + nodeId;
+    }
+
+    var rmTypeWhiteList = ['STRING', 'INTEGER'];
+
+    function generateCObject(type, ontology) {
+        if (rmTypeWhiteList.indexOf(type) != -1) {
+            return undefined;
+        }
+        var rmObject = rmFactoryService[type] && (new rmFactoryService[type]);
+        if (rmObject.isAbstract) {
+            return undefined;
+        }
+
+        var nodeId = nextNodeIdInOriOntology(ontology);
+        var attributes = generateAttributes(rmObject.attributes, ontology);
+        self.synchronizeOriOntology(nodeId, type, '', ontology);
+        return self.getComplexObject(attributes, nodeId, [0, 1], type);
+    }
+
+    function generateAttributes(attributes, ontology) {
+        var result = [];
+        angular.forEach(attributes, function(attribute) {
+            if (attribute['@required']) {
+                if (attribute['@children'].isArray) {
+                    var multiAttribute = self.getMultyAttr([], 0, [0, 1], attribute.name);
+                    result.push(multiAttribute);
+                } else {
+                    var children = generateCObject(attribute['@children'].type, ontology);
+                    var singleAttr = self.getSingleAttr(children, [0, 1], attribute.name);
+                    result.push(singleAttr);
+                }
+            }
+        })
+
+        return result;
+    }
+
 
 });

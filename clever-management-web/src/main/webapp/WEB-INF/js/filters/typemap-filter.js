@@ -28,6 +28,8 @@ angular.module('clever.management.filters.typemap', []).filter('typemap', functi
         'DV_PARSABLE': 'parsable',
         'DV_BOOLEAN': 'truefalse',
         'LINK': 'link',
+        
+        'ISM_TRANSITION' : 'transition',
 
         'EVENT': 'any',
         'POINT_EVENT': 'pointintime',

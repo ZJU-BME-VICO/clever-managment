@@ -487,6 +487,9 @@ hr.fancy-line, hr.fancy-line:before {
 }
 
 
+.occur-delay{
+	display: block;
+}
 
 
 .occur-delay.ng-enter {

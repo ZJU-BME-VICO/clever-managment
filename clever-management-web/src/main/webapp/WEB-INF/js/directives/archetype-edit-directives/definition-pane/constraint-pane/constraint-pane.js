@@ -72,13 +72,13 @@ angular.module('clever.management.directives.constraintPane', []).directive('con
 
 
             $scope.$watch('castedOccurrences.lower', function(newValue, oldValue) {
-                if (newValue && oldValue) {
+                if (newValue != undefined) {
                     occurrencesValidCheck();
                     $scope.currentNode.oriNodeRef.occurrences.lower = newValue.toString();
                 }
             });
             $scope.$watch('castedOccurrences.upper', function(newValue, oldValue) {
-                if (newValue && oldValue) {
+                if (newValue != undefined) {
                     occurrencesValidCheck();
                     $scope.currentNode.oriNodeRef.occurrences.upper = newValue.toString();
                 }
@@ -91,7 +91,7 @@ angular.module('clever.management.directives.constraintPane', []).directive('con
             }
 
             $scope.$watch('castedExistence.value', function(newValue, oldValue) {
-                if (newValue && oldValue) {
+                if (newValue != undefined) {
                     switch (newValue) {
                         case "REQUIRED":
                             $scope.existence.lower = "1";
@@ -109,13 +109,13 @@ angular.module('clever.management.directives.constraintPane', []).directive('con
                 }
             });
             $scope.$watch('castedCardinality.upper', function(newValue, oldValue) {
-                if (newValue && oldValue) {
+                if (newValue != undefined) {
                     cardinalityValidCheck();
                     $scope.currentNode.oriNodeRef.cardinality.interval.upper = newValue.toString();
                 }
             });
             $scope.$watch('castedCardinality.lower', function(newValue, oldValue) {
-                if (newValue && oldValue) {
+                if (newValue != undefined) {
                     cardinalityValidCheck();
                     $scope.currentNode.oriNodeRef.cardinality.interval.lower = newValue.toString();
                 }

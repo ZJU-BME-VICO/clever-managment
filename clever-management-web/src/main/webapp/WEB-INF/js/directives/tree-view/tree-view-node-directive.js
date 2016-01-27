@@ -36,7 +36,7 @@ angular.module('clever.management.directives.treeViewNode', []).directive('treeV
 							'</ul>';
 
 			var templateWithMenu = '<ul>' + 
-			                           '<li role="context-menu">' + 
+			                           '<li class="occur-delay" role="context-menu">' + 
 			                             '<span ng-if="childNodes.length" ng-show="!' + nodeAliasName + '.collapsed" ng-click="selectNodeHead(' + nodeAliasName + ')">' + scope.getExpandedIconElement() + '</span>' + 
 		                                 '<span ng-if="childNodes.length" ng-show="' + nodeAliasName + '.collapsed" ng-click="selectNodeHead(' + nodeAliasName + ')">' + scope.getCollapsedIconElement() + '</span>' + 
 			                             '<span context-menu="onShow(' + nodeAliasName + ')" data-target="' + prefix + parentIndex + '.{{$index}}"' + 'ng-class="' + nodeAliasName + '.selected"' + 'ng-click="clickNodeLabel(' + nodeAliasName + ')" ng-dblclick="doubleClickNodeLabel(' + nodeAliasName + ')">' + 

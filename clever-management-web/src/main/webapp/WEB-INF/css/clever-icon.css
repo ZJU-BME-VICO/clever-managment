@@ -347,7 +347,10 @@
 	background-image: url("../img/datatype/attribute.png");
 	background-repeat: no-repeat;
 }
-
+.clever-icon.transition {
+	background-image: url("../img/datatype/transition.png");
+	background-repeat: no-repeat;
+}
 /* Life cycle state */
 .clever-icon.draft {
 	background-image: url("../img/draft.png");
@@ -397,7 +400,7 @@
 	background-image: url("../img/api.png");
 	background-repeat: no-repeat;
 }
-.clever-icon.api-list{
+.clever-icon.api-list {
 	background-image: url("../img/apilist.png");
 	background-repeat: no-repeat;
 }
@@ -405,7 +408,7 @@
 	background-image: url("../img/pojo-class.png");
 	background-repeat: no-repeat;
 }
-.clever-icon.user{
+.clever-icon.user {
 	background-image: url("../img/user.png");
 	background-repeat: no-repeat;
 }
