@@ -352,10 +352,10 @@ angular.module('clever.management.i18n.zh', ['pascalprecht.translate']).config(f
         STORAGE_TEMPLATE_PANE_ARM: 'ARM',
 
         //archetype editor pane
-        //		ARCHETYPE_PANE_CREATE: '创建',
-        //		ARCHETYPE_PANE_SAVE: '保存',
-        //		ARCHETYPE_PANE_SUBMIT: '提交',
-        //		ARCHETYPE_PANE_DIFF: '对比',
+        //      ARCHETYPE_PANE_CREATE: '创建',
+        //      ARCHETYPE_PANE_SAVE: '保存',
+        //      ARCHETYPE_PANE_SUBMIT: '提交',
+        //      ARCHETYPE_PANE_DIFF: '对比',
 
         //verify pane
         SUBMIT_TIME: '提交时间',
@@ -662,6 +662,8 @@ angular.module('clever.management.i18n.zh', ['pascalprecht.translate']).config(f
         API_MAINTAIN_SUCCEEDED_HINT: '接口信息维护成功',
         API_MAINTAIN_FAILED: '操作失败',
         API_MAINTAIN_FAILED_HINT: '接口信息维护失败, 错误：{{errorMsg}}',
+        API_MAINTAIN_API_VERSION: '版本',
+        API_MAINTAIN_API_CATEGORY: '类型名称',
         DEVELOPMENT_API_MAINTAIN_CLASS_MASTER_ADD: '添加类型',
         DEVELOPMENT_API_MAINTAIN_CLASS_ATTRIBUTE_ADD: '添加属性',
         DEVELOPMENT_API_MAINTAIN_SUBMIT: '提交',

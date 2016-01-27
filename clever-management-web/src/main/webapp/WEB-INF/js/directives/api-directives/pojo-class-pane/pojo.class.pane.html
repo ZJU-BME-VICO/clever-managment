@@ -1,80 +1,67 @@
-<div class="row">
-	<div class="col-xs-12 col-md-12 col-lg-12  hbox">
-
-		<div class="panel panel-default" >
-			<div class="panel-heading">
-				<div class="btn-group-sm">
-					<input type="text" class="search-input form-control" ng-model="classNameFilter"  placeholder="{{'SEARCH_HINT' | translate}}"/>
-					<i class=" glyphicon glyphicon-search search-icon" style="top: 14px; 	left: 34px;"></i>
-				</div>
-			</div>
-
-			<div class="list-group" ng-style="{height : maxHeight - 80}"  style="overflow-x:auto; overflow-y: auto; white-space: nowrap;  margin-left: -5px;">
-				<tree-view tree-data="classMasters"
-				node-id="id"
-				click-node-callback = "selectClass(value)"
-				node-children="null"
-				tree-control="treeControl"
-				node-alias-name="node"
-				search-key-mapper="searchKeyMapper"
-				>
-					<tree-expanded-icon>
-						<span class="clever-icon expanded" style="padding: 0 6px;height: 12px;background-position-y: 6px;"></span>
-					</tree-expanded-icon>
-					<tree-collapsed-icon>
-						<span class="clever-icon collapsed" style="padding: 0 6px;height: 12px;background-position-y: 6px;"></span>
-					</tree-collapsed-icon>
-					<tree-node-label>
-						<span> <img  class="clever-icon pojo-class" style="padding: 0 10px;height: 16px;"></img> <a ng-show="node.name" ng-bind-html="node.name | highlight:keyword | unsafe"  class="api"></a></span>
-					</tree-node-label>
-				</tree-view>
-			</div>
-		</div>
-
-		<splitter is-adjust-enabled="true"  style="min-height: 100%;" >
-
-		</splitter>
-		<div class="col-xs-12 col-md-12 col-lg-12 flex-box">
-			<div  ng-style="{height : maxHeight-80}" style="overflow:auto; border-bottom: inset 1px">
-				<span class="table-label">{{selectedClass.name}}</span>
-				<table class="variables-matrix input-arguments" style="margin-top: 0">
-					<thead>
-						<tr>
-							<th style="width:120px">{{'DEVELOPMENT_API_EDIT_NAME' | translate}}</th>
-
-							<th style="width:80px">{{'DEVELOPMENT_API_EDIT_TYPE' | translate}}</th>
-							<th style="width:120px">{{'DEVELOPMENT_API_EDIT_REQUIRED' | translate}}</th>
-							<th>{{'DEVELOPMENT_API_EDIT_DESCRIPTIOIN' | translate}}</th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr ng-repeat="attribute in selectedClass.attributes">
-							<td>
-							<p>
-								{{attribute.name}}
-							</p></td>
-
-							<td>
-							<input class="form-control" ng-model="attribute.type" />
-							</td>
-							<td><select class="form-control" ng-model="attribute.isRequired" ng-options="o.v as o.n for o in [{ n: 'false', v: false }, { n: 'true', v: true }]">
-
-							</select></td>
-							<td>
-							<input class="form-control" placeholder="{{'DEVELOPMENT_API_EDIT_DESCRIPTION_PLACEHOLDER_EN' | translate}} " ng-model="attribute.descriptionEn">
-							<br>
-							<input class="form-control" placeholder="{{'DEVELOPMENT_API_EDIT_DESCRIPTION_PLACEHOLDER_ZH' | translate}}" ng-model="attribute.descriptionZh">
-							</td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
-			<div class="modal-footer">
-				<button class="btn btn-success pull-right" ng-click="saveAttribute()" style="position: center">
-					<span class="glyphicon glyphicon-floppy-open"></span>
-					{{'DEVELOPMENT_API_MAINTAIN_SUBMIT' | translate}}
-			</div>
-		</div>
-
-	</div>
+<div class="row" style="margin-top:20px;">
+    <div class="col-xs-12 col-md-12 col-lg-12  hbox">
+        <div class="panel panel-default" ng-style="{height : maxHeight + 5}">
+            <div class="panel-heading">
+                <div class="btn-group-sm">
+                    <input type="text" class="search-input form-control" ng-model="classNameFilter" placeholder="{{'SEARCH_HINT' | translate}}" />
+                    <i class=" glyphicon glyphicon-search search-icon" style="top: 14px; 	left: 34px;"></i>
+                </div>
+            </div>
+            <div class="list-group" ng-style="{height : maxHeight -35}" style="overflow-x:auto; overflow-y: auto; white-space: nowrap;  margin-left: -5px;">
+                <tree-view tree-data="classMasters" node-id="id" click-node-callback="selectClass(value)" node-children="null" tree-control="treeControl" node-alias-name="node" search-key-mapper="searchKeyMapper">
+                    <tree-expanded-icon>
+                        <span class="clever-icon expanded" style="padding: 0 6px;height: 12px;background-position-y: 6px;"></span>
+                    </tree-expanded-icon>
+                    <tree-collapsed-icon>
+                        <span class="clever-icon collapsed" style="padding: 0 6px;height: 12px;background-position-y: 6px;"></span>
+                    </tree-collapsed-icon>
+                    <tree-node-label>
+                        <span> <img  class="clever-icon pojo-class" style="padding: 0 10px;height: 16px;"></img> <a ng-show="node.name" ng-bind-html="node.name | highlight:keyword | unsafe"  class="api"></a></span>
+                    </tree-node-label>
+                </tree-view>
+            </div>
+        </div>
+        <splitter is-adjust-enabled="true" style="min-height: 100%;">
+        </splitter>
+        <div class="col-xs-12 col-md-12 col-lg-12 flex-box">
+            <div ng-style="{height : maxHeight-35}" style="overflow:auto; border-bottom: inset 1px">
+                <span class="table-label">{{selectedClass.name}}</span>
+                <table class="variables-matrix input-arguments" style="margin-top: 0">
+                    <thead>
+                        <tr>
+                            <th style="width:120px">{{'DEVELOPMENT_API_EDIT_NAME' | translate}}</th>
+                            <th style="width:80px">{{'DEVELOPMENT_API_EDIT_TYPE' | translate}}</th>
+                            <th style="width:120px">{{'DEVELOPMENT_API_EDIT_REQUIRED' | translate}}</th>
+                            <th>{{'DEVELOPMENT_API_EDIT_DESCRIPTIOIN' | translate}}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="attribute in selectedClass.attributes">
+                            <td>
+                                <p>
+                                    {{attribute.name}}
+                                </p>
+                            </td>
+                            <td>
+                                <input class="form-control" ng-model="attribute.type" />
+                            </td>
+                            <td>
+                                <select class="form-control" ng-model="attribute.isRequired" ng-options="o.v as o.n for o in [{ n: 'false', v: false }, { n: 'true', v: true }]">
+                                </select>
+                            </td>
+                            <td>
+                                <input class="form-control" placeholder="{{'DEVELOPMENT_API_EDIT_DESCRIPTION_PLACEHOLDER_EN' | translate}} " ng-model="attribute.descriptionEn">
+                                <br>
+                                <input class="form-control" placeholder="{{'DEVELOPMENT_API_EDIT_DESCRIPTION_PLACEHOLDER_ZH' | translate}}" ng-model="attribute.descriptionZh">
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-success pull-right" ng-click="saveAttribute()" style="position: center">
+                    <span class="glyphicon glyphicon-floppy-open"></span> {{'DEVELOPMENT_API_MAINTAIN_SUBMIT' | translate}}
+            </div>
+        </div>
+    </div>
 </div>
