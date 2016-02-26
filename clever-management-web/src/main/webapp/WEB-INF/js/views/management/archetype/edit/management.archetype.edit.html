@@ -1,16 +1,34 @@
 <div class="row">
 	<div class="col-xs-12 col-md-12 col-lg-12 hbox">
 		<div class="panel panel-default" ng-show="!isArchetypeListHidden">
-			<div class="panel-heading">
-				<i class="search-icon glyphicon glyphicon-search search-icon-list"></i>
-				<input type="text" style="border-radius: 17px; padding-left: 40px" ng-model="archetypeListFilter" class="form-control" placeholder="{{'SEARCH_HINT' | translate}}" />
+			<div class="panel-heading" >
+				<div class='input-group' style="display: flex">
+					<i class="search-icon glyphicon glyphicon-search search-icon-list"></i>
+					<input type="text" style="border-top-left-radius: 17px;border-bottom-left-radius:17px; padding-left: 40px" ng-model="archetypeListFilter" class="form-control" placeholder="{{'SEARCH_HINT' | translate}}" />
+					<button class="btn btn-default" ng-click="expandAll()" tooltip-placement="right" tooltip="{{'ARCHETYPE_EDIT_EXPANDALL' | translate}}" tooltip-popup-delay="500">
+						<span class="glyphicon glyphicon-plus"></span>
+					</button>
+					<button class="btn btn-default" ng-click="collapseAll()" tooltip-placement="right" tooltip="{{'ARCHETYPE_EDIT_COLLAPSEALL' | translate}}" tooltip-popup-delay="500">
+						<span class="glyphicon glyphicon-minus"></span>
+					</button>
+				</div>
+
 				<!-- <input type="text" class="form-control" ng-model="archetypeListFilter" placeholder="{{'SEARCH_HINT' | translate}}"> -->
 			</div>
 			<div class="list-group" ng-style="{height:containerHeight-55}" style="overflow: auto;margin-left: -5px;white-space: nowrap;">
 				<!--node-menu-generator = "getTreeElementMenu"
 				specialise-archetype-callback="specialiseArchetype(value)"
 				<a href=""  ng-class="{active:selectedArchetype.id == archetype.id}" class="list-group-item" ng-repeat="archetype in draftArchetypeList"  ng-click="selectArchetype(archetype)">{{archetype.name}}</a>-->
-				<tree-view tree-data="archetypeList" class="archetype-tree" double-click-node-callback="selectArchetype(value)" node-id="id" node-children="specialiseArchetype" delete-archetype-callback="deleteArchetype(value)" click-node-menu-callback="clickNodeMenu(node, type)" menu-prefix="list" tree-control="treeControl" node-alias-name="node" search-key-mapper="searchKeyMapper">
+				<tree-view tree-data="archetypeList" 
+				 class="archetype-tree" 
+				 double-click-node-callback="selectArchetype(value)" 
+				 node-id="id" 
+			   	 node-children="specialiseArchetype" 
+				 delete-archetype-callback="deleteArchetype(value)" 
+				 click-node-menu-callback="clickNodeMenu(node, type)" 
+				 menu-prefix="list" tree-control="treeControl"
+				 node-alias-name="node" 
+				 search-key-mapper="searchKeyMapper">
 					<tree-expanded-icon>
 						<span class="clever-icon expanded" style="padding: 0 6px;height: 12px;background-position-y: 6px;"></span>
 					</tree-expanded-icon>
@@ -43,7 +61,7 @@
 						<span class="text-danger" ng-if="selectedArchetype.lifecycleState != 'Draft'">{{'MANAGEMENT_ARCHETYPE_EDIT_NOT_EDITABLE' | translate}}</span>
 						<div class="input-group input-group-sm pull-right" >
 							<span class="input-group-addon success" style="width: 100px; background-color: #428bca; color:white">{{'ARCHETYPE_PANE_LANGUAGE' | translate}}:</span>
-							<select class="form-control" ng-options="lan.code for lan in languages.languages" ng-model="currentLanguage"></select>
+							<select class="form-control" ng-options="lan as lan.code for lan in languages.languages"  ng-model="currentLanguage" ></select>
 						</div>
 					</div>
 					<div class="panel-body" ng-style="{height: containerHeight - 50}">

@@ -41,6 +41,7 @@ import edu.zju.bme.clever.management.web.entity.ArchetypeInfo;
 import edu.zju.bme.clever.management.web.entity.ArchetypeMasterInfo;
 import edu.zju.bme.clever.management.web.entity.ArchetypeVersionMasterInfo;
 import edu.zju.bme.clever.management.web.entity.FileUploadResult;
+import edu.zju.bme.clever.management.web.entity.XmlInfo;
 import se.acode.openehr.parser.ADLParser;
 import se.acode.openehr.parser.ParseException;
 
@@ -223,10 +224,12 @@ public class ArchetypeResourceController extends AbstractResourceController {
 	}
 
 	@RequestMapping(value = "/name/{name}/adl", method = RequestMethod.GET)
-	public String getArchetypeAdlByName(@PathVariable String name) {
+	public AdlInfo getArchetypeAdlByName(@PathVariable String name) {
 		String adl = this.archetypeProvideService.getArchetypeAdlByName(name);
 		this.isResourcesNull(adl);
-		return adl;
+		AdlInfo info = new AdlInfo();
+		info.setAdl(adl);
+		return info;
 	}
 
 	@RequestMapping(value = "/id/{id}/xml", method = RequestMethod.GET)
@@ -237,10 +240,12 @@ public class ArchetypeResourceController extends AbstractResourceController {
 	}
 
 	@RequestMapping(value = "/name/{name}/xml", method = RequestMethod.GET)
-	public String getArchetypeXmlByName(@PathVariable String name) {
+	public XmlInfo getArchetypeXmlByName(@PathVariable String name) {
 		String xml = this.archetypeProvideService.getArchetypeXmlByName(name);
 		this.isResourcesNull(xml);
-		return xml;
+		XmlInfo info = new XmlInfo();
+		info.setXml(xml);
+		return info;
 	}
 
 	@RequestMapping(value = "/master/id/{id}", method = RequestMethod.GET)
@@ -469,14 +474,14 @@ public class ArchetypeResourceController extends AbstractResourceController {
 		info.setName(file.getName());
 		info.setSerialVersion(file.getSerialVersion());
 		info.setVersion(file.getVersion());
-		info.setAdl(file.getAdl());
+		//info.setAdl(file.getAdl());
 		ADLParser parser = new ADLParser(file.getAdl());
 		Archetype archetype = parser.parse();
 		info.setRmEntity(archetype.getArchetypeId().rmEntity());
 		info.setRmName(archetype.getArchetypeId().rmName());
 		info.setRmOriginator(archetype.getArchetypeId().rmOriginator());
 		info.setConceptName(archetype.getConceptName(archetype.getOriginalLanguage().getCodeString()));
-		info.setXml(this.xmlSerializer.output(archetype));
+		//info.setXml(this.xmlSerializer.output(archetype));
 		info.setLifecycleState(file.getLifecycleState().getValue());
 		// info.setVersionMasterName(file.getVersionMaster().getName());
 		String archetypeId = archetype.getArchetypeId().getValue();

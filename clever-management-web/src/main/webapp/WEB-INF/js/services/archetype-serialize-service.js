@@ -4,7 +4,7 @@ angular.module('clever.management.service.archetypeSerialize', []).service('arch
 	this.indent = "    ";
 	//4 white space characters
 	var x2js = new X2JS();
-	this.serializeArchetypeToXml = function(archetype){
+	this.serializeArchetypeToXml = function(archetype) {
 		return x2js.json2xml_str(archetype);
 	};
 	this.serializeArchetype = function(archetype) {
@@ -33,7 +33,7 @@ angular.module('clever.management.service.archetypeSerialize', []).service('arch
 			this.write("adl_version=");
 			this.write(archetype.adl_version);
 		}
-		if ( archetype.uid && archetype.uid.length != 0) {
+		if (archetype.uid && archetype.uid.length != 0) {
 			this.write("; uid=");
 			this.write(archetype.uid);
 		}
@@ -80,7 +80,7 @@ angular.module('clever.management.service.archetypeSerialize', []).service('arch
 			this.writeIndent(1);
 			this.write("translations = <");
 			this.newLine();
-			if(!angular.isArray(archetype.translations)){
+			if (!angular.isArray(archetype.translations)) {
 				var temp = archetype.translations;
 				archetype.translations = [temp];
 			}
@@ -175,9 +175,7 @@ angular.module('clever.management.service.archetypeSerialize', []).service('arch
 		this.writeIndent(1);
 		this.write(">");
 		this.newLine();
-    
-		
-		
+
 		if (description.other_contributors) {
 			this.writeIndent(1);
 			this.write("other_contributors = <");
@@ -202,7 +200,6 @@ angular.module('clever.management.service.archetypeSerialize', []).service('arch
 			this.write(">");
 			this.newLine();
 		}
-
 
 		this.writeIndent(1);
 		this.write("other_details = <");
@@ -238,24 +235,27 @@ angular.module('clever.management.service.archetypeSerialize', []).service('arch
 			self.write(">");
 			self.newLine();
 		}
+		console.log('this is constraint definition-------');
+		console.log(ontology.constraint_definitions);
+
 		//**constraint defintion section
+		self.writeIndent(1);
+		self.write("constraint_definitions = <");
+		self.newLine();
 		if (ontology.constraint_definitions) {
-			self.writeIndent(1);
-			self.write("constraint_definitions = <");
-			self.newLine();
 			self.printDefinitionList(ontology.constraint_definitions);
-			self.writeIndent(1);
-			self.write(">");
-			self.newLine();
 		}
+		self.writeIndent(1);
+		self.write(">");
+		self.newLine();
 
 		//---term binding section
 		var term_bindingList = ontology.term_bindings;
-		if (term_bindingList) {
-			self.writeIndent(1);
-			self.write("term_binding = <");
-			self.newLine();
+		self.writeIndent(1);
+		self.write("term_binding = <");
+		self.newLine();
 
+		if (term_bindingList) {
 			if (angular.isArray(term_bindingList)) {
 				var i;
 				for ( i = 0; i < term_bindingList.length; i++) {
@@ -264,30 +264,31 @@ angular.module('clever.management.service.archetypeSerialize', []).service('arch
 			} else {//term binding is not a array
 				this.printTermBinding(term_bindingList);
 			}
-			self.write(1);
-			self.write(">");
-			self.newLine();
 		}
+		self.writeIndent(1);
+		self.write(">");
+		self.newLine();
 
 		//-------constraint binding section------------------
 		var constraint_bindingList = ontology.constraint_bindings;
-		if (constraint_bindingList) {
-			self.writeIndent(1);
-			self.write("constraint_binding = <");
-			self.newLine();
+		self.writeIndent(1);
+		self.write("constraint_binding = <");
+		self.newLine();
 
+		if (constraint_bindingList) {
 			if (angular.isArray(constraint_bindingList)) {
 				var i;
 				for ( i = 0; i < constraint_bindingList.length; i++) {
+
 					self.printConstraintBinding(constraint_bindingList[i]);
 				}
 			} else {//is not a array
 				self.printConstraintBinding(constraint_bindingList);
 			}
-			self.writeIndent(1);
-			self.write(">");
-			self.newLine();
 		}
+		self.writeIndent(1);
+		self.write(">");
+		self.newLine();
 
 	};
 	this.printConstraintBindingItem = function(bindingItem) {
@@ -373,16 +374,19 @@ angular.module('clever.management.service.archetypeSerialize', []).service('arch
 		self.write("\"] = <");
 		self.newLine();
 		angular.forEach(archetypeTerm.items, function(item) {
-			self.writeIndent(5);
-			self.write(item._id);
-			self.write(" = <\"");
-			// this is for test ,should be remove
-			if(item.__text){
-					self.write( item.__text.replace(/"/g, "\\\""));
+			if (item.__text) {
+				self.writeIndent(5);
+				self.write(item._id);
+				self.write(" = <\"");
+				// this is for test ,should be remove
+				if (item.__text) {
+					self.write(item.__text.replace(/"/g, "\\\""));
+				}
+
+				self.write("\">");
+				self.newLine();
 			}
-		
-			self.write("\">");
-			self.newLine();
+
 		});
 		self.newLine();
 		self.writeIndent(4);
@@ -841,7 +845,7 @@ angular.module('clever.management.service.archetypeSerialize', []).service('arch
 					self.write("]");
 					self.newLine();
 				}
-			}else{
+			} else {
 				self.write("]");
 				self.newLine();
 			}
@@ -1144,8 +1148,7 @@ angular.module('clever.management.service.archetypeSerialize', []).service('arch
 			}
 			this.write("}");
 		}
-	}; 
-
+	};
 
 	this.printMapArray = function(array, number) {
 		var self = this;
@@ -1156,7 +1159,7 @@ angular.module('clever.management.service.archetypeSerialize', []).service('arch
 				self.write("[\"");
 				self.write(item._id);
 				self.write("\"] = <\"");
-				self.write(item.__text);
+				self.write(item.__text || '');
 				self.write("\">");
 				self.newLine();
 			});
@@ -1166,7 +1169,7 @@ angular.module('clever.management.service.archetypeSerialize', []).service('arch
 			self.write("[\"");
 			self.write(array._id);
 			self.write("\"] = <\"");
-			self.write(array.__text);
+			self.write(array.__text || '');
 			self.write("\">");
 			self.newLine();
 		}

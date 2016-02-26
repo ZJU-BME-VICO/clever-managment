@@ -11,11 +11,12 @@
 			<toggle-switch model="isExpandedAll.value"></toggle-switch>
 			</div>
 			</div> -->
-			<div style="margin-left:20px; display: flex">
-				<div style="margin: 15px 15px 0 15px">
-					<toggle-switch model="isExpandedAll.value"></toggle-switch>
+			<div style="margin: 15px 15px 0 15px; display: flex">
+				<toggle-switch model="isExpandedAll.value" style="margin-right:10px"></toggle-switch>
+				<div class="input-group input-group-sm" style="width: 50%">
+					<span class="input-group-addon" id="sizing-addon3">Search</span>
+					<input class="form-control" type="text" ng-model='archetypeTreeNodeFilter' />
 				</div>
-			
 			</div>
 
 			<hr />
@@ -38,7 +39,9 @@
 					node-label-generator="getLabelContent"
 					node-menu-generator="getTreeNodeMenu"
 					menu-prefix = "definition"
-					click-node-menu-callback="editArchetype(node,type)">
+					click-node-menu-callback="editArchetype(node,type)"
+					search-key-mapper="searchKeyMapper"
+					>
 						<tree-expanded-icon>
 							<span class="clever-icon expanded" style="padding: 0 6px;height: 12px;background-position-y: 6px;"></span>
 						</tree-expanded-icon>
@@ -50,13 +53,13 @@
 							<span ng-show="!node.label.slot" class="clever-icon list" ng-class="node.label.picType | typemap | lowercase  " style="padding: 7px 10px; background-position-y: 10px;"></span>
 							<span ng-show="node.label.code"> 
 								<span ng-show="node.label.archetypeNode" style="color: black;font-weight: bold;"> 
-									<span ng-bind-html="getLabelContent(node) | unsafe"></span> 
+									<span ng-bind-html="getLabelContent(node) | highlight:keyword |unsafe"></span> 
 								</span> 
 								<span ng-show="!node.label.archetyeNode" style="color: brown;">
-									<span ng-bind-html="getLabelContent(node) | unsafe"></span> 
+									<span ng-bind-html="getLabelContent(node) | highlight:keyword | unsafe"></span> 
 								</span> 
 							</span>
-							<span ng-show="(!node.label.code)&&node.label.text" style="color: brown;" > <span ng-bind-html="node.label.text | unsafe"></span></span>
+							<span ng-show="(!node.label.code)&&node.label.text" style="color: brown;" > <span ng-bind-html="node.label.text | highlight:keyword |  unsafe"></span></span>
 						</tree-node-label>
 
 					</tree-view>

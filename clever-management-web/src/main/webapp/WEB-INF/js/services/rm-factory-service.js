@@ -32,7 +32,7 @@ angular.module('clever.management.service.rmFactoryService', []).service('rmFact
     var T_DV_IDENTIFIER = 'DV_IDENTIFIER';
     var T_DV_CODED_TEXT = 'DV_CODED_TEXT';
     var T_DV_INTERVAL_DATE_TIME = 'DV_INTERVAL_DATE_TIME';
-    var T_DV_DATE_TIME = 'DV_DATE_TIME'
+    var T_DV_DATE_TIME = 'DV_DATE_TIME';
     var T_BOOLEAN = 'BOOLEAN';
     var T_CODE_PHRASE = 'CODE_PHRASE';
     var T_DV_ORDINAL = 'DV_ORDINAL';
@@ -58,7 +58,7 @@ angular.module('clever.management.service.rmFactoryService', []).service('rmFact
     var T_EVENT_CONTEXT = 'EVENT_CONTEXT';
     var T_ISM_TRANSITION = 'ISM_TRANSITION';
     var T_INSTRUCTION_DETAILS = 'INSTRUCTION_DETAILS';
-    var P
+   
 
     //Attribute generator
     function Attr(attributeName, required, childrenType, childrenIsArray) {
@@ -69,7 +69,7 @@ angular.module('clever.management.service.rmFactoryService', []).service('rmFact
                 isArray: childrenIsArray,
             },
             '@required': required,
-        }
+        };
     }
 
     function inheritEstablish(parent, children) {
@@ -82,7 +82,7 @@ angular.module('clever.management.service.rmFactoryService', []).service('rmFact
         this.attributes = [];
         this.parsable = parsable;
     }
-    RmObject.prototype.type = 'rm_Object';;
+    RmObject.prototype.type = 'rm_Object';
 
 
 
@@ -1136,4 +1136,4 @@ angular.module('clever.management.service.rmFactoryService', []).service('rmFact
     console.log(new ISM_TRANSITION);
     console.log((new ISM_TRANSITION).type);
 
-})
+});

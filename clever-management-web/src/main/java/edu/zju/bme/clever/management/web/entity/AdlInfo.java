@@ -12,5 +12,4 @@ public class AdlInfo {
 		this.adl = adl;
 	}
 
-
 }

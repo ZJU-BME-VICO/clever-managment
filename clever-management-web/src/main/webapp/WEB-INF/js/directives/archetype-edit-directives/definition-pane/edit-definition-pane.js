@@ -34,6 +34,17 @@ angular.module('clever.management.directives.editDefinitionPane', []).directive(
 				$scope.currentNode = undefined;
 				$scope.ontologyItem = undefined;
 			});
+			
+		
+			$scope.$watch('archetypeTreeNodeFilter', function(newValue) {
+				if (newValue != undefined) {
+					$scope.treeControl.search(newValue);
+				}
+			}); 
+
+			$scope.searchKeyMapper = function(node){
+			   return $scope.getLabelContent(node);
+			};
 			$scope.selectNode = function(node) {
 				$scope.currentNode = node;
 				$scope.ontologyItem = getOntologyItemByCode(node.label.code, $scope.ontology);
@@ -121,7 +132,7 @@ angular.module('clever.management.directives.editDefinitionPane', []).directive(
 
 			};
 
-			/*
+			/**
 			 * there would not a items attributs behind this
 			 * type, so when we add a type to this node , a
 			 * items attribute should be added;
@@ -416,7 +427,6 @@ angular.module('clever.management.directives.editDefinitionPane', []).directive(
 				node.oriNodeRef.children = pushTo(participation, node.oriNodeRef.children);
 				editor.synchronizeOntology($scope.ontology, nodeId, "New Participation", "*");
 				return parser.myProcessNode(participation, node, node.children, $scope.ontology.term_definitions, node.childrenAttribute);
-
 			}
 
 			// participation function end
@@ -602,18 +612,18 @@ angular.module('clever.management.directives.editDefinitionPane', []).directive(
 			}
 
 			function getEVENT(ontology) {
-				var nodeId_itemTree = editor.getTermDefinitionNodeId(ontology);
+				var nodeId_itemTree = editor.getTermDefinitionNodeId(ontology.term_definitions.oriNodeRef);
 				var ItemTree = getITEM_TREE(nodeId_itemTree);
 				editor.synchronizeOntology(ontology, nodeId_itemTree, "Tree", "@ internal @");
 				var dataAttribute = editor.getCSingleAttribute(ItemTree, editor.getDefaultExistence(1, 1), "data");
-				var nodeId_event = editor.getTermDefinitionNodeId(ontology);
+				var nodeId_event = editor.getTermDefinitionNodeId(ontology.term_definitions.oriNodeRef);
 				var eventObject = editor.getCComplexObject(dataAttribute, nodeId_event, editor.getDefaultOccurrences(0, 1), "EVENT");
 				editor.synchronizeOntology(ontology, nodeId_event, "Any event", "*");
 				return eventObject;
 			}
 
 			function getHISTORY(ontology) {
-				var nodeId_history = editor.getTermDefinitionNodeId(ontology);
+				var nodeId_history = editor.getTermDefinitionNodeId(ontology.term_definitions.oriNodeRef);
 				var eventObject = getEVENT(ontology);
 				var eventsAttribute = editor.getCMultipleAttribute(eventObject, editor.getDefaultCardinality(1), editor.getDefaultExistence(1, 1), "events");
 				var historyObject = editor.getCComplexObject(eventsAttribute, nodeId_history, editor.getDefaultOccurrences(1, 1), "HISTORY");
@@ -936,7 +946,7 @@ angular.module('clever.management.directives.editDefinitionPane', []).directive(
 			}
 
 			function getNextNodeId() {
-				return editor.getTermDefinitionNodeId($scope.ontology);
+				return editor.getTermDefinitionNodeId($scope.ontology.term_definitions.oriNodeRef);
 			}
 
 			function getDV_CODED_TEXT() {
@@ -1092,6 +1102,7 @@ angular.module('clever.management.directives.editDefinitionPane', []).directive(
 				}
 
 				function withLanguage(value) {
+					//console.log($scope.language);
 					return value.language == $scope.language.code;
 
 				}

@@ -83,6 +83,8 @@ angular.module('clever.management.i18n.zh', ['pascalprecht.translate']).config(f
         ARCHETYPE_EDIT_SAVE_SUCCEEDED_HINT: '原型保存成功',
         ARCHETYPE_FALLBACK_SUCCEEDE_HINT: '回退原型状态成功',
         ARCHETYPE_FALLBACK_FAILED_HINT: '回退原型状态失败',
+        ARCHETYPE_EDIT_COLLAPSEALL: '全部收缩',
+        ARCHETYPE_EDIT_EXPANDALL : '全部展开',
 
         //ARCHETYPE_EDIT_SUBMIT_SUCCEEDED_HINT : '原型提交成功',
         ARCHETYPE_EDIT_EDIT_FAILED_HINT: '编辑原型失败,错误: {{errorMsg}}',
@@ -91,6 +93,8 @@ angular.module('clever.management.i18n.zh', ['pascalprecht.translate']).config(f
         ARCHETYPE_NEW_VERSION_INSTRUCTION: '不能编辑已提交或已发布的原型，请通过右键菜单创建新版本原型',
         ARCHETYPE_EDIT_ADD_FAILED_HINT: '编辑原型失败,错误: {{errorMsg}}',
         ARCHETYPE_EDIT_ADD_SUCCEEDED_HINT: '添加原型成功',
+        ARCHETYPE_EDIT_TERMDEFINITION_CODE_FILTER : '按code查找' ,
+        ARCHETYPE_EDIT_TERMDEFINITION_TEXT_FILTER:  '按Text查找',
         // Storage template edit
         TEMPLATE_EDIT_FALLBACK: '状态回退',
         TEMPLATE_EDIT_BATCHSUBMIT: '批量提交',
@@ -148,7 +152,9 @@ angular.module('clever.management.i18n.zh', ['pascalprecht.translate']).config(f
         ARCHETYPE_VERIFY_REJECT_FAILED_HINT: '否决原型失败, 错误: {{errorMsg}}',
         ARCHETYPE_VERIFY_REMOVE_HINT: '是否否决并删除原型{{archetypeName}}?',
         ARCHETYPE_VERIFY_REMOVE_FAILED_HINT: '否决并删除原型失败, 错误: {{errorMsg}}',
-
+        
+        ARCHETYPE_EDIT_SAVEASK_HINT : '原型{{archetypeName}}信息已被修改，是否保存？',
+        
         // Storage template upload
         STORAGE_TEMPLATE_UPLOAD_FILE_TO_UPLOAD: '待上传',
         STORAGE_TEMPLATE_UPLOAD_ADD: '添加',
@@ -411,7 +417,7 @@ angular.module('clever.management.i18n.zh', ['pascalprecht.translate']).config(f
         MANAGEMENT_ARCHETYPE_EDIT_REFERENCE_MODEL: '参考模式',
         MANAGEMENT_ARCHETYPE_EDIT_ENTITY_TYP: '实体类型',
         MANAGEMENT_ARCHETYPE_EDIT_CONCEP: '概念',
-        MANAGEMENT_ARCHETYPE_EDIT_CREATE: '查询',
+        MANAGEMENT_ARCHETYPE_EDIT_CREATE: '创建',
         MANAGEMENT_ARCHETYPE_EDIT_SPECIALISE_THIS_ARCHETYPE: '专门化原型',
         MANAGEMENT_ARCHETYPE_EDIT_ENTER_A_NEW_CONCEP: '输入新概念',
         MANAGEMENT_ARCHETYPE_EDIT_DOWN: '向下',
@@ -514,7 +520,7 @@ angular.module('clever.management.i18n.zh', ['pascalprecht.translate']).config(f
         EDIT_DEFINITION_PANE_PARTICIPATION: '参与',
         EDIT_DEFINITION_PANE_LINKS: '链接',
         EDIT_DEFINITION_PANE_CONSTRAINT: '约束',
-        EDIT_DEFINITION_PANE_NODE_INFO: '节点信息',
+        EDIT_DEFINITION_PANE_NODE_INFO: '节点',
         EDIT_DEFINITION_PANE_OCCURRENCES: '出现次数',
         EDIT_DEFINITION_PANE_MIN: '最小值',
         EDIT_DEFINITION_PANE_MAX: '最大值',

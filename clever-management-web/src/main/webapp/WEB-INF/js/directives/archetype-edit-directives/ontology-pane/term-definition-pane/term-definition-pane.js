@@ -9,10 +9,11 @@ angular.module('clever.management.directives.termDefinitionPane', []).directive(
 		templateUrl : 'js/directives/archetype-edit-directives/ontology-pane/term-definition-pane/term.definition.pane.html',
 
 		controller : function($scope, $element, $attrs) {
-			$scope.$watch('termDefinition', function(newValue) {
-			});
-			
-			
+			$scope.currentFilter = 'codeFilter';
+			$scope.filterAlter = function() {
+				$scope.currentFilter = $scope.currentFilter == 'codeFilter' ? 'textFilter' : 'codeFilter';
+			};
+
 		}
 	};
-}); 
+});

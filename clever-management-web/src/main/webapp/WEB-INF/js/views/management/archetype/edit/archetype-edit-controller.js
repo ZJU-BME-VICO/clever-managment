@@ -1,4 +1,4 @@
-function ArchetypeEditCtrl($scope, $modal, $log, $q, $timeout, msgboxService, busyService, archetypeEditService, documentDiffModalService, resourceService, archetypeParseEditService, templateParseToEditService, archetypeSerializeService, archetypeParseService, treeDataFormatService, ARCHETYPE_LIST_EDIT_DRAFT_URL, ARCHETYPE_LIST_EDIT_PUBLISHED_URL, ARCHETYPE_CREATE_BY_URL, AECHETYPE_FALLBACK_BY_ID_URL, ARCHETYPE_EDIT_BY_ID_URL, ARCHETYPE_SUBMIT_BY_ID_URL, ARCHETYPE_REMOVE_BY_ID_URL) {
+function ArchetypeEditCtrl($scope, $modal, $log, $q, $timeout, msgboxService, busyService, archetypeEditService, documentDiffModalService, resourceService, archetypeParseEditService, templateParseToEditService, archetypeSerializeService, archetypeParseService, treeDataFormatService, ARCHETYPE_BY_NAME_URL, ARCHETYPE_LIST_EDIT_DRAFT_URL, ARCHETYPE_LIST_EDIT_PUBLISHED_URL, ARCHETYPE_CREATE_BY_URL, AECHETYPE_FALLBACK_BY_ID_URL, ARCHETYPE_EDIT_BY_ID_URL, ARCHETYPE_SUBMIT_BY_ID_URL, ARCHETYPE_REMOVE_BY_ID_URL) {
 
 
     $scope.treeControl = {};
@@ -23,6 +23,11 @@ function ArchetypeEditCtrl($scope, $modal, $log, $q, $timeout, msgboxService, bu
     });
 
 
+/**
+ * SearchKeyMapper callback function for tree view
+ * @param {object} node An archetype node in archetype tree
+ * @return {string} Node name if node is a directory, node conceptName with node latestArchetypeVersion if node is a archetype 
+ */
     $scope.searchKeyMapper = function(node) {
         if (node.isDirectory) {
             return node.name;
@@ -36,312 +41,418 @@ function ArchetypeEditCtrl($scope, $modal, $log, $q, $timeout, msgboxService, bu
             $scope.treeControl.search(newValue);
         }
     });
+    
+	$scope.collapseAll = function() {
+		$scope.treeControl.collapseAll();
+	};
+	$scope.expandAll = function() {
+		$scope.treeControl.expandAll();
+	}; 
+
+	/**
+	 * load archetype list from server, run immediately
+	 */
+	$scope.loadArchetypeList = function() {
+		var busyId = busyService.pushBusy('BUSY_LOADING');
+		resourceService.get(ARCHETYPE_LIST_EDIT_DRAFT_URL).then(function(list) {
+			$scope.draftArchetypeList = list;
+			formatArchetypeSpecialiseRelation(list);
+			$scope.draftLoadOver = true;
+			generateTreeData();
+			busyService.popBusy(busyId);
+		});
+		var busyId = busyService.pushBusy('BUSY_LOADING');
+		resourceService.get(ARCHETYPE_LIST_EDIT_PUBLISHED_URL).then(function(list) {
+			$scope.publishedArchetypeList = list;
+			formatArchetypeSpecialiseRelation(list);
+			$scope.publishedLoadOver = true;
+			console.log(list);
+			generateTreeData();
+			busyService.popBusy(busyId);
+		});
+
+	}; 
+	$scope.loadArchetypeList();
 
 
+	/**
+	 *  Concat draft and published archetype list,
+	 *  use formatTreeData service generate a foramted tree data which can be used as tree view data,
+	 *  if archetype name need located is not null ,locate this archetype.
+	 */
+	function generateTreeData() {
+		if ($scope.draftLoadOver && $scope.publishedLoadOver) {
+			$scope.draftLoadOver = false;
+			$scope.publishedLoadOver = false;
+			var list = $scope.draftArchetypeList.concat($scope.publishedArchetypeList);
+			$scope.originalArchetypeList = list;
 
-    //init data
-    $scope.draftArchetypeList = "list";
-    $scope.initData = function() {
-        var busyId = busyService.pushBusy('BUSY_LOADING');
-        resourceService.get(ARCHETYPE_LIST_EDIT_DRAFT_URL).then(function(list) {
-            $scope.draftArchetypeList = list;
-            initArchetypeSpecialise(list);
-            $scope.draftOver = true;
-            generateTreeData();
-            busyService.popBusy(busyId);
-        });
-        var busyId = busyService.pushBusy('BUSY_LOADING');
-        resourceService.get(ARCHETYPE_LIST_EDIT_PUBLISHED_URL).then(function(list) {
-            $scope.publishedArchetypeList = list;
-            initArchetypeSpecialise(list);
-            $scope.publishedOver = true;
-            console.log(list);
-            generateTreeData();
-            busyService.popBusy(busyId);
-        });
+			$scope.formatedObject = treeDataFormatService.formatTreeData(list, 'specialiseArchetype');
 
-    };
-    $scope.initData();
+			$scope.archetypeList = $scope.formatedObject.formatedList;
 
-    function generateTreeData() {
-        if ($scope.draftOver && $scope.publishedOver) {
-            $scope.draftOver = false;
-            $scope.publishedOver = false;
-            // concat draft and published list
-            var list = $scope.draftArchetypeList.concat($scope.publishedArchetypeList);
-            $scope.originalArchetypeList = list;
-
-            $scope.formatedObject = treeDataFormatService.formatTreeData(list, 'specialiseArchetype');
-
-            $scope.archetypeList = $scope.formatedObject.formatedList;
-            var name = $scope.needLocatedObjectName;
-            if (name) {
-                //wait the digest for tree end
-                $timeout(function() {
-                    $scope.locateArchetype(findArchetypeByName($scope.originalArchetypeList, name));
-
-                    $scope.needLocatedObjectName = undefined;
-                }, 0);
-            }
-        }
-    }
-
-    /*
-     * function find a archetype by name
-     */
+			var name = $scope.needLoactedArchetypeName;
+			if (name) {
+				/* after tree view digest */
+				$timeout(function() {
+					$scope.locateArchetype(findArchetypeByName($scope.originalArchetypeList, name));
+					$scope.needLoactedArchetypeName = undefined;
+				}, 0);
+			}
+		}
+	}
 
 
-    function findArchetypeByName(list, name) {
-        var matchArchetype;
-        if (list && name) {
-            if (angular.isArray(list)) {
-                return list.find(function(element) {
-                    return element.name == name;
-                });
-            }
-            return list.name == name ? list : undefined;
-        }
-    }
+	/**
+	 * Find a archetype from a archetype list
+	 * @param {array} list Archetype list
+	 * @param {string} name Archetype id
+	 * @return {object | undefined} A archetype object with archetype id equals to name or undefined if find failure
+	 */
+	function findArchetypeByName(list, name) {
+		var matchArchetype;
+		if (list && name) {
+			if (angular.isArray(list)) {
+				return list.find(function(element) {
+					return element.name == name;
+				});
+			}
+			return list.name == name ? list : undefined;
+		}
+	}
 
-    /*
-     * @param archetype list generate from ..
-     * @function initial the specialiseArchetype to a empty array if it is undefined, this is a convenience for archetype specialize later
-     */
-    function initArchetypeSpecialise(list) {
-        if (angular.isArray(list)) {
-            angular.forEach(list, function(archetype) {
-                if (angular.isArray(archetype.specialiseArchetype)) {} else if ((!archetype.specialiseArchetype) || (!archetype.specialiseArchetype.adl)) {
-                    archetype.specialiseArchetype = [];
-                }
-            });
-        } else {
-            var archetype = list;
-            if (angular.isArray(archetype.specialiseArchetype)) {} else if ((!archetype.specialiseArchetype) || (!archetype.specialiseArchetype.adl)) {
-                archetype.specialiseArchetype = [];
-            }
-        }
-    }
+	/**
+	 * Change null|undefined specialize archetype to a null array []
+	 * @param {array | object} list An archetype list
+	 */
+	function formatArchetypeSpecialiseRelation(list) {
+		if (angular.isArray(list)) {
+			angular.forEach(list, function(archetype) {
+				if ((!archetype.specialiseArchetype) || (!archetype.specialiseArchetype.adl)) {
+					archetype.specialiseArchetype = [];
+				}
+			});
+		} else {
+			var archetype = list;
+			if ((!archetype.specialiseArchetype) || (!archetype.specialiseArchetype.adl)) {
+				archetype.specialiseArchetype = [];
+			}
+		}
+	}
 
-    /*
-     * @param archetype list 
-     * @function refresh archetypeList, so refresh the tree data, use to synchronization tree view after some operates
+    /**
+     * local api for refreshFormatList in foramtTreeData service
+     * @param {array} list An archetype list
      */
     function refreshArchetypeList(list) {
         $scope.formatedArchetypeList.refreshFormatList(list);
     }
 
-    /*
-     * @param archetype
-     * @function make a archetype selected attribute to be true in tree-view
+    /**
+     * local api for locateNode in tree view directive, find and hightlight the archetype node in archetype tree
+     * @param {object} arc An archetype node object in archetype tree 
      */
     $scope.locateArchetype = function(arc) {
         $scope.treeControl.locateNode(arc);
     };
 
 
-    /*
-     * function process the archetype name to display appropriately
-     */
-    $scope.getFixedTitle = function(title, length) {
-        if (title) {
-            var titleLength = length || 40;
-            if (title.length > titleLength) {
-                return title.substring(0, titleLength / 2) + '...' + title.substring(title.length - titleLength / 2, title.length);
-            } else
-                return title;
-        }
-    };
+	/**
+	 *  shorten the archetype name appropriatly
+	 * @param {string} title Archetype name string
+	 * @param {length} length Max archetype name length
+	 * @return {string} return title if title length is lower than length, or return a shorten one with '...' inside
+	 *
+	 */
+	$scope.getFixedTitle = function(title, length) {
+		if (title) {
+			var titleLength = length || 40;
+			if (title.length > titleLength) {
+				return title.substring(0, titleLength / 2) + '...' + title.substring(title.length - titleLength / 2, title.length);
+			} else
+				return title;
+		}
+	};
+
+	/**
+	 * callback function for click tree view node, select node if the selected archetype is undefined,
+	 * or check original adl and current adl, if there is difference between them, alert a save ask dialog, or select node
+	 * @param {object} node archetype node in tree view
+	 */
+	$scope.selectArchetype = function(node) {
+		if ($scope.selectedArchetype) {
+			if (originalEqualToEdited()) {
+				selectArchetype(node);
+			} else {
+				alertSaveAskDialog(node);
+			}
+		} else {
+			selectArchetype(node);
+		}
+	};
+
+	/**
+	 * check the if original adl equals to the adl after edit
+	 * @return true if equal, or false
+	 */
+	function originalEqualToEdited() {
+		var currentSmAdl = trim(archetypeSerializeService.serializeArchetype($scope.oriArchetype));
+	//	console.log(currentSmAdl);
+
+		var originalSmAdl = trim($scope.selectedArchetype.adl);
+		//console.log(originalSmAdl);
+		return currentSmAdl == originalSmAdl;
+	}
+
+	/**
+	 * alert a dialog to ask if the user want to save change on adl
+	 * @param {object} node archetype node in tree view
+	 */
+	function alertSaveAskDialog(node) {
+		msgboxService.createMessageBox("OPERATE_PROMPT_HINT", "ARCHETYPE_EDIT_SAVEASK_HINT", {
+			archetypeName : node.name
+		}, "question", "yesOrNo").result.then(function(confirm) {
+			if (confirm) {
+				var bid = busyService.pushBusy('BUSY_LOADING');
+				saveSelectedArchetype().then(function(result) {
+					busyService.popBusy(bid);
+					processSaveResult(result);
+					selectArchetype(node);
+				});
+			}
+		}, function() {
+			selectArchetype(node);
+		});
+
+	}
+
+	/**
+	 * trim the string, delete the  Newline character and Tabs and whitespace
+	 * @param {String} str The string need to be trimed
+	 */
+	function trim(str) {
+		return str.replace(/[\r\n]/g, '').replace(/\s+/g, '');
+	}
+
+	/**
+	 * Callback function for click archetype node in archetype tree,
+	 * do nothing if node is a directory, or:
+	 * collapse definition tree, assign archetype to selectedArchetype, save original adl for generating difference
+	 * initialize originial Archetype and result json, the result json is used to display especially in definition pane
+	 * and original archetype is the target of the editor, all change should apply to original archetype and it will
+	 * be serialized to adl when a save operate is executed.
+	 */
+	var selectArchetype = function(archetype) {
+		$scope.batchStatus = false;
+		if (archetype.isDirectory) {
+			$scope.selectedArchetype = undefined;
+			return;
+		} else {
+			/* @For test */
+			console.log('this is the selected archetype');
+			console.log(archetype);
+
+			/* collapse deifnition tree when select a new archetype */
+			$scope.definitionExpandedAll.value = false;
+
+			$scope.selectedArchetype = archetype;
+            
+            console.log(archetype.xml);
+			resourceService.get(ARCHETYPE_BY_NAME_URL + archetype.name + '/adl').then(function(result) {
+				if (result) {
+					$scope.selectedArchetype.adl = result.adl;
+				} else {
+					alert("can not get adl!");
+				}
+			});
+           	var bid = busyService.pushBusy('BUSY_LOADING');
+			resourceService.get(ARCHETYPE_BY_NAME_URL + archetype.name + '/xml').then(function(result) {
+				if (result) {			
+					
+					$scope.selectedArchetype.xml = result.xml;
+					busyService.popBusy(bid);
+					var busyId = busyService.pushBusy('BUSY_LOADING');
+					$q(function(resolve, reject) {
+						setTimeout(function() {
+							var oriArchetype = archetypeParseEditService.getOriginalArchetype($scope.selectedArchetype.xml);
+							var resultJson = archetypeParseEditService.parseArchetypeJson(oriArchetype);
+							if (oriArchetype && resultJson) {
+								resolve({
+									oriArchetype : oriArchetype,
+									resultJson : resultJson,
+								});
+							} else {
+								reject("Something went wrong when parse archetype!");
+							}
+						}, 0);
+					}).then(function(data) {
+						var oriArchetype = data.oriArchetype;
+						var resultJson = data.resultJson;
+
+						console.log('this is archetype object after parse (form xml to json)');
+						console.log(oriArchetype);
+						console.log('this is archetype object after parse to edit (form json to json)');
+						console.log(resultJson);
+
+						$scope.oriArchetype = oriArchetype;
+
+						/*  initial every parts */
+						$scope.ontology = resultJson.terminologies;
+						$scope.definition = resultJson.definitions;
+						$scope.languages = resultJson.languages;
+
+						var languages = $scope.languages.languages;
+						if (angular.isArray(languages)) {
+							$scope.languages.originalLanguage = languages.find(function(value) {
+								return value.code == $scope.languages.originalLanguage.code;
+							});
+						}
+						$scope.currentLanguage = $scope.languages.originalLanguage;
+
+						/* get the header from the original archetype directly */
+						$scope.header = initializeHeader(oriArchetype);
+
+						busyService.popBusy(busyId);
+					}, function(reason) {
+						alert("Parse archetype failed :" + reason);
+					});
+
+				}
+			});
+		}
+
+	};
 
 
+	/**
+	 * initialize header information use original archetype.
+	 */
+	function initializeHeader(oriArchetype) {
+		var header = {};
+		header.archetype_id = oriArchetype.archetype_id;
+		header.concept = oriArchetype.concept;
+		header.description = oriArchetype.description;
+		header.original_language = oriArchetype.original_language;
+		header.translations = oriArchetype.translations;
+		header.ontology = oriArchetype.ontology;
+		return header;
+	}
 
+	/**
+	 * callback function for display tab clicked, serialize the original archetype to adl and xml to display the edit result
+	 */
+	$scope.refreshAdlAndXml = function() {
+		var bid = busyService.pushBusy("BUSY_LOADING");
+		$q(function(resolve, reject) {
+			setTimeout(function() {
+				var adl = archetypeSerializeService.serializeArchetype($scope.oriArchetype);
+				var xml = archetypeSerializeService.serializeArchetypeToXml($scope.oriArchetype);
+				if (adl) {
+					resolve({
+						adl : adl,
+						xml : xml,
+					});
+				} else {
+					resolve("Error : something went wrong when parse the original archetype to adl and xml!");
+				}
+			}, 0);
 
+		}).then(function(result) {
+			$scope.selectedArchetype.adl = result.adl;
+			$scope.selectedArchetype.xml = completeXml(result.xml);
+			busyService.popBusy(bid);
+		}, function(error) {
+			alert(error);
+		});
 
+	};
 
+	$scope.createNewVersionArchetype = function() {
+		createNewVersionArchetype($scope.selectedArchetype);
+	};
 
+	$scope.createNewRevisionArchetype = function() {
+		createNewRevisionArchetype($scope.selectedArchetype);
+	};
 
-    $scope.selectArchetype = function(archetype) {
+	/**
+	 * parse xml to json object and process its archetypeId to a new reivision one (eg. v1.1 to v1.2)
+	 * push the result json to archetype list, the pushToArchetypeList will process the remaining work
+	 * @param {object} archetype The selected archetype which will be process and generate a new one
+	 */
+	function createNewRevisionArchetype(archetype) {
+		var jsonArchetype = archetypeParseEditService.getOriginalArchetype(archetype.xml);
+		var archetypeId = jsonArchetype.archetype_id.value;
+		var frontString = archetypeId.slice(0, archetypeId.lastIndexOf('v1') + 3);
+		var lastString = archetypeId.slice(archetypeId.lastIndexOf('v1') + 3, archetypeId.length);
+		var newVersion = parseInt(lastString) + 1;
+		jsonArchetype.archetype_id.value = upsizingRevision(jsonArchetype.archetype_id.value);
+		pushToArchetypeList(jsonArchetype);
+	}
 
+	/**
+	 * upsize the revision.
+	 * get revision string and parse it to Int, upsize the result and add it to body string
+	 * @param {string} archetypeId
+	 */
+	function upsizingRevision(archetypeId) {
+		//  e.g. "openEhr-aaaa-bbb.v3.5"
 
-        $scope.batchStatus = false;
-        if (archetype.isDirectory) {
-            $scope.selectedArchetype = undefined;
-            //  busyService.popBusy(busyId);
-            return;
-        } else {
-            console.log('this is the selected archetype');
-            console.log(archetype);
-            //  collapse deifnition tree when select a new archetype
-            $scope.definitionExpandedAll.value = false;
+		//  this match get 'v3.5'
+		var matchInfo = archetypeId.match(/v\d*\.\d*/);
+		//get index of '.'
+		var dotIndex = matchInfo[0].indexOf('.') + matchInfo.index;
+		//get body string expect form  revision string
+		var bodyString = archetypeId.slice(0, dotIndex + 1);
+		//  get revision string
+		var revisionString = archetypeId.slice(dotIndex + 1, archetypeId.length);
+		var newRevision = parseInt(revisionString) + 1;
 
-            $scope.selectedArchetype = archetype;
+		return bodyString + newRevision;
+	}
 
-            //$scope.currentArchetypeId = archetype.id;
-            //  get this adl to generate difference
-            $scope.originalAdl = archetype.adl;
+	/**
+	 *upsize the version.
+	 * get version string and parse it to Int, replace the number in original string.
+	 * @param {object}  archetypeId
+	 */
+	function upsizingVersion(archetypeId) {
+		//  e.g. "openEhr-aaaa-bbb.v3.5"
 
-            var busyId = busyService.pushBusy('BUSY_LOADING');
+		//  this match get 'v3.5'
+		var matchInfo = archetypeId.match(/v\d*\.\d*/);
+		//  this match get 'v3'
+		var versionMatchInfo = matchInfo[0].match(/v\d*/);
+		//  get '3' and parse to int
+		var version = parseInt(versionMatchInfo[0].slice(1, versionMatchInfo[0].length));
 
-            $q(function(resolve, reject) { //asynchronously run the archetype parse service
-                setTimeout(function() {
-                    var oriArchetype = archetypeParseEditService.getOriginalArchetype($scope.selectedArchetype.xml);
-                    console.log(oriArchetype);
-                    var resultJson = archetypeParseEditService.parseArchetypeJson(oriArchetype);
-                    if (oriArchetype && resultJson) {
-                        resolve({
-                            oriArchetype: oriArchetype,
-                            resultJson: resultJson,
-                        });
-                    } else {
-                        reject("error");
-                    }
-                }, 0);
-            }).then(function(data) {
-                var oriArchetype = data.oriArchetype;
-                var resultJson = data.resultJson;
+		var nextVersion = version + 1;
+		var nextVersionString = 'v' + nextVersion;
+		// replace 'v3' with 'v4' and return
+		return archetypeId.replace(/v\d*/, nextVersionString);
+	}
 
-                console.log('this is archetype object after parse (form xml to json)');
-                console.log(oriArchetype);
-                console.log('this is archetype object after parse to edit (form json to json)');
-                console.log(resultJson);
+	/**
+	 *push a element to an array, if array is not an array, create a new one, and push the array and node into it.
+	 * @param {object} node Any type element
+	 * @param {object} array May be an array or an Obejct
+	 * @return the array after push
+	 */
+	function pushTo(node, array) {
+		if (array) {
+			if (isArray(array)) {
+				array.push(node);
+			} else {
+				var temp = array;
+				array = [temp];
+				array.push(node);
+			}
+		} else {
+			array = [node];
+		}
+		return array;
+	}
 
-                $scope.oriArchetype = oriArchetype;
-
-                //  initial every parts
-                $scope.ontology = resultJson.terminologies;
-                $scope.definition = resultJson.definitions;
-                $scope.languages = resultJson.languages;
-                var languages = $scope.languages.languages;
-                if (angular.isArray(languages)) {
-                    $scope.languages.originalLanguage = languages.find(
-                        function(value) {
-                            return value.code == $scope.languages.originalLanguage.code;
-                        });
-                }
-
-                $scope.currentLanguage = resultJson.languages.originalLanguage;
-                //  get the header from the original archetype directly
-                $scope.header = initHeader(oriArchetype);
-
-                busyService.popBusy(busyId);
-            }, function(reason) {
-                alert("Failed :" + reason);
-            });
-        }
-
-    };
-
-
-
-    function initHeader(oriArchetype) {
-        var header = {};
-        header.archetype_id = oriArchetype.archetype_id;
-        header.concept = oriArchetype.concept;
-        header.description = oriArchetype.description;
-        header.original_language = oriArchetype.original_language;
-        header.translations = oriArchetype.translations;
-        header.ontology = oriArchetype.ontology;
-        return header;
-    }
-
-
-    /*
-     * @function  refresh adl and xml when click display tab
-     */
-    $scope.refreshAdlAndXml = function() {
-        var bid = busyService.pushBusy("BUSY_LOADING");
-        $q(function(resolve, reject) {
-            setTimeout(function() {
-                var adl = archetypeSerializeService.serializeArchetype($scope.oriArchetype);
-                var xml = archetypeSerializeService.serializeArchetypeToXml($scope.oriArchetype);
-                if (adl) {
-                    resolve({
-                        adl: adl,
-                        xml: xml,
-                    });
-                } else {
-                    resolve("error");
-                }
-            }, 0);
-
-        }).then(function(result) {
-            $scope.selectedArchetype.adl = result.adl;
-            $scope.selectedArchetype.xml = completeXml(result.xml);
-            busyService.popBusy(bid);
-        });
-
-    };
-
-
-
-    $scope.createNewVersionArchetype = function() {
-        createNewVersionArchetype($scope.selectedArchetype);
-    };
-
-    function createNewRevisionArchetype(archetype) {
-        console.log(archetype);
-        var jsonArchetype = archetypeParseEditService.getOriginalArchetype(archetype.xml);
-        console.log(jsonArchetype);
-        var archetypeId = jsonArchetype.archetype_id.value;
-        var frontString = archetypeId.slice(0, archetypeId.lastIndexOf('v1') + 3);
-        var lastString = archetypeId.slice(archetypeId.lastIndexOf('v1') + 3, archetypeId.length);
-        var newVersion = parseInt(lastString) + 1;
-        jsonArchetype.archetype_id.value = upsizingRevision(jsonArchetype.archetype_id.value);
-        //pushToArchetypeList(jsonArchetype);
-    }
-
-
-    function upsizingRevision(archetypeId) {
-        //  e.g. "openEhr-aaaa-bbb.v3.5"
-
-        //  this match get 'v3.5'
-        var matchInfo = archetypeId.match(/v\d*\.\d*/);
-        //get index of '.'
-        var dotIndex = matchInfo[0].indexOf('.') + matchInfo.index;
-        //get body string expect form  revision string
-        var bodyString = archetypeId.slice(0, dotIndex + 1);
-        //  get revision string
-        var revisionString = archetypeId.slice(dotIndex + 1, archetypeId.length);
-        var newRevision = parseInt(revisionString) + 1;
-
-        return bodyString + newRevision;
-    }
-
-    function upsizingVersion(archetypeId) {
-        //  e.g. "openEhr-aaaa-bbb.v3.5"
-
-        //  this match get 'v3.5'
-        var matchInfo = archetypeId.match(/v\d*\.\d*/);
-        //  this match get 'v3'
-        var versionMatchInfo = matchInfo[0].match(/v\d*/);
-        //  get '3' and parse to int
-        var version = parseInt(versionMatchInfo[0].slice(1, versionMatchInfo[0].length));
-
-        var nextVersion = version + 1;
-        var nextVersionString = 'v' + nextVersion;
-        // replace 'v3' with 'v4' and return
-        return archetypeId.replace(/v\d*/, nextVersionString);
-    }
-
-
-
-
-
-
-    function pushTo(node, array) {
-        if (array) {
-            if (isArray(array)) {
-                array.push(node);
-            } else {
-                var temp = array;
-                array = [temp];
-                array.push(node);
-            }
-        } else {
-            array = [node];
-
-        }
-        return array;
-    }
 
 
     //-------------create action ---------------------
@@ -396,7 +507,6 @@ function ArchetypeEditCtrl($scope, $modal, $log, $q, $timeout, msgboxService, bu
         editor.synchronizeOriOntology("at0002", "Any event", "*", observation.ontology);
         editor.synchronizeOriOntology("at0003", "Tree", "@ internal @", observation.ontology);
     }
-
     //end
 
     //--------------create evaluation----------------------
@@ -524,8 +634,8 @@ function ArchetypeEditCtrl($scope, $modal, $log, $q, $timeout, msgboxService, bu
         }).then(function(result) {
             busyService.popBusy(bid);
             if (result.succeeded) {
-                $scope.needLocatedObjectName = jsonObj.archetype_id.value;
-                $scope.initData();
+                $scope.needLoactedArchetypeName = jsonObj.archetype_id.value;
+                $scope.loadArchetypeList();
                 msgboxService.createMessageBox('ARCHETYPE_EDIT_SUCCEEDED', 'ARCHETYPE_EDIT_ADD_SUCCEEDED_HINT', {}, 'success');
             } else {
                 msgboxService.createMessageBox('ARCHETYPE_EDIT_FAILED', 'ARCHETYPE_EDIT_ADD_FAILED_HINT', {
@@ -781,7 +891,7 @@ function ArchetypeEditCtrl($scope, $modal, $log, $q, $timeout, msgboxService, bu
      */
     $scope.generateDiff = function() {
         var editedArchetype = archetypeSerializeService.serializeArchetype($scope.oriArchetype);
-        documentDiffModalService.open('Modify records', editedArchetype, $scope.originalAdl);
+        documentDiffModalService.open('Modify records', editedArchetype, $scope.selectedArchetype.adl);
     };
 
 
@@ -809,22 +919,33 @@ function ArchetypeEditCtrl($scope, $modal, $log, $q, $timeout, msgboxService, bu
         });
     };
 
-    $scope.saveSelectedArchetype = function() {
-        var bid = busyService.pushBusy('BUSY_LOADING');
-        var archetype = archetypeSerializeService.serializeArchetype($scope.oriArchetype);
-        resourceService.post(ARCHETYPE_EDIT_BY_ID_URL + $scope.selectedArchetype.id, {
-            adl: archetype
-        }).then(function(result) {
-            busyService.popBusy(bid);
-            if (result.succeeded) {
-                msgboxService.createMessageBox('ARCHETYPE_EDIT_SUCCEEDED', 'ARCHETYPE_EDIT_SAVE_SUCCEEDED_HINT', {}, 'success');
-            } else {
-                msgboxService.createMessageBox('ARCHETYPE_EDIT_FAILED', 'ARCHETYPE_EDIT_SAVE_FAILED_HINT', {
-                    errorMsg: result.message
-                }, "error");
-            }
-        });
-    };
+	function saveSelectedArchetype() {
+		var adl = archetypeSerializeService.serializeArchetype($scope.oriArchetype);
+		$scope.selectedArchetype.adl = adl;
+		console.log(adl);
+		return resourceService.post(ARCHETYPE_EDIT_BY_ID_URL + $scope.selectedArchetype.id, {
+			adl : adl,
+		});
+	}
+
+	$scope.saveSelectedArchetype = function() {
+		var bid = busyService.pushBusy('BUSY_LOADING');
+		saveSelectedArchetype().then(function(result) {
+			busyService.popBusy(bid);
+			processSaveResult(result);
+		});
+	};
+
+	function processSaveResult(result) {
+		if (result.succeeded) {
+			msgboxService.createMessageBox('ARCHETYPE_EDIT_SUCCEEDED', 'ARCHETYPE_EDIT_SAVE_SUCCEEDED_HINT', {}, 'success');
+		} else {
+			msgboxService.createMessageBox('ARCHETYPE_EDIT_FAILED', 'ARCHETYPE_EDIT_SAVE_FAILED_HINT', {
+				errorMsg : result.message
+			}, "error");
+		}
+	}
+
 
     $scope.fallbackArchetype = function() {
         var bid = busyService.pushBusy('BUSY_LOADING');
@@ -897,12 +1018,12 @@ function ArchetypeEditCtrl($scope, $modal, $log, $q, $timeout, msgboxService, bu
             tooltip: 'MANAGEMENT_ARCHETYPE_EDIT_TOOTIP_CONTRAST_ADL',
             name: 'ARCHETYPE_EDIT_DIFF',
         },
-        //createNewVersionArchetype
+        //createNewRevisionArchetype
         {
             access: 'ROLE_TEMPLATE_NEW_REVISION',
             ifLifecycleState: 'Published',
             ngIf: ArchetypeLifecycleStateFilter,
-            clickCallback: $scope.createNewVersionArchetype,
+            clickCallback: $scope.createNewRevisionArchetype,
             tooltip: 'MANAGEMENT_ARCHETYPE_EDIT_TOOTIP_NEW_VERSION',
             name: 'ARCHETYPE_EDIT_NEWVERSION',
         },

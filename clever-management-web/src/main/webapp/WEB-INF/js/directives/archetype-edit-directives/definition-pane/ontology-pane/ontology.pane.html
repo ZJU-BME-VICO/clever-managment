@@ -1,20 +1,24 @@
-<div class="row">
-    <div class="col-xs-2 hidden-optional">
+<div class="row" style="border-left: solid blue">
+    <!-- <div class="col-xs-2 hidden-optional">
         <h4><span class="label label-info" style="margin-left: 10px;">{{'EDIT_DEFINITION_PANE_ONTOLOGY' | translate}}</span></h4>
-    </div>
-    <div class="col-xs-10">
+    </div> -->
+    <div class="col-xs-12">
         <form class="input-group input-group-sm" style="width: 50%" name="textForm" ng-class="{'has-error' : textForm.textInput.$error.required }">
             <span class="input-group-addon" id="sizing-addon3">Text</span>
             <input type="text" name="textInput" class="form-control" ng-model="ontologyItem.text.__text" aria-describedby="sizing-addon3" required>
         </form>
         <span class="text-danger" ng-show="textForm.textInput.$error.required">Text is required!</span>
         <br />
-        <pre> Description: {{ontologyItem.description.__text}}</pre>
-        <form class="input-group input-group-sm" name="descriptionForm" ng-class="{'has-error' : descriptionForm.descriptionInput.$error.required }">
-            <span class="input-group-addon" id="sizing-addon3">Description</span>
-            <input name="descriptionInput" type="text" class="form-control" aria-describedby="sizing-addon3" ng-model="ontologyItem.description.__text" required>
-        </form>
+        <!-- <pre> Description: {{ontologyItem.description.__text}}</pre> -->
+       <form  name="descriptionForm" ng-class="{'has-error' : descriptionForm.descriptionInput.$error.required }">
+            <!-- <span class="input-group-addon" id="sizing-addon3">Description</span>
+            <input name="descriptionInput" type="text" class="form-control" aria-describedby="sizing-addon3" ng-model="ontologyItem.description.__text" required> -->
+            <label class="control-label">Description</label>
+        <textarea row="4" name="descriptionInput" class="form-control" ng-model="ontologyItem.description.__text"  required></textarea>
+        </form> 
         <span class="text-danger" ng-show="descriptionForm.descriptionInput.$error.required">Description is required!</span>
     </div>
 </div>
-<hr class="fancy-line" />
+<br />
+<br />
+<!-- <hr class="fancy-line" /> -->

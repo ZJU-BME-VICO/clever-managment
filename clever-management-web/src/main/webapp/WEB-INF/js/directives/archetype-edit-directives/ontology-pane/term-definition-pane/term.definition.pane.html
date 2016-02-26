@@ -1,4 +1,17 @@
 <div class="col-lg-12 col-md-12 col-sm-12" ng-style="{height: maxHeight}" style="overflow: auto">
+	
+	<div class="input-group" style="display: flex; margin: 20px 0 20px 0;  width: 50%">
+		<button class="btn btn-default" ng-click="filterAlter()">
+			<span class="glyphicon glyphicon-filter"></span>
+		</button>
+		
+			<input ng-show="currentFilter == 'codeFilter'"  class="form-control"  type="text"  ng-model="ontologyFilter.code" placeholder="{{'ARCHETYPE_EDIT_TERMDEFINITION_CODE_FILTER' | translate}}"/>
+		
+		
+			<input ng-show="currentFilter == 'textFilter'"  class="form-control"   type="text" ng-model="ontologyFilter.text.__text"  placeholder="{{'ARCHETYPE_EDIT_TERMDEFINITION_TEXT_FILTER' | translate}}"/>
+		
+	</div>
+	
 	<table class="table table-hover">
 		<thead>
 			<th>Code</th>
@@ -6,7 +19,7 @@
 			<th>Description</th>
 		</thead>
 		<tbody>
-			<tr ng-repeat="item in termDefinition.items" ng-popover="Term Definition" title="Edit" placement="top" maximize="false">
+			<tr ng-repeat="item in termDefinition.items | filter: ontologyFilter  " ng-popover="Term Definition" title="Edit" placement="top" maximize="false">
 				<td><span>{{item.code}}</span></td>
 				<td><span>{{item.text.__text}}</span></td>
 				<td><span>{{item.description.__text}}</span></td>

@@ -310,12 +310,12 @@ angular.module('clever.management.service.archetypeEdit', []).service('archetype
         var codeArray = [];
         if (angular.isArray(termDefinition)) {
             angular.forEach(termDefinition[0].items, function(item) {
-                codeArray.push(item.code);
+                codeArray.push(item._code);
             });
 
         } else {
             angular.forEach(termDefinition.items, function(item) {
-                codeArray.push(item.code);
+                codeArray.push(item._code);
             });
         }
         return codeArray;
@@ -378,9 +378,13 @@ angular.module('clever.management.service.archetypeEdit', []).service('archetype
     }
 
 
-    this.getTermDefinitionNodeId = function(ontology) {
-        var termDefinition = ontology.term_definitions;
-        var codeArray = getCodeArray(termDefinition);
+    this.getTermDefinitionNodeId = function(originalTermDefinition) {
+      //  var termDefinition = ontology.term_definitions;
+        
+        console.log("this is termdefinition after parse--------------------------");
+        console.log(originalTermDefinition);
+        
+        var codeArray = getCodeArray(originalTermDefinition);
         var maxDotNumber = getMaxDotNumber(codeArray);
         var maxCodeMessage = getMaxCodeMessage(codeArray, maxDotNumber);
         //var nodeId = 'at';
@@ -687,30 +691,33 @@ angular.module('clever.management.service.archetypeEdit', []).service('archetype
         };
         return jsonObj;
     }
-    console.log(this);
 
-
-
-    this.createArchetype = function(pattern) {
-        var jsonArchetype = createBaseArchetype(pattern);
-        console.log(jsonArchetype);
-        var rm_object = jsonArchetype.definition.rm_obejct;
-        var attributes = generateAttributes(rm_object.attributes, jsonArchetype.ontology);
-        if (attributes.length) {
-            jsonArchetype.definition.attributes = attributes;
-        }
-        return jsonArchetype;
-    }
-
-
-    function nextNodeIdInOriOntology(ontology) {
-        var term_definition = ontology.term_definitions[0];
-        var nodeId = term_definition.items.length;
-        return nodeId < 10 ? 'at000' + nodeId : 'at00' + nodeId;
-    }
+	/**
+	 * Create a new archetype, firstly create a base archetype consist of base information and a simple definition and ontology
+	 * @param {object} pattern.organization: "openEHR", pattern.referenceModel: "DEMOGRAPHIC", pattern.entityType: "AGENT", pattern.concept: "concept"
+	 * @return A json archetype
+	 */
+	this.createArchetype = function(pattern) {
+		console.log('the pattern is :');
+		console.log(pattern);
+		var jsonArchetype = createBaseArchetype(pattern);
+		console.log(jsonArchetype);
+		var rm_object = jsonArchetype.definition.rm_obejct;
+		var attributes = generateAttributes(rm_object.attributes, jsonArchetype.ontology);
+		if (attributes.length) {
+			jsonArchetype.definition.attributes = attributes;
+		}
+		return jsonArchetype;
+	};
 
     var rmTypeWhiteList = ['STRING', 'INTEGER'];
 
+/**
+ * 
+ * create a Object node with type, get next node id in term_definition and synchronize the ontology 
+ * @param {Object} type The reference model type of the CObject 
+ * @param {Object} ontology The ontology in original archetype
+ */
     function generateCObject(type, ontology) {
         if (rmTypeWhiteList.indexOf(type) != -1) {
             return undefined;
@@ -719,8 +726,8 @@ angular.module('clever.management.service.archetypeEdit', []).service('archetype
         if (rmObject.isAbstract) {
             return undefined;
         }
-
-        var nodeId = nextNodeIdInOriOntology(ontology);
+        
+        var nodeId = getTermDefinitionNodeId(ontology.term_definitions);
         var attributes = generateAttributes(rmObject.attributes, ontology);
         self.synchronizeOriOntology(nodeId, type, '', ontology);
         return self.getComplexObject(attributes, nodeId, [0, 1], type);
@@ -735,11 +742,11 @@ angular.module('clever.management.service.archetypeEdit', []).service('archetype
                     result.push(multiAttribute);
                 } else {
                     var children = generateCObject(attribute['@children'].type, ontology);
-                    var singleAttr = self.getSingleAttr(children, [0, 1], attribute.name);
+                    var singleAttr = self.getSingleAttr(children || {}, [0, 1], attribute.name);
                     result.push(singleAttr);
                 }
             }
-        })
+        });
 
         return result;
     }

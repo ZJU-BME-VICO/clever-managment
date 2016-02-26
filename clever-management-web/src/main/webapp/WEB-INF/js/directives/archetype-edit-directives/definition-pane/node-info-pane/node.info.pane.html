@@ -1,8 +1,8 @@
-<div class="row">
-    <div class="col-xs-2 hidden-optional">
+<div class="row" style="border-left: solid #FFBC00">
+    <!-- <div class="col-xs-2 hidden-optional">
         <h4><span class="label label-warning" style="margin-left: 10px;">{{'EDIT_DEFINITION_PANE_NODE_INFO' | translate}}</span></h4>
-    </div>
-    <div class="col-xs-10">
+    </div> -->
+    <div class="col-xs-12">
         <ul class="list-group">
             <li class="list-group-item">
                 &nbsp;&nbsp; <span class="button-label post " ng-if="node.label.code">{{node.label.code}}</span> &nbsp;&nbsp; <span class="button-label post">{{node.label.type}}</span> &nbsp;&nbsp; <span ng-if="node.label.type == 'type'" class="button-label post">{{node.label.picType}}</span> &nbsp;&nbsp;
@@ -25,4 +25,6 @@
         </ul>
     </div>
 </div>
-<hr ng-if="node" class="fancy-line" />
+<br />
+<br />
+<!-- <hr ng-if="node" class="fancy-line" /> -->
