@@ -474,14 +474,14 @@ public class ArchetypeResourceController extends AbstractResourceController {
 		info.setName(file.getName());
 		info.setSerialVersion(file.getSerialVersion());
 		info.setVersion(file.getVersion());
-		//info.setAdl(file.getAdl());
+		info.setAdl(file.getAdl());
 		ADLParser parser = new ADLParser(file.getAdl());
 		Archetype archetype = parser.parse();
 		info.setRmEntity(archetype.getArchetypeId().rmEntity());
 		info.setRmName(archetype.getArchetypeId().rmName());
 		info.setRmOriginator(archetype.getArchetypeId().rmOriginator());
 		info.setConceptName(archetype.getConceptName(archetype.getOriginalLanguage().getCodeString()));
-		//info.setXml(this.xmlSerializer.output(archetype));
+		info.setXml(this.xmlSerializer.output(archetype));
 		info.setLifecycleState(file.getLifecycleState().getValue());
 		// info.setVersionMasterName(file.getVersionMaster().getName());
 		String archetypeId = archetype.getArchetypeId().getValue();
