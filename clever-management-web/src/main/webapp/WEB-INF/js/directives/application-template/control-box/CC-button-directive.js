@@ -12,7 +12,7 @@ function($document) {
         controller:function($scope){
             
             $scope.btnControl={};
-            $scope.save()=function(){
+            $scope.save = function(){
                 
             };
         },

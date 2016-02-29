@@ -51,7 +51,7 @@ import se.acode.openehr.parser.ParseException;
 public class ArchetypeResourceController extends AbstractResourceController {
 
 	protected final Logger logger = LoggerFactory.getLogger(this.getClass());
-
+    
 	@Autowired
 	private ArchetypeValidateService archetypeValidateService;
 	@Autowired
@@ -81,12 +81,12 @@ public class ArchetypeResourceController extends AbstractResourceController {
 	public boolean isUploadResult() {
 		return uploadResult;
 	}
-
+   
 	@ManagedAttribute
 	public void setUploadResult(boolean uploadResult) {
 		this.uploadResult = uploadResult;
 	}
-
+   
 	@ManagedAttribute
 	public boolean isValidationEnabled() {
 		return validationEnabled;
@@ -96,12 +96,12 @@ public class ArchetypeResourceController extends AbstractResourceController {
 	public void setValidationEnabled(boolean validationEnabled) {
 		this.validationEnabled = validationEnabled;
 	}
-
+    
 	@RequestMapping(value = "/export", method = RequestMethod.GET)
 	public void exportArchetypes(OutputStream out) throws ResourceExportException {
 		this.archetypeProvideService.exportArchetypes(out);
 	}
-
+     
 	@RequestMapping(value = "/list", method = RequestMethod.GET)
 	public List<ArchetypeMasterInfo> getArchtypeList() {
 		List<ArchetypeMaster> masters = this.archetypeProvideService.getAllArchetypeMasters();

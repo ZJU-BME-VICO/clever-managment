@@ -58,6 +58,8 @@ angular.module('clever.management.service.rmFactoryService', []).service('rmFact
     var T_EVENT_CONTEXT = 'EVENT_CONTEXT';
     var T_ISM_TRANSITION = 'ISM_TRANSITION';
     var T_INSTRUCTION_DETAILS = 'INSTRUCTION_DETAILS';
+    var T_ACTIVITY = 'ACTIVITY';
+    var T_OBJECT_ID = 'OBJECT_ID';
    
 
     //Attribute generator
@@ -130,7 +132,7 @@ angular.module('clever.management.service.rmFactoryService', []).service('rmFact
 
     /* PARTY_PROXY */
     function PARTY_PROXY() {
-        RmObject.call(this, MenuType.TYPE, PARSABLE);
+        RmObject.call(this, MenuType.TYPE, UNPARSABLE);
         this.attributes.push(Attr('external_ref', OPTIONAL, T_PARTY_REF, NOT_ARRAY));
         this.isAbstract = false;
     }
@@ -757,7 +759,7 @@ angular.module('clever.management.service.rmFactoryService', []).service('rmFact
     /* OBJECT_REF */
     function OBJECT_REF() {
         RmObject.call(this, MenuType.NULL, PARSABLE);
-        this.attributes.push(Attr('id', REQUIERD, OBJECT_ID, NOT_ARRAY));
+        this.attributes.push(Attr('id', REQUIERD, T_OBJECT_ID, NOT_ARRAY));
         this.attributes.push(Attr('namespace', REQUIERD, T_STRING, NOT_ARRAY));
         this.attributes.push(Attr('type', REQUIERD, T_STRING), NOT_ARRAY);
         this.isAbstract = true;
@@ -881,15 +883,15 @@ angular.module('clever.management.service.rmFactoryService', []).service('rmFact
     var person = new PERSON();
     console.log(person);
 
-    /* ORGNIZATION */
-    function ORGNIZATION() {
+    /* ORGNISATION */
+    function ORGANISATION() {
         ACTOR.call(this);
         this.isAbstract = false;
     }
-    this.ORGNIZATION = ORGNIZATION;
-    inheritEstablish(ACTOR, ORGNIZATION);
+    this.ORGANISATION = ORGANISATION;
+    inheritEstablish(ACTOR, ORGANISATION);
     /*Test*/
-    var orgnization = new ORGNIZATION();
+    var orgnization = new ORGANISATION();
     console.log(orgnization);
 
     /* GROUP */
@@ -945,9 +947,9 @@ angular.module('clever.management.service.rmFactoryService', []).service('rmFact
     /* PARTY_RELATIONSHIP */
     function PARTY_RELATIONSHIP() {
         LOCATABLE.call(this, MenuType.ATTRIBUTE, PARSABLE);
-        this.attributes.push(Attr('uid', REQUIERD, T_HIER_OBJECT_ID, NOT_ARRAY));
-        this.attributes.push(Attr('source', REQUIERD, PARTY_REF, NOT_ARRAY));
-        this.attributes.push(Attr('target', REQUIERD, PARTY_REF, NOT_ARRAY));
+      //  this.attributes.push(Attr('uid', REQUIERD, T_HIER_OBJECT_ID, NOT_ARRAY)); //this attribute is not accept by archetype parse in java 
+        this.attributes.push(Attr('source', REQUIERD, T_PARTY_REF, NOT_ARRAY));
+        this.attributes.push(Attr('target', REQUIERD, T_PARTY_REF, NOT_ARRAY));
         this.attributes.push(Attr('details', OPTIONAL, T_ITEM_STRUCTURE, NOT_ARRAY));
         this.attributes.push(Attr('time_validity', OPTIONAL, T_DV_INTERVAL_DATE_TIME, NOT_ARRAY));
         this.isAbstract = false;
@@ -1077,8 +1079,8 @@ angular.module('clever.management.service.rmFactoryService', []).service('rmFact
     /* INSTRUCTION */
     function INSTRUCTION() {
         CARE_ENTRY.call(this);
-        this.attributes.push(Attr('activities', OPTIONAL, ACTIVITY, IS_ARRAY));
-        this.attributes.push(Attr('expiry_time', OPTIONAL, DV_DATE_TIME, NOT_ARRAY));
+        this.attributes.push(Attr('activities', OPTIONAL, T_ACTIVITY, IS_ARRAY));
+        this.attributes.push(Attr('expiry_time', OPTIONAL, T_DV_DATE_TIME, NOT_ARRAY));
         this.attributes.push(Attr('narrative', REQUIERD, T_DV_TEXT, NOT_ARRAY));
         this.isAbstract = false;
     }
@@ -1088,7 +1090,7 @@ angular.module('clever.management.service.rmFactoryService', []).service('rmFact
 
     /* ACTIVITY  */
     function ACTIVITY() {
-        LOCATABLE.call(this, MenuType.LEAPFROG);
+        LOCATABLE.call(this, MenuType.LEAPFROG, PARSABLE);
         this.attributes.push(Attr('description', REQUIERD, T_ITEM_STRUCTURE, NOT_ARRAY));
         this.isAbstract = false;
     }

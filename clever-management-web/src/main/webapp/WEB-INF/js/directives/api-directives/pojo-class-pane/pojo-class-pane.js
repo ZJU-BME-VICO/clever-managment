@@ -29,7 +29,7 @@ angular.module('clever.management.directives.pojoClassPane', []).directive('pojo
             };
 
             $scope.$watch('classNameFilter', function(newValue) {
-                $scope.treeControl.search && 　$scope.treeControl.search(newValue);
+                $scope.treeControl.search && $scope.treeControl.search(newValue);
             });
             $scope.searchKeyMapper = function(node) {
                 return node.name;

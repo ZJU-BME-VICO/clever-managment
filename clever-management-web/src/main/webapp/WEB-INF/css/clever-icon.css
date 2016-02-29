@@ -1,5 +1,5 @@
 /* Data type */
-.clever-icon.DV_TEXT {
+/* .clever-icon.DV_TEXT {
 	background-image: url("../img/datatype/text.png");
 	background-repeat: no-repeat;
 }
@@ -18,7 +18,7 @@
 .clever-icon.DV_BOOLEAN {
 	background-image: url("../img/datatype/boolean.png");
 	background-repeat: no-repeat;
-}
+} */
 
 .clever-icon.dv_text {
 	background-image: url("../img/datatype/text.png");
@@ -318,6 +318,19 @@
 	background-image: url("../img/datatype/contact.png");
 	background-repeat: no-repeat;
 }
+.clever-icon.agent {
+	background-image: url("../img/datatype/agent.png");
+	background-repeat: no-repeat;
+}
+.clever-icon.person {
+	background-image: url("../img/datatype/person.png");
+	background-repeat: no-repeat;
+}
+.clever-icon.group {
+	background-image: url("../img/datatype/group.png");
+	background-repeat: no-repeat;
+}
+
 .clever-icon.demographic {
 	background-image: url("../img/datatype/demographic.png");
 	background-repeat: no-repeat;

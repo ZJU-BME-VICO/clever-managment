@@ -19,7 +19,7 @@ angular.module('clever.management.directives.editDefinitionPane', []).directive(
 			var parser = archetypeParseEditService;
 			$scope.treeControl = {};
 			$scope.isCollapse = true;
-
+			//asdfasdf asdfasffasdf asdfa
 			$scope.$watch('isExpandedAll.value', function(newValue, oldValue) {
 				if ($scope.treeControl.expandAll) {
 					if (newValue) {
@@ -31,7 +31,7 @@ angular.module('clever.management.directives.editDefinitionPane', []).directive(
 			});
 
 			$scope.$watch('currentArchetypeId', function(newValue) {
-				$scope.currentNode = undefined;
+			$scope.currentNode = undefined;
 				$scope.ontologyItem = undefined;
 			});
 			
@@ -47,6 +47,8 @@ angular.module('clever.management.directives.editDefinitionPane', []).directive(
 			};
 			$scope.selectNode = function(node) {
 				$scope.currentNode = node;
+				console.log("this is selected node in definition tree!");
+				console.log(node);
 				$scope.ontologyItem = getOntologyItemByCode(node.label.code, $scope.ontology);
 
 			};
@@ -58,8 +60,9 @@ angular.module('clever.management.directives.editDefinitionPane', []).directive(
 			$scope.getTreeNodeMenu = function(node, aliasName) {
 				var menuList;
 				var menuHtml = '<ul class="dropdown-menu" role="menu" ng-if="true" >';
-
-				if (node.label.slot) {// if the node type is slot, it's pictype will be ITEM,CLUSTER...,so we should distinguish it with other CLUSTER and so on..
+				
+				// if the node type is slot, it's pictype will be ITEM,CLUSTER...,so we should distinguish it with other CLUSTER and so on..
+				if (node.label.slot) {
 					menuHtml += '<li class="menu-item ">' + '<span class="clever-icon list delete" style="padding: 7px 10px; background-position-y: 10px;"></span>' + '<a class="pointer" role="menuitem"  ng-click="operateNodeByContextMenu(' + aliasName + ', ' + '\'delete\')" >Delete</a></li>';
 				} else {
 					if (typeWithSlot.indexOf(node.label.picType) != -1) {// add the slot sub menu
@@ -97,7 +100,14 @@ angular.module('clever.management.directives.editDefinitionPane', []).directive(
 				menuHtml += '</ul>';
 				return menuHtml;
 			};
-
+			
+			/**
+			 * use the information in node, get a rm_object from rm_factory_service, and use this object's menu type to generate a menu array
+			 * @param 
+			 */
+			$scope.getNodeMenu = function(node, alisName){
+				
+			}
 			var intervalTypeMap = {
 				'Date time' : 'interval_datetime',
 				'Quantity' : 'interval_quantity',

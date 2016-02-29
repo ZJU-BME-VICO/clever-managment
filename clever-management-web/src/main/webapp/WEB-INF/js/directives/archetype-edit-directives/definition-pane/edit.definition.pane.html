@@ -50,18 +50,19 @@
 						</tree-collapsed-icon>
 						<tree-node-label>
 							<span ng-show="node.label.slot" class="clever-icon slot" style="padding: 7px 10px; background-position-y: 10px;"></span>
-							<span ng-show="!node.label.slot" class="clever-icon list" ng-class="node.label.picType | typemap | lowercase  " style="padding: 7px 10px; background-position-y: 10px;"></span>
+							<span ng-show="(!node.label.slot)&& node.label.type!='attribute'" class="clever-icon list" ng-class="node.label.picType | typemap | lowercase  " style="padding: 7px 10px; background-position-y: 10px;"></span>
 							<span ng-show="node.label.code"> 
 								<span ng-show="node.label.archetypeNode" style="color: black;font-weight: bold;"> 
 									<span ng-bind-html="getLabelContent(node) | highlight:keyword |unsafe"></span> 
 								</span> 
-								<span ng-show="!node.label.archetyeNode" style="color: brown;">
+								<span ng-show="!node.label.archetypeNode" style="color: brown;">
 									<span ng-bind-html="getLabelContent(node) | highlight:keyword | unsafe"></span> 
 								</span> 
 							</span>
-							<span ng-show="(!node.label.code)&&node.label.text" style="color: brown;" > <span ng-bind-html="node.label.text | highlight:keyword |  unsafe"></span></span>
+							<span ng-show="(!node.label.code)&&node.label.text&&node.label.type=='type'" style="color: brown;" > <span ng-bind-html="node.label.text | highlight:keyword |  unsafe"></span></span>
+							<span ng-show="(!node.label.code)&&node.label.text&&node.label.type=='attribute'" style="color: #307186;" > <span ng-bind-html="node.label.text | highlight:keyword |  unsafe"></span></span>
+					
 						</tree-node-label>
-
 					</tree-view>
 				</div>
 			</div>

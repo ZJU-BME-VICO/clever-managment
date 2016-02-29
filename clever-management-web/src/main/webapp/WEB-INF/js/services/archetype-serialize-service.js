@@ -456,7 +456,7 @@ angular.module('clever.management.service.archetypeSerialize', []).service('arch
 
 			this.write(" matches {");
 			var self = this;
-			if (ccobj.attributes) {
+			if (ccobj.attributes && ccobj.attributes.length != 0) {
 				if (ccobj.node_id) {
 					this.printComment(ccobj.node_id, ontology);
 				}
@@ -500,7 +500,7 @@ angular.module('clever.management.service.archetypeSerialize', []).service('arch
 
 		self.write(" matches {");
 		var children = attribute.children;
-		if (children) {
+		if (children && children.length != 0) {
 
 			if (angular.isArray(children)) {
 				self.newLine();

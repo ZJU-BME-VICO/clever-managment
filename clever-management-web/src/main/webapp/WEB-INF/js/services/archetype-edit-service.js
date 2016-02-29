@@ -21,7 +21,6 @@ angular.module('clever.management.service.archetypeEdit', []).service('archetype
             assumed_value: undefined,
         };
     };
-
     this.getCDuration = function() {
         return {
             '_xsi:type': "C_DURATION",
@@ -630,9 +629,19 @@ angular.module('clever.management.service.archetypeEdit', []).service('archetype
 
     function getDefaultDescription() {
         return {
-            original_author: {
-                _id: "name"
-            },
+            original_author:[{
+                _id: "date",
+                __text : "NaN-aN-aN",	
+            },{
+                _id: "name",
+                __text : "",	
+            },{
+                _id: "organisation",
+                __text : "",	
+            },{
+                _id: "email",
+                __text : "",	
+            },] ,
             lifecycle_state: "0",
             details: {
                 copyright: "",
@@ -714,7 +723,7 @@ angular.module('clever.management.service.archetypeEdit', []).service('archetype
 
 /**
  * 
- * create a Object node with type, get next node id in term_definition and synchronize the ontology 
+ * create an Object node with type, get next node id in term_definition and synchronize the ontology 
  * @param {Object} type The reference model type of the CObject 
  * @param {Object} ontology The ontology in original archetype
  */
@@ -727,9 +736,9 @@ angular.module('clever.management.service.archetypeEdit', []).service('archetype
             return undefined;
         }
         
-        var nodeId = getTermDefinitionNodeId(ontology.term_definitions);
+        var nodeId = self.getTermDefinitionNodeId(ontology.term_definitions); 
+        self.synchronizeOriOntology(nodeId, type, '*', ontology);
         var attributes = generateAttributes(rmObject.attributes, ontology);
-        self.synchronizeOriOntology(nodeId, type, '', ontology);
         return self.getComplexObject(attributes, nodeId, [0, 1], type);
     }
 
@@ -742,14 +751,13 @@ angular.module('clever.management.service.archetypeEdit', []).service('archetype
                     result.push(multiAttribute);
                 } else {
                     var children = generateCObject(attribute['@children'].type, ontology);
-                    var singleAttr = self.getSingleAttr(children || {}, [0, 1], attribute.name);
+                    var singleAttr = self.getSingleAttr(children || [], [0, 1], attribute.name);
                     result.push(singleAttr);
                 }
             }
         });
 
         return result;
-    }
+					    }
 
-
-});
+				});

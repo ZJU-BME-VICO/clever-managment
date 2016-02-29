@@ -59,8 +59,6 @@ angular.module('clever.management.services.templateParseToEdit', []).service('te
 				async : false,
 				success : function(archetype) {
 					parseResult = archetypeParseService.parseArchetypeXml(archetype.xml);
-					console.log("this is parse archetype result=================================");
-					console.log(parseResult);
 				}
 			});
 			var allowArchetypeNode = {
