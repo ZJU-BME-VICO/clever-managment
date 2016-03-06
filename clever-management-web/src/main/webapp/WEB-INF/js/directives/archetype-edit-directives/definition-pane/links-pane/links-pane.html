@@ -1,8 +1,20 @@
-<div>
-	<form class="form-group">
-	   <label>{{'LINKS_PANE_MEANING' | translate}}:</label>	
-	   <input class="form-control" type="text" ng-model="meaning.list">
-	   <label>{{'LINKS_PANE_TARGET' | translate}}:</label>
-	   <textarea class = "form-control"  ng-model="target.list"></textarea>
-	</form>
+<div class="row">
+	<div class="col-xs-2 hidden-optional">
+		<h4><span class="label label-success" style="margin-left: 10px;">{{'EDIT_DEFINITION_PANE_LINKS' | translate}}</span></h4>
+	</div>
+	<div class="col-xs-10">
+		<div class="form-group">
+
+			<div class="input-group input-group-sm">
+				<label class="control-label">{{'LINKS_PANE_MEANING' | translate}}:</label>
+				<input class="form-control" type="text" ng-model="meaning.list" style="width:100%">
+			</div>
+			<div>
+				<label class="control-label">{{'LINKS_PANE_TARGET' | translate}}:</label>
+				<textarea rows="2" class = "form-control"  ng-model="target.list"></textarea>
+			</div>
+
+		</div>
+	</div>
 </div>
+<hr  class="fancy-line" />

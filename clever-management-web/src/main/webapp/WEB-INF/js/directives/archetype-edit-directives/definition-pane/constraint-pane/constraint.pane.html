@@ -1,0 +1,71 @@
+<div class="row">
+	<div class="col-xs-2 hidden-optional" >
+		<h4 style="margin:0;"><span class="label label-danger" style="margin-left: 10px;"> {{'EDIT_DEFINITION_PANE_CONSTRAINT' | translate}}</span></h4>
+	</div>
+	<div class="col-xs-10">
+		<table class=" table table-bordered">
+			<tr  ng-if="currentNode.oriNodeRef.occurrences">
+				<td>{{'EDIT_DEFINITION_PANE_OCCURRENCES' | translate}}</td>
+				<td><a ng-popover="occurrences" title="Occurrences" placement="left" maximize="true">{{getOccurrencesString()}}</a></td>
+			</tr>
+			<tr  ng-if="currentNode.oriNodeRef.existence">
+				<td>{{'EDIT_DEFINITION_PANE_EXISTENCE' | translate}}</td>
+				<td >
+				<div class="input-group input-group-sm">
+					<select  ng-options="item for item in EXISTENCE"   ng-model="castedExistence.value"  class="form-control"></select>
+				</div>
+				</td>
+			</tr>
+			<tr ng-if="currentNode.oriNodeRef.cardinality">
+				<td>{{'EDIT_DEFINITION_PANE_CARDINALITY' | translate}}</td>
+				<td><a ng-popover="cardinality" title="Cardinality" placement="left" maximize="true" ng-bind-html="getCardinalityString() | unsafe"></a></td>
+			</tr>
+
+		</table>
+
+	</div>
+</div>
+<hr  class="fancy-line" />
+
+<script type="text/ng-template" id="occurrences">
+	<ul>
+	<li>
+	<label class="control-label">{{'EDIT_DEFINITION_PANE_MIN' | translate}}:</label>&nbsp;&nbsp;&nbsp;
+	<input type="number" ng-model="castedOccurrences.lower"  style="width: 60%;" />
+	</li>
+	<li>
+	<label class="control-label">{{'EDIT_DEFINITION_PANE_MAX' | translate}}:</label>&nbsp;&nbsp;&nbsp;
+	<input ng-if="occurrences.upper_unbounded == 'false'" type="number" ng-model="castedOccurrences.upper"  style="width: 60%;"/>
+	</li>
+	<li>
+	<input type="checkbox" ng-model="occurrences.upper_unbounded" ng-true-value="'true'" ng-false-value="'false'"/>
+	&nbsp;&nbsp;&nbsp; <label class="control-label">{{'EDIT_DEFINITION_PANE_UNBOUNDED' | translate}}</label>
+	</li>
+	</ul>
+</script>
+
+<script type="text/ng-template" id="cardinality">
+	<ul>
+	<li>
+	<label class="control-label">{{'EDIT_DEFINITION_PANE_MIN' | translate}}:</label>&nbsp;&nbsp;&nbsp;
+	<input type="number"  ng-model="castedCardinality.lower"  style="width: 60%;"/>
+	</li>
+	<li>
+	<label class="control-label">{{'EDIT_DEFINITION_PANE_MAX' | translate}}:</label>&nbsp;&nbsp;&nbsp;
+	<input type="number" ng-if="cardinality.interval.upper_unbounded == 'false'" ng-model="castedCardinality.upper"  style="width: 60%;"/>
+	</li>
+	<li>
+	<input type="checkbox" ng-model="cardinality.interval.upper_unbounded" ng-true-value="'true'" ng-false-value="'false'"/>
+	&nbsp;&nbsp;&nbsp; <label class="control-label">{{'EDIT_DEFINITION_PANE_UNBOUNDED' | translate}}</label>
+	</li>
+
+	<li>
+	<input type="checkbox" ng-model="cardinality.is_unique" ng-true-value="'true'" ng-false-value="'false'" />
+	&nbsp;&nbsp;&nbsp; <label class="control-label">{{'EDIT_DEFINITION_PANE_UNIQUE' | translate}}:</label>
+	</li>
+	<li>
+	<input type="checkbox" ng-model="cardinality.is_ordered" ng-true-value="'true'" ng-false-value="'false'" />
+	&nbsp;&nbsp;&nbsp; <label class="control-label">{{'EDIT_DEFINITION_PANE_ORDERED' | translate}}:</label>
+	</li>
+	</ul>
+</script>

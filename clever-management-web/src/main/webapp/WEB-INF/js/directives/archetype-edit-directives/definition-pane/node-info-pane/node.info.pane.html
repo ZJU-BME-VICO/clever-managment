@@ -1,0 +1,28 @@
+<div class="row">
+    <div class="col-xs-2 hidden-optional">
+        <h4><span class="label label-warning" style="margin-left: 10px;">{{'EDIT_DEFINITION_PANE_NODE_INFO' | translate}}</span></h4>
+    </div>
+    <div class="col-xs-10">
+        <ul class="list-group">
+            <li class="list-group-item">
+                &nbsp;&nbsp; <span class="button-label post " ng-if="node.label.code">{{node.label.code}}</span> &nbsp;&nbsp; <span class="button-label post">{{node.label.type}}</span> &nbsp;&nbsp; <span ng-if="node.label.type == 'type'" class="button-label post">{{node.label.picType}}</span> &nbsp;&nbsp;
+                <span class="button-label post" ng-if="node.label.type == 'attribute'"> {{node.label.picType}}</span>
+            </li>
+            <li class="list-group-item" ng-if="node.oriNodeRef.textPath" style="overflow : auto">
+                <label class="control-label">Text Path:</label>
+                <br />
+                <code>
+                    {{node.oriNodeRef.textPath}}
+                </code>
+            </li>
+            <li class="list-group-item" ng-if="node.oriNodeRef.idPath" style="overflow : auto">
+                <label class="control-label">Id Path:</label>
+                <br />
+                <code>
+                 {{node.oriNodeRef.idPath}}
+                </code>        
+            </li>
+        </ul>
+    </div>
+</div>
+<hr ng-if="node" class="fancy-line" />

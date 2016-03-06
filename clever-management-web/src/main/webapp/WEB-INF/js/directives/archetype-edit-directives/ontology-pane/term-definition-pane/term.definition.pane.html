@@ -1,0 +1,28 @@
+<div class="col-lg-12 col-md-12 col-sm-12" ng-style="{height: maxHeight}" style="overflow: auto">
+    <table class="table table-hover">
+        <thead>
+            <th>Code</th>
+            <th>Text</th>
+            <th>Description</th>
+        </thead>
+        <tbody>
+            <tr ng-repeat="item in termDefinition.items" ng-popover="Term Definition" title="Edit" placement="top" maximize="false">
+                <td><span>{{item.code}}</span></td>
+                <td><span>{{item.text.__text}}</span></td>
+                <td><span>{{item.description.__text}}</span></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<script type="text/ng-template" id="Term Definition">
+    <form class="input-group input-group-sm" name="textForm" ng-class="{'has-error' : textForm.textInput.$error.required }">
+        <label>Text</label>
+        <input type="text" name="textInput" class="form-control" ng-model="item.text.__text" required>
+    </form>
+    <span class="text-danger" ng-show="textForm.textInput.$error.required">Required!</span>
+    <form class="input-group" style="min-width: 600px" name="descriptionForm" ng-class="{'has-error' : descriptionForm.descriptionInput.$error.required }">
+        <label>Description</label>
+        <textarea name="descriptionInput" elastic class="form-control" ng-model="item.description.__text" required></textarea>
+    </form>
+    <span class="text-danger" ng-show="descriptionForm.descriptionInput.$error.required">Required!</span>
+</script>

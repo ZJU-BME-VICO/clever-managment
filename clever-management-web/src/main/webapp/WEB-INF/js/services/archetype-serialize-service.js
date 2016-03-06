@@ -376,7 +376,11 @@ angular.module('clever.management.service.archetypeSerialize', []).service('arch
 			self.writeIndent(5);
 			self.write(item._id);
 			self.write(" = <\"");
-			self.write( item.__text.replace(/"/g, "\\\""));
+			// this is for test ,should be remove
+			if(item.__text){
+					self.write( item.__text.replace(/"/g, "\\\""));
+			}
+		
 			self.write("\">");
 			self.newLine();
 		});

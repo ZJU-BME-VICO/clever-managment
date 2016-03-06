@@ -7,16 +7,17 @@
 <script src="js/lib/ui-utils.js"></script>
 <script src="js/lib/angular-ui-router.js"></script>
 <script src="js/lib/ui-bootstrap-tpls-0.12.0.js"></script>
+<!--<script src="js/lib/ui-bootstrap-tpls-1.0.3.js"></script>-->
 <script src="js/lib/xml2json.js"></script>
 
 <script src="js/lib/jquery-transit.js"></script>
 <script src="js/lib/diffview.js"></script>
 <script src="js/lib/difflib.js"></script>
 <script src="js/lib/ng-context-menu.js"></script>
-<script src="js/lib/ui-bootstrap-typeahead.js"></script>
+ <script src="js/lib/ui-bootstrap-typeahead.js"></script> 
 <script src="js/lib/angular-drag-and-drop-list.js"></script>
 <script src="js/lib/ngPopover.js"></script>
-
+<script src="js/lib/toaster.js"></script>
 
 <script src="js/lib/ngclipboard.min.js"></script>
 
@@ -90,13 +91,18 @@
 <script src="js/directives/api-directives/api-information-pane/api-information-pane.js"></script>
 <script src="js/directives/api-directives/pojo-class-add-pane/pojo-class-add-pane.js"></script>
 <script src="js/directives/api-directives/maintain-overall-pane/maintain-overall-pane.js"></script>
+<script src="js/directives/input-valid-check/valid-check.js"></script>
 
 <script src="js/directives/archetype-edit-directives/definition-pane/edit-definition-pane.js"></script>
 <script src="js/directives/archetype-edit-directives/header-pane/edit-header-pane.js"></script>
 <script src="js/directives/archetype-edit-directives/ontology-pane/edit-ontology-pane.js"></script>
+<script src="js/directives/archetype-edit-directives/ontology-pane/term-definition-pane/term-definition-pane.js"></script>
 <script src="js/directives/archetype-edit-directives/definition-pane/participation-pane/participation-pane.js"></script>
 <script src="js/directives/archetype-edit-directives/definition-pane/subject-pane/subject-pane.js"></script>
 <script src="js/directives/archetype-edit-directives/definition-pane/links-pane/links-pane.js"></script>
+<script src="js/directives/archetype-edit-directives/definition-pane/constraint-pane/constraint-pane.js"></script>
+<script src="js/directives/archetype-edit-directives/definition-pane/ontology-pane/ontology-pane.js"></script>
+<script src="js/directives/archetype-edit-directives/definition-pane/node-info-pane/node-info-pane.js"></script>
 <script src="js/directives/archetype-edit-directives/batch-submit-directive/batch-submit-pane.js"></script>
 <script src="js/directives/introduction-pane/introduction-pane.js"></script>
 <script src="js/directives/access/access.js"></script>

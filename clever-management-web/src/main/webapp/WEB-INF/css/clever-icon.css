@@ -101,8 +101,8 @@
 	background-image: ;/*no image*/
 	background-repeat: no-repeat;
 }
-.clever-icon.dv_parseble {
-	background-image: url("../img/datatype/parseable.png");
+.clever-icon.dv_parsable {
+	background-image: url("../img/datatype/parsable.png");
 	background-repeat: no-repeat;
 }
 .clever-icon.any {
@@ -254,8 +254,8 @@
 	background-image: url("../img/datatype/multimedia.png");
 	background-repeat: no-repeat;
 }
-.clever-icon.parseable {
-	background-image: url("../img/datatype/parseable.png");
+.clever-icon.parsable {
+	background-image: url("../img/datatype/parsable.png");
 	background-repeat: no-repeat;
 }
 .clever-icon.id {

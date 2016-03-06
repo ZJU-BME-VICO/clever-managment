@@ -281,6 +281,7 @@ function StorageTemplateUploadCtrl($scope, resourceService, busyService, msgboxS
 						'Content-Type' : undefined
 					}
 				}).then(function(result) {
+					console.log(result);
 
 					template.message = result.message;
 					if (result.status == 'VALID') {
@@ -320,32 +321,39 @@ function StorageTemplateUploadCtrl($scope, resourceService, busyService, msgboxS
 	function uploadTemplates() {
 		$scope.status = pageStatus.Uploading;
 
-		var busyId = busyService.pushBusy('BUSY_UPLOADING');
+	
 		var formData = new FormData();
-		formData.append('count', $scope.validateResult.successful.length);
-		angular.forEach($scope.validateResult.successful, function(template, index) {
-			formData.append('oets', template.oet.file);
-			formData.append('arms', template.arm.file);
-		});
-		resourceService.post(STORAGE_TEMPLATE_UPLOAD_URL, formData, {
-			transformRequest : angular.identity,
-			headers : {
-				'Content-Type' : undefined
-			}
-		}).then(function(result) {
-			busyService.popBusy(busyId);
-			if (result.succeeded) {
-				msgboxService.createMessageBox("STORAGE_TEMPLATE_UPLOAD_SUCCEEDED", "STORAGE_TEMPLATE_UPLOAD_SUCCEEDED_HINT", {}, 'success').result.then(function() {
-					$scope.status = pageStatus.AfterUpload;
-				});
-			} else {
-				msgboxService.createMessageBox("STORAGE_TEMPLATE_UPLOAD_FAILED", "STORAGE_TEMPLATE_UPLOAD_FAILED_HINT", {
-					errorMsg : result.message
-				}, 'error').result.then(function() {
-					$scope.reset();
-				});
-			}
-		});
+		if( $scope.validateResult.successful.length > 0){	
+			var busyId = busyService.pushBusy('BUSY_UPLOADING');
+			formData.append('count', $scope.validateResult.successful.length);
+			angular.forEach($scope.validateResult.successful, function(template, index) {
+				formData.append('oets', template.oet.file);
+				formData.append('arms', template.arm.file);
+			});
+			resourceService.post(STORAGE_TEMPLATE_UPLOAD_URL, formData, {
+				transformRequest : angular.identity,
+				headers : {
+					'Content-Type' : undefined
+				}
+			}).then(function(result) {
+				console.log(result);
+				busyService.popBusy(busyId);
+				if (result.succeeded) {
+					msgboxService.createMessageBox("STORAGE_TEMPLATE_UPLOAD_SUCCEEDED", "STORAGE_TEMPLATE_UPLOAD_SUCCEEDED_HINT", {}, 'success').result.then(function() {
+						$scope.status = pageStatus.AfterUpload;
+					});
+				} else {
+					msgboxService.createMessageBox("STORAGE_TEMPLATE_UPLOAD_FAILED", "STORAGE_TEMPLATE_UPLOAD_FAILED_HINT", {
+						errorMsg : result.message
+					}, 'error').result.then(function() {
+						$scope.reset();
+					});
+				}
+			}); 
+
+		}else{
+			$scope.status = pageStatus.AfterUpload;
+		}
 
 	};
 

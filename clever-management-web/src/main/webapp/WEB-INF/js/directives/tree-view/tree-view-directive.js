@@ -78,7 +78,6 @@ angular.module('clever.management.directives.treeView', []).directive('treeView'
 				$scope.clickNodeCallback({
 					value : node,
 				});
-				//$scope.nodeMessageGenerator(node);
 			};
 			$scope.clickNodeMenu = function(node, type, value) {
 				$scope.clickNodeMenuCallback({
@@ -88,16 +87,7 @@ angular.module('clever.management.directives.treeView', []).directive('treeView'
 				});
 			};
 				
-			// $scope.clickEditNodeMenu = function(node, type) {
-// 
-				// $scope.clickEditMenuCallback({
-					// node : node,
-					// type : type,
-				// });
-// 
-			// }; 
-			
-			
+
 			$scope.specialiseArchetype = function(node){
 				
 				var specialisedArchetype = $scope.specialiseArchetypeCallback({
@@ -106,15 +96,8 @@ angular.module('clever.management.directives.treeView', []).directive('treeView'
 				return specialisedArchetype;
 				
 			};
-			// $scope.deleteArchetype = function(node){
-				// $scope.deleteArchetypeCallback({
-					// value:node,
-				// });
-			// };
-			
 			
 			$scope.doubleClickNode = function(node) {
-				//console.log(node);
 				$scope.doubleClickNodeCallback({
 					value : node,
 				});
@@ -144,11 +127,11 @@ angular.module('clever.management.directives.treeView', []).directive('treeView'
 			// used by archetype editor now , get tree node label should be abandoned
 		
             $scope.getLabelContent = function(node) {
-                return $scope.nodeLabelGenerator(node);
+                return $scope.nodeLabelGenerator ?  $scope.nodeLabelGenerator(node): undefined;
 
             };
 
-			$scope.getNodeMenu1 = function() {
+			$scope.getNodeMenuFormElement = function() {
 				if(treeNodeMenuElement){
 					return  $scope.getTreeNodeMenuElement();
 				}else{

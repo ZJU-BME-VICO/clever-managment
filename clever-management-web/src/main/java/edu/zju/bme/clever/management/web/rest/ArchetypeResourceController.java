@@ -167,6 +167,15 @@ public class ArchetypeResourceController extends AbstractResourceController {
 		List<ArchetypeRevisionFile> files = this.archetypeProvideService.getLatestPublishArchetypeRevisionFileToEdit();
 		return constructArchetypeInfoList(files);
 	}
+	
+	@RequestMapping(value="/list/edit", method = RequestMethod.GET)
+	public List<ArchetypeInfo> getArchetypeListToEdit(Authentication authentication){
+		String userName = ((UserDetails) authentication.getPrincipal()).getUsername();
+		User user = this.userService.getUserByName(userName);
+		List<ArchetypeRevisionFile> files = this.archetypeProvideService.getDraftArchetypeRevisionFileToEdit(user);
+		files.addAll( this.archetypeProvideService.getLatestPublishArchetypeRevisionFileToEdit());
+		return constructArchetypeInfoList(files);
+	}
 
 	@RequestMapping(value = "/list/verify", method = RequestMethod.GET)
 	public List<ArchetypeInfo> getArchetypeListToVerify() throws Exception {

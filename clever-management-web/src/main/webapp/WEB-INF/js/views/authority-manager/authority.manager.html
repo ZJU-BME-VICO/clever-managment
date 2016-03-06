@@ -31,11 +31,11 @@
 
 		<div ng-if="currentTable == 'USER2ROLE'" ng-style="{height:containerHeight.value -45}" style="overflow: auto">
 			<!-- Default panel contents -->
-
+		
 			<!-- Table -->
 			<table class="table">
 				<thead>
-					<th></th>
+					<th style="width: 300px"></th>
 					<th>Role</th>
 					<th>Password</th>
 					<th>Status</th>
@@ -43,9 +43,8 @@
 					<th></th>
 					<th></th>
 				</thead>
-
 				<tbody>
-					<tr ng-repeat="user in userList | filter: userNameFilter | orderBy : user.id" >
+					<tr  ng-repeat="user in userList | filter: userNameFilter | orderBy : user.id" >
 						<td class="user-name"><a   ng-popover="userName" title="user name" placement="right" maximize="false" ><img class="clever-icon user img-circle" style="height:40px; width:40px" />&nbsp;&nbsp;&nbsp;&nbsp;{{user.userName}}</a></td>
 						<td style="vertical-align:middle"><select ng-model="user.role"  ng-options="role.roleName for role in roleList track by role.id" class="success"></select></td>
 						<td style="vertical-align:middle"><a href='' ng-popover="password" title="password" placement="right" maximize="false">{{user.password}}</a></td>
@@ -66,10 +65,10 @@
 		<div ng-if="currentTable == 'ROLE2AUTHORITY'" ng-style="{height:containerHeight.value -45}" style="overflow: auto">
 			<table class="table">
 				<thead>
-					<th>Role Name</th>
+					<th style="width: 300px">Role Name</th>
 					<th>Authorities</th>
 					<th style="width : 200px">Description</th>
-					<th style="width : 200px"></th>
+					<th></th>
 				</thead>
 
 				<tbody>
@@ -80,7 +79,7 @@
 							<li ng-repeat="authority in role.authorities">
 								<span popover-placement="left" popover="{{authority.description}}" popover-trigger="mouseenter" class="glyphicon glyphicon-info-sign"></span>
 								<span>{{authority.authorityName | translate}}</span>
-								
+
 							</li>
 						</ul></td>
 						<td style="vertical-align:middle; "><span style="font-style:oblique">{{role.description}}</span></td>
