@@ -15,6 +15,8 @@ function DesignerCtrl($scope,resourceService,$q,templateParseService,archetypePa
     };
         
     $scope.getTemplateDetail=function(node){
+        console.log(node);
+        if(!node.isDirectory){
         var url=node.name;
       /*  var pos=tempName.lastIndexOf(".v");        
         var url=tempName.substring(0,pos)+"."+node.latestTemplateVersion;*/
@@ -30,6 +32,8 @@ function DesignerCtrl($scope,resourceService,$q,templateParseService,archetypePa
             $scope.templateDetail.push(simplifyTree);
          }       
         });
+            
+        }
     };
     
     //change templtatelist view as other pages

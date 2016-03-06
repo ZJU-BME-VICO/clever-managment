@@ -46,79 +46,16 @@
 	<sec:http auto-config="true" use-expressions="true" entry-point-ref="restAuthenticationEntryPoint">	
 	    
 		<sec:intercept-url pattern="/" access="permitAll" />
-		<!-- <sec:intercept-url pattern="/" access="isAuthenticated()" /> -->
+	    <sec:intercept-url pattern="/**" access="isAuthenticated()" />
         
-	  	<sec:intercept-url pattern="/authentication" access="isAuthenticated()"/> 
 	  	
-	  	<sec:intercept-url pattern="/development/api/display/**" access="hasAnyRole('ROLE_API_VIEW', 'ROLE_API_MAINTAIN')" />
-	  	<sec:intercept-url pattern="/development/api/maintain/**" access="hasRole('ROLE_API_MAINTAIN')" />
 	  	
-	  	<sec:intercept-url pattern="/applications/list" access="hasAnyRole('ROLE_APPILCATION_VIEW', 'ROLE_APPILCATION_EDIT')" />
 	  	
-	    <!-- template deploy -->
-	  	<sec:intercept-url pattern="/templates/storage/list/deploy" access="hasRole('ROLE_TEMPLATE_DEPLOY')" />
-	  	<sec:intercept-url pattern="/templates/storage/list/deployed" access="hasRole('ROLE_TEMPLATE_DEPLOY')" />
-	  	<sec:intercept-url pattern="/templates/storage/action/deploy" access="hasRole('ROLE_TEMPLATE_DEPLOY')" />
-	  	<sec:intercept-url pattern="/deployRecords/list" access="hasRole('ROLE_TEMPLATE_DEPLOY')" />
-	  	<!-- template verify -->
-	  	<sec:intercept-url pattern="/templates/storage/list/verify" access="hasRole('ROLE_TEMPLATE_VERIFY')" />
-	  	<sec:intercept-url pattern="/templates/storage/action/approve/id/**" access="hasRole('ROLE_TEMPLATE_VERIFY')" />
-	  	<sec:intercept-url pattern="/templates/storage/action/reject/id/**" access="hasRole('ROLE_TEMPLATE_VERIFY')" />
-	  	<sec:intercept-url pattern="/templates/storage/action/remove/id/**" access="hasRole('ROLE_TEMPLATE_VERIFY')" />
-	  
-        <!--template submit  -->
-	  	<sec:intercept-url pattern="/templates/storage/action/submit/id/**" access="hasAnyRole('ROLE_TEMPLATE_SUBMIT', 'ROLE_TEMPLATE_BACTH_SUBMIT')" />
-	  	<!-- template fallback  -->
-	  	<sec:intercept-url pattern="/templates/storage/action/fallback/id/**" access="hasRole('ROLE_API_VIEW')" />
-		<!-- template create -->
-		<sec:intercept-url pattern="/templates/storage/action/create" access="hasRole('ROLE_TEMPLATE_CREATE')" />
-		<!-- template save -->
-		<sec:intercept-url pattern="/templates/storage/action/edit/id/**" access="hasRole('ROLE_TEMPLATE_SAVE')" />
-		<!-- template edit resource-->
-		<sec:intercept-url pattern="/templates/storage/list/edit/draft'" access="hasRole('ROLE_TEMPLATE_EDIT')" />
-		<sec:intercept-url pattern="/templates/storage/list/edit/published" access="hasRole('ROLE_TEMPLATE_EDIT')" />
-		<sec:intercept-url pattern="/archetypes/name/**" access="hasAnyRole('ROLE_TEMPLATE_EDIT', 'ROLE_TEMPLATE_VIEW')" />
-		<sec:intercept-url pattern="/archetypes/list/reference" access="hasRole('ROLE_TEMPLATE_EDIT')" />
-		
-		<!-- template view -->	
-		<sec:intercept-url pattern="/templates/storage/name/**" access="hasRole('ROLE_TEMPLATE_VIEW')" />
-		<sec:intercept-url pattern="/templates/storage/id/**" access="hasRole('ROLE_TEMPLATE_VIEW')" />
-		<sec:intercept-url pattern="/templates/storage/list" access="hasRole('ROLE_TEMPLATE_VIEW')" />
-		<sec:intercept-url pattern="/templates/storage/master/id/" access="hasRole('ROLE_TEMPLATE_VIEW')" />
-		<!-- template upload -->
-		<sec:intercept-url pattern="/templates/storage/action/upload" access="hasRole('ROLE_TEMPLATE_UPLOAD')" />
-		<sec:intercept-url pattern="/templates/storage/action/validate" access="hasRole('ROLE_TEMPLATE_UPLOAD')" />
-	   	<!-- archetype view -->
-		<sec:intercept-url pattern="/archetypes/list" access="hasRole('ROLE_ARCHETYPE_VIEW')" />
-		<sec:intercept-url pattern="/archetypes/master/id/**" access="hasRole('ROLE_ARCHETYPE_VIEW')" />
-		<sec:intercept-url pattern="/archetypes/id/**"           access="hasRole('ROLE_ARCHETYPE_VIEW')" />
-		<!-- archetype upload -->
-		<sec:intercept-url pattern="/archetypes/action/upload" access="hasRole('ROLE_ARCHETYPE_UPLOAD')" />
-		<sec:intercept-url pattern="/archetypes/action/validate" access="hasRole('ROLE_ARCHETYPE_UPLOAD')" />
-		
-		<!-- archetype create -->
-		<sec:intercept-url pattern="/archetypes/action/create" access="hasAnyRole('ROLE_ARCHETYPE_CREATE','ROLE_ARCHETYPE_NEW_REVISION','ROLE_ARCHETYPE_NEW_VERSION','ROLE_ARCHETYPE_SPECIALIZE')" />
-		<!-- archetype save -->
-		<sec:intercept-url pattern="/archetypes/action/edit/id/**" access="hasRole('ROLE_ARCHETYPE_EDIT')" />
-		<!-- archetype edit -->
-		<sec:intercept-url pattern="/archetypes/list/edit/draft" access="hasRole('ROLE_ARCHETYPE_EDIT')" />
-		<sec:intercept-url pattern="/archetypes/list/edit/published" access="hasRole('ROLE_ARCHETYPE_EDIT')" />
-		<!-- archetype submit -->
-		<sec:intercept-url pattern="/archetypes/action/submit/id/**" access="hasAnyRole('ROLE_ARCHETYPE_SUBMIT','ROLE_ARCHETYPE_BATCH_SUBMIT')" />
-		<!-- archetype fallback -->
-		<sec:intercept-url pattern="/archetypes/action/fallback/id/**" access="hasRole('ROLE_ARCHETYPE_STATUS_FALLBACK')" />
-		<!-- archetype verify -->
-		<sec:intercept-url pattern="/archetypes/list/verify**" access="hasRole('ROLE_ARCHETYPE_VERIFY')" />
-		<sec:intercept-url pattern="/archetypes/action/approve/id/**" access="hasRole('ROLE_ARCHETYPE_VERIFY')" />
-		<sec:intercept-url pattern="/archetypes/action/reject/id/**" access="hasRole('ROLE_ARCHETYPE_VERIFY')" />
-		<sec:intercept-url pattern="/archetypes/action/remove/id/**" access="hasRole('ROLE_ARCHETYPE_VERIFY')" />
-		<!-- authority -->
-		<sec:intercept-url pattern="/authority/**" access="hasRole('ROLE_AUTHORIZE')" />
 		
 		
 
 	  	
-	  	<sec:intercept-url pattern="/**" access="isAuthenticated() and hasRole('ROLE_ADMIN')" />
+	  	
 		<sec:form-login login-page="/#/login"
 			authentication-success-handler-ref="authenticationSuccessHandler"
 			authentication-failure-handler-ref="authenticationFailureHandler" 
