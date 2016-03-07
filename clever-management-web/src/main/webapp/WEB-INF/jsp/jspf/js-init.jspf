@@ -14,7 +14,7 @@
 <script src="js/lib/diffview.js"></script>
 <script src="js/lib/difflib.js"></script>
 <script src="js/lib/ng-context-menu.js"></script>
- <script src="js/lib/ui-bootstrap-typeahead.js"></script> 
+ <script src="js/lib/ui-bootstrap-typeahead.js"></script>
 <script src="js/lib/angular-drag-and-drop-list.js"></script>
 <script src="js/lib/ngPopover.js"></script>
 <script src="js/lib/toaster.js"></script>
@@ -136,6 +136,7 @@
 <!-- filters -->
 <script src="js/filters/unsafe-filter.js"></script>
 <script src="js/filters/typemap-filter.js"></script>
+<script src="js/filters/typemap2display-filter.js"></script>
 
 <!-- util -->
 <script src="js/util/date-format-extension.js"></script>

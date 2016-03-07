@@ -126,11 +126,11 @@
 	background-repeat: no-repeat;
 }
 .clever-icon.slot_element {
-	background-image: url("../img/datatype/slot.png");
+	background-image: url("../img/datatype/slot_element.png");
 	background-repeat: no-repeat;
 }
 .clever-icon.slot_cluster {
-	background-image: url("../img/datatype/slot.png");
+	background-image: url("../img/datatype/slot_cluster.png");
 	background-repeat: no-repeat;
 }
 /*do not know whether we need these image*/
@@ -150,7 +150,11 @@
 	background-image: url("../img/datatype/item.png");
 	background-repeat: no-repeat;
 }
+.clever-icon.activity{
+	background-image: url("../img/datatype/activity.png");
+	background-repeat: no-repeat;
 
+}
 /* Reference model type */
 .clever-icon.list.action {
 	background-image: url("../img/archetype/action.png");

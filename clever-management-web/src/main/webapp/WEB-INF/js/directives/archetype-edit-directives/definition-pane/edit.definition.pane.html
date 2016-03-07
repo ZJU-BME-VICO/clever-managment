@@ -1,8 +1,8 @@
 <div class="row">
-	<div class="row">
-		<div class="col-xs-6 col-md-6 col-lg-6"  ng-style="{height: contentHeight.value - 85}" style="overflow: hidden; padding-left:0px; margin-left:0px; border-right: #EBF0F3 solid 1px" >
+  <div class="row">
+    <div class="col-xs-6 col-md-6 col-lg-6" ng-style="{height: contentHeight.value - 85}" style="overflow: hidden; padding-left:0px; margin-left:0px; border-right: #EBF0F3 solid 1px">
 
-			<!-- <div style="margin-left:20px; display: flex">
+      <!-- <div style="margin-left:20px; display: flex">
 			<div style="width:50px;  margin-top:10px" >
 			<span class="label label-primary" >{{'EDIT_DEFINITION_PANE_EXPAND_ALL' | translate}}&nbsp;&nbsp;&nbsp;</span>
 			<span class="label label-success">{{'EDIT_DEFINITION_PANE_COLLAPSE_ALL' | translate}}&nbsp;&nbsp;&nbsp;</span>
@@ -11,84 +11,88 @@
 			<toggle-switch model="isExpandedAll.value"></toggle-switch>
 			</div>
 			</div> -->
-			<div style="margin: 15px 15px 0 15px; display: flex">
-				<toggle-switch model="isExpandedAll.value" style="margin-right:10px"></toggle-switch>
-				<div class="input-group input-group-sm" style="width: 50%">
-					<span class="input-group-addon" id="sizing-addon3">Search</span>
-					<input class="form-control" type="text" ng-model='archetypeTreeNodeFilter' />
-				</div>
-			</div>
+      <div style="margin: 15px 15px 0 15px; display: flex">
+        <toggle-switch model="isExpandedAll.value" off-label="{{'ARCHETYPE_EDIT_COLLAPSEALL' | translate}}" on-label="{{'ARCHETYPE_EDIT_EXPANDALL' | translate}}" style="margin-right:10px"></toggle-switch>
+        <div class="input-group input-group-sm" style="width: 50%">
+          <span class="input-group-addon" id="sizing-addon3">{{'ARCHETYPE_EDIT_DEFINITION_SEARCH' | translate}}</span>
+          <input class="form-control" type="text" ng-model='archetypeTreeNodeFilter' placeholder="{{'SEARCH_HINT' | translate}}"/>
+        </div>
+      </div>
 
-			<hr />
-			<div class="row" style="display: flex">
-				<div style="margin-left: 30px; width: 60px; border-right: 1px solid rgba(133, 87, 87, 0.27);">
-					<ul style="padding-left: 0;">
-						<li ng-repeat="icon in dragableIcons" style="margin-bottom: 4px; ">
-							<button class="btn btn-default" style="border-radius: 30px; " >
-								<span class="clever-icon" ng-class="icon"  style="padding: 7px 10px; background-position-y: 10px;"></span>
-							</button>
-						</li>
-					</ul>
-				</div>
-				<div ng-style="{height: contentHeight.value - 185}" style="overflow: auto; width:100%">
-					<tree-view tree-data="definition.treeItems"
-					class="definition-tree"
-					node-alias-name="node"
-					tree-control="treeControl"
-					click-node-callback="selectNode(value)"
-					node-label-generator="getLabelContent"
-					node-menu-generator="getTreeNodeMenu"
-					menu-prefix = "definition"
-					click-node-menu-callback="editArchetype(node,type)"
-					search-key-mapper="searchKeyMapper"
-					>
-						<tree-expanded-icon>
-							<span class="clever-icon expanded" style="padding: 0 6px;height: 12px;background-position-y: 6px;"></span>
-						</tree-expanded-icon>
-						<tree-collapsed-icon>
-							<span class="clever-icon collapsed" style="padding: 0 6px;height: 12px;background-position-y: 6px;"></span>
-						</tree-collapsed-icon>
-						<tree-node-label>
-							<span ng-show="node.label.slot" class="clever-icon slot" style="padding: 7px 10px; background-position-y: 10px;"></span>
-							<span ng-show="(!node.label.slot)&& node.label.type!='attribute'" class="clever-icon list" ng-class="node.label.picType | typemap | lowercase  " style="padding: 7px 10px; background-position-y: 10px;"></span>
-							<span ng-show="node.label.code"> 
-								<span ng-show="node.label.archetypeNode" style="color: black;font-weight: bold;"> 
-									<span ng-bind-html="getLabelContent(node) | highlight:keyword |unsafe"></span> 
-								</span> 
-								<span ng-show="!node.label.archetypeNode" style="color: brown;">
-									<span ng-bind-html="getLabelContent(node) | highlight:keyword | unsafe"></span> 
-								</span> 
-							</span>
-							<span ng-show="(!node.label.code)&&node.label.text&&node.label.type=='type'" style="color: brown;" > <span ng-bind-html="node.label.text | highlight:keyword |  unsafe"></span></span>
-							<span ng-show="(!node.label.code)&&node.label.text&&node.label.type=='attribute'" style="color: #307186;" > <span ng-bind-html="node.label.text | highlight:keyword |  unsafe"></span></span>
-					
-						</tree-node-label>
-					</tree-view>
-				</div>
-			</div>
-		</div>
-		<!-- constraint edit pane -->
-		<div class = "col-lg-6 col-md-6 col-sm-6"  ng-style="{height: contentHeight.value - 85}" style="overflow: auto; padding-left:0px; margin-left:0px; padding-top: 10px; min-width: 300px ">
-			<div class="panel occur-delay" ng-if="currentNode.oriNodeRef.rm_attribute_name == 'subject'">
-				<div class="panel-heading" style="color: white;background-color: #8cc152;border-color: #8cc152;">
-					{{'EDIT_DEFINITION_PANE_SUBJECT' | translate}}
-				</div>
-				<div class="panel-body" style="border:1px solid #dddddd">
-					<subject-pane subject="currentNode"></subject-pane>
-				</div>
-			</div>
+      <hr/>
+      <div class="row" style="display: flex">
+        <div style="margin-left: 30px; width: 60px; border-right: 1px solid rgba(133, 87, 87, 0.27);">
+          <ul style="padding-left: 0;">
+            <li ng-repeat="icon in dragableIcons" style="margin-bottom: 4px; ">
+              <button class="btn btn-default" style="border-radius: 30px; ">
+                <span class="clever-icon" ng-class="icon" style="padding: 7px 10px; background-position-y: 10px;"></span>
+              </button>
+            </li>
+          </ul>
+        </div>
+        <div ng-style="{height: contentHeight.value - 185}" style="overflow: auto; width:100%">
+          <tree-view
+            tree-data="definition.treeItems"
+            class="definition-tree"
+            node-alias-name="node"
+            tree-control="treeControl"
+            click-node-callback="selectNode(value)"
+            node-label-generator="getLabelContent"
+            node-menu-generator="getTreeNodeMenu"
+            menu-prefix="definition"
+            click-node-menu-callback="editArchetype(node, value, type)"
+            search-key-mapper="searchKeyMapper">
+            <tree-expanded-icon>
+              <span class="clever-icon expanded" style="padding: 0 6px;height: 12px;background-position-y: 6px;"></span>
+            </tree-expanded-icon>
+            <tree-collapsed-icon>
+              <span class="clever-icon collapsed" style="padding: 0 6px;height: 12px;background-position-y: 6px;"></span>
+            </tree-collapsed-icon>
+            <tree-node-label>
+              <span ng-show="node.label.slot" class="clever-icon slot" style="padding: 7px 10px; background-position-y: 10px;"></span>
+              <span ng-show="(!node.label.slot)&& node.label.type!='attribute'" class="clever-icon list" ng-class="node.label.picType | typemap | lowercase  " style="padding: 7px 10px; background-position-y: 10px;"></span>
+              <span ng-show="node.label.code">
+                <span ng-show="node.label.archetypeNode" style="color: black;font-weight: bold;">
+                  <span ng-bind-html="getLabelContent(node) | highlight:keyword |unsafe"></span>
+                </span>
+                <span ng-show="!node.label.archetypeNode" style="color: brown;">
+                  <span ng-bind-html="getLabelContent(node) | highlight:keyword | unsafe"></span>
+                </span>
+              </span>
+              <span ng-show="(!node.label.code)&&node.label.text&&node.label.type=='type'" style="color: brown;">
+                <span ng-bind-html="node.label.text | highlight:keyword |  unsafe"></span>
+              </span>
+              <span ng-show="(!node.label.code)&&node.label.text&&node.label.type=='attribute'" style="color: #307186;">
+                <span ng-bind-html="node.label.text | highlight:keyword |  unsafe"></span>
+              </span>
 
-			<div class="panel occur-delay" ng-if="currentNode.oriNodeRef.rm_type_name == 'PARTICIPATION'">
-				<div class="panel-heading" style="color: white;background-color: #8cc152;border-color: #8cc152;">
-					{{'EDIT_DEFINITION_PANE_PARTICIPATION' | translate}}
-				</div>
+            </tree-node-label>
+          </tree-view>
+        </div>
+      </div>
+    </div>
+    <!-- constraint edit pane -->
+    <div class="col-lg-6 col-md-6 col-sm-6" ng-style="{height: contentHeight.value - 85}" style="overflow: auto; padding-left:0px; margin-left:0px; padding-top: 10px; min-width: 300px ">
+      <div class="panel occur-delay" ng-if="currentNode.oriNodeRef.rm_attribute_name == 'subject'">
+        <div class="panel-heading" style="color: white;background-color: #8cc152;border-color: #8cc152;">
+          {{'EDIT_DEFINITION_PANE_SUBJECT' | translate}}
+        </div>
+        <div class="panel-body" style="border:1px solid #dddddd">
+          <subject-pane subject="currentNode"></subject-pane>
+        </div>
+      </div>
 
-				<div class="panel-body" style="border:1px solid #dddddd">
-					<participation-pane participation="currentNode"></participation-pane>
-				</div>
-			</div>
+      <div class="panel occur-delay" ng-if="currentNode.oriNodeRef.rm_type_name == 'PARTICIPATION'">
+        <div class="panel-heading" style="color: white;background-color: #8cc152;border-color: #8cc152;">
+          {{'EDIT_DEFINITION_PANE_PARTICIPATION' | translate}}
+        </div>
 
-			<!-- <div class="panel" ng-if="currentNode.oriNodeRef.rm_type_name == 'LINK'">
+        <div class="panel-body" style="border:1px solid #dddddd">
+          <participation-pane participation="currentNode"></participation-pane>
+        </div>
+      </div>
+
+      <!-- <div class="panel" ng-if="currentNode.oriNodeRef.rm_type_name == 'LINK'">
 				<div class="panel-heading" style="color: white;background-color: #8cc152;border-color: #8cc152;">
 					{{'EDIT_DEFINITION_PANE_LINKS' | translate}}
 				</div>
@@ -96,290 +100,314 @@
 					<links-pane link="currentNode"></links-pane>
 				</div>
 			</div> -->
-			
-           	<div class = "col-lg-12 col-md-12 col-sm-12 occur-delay"  ng-if="currentNode.oriNodeRef.rm_type_name == 'LINK'">
-				<links-pane link="currentNode"></links-pane>
-			</div>
-			<div class = "col-lg-12 col-md-12 col-sm-12 occur-delay" ng-if="currentNode" style="display: block">
-				<node-info-pane node="currentNode"></node-info-pane>
-			</div>
-			<div class = "col-lg-12 col-md-12 col-sm-12 occur-delay" ng-if="currentNode"   style="display: block" >
-				<constraint-pane current-node="currentNode"></constraint-pane>
-			</div>
-			<div class = "col-lg-12 col-md-12 col-sm-12 occur-delay" ng-if="currentNode"   style="display: block">
-				<definition-ontology-pane ng-if="ontologyItem" ontology-item="ontologyItem"></definition-ontology-pane>
-			</div>
 
-			<!-- <div class="panel" ng-if="currentNode.oriNodeRef.node_id"> -->
-			<div class="panel" ng-if="false">
-				<div class="panel-heading" style="color: white;background-color: #8cc152;border-color: #8cc152;">
-					{{'EDIT_DEFINITION_PANE_NODE_TERM_BIND' | translate}}
-				</div>
-				<div class="panel-body" style="border:1px solid #dddddd">
-					<div class="row">
-						<div class="col-lg-4 col-md-4 col-sm-4">
-							<label>{{'EDIT_DEFINITION_PANE_TERMINOLOGY_SET' | translate}} :</label>
-						</div>
-						<div class="col-lg-8 col-md-8 col-sm-8">
-							<select style="width:100%" ng-model="selectedTerminology" ng-options="code for code in terminologyList"></select>
-						</div>
-					</div>
-					<div class="row">
-						<div class="col-lg-7 col-md-7 col-sm-7">
+      <div class="col-lg-12 col-md-12 col-sm-12 occur-delay" ng-if="currentNode.oriNodeRef.rm_type_name == 'LINK'">
+        <links-pane link="currentNode"></links-pane>
+      </div>
+      <div class="col-lg-12 col-md-12 col-sm-12 occur-delay" ng-if="currentNode" style="display: block">
+        <node-info-pane node="currentNode"></node-info-pane>
+      </div>
+      <div class="col-lg-12 col-md-12 col-sm-12 occur-delay" ng-if="currentNode" style="display: block">
+        <constraint-pane current-node="currentNode"></constraint-pane>
+      </div>
+      <div class="col-lg-12 col-md-12 col-sm-12 occur-delay" ng-if="currentNode" style="display: block">
+        <definition-ontology-pane ng-if="ontologyItem" ontology-item="ontologyItem"></definition-ontology-pane>
+      </div>
 
-						</div>
-						<div class="col-lg-2 col-md-2 col-sm-2">
-							<div style="margin-bottom:3px">
-								<span class="input-group-btn">
-									<button class="btn btn-default" type="button" tabindex="termBind" ng-click="add2AvailableList()" tooltip-placement="right" tooltip="Add this terminology to aviliable terminology list" tooltip-popup-delay="500">
-										<span class="glyphicon glyphicon-arrow-down"></span>
-									</button> </span>
-							</div>
-						</div>
-						<div class="col-lg-3 col-md-3 col-sm-3">
+      <!-- <div class="panel" ng-if="currentNode.oriNodeRef.node_id"> -->
+      <div class="panel" ng-if="false">
+        <div class="panel-heading" style="color: white;background-color: #8cc152;border-color: #8cc152;">
+          {{'EDIT_DEFINITION_PANE_NODE_TERM_BIND' | translate}}
+        </div>
+        <div class="panel-body" style="border:1px solid #dddddd">
+          <div class="row">
+            <div class="col-lg-4 col-md-4 col-sm-4">
+              <label>{{'EDIT_DEFINITION_PANE_TERMINOLOGY_SET' | translate}}
+                :</label>
+            </div>
+            <div class="col-lg-8 col-md-8 col-sm-8">
+              <select style="width:100%" ng-model="selectedTerminology" ng-options="code for code in terminologyList"></select>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-lg-7 col-md-7 col-sm-7"></div>
+            <div class="col-lg-2 col-md-2 col-sm-2">
+              <div style="margin-bottom:3px">
+                <span class="input-group-btn">
+                  <button class="btn btn-default" type="button" tabindex="termBind" ng-click="add2AvailableList()" tooltip-placement="right" tooltip="Add this terminology to aviliable terminology list" tooltip-popup-delay="500">
+                    <span class="glyphicon glyphicon-arrow-down"></span>
+                  </button>
+                </span>
+              </div>
+            </div>
+            <div class="col-lg-3 col-md-3 col-sm-3"></div>
+          </div>
+          <div class="row">
+            <div class="col-lg-4 col-md-4 col-sm-4">
+              <label>{{'EDIT_DEFINITION_PANE_AVAILABLE' | translate}}
+                :</label>
+            </div>
+            <div class="col-lg-8 col-md-8 col-sm-8">
+              <select style="width:100%" ng-model="currentTerminology" ng-options="code for code in avaiTerminologyList"></select>
+            </div>
+          </div>
+          <br>
+          <div>
+            <form class="form-group">
+              <label style="width:100px">{{'EDIT_DEFINITION_PANE_CODE' | translate}}:</label>
+              <code>
+                #{{currentNode.oriNodeRef.node_id}}
+              </code>
+              <br>
+              <label>{{'EDIT_DEFINITION_PANE_PATH[TEXT]' | translate}}
+                :</label>
+              <span class="form-control" style="border:hidden">{{currentNode.oriNodeRef.textPath}}</span>
+              <br>
+              <label>{{'EDIT_DEFINITION_PANE_PATH[ID]' | translate}}
+                :</label>
+              <span class="form-control" style="border:hidden">{{currentNode.oriNodeRef.idPath}}</span>
+              <br>
+              <label>{{'EDIT_DEFINITION_PANE_BIND_CODE' | translate}}
+                :</label>
+              <input type="text" ng-model="bindCode" class="form-control"/>
+              <label>{{'EDIT_DEFINITION_PANE_RELEASE' | translate}}
+                :</label>
+              <input type="text" ng-model="release" class="form-control"/>
+              <br>
+              <button class="btn btn-success pull-right" style="position: center">
+                {{'EDIT_DEFINITION_PANE_ADD_TERM_BIND_TO_THIS_NODE' | translate}}
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
 
-						</div>
-					</div>
-					<div class="row">
-						<div class="col-lg-4 col-md-4 col-sm-4">
-							<label>{{'EDIT_DEFINITION_PANE_AVAILABLE' | translate}} :</label>
-						</div>
-						<div class="col-lg-8 col-md-8 col-sm-8">
-							<select style="width:100%" ng-model="currentTerminology" ng-options="code for code in avaiTerminologyList"></select>
-						</div>
-					</div>
-					<br>
-					<div>
-						<form class="form-group">
-							<label style="width:100px">{{'EDIT_DEFINITION_PANE_CODE' | translate}}:</label>
-							<code>
-								#{{currentNode.oriNodeRef.node_id}}
-							</code>
-							<br>
-							<label>{{'EDIT_DEFINITION_PANE_PATH[TEXT]' | translate}} :</label>
-							<span class="form-control"  style="border:hidden">{{currentNode.oriNodeRef.textPath}}</span>
-							<br>
-							<label>{{'EDIT_DEFINITION_PANE_PATH[ID]' | translate}} :</label>
-							<span class="form-control"  style="border:hidden">{{currentNode.oriNodeRef.idPath}}</span>
-							<br>
-							<label>{{'EDIT_DEFINITION_PANE_BIND_CODE' | translate}} :</label>
-							<input type="text" ng-model="bindCode" class="form-control" />
-							<label>{{'EDIT_DEFINITION_PANE_RELEASE' | translate}} :</label>
-							<input type="text" ng-model="release" class="form-control" />
-							<br>
-							<button class="btn btn-success pull-right" style="position: center">
-								{{'EDIT_DEFINITION_PANE_ADD_TERM_BIND_TO_THIS_NODE' | translate}}
-							</button>
-						</form>
-					</div>
-				</div>
-			</div>
+      <!-- node value-->
+      <div class="panel" ng-if="false">
+        <div class="panel-heading" style="color: white;background-color: #8cc152;border-color: #8cc152;">
+          {{'EDIT_DEFINITION_PANE_NODE_VALUE' | translate}}
+        </div>
+        <div class="panel-body" style="border:1px solid #dddddd">
+          <!-- DV_CODED_TEXT -->
+          <div ng-if="false" style="margin-top: 1px">
+            <div class="row">
+              <div class="col-lg-2 col-md-2 col-sm-2">
+                <div style="margin-left:10px">
+                  <div class="col">
+                    <div>
+                      <span class="input-group-btn">
+                        <button class="btn btn-default" type="button" tabindex="coded_text" tooltip-placement="right" tooltip="Add a constraint bind to this node" tooltip-popup-delay="500">
+                          <span class="glyphicon glyphicon-plus"></span>
+                        </button>
+                      </span>
+                    </div>
+                    <div>
+                      <span class="input-group-btn">
+                        <button class="btn btn-default" type="button" tabindex="coded_text" tooltip-placement="right" tooltip="Delete this constraint bind " tooltip-popup-delay="500">
+                          <span class="glyphicon glyphicon-minus"></span>
+                        </button>
+                      </span>
+                    </div>
+                    <div>
+                      <span class="input-group-btn">
+                        <button class="btn btn-default" type="button" popover-template="nodeBindUrl" popover-title="select one" popover-placement="right" tabindex="coded_text" tooltip-placement="right" tooltip="Use internal node bind" tooltip-popup-delay="500">
+                          <span class="glyphicon glyphicon-book"></span>
+                        </button>
+                      </span>
 
-			<!-- node value-->
-			<div class="panel" ng-if="false">
-				<div class="panel-heading" style="color: white;background-color: #8cc152;border-color: #8cc152;">
-					{{'EDIT_DEFINITION_PANE_NODE_VALUE' | translate}}
-				</div>
-				<div class="panel-body" style="border:1px solid #dddddd">
-					<!-- DV_CODED_TEXT -->
-					<div ng-if="false"  style="margin-top: 1px">
-						<div class="row">
-							<div class="col-lg-2 col-md-2 col-sm-2">
-								<div style="margin-left:10px">
-									<div class="col">
-										<div>
-											<span class="input-group-btn">
-												<button class="btn btn-default" type="button" tabindex="coded_text"  tooltip-placement="right" tooltip="Add a constraint bind to this node" tooltip-popup-delay="500">
-													<span class="glyphicon glyphicon-plus"></span>
-												</button> </span>
-										</div>
-										<div>
-											<span class="input-group-btn" >
-												<button class="btn btn-default" type="button" tabindex="coded_text" tooltip-placement="right" tooltip="Delete this constraint bind " tooltip-popup-delay="500">
-													<span class="glyphicon glyphicon-minus"></span>
-												</button> </span>
-										</div>
-										<div>
-											<span class="input-group-btn">
-												<button class="btn btn-default" type="button"   popover-template = "nodeBindUrl"  popover-title="select one"  popover-placement="right"  tabindex="coded_text"  tooltip-placement="right" tooltip="Use internal node bind" tooltip-popup-delay="500">
-													<span class="glyphicon glyphicon-book"></span>
-												</button> </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-10 col-md-10 col-sm-10" border="1">
 
-										</div>
-									</div>
-								</div>
-							</div>
-							<div class="col-lg-10 col-md-10 col-sm-10" border="1" >
+                <ul style="padding-left:15px; ">
+                  <li>
+                    <span class="glyphicon glyphicon-star"></span>
+                    <a href="#" ng-click="$event.preventDefault();">{{'EDIT_DEFINITION_PANE_CODETEXT1' | translate}}</a>
+                  </li>
+                  <li>
+                    <span class="glyphicon glyphicon-star"></span>
+                    <a href="#" ng-click="$event.preventDefault();">{{'EDIT_DEFINITION_PANE_CODETEXT1' | translate}}</a>
+                  </li>
+                </ul>
 
-								<ul style="padding-left:15px; ">
-									<li>
-										<span class="glyphicon glyphicon-star"></span>
-										<a href="#" ng-click="$event.preventDefault();" >{{'EDIT_DEFINITION_PANE_CODETEXT1' | translate}}</a>
-									</li>
-									<li>
-										<span class="glyphicon glyphicon-star"></span>
-										<a href="#" ng-click="$event.preventDefault();" >{{'EDIT_DEFINITION_PANE_CODETEXT1' | translate}}</a>
-									</li>
-								</ul>
+              </div>
+            </div>
+            <div>
+              <form style="margin-left:15px">
+                <h5>{{'EDIT_DEFINITION_PANE_CODE' | translate}}
+                  :
+                  <span style="color:black">#at0012<span></h5>
 
-							</div>
-						</div>
-						<div>
-							<form style="margin-left:15px">
-								<h5>{{'EDIT_DEFINITION_PANE_CODE' | translate}} : <span style="color:black">#at0012<span></h5>
+                    <h5>{{'EDIT_DEFINITION_PANE_TEXT' | translate}}
+                      :</h5>
+                    <input type="text" class="form-control" id="formGroupInputSmall"/>
+                    <h5>{{'EDIT_DEFINITION_PANE_DESCRIPTION' | translate}}
+                      :</h5>
+                    <input type="text" class="form-control" id="formGroupInputSmall"/>
+                    <h5>{{'EDIT_DEFINITION_PANE_ASSUMED_VALUE' | translate}}
+                      :</h5>
+                    <select ng-options="code for code in codeList" class="form-control"></select>
+                  </form>
+                </div>
+              </div>
 
-								<h5>{{'EDIT_DEFINITION_PANE_TEXT' | translate}} :</h5>
-								<input type="text" class="form-control"  id="formGroupInputSmall" />
-								<h5>{{'EDIT_DEFINITION_PANE_DESCRIPTION' | translate}} :</h5>
-								<input type="text" class="form-control"  id="formGroupInputSmall" />
-								<h5>{{'EDIT_DEFINITION_PANE_ASSUMED_VALUE' | translate}} :</h5>
-								<select ng-options = "code for code in codeList" class="form-control"></select>
-							</form>
-						</div>
-					</div>
+              <!-- DV_QUANTITY -->
+              <div ng-if="false">
+                <div>
+                  <h5>{{'EDIT_DEFINITION_PANE_PROPERTY' | translate}}
+                    :
+                  </h5>
+                  <select ng-options="pro for pro in propertyList" class="form-control"></select>
+                </div>
 
-					<!-- DV_QUANTITY -->
-					<div ng-if="false" >
-						<div>
-							<h5>{{'EDIT_DEFINITION_PANE_PROPERTY' | translate}} : </h5>
-							<select ng-options ="pro for pro in propertyList" class="form-control"></select>
-						</div>
+                <hr style="margin-bottom: 1px">
+                <div class="row">
+                  <div class="col-lg-2 col-md-2 col-sm-2 bordered">
+                    <h5>{{'EDIT_DEFINITION_PANE_UNIT' | translate}}:</h5>
+                  </div>
+                  <div class="col-lg-5 col-md-5 col-sm-5 bordered">
 
-						<hr style="margin-bottom: 1px">
-						<div class="row">
-							<div class="col-lg-2 col-md-2 col-sm-2 bordered">
-								<h5>{{'EDIT_DEFINITION_PANE_UNIT' | translate}}:</h5>
-							</div>
-							<div class="col-lg-5 col-md-5 col-sm-5 bordered">
+                    <label style="padding-left:15px; ">{{'EDIT_DEFINITION_PANE_ORIGINAL' | translate}}</label>
+                  </div>
+                  <div class="col-lg-5 col-md-5 col-sm-5 bordered">
+                    <label style="padding-left:15px; ">{{'EDIT_DEFINITION_PANE_SELECTED' | translate}}</label>
+                  </div>
+                </div>
+                <hr style="margin-top:1px; margin-bottom: 1px">
+                <div class="row" style="margin-top:10px">
+                  <div class="col-lg-2 col-md-2 col-sm-2 bordered"></div>
+                  <div class="col-lg-5 col-md-5 col-sm-5 bordered">
+                    <ul style="padding-left:15px; ">
+                      <li>
+                        <span class="glyphicon glyphicon-star"></span>
+                        <a href="#" ng-click="$event.preventDefault();">{{'EDIT_DEFINITION_PANE_CODETEXT1' | translate}}</a>
+                      </li>
+                      <li>
+                        <span class="glyphicon glyphicon-star"></span>
+                        <a href="#" ng-click="$event.preventDefault();">{{'EDIT_DEFINITION_PANE_CODETEXT1' | translate}}</a>
+                      </li>
+                      <li>
+                        <span class="glyphicon glyphicon-star"></span>
+                        <a href="#" ng-click="$event.preventDefault();">{{'EDIT_DEFINITION_PANE_CODETEXT1' | translate}}</a>
+                      </li>
+                    </ul>
+                  </div>
+                  <div class="col-lg-5 col-md-5 col-sm-5 bordered">
 
-								<label style="padding-left:15px; ">{{'EDIT_DEFINITION_PANE_ORIGINAL' | translate}}</label>
-							</div>
-							<div class="col-lg-5 col-md-5 col-sm-5 bordered">
-								<label style="padding-left:15px; ">{{'EDIT_DEFINITION_PANE_SELECTED' | translate}}</label>
-							</div>
-						</div>
-						<hr style="margin-top:1px; margin-bottom: 1px">
-						<div class="row" style="margin-top:10px">
-							<div class="col-lg-2 col-md-2 col-sm-2 bordered">
+                    <ul style="padding-left:15px; ">
+                      <li>
+                        <span class="glyphicon glyphicon-star"></span>
+                        <a href="#" ng-click="$event.preventDefault();">{{'EDIT_DEFINITION_PANE_CODETEXT1' | translate}}</a>
+                      </li>
+                      <li>
+                        <span class="glyphicon glyphicon-star"></span>
+                        <a href="#" ng-click="$event.preventDefault();">{{'EDIT_DEFINITION_PANE_CODETEXT1' | translate}}</a>
+                      </li>
+                    </ul>
 
-							</div>
-							<div class="col-lg-5 col-md-5 col-sm-5 bordered">
-								<ul style="padding-left:15px; ">
-									<li>
-										<span class="glyphicon glyphicon-star"></span>
-										<a href="#" ng-click="$event.preventDefault();" >{{'EDIT_DEFINITION_PANE_CODETEXT1' | translate}}</a>
-									</li>
-									<li>
-										<span class="glyphicon glyphicon-star"></span>
-										<a href="#" ng-click="$event.preventDefault();" >{{'EDIT_DEFINITION_PANE_CODETEXT1' | translate}}</a>
-									</li>
-									<li>
-										<span class="glyphicon glyphicon-star"></span>
-										<a href="#" ng-click="$event.preventDefault();" >{{'EDIT_DEFINITION_PANE_CODETEXT1' | translate}}</a>
-									</li>
-								</ul>
-							</div>
-							<div class="col-lg-5 col-md-5 col-sm-5 bordered">
+                  </div>
 
-								<ul style="padding-left:15px; ">
-									<li>
-										<span class="glyphicon glyphicon-star"></span>
-										<a href="#" ng-click="$event.preventDefault();" >{{'EDIT_DEFINITION_PANE_CODETEXT1' | translate}}</a>
-									</li>
-									<li>
-										<span class="glyphicon glyphicon-star"></span>
-										<a href="#" ng-click="$event.preventDefault();" >{{'EDIT_DEFINITION_PANE_CODETEXT1' | translate}}</a>
-									</li>
-								</ul>
+                </div>
+                <hr>
+                <div>
+                  <table style="border-collapse: separate; border-spacing: 5px;">
+                    <tbody >
+                      <tr>
+                        <td style="width: 150px">
+                          <input type="checkbox" ng-model="pre"/>
+                          {{'EDIT_DEFINITION_PANE_PRECISION' | translate}}:</td>
+                        <td style="width: 50px">
+                          <input ng-show="pre" type="number" style="width: 100%"/>
+                        </select>
+                      </td>
 
-							</div>
+                    </tr>
+                    <tr>
+                      <td>
+                        <input type="checkbox" ng-model="min"/>
+                        {{'EDIT_DEFINITION_PANE_SET_MIN' | translate}}:</td>
+                      <td>
+                        <select ng-show="min" ng-options="" style="width: 100%"></select>
+                      </td>
+                      <td>
+                        <input ng-show="min" type="number" style="width: 100%"/>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <input type="checkbox" ng-model="max"/>
+                        {{'EDIT_DEFINITION_PANE_SET_MAX' | translate}}:</td>
+                      <td>
+                        <select ng-show="max" ng-options="" style="width: 100%"></select>
+                      </td>
+                      <td>
+                        <input ng-show="max" type="number" style="width: 100%"/>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <input type="checkbox" ng-model="assumed"/>
+                        {{'EDIT_DEFINITION_PANE_SET_ASS' | translate}}:</td>
+                      <td>
+                        <select ng-show="assumed" ng-options="" style="width: 100%"></select>
+                      </td>
+                      <td>
+                        <input ng-show="assumed" type="number" style="width: 100%"/>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
 
-						</div>
-						<hr>
-						<div>
-							<table style="border-collapse: separate; border-spacing: 5px;">
-								<tbody >
-									<tr>
-										<td style="width: 150px" >
-										<input type="checkbox"  ng-model="pre"/>
-										{{'EDIT_DEFINITION_PANE_PRECISION' | translate}}:</td>
-										<td style="width: 50px">
-										<input ng-show="pre" type="number" style="width: 100%" />
-										</select></td>
+            </div>
+            <!-- DV_COUNT -->
+            <div ng-if="false">
+              <div>
+                <table style="border-collapse: separate; border-spacing: 5px;">
+                  <tbody >
 
-									</tr>
-									<tr>
-										<td>
-										<input type="checkbox"  ng-model="min"/>
-										{{'EDIT_DEFINITION_PANE_SET_MIN' | translate}}:</td>
-										<td><select ng-show="min" ng-options="" style="width: 100%" ></select></td>
-										<td>
-										<input ng-show="min" type="number" style="width: 100%" />
-										</td>
-									</tr>
-									<tr>
-										<td>
-										<input type="checkbox" ng-model="max" />
-										{{'EDIT_DEFINITION_PANE_SET_MAX' | translate}}:</td>
-										<td><select ng-show="max" ng-options="" style="width: 100%" ></select></td>
-										<td>
-										<input ng-show="max" type="number" style="width: 100%" />
-										</td>
-									</tr>
-									<tr>
-										<td>
-										<input type="checkbox" ng-model="assumed" />
-										{{'EDIT_DEFINITION_PANE_SET_ASS' | translate}}:</td>
-										<td><select  ng-show="assumed" ng-options="" style="width: 100%" ></select></td>
-										<td>
-										<input ng-show="assumed" type="number" style="width: 100%" />
-										</td>
-									</tr>
-								</tbody>
-							</table>
-						</div>
-
-					</div>
-					<!-- DV_COUNT -->
-					<div ng-if="false" >
-						<div>
-							<table style="border-collapse: separate; border-spacing: 5px;">
-								<tbody >
-
-									<tr>
-										<td>
-										<input type="checkbox"  ng-model="min"/>
-										{{'EDIT_DEFINITION_PANE_SET_MIN' | translate}}:</td>
-										<td><select ng-show="min" ng-options="" style="width: 100%" ></select></td>
-										<td>
-										<input ng-show="min" type="number" style="width: 100%" />
-										</td>
-									</tr>
-									<tr>
-										<td>
-										<input type="checkbox" ng-model="max" />
-										{{'EDIT_DEFINITION_PANE_SET_MAX' | translate}}:</td>
-										<td><select ng-show="max" ng-options="" style="width: 100%" ></select></td>
-										<td>
-										<input ng-show="max" type="number" style="width: 100%" />
-										</td>
-									</tr>
-									<tr>
-										<td>
-										<input type="checkbox" ng-model="assumed" />
-										{{'EDIT_DEFINITION_PANE_SET_ASS.' | translate}}.:</td>
-										<td><select  ng-show="assumed" ng-options="" style="width: 100%" ></select></td>
-										<td>
-										<input ng-show="assumed" type="number" style="width: 100%" />
-										</td>
-									</tr>
-								</tbody>
-							</table>
-						</div>
-					</div>
-					<!-- DV_DATE_TIME -->
-					<div ng-if="false" >
-						<!--	drop down example----------------
+                    <tr>
+                      <td>
+                        <input type="checkbox" ng-model="min"/>
+                        {{'EDIT_DEFINITION_PANE_SET_MIN' | translate}}:</td>
+                      <td>
+                        <select ng-show="min" ng-options="" style="width: 100%"></select>
+                      </td>
+                      <td>
+                        <input ng-show="min" type="number" style="width: 100%"/>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <input type="checkbox" ng-model="max"/>
+                        {{'EDIT_DEFINITION_PANE_SET_MAX' | translate}}:</td>
+                      <td>
+                        <select ng-show="max" ng-options="" style="width: 100%"></select>
+                      </td>
+                      <td>
+                        <input ng-show="max" type="number" style="width: 100%"/>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <input type="checkbox" ng-model="assumed"/>
+                        {{'EDIT_DEFINITION_PANE_SET_ASS.' | translate}}.:</td>
+                      <td>
+                        <select ng-show="assumed" ng-options="" style="width: 100%"></select>
+                      </td>
+                      <td>
+                        <input ng-show="assumed" type="number" style="width: 100%"/>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <!-- DV_DATE_TIME -->
+            <div ng-if="false">
+              <!--	drop down example----------------
 						<div class="row">
 						<div class="clo-lg-4 col-md-4 col-sm-4">
 						<h5>Select Parttern :</h5>
@@ -438,67 +466,74 @@
 
 						</div>
 						-->
-						<form class="form-group">
-							<h5>{{'EDIT_DEFINITION_PANE_YOUR_DATE_TIME_PARTTERN' | translate}} :</h5>
-							<select class="form-control" ng-options="par.name for par in dateTimePartterList" ng-model="asdf"></select>
-						</form>
-					</div>
-					<!-- DV_ORDINAL -->
-					<div ng-if="false">
-						<div class="row">
-							<div class="col-lg-2 col-md-2 col-sm-2"  style="margin-left:2px; padding-left: 0">
+              <form class="form-group">
+                <h5>{{'EDIT_DEFINITION_PANE_YOUR_DATE_TIME_PARTTERN' | translate}}
+                  :</h5>
+                <select class="form-control" ng-options="par.name for par in dateTimePartterList" ng-model="asdf"></select>
+              </form>
+            </div>
+            <!-- DV_ORDINAL -->
+            <div ng-if="false">
+              <div class="row">
+                <div class="col-lg-2 col-md-2 col-sm-2" style="margin-left:2px; padding-left: 0">
 
-								<span class="input-group-btn">
-									<button class="btn btn-default" type="button" tabindex="ordinal"  tooltip-placement="right" tooltip="Add a ordinal" tooltip-popup-delay="500">
-										<span class="glyphicon glyphicon-plus"></span>
-									</button> </span>
+                  <span class="input-group-btn">
+                    <button class="btn btn-default" type="button" tabindex="ordinal" tooltip-placement="right" tooltip="Add a ordinal" tooltip-popup-delay="500">
+                      <span class="glyphicon glyphicon-plus"></span>
+                    </button>
+                  </span>
 
-								<span class="input-group-btn" >
-									<button class="btn btn-default" type="button" tabindex="ordinal" tooltip-placement="right" tooltip="Delete this Ordinal " tooltip-popup-delay="500">
-										<span class="glyphicon glyphicon-minus"></span>
-									</button> </span>
-							</div>
-							<div class="col-lg-8 col-ms-8 col-sm-8" style="margin-left:10px">
-								<span class="btn-group"> <span>{{'EDIT_DEFINITION_PANE_CODE' | translate}} :</span>
-									<button class="btn-default {{code.selected}}"  ng-click="setValue(code)" ng-repeat="code in ordinalCodes">
-										{{code.number}}
-									</button> </span>
-							</div>
-						</div>
-						<form>
-							<h5>{{'EDIT_DEFINITION_PANE_TEXT' | translate}} :</h5>
-							<input type="text" class="form-control" />
-							<h5>{{'EDIT_DEFINITION_PANE_DESCRIPTION' | translate}} :</h5>
-							<input type="text" class="form-control"  />
+                  <span class="input-group-btn">
+                    <button class="btn btn-default" type="button" tabindex="ordinal" tooltip-placement="right" tooltip="Delete this Ordinal " tooltip-popup-delay="500">
+                      <span class="glyphicon glyphicon-minus"></span>
+                    </button>
+                  </span>
+                </div>
+                <div class="col-lg-8 col-ms-8 col-sm-8" style="margin-left:10px">
+                  <span class="btn-group">
+                    <span>{{'EDIT_DEFINITION_PANE_CODE' | translate}}
+                      :</span>
+                    <button class="btn-default {{code.selected}}" ng-click="setValue(code)" ng-repeat="code in ordinalCodes">
+                      {{code.number}}
+                    </button>
+                  </span>
+                </div>
+              </div>
+              <form>
+                <h5>{{'EDIT_DEFINITION_PANE_TEXT' | translate}}
+                  :</h5>
+                <input type="text" class="form-control"/>
+                <h5>{{'EDIT_DEFINITION_PANE_DESCRIPTION' | translate}}
+                  :</h5>
+                <input type="text" class="form-control"/>
 
-							<input type="checkbox" ng-model="assumed" />
-							<span>{{'EDIT_DEFINITION_PANE_ASSUMED_VALUE' | translate}}:</span>
-							<select class="form-control" ng-show="assumed" ng-options="" style="width: 100%" ></select>
-						</form>
-					</div>
-					<!-- DV_BOOLEAN -->
-					<div ng-if="false" >
-						<form class="form-group">
-							<h5>{{'EDIT_DEFINITION_PANE_ALLOW_VALUE' | translate}} :</h5>
-							<span>{{'EDIT_DEFINITION_PANE_TRUE' | translate}}
-								<input type="checkbox" />
-							</span>
-							<span>{{'EDIT_DEFINITION_PANE_FALSE' | translate}}
-								<input type="checkbox" />
-							</span>
-							<h5>{{'EDIT_DEFINITION_PANE_ASSUMED_VALUE' | translate}} :</h5>
-							<select class="form-control" ng-options="var for var in allowValues"></select>
-						</form>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
+                <input type="checkbox" ng-model="assumed"/>
+                <span>{{'EDIT_DEFINITION_PANE_ASSUMED_VALUE' | translate}}:</span>
+                <select class="form-control" ng-show="assumed" ng-options="" style="width: 100%"></select>
+              </form>
+            </div>
+            <!-- DV_BOOLEAN -->
+            <div ng-if="false">
+              <form class="form-group">
+                <h5>{{'EDIT_DEFINITION_PANE_ALLOW_VALUE' | translate}}
+                  :</h5>
+                <span>{{'EDIT_DEFINITION_PANE_TRUE' | translate}}
+                  <input type="checkbox"/>
+                </span>
+                <span>{{'EDIT_DEFINITION_PANE_FALSE' | translate}}
+                  <input type="checkbox"/>
+                </span>
+                <h5>{{'EDIT_DEFINITION_PANE_ASSUMED_VALUE' | translate}}
+                  :</h5>
+                <select class="form-control" ng-options="var for var in allowValues"></select>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
 
-	<script type="text/ng-template" id="nodeBind.html">
-		<div>
-
-		</div>
-	</script>
-</div>
-
+    <script type="text/ng-template" id="nodeBind.html">
+      <div></div>
+    </script>
+  </div>

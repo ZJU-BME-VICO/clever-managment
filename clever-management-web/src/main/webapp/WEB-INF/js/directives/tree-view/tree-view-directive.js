@@ -17,7 +17,7 @@ angular.module('clever.management.directives.treeView', []).directive('treeView'
 			nodeMenuGenerator : '=',
 			nodeLabelGenerator : '=',
 			searchKeyMapper : '=',
-			
+
 			nodeMessageGenerator:'=',
 			clickEditMenuCallback:'&',
 			specialiseArchetypeCallback:'&',
@@ -25,7 +25,7 @@ angular.module('clever.management.directives.treeView', []).directive('treeView'
 			clickMenuCallback : '&',
 		},
 		controller : function($scope, $transclude) {
-			
+
 
 			var nodes = [];
 
@@ -53,7 +53,7 @@ angular.module('clever.management.directives.treeView', []).directive('treeView'
 			}
 			$scope.getNodeAliasName = function() {
 				return nodeAliasName;
-			}; 
+			};
 			var nodeLabelClass = $scope.nodeLabelClass || '';
 			$scope.getNodeLabelClass = function() {
 				return nodeLabelClass;
@@ -69,7 +69,7 @@ angular.module('clever.management.directives.treeView', []).directive('treeView'
 			var treeNodeLabelElement;
 			$scope.getTreeNodeLabelElement = function() {
 				return treeNodeLabelElement.innerHTML;
-			}; 
+			};
 			var treeNodeMenuElement;
 			$scope.getTreeNodeMenuElement = function(){
 				return treeNodeMenuElement.innerHTML;
@@ -79,53 +79,53 @@ angular.module('clever.management.directives.treeView', []).directive('treeView'
 					value : node,
 				});
 			};
-			$scope.clickNodeMenu = function(node, type, value) {
+			$scope.clickNodeMenu = function(node, value, type) {
 				$scope.clickNodeMenuCallback({
 					node : node,
+					value : value,
 					type : type,
-					value : value
 				});
 			};
-				
+
 
 			$scope.specialiseArchetype = function(node){
-				
+
 				var specialisedArchetype = $scope.specialiseArchetypeCallback({
 					value:node,
 				});
 				return specialisedArchetype;
-				
+
 			};
-			
+
 			$scope.doubleClickNode = function(node) {
 				$scope.doubleClickNodeCallback({
 					value : node,
 				});
 			};
-	    
-			
 
-			$scope.getNodeLabel = function(node, aliasName) {			
+
+
+			$scope.getNodeLabel = function(node, aliasName) {
 				if (treeNodeLabelElement) {
 					return '<span class="' + $scope.getNodeLabelClass() + '">' + $scope.getTreeNodeLabelElement() + '</span>';
 				}else if($scope.nodeLabelGenerator){
 					if ($scope.nodeMenuGenerator) {
-						
+
 					//	return $scope.nodeLabelGenerator(node, aliasName);
-						
-					
-					return '<span class="' + $scope.getNodeLabelClass() + 
+
+
+					return '<span class="' + $scope.getNodeLabelClass() +
 							'" ng-bind-html="nodeLabelGenerator(' + $scope.getNodeAliasName() + ',\''+ $scope.getNodeAliasName()  +'\') | unsafe"></span>';
-						
+
 					} else {
-						return '<span class="' + $scope.getNodeLabelClass() + 
+						return '<span class="' + $scope.getNodeLabelClass() +
 							'" ng-bind-html="nodeLabelGenerator(' + $scope.getNodeAliasName() + ') | unsafe"></span>';
 					}
 				}
 			};
-			
+
 			// used by archetype editor now , get tree node label should be abandoned
-		
+
             $scope.getLabelContent = function(node) {
                 return $scope.nodeLabelGenerator ?  $scope.nodeLabelGenerator(node): undefined;
 
@@ -154,15 +154,15 @@ angular.module('clever.management.directives.treeView', []).directive('treeView'
 			};
 
 			$scope.keyword = '';
-			
+
 			$scope.$watch('treeData', function(newValue, oldValue) {
 				if (newValue != oldValue) {
 					currentNode = undefined;
 					nodes = [];
-				}	
-				
+				}
+
 			});
-					
+
 			$scope.treeControl = {
 				expandAll : function() {
 					angular.forEach(nodes, function(node) {
@@ -183,9 +183,9 @@ angular.module('clever.management.directives.treeView', []).directive('treeView'
 					while(parent){
 						parent.collapsed = false;
 						parent = parent.parent;
-					}              
+					}
 					node.selected = 'selected';
-                    
+
 					$scope.setCurrentNode(node);
 
 					$scope.clickNode(node);
@@ -200,9 +200,9 @@ angular.module('clever.management.directives.treeView', []).directive('treeView'
 						angular.forEach(nodes, function(node) {
 							node.containsTargetChild = undefined;
 						});
-						
-						angular.forEach(nodes, function(node) {	
-							if($scope.searchKeyMapper(node)){					
+
+						angular.forEach(nodes, function(node) {
+							if($scope.searchKeyMapper(node)){
 								if ($scope.searchKeyMapper(node).toLowerCase().indexOf(keyword.toLowerCase()) < 0) {
 									if (!node.containsTargetChild) {
 										node.show = false;
@@ -222,7 +222,7 @@ angular.module('clever.management.directives.treeView', []).directive('treeView'
 								}
 
 							}
-						}); 
+						});
 
 					} else {
 						angular.forEach(nodes, function(node) {
@@ -235,7 +235,7 @@ angular.module('clever.management.directives.treeView', []).directive('treeView'
 					}
 				},
 			};
-			
+
 			$transclude(function(clone, scope) {
                	angular.forEach(clone, function(node) {
 					if (isExpandedIcon(node)) {
@@ -249,21 +249,21 @@ angular.module('clever.management.directives.treeView', []).directive('treeView'
 					}
 				});
             });
-            
+
             function isExpandedIcon(node){
 				return node.tagName &&  (
 				       node.hasAttribute('tree-expanded-icon') ||
 				       node.tagName.toLowerCase() === 'tree-expanded-icon'
 				);
 			}
-			
+
 			function isCollapsedIcon(node){
 				return node.tagName &&  (
 				       node.hasAttribute('tree-collapsed-icon') ||
 				       node.tagName.toLowerCase() === 'tree-collapsed-icon'
 				);
 			}
-			
+
 			function isTreeNodeLabel(node){
 				return node.tagName &&  (
 				       node.hasAttribute('tree-node-label') ||
@@ -283,7 +283,7 @@ angular.module('clever.management.directives.treeView', []).directive('treeView'
 								'ng-show="_node.show" ' +
 								scope.getNodeAliasName().replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase() + '="_node">' +
 							'</tree-view-node>';
-			
+
 			var hasRendered = false;
 			scope.$watch('treeData', function(newValue, oldValue) {
 				if (newValue == oldValue) {
@@ -297,7 +297,7 @@ angular.module('clever.management.directives.treeView', []).directive('treeView'
 					elm.html('').append($compile( template )(scope));
 					hasRendered = true;
 				}
-			}); 
+			});
 
 		},
 	};

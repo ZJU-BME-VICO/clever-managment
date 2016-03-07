@@ -13,38 +13,38 @@ angular.module('clever.management.directives.treeViewNode', []).directive('treeV
 			scope.childNodes = nodeData[scope.getNodeChildren()];
 			var parentIndex = attrs.nodeIndex || '';
 			var prefix = scope.menuPrefix || '';
-			var template = '<ul>' + 
-								'<li role="context-menu" ng-class="' + nodeAliasName + '.collapsed ? \'collapsed\' : \'expanded\'">' + 
-									'<span ng-if="childNodes.length" ng-show="!' + nodeAliasName + '.collapsed" ng-click="selectNodeHead(' + nodeAliasName + ')">' + 
-										scope.getExpandedIconElement() + 
-									'</span>' + 
-									'<span ng-if="childNodes.length" ng-show="' + nodeAliasName + '.collapsed" ng-click="selectNodeHead(' + nodeAliasName + ')">' + 
-										scope.getCollapsedIconElement() + 
-									'</span>' + 
-									'<span context-menu="onShow(node)" data-target="' + prefix + parentIndex + '.{{$index}}"' + 'ng-class="' + nodeAliasName + '.selected"' + ' ng-click="clickNodeLabel(' + nodeAliasName + ')" ng-dblclick="doubleClickNodeLabel(' + nodeAliasName + ')">' + 
-										'<span ng-if="!childNodes.length" style="visibility: hidden;">' + scope.getExpandedIconElement() + '</span>' + 
-										'<span ng-class="' + nodeAliasName + '.selected">' + scope.getNodeLabel(nodeData) + '</span>' + 
-									'</span>' + 
+			var template = '<ul>' +
+								'<li role="context-menu" ng-class="' + nodeAliasName + '.collapsed ? \'collapsed\' : \'expanded\'">' +
+									'<span ng-if="childNodes.length" ng-show="!' + nodeAliasName + '.collapsed" ng-click="selectNodeHead(' + nodeAliasName + ')">' +
+										scope.getExpandedIconElement() +
+									'</span>' +
+									'<span ng-if="childNodes.length" ng-show="' + nodeAliasName + '.collapsed" ng-click="selectNodeHead(' + nodeAliasName + ')">' +
+										scope.getCollapsedIconElement() +
+									'</span>' +
+									'<span context-menu="onShow(node)" data-target="' + prefix + parentIndex + '.{{$index}}"' + 'ng-class="' + nodeAliasName + '.selected"' + ' ng-click="clickNodeLabel(' + nodeAliasName + ')" ng-dblclick="doubleClickNodeLabel(' + nodeAliasName + ')">' +
+										'<span ng-if="!childNodes.length" style="visibility: hidden;">' + scope.getExpandedIconElement() + '</span>' +
+										'<span ng-class="' + nodeAliasName + '.selected">' + scope.getNodeLabel(nodeData) + '</span>' +
+									'</span>' +
 									'<span class="dropdown position-fixed" id="' + prefix + parentIndex + '.{{$index}}">' + scope.getNodeMenuFormElement() +
 								    '</span>'+
-									'<tree-view-node ' + 
-										'ng-repeat="_node in childNodes track by $index" ' + 
-										'ng-hide="_node.parent.collapsed || !_node.show" ' + 
-										'ng-init="_node.parent = ' + nodeAliasName + '" ' + 'node-index="' + parentIndex + '.{{$index}}"' +  nodeAliasName.replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase() + '="_node">' + 
-									'</tree-view-node>' + 
-								'</li>' + 
+									'<tree-view-node ' +
+										'ng-repeat="_node in childNodes track by $index" ' +
+										'ng-hide="_node.parent.collapsed || !_node.show" ' +
+										'ng-init="_node.parent = ' + nodeAliasName + '" ' + 'node-index="' + parentIndex + '.{{$index}}"' +  nodeAliasName.replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase() + '="_node">' +
+									'</tree-view-node>' +
+								'</li>' +
 							'</ul>';
 
-			var templateWithMenu = '<ul>' + 
-			                           '<li class="occur-delay" role="context-menu">' + 
-			                             '<span ng-if="childNodes.length" ng-show="!' + nodeAliasName + '.collapsed" ng-click="selectNodeHead(' + nodeAliasName + ')">' + scope.getExpandedIconElement() + '</span>' + 
-		                                 '<span ng-if="childNodes.length" ng-show="' + nodeAliasName + '.collapsed" ng-click="selectNodeHead(' + nodeAliasName + ')">' + scope.getCollapsedIconElement() + '</span>' + 
-			                             '<span context-menu="onShow(' + nodeAliasName + ')" data-target="' + prefix + parentIndex + '.{{$index}}"' + 'ng-class="' + nodeAliasName + '.selected"' + 'ng-click="clickNodeLabel(' + nodeAliasName + ')" ng-dblclick="doubleClickNodeLabel(' + nodeAliasName + ')">' + 
-			                             '<span ng-if="!childNodes.length" style="visibility: hidden;">' + scope.getExpandedIconElement() + '</span>' + 
-			                              scope.getNodeLabel(nodeData, nodeAliasName) + '</span>' + 
-			                             '<span class="dropdown position-fixed" id="' + prefix + parentIndex + '.{{$index}}">' + scope.getNodeMenu(nodeData, nodeAliasName) + '</span>' + 
-			                             '<tree-view-node ' + 'ng-repeat="_node in childNodes" ' + 'ng-hide="_node.parent.collapsed || !_node.show" ' + 'ng-init="_node.parent = ' + nodeAliasName + '" ' + 'node-index="' + parentIndex + '.{{$index}}"' + nodeAliasName.replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase() + '="_node">' + '</tree-view-node>' + 
-			                           '</li>' + 
+			var templateWithMenu = '<ul>' +
+			                           '<li class="occur-delay" role="context-menu">' +
+			                             '<span ng-if="childNodes.length" ng-show="!' + nodeAliasName + '.collapsed" ng-click="selectNodeHead(' + nodeAliasName + ')">' + scope.getExpandedIconElement() + '</span>' +
+		                                 '<span ng-if="childNodes.length" ng-show="' + nodeAliasName + '.collapsed" ng-click="selectNodeHead(' + nodeAliasName + ')">' + scope.getCollapsedIconElement() + '</span>' +
+			                             '<span context-menu="onShow(' + nodeAliasName + ')" data-target="' + prefix + parentIndex + '.{{$index}}"' + 'ng-class="' + nodeAliasName + '.selected"' + 'ng-click="clickNodeLabel(' + nodeAliasName + ')" ng-dblclick="doubleClickNodeLabel(' + nodeAliasName + ')">' +
+			                             '<span ng-if="!childNodes.length" style="visibility: hidden;">' + scope.getExpandedIconElement() + '</span>' +
+			                              scope.getNodeLabel(nodeData, nodeAliasName) + '</span>' +
+			                             '<span class="dropdown position-fixed" id="' + prefix + parentIndex + '.{{$index}}">' + scope.getNodeMenu(nodeData, nodeAliasName) + '</span>' +
+			                             '<tree-view-node ' + 'ng-repeat="_node in childNodes" ' + 'ng-hide="_node.parent.collapsed || !_node.show" ' + 'ng-init="_node.parent = ' + nodeAliasName + '" ' + 'node-index="' + parentIndex + '.{{$index}}"' + nodeAliasName.replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase() + '="_node">' + '</tree-view-node>' +
+			                           '</li>' +
 			                       '</ul>';
 
 			if (nodeData) {
@@ -54,7 +54,7 @@ angular.module('clever.management.directives.treeViewNode', []).directive('treeV
 					elm.html('').append($compile( template )(scope));
 				}
 			}
-	
+
 			scope.selectNodeHead = function(selectedNode) {
 				//Collapse or Expand
 				selectedNode.collapsed = !selectedNode.collapsed;
@@ -66,7 +66,7 @@ angular.module('clever.management.directives.treeViewNode', []).directive('treeV
 
 				// call back
 				scope.doubleClickNode(selectedNode);
-				
+
 			  //  scope.clickNoeLabel(selectedNode);
 			};
 
@@ -86,31 +86,11 @@ angular.module('clever.management.directives.treeViewNode', []).directive('treeV
 				scope.clickNode(selectedNode);
 			};
 
-			scope.operateNodeByContextMenu = function(node, type, value) {
-				scope.clickNodeMenu(node, type, value);
+			scope.operateNodeByContextMenu = function(node, value, type) {
+				scope.clickNodeMenu(node, value, type);
 			};
 
-			// scope.editNodeByMenu = function(node, type) {
-				// scope.clickEditNodeMenu(node, type);
-			// };
-			
-			scope.specialiseNodeByMenu = function(node) {
-				var specialisedArchetype = scope.specialiseArchetype(node);
-				node.collapsed = false;
-				scope.clickNodeLabel(specialisedArchetype);
 
-				scope.doubleClickNode(specialisedArchetype);
-			};
-			scope.deleteNodeByMenu = function(node) {
-				console.log("delete archetype here");
-				console.log(node);
-				scope.deleteArchetype(node);
-			};
-			// scope.clickNodeMenu = function(operateType, node){
-				// console.log(operateType);
-				// console.log(node);
-				// scope.clickMenu(operateType, node);
-			// };
 			scope.onShow = function(node) {
 				scope.clickNodeLabel(node);
 			};
