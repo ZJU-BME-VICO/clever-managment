@@ -1242,7 +1242,7 @@ angular.module('clever.management.service.rmFactoryService', []).service('rmFact
   this.inheritMap.CARE_ENTRY.push('INSTRUCTION');
   /* ACTIVITY  */
   function ACTIVITY() {
-    LOCATABLE.call(this, MenuType.LEAPFROG, PARSABLE);
+    LOCATABLE.call(this, MenuType.ATTRIBUTE, PARSABLE);
     this.attributes.push(Attr('description', REQUIERD, T_ITEM_STRUCTURE, NOT_ARRAY));
     this.isAbstract = false;
   }

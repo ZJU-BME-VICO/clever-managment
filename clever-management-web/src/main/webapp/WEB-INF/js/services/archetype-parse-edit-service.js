@@ -644,7 +644,7 @@ angular
             extractedNode.label.archetypeNode = true;
           }
           extractedNode.oriNodeRef = value;
-          nodeForReturn = extractedNode;
+          //nodeForReturn = extractedNode;
           extractedNode.children = [];
           if (value.attributes) {
             self.processAttribute(value.attributes,
@@ -682,22 +682,17 @@ angular
           return nodeForReturn;
         }
       };
+      
 
       var self = this;
 
       function processSingleAttribute(attribute, parent,
-        treeItems, terminologies, isKeepAttribute) {
-        // var self = this;
+        treeItems, terminologies, isKeepAttribute) {  
         generateNodePath(attribute, parent.oriNodeRef,
           terminologies);
-        // if
-        // (noTraverseAttributes.indexOf(attribute.rm_attribute_name)
-        // != -1) { //if attribute type should be keep
-        if (isKeepAttribute) { // if attribute type should be
-          // keep
+        if (isKeepAttribute) {
           var keepAttribute = extractNode(attribute,
-            terminologies, undefined);
-          nodeForReturn = keepAttribute;
+            terminologies, undefined);    
           keepAttribute.oriNodeRef = attribute;
           keepAttribute.children = [];
           if (attribute.children) {
@@ -706,6 +701,7 @@ angular
               terminologies, undefined);
           }
           treeItems.push(keepAttribute);
+          return keepAttribute;
         } else {
           var noKeepAttribute = extractNode(attribute,
             terminologies, undefined);
@@ -724,19 +720,19 @@ angular
 
       this.processAttribute = function(attributes, parent,
         treeItems, terminologies, keepAttribute) {
-        var nodeForReturn = "";
+        var nodeForReturn;
         var self = this;
         if (attributes) {
           if (angular.isArray(attributes)) {
             angular.forEach(attributes,
               function(attribute) {
-                processSingleAttribute(attribute,
+               nodeForReturn = processSingleAttribute(attribute,
                   parent, treeItems,
                   terminologies,
                   keepAttribute);
               });
           } else {
-            processSingleAttribute(attributes, parent,
+        	  nodeForReturn = processSingleAttribute(attributes, parent,
               treeItems, terminologies, keepAttribute);
           }
         }
