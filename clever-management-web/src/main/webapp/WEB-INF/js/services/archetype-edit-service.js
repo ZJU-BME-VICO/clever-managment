@@ -4,7 +4,7 @@ angular.module('clever.management.service.archetypeEdit', []).service('archetype
 
 
 
-  this.getCBoolean = function() {
+  var getCBoolean = function() {
     return {
       '_xsi:type': "C_BOOLEAN",
       true_valid: "true",
@@ -12,7 +12,7 @@ angular.module('clever.management.service.archetypeEdit', []).service('archetype
     };
   };
 
-  this.getCDateTime = function() {
+  var getCDateTime = function() {
     return {
       '_xsi:type': "C_DATE_TIME",
       pattern: undefined,
@@ -21,7 +21,7 @@ angular.module('clever.management.service.archetypeEdit', []).service('archetype
       assumed_value: undefined,
     };
   };
-  this.getCDuration = function() {
+  var getCDuration = function() {
     return {
       '_xsi:type': "C_DURATION",
       value: undefined,
@@ -30,7 +30,7 @@ angular.module('clever.management.service.archetypeEdit', []).service('archetype
     };
   };
 
-  this.getCInteger = function() {
+  var getCInteger = function() {
     return {
       '_xsi:type': "C_INTEGER",
       list: [],
@@ -39,7 +39,7 @@ angular.module('clever.management.service.archetypeEdit', []).service('archetype
     };
   };
 
-  this.getCReal = function() {
+  var getCReal = function() {
     return {
       '_xsi:type': "C_REAL",
       list: [],
@@ -48,7 +48,7 @@ angular.module('clever.management.service.archetypeEdit', []).service('archetype
     };
   };
 
-  this.getCString = function(stringList) {
+  var getCString = function(stringList) {
     return {
       '_xsi:type': "C_STRING",
       pattern: undefined,
@@ -58,10 +58,10 @@ angular.module('clever.management.service.archetypeEdit', []).service('archetype
     };
   };
 
-  //primitive object get this.end
+  //primitive object get var end
 
   //Constraint object get function
-  this.getCDvOrdinal = function() {
+  var getCDvOrdinal = function() {
     return {
       '_xsi:type': "C_DV_ORDINAL",
       list: undefined, //element is ordinal --- consist of value|symbol.defining_code.terminology_id.value&code_string
@@ -69,7 +69,7 @@ angular.module('clever.management.service.archetypeEdit', []).service('archetype
     };
   };
 
-  this.getCCodePhrase = function() {
+  var getCCodePhrase = function() {
     return {
       '_xsi:type': "C_CODE_PHRASE",
       terminology_id: undefined,
@@ -78,7 +78,7 @@ angular.module('clever.management.service.archetypeEdit', []).service('archetype
       assumed_value: undefined,
     };
   };
-  this.getCCodePhraseWithPara = function(terminologyValue, codeList, assumedValue) {
+  var getCCodePhraseWithPara = function(terminologyValue, codeList, assumedValue) {
     return {
       '_xsi:type': "C_CODE_PHRASE",
       terminology_id: {
@@ -89,7 +89,7 @@ angular.module('clever.management.service.archetypeEdit', []).service('archetype
       assumed_value: assumedValue,
     };
   };
-  this.getCDvQuantity = function() {
+  var getCDvQuantity = function() {
     return {
       '_xsi:type': "C_DV_QUANTITY",
       property: undefined, // terminology_id/value    code_string
@@ -99,7 +99,7 @@ angular.module('clever.management.service.archetypeEdit', []).service('archetype
     };
   };
 
-  this.getArchetypeInternalRef = function(rmTypeName, occurrences, targetPath) {
+  var getArchetypeInternalRef = function(rmTypeName, occurrences, targetPath) {
     return {
       '_xsi:type': "ARCHETYPE_INTERNAL_REF",
       rm_type_name: rmTypeName,
@@ -108,14 +108,14 @@ angular.module('clever.management.service.archetypeEdit', []).service('archetype
     };
   };
 
-  this.getConstraintRef = function() {
+  var getConstraintRef = function() {
     return {
       '_xsi:type': "CONSTRAINT_REF",
       reference: undefined,
     };
   };
 
-  this.getArchetypeSlot = function(rmTypeName, nodeId, occurrences, includes, excludes) {
+  var getArchetypeSlot = function(rmTypeName, nodeId, occurrences, includes, excludes) {
     return {
       '_xsi:type': "ARCHETYPE_SLOT",
       rm_type_name: rmTypeName,
@@ -131,6 +131,22 @@ angular.module('clever.management.service.archetypeEdit', []).service('archetype
   };
   this.defaultIncludes = "archetype_id/value matches {/.*/}";
 
+  var cobjectMap = {
+		    C_BOOLEAN : getCBoolean,
+		    C_DATE_TIME : getCDateTime,
+		    C_DURATION : getCDuration,
+		    C_INTEGER : getCInteger,
+		    C_REAL : getCReal,
+		    C_STRING : getCString,
+		    C_DV_ORDINAL : getCDvOrdinal,
+		    C_CODE_PHRASE : getCCodePhrase,
+		    C_DV_QUANTITY : getCDvQuantity,
+		    ARCHETYPE_INTERNAL_REF : getArchetypeInternalRef,
+		    CONSTRAINT_REF : getConstraintRef,
+		    ARCHETYPE_SLOT : getArchetypeSlot,
+  }
+
+  
   //constraint object get this.end
 
   this.getNodeLabel = function(cardinality, code, dataType, dataValue, excludes, existence, includes, occurrences, picType, slot, text, type) {
@@ -550,61 +566,45 @@ angular.module('clever.management.service.archetypeEdit', []).service('archetype
 
 
 
+//
+//
+//  this.getPARTY_SELF = function() {
+//    //return this.getCComplexObject([], '', this.getDefaultOccurrences(1,1), "PARTY_SELF");
+//    return this.getComplexObject(null, '', [1, 1], "PARTY_SELF");
+//  };
+//
+//  this.getPARTY_RELATED = function() {
+//    // var definingCode = editor.getCSingleAttribute([], editor.getDefaultExistence(1, 1), "defining_code");
+//    // var DV_CODED_TEXT = editor.getCComplexObject(definingCode, '', editor.getDefaultOccurrences(1, 1), "DV_CODED_TEXT");
+//    // var relationship = editor.getCSingleAttribute(DV_CODED_TEXT, editor.getDefaultExistence(1, 1), "relationship");
+//    // var PARTY_RELATED = editor.getCComplexObject([relationship], '', editor.getDefaultOccurrences(1, 1), "PARTY_RELATED");
+//    var relationship = this.getSingleAttr([this.getDV_CODED_TEXT()], [1, 1], "relationship");
+//    var PARTY_RELATED = this.getComplexObject([relationship], '', [1, 1], "PARTY_RELATED");
+//    return PARTY_RELATED;
+//  };
+//
+//  this.getPARTY_IDENTIFIED = function() {
+//    //var externalRef = this.getCSingleAttribute([this.getPARTY_REF()], this.getDefaultExistence(1,1), "externalRef");
+//    //var name = this.getCSingleAttribute([], this.getDefaultExistence(1,1),"name");
+//    //var identifiers  = this.getCSingleAttribute([this.getDV_IDENTIFIER()], this.getDefaultExistence(1,1), "identifiers");
+//    //return this.getCComplexObject([], '', this.getDefaultOccurrences(1,1), "PARTY_IDENTIFIED");
+//    return this.getComplexObject(null, '', [1, 1], 'PARTY_IDENTIFIED');
+//
+//  };
+//
+//  this.getPARTY_REF = function() {
+//
+//    // var id = this.getCSingleAttribute([this.getGENERIC_ID()], this.getDefaultExistence(1,1), "id");
+//    var id = this.getSingleAttr([this.getGENERIC_ID()], [1, 1], 'id');
+//    return this.getComplexObject([id], '', [1, 1], "PARTY_REF");
+//  };
+//
+//  this.getGENERIC_ID = function() {
+//    return this.getComplexObject(null, '', [1, 1], "GENERIC_ID");
+//  };
 
 
-  this.getPARTY_SELF = function() {
-    //return this.getCComplexObject([], '', this.getDefaultOccurrences(1,1), "PARTY_SELF");
-    return this.getComplexObject(null, '', [1, 1], "PARTY_SELF");
-  };
 
-  this.getPARTY_RELATED = function() {
-    // var definingCode = editor.getCSingleAttribute([], editor.getDefaultExistence(1, 1), "defining_code");
-    // var DV_CODED_TEXT = editor.getCComplexObject(definingCode, '', editor.getDefaultOccurrences(1, 1), "DV_CODED_TEXT");
-    // var relationship = editor.getCSingleAttribute(DV_CODED_TEXT, editor.getDefaultExistence(1, 1), "relationship");
-    // var PARTY_RELATED = editor.getCComplexObject([relationship], '', editor.getDefaultOccurrences(1, 1), "PARTY_RELATED");
-    var relationship = this.getSingleAttr([this.getDV_CODED_TEXT()], [1, 1], "relationship");
-    var PARTY_RELATED = this.getComplexObject([relationship], '', [1, 1], "PARTY_RELATED");
-    return PARTY_RELATED;
-  };
-
-  this.getPARTY_IDENTIFIED = function() {
-    //var externalRef = this.getCSingleAttribute([this.getPARTY_REF()], this.getDefaultExistence(1,1), "externalRef");
-    //var name = this.getCSingleAttribute([], this.getDefaultExistence(1,1),"name");
-    //var identifiers  = this.getCSingleAttribute([this.getDV_IDENTIFIER()], this.getDefaultExistence(1,1), "identifiers");
-    //return this.getCComplexObject([], '', this.getDefaultOccurrences(1,1), "PARTY_IDENTIFIED");
-    return this.getComplexObject(null, '', [1, 1], 'PARTY_IDENTIFIED');
-
-  };
-
-  this.getPARTY_REF = function() {
-
-    // var id = this.getCSingleAttribute([this.getGENERIC_ID()], this.getDefaultExistence(1,1), "id");
-    var id = this.getSingleAttr([this.getGENERIC_ID()], [1, 1], 'id');
-    return this.getComplexObject([id], '', [1, 1], "PARTY_REF");
-  };
-
-  this.getGENERIC_ID = function() {
-    return this.getComplexObject(null, '', [1, 1], "GENERIC_ID");
-  };
-
-
-  // get base type
-  this.getDV_IDENTIFIER = function() {
-    var issuer = this.getSingleAttr(null, [1, 1], "issuer");
-    var assigner = this.getSingleAttr(null, [1, 1], "assigner");
-    var id = this.getSingleAttr(null, [1, 1], "id");
-    var type = this.getSingleAttr(null, [1, 1], "type");
-    var DV_IDENTIFIER = this.getComplexObject([issuer, assigner, id, type], "", [1, 1], "DV_IDENTIFIER");
-    return DV_IDENTIFIER;
-  };
-  this.getDV_CODED_TEXT = function() {
-    var definingCode = this.getSingleAttr(null, [1, 1], "defining_code");
-    var DV_CODED_TEXT = this.getComplexObject(definingCode, '', [1, 1], "DV_CODED_TEXT");
-    return DV_CODED_TEXT;
-  };
-  this.getDV_TEXT = function() {
-    return this.getComplexObject(null, '', [1, 1], "DV_TEXT");
-  };
 
   //get primitive object
   this.getPrimitiveString = function(string) {
@@ -766,18 +766,37 @@ angular.module('clever.management.service.archetypeEdit', []).service('archetype
     return result;
   }
 
+   var intervalMap = {
+		 INTERVAL_COUNT : 'DV_INTERVAL<DV_COUNT>',
+		 INTERVAL_QUANTITY : 'DV_INTERVAL<DV_QUANTITY>',
+		 INTERVAL_DATETIME : 'DV_INTERVAL<DV_DATE_TIME>',
+   }
+  
   this.generateCObjectWithParsedOntology = function(type, ontology) {
-    if (rmTypeWhiteList.indexOf(type) != -1) {
-      return undefined;
+	 if(type.includes('SLOT_')){ 
+        type = type.slice(5, type.length);
+        var nodeId = self.getTermDefinitionNodeId(ontology.term_definitions.oriNodeRef);
+        self.synchronizeOntology(ontology, nodeId, type, '*');
+    	return getArchetypeSlot(type, nodeId,  self.getDefaultOccurrences(1,'*'), self.defaultIncludes, undefined) 
     }
-    var rmObject = rmFactoryService[type] && (new rmFactoryService[type]);
-    if (rmObject.isAbstract) {
-      return 'can not generate rmObject with type : ' + type + ' because this type is a abstract!';
-    }
-    var nodeId = self.getTermDefinitionNodeId(ontology.term_definitions.oriNodeRef);
-    self.synchronizeOntology(ontology, nodeId, type, '*');
-    var attributes = this.generateAttributesWithParsedOntology(rmObject, ontology);
-    return self.getComplexObject(attributes, nodeId, [0, 1], type);
+	 if(cobjectMap[type]){
+		 return cobjectMap[type]();
+	 }else{ 
+		 if (rmTypeWhiteList.indexOf(type) != -1) {
+			 return undefined;
+		 }
+		 
+		 var rmObject = rmFactoryService[type] && (new rmFactoryService[type]);
+		 if (rmObject.isAbstract) {
+			 return 'can not generate rmObject with type : ' + type + ' because this type is a abstract!';
+		 }
+		 var nodeId = self.getTermDefinitionNodeId(ontology.term_definitions.oriNodeRef);
+		 
+		 self.synchronizeOntology(ontology, nodeId, type, '*');
+		 var attributes = this.generateAttributesWithParsedOntology(rmObject, ontology);
+		 return self.getComplexObject(attributes, nodeId, [0, 1], type.includes('INTERVAL')? intervalMap[type] : type);
+	 }
+	
   }
 
   this.generateAttributesWithParsedOntology = function(rmObject, ontology) {
@@ -789,24 +808,48 @@ angular.module('clever.management.service.archetypeEdit', []).service('archetype
           var multiAttribute = self.getMultyAttr([], 0, [1, 1], attribute.name);
           result.push(multiAttribute);
         } else {
-          //var children = generateCObjectWithParsedOntology(attribute['@children'].type, ontology);
-          var singleAttr = self.getSingleAttr([], [1, 1], attribute.name);
+        	/* for interval type node, may should be rewrite someday */
+          if(['upper', 'lower'].indexOf(attribute.name) != -1){
+        	  var children = self.generateCObjectWithParsedOntology(attribute['@children'].type, ontology);
+              var singleAttr = self.getSingleAttr(children, [1, 1], attribute.name);
+          }else{
+        	  //var children = generateCObjectWithParsedOntology(attribute['@children'].type, ontology);
+        	  var singleAttr = self.getSingleAttr([], [1, 1], attribute.name);
+          }
           result.push(singleAttr);
         }
       }
     });
     return result;
   }
+  
+  this.generateAttributesWithParsedOntologyForInterval = function(rmObject, ontology) {
+	    var attributes = rmObject.attributes;
+	    var result = [];
+	    angular.forEach(attributes, function(attribute) {
+	      if (attribute['@required']) {
+	        if (attribute['@children'].isArray) {
+	          var multiAttribute = self.getMultyAttr([], 0, [1, 1], attribute.name);
+	          result.push(multiAttribute);
+	        } else {
+	          var children = generateCObjectWithParsedOntology(attribute['@children'].type, ontology);
+	          var singleAttr = self.getSingleAttr(children, [1, 1], attribute.name);
+	          result.push(singleAttr);
+	        }
+	      }
+	    });
+	    return result;
+	  }
 
-  this.generateAttribtue = function(attributeName, parentType) {
-    var rmAttribtue = rmFactoryService.getAttribute(new rmFactoryService[parentType], attributeName);
-    var attribute;
-    if (rmAttribtue['@children'].isArray) {
-      attribute = self.getMultyAttr([], 0, [0, 1], attributeName);
-    } else {
-      attribute = self.getSingleAttr([], [0, 1], attributeName);
-    }
-    return attribute;
-  }
+//  this.generateAttribtue = function(attributeName, parentType) {
+//    var rmAttribtue = rmFactoryService.getAttribute(new rmFactoryService[parentType], attributeName);
+//    var attribute;
+//    if (rmAttribtue['@children'].isArray) {
+//      attribute = self.getMultyAttr([], 0, [0, 1], attributeName);
+//    } else {
+//      attribute = self.getSingleAttr([], [0, 1], attributeName);
+//    }
+//    return attribute;
+//  }
 
 });

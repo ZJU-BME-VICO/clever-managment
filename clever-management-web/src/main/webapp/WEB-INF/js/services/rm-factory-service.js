@@ -35,7 +35,7 @@ angular.module('clever.management.service.rmFactoryService', []).service('rmFact
   var T_DV_INTERVAL_DATE_TIME = 'DV_INTERVAL_DATE_TIME';
   var T_DV_DATE_TIME = 'DV_DATE_TIME';
   var T_BOOLEAN = 'BOOLEAN';
-  var T_CODE_PHRASE = 'CODE_PHRASE';
+  var T_CODE_PHRASE = 'C_CODE_PHRASE';
   var T_DV_ORDINAL = 'DV_ORDINAL';
   var T_C_QUANTITY_ITEM = 'C_QUANTITY_ITEM';
   var T_INTERVAL_REAL = 'INTERVAL_REAL';
@@ -61,7 +61,9 @@ angular.module('clever.management.service.rmFactoryService', []).service('rmFact
   var T_INSTRUCTION_DETAILS = 'INSTRUCTION_DETAILS';
   var T_ACTIVITY = 'ACTIVITY';
   var T_OBJECT_ID = 'OBJECT_ID';
-
+  var T_C_DV_QUANTITY = 'C_DV_QUANTITY';
+  var T_DV_COUNT = 'DV_COUNT';
+ 
   this.inheritMap = {};
   //Attribute generator
   function Attr(attributeName, required, childrenType, childrenIsArray) {
@@ -350,7 +352,33 @@ angular.module('clever.management.service.rmFactoryService', []).service('rmFact
   }
   this.DV_INTERVAL = DV_INTERVAL;
   this.inheritMap.DATA_VALUE.push('DV_INTERVAL');
-
+  
+  function INTERVAL_COUNT(){
+	  DATA_VALUE.call(this);
+	  this.attributes.push(Attr('upper', REQUIERD, T_DV_COUNT, NOT_ARRAY));
+	  this.attributes.push(Attr('lower', REQUIERD, T_DV_COUNT, NOT_ARRAY));
+	  this.isAbstract = false;
+  }
+  this.INTERVAL_COUNT = INTERVAL_COUNT;
+  
+  function INTERVAL_QUANTITY(){
+	  DATA_VALUE.call(this);
+	  this.attributes.push(Attr('upper', REQUIERD, T_C_DV_QUANTITY, NOT_ARRAY));
+	  this.attributes.push(Attr('lower', REQUIERD, T_C_DV_QUANTITY, NOT_ARRAY));
+	  this.isAbstract = false;
+  }
+  this.INTERVAL_QUANTITY = INTERVAL_QUANTITY;
+  
+  
+  function INTERVAL_DATETIME(){
+	  DATA_VALUE.call(this);
+	  this.attributes.push(Attr('upper', REQUIERD, T_DV_DATE_TIME, NOT_ARRAY));
+	  this.attributes.push(Attr('lower', REQUIERD, T_DV_DATE_TIME, NOT_ARRAY));
+	  this.isAbstract = false;
+  }
+  this.INTERVAL_DATETIME = INTERVAL_DATETIME;
+  
+  
   function DV_AMOUNT() {} //not used now
 
   /* may be use C_DV_ORDINAL */

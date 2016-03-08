@@ -371,15 +371,14 @@ angular.module('clever.management.directives.editDefinitionPane', []).directive(
 
 
 
-
         /**
-         * there would not a items attributs behind this
+         * there would not a items attributes behind this
          * type, so when we add a type to this node , a
-         * items attribute should be added;
+         * items attribute should be added
          */
         $scope.editArchetype = function(node, menuContent, type) {
           console.log("edit Archetype node " + node.label.text + "with type " + menuContent + "which is a " + type);
-
+          
           if (menuContent == 'delete') {
             if (isDeleteable(node)) {
               deleteNode(node);
@@ -389,11 +388,9 @@ angular.module('clever.management.directives.editDefinitionPane', []).directive(
           }
 
           if (type == 'attribute') {
-            //  console.log($scope.ontology);
             if (!isAttributeAlreadyExist(menuContent, node)) {
               var attribute = editor.generateAttribtue(menuContent, node.label.picType);
               addAttributeToNode(node, attribute);
-              //console.log(attribute);
             } else {
               toaster.pop('error', 'Eror', 'failure to add the attribute: ' + menuContent + ' Because it is already exist!');
             }
@@ -402,8 +399,7 @@ angular.module('clever.management.directives.editDefinitionPane', []).directive(
           if (type == 'type') {
             if (node.label.type == 'attribute') {
               var rmObject = new rmFactoryService[node.parent.label.picType];
-              var attribute = rmFactoryService.getAttribute(rmObject, node.label.text);
-              console.log(attribute);
+              var attribute = rmFactoryService.getAttribute(rmObject, node.label.text);    
               if (attribute['@children'].isArray || node.children.length == 0 || !node.children) {
                 var cobject = editor.generateCObjectWithParsedOntology(menuContent, $scope.ontology);
                 addCObjectToAttributeNode(node, cobject);
@@ -412,39 +408,47 @@ angular.module('clever.management.directives.editDefinitionPane', []).directive(
               }
               /* menu type is LEAPGROG */
             } else if (node.label.type == 'type') {
-              var parentType = node.label.picType;
-              var parent = new rmFactoryService[parentType];
-              var parentAttribtueType = parent.attributes[0]['@children'].type;
-              /* get the childrenTypeArray */
-              var childrenTypeSet = collectInheritContentWithType(parentAttribtueType);
-              console.log(childrenTypeSet);
-              // if (!(new rmFactoryService[parentAttribtueType]).isAbstract) {
-              //   childrenTypeArray.push(parentAttribtueType);
-              // }
-
-              if (childrenTypeSet.has(menuContent)) {
-                /* add element and cluster */
-                var cobject = editor.generateCObjectWithParsedOntology(menuContent, $scope.ontology);
-                addCObjectToTypeNode(node, cobject);
-
-              } else {
-                angular.forEach(childrenTypeSet, function(childrenType) {
-                  var tempSet = collectInheritContentWithType((new rmFactoryService[childrenType]).attributes[0]['@children'].type);
-                  console.log(tempSet);
-                  if (tempSet.has(menuContent)) {
-                    /* add element and dv_text here */
-                    var childCObject = editor.generateCObjectWithParsedOntology(childrenType, $scope.ontology);
-                    //  addCObjectToTypeNode(node, childCObject);
-
-                    var grandChildCObject = editor.generateCObjectWithParsedOntology(menuContent, $scope.ontology);
-                    childCObject.attributes[0].children.push(grandChildCObject);
-                    addCObjectToTypeNode(node, childCObject);
-                  }
-                })
-              }
-
-              //  console.log(childrenTypeArray);
-
+             console.log('add a ' + menuContent + ' to this element');
+             if(menuContent.includes('SLOT_')){
+            	 var cobject = editor.generateCObjectWithParsedOntology(menuContent, $scope.ontology);
+            	 addCObjectToTypeNode(node, cobject);
+             }else{
+            	 var parentType = node.label.picType;          
+            	 var parent = new rmFactoryService[parentType];
+            	 var parentAttribtueType = parent.attributes[0]['@children'].type;
+            	 /* get the childrenTypeArray */
+            	 var childrenTypeSet = collectInheritContentWithType(parentAttribtueType);
+            	 
+            	 if (childrenTypeSet.has(menuContent)) {
+            		 /* add element and cluster */
+            		 var cobject = editor.generateCObjectWithParsedOntology(menuContent, $scope.ontology);
+            		 addCObjectToTypeNode(node, cobject);
+            		 
+            	 } else {
+            		 var singleCheck = 0;
+            		 angular.forEach(childrenTypeSet, function(childrenType) {
+            			 var tempSet = collectInheritContentWithType((new rmFactoryService[childrenType]).attributes[0]['@children'].type);
+            			 console.log(tempSet);
+            			 if(tempSet.has('DV_INTERVAL')){
+            				 tempSet.add('INTERVAL_COUNT').add('INTERVAL_DATETIME').add('INTERVAL_QUANTITY');
+            			 }
+            			 if (tempSet.has(menuContent)) {
+            				 singleCheck ++;
+            				 /* add element and dv_text here */
+            				 var childCObject = editor.generateCObjectWithParsedOntology(childrenType, $scope.ontology);
+            				 //  addCObjectToTypeNode(node, childCObject);
+            				 
+            				 var grandChildCObject = editor.generateCObjectWithParsedOntology(menuContent, $scope.ontology);
+            				 childCObject.attributes[0].children.push(grandChildCObject);
+            				 addCObjectToTypeNode(node, childCObject);
+            			 }
+            			 if(singleCheck >1){
+            				 alert("error, this operate add two element with only on menu content");
+            			 }
+            		 });
+            	 }
+            	 
+             }
             }
           }
 
@@ -453,10 +457,16 @@ angular.module('clever.management.directives.editDefinitionPane', []).directive(
         function addCObjectToAttributeNode(node, cobject) {
           //  node.oriNodeRef.children.push(cobject);
           node.oriNodeRef.children = editor.pushElementToArray(cobject, node.oriNodeRef.children);
-          $scope.treeControl
+          $scope
             .locateNode(parser.myProcessNode(cobject, node, node.children, $scope.ontology.term_definitions, undefined));
         }
 
+        $scope.locateNode = function(node){
+        	setTimeout(function(){
+        		$scope.treeControl.locateNode(node);
+        	    $scope.$digest();
+        	},0)
+        }
         function addCObjectToTypeNode(node, cobject) {
           var atttribute;
           if (angular.isArray(node.oriNodeRef.attributes)) {
@@ -465,14 +475,14 @@ angular.module('clever.management.directives.editDefinitionPane', []).directive(
             attribute = node.oriNodeRef.attributes;
           }
           attribute.children = editor.pushElementToArray(cobject, attribute.children);
-          $scope.treeControl
+          $scope
             .locateNode(parser.myProcessNode(cobject, node, node.children, $scope.ontology.term_definitions, node.childrenAttribute));
         }
 
         function addAttributeToNode(node, attribute) {
           var nodeAttributes = node.oriNodeRef.attributes;
           node.oriNodeRef.attributes = editor.pushElementToArray(attribute, node.oriNodeRef.attributes)
-          $scope.treeControl
+          $scope
             .locateNode(parser.processAttribute(attribute, node, node.children, $scope.ontology.term_definitions, parser.KEEPATTRIBUTE));
         }
 
@@ -544,7 +554,7 @@ angular.module('clever.management.directives.editDefinitionPane', []).directive(
           if (node.label.type == "attribute") {
             var tempAttributes = node.parent.oriNodeRef.attributes;
             if (angular.isArray(tempAttributes)) {
-              tempAttribute.splice(tempAttributes
+              tempAttributes.splice(tempAttributes
                 .indexOf(node.oriNodeRef), 1);
             } else {
               node.parent.oriNodeRef.attributes = undefined;
